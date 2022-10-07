@@ -20,7 +20,7 @@
 
 ~~~ruby
 # Espace de nom
-module Narration
+module Prawn4book
   
   # Classe principale pour le fichier texte à balisage simple
   class InputFile

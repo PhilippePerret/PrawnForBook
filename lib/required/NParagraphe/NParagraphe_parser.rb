@@ -1,8 +1,25 @@
-module Narration
+module Prawn4book
+class PdfBook
 class InputSimpleFile
-class NParagraphe
+class Paragraphe
 
   REG_LINE = /^IMAGE\[(.+?)\]$/
+
+
+  #
+  # La méthode précédente (parse) s'occupe d'un texte pas encore
+  # analysé et enregistré dans son fichier YAML. Cette méthode, au
+  # contraire, reçoit les données dictionnaire de chaque paragraphe
+  # et en fait l'élément qui correspond.
+  # 
+  def self.dispatch_by_type(data)
+    case data[:type]
+    when 'image'  then PdfBook::NImage.new(data)
+    when 'titre'  then PdfBook::NTitre.new(data)
+                  else PdfBook::NTextParagraph.new(data)
+    end
+  end
+
 
   attr_reader :line
 
@@ -12,6 +29,10 @@ class NParagraphe
 
   # Quand le paragraphe vient du fichier texte initial, on le
   # déduit de la ligne (pour connaitre son type)
+  # 
+  # C'est ici qu'est décidé la nature du paragraphe, titre, image,
+  # paragraphe ou autre.
+  # 
   def parse
     case line
     when REG_LINE
@@ -46,8 +67,9 @@ class NParagraphe
 
 
 end #/class NParagraphe
+end #/class InputSimpleFile
 end #/class PdfBook
-end #/module Narration
+end #/module Prawn4book
 
 def log(str)
   STDOUT.puts str.jaune

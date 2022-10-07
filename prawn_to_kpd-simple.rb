@@ -16,47 +16,10 @@ Prawn::Fonts::AFM.hide_m17n_warning = true
 doc = Narration::PdfBook.generate(
   filename,
   margin: Narration::PdfBook::MARGIN_ODD) do 
-
-
-    # 
-    # Définition des polices à utiliser
-    # 
-    font_families.update("Garamond" => {
-      normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf",
-      italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
-    })
-    font_families.update("Bangla" => {
-      normal: "/System/Library/Fonts/Supplemental/Bangla MN.ttc",
-      bold:   "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
-    })
-    font_families.update({
-      "Avenir" => {
-        normal: "/System/Library/Fonts/Avenir Next Condensed.ttc"
-      }
-    })
-
-    font_families.update({
-      "Arial" => {
-        normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
-      }
-    })
-
-
     #
     # Espacement entre les lignes
     # 
     default_leading 1 # 5 aligne sur la baseline
-
-    repeat(:odd) do
-      font "Arial"
-      draw_text "Page n°X", at: [300, 0], size: 9
-    end
-
-    repeat(:even) do
-      font "Arial"
-      draw_text "n°X Page", at: [0, 0], size: 9
-    end
-
 
     #
     # On prend le texte

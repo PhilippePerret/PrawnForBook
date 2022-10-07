@@ -16,4 +16,12 @@ class PrawForBookCommandTest < Minitest::Test
     assert_equal 0, $?, "la commande devrait exister et fonctionner sans arguments"
   end
 
+  def test_commande_seule_affiche_mini_aide
+    out = `#{COMMAND_NAME}` rescue nil
+    # puts "out = #{out.inspect}"
+    refute_nil out
+    assert_match "#{COMMAND_NAME} init", out
+    assert_match "#{COMMAND_NAME} aide", out
+  end
+
 end

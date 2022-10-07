@@ -1,5 +1,5 @@
-module Narration
-class PdfBook < Prawn::Document
+module Prawn4book
+class PdfBook
 class NParagraphe
 
   # --- Data Methods ---
@@ -17,4 +17,4 @@ class NParagraphe
 
 end #/class NParagraphe
 end #/class PdfBook
-end #/module Narration
+end #/module Prawn4book

@@ -7,3 +7,6 @@
   avec Prawn
 
 =end
+
+require_relative 'lib/required'
+Prawn4book.run

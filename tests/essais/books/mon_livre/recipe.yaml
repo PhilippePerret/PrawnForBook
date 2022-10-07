@@ -1,0 +1,9 @@
+---
+:titre: Le titre du livre à 07 10 2022 - 18:44
+:auteur: Philippe Perret
+:id: mon_livre
+:main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books"
+:text_path: "/Users/philippeperret/Programmes/Prawn4book/tests/resources/textes/book_text.txt"
+:dim: 127x203.2
+:marges: '10,10,10,10'
+:opt_para_num: false

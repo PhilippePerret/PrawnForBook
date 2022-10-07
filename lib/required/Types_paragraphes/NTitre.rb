@@ -1,11 +1,11 @@
-module Narration
+module Prawn4book
 class PdfBook
 class NTitre
 
   attr_reader :data
 
   def initialize(data)
-    @data   = data
+    @data   = data.merge!(type: 'titre')
   end
 
   # --- Helpers Methods ---
@@ -38,4 +38,4 @@ class NTitre
 
 end #/class NTitre
 end #/class PdfBook
-end #/module Narration
+end #/module Prawn4book

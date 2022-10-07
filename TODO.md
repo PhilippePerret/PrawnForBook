@@ -1,5 +1,6 @@
 # Todo
 
+* Il faudra faire des propriétés propres à chaque style de paragraphe, par exemple des "note" pourraient être de différents styles qu'on doit pouvoir spécifier. 
 * Ajuster les positions des titres
   -> pouvoir les définir dans le fichier de configuration
 * Définir les numéros de paragraphe à la place des numéros de page en bas de page

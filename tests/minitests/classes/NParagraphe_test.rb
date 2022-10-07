@@ -1,5 +1,5 @@
 # require 'test_helper'
-# module Narration
+# module Prawn4book
 # class PdfBook
 # class NParagraphe
 
@@ -33,7 +33,7 @@
 
 # end #/class NParagraphe
 # end #/class PdfBook
-# end #/module Narration
+# end #/module Prawn4book
 
 # class NParagrapheClassTest < Minitest::Test
 

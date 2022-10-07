@@ -1,4 +1,4 @@
-module Narration
+module Prawn4book
 class PdfBook
 class NTextParagraph
 
@@ -12,7 +12,7 @@ class NTextParagraph
   alias :number :numero
 
   def initialize(data)
-    @data   = data
+    @data   = data.merge!(type: 'paragraph')
     @numero = self.class.get_next_numero
   end
 
@@ -29,4 +29,4 @@ class NTextParagraph
 
 end #/class NTextParagraph
 end #/class PdfBook
-end #/module Narration
+end #/module Prawn4book

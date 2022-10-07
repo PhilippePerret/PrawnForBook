@@ -1,7 +1,7 @@
 require 'prawn'
 require 'prawn/measurement_extensions'
 
-module Narration
+module Prawn4book
 class PdfFile < Prawn::Document
 
 NARRATION_BOOK_LAYOUT = {
@@ -53,11 +53,11 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   # 
   def insert(parag)
     case parag
-    when Narration::PdfBook::NTextParagraph
+    when Prawn4book::PdfBook::NTextParagraph
       insert_paragraph(parag)
-    when Narration::PdfBook::NImage
+    when Prawn4book::PdfBook::NImage
       insert_image(parag)
-    when Narration::PdfBook::NTitre
+    when Prawn4book::PdfBook::NTitre
       insert_titre(parag)
     end
   end
@@ -130,7 +130,7 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   # Définition des polices requises
   # 
   def define_required_fonts(fonts)
-    
+    return if fonts.nil? || fonts.empty?
     fonts.each do |fontname, fontdata|
       font_families.update(fontname => fontdata)
     end
@@ -160,4 +160,4 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   end
 
 end #/class PdfFile
-end #/module Narration
+end #/module Prawn4book

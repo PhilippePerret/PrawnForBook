@@ -1,11 +1,11 @@
-module Narration
+module Prawn4book
 class PdfBook
 class NImage
 
   attr_reader :data
 
   def initialize(data)
-    @data = data
+    @data = data.merge!(type: 'image')
   end
 
   # --- Helpers Methods ---
@@ -35,4 +35,4 @@ class NImage
 
 end #/class NImage
 end #/class PdfBook
-end #/module Narration
+end #/module Prawn4book

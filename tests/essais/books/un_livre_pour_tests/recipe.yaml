@@ -1,0 +1,24 @@
+---
+:titre: Le titre du livre à 07 10 2022 - 18:44
+:auteur: Philippe Perret
+:id: mon_livre
+:main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books"
+:text_path: "/Users/philippeperret/Programmes/Prawn4book/tests/resources/textes/book_text.txt"
+:dim: 127x203.2
+:marges: '10,10,10,10'
+:opt_para_num: false
+:num_page: 'num_parags'
+:fonts:
+  Garamond:
+    :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
+    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
+  Bangla:
+    :normal: "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+    :bold:   "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+  Avenir:
+    :normal: "/System/Library/Fonts/Avenir Next Condensed.ttc"
+  Arial:
+    :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
+  Nunito:
+    :normal: "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
+    :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
