@@ -1,0 +1,22 @@
+---
+:fonts:
+  Garamond:
+    :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
+    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
+  Bangla:
+    :normal: "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+    :bold:   "/System/Library/Fonts/Supplemental/Bangla MN-Bold.ttc"
+  Avenir:
+    :normal:  "./resources/fonts/Avenir Next Condensed.ttf"
+    # :normal: "/System/Library/Fonts/Avenir Next Condensed.ttf"
+    # :courant: "/System/Library/Fonts/Avenir Next Condensed-Courant.ttf"
+    # :light:   "/System/Library/Fonts/Avenir Next Condensed-Light.ttf"
+  Arial:
+    :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
+    :italic: "/Users/philippeperret/Library/Fonts/Arial Narrow-Italic.ttf"
+    :bold: "/Users/philippeperret/Library/Fonts/Arial Narrow-bold.ttf"
+  Nunito:
+    # :normal: "./resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
+    :normal: "./resources/fonts/Nunito_Sans/NunitoSans-Light.ttf"
+    :light:  "./resources/fonts/Nunito_Sans/NunitoSans-ExtraLight.ttf"
+    :bold:   "./resources/fonts/Nunito_Sans/NunitoSans-SemiBold.ttf"
