@@ -12,16 +12,19 @@ class InitPdfBookTest < Minitest::Test
   end
 
   def pdfbook
-    @pdfbook ||= Prawn4book::PdfBook.new
+    @pdfbook ||= Prawn4book::PdfBook.new(nil)
   end
 
   def test_pdfbook_init
-    assert_respond_to pdfbook, :init_recipe
+    Prawn4book.require_module('pdfbook/recipe')
+    assert_respond_to Prawn4book::PdfBook, :define_book_recipe
+    assert_respond_to pdfbook, :create_recipe
   end
 
   def test_create_recipe_with_data
-    Prawn4book.require_module('recipe')
-    assert_respond_to Prawn4book::PdfBook, :define_first_recipe
+    return
+    skip "Concentration"
+    Prawn4book.require_module('pdfbook/recipe')
     assert_respond_to pdfbook, :create_recipe
     books_folder = mkdir(File.join(TEST_FOLDER,'essais','books'))
     book_folder  = File.join(books_folder,'mon_livre')
@@ -52,6 +55,8 @@ class InitPdfBookTest < Minitest::Test
   end
 
   def test_create_with_bad_data
+    return
+    skip "Concentration"
     Prawn4book.require_module('recipe')
     books_folder = mkdir(File.join(TEST_FOLDER,'essais','books'))
     cdata = {
@@ -170,5 +175,20 @@ class InitPdfBookTest < Minitest::Test
 
   end
 
+
+
+  # On crée la recette d'un nouveau livre avec un test d'intégration
+  # 
+  # Ce test, pour le moment, doit permettre d'essayer d'utiliser
+  # les possibilités de CLI_TEST (sans le charger)
+  def test_init_create
+    inputs = [
+      'Y',
+      "Le titre du nouveau bouquin", 
+      nil, # Pour s'arrêter là tout de suite
+    ]
+    res = run_('init', inputs)
+    puts "res = #{res.inspect}".jaune
+  end
 
 end #/class InitPdfBookTest

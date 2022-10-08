@@ -1,5 +1,9 @@
 # Prawn4book<br />Manuel
 
+
+
+[TOC]
+
 **Prawn4book** est une application en ligne de commande permettant de transformer un texte en PDF prêt pour l’impression, grâce au (lovely) gem `Prawn`.
 
 Tous les exemples de ce manuel présupposent qu’un alias de la commande a été créé, grâce à :
@@ -41,6 +45,12 @@ titre
 
 ## Recette du livre
 
+### Création de la recette du livre
+
+On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.txt` ou `texte.md` — et en  jouant la commande : **`> prawn-for-book init`**.
+
+Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre.
+
 ### Définition des fonts
 
 ~~~yaml
@@ -72,3 +82,59 @@ dossier_fonts: &dosfonts "/Users/philippeperret/Library/Fonts"
 
 ~~~
 
+
+
+---
+
+<a name="header-footer"></a>
+
+## Entête et pied de page
+
+On peut définir les entêtes et les pieds de page dans le fichier recette du livre ou de la collection grâce aux données `:header` et `:footer`.
+
+~~~yaml
+:default: &styleheader 
+	:font: NomDeLaFont
+	:size: 13.5
+:header:
+	- :name:  	"Nom de ce premier rang" # juste pour information
+		:from_page: 12 # numéro de la première page qui affichera cet header
+		:to_page:   15	# Numéro de la dernière page qui affichera cet header
+		:disposition:   '%titre1- | | -%titre2'
+		:style: *styleheader
+	- :name:    'Nom de ce second rang' # juste pour information
+		:from_page: 	16
+		:to_page:    	86
+		:format:    ' | -%titre3- | '
+		:style: *styleheader
+  - :name:  'Pour la fin toute différente'
+  	:from_page: 120
+  	:to_page:   128
+  	:disposition:    'C’est | la | fin'
+  	:style: 
+  		:font: Geneva
+  		:size: 24
+  		:border_top: 1px #CCCCCC
+:footer:
+	- :name:    "Introduction"
+		:from_page: 1
+		:to_page:   5
+		:disposition:    ' | -%num- | '
+		:style:
+			:size: 9
+			:font: Arial
+~~~
+
+### Disposition
+
+Le pied de page et l’entête sont divisés en trois parties de taille variable en fonction du contenu. Dans le format (`:disposition`), ces trois parties sont définies par des `|`. 
+
+L’**alignement** s’indique par des tirets avant, après ou de chaque côté du contenu. Quand le tiret est à droite (`mot-`), le mot est aligné à gauche, quand le tiret est à gauche (`-mot`) le contenu est aligné à droite, quand les tirets encadrent le contenu (`-mot- `) — ou quand il n’y en a pas — le contenu est centré.
+
+### Variables
+
+Les variables utilisables dans les entêtes et pieds de page sont toujours des mots simples commençant par `%`. 
+
+Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
+
+Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter.

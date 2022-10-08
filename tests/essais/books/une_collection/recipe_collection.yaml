@@ -1,0 +1,23 @@
+---
+:name: Collection Narration
+:short_name: Narration
+:book_dimensions: [127, 203.2]
+:book_marges: null # {:top, :ext, :bot, :int}
+:interligne:  null
+:opt_num_parag: true
+:fonts:
+  Garamond:
+    :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
+    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
+  Bangla:
+    :normal: "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+    :bold:   "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+  Avenir:
+    :normal: "/System/Library/Fonts/Avenir Next Condensed.ttc"
+  Arial:
+    :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
+  Nunito:
+    :normal: "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
+    :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
+
+:num_page_style: null # 'num_page'
