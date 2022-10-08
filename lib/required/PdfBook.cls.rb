@@ -25,6 +25,7 @@ class << self
       raise "Impossible de trouver le livre '#{cfolder}'… Ce n'est pas un dossier de livre PDF."
     end
   end
+  alias :current :get_current
 
 end #/<< self
 end #/class PdfBook

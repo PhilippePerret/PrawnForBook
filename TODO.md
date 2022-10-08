@@ -1,17 +1,10 @@
 # Todo
 
+* Pouvoir créer/enregistrer une collection
 * Command qui permet d'ouvrir le fichier de recette du livre
 * Prendre les données enregistrées pour en tenir compte lors de la génération du book PDF.
-* Autres propriétés à demander :
-  - entête et pied de page
-  - pouvoir les définir très précisément dans le fichier recette
+* Entête et Pied de page
    => une class propre, qui génèrera des données YAML qu'on pourra enregistrer dans le fichier recette
-* Mieux accompagner la définition des propriétés de la recette du document (par exemple les marges). Toujours proposer des valeurs à choisir (sauf quand c'est impossible — le titre du livre par exemple)
-  - pouvoir se servir de modèles (dont on recopierait les paramètres ou carrément une recette maitresse, propre à une "collection")
-  => Le dossier du livre peut être dans un autre dossier qui est une collection (fichier 'recette_collection.yaml' qui définit les valeurs propres aux différents volumes de la collection)
-  => À la création d'un nouveau livre, si on se trouve dans le dossier d'une colection, demander tout de suite si c'est un nouveau volume pour cette collection
-    - Quand le livre n'est pas créé dans une collection demander s'il fera partie d'une collection
-  => Classe NCollection
 * Il faudra faire des propriétés propres à chaque style de paragraphe, par exemple des "note" pourraient être de différents styles qu'on doit pouvoir spécifier. 
   => documenter
 * Ajuster les positions des titres

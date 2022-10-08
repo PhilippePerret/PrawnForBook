@@ -2,6 +2,17 @@ module Prawn4book
 class PdfBook
 class NTitre
 
+  def self.font_size(level)
+    @@data_font_size ||= {}
+    @@data_font_size[level] ||= begin
+      data_titles["level#{level}".to_sym][:size] || (11 + ( (8 - level) * 2.5)).to_i
+    end    
+  end
+
+  def self.data_titles
+    @@data_titles ||= PdfBook.current.recette[:titles]
+  end
+
   attr_reader :data
 
   def initialize(data)
@@ -13,7 +24,7 @@ class NTitre
   # @prop La taille de la police en fonction du niveau de titre
   # 
   def font_size
-    @font_size ||= (11 + ( 8.0 / level) * 2).to_i
+    @font_size ||= self.class.font_size(level)
   end
 
   def font_style

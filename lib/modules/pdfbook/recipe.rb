@@ -93,15 +93,46 @@ class PdfBook
 
     # 
     # On retire l'instance de collection
+    # 
     cdata.delete(:instance_collection)
 
-    puts cdata.inspect
+    #
+    # On ajout des propriétés qui devront être définies de façon
+    # plus complexe
+    # 
+    cdata.merge!(
+      header: {
+        from_page: 10, to_page: 200,
+        disposition: '| -%titre1- |',
+        style: {font: "ArialNarrow", size:8, style: :bold}
+      },
+      footer: {
+        from_page: 1, to_page: 220,
+        disposition: '| | -%num',
+        style: {font:'ArialNarrow', size:9}
+      },
+      titles: {
+        level1: { font: 'Nunito', size: 30 },
+        level2: { font: 'Nunito', size: 26 },
+        level3: { font: 'Nunito', size: 20 },
+        level4: { font: 'Nunito', size: 16 },
+      }
+
+    )
+
+    # puts cdata.inspect
+
+    # 
+    # L'instance du book
+    # 
+    book = PdfBook.new(cdata[:main_folder])
 
     # 
     # On crée le fichier de recette du livre
     # 
-    create_recipe(cdata)
+    book.create_recipe(cdata)
 
+    puts "(jouer '#{COMMAND_NAME} open recipe' pour ouvrir le fichier recette du livre et régler d'autres valeurs comme le pied de page ou les titres)".gris
     puts "(jouer '#{COMMAND_NAME} manuel' pour ouvrir le manuel de l'application et voir notamment comment définir l'entête et le pied de page.)".gris
     puts "\n\n"
   end
@@ -354,7 +385,7 @@ NUMPAGES_VALUES = [
   {name: 'Numéro page courante seule'           , value: 'num_page'       },
   {name: 'Numéro page courante / nombre total de pages'  , value: 'num_et_nombre'  },
   {name: 'Ne pas numéroter les pages'             , value: false            },
-  {name: 'Numéro de paragraphes'                  , value: 'num_parags'     }
+  {name: 'Numéro de paragraphes'                  , value: 'num_parags'     },
   {name: 'Numéro de page et de paragraphes'       , value: 'num_page_et_parags'     }
 ]
 
@@ -406,10 +437,12 @@ NUMPAGES_VALUES = [
 
   def create_recipe(data)
 
+    # puts "data = #{data.pretty_inspect}"
+
     # 
     # Création du dossier
     # 
-    @folder = File.join(data[:main_folder], data[:id])
+    @folder = File.join(data[:main_folder])
     mkdir(@folder)
     
     # 
@@ -430,6 +463,8 @@ NUMPAGES_VALUES = [
     puts "la commande 'prawn-for-book build' pour ".jaune
     puts "produire la première version du livre.".jaune
   end
+
+
 
   def text_path
     @text_path ||= File.join(folder, "texte#{File.extname(original_text_path)}")
