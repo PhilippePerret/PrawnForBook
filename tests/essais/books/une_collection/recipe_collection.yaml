@@ -1,8 +1,12 @@
 ---
 :name: Collection Narration
 :short_name: Narration
-:book_dimensions: [127, 203.2]
-:book_marges:   {:top => 25, :ext => 15, :bot => 20, :int => 30}
+:book_dimensions: ['127mm', '203.2mm']
+:book_marges:
+  :top: 25
+  :ext: 15 
+  :bot: 20
+  :int: 30
 :interligne:    null
 :leading:       1
 :opt_num_parag: true

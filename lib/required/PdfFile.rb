@@ -14,7 +14,8 @@ MARGIN_ODD  = [20.mm, 15.mm, 20.mm, 25.mm]
 MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
 
   def initialize(config = nil)
-    super(NARRATION_BOOK_LAYOUT)
+    super(config)
+    puts "config = #{config.inspect}".jaune
   end
 
   ##
@@ -129,9 +130,9 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   ##
   # Définition des polices requises
   # 
-  def define_required_fonts(fonts)
-    return if fonts.nil? || fonts.empty?
-    fonts.each do |fontname, fontdata|
+  def define_required_fonts(fontes)
+    return if fontes.nil? || fontes.empty?
+    fontes.each do |fontname, fontdata|
       font_families.update(fontname => fontdata)
     end
   end

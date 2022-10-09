@@ -21,7 +21,7 @@ class PdfBook
     # fichier recette.
     #
     if module_formatage?
-      require_module_formate
+      require_module_formatage
       PdfFile.extensions << PdfBookFormatageModule
     end
 
@@ -87,7 +87,7 @@ class PdfBook
       # On définit les polices requises pour le livre
       # 
       # define_required_fonts(self.config[:fonts])
-      pdf.define_required_fonts(recette[:fonts])
+      pdf.define_required_fonts(book_fonts)
       #
       # Définition des numéros de page
       # 
@@ -132,31 +132,49 @@ class PdfBook
   def pdf_config
     @pdf_config ||= begin
       {
-        page_size:          get_config(:dimensions),
+        page_size:          proceed_unit(get_config(:dimensions)),
         page_layout:        get_config(:layout),
-        margin:             get_config(:margin),
+        margin:             proceed_unit(get_config(:margin)),
         left_margin:        conf_margin(:left) ||conf_margin(:ext),
-        right_margin:       conf_margin(:right)||conf_margin(:int,
+        right_margin:       conf_margin(:right)||conf_margin(:int),
         top_margin:         conf_margin(:top),
         bottom_margin:      conf_margin(:bot),
         background:         get_config(:background),
         default_leading:    get_config(:leading),
-        optimize_objects:   get_config(:optimize_objects, true)
+        optimize_objects:   get_config(:optimize_objects, true),
         compress:           get_config(:compress),
         # {Hash} Des variables (méta-propriété personnalisées)
         info:               get_config(:info),
         # Un fichier template
         template:           get_config(:template),
         # Pour créer le document sans créer de première page
-        skip_page_creation: get_config(:skip_page_creation)
+        skip_page_creation: get_config(:skip_page_creation),
       }
     end
   end
 
+  # Fontes utilisées dans le boucle (définies dans le fichier de
+  # recette du livre ou de la collection)
+  def book_fonts
+    @book_fonts ||= begin
+      if recette[:fonts].nil? && not(collection?)
+        nil
+      elsif recette[:fonts] == :collection
+        collection.data[:fonts]
+      else
+        recette[:fonts]
+      end
+    end
+  end
+
   def get_config(property, default_value = nil)
+    if property == :dimensions
+      puts "data du PdfBook : #{data.inspect}".bleu
+      puts "data collection : #{collection.data.inspect}".mauve
+    end
     pdoc = data[property] # défini par la recette du livre
     if pdoc.nil? || pdoc == :collection
-      return collection.data[property] if collection?
+      return (collection.data[property]||collection.data["book_#{property}".to_sym]) if collection?
     else
       return pdoc
     end
@@ -166,14 +184,15 @@ class PdfBook
   # Retourne la configuration du livre pour la marge +side+
   def conf_margin(side)
     @marges ||= data[:marges]
-    if @marges.is_a?(Hash)
-      @marges[side]
-    elsif @marges == :collection
-      @marges_collection = collection.data[:book_marges]
-      @marges_collection[side]
-    else
-      @marges
-    end
+    mgs = if @marges.is_a?(Hash)
+        proceed_unit(@marges[side])
+      elsif @marges == :collection
+        @marges_collection = collection.data[:book_marges]
+        proceed_unit(@marges_collection[side])
+      else
+        @marges
+      end
+    proceed_unit(mgs)
   end
 
   # --- Formating Methods ---
@@ -197,6 +216,31 @@ class PdfBook
       pth = File.join(collection.folder, 'module_formatage.rb')
       return pth if File.exist?(pth)
     end    
+  end
+
+  # Reçoit une valeur ou une liste de valeur avec des unités et
+  # retourne la valeur correspondante en nombre grâce aux méthodes
+  # de Prawn::Measurements
+  def proceed_unit(foo)
+    return if foo.nil?
+    return foo if foo.is_a?(Integer) || foo.is_a?(Float)
+    valeur_string_seule = foo.is_a?(String)
+    foo = [foo] if valeur_string_seule
+    foo = foo.map do |n|
+      if n.is_a?(String)
+        unite   = n[-2..-1]
+        nombre  = n[0..-3].to_f
+        nombre.send(unite.to_sym)
+      else
+        n
+      end
+    end
+
+    if valeur_string_seule
+      foo.first
+    else
+      foo
+    end
   end
 
 end #/class PdfBook

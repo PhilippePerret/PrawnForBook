@@ -32,7 +32,7 @@ class NTitre
       case level
       when 1 then :bold
       when 2 then :normal
-      else        :light
+      else        :normal
       end
     end
   end
