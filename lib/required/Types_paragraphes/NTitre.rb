@@ -44,6 +44,8 @@ class NTitre
 
   # --- Predicate Methods ---
 
+  def paragraph?; false end
+
   def level ; @level  ||= data[:level]  end
   def text  ; @text   ||= data[:text]   end
 

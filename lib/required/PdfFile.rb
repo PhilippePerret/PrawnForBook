@@ -175,14 +175,14 @@ class PdfFile < Prawn::Document
   # Place les numéros de pages
   # (note : ne devrait pas être utilisé puisqu'on mettra plutôt
   #  le numéro des paragraphes)
-  def set_pages_numbers
+  def set_pages_numbers(data_pages)
     @top_footer ||= - footer_height
 
     font footer_font_name, size: footer_font_size
 
     case num_page_style
     when 'num_parags'
-      numerote_pages_with_paragraphs_number
+      numerote_pages_with_paragraphs_number(data_pages)
     when 'num_page'
       numerote_pages_with_page_number
     end
@@ -209,15 +209,40 @@ class PdfFile < Prawn::Document
     number_pages str, even_options
   end
 
-  def numerote_pages_with_paragraphs_number
-    # repeat(:even) do
-    #   font footer_font_name, size: footer_font_size
-    #   # draw_text "n°<page> Page", at: [0, @top_footer]
-    #   str = "Page n°<page>"
-    #   opt = { }
-    #   number_pages(str, opt)
-    # end    
-    
+  def numerote_pages_with_paragraphs_number(data_pages)
+    odd_options = {
+      page_filter: :odd,
+      at: [bounds.right - 200, @top_footer],
+      width: 200,
+      align: :right
+    }
+    even_options = {
+      page_filter: :even,
+      at: [0, @top_footer], 
+      width: 200, 
+      align: :left,
+    }
+    number_paragraphs data_pages, odd_options
+    number_paragraphs data_pages, even_options        
+  end
+
+
+  ##
+  # Numérotation des pages avec les paragraphes
+  #
+  # Cf. https://github.com/prawnpdf/prawn/blob/7d4f6b8998e0627259c1036a2cd6bca65cd53f45/lib/prawn/document.rb#L572
+  # 
+  def number_paragraphs data_pages, options
+    page_filter = options.delete(:page_filter)
+
+    (1..page_count).each do |pg|
+      next if page_match?(page_filter, pg)
+      go_to_page(pg)
+      data_page = data_pages[pg]
+      puts "data_page : #{data_page}.inspect"
+      str = "#{data_page[:first_par]}-#{data_page[:last_par]}"
+      text_box str, options
+    end
   end
 
   ##

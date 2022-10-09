@@ -1,5 +1,15 @@
 # Todo
 
+* Placement des numéros de paragraphes en footer
+  - au cours de la construction du document, il faut relever le premier et le dernier paragraphe de chaque page. Pour ce faire, on tient à jour une propriété pdfbook.pages qui va comprendre en clé l'indice de la page et en valeur les données de la page
+  À chaque changement de page :
+    - on enregistre dans la nouvelle page le numéro suivant
+    - on enregistre dans la page précédente le numéro courant
+  Note : voir si le numéro de paragraphe est "exposé", ce qui n'est
+  pas sûr du tout (le mettre dans pdfbook, au cas où)
+
+* Voir comment traiter la première page (pour le moment, elle ne se traite pas comme les autres)
+
 * Les unités doivent être ajoutées, avec l'assistant d'init.
 
 * Bien calculer les marges/header/footer (cf. le manuel pour voir comment ils sont définis)

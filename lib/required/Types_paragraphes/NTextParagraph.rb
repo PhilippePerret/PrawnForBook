@@ -23,6 +23,8 @@ class NTextParagraph
 
   # --- Predicate Methods ---
 
+  def paragraph?; true end
+
   # --- Data Methods ---
 
   def text  ; @text ||= data[:text]||data[:raw_line] end

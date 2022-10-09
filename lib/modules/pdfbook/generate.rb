@@ -1,6 +1,9 @@
 module Prawn4book
 class PdfBook
 
+  # Pour exposer les données des pages (à commencer par les
+  # paragraphes)
+  attr_reader :pages
 
   ##
   # = main =
@@ -26,6 +29,12 @@ class PdfBook
     end
 
     #
+    # Pour consigner les informations sur les pages, à commencer
+    # par les paragraphes (numéros) s'ils sont numérotés
+    # 
+    @pages = {}
+
+    #
     # On doit définir la configuration
     # C'est la propriété-méthode pdf_config qui s'en charge.
     # 
@@ -49,19 +58,6 @@ class PdfBook
         page_keys_to_see.each do |key|
           puts "pdf.page.#{key} = #{pdf.page.send(key).inspect}"
         end
-        puts "pdf.bounds (methods) = #{pdf.bounds.methods.inspect}"
-
-
-        puts "pdf.page.margins = #{pdf.page.margins.inspect}"
-        puts "pdf.bounds.top = #{pdf.bounds.top.inspect}"
-        puts "pdf.bounds.left = #{pdf.bounds.left.inspect}"
-        puts "pdf.bounds.absolute_left = #{pdf.bounds.absolute_left.inspect}"
-        puts "pdf.bounds.right = #{pdf.bounds.right.inspect}"
-        puts "pdf.bounds.absolute_right = #{pdf.bounds.absolute_right.inspect}"
-        puts "pdf.bounds.width = #{pdf.bounds.width.inspect}"
-        puts "pdf.bounds.height = #{pdf.bounds.height.inspect}"
-        puts "pdf.bounds.bottom = #{pdf.bounds.bottom.inspect}"
-        puts "pdf.bounds.absolute_bottom = #{pdf.bounds.absolute_bottom.inspect}"
 
         puts "pdf.page_count = #{pdf.page_count.inspect}"
         puts "pdf.page_number = #{pdf.page_number.inspect}"
@@ -69,11 +65,6 @@ class PdfBook
         puts "pdf.delete_page(2)"
         puts "pdf.page_count = #{pdf.page_count.inspect}"
         puts "pdf.page_number = #{pdf.page_number.inspect}"
-
-        # puts "pdf.x = #{pdf.x.inspect}"
-        # puts "pdf.y = #{pdf.y.inspect}"
-
-        puts "pdf.width_of('Bonjour vous') = #{pdf.width_of('Bonjour vous').inspect}"
 
         # Apparemment pour se rendre sur une page
         # pdf.go_to_page <num page>
@@ -131,16 +122,29 @@ class PdfBook
       # 
       inputfile.paragraphes.each_with_index do |paragraphe, idx|
         pdf.insert(paragraphe)
+
+        if paragraphe.paragraph?
+          @pages[pdf.page_number] || begin
+            @pages.merge!(pdf.page_number => {first_par:nil, last_par:nil})
+          end
+          @pages[pdf.page_number][:first_par] ||= paragraphe.numero
+          # On le met toujours en dernier paragraphe de la page
+          @pages[pdf.page_number][:last_par] = paragraphe.numero
+        end
+
         break if pdf.page_number == 24
+        
         pdf.move_down( paragraphe.margin_bottom )
       end
+
+      puts "pages : #{@pages.pretty_inspect}"
 
 
 
       #
-      # Définition des numéros de page
+      # Définition des numéros de page ou numéros de paragraphes
       # 
-      pdf.set_pages_numbers
+      pdf.set_pages_numbers(@pages)
 
 
 

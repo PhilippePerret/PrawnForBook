@@ -85,6 +85,7 @@ class PdfBook
       else
         data[:num_page_style] || 'num_page'
       end
+    end
   end
 
 
