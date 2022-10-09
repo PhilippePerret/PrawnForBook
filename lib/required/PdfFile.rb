@@ -4,18 +4,21 @@ require 'prawn/measurement_extensions'
 module Prawn4book
 class PdfFile < Prawn::Document
 
-NARRATION_BOOK_LAYOUT = {
-  page_size: 'A5',
-  page_layout: :portrait,
-  align: :justify
-}
+# NARRATION_BOOK_LAYOUT = {
+#   page_size: 'A5',
+#   page_layout: :portrait,
+#   align: :justify
+# }
 
-MARGIN_ODD  = [20.mm, 15.mm, 20.mm, 25.mm]
-MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
+# MARGIN_ODD  = [20.mm, 15.mm, 20.mm, 25.mm]
+# MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
+
+  attr_reader :config
 
   def initialize(config = nil)
+    @config = config
     super(config)
-    puts "config = #{config.inspect}".jaune
+    puts "[instantiation PdfFile] config = #{config.pretty_inspect}".jaune
   end
 
   ##
@@ -31,7 +34,7 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
     # 
     # Réglage des marges de la prochaine page
     # 
-    super({margin: (page_number.odd? ? MARGIN_ODD : MARGIN_EVEN)}.merge(options))
+    super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
     move_cursor_to_top_of_the_page
 
   end
@@ -67,9 +70,6 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   # INSERTION D'UN PARAGRAPHE
   # -------------------------
   # 
-  # La complexité ici est qu'il faudra ajouter le numéro du 
-  # paragraphe à côté de lui, en regard.
-  # 
   # @param {PdfBook::NTextParagraph} par Le paragraphe à insérer
   # 
   def insert_paragraph(parag)
@@ -87,23 +87,57 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
       move_cursor_to cursor_on_baseline
     end
 
-    span_pos = belle_page? ? :right : :left
-    span_pos_num = belle_page? ? 11.2.cm : -1.cm 
-    span(2.cm, position: span_pos_num) do
-      font "Bangla"
-      # pos_num = [(belle_page? ? 11.2.cm : -0.8.cm ), cursor - 16]
-      number = parag.number.to_s
-      number = number.rjust(4) unless belle_page?
-      text "#{number}", size: 8, color: '777777' #, inline_format: true
-    end
+    if paragraph_number? 
+      numero = (parag.number + 900).to_s
+
+      # 
+      # On place le numéro de paragraphe
+      # 
+      font "Bangla", size: 7
+      # 
+      # Taille du numéro si c'est en belle page, pour calcul du 
+      # positionnement exactement
+      # 
+      # Calcul de la position du numéro de paragraphe en fonction du
+      # fait qu'on se trouve sur une page gauche ou une page droite
+      # 
+      span_pos_num = 
+        if belle_page?
+          wspan = width_of(numero)
+          bounds.right + (parag_number_width - wspan)
+        else
+          - parag_number_width
+        end
+
+      @span_number_width ||= 1.cm
+
+      move_cursor_to cursor_on_baseline - 1
+      span(@span_number_width, position: span_pos_num) do
+        text "#{numero}", color: '777777'
+      end
+    end #/end if paragraph_number?
 
     move_cursor_to cursor_on_baseline
 
     # puts "cursor avant écriture paragraphe = #{cursor}"
 
-    font "Garamond" # apparemment, ça ne fonctionne que comme ça
-    text "#{cursor_on_baseline} #{parag.text}", align: :justify, size: 11, font_style: 'normal', inline_format: true
-    
+    final_str = "#{cursor_on_baseline} #{parag.text}"
+
+    font "Garamond", size: 11, font_style: :normal
+    text final_str, 
+      align: :justify, 
+      size: 11, 
+      font_style: 'normal', 
+      inline_format: true
+    # h = height_of(final_str)
+    # puts "h = #{h.inspect}"
+    # text_box(final_str, 
+    #     at: [belle_page? ? 0 : 1.cm, cursor],
+    #     # inline_format: true,
+    #     height: h,
+    #     overflow: :shrink_to_fit
+    #     ) do
+    # end    
   end
 
   ##
@@ -142,15 +176,48 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
   # (note : ne devrait pas être utilisé puisqu'on mettra plutôt
   #  le numéro des paragraphes)
   def set_pages_numbers
-    repeat(:odd) do
-      font "Arial"
-      draw_text "Page n°X", at: [300, -20], size: 9
+    @top_footer ||= - footer_height
+
+    font footer_font_name, size: footer_font_size
+
+    case num_page_style
+    when 'num_parags'
+      numerote_pages_with_paragraphs_number
+    when 'num_page'
+      numerote_pages_with_page_number
     end
 
-    repeat(:even) do
-      font "Arial"
-      draw_text "n°X Page", at: [0, -20], size: 9
-    end    
+  end
+
+  def numerote_pages_with_page_number
+    str = "<page>"
+    odd_options = { 
+      page_filter: :odd,
+      at: [bounds.right - 200, @top_footer], 
+      width: 200, 
+      align: :right,
+      start_count_at: 1
+    }
+    even_options = {
+      page_filter: :even,
+      at: [0, @top_footer], 
+      width: 200, 
+      align: :left,
+      start_count_at: 2
+    }
+    number_pages str, odd_options
+    number_pages str, even_options
+  end
+
+  def numerote_pages_with_paragraphs_number
+    # repeat(:even) do
+    #   font footer_font_name, size: footer_font_size
+    #   # draw_text "n°<page> Page", at: [0, @top_footer]
+    #   str = "Page n°<page>"
+    #   opt = { }
+    #   number_pages(str, opt)
+    # end    
+    
   end
 
   ##
@@ -160,5 +227,69 @@ MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
     0
   end
 
-end #/class PdfFile
+
+  def odd_margins
+    @odd_margins ||= [top_mg, int_mg, bot_mg, ext_mg]
+  end
+  def even_margins
+    @even_margins ||= [top_mg, ext_mg, bot_mg, int_mg]
+  end
+
+  def num_page_style
+    @num_page_style ||= pdfbook.num_page_style
+  end
+
+  def paragraph_number?
+    :TRUE == @hasparagnum ||= true_or_false(pdfbook.paragraph_number?)
+  end
+
+  def parag_number_width
+    @parag_number_width ||= 7.mm
+  end
+
+  def top_mg; @top_mg ||= config[:top_margin]     end
+  def bot_mg
+    @bot_mg ||= begin
+      config[:bottom_margin] + 20
+    end
+  end
+  def ext_mg
+    @ext_mg ||= begin
+      lm = config[:left_margin]
+      lm += parag_number_width if paragraph_number?
+      lm
+    end
+  end
+  def int_mg
+    @int_mg ||= begin
+      rm = config[:right_margin]
+      rm += parag_number_width if paragraph_number?
+      rm
+    end
+  end
+
+
+  # --- Calcul Methods ---
+
+  # @prop Hauteur du pied de page. Déterminera le cursor maximal pour
+  # une page
+  def footer_height
+    @footer_height ||= begin
+      font footer_font_name, size: footer_font_size
+      height_of("Dans le pied de page")
+    end
+  end
+
+  def footer_font_name
+    @footer_font_name ||= pdfbook.footer[:style][:font] || 'Times'
+  end
+  def footer_font_size
+    @footer_font_size ||= pdfbook.footer[:style][:font_size] || 10
+  end
+
+  def pdfbook
+    @pdfbook ||= PdfBook.current
+  end
+
+end #/class PdfFile < Prawn::Document
 end #/module Prawn4book

@@ -44,11 +44,49 @@ class PdfBook
     not(data[:collection] === false || data[:collection] === nil)
   end
 
+  def paragraph_number?
+    :TRUE == @hasparagnum ||= true_or_false(opt_num_parag)
+  end
+
+
   # --- Paths Methods ---
 
   def folder
     @folder ||= File.join(data[:main_folder])
   end
+
+
+  # --- Data Methods ---
+
+  def footer
+    @footer ||= begin
+      if collection?
+        collection.data[:footer]
+      else
+        data[:footer] || {style:{font:'Times', font_size:9}}
+      end
+    end
+  end
+
+  def opt_num_parag
+    @opt_num_parag ||= begin
+      if data[:opt_num_parag] == :collection || data[:opt_num_parag].nil?
+        collection.data[:opt_num_parag]
+      else
+        data[:opt_num_parag] === true
+      end
+    end
+  end
+
+  def num_page_style
+    @num_page_style ||= begin
+      if data[:num_page_style] == :collection || data[:num_page_style].nil?
+        collection.data[:num_page_style]
+      else
+        data[:num_page_style] || 'num_page'
+      end
+  end
+
 
   private
 

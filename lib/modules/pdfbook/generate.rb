@@ -29,18 +29,38 @@ class PdfBook
     # On doit définir la configuration
     # C'est la propriété-méthode pdf_config qui s'en charge.
     # 
+    # bookfile.generate(pdf_path) do |pdf|
     PdfFile.generate(pdf_path, pdf_config) do |pdf|
+    # PdfFile.generate(pdf_path, pdf_config) do |pdf|
+      # doc = PdfFile.new()
 
+      # 
+      # On définit les polices requises pour le livre
+      # 
+      # define_required_fonts(self.config[:fonts])
+      pdf.define_required_fonts(book_fonts)
 
       # 
       # DES CODES À ESSAYER
       # 
-      if pdf.page_count == 4
-        puts "pdf.page = #{pdf.page.inspect}"
+      if false # pdf.page_count == 4
+        puts "pdf.page (methods) = #{pdf.page.methods.inspect}"
+        page_keys_to_see = [:dimensions]
+        page_keys_to_see.each do |key|
+          puts "pdf.page.#{key} = #{pdf.page.send(key).inspect}"
+        end
+        puts "pdf.bounds (methods) = #{pdf.bounds.methods.inspect}"
+
+
         puts "pdf.page.margins = #{pdf.page.margins.inspect}"
-        puts "pdf.bounds = #{pdf.bounds.inspect}"
         puts "pdf.bounds.top = #{pdf.bounds.top.inspect}"
+        puts "pdf.bounds.left = #{pdf.bounds.left.inspect}"
+        puts "pdf.bounds.absolute_left = #{pdf.bounds.absolute_left.inspect}"
+        puts "pdf.bounds.right = #{pdf.bounds.right.inspect}"
+        puts "pdf.bounds.absolute_right = #{pdf.bounds.absolute_right.inspect}"
         puts "pdf.bounds.width = #{pdf.bounds.width.inspect}"
+        puts "pdf.bounds.height = #{pdf.bounds.height.inspect}"
+        puts "pdf.bounds.bottom = #{pdf.bounds.bottom.inspect}"
         puts "pdf.bounds.absolute_bottom = #{pdf.bounds.absolute_bottom.inspect}"
 
         puts "pdf.page_count = #{pdf.page_count.inspect}"
@@ -50,8 +70,8 @@ class PdfBook
         puts "pdf.page_count = #{pdf.page_count.inspect}"
         puts "pdf.page_number = #{pdf.page_number.inspect}"
 
-        puts "pdf.x = #{pdf.x.inspect}"
-        puts "pdf.y = #{pdf.y.inspect}"
+        # puts "pdf.x = #{pdf.x.inspect}"
+        # puts "pdf.y = #{pdf.y.inspect}"
 
         puts "pdf.width_of('Bonjour vous') = #{pdf.width_of('Bonjour vous').inspect}"
 
@@ -81,23 +101,24 @@ class PdfBook
         # À quoi correspond ?
         # pdf.add_dest 'candy', 'chocolate'
         # pdf.dests.data.size
+
+        return
       end
 
       # 
-      # On définit les polices requises pour le livre
-      # 
-      # define_required_fonts(self.config[:fonts])
-      pdf.define_required_fonts(book_fonts)
-      #
-      # Définition des numéros de page
-      # 
-      pdf.set_pages_numbers
+      # Si le format est recto verso (vrai par défaut, puisque
+      # l'application est faite pour fabriquer des livres),  il faut
+      # définir, d'après les marges, les tailles de chaque côté (les
+      # marges de chaque côté)
+      # cf. odd_margins et even_margins
+
+
       #
       # On se place toujours en haut de la page pour commencer
       #
       pdf.move_cursor_to_top_of_the_page
 
-      interligne = recette[:interligne] # TODO : à mettre dans la recette
+      interligne = recette[:interligne]
 
       # 
       # On boucle sur tous les paragraphes du fichier d'entrée
@@ -113,6 +134,16 @@ class PdfBook
         break if pdf.page_number == 24
         pdf.move_down( paragraphe.margin_bottom )
       end
+
+
+
+      #
+      # Définition des numéros de page
+      # 
+      pdf.set_pages_numbers
+
+
+
     end #/PdfFile.generate
 
     if File.exist?(pdf_path)
@@ -147,8 +178,10 @@ class PdfBook
         info:               get_config(:info),
         # Un fichier template
         template:           get_config(:template),
+        text_formatter:     nil,
         # Pour créer le document sans créer de première page
-        skip_page_creation: get_config(:skip_page_creation),
+        # (ne semble pas fonctionner)
+        skip_page_creation: get_config(:skip_page_creation, nil),
       }
     end
   end
@@ -168,17 +201,16 @@ class PdfBook
   end
 
   def get_config(property, default_value = nil)
-    if property == :dimensions
-      puts "data du PdfBook : #{data.inspect}".bleu
-      puts "data collection : #{collection.data.inspect}".mauve
-    end
-    pdoc = data[property] # défini par la recette du livre
-    if pdoc.nil? || pdoc == :collection
+    # if property == :dimensions
+    #   puts "data du PdfBook : #{data.inspect}".bleu
+    #   puts "data collection : #{collection.data.inspect}".mauve
+    # end
+    pdoc = data[property] || default_value # défini par la recette du livre
+    if pdoc == :collection
       return (collection.data[property]||collection.data["book_#{property}".to_sym]) if collection?
     else
       return pdoc
     end
-    return default_value
   end
 
   # Retourne la configuration du livre pour la marge +side+
@@ -194,6 +226,7 @@ class PdfBook
       end
     proceed_unit(mgs)
   end
+
 
   # --- Formating Methods ---
 

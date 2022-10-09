@@ -1,5 +1,7 @@
 # Todo
 
+* Les unités doivent être ajoutées, avec l'assistant d'init.
+
 * Bien calculer les marges/header/footer (cf. le manuel pour voir comment ils sont définis)
 
 * Pouvoir créer/enregistrer une collection

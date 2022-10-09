@@ -3,10 +3,10 @@
 :short_name: Narration
 :book_dimensions: ['127mm', '203.2mm']
 :book_marges:
-  :top: 25
-  :ext: 15 
-  :bot: 20
-  :int: 30
+  :top: '25mm'
+  :ext: '10mm'
+  :bot: '15mm'
+  :int: '25mm'
 :interligne:    null
 :leading:       1
 :opt_num_parag: true
@@ -25,4 +25,11 @@
     :normal: "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
     :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
 
-:num_page_style: null # 'num_page'
+:num_page_style: num_parags
+:footer:
+  :from_page: 1
+  :to_page: 220
+  :disposition: "| | -%num"
+  :style:
+    :font: Arial
+    :size: 9
