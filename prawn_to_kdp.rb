@@ -12,7 +12,7 @@ Prawn::Fonts::AFM.hide_m17n_warning = true
 ifile_path  = File.expand_path('./texte.txt')
 config_path = File.expand_path('./config.yaml')
 
-inputfile = Narration::InputSimpleFile.new(ifile_path)
+inputfile = Narration::InputTextFile.new(ifile_path)
 pdfbook   = Narration::PdfBook.new(inputfile, YAML.load_file(config_path, aliases:true))
 
 #

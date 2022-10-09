@@ -26,28 +26,34 @@ class PdfBook
   alias :recette :data
   alias :recipe  :data
 
-  def inputfile
-    @inputfile = InputSimpleFile.new(self, data[:text_path])
+  def collection
+    @collection ||= collection? ? Collection.new(self) : nil
   end
 
+  # @prop L'instance du fichier texte qui contient le texte à
+  # traiter.
+  # 
+  def inputfile
+    @inputfile = InputTextFile.new(self, data[:text_path])
+  end
+
+  # --- Predicate Methods ---
+
+  # @return true si le document appartient à une collection
+  def collection?
+    not(data[:collection] === false || data[:collection] === nil)
+  end
+
+  # --- Paths Methods ---
+
   def folder
-    @folder ||= File.join(data[:main_folder],data[:id])
+    @folder ||= File.join(data[:main_folder])
   end
 
   private
 
     # --- PDF Methods & Props ---
 
-    # @prop Configuration pour le second argument de la méthode
-    # #generate de Prawn::Document (en fait PdfBook::PdfFile)
-    def pdf_config
-      @pdf_config ||= begin
-        {
-          margin: PdfFile::MARGIN_ODD,
-          default_leading:  1
-        }
-      end
-    end
 
     def pdf_path
       @pdf_path ||= File.join(folder,'book.pdf')

@@ -3,8 +3,43 @@ class Collection
 
   attr_reader :folder
 
-  def initialize(cfolder)
-    @folder = cfolder
+  def initialize(arg)
+    define_folder_from_arg(arg)
+  end
+
+  ##
+  # Définit le dossier de la collection en fonction de
+  # l'argument transmis en argument à l'instantiation
+  # 
+  def define_folder_from_arg(arg)
+    @folder = 
+      case arg
+      when Prawn4book::PdfBook
+        # 
+        # L'argument est l'instance du document PdfBook
+        # Attention : ne pas utiliser arg.collection qui retourne
+        # l'instance Prawn4book::Collection du livre (=> infinite loop)
+        # 
+        if arg.data[:collection] === true
+          # 
+          # La donnée du PdfBook est TRUE, ce qui signifie que le
+          # livre se trouve dans le dossier de la collection, au même
+          # niveau que la recette de la collection.
+          # 
+          File.dirname(arg.folder)
+        else
+          # 
+          # La donnée :collection du PdfBook est le chemin d'accès au
+          # dossier de la collection
+          # 
+          arg.data[:collection]
+        end
+      else
+        # 
+        # L'argument est le path au dossier de la collection
+        # 
+        arg
+      end
   end
 
   ##

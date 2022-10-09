@@ -1,6 +1,6 @@
 module Prawn4book
 class PdfBook
-class InputSimpleFile
+class InputTextFile
 
   # @prop {PdfBook} La classe principale de l'instance à laquelle
   # appartient ce fichier texte
@@ -12,9 +12,33 @@ class InputSimpleFile
   ##
   # Instanciation du fichier à partir de son path
   # 
-  def initialize(pdfbook, path)
+  # @param pdfbook {Prawn4book} Instance du PdfBook contenant ce texte
+  # @param patharg {Bool|Path} Soit true si le fichier porte le nom
+  #             normal (texte.txt ou texte.md) soit le chemin d'accès
+  #             complet
+  #
+  def initialize(pdfbook, patharg)
     @pdfbook  = pdfbook
-    @path     = path
+    @path = define_path_from_arg(patharg)
+  end
+
+  def define_path_from_arg(patharg)
+    case patharg
+    when TrueClass
+      txt_path = File.join(pdfbook.folder,'texte.txt')
+      return txt_path if File.exist?(txt_path)
+      md_path  = File.join(pdfbook.folder,'texte.md')
+      return md_path if File.exist?(md_path)
+      puts "Le fichier texte est introuvable…".rouge
+      puts "(recherché dans '#{txt_path}' et\n'#{md_path}')".gris
+      raise '- Abandon -'
+    else
+      if File.exist?(patharg)
+        return patharg
+      else
+        raise "Le fichier texte '#{patharg}' est introuvable…"
+      end
+    end
   end
 
   # @prop {Array of Any} paragraphes
@@ -89,6 +113,6 @@ class InputSimpleFile
     @folder ||= File.dirname(path)
   end
 
-end #/class InputSimpleFile
+end #/class InputTextFile
 end #/class PdfBook
 end #/module Prawn4book

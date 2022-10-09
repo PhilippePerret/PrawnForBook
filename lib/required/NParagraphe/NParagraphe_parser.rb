@@ -1,6 +1,6 @@
 module Prawn4book
 class PdfBook
-class InputSimpleFile
+class InputTextFile
 class Paragraphe
 
   REG_LINE = /^IMAGE\[(.+?)\]$/
@@ -67,7 +67,7 @@ class Paragraphe
 
 
 end #/class NParagraphe
-end #/class InputSimpleFile
+end #/class InputTextFile
 end #/class PdfBook
 end #/module Prawn4book
 

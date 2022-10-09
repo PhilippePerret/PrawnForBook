@@ -14,7 +14,40 @@ Tous les exemples de ce manuel présupposent qu’un alias de la commande a ét�
 
 > Noter ci-dessus que la commande sera `prawn-for-book` (qui est plus simple à taper)
 
+---
 
+## Pages du livre
+
+### Les marges
+
+Les marges sont définies de façon très strictes et concernent vraiment la partie de la page ***où ne sera rien écrit***, ni pied de page ni entête. On peut représenter les choses ainsi :
+
+~~~
+				
+					v------ marge gauche (ou intérieure)
+					___________________________
+				|		|			
+Mtop 	 -|   |
+				|	__|________________________
+Header -|   |	 Titre du livre
+				|	__|_________________________
+            |
+            | 23  Le 23e paragraphe
+            | 24  Un autre paragraphe
+            | ...
+            |
+          __|___________________________
+Footer  -|  | p. 42
+				 |__|___________________________
+				 |
+Mg Bot  -|
+				 |________________________________________________
+				 
+~~~
+
+Ce qui signifie que le haut et le bas du texte sont calculés en fonction des marges et des header et footer.
+
+---
 
 ## Les paragraphes
 
@@ -42,6 +75,34 @@ titre
 		Définit dans le texte par '#[#[#]] Titre'
 		
 ~~~
+
+### Formatage personnalisé des paragraphes (`module_formatage.rb`)
+
+Le principe est le suivant : 
+
+~~~
+SI un paragraphe commence par une balise (un mot suivi sans espace par ':')
+		par exemple : "custag: Le texte du paragraphe."
+
+ALORS ce paragraphe sera mis en forme à l'aide d'une méthode de nom :
+
+		formate_<nom balise>
+		
+		par exemple : def formate_custag(string)
+
+QUI SERA DÉFINIE dans le fichier 'module_formatage.rb' définissant le module 'PdfBookFormatageModule'
+~~~
+
+~~~ruby
+module PdfBookFormatageModule
+	def	formate_custag(string)
+		# ...
+		return string_formated
+	end
+end
+~~~
+
+---
 
 ## Recette du livre
 

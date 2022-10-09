@@ -1,5 +1,7 @@
 # Todo
 
+* Bien calculer les marges/header/footer (cf. le manuel pour voir comment ils sont définis)
+
 * Pouvoir créer/enregistrer une collection
 * Command qui permet d'ouvrir le fichier de recette du livre
 * Prendre les données enregistrées pour en tenir compte lors de la génération du book PDF.

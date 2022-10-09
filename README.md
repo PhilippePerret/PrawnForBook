@@ -1,5 +1,7 @@
 # Dossier PRAWN
 
+[Prawn sur Github](https://github.com/justchilinp/prawnpdf)
+
 Ce dossier doit permettre de tester l'utilisation du gem `prawn` pour produire les PDFs de la collection Narration
 
 Synopsis
