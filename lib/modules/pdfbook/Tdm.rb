@@ -5,11 +5,22 @@ module Prawn4book
 class PdfBook
 class Tdm
 
+  LINE_HEIGHT = 20
+
+  NUMERO_WIDTH = 50
+
+  #
+  # Distance du numéro de page/paragraphes avec la marge droite
+  # Peut-être redéfinie dans les recettes par 
+  # :tdm{:dist_num_from_rmargin}
+  NUMERO_FROM_RIGHT_MARGIN = 0
+
+
   # Instance Prawn4book::PdfBook
   attr_reader :pdfbook
 
   # Instance Praw4book::PdfFile < Prawn::Document
-  attr_reader :pdffile
+  attr_reader :pdf
 
   # Contenu de la table des matières, une table avec
   # en identifiant l'identifiant de la section (titre
@@ -17,10 +28,10 @@ class Tdm
   # de niveau inférieur
   attr_reader :content
 
-  def initialize(pdfbook, pdffile)
-    @pdfbook = pdfbook
-    @pdffile = pdffile
-    @content = []
+  def initialize(pdfbook, pdf)
+    @pdfbook  = pdfbook
+    @pdf      = pdf
+    @content  = []
   end
 
   #
@@ -28,22 +39,17 @@ class Tdm
   # +on_page+
   # 
   def output(on_page)
-    pdf = self.pdffile
     pdf.font 'Garamond', size:12
     pdf.go_to_page(on_page)
     pdf.move_cursor_to(pdf.bounds.height - 50)
     content.each do |l1_data|
-      pdf.text_box "#{l1_data[:titre].text}.....#{dest(l1_data[:page])}", at: [0, pdf.cursor], height:20, width:pdf.bounds.width
-      pdf.move_down(20)
+      write_title(l1_data)
       l1_data[:items].each do |l2_data|
-        pdf.text_box "#{l2_data[:titre].text}.....#{dest(l2_data[:page])}", at: [20, pdf.cursor], height:20, width:pdf.bounds.width
-        pdf.move_down(20)
+        write_title(l2_data)
         l2_data[:items].each do |l3_data|
-          pdf.text_box "#{l3_data[:titre].text}.....#{dest(l3_data[:page])}", at: [40, pdf.cursor], height:20, width:pdf.bounds.width
-          pdf.move_down(20)
+          write_title(l3_data)
           l3_data[:items].each do |l4_data|
-            pdf.text_box "#{l4_data[:titre].text}.....#{dest(l4_data[:page])}", at: [40, pdf.cursor], height:20, width:pdf.bounds.width
-            pdf.move_down(20)
+            write_title(l4_data)
           end
         end
       end
@@ -51,11 +57,43 @@ class Tdm
   end
 
   ##
+  # Écrit le titre défini par les +data+
+  # @param {Hash} data
+  #   :titre  Instance PdfBook::NTitre du titre
+  #           Définit notamment :text et :level
+  #   :page   Numéro de page où se trouve le titre
+  def write_title(data)
+    titre = data[:titre]
+    page  = data[:page]
+    indent = [0, 20, 40][titre.level - 1]
+
+    pdf.text_box "#{titre.text}.....", at: [indent, pdf.cursor], height:LINE_HEIGHT, width:pdf.bounds.width - (NUMERO_WIDTH+1), overflow: :truncate
+    pdf.span NUMERO_WIDTH, position: distance_numero do
+      pdf.text destination(page), align: :right
+    end
+    pdf.move_down(LINE_HEIGHT)
+
+  end
+
+  def distance_numero
+    @distance_numero ||= begin
+      pdf.bounds.width - (NUMERO_WIDTH + distance_numero_from_rmargin)
+    end
+  end
+
+  def distance_numero_from_rmargin
+    @distance_numero_from_rmargin ||= begin
+      pdfbook.recette[:distance_numero_from_rmargin] || NUMERO_FROM_RIGHT_MARGIN
+    end
+  end
+
+
+  ##
   # En règle général, la valeur retournée est le numéro de page
   # à mettre en regard du titre. Mais lorsque la numérotation des
   # pages se fait avec les numéros de premier et dernier paragraphe,
   # c'est cela qu'il faut renvoyer.
-  def dest(num_page)
+  def destination(num_page)
     if numerotation_page_with_num_parag?
       data_page = pdfbook.pages[num_page]
       "#{data_page[:first_par]}-#{data_page[:last_par]}"
@@ -63,6 +101,7 @@ class Tdm
       num_page
     end
   end
+  alias dest destination
 
   def numerotation_page_with_num_parag?
     pdfbook.num_page_style == 'num_parags'

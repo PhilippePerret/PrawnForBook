@@ -8,17 +8,18 @@
 :auteurs:
 - Marion MICHEL
 - Philippe PERRET
-:edition: :collection
 :main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books/une_collection/mon_livre"
 :text_path: true
-:dimensions: :collection
-:marges: :collection
-:interligne: :collection
-:opt_num_parag: :collection
-:fonts: :collection
-:faux_titre: :collection
-:page_de_garde: :collection
-:num_page_style: :collection
+:edition:         :collection
+:dimensions:      :collection
+:marges:          :collection
+:interligne:      :collection
+:opt_num_parag:   :collection
+:fonts:           :collection
+:faux_titre:      :collection
+:page_de_garde:   :collection
+:num_page_style:  :collection
+:tdm:             :collection
 :header:
   :from_page: 10
   :to_page: 200
