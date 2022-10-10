@@ -39,8 +39,8 @@ class Tdm
   # +on_page+
   # 
   def output(on_page)
-    pdf.font 'Garamond', size:12
     pdf.go_to_page(on_page)
+    # pdf.stroke_axis # pour voir les axes
     pdf.move_cursor_to(pdf.bounds.height - 50)
     content.each do |l1_data|
       write_title(l1_data)
@@ -63,28 +63,54 @@ class Tdm
   #           Définit notamment :text et :level
   #   :page   Numéro de page où se trouve le titre
   def write_title(data)
-    titre = data[:titre]
-    page  = data[:page]
-    indent = [0, 20, 40][titre.level - 1]
+    titre     = data[:titre]
+    idxtitre  = titre.level - 1
+    indent    = [0, 15, 30, 45][idxtitre]
+    fsize     = [14, 12, 10, 10][idxtitre]     
 
-    pdf.text_box "#{titre.text}.....", at: [indent, pdf.cursor], height:LINE_HEIGHT, width:pdf.bounds.width - (NUMERO_WIDTH+1), overflow: :truncate
-    pdf.span NUMERO_WIDTH, position: distance_numero do
-      pdf.text destination(page), align: :right
-    end
+    # 
+    # Font pour ce niveau de titre
+    # 
+    # 
+    # Numéro pour la pagination
+    # 
+    numero = destination(data[:page])
+    # 
+    # Largeur de la pagination
+    # 
+    pdf.font 'Garamond', size: 11
+    wnum = pdf.width_of(numero)
+
+    hauteur_cursor = pdf.cursor.freeze
+
+    # 
+    # Écriture du texte
+    # 
+    pdf.font( 'Garamond', size: fsize)
+    titre_width = page_width - (indent + wnum)
+    puts "Titre «#{titre.text}» - indent:#{indent} — width: #{titre_width} - width num: #{wnum} - page_width: #{page_width}"
+    # pdf.text_box "#{titre.text}#{' .' * 50}", at: [indent, pdf.cursor], width:titre_width, overflow: :truncate #, height:LINE_HEIGHT
+    
+    # pdf.span pdf.bounds.width, position: indent, overflow: :truncate, inline_format: true do
+    #   pdf.text "#{titre.text}#{' .' * 30}", overflow: :truncate
+    # end
+
+    # 
+    # Écriture de la pagination
+    # 
+    pdf.move_cursor_to(hauteur_cursor)
+    pdf.font 'Garamond', size: 11
+    pdf.text_box "#{'. ' * 50} #{numero.strip}", width: page_width - wnum, align: :right, overflow: :truncate
+    # pdf.span page_width - wnum, position: 0 do
+    #   pdf.text "#{' .' * 50} #{numero}", align: :right
+    # end
+
     pdf.move_down(LINE_HEIGHT)
 
   end
 
-  def distance_numero
-    @distance_numero ||= begin
-      pdf.bounds.width - (NUMERO_WIDTH + distance_numero_from_rmargin)
-    end
-  end
-
-  def distance_numero_from_rmargin
-    @distance_numero_from_rmargin ||= begin
-      pdfbook.recette[:distance_numero_from_rmargin] || NUMERO_FROM_RIGHT_MARGIN
-    end
+  def page_width
+    @page_width ||= pdf.bounds.width
   end
 
 

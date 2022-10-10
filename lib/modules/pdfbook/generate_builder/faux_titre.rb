@@ -33,7 +33,6 @@ class PdfFile < Prawn::Document
       align: :center,
       valign: :center,
     }
-    puts "Écriture du titre «  » avec #{options.inspect}"
     text_box(titre, options)
 
     #

@@ -176,6 +176,9 @@
     dignissim pulvinar a eget urna. Donec eu vehicula dolor. Cras interdum faucibus
     augue, a posuere nisi lobortis et. Praesent a lacinia enim. Aliquam erat volutpat.
   :type: paragraph
+- :level: 1
+  :text: Grand titre deux
+  :type: titre
 - :raw_line: Integer faucibus nulla placerat, lacinia lectus in, suscipit metus. Cras
     commodo enim et viverra imperdiet. Vestibulum ante ipsum primis in faucibus orci
     luctus et ultrices posuere cubilia curae; Vestibulum feugiat ullamcorper augue,
@@ -191,6 +194,9 @@
     massa ac dignissim maximus, velit est pharetra felis, vel vestibulum nibh mi vitae
     turpis.
   :type: paragraph
+- :level: 2
+  :text: Titre après grand titre deux long
+  :type: titre
 - :raw_line: Cras sodales tortor ut urna tempus, ac ultricies mi dictum. Pellentesque
     habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
     Proin aliquet rhoncus magna, a viverra dui condimentum eget. Morbi porttitor enim
