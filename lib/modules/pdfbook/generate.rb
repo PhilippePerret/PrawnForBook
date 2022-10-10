@@ -78,6 +78,7 @@ class PdfBook
 
       # interligne = recette[:interligne]
 
+      puts "first/last = #{CLI.options[:first]}/#{CLI.options[:last]}".bleu
       # 
       # On boucle sur tous les paragraphes du fichier d'entrée
       # 
@@ -88,7 +89,6 @@ class PdfBook
       # Note : 'with_index' permet juste de faire des essais
       # 
       inputfile.paragraphes.each_with_index do |paragraphe, idx|
-        pdf.insert(paragraphe)
 
         if paragraphe.paragraph?
           @pages[pdf.page_number] || begin
@@ -99,7 +99,9 @@ class PdfBook
           @pages[pdf.page_number][:last_par] = paragraphe.numero
         end
 
-        break if pdf.page_number == 24
+        pdf.insert(paragraphe)
+        
+        break if CLI.options[:last] && pdf.page_number == CLI.options[:last]
         
         pdf.move_down( paragraphe.margin_bottom )
       end

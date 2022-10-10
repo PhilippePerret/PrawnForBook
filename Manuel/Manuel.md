@@ -16,6 +16,29 @@ Tous les exemples de ce manuel présupposent qu’un alias de la commande a ét�
 
 ---
 
+<a name="build-book-pdf"></a>
+
+## Construction du PDF du livre
+
+Pour lancer la fabrication du PDF qui servira à l'impression du livre, jouer la commande :
+
+~~~bash
+> cd path/to/book/folder
+> prawn-for-book build
+~~~
+
+Certaines options permettent de travailler le livre avant sa fabrication définitive :
+
+Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des essais minimum avec KDP :
+
+~~~bash
+> prawn-for-book build -last=24
+~~~
+
+---
+
+<a name="book-pages"></a>
+
 ## Pages du livre
 
 ### Les marges
