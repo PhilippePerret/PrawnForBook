@@ -35,6 +35,58 @@ Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des e
 > prawn-for-book build -last=24
 ~~~
 
+
+
+<a name="build-index"></a>
+
+### Construction d’un index
+
+cf. [Parsing personnalisé du texte](text-custom-parser) pour savoir comment parser les paragraphes pour en tirer les informations importantes.
+
+Il s’agit donc, ici, de programmer la méthode `__paragraph_parser` pour qu’elle récupère les mots à indexer. Par exemple, si ces mots sont repérés par la balise `index:mot` ou `index:(groupe de mot)`, il suffit de faire :
+
+~~~ruby
+def __paragraph_parser(paragraph)
+ 
+  @table_index ||= {}
+  paragraph.text.scan(/index[:\(](.+?)\)?/).each do |idiom|
+    @table_index.key?(idiom[0]) || @table_index.merge!(idiom[0] => [])
+    @table_index[idiom[0]] << {text: idiom, parag: paragraph}
+  end
+end 
+~~~
+
+À l’issue du traitement, la table `@table_index` (de l’instance `PdfBook`) contiendra en clé tous les mots trouvés et en valeur une liste de toutes les itérations.
+
+On peut donc faire ensuite :
+
+~~~ruby
+module Prawn4book
+  class PdfBook
+		attr_reader :table_index
+  end
+end
+
+module ParserParagraphModule
+  def __paragraph_parser(paragraph)
+    #... cf ci-dessus
+  end
+end
+
+module PrawnCustomBuilderModule
+  def __custom_builder(pdfbook, pdf)
+    pdfbook.table_index.each do |idiom, occurrences|
+      pdf.text "Index de '#{idiom}'"
+      pdf.text occurrences.map {|oc| oc[:parag].numero }.uniq.join(', ')
+    end
+  end
+end
+~~~
+
+
+
+
+
 ---
 
 <a name="book-pages"></a>
@@ -99,33 +151,77 @@ titre
 		
 ~~~
 
-### Formatage personnalisé des paragraphes (`module_formatage.rb`)
+### Formatage personnalisé des paragraphes (`formater.rb`)
 
 Le principe est le suivant : 
 
 ~~~
-SI un paragraphe commence par une balise (un mot suivi sans espace par ':')
-		par exemple : "custag: Le texte du paragraphe."
+SI un paragraphe commence par une balise (un mot suivi sans espace par '::')
+		par exemple : "custag:: Le texte du paragraphe."
 
 ALORS ce paragraphe sera mis en forme à l'aide d'une méthode de nom :
 
-		formate_<nom balise>
+		__formate_<nom balise>
 		
-		par exemple : def formate_custag(string)
+		par exemple : def __formate_custag(string)
 
-QUI SERA DÉFINIE dans le fichier 'module_formatage.rb' définissant le module 'PdfBookFormatageModule'
+QUI SERA DÉFINIE dans le fichier 'formater.rb' définissant le module 'FormaterParagraphModule'
 ~~~
 
 ~~~ruby
-module PdfBookFormatageModule
-	def	formate_custag(string)
+module FormaterParagraphModule # Ce nom est absolument à respecter
+	def	__formate_custag(string)
 		# ...
 		return string_formated
 	end
 end
 ~~~
 
+Ce code doit être placé dans un fichier **`formater.rb`** soit dans le dossier du livre soit dans le dossier de la collection si le livre appartient à une collection.
+
+> Noter que si collection et livre contient ce fichier, seul celui de la collection sera chargé.
+
+<a name="text-custom-parser"></a>
+
+### Parsing personnalisé des paragraphes (`parser.rb`)
+
+De la même manière que les paragraphes sont formatés (cf. ci-dessus), ils peuvent être parsés pour en tirer des informations utiles (pour faire un index, une bibliographie, etc.)
+
+Il suffit pour cela de créer un fichier de nom `parser.rb` dans le dossier du livre (ou de la collection) qui contienne : 
+
+~~~ruby
+module ParserParagraphModule # ce nom est absolument à respecter
+  def	__paragraph_parser(str)
+    # Parse le paragraphe +str+
+  end
+  # ...
+end #/module
+
+module PrawnCustomBuilderModule # ce nom est absolument à respecter
+  # 
+  # Ici doit être défini les choses à faire avec les informations
+  # qui ont été parsées
+  #
+  def __custom_builder(pdfbook, pdf)
+    #
+    # P.e. pour insérer une nouvelle page avec du texte
+    #
+    pdf.start_new_page
+    pdf.text "Ceci est un texte avec les infos parsées."
+    
+  end
+end #/module
+~~~
+
+Ce fichier contient donc deux modules :
+
+* **ParserParagraphModule** définit la méthode `__paragraph_parser` qui parse les paragraphes.
+* **PrawnCustomBuilderModule** définit la méthode `__custom_builder` qui construit les éléments du livre en rapport avec les informations relevées.
+
+
 ---
+
+<a name="book-recipe"></a>
 
 ## Recette du livre
 

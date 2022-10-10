@@ -1,16 +1,21 @@
 # Todo
 
-* Placement des numéros de paragraphes en footer
-  - au cours de la construction du document, il faut relever le premier et le dernier paragraphe de chaque page. Pour ce faire, on tient à jour une propriété pdfbook.pages qui va comprendre en clé l'indice de la page et en valeur les données de la page
-  À chaque changement de page :
-    - on enregistre dans la nouvelle page le numéro suivant
-    - on enregistre dans la page précédente le numéro courant
-  Note : voir si le numéro de paragraphe est "exposé", ce qui n'est
-  pas sûr du tout (le mettre dans pdfbook, au cas où)
+* Dans le dossier du livre on peut trouver :
+  - (`parser.rb`) un *parser* (qui parse les paragraphes et en tire des informations — dans la collection Narration, on relève les films et les mots techniques, indexés)
+  - (`formater.rb`)un *formater* — qui va mettre en forme les balises se trouvant dans le texte
+    * noter quand même qu'on doit proposer le même principe pour tout type de document : un code `balise:` amorçant un paragraphe détermine un type de paragraphe qui renverra au formater (`formate_balise(paragraphe)`) 
+    QUESTION : ne faut-il pas mettre 'balise::' pour éviter toute ambigüité avec les autres balisages. Par exemple, dans la collection, on peut avoir un paragraphe qui commence par "film:Her est un film" où "film" n'est pas une balise de formatage, mais une balise de film.
 
-* Voir comment traiter la première page (pour le moment, elle ne se traite pas comme les autres)
+* Poursuivre les essais sur la table des matières
+  En profiter pour bien comprendre le fonctionnement des :
+  - text
+  - text_box
+  - span
+  - bounding_box
 
-* Les unités doivent être ajoutées, avec l'assistant d'init.
+* [NARRATION]
+  * Faire la liste de tous les films avec les endroits où on en parle
+    - de façon plus générale, voir comment on peut programmer ce genre de chose dans P4B
 
 * Bien calculer les marges/header/footer (cf. le manuel pour voir comment ils sont définis)
 
