@@ -19,6 +19,11 @@ class PdfFile < Prawn::Document
   # en options de la ligne de commande (pour le moment)
   attr_accessor :last_page
 
+  # L'instance PdfBook::Tdm qui gère la table des
+  # matière. Permettra d'ajouter les titres pour construire
+  # la table des matières finales
+  attr_accessor :tdm
+
   def initialize(config = nil)
     @config = config
     super(config)
@@ -156,7 +161,7 @@ class PdfFile < Prawn::Document
     parag.last_page = page_number # + (chevauchement ? 1 : 0)
 
     # debug rapport
-    puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
+    # puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
 
   end
 
@@ -167,6 +172,10 @@ class PdfFile < Prawn::Document
   def insert_titre(titre)
     font "Nunito", style: titre.font_style
     text titre.text, align: :left, size: titre.font_size
+    #
+    # On ajoute toujours le titre à la table des matières
+    # 
+    tdm.add_title(titre, page_number)
   end
 
   ##

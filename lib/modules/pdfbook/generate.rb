@@ -1,5 +1,6 @@
 require_relative 'generate_building_methods'
 require_relative 'PdfBook_helpers'
+require_relative 'Tdm'
 
 module Prawn4book
 class PdfBook
@@ -59,18 +60,41 @@ class PdfBook
       # define_required_fonts(self.config[:fonts])
       pdf.define_required_fonts(book_fonts)
 
+      # 
+      # Initier une première page, si on a demandé de la sauter
+      # au départ (on le demande pour qu'elle prennen en compte les
+      # définitions de marge, etc.)
+      # 
+      pdf.start_new_page if skip_page_creation?
 
-      if skip_page_creation?
-        pdf.start_new_page
-      end
+      #
+      # Initier la table des matières (je préfère faire mon 
+      # instance plutôt que d'utiliser l'outline de Prawn)
+      # 
+      tdm = PdfBook::Tdm.new(self, pdf)
+      pdf.tdm = tdm
 
-      if page_de_garde?
-        pdf.start_new_page
-      end
+
+      pdf.start_new_page if page_de_garde?
 
       pdf.build_faux_titre(self) if faux_titre?
-
+        
       pdf.build_page_de_titre(self) if page_de_titre?
+
+
+      if table_des_matieres?
+
+        # Pour savoir sur quelle page construire la table des
+        # matière
+        on_page = pdf.page_number
+        pdf.font "Nunito", size: 20 # TODO À régler
+        pdf.text "Table des matières"
+
+        pdf.start_new_page
+
+        pdf.start_new_page
+
+      end
 
       # 
       # Pour commencer sur la belle page, on doit toujours ajouter
@@ -85,6 +109,9 @@ class PdfBook
 
       # interligne = recette[:interligne]
 
+      # 
+      # BOUCLE SUR TOUS LES PARAGRAPHES
+      # ===============================
       # 
       # On boucle sur tous les paragraphes du fichier d'entrée
       # 
@@ -120,6 +147,10 @@ class PdfBook
       # puts "pages : #{@pages.pretty_inspect}"
 
 
+      # 
+      # Écriture de la table des matières
+      # 
+      tdm.output(on_page)
 
       #
       # Définition des numéros de page ou numéros de paragraphes
@@ -141,6 +172,9 @@ class PdfBook
 
   # --- Predicate Methods ---
 
+  def table_des_matieres?
+    pdf_config[:table_of_content] === true
+  end
   def skip_page_creation?
     pdf_config[:skip_page_creation] === true
   end
@@ -183,15 +217,18 @@ class PdfBook
         optimize_objects:   get_config(:optimize_objects, true),
         compress:           get_config(:compress),
         # {Hash} Des variables (méta-propriété personnalisées)
+        # (:title, :author, etc.)
         info:               get_config(:info),
         # Un fichier template
         template:           get_config(:template),
         text_formatter:     nil, # ?
-        faux_titre:         get_config(:faux_titre, false),
-        page_de_titre:      get_config(:page_titre, true),
-        page_de_garde:      get_config(:page_de_garde, true),
         # Pour créer le document sans créer de première page
         skip_page_creation: get_config(:skip_page_creation, true),
+        # --- Options propres à Praw4Book ---
+        table_of_content:   get_config(:table_of_content, true),
+        page_de_garde:      get_config(:page_de_garde, true),
+        page_de_titre:      get_config(:page_titre, true),
+        faux_titre:         get_config(:faux_titre, false),
       }
     end
   end
