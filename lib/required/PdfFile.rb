@@ -209,40 +209,47 @@ class PdfFile < Prawn::Document
     number_pages str, even_options
   end
 
-  def numerote_pages_with_paragraphs_number(data_pages)
-    odd_options = {
-      page_filter: :odd,
-      at: [bounds.right - 200, @top_footer],
-      width: 200,
-      align: :right
-    }
-    even_options = {
-      page_filter: :even,
-      at: [0, @top_footer], 
-      width: 200, 
-      align: :left,
-    }
-    number_paragraphs data_pages, odd_options
-    number_paragraphs data_pages, even_options        
-  end
-
-
-  ##
-  # Numérotation des pages avec les paragraphes
   #
-  # Cf. https://github.com/prawnpdf/prawn/blob/7d4f6b8998e0627259c1036a2cd6bca65cd53f45/lib/prawn/document.rb#L572
+  # Numérotation exceptionnelle des pages avec le numéro des
+  # premiers et derniers paragraphes
   # 
-  def number_paragraphs data_pages, options
-    page_filter = options.delete(:page_filter)
+  # Cf. https://github.com/prawnpdf/prawn/blob/7d4f6b8998e0627259c1036a2cd6bca65cd53f45/lib/prawn/document.rb#L572
+  def numerote_pages_with_paragraphs_number(data_pages)
+    common_options = {
+      width: 200,
+      height: 50,
+      color: 'CCCCCC'
+    }
+    odd_options = common_options.merge({
+      at: [bounds.right - 200, @top_footer],
+      align: :right
+    })
+    even_options = common_options.merge({
+      at: [0, @top_footer], 
+      align: :left,
+    })
+    # 
+    # Réglage de la fonte
+    # 
+    font footer_font_name, size: footer_font_size
+    # 
+    # Boucle sur toutes les pages (qui comportent des paragraphes)
+    # 
+    data_pages.each do |page_number, data_page|
+      if page_match?(:odd, page_number)
+        options = odd_options.dup
+      else
+        options = even_options.dup
+      end
+      go_to_page(page_number)
+      str = "#{data_page[:first_par]} - #{data_page[:last_par]}"
 
-    (1..page_count).each do |pg|
-      next if page_match?(page_filter, pg)
-      go_to_page(pg)
-      data_page = data_pages[pg]
-      puts "data_page : #{data_page}.inspect"
-      str = "#{data_page[:first_par]}-#{data_page[:last_par]}"
+      # Debug
+      # puts "str = #{str.inspect} / #{options.inspect} / page #{page_number}"
+
       text_box str, options
     end
+
   end
 
   ##
