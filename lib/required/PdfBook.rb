@@ -58,6 +58,8 @@ class PdfBook
 
   # --- Data Methods ---
 
+  def titre; data[:book_title] end
+
   def footer
     @footer ||= begin
       if collection?

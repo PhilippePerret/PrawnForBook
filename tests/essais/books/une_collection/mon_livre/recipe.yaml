@@ -12,6 +12,8 @@
 :interligne: :collection
 :opt_num_parag: :collection
 :fonts: :collection
+:faux_titre: :collection
+:page_de_garde: :collection
 :num_page_style: :collection
 :header:
   :from_page: 10

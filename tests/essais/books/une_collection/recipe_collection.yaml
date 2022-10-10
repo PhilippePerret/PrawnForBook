@@ -26,6 +26,8 @@
     :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
 
 :num_page_style: num_parags
+:faux_titre: true # pour l'essai de la méthode
+:page_de_garde: true
 :footer:
   :from_page: 1
   :to_page: 220

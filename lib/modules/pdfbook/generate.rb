@@ -1,3 +1,5 @@
+require_relative 'generate_building_methods'
+
 module Prawn4book
 class PdfBook
 
@@ -54,12 +56,26 @@ class PdfBook
         pdf.start_new_page
       end
 
+      if page_de_garde?
+        pdf.start_new_page
+      end
+
+      pdf.build_faux_titre(self) if faux_titre?
+
+      pdf.build_page_de_titre(self) if page_de_titre?
+
+      # 
+      # Pour commencer sur la belle page, on doit toujours ajouter
+      # une page blanche
+      # 
+      pdf.start_new_page
+
       #
       # On se place toujours en haut de la page pour commencer
       #
-      pdf.move_cursor_to_top_of_the_page
+      # pdf.move_cursor_to_top_of_the_page
 
-      interligne = recette[:interligne]
+      # interligne = recette[:interligne]
 
       # 
       # On boucle sur tous les paragraphes du fichier d'entrée
@@ -115,6 +131,23 @@ class PdfBook
     pdf_config[:skip_page_creation] === true
   end
 
+  def page_de_garde?
+    pdf_config[:page_de_garde] === true
+  end
+
+  # @return true s'il faut un faux titre
+  # Rappel : le "faux-titre" est la première page imprimée du livre,
+  # après la page de garde, qui contient JUSTE le titre du livre. 
+  # Elle ne doit pas être confondu avec la "page de titre" qui 
+  # contient les informations générales sur le livre.
+  def faux_titre?
+    pdf_config[:faux_titre] === true
+  end
+
+  def page_de_titre?
+    pdf_config[:page_de_titre] === true
+  end
+
   # --- Configuration Pdf Methods ---
 
   # @prop Configuration pour le second argument de la méthode
@@ -125,7 +158,7 @@ class PdfBook
     @pdf_config ||= begin
       {
         page_size:          proceed_unit(get_config(:dimensions)),
-        page_layout:        get_config(:layout),
+        page_layout:        get_config(:layout, :portrait),
         margin:             proceed_unit(get_config(:margin)),
         left_margin:        conf_margin(:left) ||conf_margin(:ext),
         right_margin:       conf_margin(:right)||conf_margin(:int),
@@ -139,9 +172,11 @@ class PdfBook
         info:               get_config(:info),
         # Un fichier template
         template:           get_config(:template),
-        text_formatter:     nil,
+        text_formatter:     nil, # ?
+        faux_titre:         get_config(:faux_titre, false),
+        page_de_titre:      get_config(:page_titre, true),
+        page_de_garde:      get_config(:page_de_garde, true),
         # Pour créer le document sans créer de première page
-        # (ne semble pas fonctionner)
         skip_page_creation: get_config(:skip_page_creation, true),
       }
     end
