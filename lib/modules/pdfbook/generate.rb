@@ -9,7 +9,10 @@ class PdfBook
   # = main =
   # 
   # Méthode principale pour générer le PDF du livre
-  #
+  # Elle prépare le document Prawn::Document (PdfFile) et boucle
+  # sur tous les paragraphes du texte pour les formater et les
+  # ajouter.
+  # 
   # Rappel : PdfFile hérite de Prawn::Document
   # 
   def generate_pdf_book
@@ -38,10 +41,7 @@ class PdfBook
     # On doit définir la configuration
     # C'est la propriété-méthode pdf_config qui s'en charge.
     # 
-    # bookfile.generate(pdf_path) do |pdf|
     PdfFile.generate(pdf_path, pdf_config) do |pdf|
-    # PdfFile.generate(pdf_path, pdf_config) do |pdf|
-      # doc = PdfFile.new()
 
       # 
       # On définit les polices requises pour le livre
@@ -49,60 +49,10 @@ class PdfBook
       # define_required_fonts(self.config[:fonts])
       pdf.define_required_fonts(book_fonts)
 
-      # 
-      # DES CODES À ESSAYER
-      # 
-      if false # pdf.page_count == 4
-        puts "pdf.page (methods) = #{pdf.page.methods.inspect}"
-        page_keys_to_see = [:dimensions]
-        page_keys_to_see.each do |key|
-          puts "pdf.page.#{key} = #{pdf.page.send(key).inspect}"
-        end
 
-        puts "pdf.page_count = #{pdf.page_count.inspect}"
-        puts "pdf.page_number = #{pdf.page_number.inspect}"
-        pdf.delete_page(2)
-        puts "pdf.delete_page(2)"
-        puts "pdf.page_count = #{pdf.page_count.inspect}"
-        puts "pdf.page_number = #{pdf.page_number.inspect}"
-
-        # Apparemment pour se rendre sur une page
-        # pdf.go_to_page <num page>
-
-        # Apparemment pour marquer le nombre de pages :
-        # pdf.number_pages '<page> <number>', page_filter: ..., start_count_at: ...
-
-        # ?
-        # pdf.page_match?(:all|:odd|:even, i)
-
-
-        # Annotation ? 
-        pdf.annotate(
-          Rect: [0, 0, 10, 10],
-          Subtype: :Text,
-          Contents: 'Une annotation ?',
-          # Type: :Bogus, # ?
-        )
-        rect = [10,10,20,20]
-        content = "Avec text_annotation"
-        pdf.text_annotation(rect, content, Open: true, Subtype: :Bogus)
-        # Il y a aussi : pdf.link_annotation avec la propriété :Dest qui 
-        # peut contenir 'home' (dans l'exemple)
-
-        # À quoi correspond ?
-        # pdf.add_dest 'candy', 'chocolate'
-        # pdf.dests.data.size
-
-        return
+      if skip_page_creation?
+        pdf.start_new_page
       end
-
-      # 
-      # Si le format est recto verso (vrai par défaut, puisque
-      # l'application est faite pour fabriquer des livres),  il faut
-      # définir, d'après les marges, les tailles de chaque côté (les
-      # marges de chaque côté)
-      # cf. odd_margins et even_margins
-
 
       #
       # On se place toujours en haut de la page pour commencer
@@ -137,7 +87,7 @@ class PdfBook
         pdf.move_down( paragraphe.margin_bottom )
       end
 
-      puts "pages : #{@pages.pretty_inspect}"
+      # puts "pages : #{@pages.pretty_inspect}"
 
 
 
@@ -156,6 +106,13 @@ class PdfBook
     else
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
     end
+  end
+
+
+  # --- Predicate Methods ---
+
+  def skip_page_creation?
+    pdf_config[:skip_page_creation] === true
   end
 
   # --- Configuration Pdf Methods ---
@@ -185,7 +142,7 @@ class PdfBook
         text_formatter:     nil,
         # Pour créer le document sans créer de première page
         # (ne semble pas fonctionner)
-        skip_page_creation: get_config(:skip_page_creation, nil),
+        skip_page_creation: get_config(:skip_page_creation, true),
       }
     end
   end

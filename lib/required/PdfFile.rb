@@ -129,15 +129,6 @@ class PdfFile < Prawn::Document
       size: 11, 
       font_style: 'normal', 
       inline_format: true
-    # h = height_of(final_str)
-    # puts "h = #{h.inspect}"
-    # text_box(final_str, 
-    #     at: [belle_page? ? 0 : 1.cm, cursor],
-    #     # inline_format: true,
-    #     height: h,
-    #     overflow: :shrink_to_fit
-    #     ) do
-    # end    
   end
 
   ##
@@ -146,9 +137,7 @@ class PdfFile < Prawn::Document
   # @param {PdfBook::NTitre} titre Le titre à écrire
   def insert_titre(titre)
     font "Nunito", style: titre.font_style
-    # font "Bangla"
     text titre.text, align: :left, size: titre.font_size
-    # text titre.text, font_family:'Avenir', align: :left, size: 14, font_style:'normal'
   end
 
   ##
