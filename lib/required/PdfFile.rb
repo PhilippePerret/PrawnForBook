@@ -27,7 +27,7 @@ class PdfFile < Prawn::Document
   def initialize(config = nil)
     @config = config
     super(config)
-    puts "[instantiation PdfFile] config = #{config.pretty_inspect}".jaune
+    # puts "[instantiation PdfFile] config = #{config.pretty_inspect}".jaune
   end
 
   ##

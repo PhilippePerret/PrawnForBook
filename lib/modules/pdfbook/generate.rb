@@ -158,7 +158,6 @@ class PdfBook
       pdf.set_pages_numbers(@pages)
 
 
-
     end #/PdfFile.generate
 
     if File.exist?(pdf_path)

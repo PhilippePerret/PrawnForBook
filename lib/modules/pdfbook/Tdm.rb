@@ -32,18 +32,40 @@ class Tdm
     pdf.font 'Garamond', size:12
     pdf.go_to_page(on_page)
     pdf.move_cursor_to(pdf.bounds.height - 50)
-    content.each do |sec_data|
-      pdf.text_box "#{sec_data[:titre].text} ... #{sec_data[:page]}", at: [0, pdf.cursor], height:20, width:pdf.bounds.width
+    content.each do |l1_data|
+      pdf.text_box "#{l1_data[:titre].text}.....#{dest(l1_data[:page])}", at: [0, pdf.cursor], height:20, width:pdf.bounds.width
       pdf.move_down(20)
-      sec_data[:items].each do |sub_data|
-        pdf.text_box "#{sub_data[:titre].text} ... #{sub_data[:page]}", at: [20, pdf.cursor], height:20, width:pdf.bounds.width
+      l1_data[:items].each do |l2_data|
+        pdf.text_box "#{l2_data[:titre].text}.....#{dest(l2_data[:page])}", at: [20, pdf.cursor], height:20, width:pdf.bounds.width
         pdf.move_down(20)
-        sub_data[:items].each do |ssub_data|
-          pdf.text_box "#{ssub_data[:titre].text} ... #{ssub_data[:page]}", at: [40, pdf.cursor], height:20, width:pdf.bounds.width
+        l2_data[:items].each do |l3_data|
+          pdf.text_box "#{l3_data[:titre].text}.....#{dest(l3_data[:page])}", at: [40, pdf.cursor], height:20, width:pdf.bounds.width
           pdf.move_down(20)
+          l3_data[:items].each do |l4_data|
+            pdf.text_box "#{l4_data[:titre].text}.....#{dest(l4_data[:page])}", at: [40, pdf.cursor], height:20, width:pdf.bounds.width
+            pdf.move_down(20)
+          end
         end
       end
     end
+  end
+
+  ##
+  # En règle général, la valeur retournée est le numéro de page
+  # à mettre en regard du titre. Mais lorsque la numérotation des
+  # pages se fait avec les numéros de premier et dernier paragraphe,
+  # c'est cela qu'il faut renvoyer.
+  def dest(num_page)
+    if numerotation_page_with_num_parag?
+      data_page = pdfbook.pages[num_page]
+      "#{data_page[:first_par]}-#{data_page[:last_par]}"
+    else
+      num_page
+    end
+  end
+
+  def numerotation_page_with_num_parag?
+    pdfbook.num_page_style == 'num_parags'
   end
 
   #
@@ -73,6 +95,9 @@ class Tdm
     elsif titre.level == 4
       container = content[@current_level1][:items][@current_level2][:items][@current_level3]
       @current_level4 = container[:items].count
+    else
+      # Ce niveau de titre n'est pas enregistré
+      return
     end
     container[:items] << {titre:titre, items:[], page: num_page}
   end
