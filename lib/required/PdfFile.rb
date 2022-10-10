@@ -15,6 +15,10 @@ class PdfFile < Prawn::Document
 
   attr_reader :config
 
+  # Dernière page à imprimer (page du pdf), définie
+  # en options de la ligne de commande (pour le moment)
+  attr_accessor :last_page
+
   def initialize(config = nil)
     @config = config
     super(config)
@@ -87,8 +91,13 @@ class PdfFile < Prawn::Document
       move_cursor_to cursor_on_baseline
     end
 
+    # 
+    # Indication de la première page du paragraphe
+    # 
+    parag.first_page = page_number
+
     if paragraph_number? 
-      numero = (parag.number + 900).to_s
+      numero = parag.number.to_s
 
       # 
       # On place le numéro de paragraphe
@@ -124,11 +133,31 @@ class PdfFile < Prawn::Document
     final_str = "#{cursor_on_baseline} #{parag.text}"
 
     font "Garamond", size: 11, font_style: :normal
+    # 
+    # Le paragraphe va-t-il passer à la page suivante ?
+    # (pour pouvoir calculer son numéro de dernière page)
+    # 
+    final_str_height = height_of(final_str)
+    chevauchement = cursor - final_str_height < 0
+
+    # 
+    # Écriture du paragraphe
+    # 
     text final_str, 
       align: :justify, 
       size: 11, 
       font_style: 'normal', 
       inline_format: true
+
+    # 
+    # On prend la dernière page du paragraphe, c'est celle sur 
+    # laquelle on se trouve maintenant
+    # 
+    parag.last_page = page_number # + (chevauchement ? 1 : 0)
+
+    # debug rapport
+    puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
+
   end
 
   ##
@@ -237,6 +266,9 @@ class PdfFile < Prawn::Document
       # puts "str = #{str.inspect} / #{options.inspect} / page #{page_number}"
 
       text_box str, options
+
+      break if page_number === last_page
+
     end
 
   end

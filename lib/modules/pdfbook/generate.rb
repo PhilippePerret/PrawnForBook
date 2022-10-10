@@ -46,6 +46,13 @@ class PdfBook
     # 
     PdfFile.generate(pdf_path, pdf_config) do |pdf|
 
+      #
+      # Y a-t-il une dernière page définie en options
+      # 
+      if CLI.options[:last]
+        pdf.last_page = CLI.options[:last].to_i
+      end
+
       # 
       # On définit les polices requises pour le livre
       # 
@@ -78,7 +85,6 @@ class PdfBook
 
       # interligne = recette[:interligne]
 
-      puts "first/last = #{CLI.options[:first]}/#{CLI.options[:last]}".bleu
       # 
       # On boucle sur tous les paragraphes du fichier d'entrée
       # 
@@ -90,18 +96,23 @@ class PdfBook
       # 
       inputfile.paragraphes.each_with_index do |paragraphe, idx|
 
+        pdf.insert(paragraphe)
+
+        # On peut indiquer les pages sur lesquelles est inscrit le
+        # paragraphe
         if paragraphe.paragraph?
-          @pages[pdf.page_number] || begin
-            @pages.merge!(pdf.page_number => {first_par:nil, last_par:nil})
+          @pages[paragraphe.first_page] || begin
+            @pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
           end
-          @pages[pdf.page_number][:first_par] ||= paragraphe.numero
-          # On le met toujours en dernier paragraphe de la page
-          @pages[pdf.page_number][:last_par] = paragraphe.numero
+          @pages[paragraphe.last_page] || begin
+            @pages.merge!(paragraphe.last_page => {first_par:paragraphe.numero, last_par:nil})
+          end
+          # On le met toujours en dernier paragraphe de sa première page
+          @pages[paragraphe.first_page][:last_par] = paragraphe.numero
         end
 
-        pdf.insert(paragraphe)
         
-        break if CLI.options[:last] && pdf.page_number == CLI.options[:last]
+        break if pdf.page_number === pdf.last_page
         
         pdf.move_down( paragraphe.margin_bottom )
       end
