@@ -1,4 +1,5 @@
 require_relative 'generate_building_methods'
+require_relative 'PdfBook_helpers'
 
 module Prawn4book
 class PdfBook

@@ -1,10 +1,14 @@
 ---
-:book_title: Mon livre
+:book_title: Titre du livre
+:book_subtitle: |
+  Le premier livre de la collection 
+  pour voir ce que c'est
 :collection: true
 :book_id: mon_livre
 :auteurs:
 - Marion MICHEL
 - Philippe PERRET
+:edition: :collection
 :main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books/une_collection/mon_livre"
 :text_path: true
 :dimensions: :collection
