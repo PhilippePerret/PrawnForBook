@@ -11,7 +11,7 @@ class PdfFile < Prawn::Document
     if pdfbook.collection?
       titre_collection = pdfbook.collection.name
     end
-    edition = pdfbook.edition
+    editor = pdfbook.editor
 
     #
     # On commence une nouvelle page
@@ -39,15 +39,15 @@ class PdfFile < Prawn::Document
     move_down 40
     text auteurs, {align: :center, size: 16}
 
-    if edition
+    if editor
       font 'Garamond', size: 14 # TODO pouvoir régler
-      name_height = self.height_of(edition.name)
+      name_height = self.height_of(editor.name)
       hauteur_totale = name_height + 10.mm
       move_cursor_to hauteur_totale
-      text edition.name, align: :center, size: 14
-      if edition.logo?
+      text editor.name, align: :center, size: 14
+      if editor.logo?
         # bounding_box(align: :center) do
-          image edition.logo, height: 10.mm, position: :center
+          image editor.logo, height: 10.mm, position: :center
         # end
       end
     end

@@ -8,10 +8,10 @@
   conservés et affiché
 :collection: true     # true => dans une collection
 :book_id: mon_livre
-:auteurs: ['Philippe PERRET']
+:auteurs: ['Prénom NOM']
 :main_folder: "/absolute/path/to/this/folder"
 :text_path: true # true = texte.md ou texte.txt dans ce dossier
-:edition:         :collection # données de l'éditeur
+:editor:         :collection # données de l'éditeur
 
 # --- Fontes à empaqueter ---
 # :fonts:           :collection # Si collection
