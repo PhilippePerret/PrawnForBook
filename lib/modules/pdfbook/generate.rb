@@ -193,11 +193,12 @@ class PdfBook
     if File.exist?(pdf_path)
       puts "Le book PDF a été produit avec succès !".vert
       puts "(in #{pdf_path})".gris
+      puts "\n"
+      open_book if Q.yes?('Voulez-vous le lire ?'.jaune)
     else
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
     end
   end
-
 
   # --- Predicate Methods ---
 

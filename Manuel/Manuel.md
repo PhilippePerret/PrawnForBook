@@ -88,6 +88,16 @@ Si l’on est sûr de devoir reparser à chaque fois le texte (par exemple lorsq
 
 ---
 
+<a name="open-book"></a>
+
+## Ouverture du PDF
+
+On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
+
+<console>prawn-for-book open book</console>
+
+---
+
 <a name="build-index"></a>
 
 ### Construction d’un index

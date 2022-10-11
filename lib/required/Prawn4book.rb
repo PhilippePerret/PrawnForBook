@@ -11,6 +11,8 @@ module Prawn4book
         PdfBook.define_book_recipe
       when 'generate', 'build'
         PdfBook.get_current.generate
+      when 'open', 'ouvre'
+        require_module('open', :open_something)
       when 'manuel'
         require_module('help', :open_user_manuel)
       when 'essais', 'sandbox' # pour faire des essais

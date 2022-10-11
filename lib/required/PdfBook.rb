@@ -20,6 +20,15 @@ class PdfBook
     generate_pdf_book
   end
 
+  # Pour ouvrir le livre dans Aperçu, en double pages
+  def open_book
+    if File.exist?(pdf_path)
+      `osascript "#{APP_FOLDER}/resources/bin/open_book.scpt" "#{pdf_path}"`
+    else
+      puts "Il faut produire le livre, avant de pouvoir le lire !".rouge
+    end
+  end
+
   # @prop Instance {PdfBook::Recipe} de la recette du livre
   # @usage
   #   <book>.recette[key] # => valeur dans la recette du livre

@@ -41,9 +41,18 @@ class Tdm
     pdf.go_to_page(on_page)
     # pdf.stroke_axis # pour voir les axes
     pdf.move_cursor_to(pdf.bounds.height - 50)
-    content.each do |data_titre|
-      write_title(data_titre)
+    suivi = ('Écriture du titre #%{num}/' + content.count.to_s).vert
+    content.each_with_index do |data_titre, idx|
+      begin
+        write_at(suivi % {num: idx+1}, 2, 0)
+        write_title(data_titre)
+      rescue Exception => e
+        puts "\nProblème avec le titre : #{data_titre.inspect}".rouge
+        puts "-> #{e.message}".rouge
+        puts e.backtrace[-3..-1].join("\n").rouge
+      end
     end
+    puts "\n\n"
   end
 
   ##
@@ -79,9 +88,9 @@ class Tdm
     # Écriture du texte
     # 
     pdf.font( 'Garamond', size: fsize)
-    puts "Titre «#{titre.text.inspect}» (level: #{titre.level.inspect}) - indent:#{indent.inspect} — width num: #{wnum.inspect} - page_width: #{page_width.inspect}"
+    # puts "Titre «#{titre.text.inspect}» (level: #{titre.level.inspect}) - indent:#{indent.inspect} — width num: #{wnum.inspect} - page_width: #{page_width.inspect}"
     titre_width = page_width - (indent + wnum)
-    puts "=> titre_width = #{titre_width.inspect}"
+    # puts "=> titre_width = #{titre_width.inspect}"
     # pdf.text_box "#{titre.text}#{' .' * 50}", at: [indent, pdf.cursor], width:titre_width, overflow: :truncate #, height:LINE_HEIGHT
     
     # pdf.span pdf.bounds.width, position: indent, overflow: :truncate, inline_format: true do
