@@ -3,8 +3,11 @@
   :adresse: |
     xxx rue de Loraine 
     xxxxxx Ville
-  :logo:  "/path/to/logo.svg"
-  :mail:  editor@editions.fr
+  :site:      'https://icare-editions.fr'
+  :logo:      "/path/to/logo.svg"
+  :siret:     '508 680 360 00023'
+  :mail:      editor@edition.fr
+  :contact:   contact@edition.fr
 
 # --- Fontes à empaqueter ---
 # Jouer la commande 'prawn-for-book aide fontes' pour obtenir
@@ -17,6 +20,7 @@
 # --- Options pour les pages ---
 
 :dimensions: ['127mm', '203.2mm'] # taille du livre
+:layout: :portrait
 :marges:
   :top: '25mm'
   :ext: '10mm'
@@ -27,19 +31,17 @@
 :opt_num_parag:   true # true => numéroter les paragraphes
 :num_page_style:  num_page # style de numérotation des pages
 
-# --- Pages à insérer ---
+# --- Pages à insérer ou à sauter ---
 # Table des matières : cf. plus bas
-:faux_titre:      false # true => insérer la page de faux-titre
+:skip_page_creation:  true # true => ne pas écrire la 1re page (pour pouvoir appliquer sur la première la mise en page des pages impaires)
 :page_de_garde:   true  # true => insérer la page de garde
+:faux_titre:      false # true => insérer la page de faux-titre
+:page_de_titre:   true  # true => insérer la page de titre
 :page_info:       # => page de fin avec les infos
   :display: true  # true => afficher la page des infos à la fin
-  :isbn:    null
-  :depot_bnf: 3e trimestre 2022
-  :cover:     MM & PP # auteurs de la couverture
-  :mep:       ['Auteur', 'MISE EN PAGE']
 
 # --- Table Des Matières ---
-:tdm:
+:table_of_content:
   :display: true # true => afficher la table des matières
   # Page où insérer la table des matières. Si sa valeur est :flux 
   # elle sera placée en fonction des autres pages présentes

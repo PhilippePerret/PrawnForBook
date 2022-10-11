@@ -37,11 +37,35 @@ class Recipe
     :TRUE == @numeroterpar ||= true_or_false(get(:opt_num_parag))
   end
 
+  def skip_page_creation?
+    :TRUE == @skipfirst ||= true_or_false(get(:skip_page_creation?) === true)
+  end
+
+  def page_de_garde?
+    :TRUE == @haspagegarde ||= true_or_false(get(:page_de_garde) === true)
+  end
+
+  def page_faux_titre?
+    :TRUE == @hasfauxtitre ||= true_or_false(get(:faux_titre) === true)
+  end
+
+  def table_of_content?
+    :TRUE == @hastdm ||= true_or_false(get(:table_of_content)[:display] === true)
+  end
+
+  def page_info?
+    :TRUE == @writepageinfo ||= true_or_false(get(:page_info)[:display] === true)
+  end
+
 
   # --- Precise Recipe Data ---
 
   def title
     @title ||= get(:book_title)
+  end
+
+  def page_info
+    @page_info ||= get(:page_info)
   end
 
   def headers
@@ -83,6 +107,7 @@ DEFAULT_DATA = {
   num_page_style: 'num_page',
   headers: {},
   footers: {},
+  page_info: {}
 }
 
 end #/class Recipe

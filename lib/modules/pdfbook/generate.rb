@@ -35,6 +35,8 @@ class PdfBook
       PrawnDoc.extensions << PdfBookFormatageModule
     end
 
+    require_module_parser if module_parser?
+
     #
     # Pour consigner les informations sur les pages, à commencer
     # par les paragraphes (numéros) s'ils sont numérotés
@@ -77,7 +79,7 @@ class PdfBook
 
       pdf.start_new_page if page_de_garde?
 
-      pdf.build_faux_titre(self) if faux_titre?
+      pdf.build_faux_titre(self) if page_faux_titre?
         
       pdf.build_page_de_titre(self) if page_de_titre?
 
@@ -123,6 +125,10 @@ class PdfBook
       # 
       inputfile.paragraphes.each_with_index do |paragraphe, idx|
 
+        if module_parser? && paragraphe.paragraph?
+          paragraphe.text = __paragraph_parser(paragraphe.text)
+        end
+
         pdf.insert(paragraphe)
 
         # On peut indiquer les pages sur lesquelles est inscrit le
@@ -144,13 +150,16 @@ class PdfBook
         pdf.move_down( paragraphe.margin_bottom )
       end
 
-      # puts "pages : #{@pages.pretty_inspect}"
+      # 
+      # - Page infos ? -
+      # 
+      pdf.build_page_infos(pdfbook) if recette.page_info?
 
 
       # 
-      # Écriture de la table des matières
+      # Écriture de la TABLE DES MATIÈRES
       # 
-      tdm.output(on_page)
+      tdm.output(on_page) if table_des_matieres?
 
       #
       # Définition des numéros de page ou numéros de paragraphes
@@ -171,29 +180,11 @@ class PdfBook
 
   # --- Predicate Methods ---
 
-  def table_des_matieres?
-    pdf_config[:table_of_content] === true
-  end
-  def skip_page_creation?
-    pdf_config[:skip_page_creation] === true
-  end
-
-  def page_de_garde?
-    pdf_config[:page_de_garde] === true
-  end
-
-  # @return true s'il faut un faux titre
-  # Rappel : le "faux-titre" est la première page imprimée du livre,
-  # après la page de garde, qui contient JUSTE le titre du livre. 
-  # Elle ne doit pas être confondu avec la "page de titre" qui 
-  # contient les informations générales sur le livre.
-  def faux_titre?
-    pdf_config[:faux_titre] === true
-  end
-
-  def page_de_titre?
-    pdf_config[:page_de_titre] === true
-  end
+  def table_des_matieres?     ;recette.table_of_content?    end
+  def skip_page_creation?     ;recette.skip_page_creation?  end
+  def page_de_garde?          ;recette.page_de_garde?       end
+  def page_faux_titre?        ;recette.page_faux_titre?     end
+  def page_de_titre?          ;recette.page_de_titre?       end
 
   # --- Configuration Pdf Methods ---
 
@@ -204,30 +195,23 @@ class PdfBook
   def pdf_config
     @pdf_config ||= begin
       {
-        page_size:          proceed_unit(get_config(:dimensions)),
-        page_layout:        get_config(:layout, :portrait),
-        margin:             proceed_unit(get_config(:margin)),
+        page_size:          proceed_unit(get_recipe(:dimensions)),
+        page_layout:        get_recipe(:layout, :portrait),
+        margin:             proceed_unit(get_recipe(:margin)),
         left_margin:        conf_margin(:left) ||conf_margin(:ext),
         right_margin:       conf_margin(:right)||conf_margin(:int),
         top_margin:         conf_margin(:top),
         bottom_margin:      conf_margin(:bot),
-        background:         get_config(:background),
-        default_leading:    get_config(:leading),
-        optimize_objects:   get_config(:optimize_objects, true),
-        compress:           get_config(:compress),
+        background:         get_recipe(:background),
+        default_leading:    get_recipe(:leading),
+        optimize_objects:   get_recipe(:optimize_objects, true),
+        compress:           get_recipe(:compress),
         # {Hash} Des variables (méta-propriété personnalisées)
         # (:title, :author, etc.)
-        info:               get_config(:info),
+        info:               get_recipe(:info),
         # Un fichier template
-        template:           get_config(:template),
+        template:           get_recipe(:template),
         text_formatter:     nil, # ?
-        # Pour créer le document sans créer de première page
-        skip_page_creation: get_config(:skip_page_creation, true),
-        # --- Options propres à Praw4Book ---
-        table_of_content:   get_config(:table_of_content, true),
-        page_de_garde:      get_config(:page_de_garde, true),
-        page_de_titre:      get_config(:page_titre, true),
-        faux_titre:         get_config(:faux_titre, false),
       }
     end
   end
@@ -235,38 +219,19 @@ class PdfBook
   # Fontes utilisées dans le boucle (définies dans le fichier de
   # recette du livre ou de la collection)
   def book_fonts
-    @book_fonts ||= begin
-      if recette[:fonts].nil? && not(collection?)
-        nil
-      elsif recette[:fonts] == :collection
-        collection.data[:fonts]
-      else
-        recette[:fonts]
-      end
-    end
+    @book_fonts ||= recette[:fonts]
   end
 
-  def get_config(property, default_value = nil)
-    # if property == :dimensions
-    #   puts "data du PdfBook : #{data.inspect}".bleu
-    #   puts "data collection : #{collection.data.inspect}".mauve
-    # end
-    pdoc = data[property] || default_value # défini par la recette du livre
-    if pdoc == :collection
-      return (collection.data[property]||collection.data["book_#{property}".to_sym]) if collection?
-    else
-      return pdoc
-    end
+  def get_recipe(property, default_value = nil)
+    recette[property] || default_value
   end
 
   # Retourne la configuration du livre pour la marge +side+
   def conf_margin(side)
-    @marges ||= data[:marges]
-    mgs = if @marges.is_a?(Hash)
-        proceed_unit(@marges[side])
-      elsif @marges == :collection
-        @marges_collection = collection.data[:marges]
-        proceed_unit(@marges_collection[side])
+    @marges ||= recette[:marges]
+    mgs = 
+      if @marges.is_a?(Hash)
+        @marges[side]
       else
         @marges
       end
@@ -277,7 +242,7 @@ class PdfBook
   # --- Formating Methods ---
 
   ##
-  # Traitement du module de formatage propre au live s'il existe
+  # Traitement du module de formatage propre au livre s'il existe
   # 
   def require_module_formatage
     module_formatage_path && require(module_formatage_path)
@@ -289,12 +254,33 @@ class PdfBook
     @module_formatage_path ||= get_module_formatage
   end
   def get_module_formatage
-    pth = File.join(folder, 'module_formatage.rb')
-    return pth if File.exist?(pth)
     if collection?
-      pth = File.join(collection.folder, 'module_formatage.rb')
+      pth = File.join(collection.folder, 'formater.rb')
       return pth if File.exist?(pth)
     end    
+    pth = File.join(folder, 'formater.rb')
+    return pth if File.exist?(pth)
+  end
+
+  # Parser propre au livre
+  def module_parser?
+    module_parser_path && File.exist?(module_parser_path)
+  end
+  def require_module_parser
+    require module_parser_path
+    extend ParserParagraphModule
+  end
+  def module_parser_path
+    @module_parser_path ||= begin
+    end
+  end
+  def get_module_parser_path
+    if collection?
+      pth = File.join(collection.folder, 'parser.rb')
+      return pth if File.exist?(pth)
+    end    
+    pth = File.join(folder, 'parser.rb')
+    return pth if File.exist?(pth)    
   end
 
   # Reçoit une valeur ou une liste de valeur avec des unités et

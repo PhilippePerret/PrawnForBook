@@ -19,7 +19,10 @@ class PrawnDoc < Prawn::Document
     insert_page_de_titre(pdfbook)
   end
 
-
+  def build_page_infos(pdfbook)
+    require_relative 'generate_builder/page_infos'
+    insert_page_infos(pdfbook)    
+  end
 
 end #/PrawnDoc
 end #/Prawn4book

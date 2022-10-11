@@ -32,6 +32,9 @@ class NTextParagraph
   # --- Data Methods ---
 
   def text  ; @text ||= data[:text]||data[:raw_line] end
+  def text=(value)
+    @text = value
+  end
 
 end #/class NTextParagraph
 end #/class PdfBook
