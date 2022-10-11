@@ -11,7 +11,11 @@ module Prawn4book
 
   def self.display_help
     clear
-    less(INLINE_AIDE)
+    if CLI.components[0].in?(['fontes','fonts'])
+      require_module('assistant', :assistant_fontes)
+    else
+      less(INLINE_AIDE)
+    end
   end
 
 
@@ -41,6 +45,10 @@ MINI_AIDE = <<-TEXT
 #{'prawn-for-book build'.jaune}
     Construire le livre du livre courant.
 
+#{'prawn-for-book aide fontes'.jaune}
+    Aide en ligne pour produire la donnée :fonts du 
+    fichier recette.
+
 
 TEXT
 
@@ -65,11 +73,12 @@ AIDE RAPIDE
 
 Création d'un nouveau livre
 ---------------------------
+(ou d'une nouvelle collection)
 
 * Ouvrir un Terminal dans le dossier où créer le nouveau livre,
 * Jouer #{'prawn-for-book init'.jaune},
 * répondre aux questions posées
-> Cela produit le fichier 'book_receipe.yaml' qui contient la 
-  "recette" du livre
+> Cela produit le fichier 'receipe.yaml' qui contient la 
+  "recette" du livre (ou la recette de la collection)
 TEXT
 end #/ module Prawn4book
