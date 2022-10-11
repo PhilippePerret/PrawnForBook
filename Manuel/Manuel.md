@@ -314,39 +314,48 @@ dossier_fonts: &dosfonts "/Users/philippeperret/Library/Fonts"
 
 ## Entête et pied de page
 
-On peut définir les entêtes et les pieds de page dans le fichier recette du livre ou de la collection grâce aux données `:header` et `:footer`.
+On peut définir les entêtes et les pieds de page dans le fichier recette du livre ou de la collection grâce aux données `:headers` et `:footers`.
+
+> Noter qu’ils sont au pluriel
+
+Le principe est que pour chaque rang de page on peut définir un pied de page et une entête différents.
 
 ~~~yaml
 :default: &styleheader 
 	:font: NomDeLaFont
 	:size: 13.5
-:header:
-	- :name:  	"Nom de ce premier rang" # juste pour information
-		:from_page: 12 # numéro de la première page qui affichera cet header
-		:to_page:   15	# Numéro de la dernière page qui affichera cet header
+:headers:
+	# Nom de l'entête, juste pour info, pour savoir ici ce que c'est
+	- :name:  	"Nom de ce premier rang"
+		# Définition des pages qui utiliseront cet entête. Un rang de la
+		# première page à la dernière.
+		:pages: (12..15)
+		# Disposition de l'entête. Il est toujours constitué de 3 sections,
+		# le milieu, le côté gauche et le côté droit. Ils sont délimités
+		# par des "|". Le tiret '-' permet de définir l'alignement dans cette
+		# section :
+		# 	-mot 		=> alignement à droite
+		#   mot- 		=> alignement à gauche
+		#   -mot-   => alignement au centre
 		:disposition:   '%titre1- | | -%titre2'
-		:style: *styleheader
+		# La police à utiliser. Elle doit impérativement être défini dans
+		# les :fonts:
+		:font: 	Arial
+		# Taille de la police (en points, je crois)
+		:size:  11
+	# Un autre rang
 	- :name:    'Nom de ce second rang' # juste pour information
-		:from_page: 	16
-		:to_page:    	86
-		:format:    ' | -%titre3- | '
-		:style: *styleheader
-  - :name:  'Pour la fin toute différente'
-  	:from_page: 120
-  	:to_page:   128
-  	:disposition:    'C’est | la | fin'
-  	:style: 
-  		:font: Geneva
-  		:size: 24
-  		:border_top: 1px #CCCCCC
-:footer:
-	- :name:    "Introduction"
-		:from_page: 1
-		:to_page:   5
+		# etc.
+#
+# --- PIEDS DE PAGE ---
+#
+# Les définitions sont les mêmes que pour les entêtes.
+:footers:
+	- :name: "Pied de page pour l'introduction"
+		:pages: (1..5)
 		:disposition:    ' | -%num- | '
-		:style:
-			:size: 9
-			:font: Arial
+		:font: Arial
+		:size: 9
 ~~~
 
 ### Disposition
@@ -361,4 +370,4 @@ Les variables utilisables dans les entêtes et pieds de page sont toujours des m
 
 Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
 
-Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter.
+Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter. TODO: à l’avenir on pourra imaginer avoir des numéros différents suivant les parties.
