@@ -13,18 +13,18 @@ class PdfBook
   # = main =
   # 
   # Méthode principale pour générer le PDF du livre
-  # Elle prépare le document Prawn::Document (PdfFile) et boucle
+  # Elle prépare le document Prawn::Document (PrawnDoc) et boucle
   # sur tous les paragraphes du texte pour les formater et les
   # ajouter.
   # 
-  # Rappel : PdfFile hérite de Prawn::Document
+  # Rappel : PrawnDoc hérite de Prawn::Document
   # 
   def generate_pdf_book
     clear
     File.delete(pdf_path) if File.exist?(pdf_path)
     
     #
-    # Au lieu d'un PdfFile héritant de Prawn::Document avec ses
+    # Au lieu d'un PrawnDoc héritant de Prawn::Document avec ses
     # propres méthodes, on pourrait utiliser :
     #     Prawn::Document.extensions << CustomsMethodsModule
     # L'avantage serait de pouvoir des méthodes à la volée, dans le
@@ -32,7 +32,7 @@ class PdfBook
     #
     if module_formatage?
       require_module_formatage
-      PdfFile.extensions << PdfBookFormatageModule
+      PrawnDoc.extensions << PdfBookFormatageModule
     end
 
     #
@@ -45,7 +45,7 @@ class PdfBook
     # On doit définir la configuration
     # C'est la propriété-méthode pdf_config qui s'en charge.
     # 
-    PdfFile.generate(pdf_path, pdf_config) do |pdf|
+    PrawnDoc.generate(pdf_path, pdf_config) do |pdf|
 
       #
       # Y a-t-il une dernière page définie en options
@@ -158,7 +158,7 @@ class PdfBook
       pdf.set_pages_numbers(@pages)
 
 
-    end #/PdfFile.generate
+    end #/PrawnDoc.generate
 
     if File.exist?(pdf_path)
       puts "Le book PDF a été produit avec succès !".vert
@@ -198,7 +198,7 @@ class PdfBook
   # --- Configuration Pdf Methods ---
 
   # @prop Configuration pour le second argument de la méthode
-  # #generate de Prawn::Document (en fait PdfBook::PdfFile)
+  # #generate de Prawn::Document (en fait PdfBook::PrawnDoc)
   # TODO : la composer en fonction de la recette du livre ou de la
   # collection
   def pdf_config

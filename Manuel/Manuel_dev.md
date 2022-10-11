@@ -27,10 +27,10 @@ Il se passe alors :
 
 - Instanciation du livre (Prawn4book::PdfBook)
 - Instanciation du texte du livre (@inputfile = Prawn4book::PdfBook::InputTextFile)
-- Appel de Prawn4book::PdfFile (héritant de Prawn::Document) pour 'generate' du fichier
+- Appel de Prawn4book::PrawnDoc (héritant de Prawn::Document) pour 'generate' du fichier
 	PDF
 	* On regarde si un module propre de formatage est défini, à ajouter en extension de
-		Prawn::Document (PdfFile) qui permettra de traiter certains paragraphes.
+		Prawn::Document (PrawnDoc) qui permettra de traiter certains paragraphes.
 		L'idée est la suivante : si le paragraphe commence par "balise:Le texte du parag.",
 		alors 'balise' est considéré comme une balise de formatage qui doit appeler la
 		méthode 'formate_balise' de ce module.
@@ -73,7 +73,7 @@ module Prawn4book
   class PdfBook
     
     # La classe qui hérite de Prawn::Document, pour générer le document
-    class PdfFile
+    class PrawnDoc
     
   	# Classe pour une image
     class NImage

@@ -4,7 +4,7 @@
 
 =end
 module Prawn4book
-class PdfFile < Prawn::Document
+class PrawnDoc < Prawn::Document
 
   ##
   # Construction du faux titre
@@ -21,5 +21,5 @@ class PdfFile < Prawn::Document
 
 
 
-end #/PdfFile
+end #/PrawnDoc
 end #/Prawn4book

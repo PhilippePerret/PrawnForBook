@@ -19,7 +19,7 @@ class Tdm
   # Instance Prawn4book::PdfBook
   attr_reader :pdfbook
 
-  # Instance Praw4book::PdfFile < Prawn::Document
+  # Instance Praw4book::PrawnDoc < Prawn::Document
   attr_reader :pdf
 
   # Contenu de la table des matières, une table avec

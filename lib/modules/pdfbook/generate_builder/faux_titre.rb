@@ -1,5 +1,5 @@
 module Prawn4book
-class PdfFile < Prawn::Document
+class PrawnDoc < Prawn::Document
 
   def insert_faux_titre(pdfbook)
     #
@@ -42,5 +42,5 @@ class PdfFile < Prawn::Document
     
   end
 
-end #/class PdfFile
+end #/class PrawnDoc
 end #/module Prawn4book
