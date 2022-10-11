@@ -3,10 +3,12 @@
 :short_name: Narration
 :editor: 
   :name: Icare Édition
-  :adresse: 295 impasse des Fauvettes 13400 Aubagne
+  :adresse: |
+    295 impasse des Fauvettes 
+    13400 Aubagne
   :logo: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ICARE_EDITIONS/Divers/xImages/Logo/Officiel/logo-gris-moyen.jpg"
-:book_dimensions: ['127mm', '203.2mm']
-:book_marges:
+:dimensions: ['127mm', '203.2mm']
+:marges:
   :top: '25mm'
   :ext: '10mm'
   :bot: '15mm'

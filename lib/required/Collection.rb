@@ -53,9 +53,9 @@ class Collection
   # --- Data Methods ---
 
   def name            ; data[:name]             end
-  def book_dimensions ; data[:book_dimensions]  end
+  def dimensions      ; data[:dimensions]       end
   def num_page_style  ; data[:num_page_style]   end
-  def book_marges     ; data[:book_marges]      end
+  def marges          ; data[:marges]           end
   def interligne      ; data[:interligne]       end
   def opt_num_parag   ; data[:opt_num_parag]    end
   def fonts           ; data[:fonts]            end

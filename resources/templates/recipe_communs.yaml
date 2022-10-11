@@ -1,0 +1,81 @@
+:editor:
+  :name:  Nom de l'éditeur
+  :adresse: |
+    xxx rue de Loraine 
+    xxxxxx Ville
+  :logo:  "/path/to/logo.svg"
+  :mail:  editor@editions.fr
+
+# --- Fontes à empaqueter ---
+# Jouer la commande 'prawn-for-book aide fontes' pour obtenir
+# de l'aide pour les fontes
+:fonts:
+  FontName:
+    :normal: "/path/to/font.ttf"
+    :italic: "/path/to/font-italic.ttf"
+
+# --- Options pour les pages ---
+
+:dimensions: ['127mm', '203.2mm'] # taille du livre
+:marges:
+  :top: '25mm'
+  :ext: '10mm'
+  :bot: '15mm'
+  :int: '25mm'
+:interligne:      :collection # interlilgne
+:leading:         1
+:opt_num_parag:   true # true => numéroter les paragraphes
+:num_page_style:  num_page # style de numérotation des pages
+
+# --- Pages à insérer ---
+# Table des matières : cf. plus bas
+:faux_titre:      false # true => insérer la page de faux-titre
+:page_de_garde:   true  # true => insérer la page de garde
+:page_info:       # => page de fin avec les infos
+  :display: true  # true => afficher la page des infos à la fin
+  :isbn:    null
+  :depot_bnf: 3e trimestre 2022
+  :cover:     MM & PP # auteurs de la couverture
+  :mep:       ['Auteur', 'MISE EN PAGE']
+
+# --- Table Des Matières ---
+:tdm:
+  :display: true # true => afficher la table des matières
+  # Page où insérer la table des matières. Si sa valeur est :flux 
+  # elle sera placée en fonction des autres pages présentes
+  :page_number: :flux 
+  # Distance du numéro de page avec la marge droite
+  :dist_num_from_rmargin: 0
+
+# --- Entête du livre ---
+:header: # tous les rangs
+  - :from_page: 10
+    :to_page: 200
+    :disposition: "| -%titre1- |"
+    :font: ArialNarrow
+    :size: 8
+    :style: :bold
+
+# --- Pied de page ---
+:footer: # tous les rangs
+  - :from_page: 10
+    :to_page: 20
+    :disposition: "-%titre1 | |"
+    :font: Arial
+    :size: 8
+    :style: :bold
+
+# --- Titres ---
+:titles:
+  :level1:
+    :font: Nunito
+    :size: 30
+  :level2:
+    :font: Nunito
+    :size: 26
+  :level3:
+    :font: Nunito
+    :size: 20
+  :level4:
+    :font: Nunito
+    :size: 16

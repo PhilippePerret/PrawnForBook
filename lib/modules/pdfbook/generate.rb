@@ -265,7 +265,7 @@ class PdfBook
     mgs = if @marges.is_a?(Hash)
         proceed_unit(@marges[side])
       elsif @marges == :collection
-        @marges_collection = collection.data[:book_marges]
+        @marges_collection = collection.data[:marges]
         proceed_unit(@marges_collection[side])
       else
         @marges

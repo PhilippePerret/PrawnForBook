@@ -1,5 +1,7 @@
 # Todo
 
+* Faire la classe PdfBook::Recette
+
 * Dans le dossier du livre on peut trouver :
   - (`parser.rb`) un *parser* (qui parse les paragraphes et en tire des informations — dans la collection Narration, on relève les films et les mots techniques, indexés)
   - (`formater.rb`)un *formater* — qui va mettre en forme les balises se trouvant dans le texte

@@ -1,34 +1,232 @@
 module Prawn4book
 class PdfBook
 
-  quest_book_id     = "Identifiant (seulement lettres et '_')".freeze
-  quest_collection  = "Appartient-il à une collection ? (si oui, laquelle)".freeze
-  quest_book_folder = "Dossier où placer le dossier du livre".freeze
-  quest_text_path   = "Chemin d'accès au texte initial".freeze
-
-  DATA_RECIPE = [
-    {q: 'Numéroter les pages avec : ' , id:'num_page'     , v: nil , values: 'NUMPAGES_VALUES'},
-
-  ]
-
-  def self.is_defined_or_define(prop, cdata)
-    if not(cdata.key?(prop)) || cdata[prop] === nil
-      return send("define_#{prop}".to_sym, cdata)
-    else
-      return true
-    end
-  end
-
   ##
   # = main =
   # 
   # Méthode principale pour définir la recette du livre
+  # Soit on demande simplement un template, soit on utilise
+  # l'assistant, mais il n'est pas tout à fait à jour.
   # 
   # @param cdata {Hash|Nil} Les données qui peuvent permettre de
   # définir des premières chose sur le livre dont il faut définir ou
   # redéfinir la recette.
   # 
   def self.define_book_recipe(cdata = nil, force = false)
+    clear
+    case Q.select("Comment voulez-vous initier le livre ?".jaune, DEFINE_RECIPE_WAYS, per_page: DEFINE_RECIPE_WAYS.count)
+    when NilClass
+      return false
+    when :assistant
+      assistant_recipe(cdata, force)
+    when :template
+      templates_recipe
+    end
+  end
+
+  #
+  # --- PAR TEMPLATE ---
+  # 
+  def self.templates_recipe
+    # 
+    # Quoi initier ? (livre ou collection)
+    # 
+    case Q.select("Initier… ".jaune, TYPE_INITIED, per_page: TYPE_INITIED.count) || return
+    when :book
+      template_recipe_for_book
+    when :collection
+      template_recipe_for_collection
+    end
+  end
+
+  def self.template_recipe_for_collection
+    # 
+    # Dossier dans lequel initier la collection
+    # 
+    puts "#{cfolder}".bleu
+    unless Q.yes?("Le dossier ci-dessus est-il le dossier de la collection ?".jaune)
+      @@cfolder = Q.ask("Dossier de la collection : ".jaune) || return
+    end
+    # 
+    # Le chemin d'accès au fichier recette
+    # 
+    frecipe = File.join(cfolder, 'recipe_collection.yaml')
+    # 
+    # Traitement en cas d'existence du fichier recette
+    # 
+    traitement_si_fichier_recette_existe(frecipe) || return
+
+    # 
+    # Copie du fichier original
+    # 
+    fsource = File.join(templates_folder,'recipe_collection.yaml')
+    FileUtils.cp(fsource, frecipe)
+    # 
+    # Ajout du code commun
+    # 
+    fcommun = File.join(templates_folder,'recipe_communs.yaml')
+    File.open(frecipe,'a') do |f| f.puts File.read(fcommun) end
+
+    #
+    # Confirmation et demande d'ouverture
+    # 
+    confirme_create_of(frecipe)
+
+  end
+
+  def self.template_recipe_for_book
+    # 
+    # Se trouve-t-on dans le dossier d'une collection ?
+    # 
+    coll_folder = nil
+    if File.exist?(File.join(cfolder,'recipe_collection.yaml'))
+      # Si on se trouve dans le dossier de la collection
+      coll_folder = cfolder
+    else
+      # Si on se trouve dans le dossier du nouveau livre
+      coll_folder = File.dirname(cfolder)
+      coll_folder = nil unless File.exist?(File.join(coll_folder,'recipe_collection.yaml'))
+    end
+    if coll_folder
+      collection = Collection.new(coll_folder)
+      if Q.yes?("Est-ce un livre pour la collection « #{collection.name} » ?".jaune)
+        create_template_book_in_collection(coll_folder)
+      else
+        create_template_book_hors_collection
+      end
+    else
+      create_template_book_hors_collection
+    end
+  end
+
+  def self.create_template_book_in_collection(coll_folder)
+    # 
+    # Déterminer (et créer) le dossier du livre
+    # 
+    if cfolder == coll_folder
+      # 
+      # Quand on se trouve dans le dossier de la collection
+      #
+      book_folder = File.join(coll_folder, Q.ask("Nom du dossier du livre : ".jaune))
+      mkdir(book_folder)
+    else
+      #
+      # Quand on se trouve dans le dossier du livre
+      # 
+      book_folder = cfolder
+    end
+    puts "Dossier du livre : #{book_folder}".bleu
+    frecipe = File.join(book_folder,'recipe.yaml')
+    # 
+    # Traitement en cas d'existence du fichier recette (copie, 
+    # destruction ou renoncement)
+    # 
+    traitement_si_fichier_recette_existe(frecipe) || return
+    # 
+    # Faire le fichier initial
+    # 
+    fsource = File.join(templates_folder,'recipe.yaml')
+    FileUtils.cp(fsource, frecipe)
+    # 
+    # Ajouter les informations commune
+    # 
+    fcommun = File.join(templates_folder,'recipe_communs.yaml')
+    File.open(frecipe,'a') do |f|
+      if Q.yes?("La plupart des informations viendront-elles de la recette de la collection ?".jaune)
+        YAML.load_file(fcommun, aliases: true).each do |k, v|
+          f.puts ":#{k}: :collection"
+        end
+      else
+         f.puts File.read(fcommun)
+      end
+    end
+    # 
+    # Confirmation création
+    # 
+    confirme_create_of(frecipe)
+  end
+
+  def self.create_template_book_hors_collection
+
+    puts "#{cfolder}".bleu
+    unless Q.yes?("Le dossier ci-dessus est-il bien le dossier du livre ?".jaune)
+      @@cfolder = mkdir(File.join(cfolder, Q.ask('Nom du dossier : '.jaune)))
+    end
+    puts "Dossier du livre : #{cfolder}".bleu
+    # 
+    # Chemin d'accès au fichier recette
+    # 
+    frecipe = File.join(cfolder,'recipe.yaml')
+    # 
+    # Traitement en cas d'existence du fichier recette (copie, 
+    # destruction ou renoncement)
+    # 
+    traitement_si_fichier_recette_existe(frecipe) || return
+    # 
+    # Faire le fichier initial
+    # 
+    fsource = File.join(templates_folder,'recipe.yaml')
+    FileUtils.cp(fsource, frecipe)
+    # 
+    # Ajouter les informations commune
+    # 
+    fcommun = File.join(templates_folder,'recipe_communs.yaml')
+    File.open(frecipe,'a') do |f|
+      f.puts File.read(fcommun)
+    end
+    # 
+    # Confirmation création
+    # 
+    confirme_create_of(frecipe)
+  end
+
+  def self.traitement_si_fichier_recette_existe(frecipe)
+    if File.exist?(frecipe)
+      puts "\nATTENTION ! Un fichier recette existe déjà dans ce dossier !".rouge
+      case Q.select("Que dois-je faire ?".jaune, ACTIONS_ON_COLLECTION_EXIST, per_page: ACTIONS_ON_COLLECTION_EXIST.count)
+      when :cancel
+        return
+      when :keep
+        FileUtils.mv(frecipe, "#{frecipe}.copie")
+      when :destroy
+        File.delete(frecipe)
+      end
+    end    
+    return true
+  end
+
+  def self.confirme_create_of(frecipe)
+    if File.exist?(frecipe)
+      puts "FICHIER RECETTE PRODUIT AVEC SUCCÈS.".vert
+      if Q.yes?("Dois-je l'ouvrir ?".jaune)
+        `subl -n "#{frecipe}"`
+      end
+    else
+      puts "\nBizarrement, je ne trouve pas la recette du livre…".rouge
+    end
+  end
+
+
+  def self.templates_folder
+    @templates_folder ||= File.join(APP_FOLDER,'resources','templates')
+  end
+
+  #
+  # --- PAR ASSISTANT ---
+  # 
+  # Assistant qui permet de définir la recette du livre ou de la
+  # collection
+  # 
+  def self.assistant_recipe(cdata = nil, force = false)
+
+    clear
+
+    # Avertissement préliminaire
+    puts "Attention, cet assistant n'est pas à jour, des informations
+    importantes ne sont pas prises en comptes. Utiliser plutôt les 
+    modèles.".bleu
+    sleep 5
+
     cdata ||= {}
 
     # --- POUR L'ESSAI ---
@@ -51,7 +249,6 @@ class PdfBook
     end
 
 
-    clear
     [
       #
       # LISTE DES PROPRIÉTÉS À DÉFINIR
@@ -139,6 +336,14 @@ class PdfBook
 
 
   # ---- MÉTHODES GÉNÉRIQUES ----
+
+  def self.is_defined_or_define(prop, cdata)
+    if not(cdata.key?(prop)) || cdata[prop] === nil
+      return send("define_#{prop}".to_sym, cdata)
+    else
+      return true
+    end
+  end
 
   # --- Méthode générique pour demander une propriété ---
   def self.ask_for(cdata, question, prop, vdefaut = nil, aide = nil)
@@ -235,7 +440,7 @@ class PdfBook
 
   def self.define_dimensions(cdata)
     paire = 
-      if cdata[:instance_collection] && cdata[:instance_collection].book_dimensions
+      if cdata[:instance_collection] && cdata[:instance_collection].dimensions
         :collection
       else
         Q.select("Dimensions du livre", DIM_VALUES) || begin
@@ -251,7 +456,7 @@ class PdfBook
 
   def self.define_marges(cdata)
     quatro = 
-      if cdata[:instance_collection] && cdata[:instance_collection].book_marges
+      if cdata[:instance_collection] && cdata[:instance_collection].marges
         :collection
       else
         mtop = ask_for_number('Marge en haut en millimètres', 5, 80, 20)
@@ -480,7 +685,24 @@ DIM_VALUES = [
   {name:'15,24 x 22,86 (6 x 9 po)'      , value:[152.4, 228.6] },
   {name:'A5 (14.85 x 21)'               , value:[148.5, 210]   },
   {name:'Autre dimension…'              , value: nil }
+]
 
+DEFINE_RECIPE_WAYS = [
+  {name:'En copiant un modèle de recette dans le dossier', value: :template},
+  {name:'Avec un assistant pour définir la recette', value: :assistant},
+  {name:'Renoncer', value: nil}
+]
+
+TYPE_INITIED = [
+  {name:'Un livre',       value: :book}, 
+  {name:'Une collection', value: :collection},
+  {name:'Renoncer',       value: nil}
+]
+
+ACTIONS_ON_COLLECTION_EXIST = [
+  {name:'Le garder (en faire une copie)', value: :keep},
+  {name:'Le détruire définitivement',     value: :destroy},
+  {name:'Renoncer',                       value: :cancel}
 ]
 
 end #/class PdfBook

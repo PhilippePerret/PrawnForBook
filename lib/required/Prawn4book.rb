@@ -7,7 +7,7 @@ module Prawn4book
     else
       case CLI.main_command
       when 'init', 'create'
-        require_module('pdfbook/recipe')
+        require_module('pdfbook/init')
         PdfBook.define_book_recipe
       when 'generate', 'build'
         PdfBook.get_current.generate
