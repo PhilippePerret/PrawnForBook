@@ -3,7 +3,7 @@ class PdfBook
 class InputTextFile
 class Paragraphe
 
-  REG_LINE = /^IMAGE\[(.+?)\]$/
+  REG_IMAGE = /^IMAGE\[(.+?)\]$/
 
 
   #
@@ -35,9 +35,9 @@ class Paragraphe
   # 
   def parse
     case line
-    when REG_LINE
+    when REG_IMAGE
       parse_as_image(line) # => PdfBook::NImage
-    when /^\#{1,4}/
+    when /^\#{1,6} /
       parse_as_titre(line) # => PdfBook::NTitre
     else 
       PdfBook::NTextParagraph.new({raw_line: line})
@@ -45,12 +45,25 @@ class Paragraphe
   end
 
   def parse_as_image(line)
-    dimg = line.match(REG_LINE)[1]
+    dimg = line.match(REG_IMAGE)[1]
     dimg || raise("L'image '#{line}' est mal formatée.")
     if dimg.start_with?('{') && dimg.end_with?('}')
+      # 
+      # Définition moderne de l'image par un dictionnaire JSON
+      # 
       dimg      = eval(dimg)
       img_path  = dimg[:path]||dimg[:file]||dimg[:name]||dimg[:filename]
+    elsif dimg.match?('\|')
+      # 
+      # Vieille division avec les propriétés séparées par des '|'
+      # 
+      img_props = dimg.split('|').map { |n|n.strip }
+      img_path = img_props[0]
+      dimg = {class:img_props[1], alt:img_props[2], style:img_props[3]}
     else
+      # 
+      # Simple path de l'image
+      # 
       img_path  = dimg
       dimg      = {}
     end
@@ -59,7 +72,7 @@ class Paragraphe
   end
 
   def parse_as_titre(line)
-    prefix, titre = line.match(/^(\#{1,4}) (.+)$/)[1..2]
+    prefix, titre = line.match(/^(\#{1,6}) (.+)$/)[1..2]
     level = prefix.length
     text  = titre.strip
     PdfBook::NTitre.new({level:level, text:text})

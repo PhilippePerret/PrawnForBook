@@ -22,6 +22,16 @@ class PdfBook
   def generate_pdf_book
     clear
     File.delete(pdf_path) if File.exist?(pdf_path)
+
+    # 
+    # Si l'option '--force' a été ajoutée et que le fichier
+    # texte.yaml existe, on le détruit après confirmation
+    # 
+    if CLI.option(:force) && File.exist?(inputfile.data_paragraphes_path)
+      unless Q.no?("Es-tu certain de vouloir détruire le fichier 'texte.yaml' ?\nIl contient peut-être des informations précieuses sur le\ntraitement du texte…)".jaune)
+        File.delete(inputfile.data_paragraphes_path)
+      end
+    end
     
     #
     # Au lieu d'un PrawnDoc héritant de Prawn::Document avec ses
@@ -147,7 +157,12 @@ class PdfBook
         
         break if pdf.page_number === pdf.last_page
         
+        if paragraphe.margin_bottom.nil?
+          raise "Problème avec margin_bottom de : #{paragraphe.inspect}"
+        end
+
         pdf.move_down( paragraphe.margin_bottom )
+
       end
 
       # 

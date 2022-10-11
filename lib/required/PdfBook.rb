@@ -41,14 +41,14 @@ class PdfBook
   # traiter.
   # 
   def inputfile
-    @inputfile = InputTextFile.new(self, data[:text_path])
+    @inputfile = InputTextFile.new(self, recette[:text_path])
   end
 
   # --- Predicate Methods ---
 
   # @return true si le document appartient à une collection
   def collection?
-    not(data[:collection] === false || data[:collection] === nil)
+    recette.collection?
   end
 
 
@@ -59,9 +59,30 @@ class PdfBook
 
   # --- Paths Methods ---
 
+  def recipe_path
+    @recipe_path ||= File.join(folder,'recipe.yaml')
+  end
+
+  def image_path(relpath)
+    if File.exist?(relpath)
+      relpath
+    elsif File.exist?(pth = File.join(collection.folder,'images',relpath))
+      return pth
+    elsif File.exist?(pth = File.join(folder_images, relpath))
+      return pth
+    else
+      raise "L'image '#{relpath}' est introuvable (ni dans le dossier de la collection si le livre appartient à une collection, ni dans le dossier 'images' du livre, ni en tant que path absolue)"
+    end
+  end
+
+  def folder_images
+    @folder_images ||= File.join(folder,'images')
+  end
+
   def folder
     @folder ||= File.join(recette[:main_folder])
   end
+
 
   private
 
@@ -72,9 +93,6 @@ class PdfBook
       @pdf_path ||= File.join(folder,'book.pdf')
     end
 
-    def recipe_path
-      @recipe_path ||= File.join(folder,'recipe.yaml')
-    end
 
 
 end #/class PdfBook

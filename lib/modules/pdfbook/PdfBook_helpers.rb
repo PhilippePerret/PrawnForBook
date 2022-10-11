@@ -9,8 +9,8 @@ class PdfBook
   # Le sous-titre, s'il existe
   def formated_sous_titre
     @formated_sous_titre ||= begin
-      if data[:book_subtitle]
-        "(#{data[:book_subtitle].strip})"
+      if recette[:book_subtitle]
+        "(#{recette[:book_subtitle].strip})"
       end
     end
   end
@@ -19,7 +19,7 @@ class PdfBook
   # 
   def formated_auteurs
     @formated_auteurs ||= begin
-      data[:auteurs].pretty_join
+      recette[:auteurs].pretty_join
     end
   end
 

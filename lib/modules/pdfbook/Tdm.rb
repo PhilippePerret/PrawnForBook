@@ -22,10 +22,9 @@ class Tdm
   # Instance Praw4book::PrawnDoc < Prawn::Document
   attr_reader :pdf
 
-  # Contenu de la table des matières, une table avec
-  # en identifiant l'identifiant de la section (titre
-  # principal) et en valeur une table identique mais
-  # de niveau inférieur
+  # Contenu de la table des matières
+  # Une liste avec les titres qui se suivent, chaque élément est
+  # un hash qui contient :titre (l'instance NTitre) et la page
   attr_reader :content
 
   def initialize(pdfbook, pdf)
@@ -42,17 +41,8 @@ class Tdm
     pdf.go_to_page(on_page)
     # pdf.stroke_axis # pour voir les axes
     pdf.move_cursor_to(pdf.bounds.height - 50)
-    content.each do |l1_data|
-      write_title(l1_data)
-      l1_data[:items].each do |l2_data|
-        write_title(l2_data)
-        l2_data[:items].each do |l3_data|
-          write_title(l3_data)
-          l3_data[:items].each do |l4_data|
-            write_title(l4_data)
-          end
-        end
-      end
+    content.each do |data_titre|
+      write_title(data_titre)
     end
   end
 
@@ -65,8 +55,8 @@ class Tdm
   def write_title(data)
     titre     = data[:titre]
     idxtitre  = titre.level - 1
-    indent    = [0, 15, 30, 45][idxtitre]
-    fsize     = [14, 12, 10, 10][idxtitre]     
+    indent    = [0, 15, 30, 45][idxtitre]  # TODO Pouvoir le régler
+    fsize     = [14, 12, 10, 10][idxtitre] # TODO Pouvoir le régler
 
     # 
     # Font pour ce niveau de titre
@@ -138,33 +128,7 @@ class Tdm
   # table des matières
   # 
   def add_title(titre, num_page)
-    if titre.level == 1
-      # 
-      # Initiation d'un grand titre
-      # 
-      @current_level1 = content.count
-      content << {titre:titre, items: [], page: num_page}
-      @current_level2 = 0
-      @current_level3 = 0
-      @current_level4 = 0
-      return
-    elsif titre.level == 2
-      container = content[@current_level1]
-      @current_level2 = container[:items].count
-      @current_level3 = 0
-      @current_level4 = 0
-    elsif titre.level == 3
-      container = content[@current_level1][:items][@current_level2]
-      @current_level3 = container[:items].count
-      @current_level4 = 0
-    elsif titre.level == 4
-      container = content[@current_level1][:items][@current_level2][:items][@current_level3]
-      @current_level4 = container[:items].count
-    else
-      # Ce niveau de titre n'est pas enregistré
-      return
-    end
-    container[:items] << {titre:titre, items:[], page: num_page}
+    @content << {titre:titre, page: num_page}
   end
 
 

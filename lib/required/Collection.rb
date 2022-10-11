@@ -20,7 +20,7 @@ class Collection
         # Attention : ne pas utiliser arg.collection qui retourne
         # l'instance Prawn4book::Collection du livre (=> infinite loop)
         # 
-        if arg.data[:collection] === true
+        if arg.recette[:collection] === true
           # 
           # La donnée du PdfBook est TRUE, ce qui signifie que le
           # livre se trouve dans le dossier de la collection, au même
@@ -32,7 +32,7 @@ class Collection
           # La donnée :collection du PdfBook est le chemin d'accès au
           # dossier de la collection
           # 
-          arg.data[:collection]
+          arg.recette[:collection]
         end
       else
         # 

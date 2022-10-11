@@ -10,6 +10,7 @@ class PdfBook
 class Recipe
 
   attr_reader :pdfbook
+  attr_reader :real_data
 
   def initialize(pdfbook)
     @pdfbook = pdfbook
@@ -23,7 +24,11 @@ class Recipe
   end
 
   def get(key)
-    real_data[key.to_sym] || real_data.merge!(key.to_sym => get_data(key))
+    real_data[key.to_sym] || begin
+      keydata = get_data(key)
+      real_data.merge!(key.to_sym => keydata)
+      keydata
+    end
   end
 
   def info(key)
@@ -33,6 +38,9 @@ class Recipe
 
   # --- Precidate Methods ---
 
+  def collection?
+    :TRUE == @incollection ||= true_or_false(check_if_collection)
+  end
   def paragraph_number?
     :TRUE == @numeroterpar ||= true_or_false(get(:opt_num_parag))
   end
@@ -47,6 +55,10 @@ class Recipe
 
   def page_faux_titre?
     :TRUE == @hasfauxtitre ||= true_or_false(get(:faux_titre) === true)
+  end
+
+  def page_de_titre?
+    :TRUE == @haspagetitre ||= true_or_false(get(:page_de_titre) === true)
   end
 
   def table_of_content?
@@ -98,16 +110,35 @@ class Recipe
   end
 
   def data_collection
-    @data_collection ||= pdfbook.collection? ? pdfbook.collection.data : {}
+    @data_collection ||= collection? ? pdfbook.collection.data : {}
   end
 
+
+  private
+
+    ##
+    # @return true si le livre appartient vraiment à une collection,
+    # en checkant que cette collection existe bel et bien.
+    def check_if_collection
+      datacoll = data[:collection]
+      return false if datacoll.nil?
+      if datacoll === true
+        return File.exist?(File.join(File.dirname(pdfbook.folder),'recipe_collection.yaml'))
+      else
+        # Si :collection n'est pas true, c'est le path du dossier
+        # de la collection, quand le livre ne se trouve pas dedans
+        # (ce qui est pourtant préférable)
+        return File.exist?(datacoll)
+      end
+    end
 
 DEFAULT_DATA = {
   info: {},
   num_page_style: 'num_page',
   headers: {},
   footers: {},
-  page_info: {}
+  page_info: {},
+  table_des_matières: {},
 }
 
 end #/class Recipe

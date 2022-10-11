@@ -74,16 +74,20 @@
   :level1:
     :font: Nunito
     :size: 30
+    :margin_top: 100
+    :margin_bottom: 50
   :level2:
     :font: Nunito
     :size: 26
+    :margin_top:    75
+    :margin_bottom: 35
   :level3:
     :font: Nunito
     :size: 20
+    :margin_top:    50
+    :margin_bottom: 10
   :level4:
     :font: Nunito
     :size: 16
-  :level5:
-    :font: Nunito
-    :size: 14
-    :style: :bold
+    :margin_top:    25
+    :margin_bottom: 0

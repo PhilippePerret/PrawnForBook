@@ -32,7 +32,7 @@ class NImage
   end
 
   def path
-    @path ||= File.join(IMAGES_FOLDER, filename)
+    @path ||= PdfBook.current.image_path(filename)
   end
 
 end #/class NImage
