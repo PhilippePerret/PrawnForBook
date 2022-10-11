@@ -1,3 +1,15 @@
+<style style="text/css">
+console {
+	background-color: #333333;
+  color:white;
+  font-family:courier;
+  font-size:11pt;
+  display:inline-block;
+  padding:0 12px;
+ }
+ console:before {content:"$> "}
+</style>
+
 # Prawn4book<br />Manuel
 
 
@@ -13,6 +25,35 @@ Tous les exemples de ce manuel présupposent qu’un alias de la commande a ét�
 ~~~
 
 > Noter ci-dessus que la commande sera `prawn-for-book` (qui est plus simple à taper)
+
+<a name="init-book-pdf"></a>
+
+## Initiation d’un livre
+
+* Créer un dossier dans lequel seront mis tous les éléments du livre,
+* ouvrir une fenêtre Terminal dans ce dossier,
+* jouer la commande <console>prawn-for-book init</console>,
+* choisir de construire un nouveau livre,
+* suivre le processus proposé et choisi.
+
+---
+
+<a name="add-livre-to-collection"></a>
+
+## Ajouter un livre à une collection
+
+Suivre la [procédure d’initiation d’un nouveau livre](#init-book-pdf) mais en ouvrant le Terminal au dossier de la collection (ou au dossier du livre créé dans le dossier de cette collection).
+
+---
+
+<a name="init-collection"></a>
+
+## Initiation d’une nouvelle collection
+
+* Créer le dossier dans lequel doit être placée la collection,
+* ouvrir une fenêtre Terminal à ce dossier,
+* jouer la commande <console>prawn-for-book init</console>,
+* choisir de construire une collection.
 
 ---
 
@@ -31,11 +72,9 @@ Certaines options permettent de travailler le livre avant sa fabrication défini
 
 Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des essais minimum avec KDP :
 
-~~~bash
-> prawn-for-book build -last=24
-~~~
+<console>prawn-for-book build -last=24</console>
 
-
+---
 
 <a name="build-index"></a>
 
@@ -231,7 +270,12 @@ On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal 
 
 Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre.
 
-### Définition des fonts
+### Définition des fontes
+
+On peut être assister pour la création de la donnée des fontes (qui nécessite de connaitre les chemins d’accès à toutes les fontes possibles) de cette manière :
+
+* ouvrir un Terminal au dossier du livre ou de la collection
+* jouer la commande <console>prawn-for-book aide fontes</console>.
 
 ~~~yaml
 
