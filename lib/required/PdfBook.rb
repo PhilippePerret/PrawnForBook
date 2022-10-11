@@ -20,11 +20,18 @@ class PdfBook
     generate_pdf_book
   end
 
-  def data
-    @data ||= YAML.load_file(recipe_path, aliases: true)
+  # @prop Instance {PdfBook::Recipe} de la recette du livre
+  # @usage
+  #   <book>.recette[key] # => valeur dans la recette du livre
+  #                       #    ou la recette de la collection
+  def recette
+    @recette ||= Recipe.new(self)
   end
-  alias :recette :data
-  alias :recipe  :data
+  alias :recipe :recette
+
+  # def data
+  #   @data ||= YAML.load_file(recipe_path, aliases: true)
+  # end
 
   def collection
     @collection ||= collection? ? Collection.new(self) : nil
@@ -44,52 +51,17 @@ class PdfBook
     not(data[:collection] === false || data[:collection] === nil)
   end
 
-  def paragraph_number?
-    :TRUE == @hasparagnum ||= true_or_false(opt_num_parag)
-  end
+
+  # --- Data Methods ---
+
+  def titre; recette.title end
 
 
   # --- Paths Methods ---
 
   def folder
-    @folder ||= File.join(data[:main_folder])
+    @folder ||= File.join(recette[:main_folder])
   end
-
-
-  # --- Data Methods ---
-
-  def titre; data[:book_title] end
-
-  def footer
-    @footer ||= begin
-      if collection?
-        collection.data[:footer]
-      else
-        data[:footer] || {style:{font:'Times', font_size:9}}
-      end
-    end
-  end
-
-  def opt_num_parag
-    @opt_num_parag ||= begin
-      if data[:opt_num_parag] == :collection || data[:opt_num_parag].nil?
-        collection.data[:opt_num_parag]
-      else
-        data[:opt_num_parag] === true
-      end
-    end
-  end
-
-  def num_page_style
-    @num_page_style ||= begin
-      if data[:num_page_style] == :collection || data[:num_page_style].nil?
-        collection.data[:num_page_style]
-      else
-        data[:num_page_style] || 'num_page'
-      end
-    end
-  end
-
 
   private
 

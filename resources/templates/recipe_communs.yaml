@@ -47,19 +47,17 @@
   # Distance du numéro de page avec la marge droite
   :dist_num_from_rmargin: 0
 
-# --- Entête du livre ---
-:header: # tous les rangs
-  - :from_page: 10
-    :to_page: 200
+# --- Entêtes du livre ---
+:headers: # tous les rangs
+  - :pages: (10..200)
     :disposition: "| -%titre1- |"
     :font: ArialNarrow
     :size: 8
     :style: :bold
 
-# --- Pied de page ---
-:footer: # tous les rangs
-  - :from_page: 10
-    :to_page: 20
+# --- Pieds de page ---
+:footers: # tous les rangs
+  - :pages: (10..20)
     :disposition: "-%titre1 | |"
     :font: Arial
     :size: 8

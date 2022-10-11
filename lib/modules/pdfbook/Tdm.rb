@@ -130,7 +130,7 @@ class Tdm
   alias dest destination
 
   def numerotation_page_with_num_parag?
-    pdfbook.num_page_style == 'num_parags'
+    pdfbook.recette.style_numero_page == 'num_parags'
   end
 
   #
