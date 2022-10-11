@@ -37,8 +37,6 @@
 :page_de_garde:   true  # true => insérer la page de garde
 :faux_titre:      false # true => insérer la page de faux-titre
 :page_de_titre:   true  # true => insérer la page de titre
-:page_info:       # => page de fin avec les infos
-  :display: true  # true => afficher la page des infos à la fin
 
 # --- Table Des Matières ---
 :table_of_content:

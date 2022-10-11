@@ -12,7 +12,8 @@
 :main_folder: "/absolute/path/to/this/folder"
 :text_path: true # true = texte.md ou texte.txt dans ce dossier
 :page_info:
-  :isbn:    null
+  :display:     true
+  :isbn:        null
   :depot_bnf:   3e trimestre 2022
   :cover:       "MM & PP" # auteurs de la couverture
   :mep:         ['Prénom NOM']

@@ -27,7 +27,7 @@ class PrawnDoc < Prawn::Document
     #
     # On doit se retrouver sur une belle page
     # 
-    unless odd?
+    unless page_match?(:odd, page_number)
       start_new_page
     end
 
@@ -55,16 +55,17 @@ class PrawnDoc < Prawn::Document
     # 
     # ["valeur", margin bottom|nil]
     page_info = book.recette[:page_info]
+    editor    = book.recette.editor
     [
-      [book.editor[:name]           , nil],
-      [book.editor[:site]           , nil],
-      [book.editor[:adresse]        , nil],
-      [book.editor[:mail]           , nil],
+      [editor[:name]           , nil],
+      [editor[:site]           , nil],
+      [editor[:adresse]        , nil],
+      [editor[:mail]           , nil],
       ['', nil],
-      [book.editor[:siret]          , nil],
+      [editor[:siret]          , nil],
       ['——————', nil],
       ['Contact', nil],
-      [book.editor[:contact]        , nil],
+      [editor[:contact]        , nil],
       ['——————', nil],
       [depot_legal                  , nil],
       ["ISBN : #{page_info[:isbn]}" , nil],
@@ -72,7 +73,7 @@ class PrawnDoc < Prawn::Document
       ["Conception & rédaction"     , nil],
       [conception_redaction         , nil],
       ['Mise en page'               , nil],
-      [page_info[:mep]              , nil],
+      [mise_en_page                 , nil],
       ['Couverture'                 , nil],
       [page_info[:cover]            , nil],
       ['Relectures et correction'   , nil],
@@ -100,8 +101,12 @@ class PrawnDoc < Prawn::Document
   end
 
   def conception_redaction
-    ary = recette.page_info[:conception] + recette.auteurs
+    ary = (recette.page_info[:conception]||[]) + recette.auteurs
     ary.uniq.pretty_join
+  end
+
+  def mise_en_page
+    recette.page_info[:mep].uniq.pretty_join
   end
 
   def depot_legal

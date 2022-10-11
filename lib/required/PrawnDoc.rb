@@ -148,12 +148,16 @@ class PrawnDoc < Prawn::Document
     # 
     # Écriture du paragraphe
     # 
-    text final_str, 
-      align: :justify, 
-      size: 11, 
-      font_style: 'normal', 
-      inline_format: true
-
+    begin
+      text final_str, 
+        align: :justify, 
+        size: 11, 
+        font_style: :normal, 
+        inline_format: true
+    rescue Exception => e
+      puts "Problème avec le paragraphe #{final_str.inspect}".rouge
+      exit
+    end
     # 
     # On prend la dernière page du paragraphe, c'est celle sur 
     # laquelle on se trouve maintenant

@@ -59,8 +59,13 @@ class InputTextFile
         end
       else
         parse.tap do |parags|
-          lespars = parags.map { |parag| parag.data }
-          File.write(data_paragraphes_path, lespars.to_yaml)
+          unless CLI.option(:no_save)
+            lespars = parags.map { |parag| parag.data }
+            # 
+            # ÉCRITURE DANS LE FICHIER texte.yaml
+            # 
+            File.write(data_paragraphes_path, lespars.to_yaml)
+          end
         end
       end
     end

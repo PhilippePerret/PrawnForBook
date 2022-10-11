@@ -74,6 +74,18 @@ Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des e
 
 <console>prawn-for-book build -last=24</console>
 
+### Forcer le re-parsing du texte
+
+Par défaut, l’application utilisera le fichier `texte.yaml` s’il existe. Pour détruire ce texte, ce qui provoquera le reparsing du texte original, ajouter l’option `--force`.
+
+<console>prawn-for-book build --force</console>
+
+### Ne pas enregistrer le fichier `texte.yaml`
+
+Si l’on est sûr de devoir reparser à chaque fois le texte (par exemple lorsque l’on travaille sur ce texte), on peut ajouter l’option `--no_save` à la commande `build` :
+
+<console>prawn-for-book build --no_save</console>
+
 ---
 
 <a name="build-index"></a>

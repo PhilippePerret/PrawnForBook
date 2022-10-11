@@ -54,6 +54,7 @@ class Tdm
   #   :page   Numéro de page où se trouve le titre
   def write_title(data)
     titre     = data[:titre]
+    return if titre.level > 4 # TODO pouvoir le définir
     idxtitre  = titre.level - 1
     indent    = [0, 15, 30, 45][idxtitre]  # TODO Pouvoir le régler
     fsize     = [14, 12, 10, 10][idxtitre] # TODO Pouvoir le régler
@@ -65,6 +66,7 @@ class Tdm
     # Numéro pour la pagination
     # 
     numero = destination(data[:page])
+    numero = numero.to_s
     # 
     # Largeur de la pagination
     # 
@@ -77,8 +79,9 @@ class Tdm
     # Écriture du texte
     # 
     pdf.font( 'Garamond', size: fsize)
+    puts "Titre «#{titre.text.inspect}» (level: #{titre.level.inspect}) - indent:#{indent.inspect} — width num: #{wnum.inspect} - page_width: #{page_width.inspect}"
     titre_width = page_width - (indent + wnum)
-    puts "Titre «#{titre.text}» - indent:#{indent} — width: #{titre_width} - width num: #{wnum} - page_width: #{page_width}"
+    puts "=> titre_width = #{titre_width.inspect}"
     # pdf.text_box "#{titre.text}#{' .' * 50}", at: [indent, pdf.cursor], width:titre_width, overflow: :truncate #, height:LINE_HEIGHT
     
     # pdf.span pdf.bounds.width, position: indent, overflow: :truncate, inline_format: true do

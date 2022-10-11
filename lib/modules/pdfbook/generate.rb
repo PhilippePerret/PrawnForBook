@@ -133,7 +133,12 @@ class PdfBook
       # 
       # Note : 'with_index' permet juste de faire des essais
       # 
+      green_point = '.'.vert
+      clear
+      suivi = 'Écriture du paragraphe #%{num}…'.vert
       inputfile.paragraphes.each_with_index do |paragraphe, idx|
+
+        # STDOUT.write green_point
 
         if module_parser? && paragraphe.paragraph?
           paragraphe.text = __paragraph_parser(paragraphe.text)
@@ -144,6 +149,7 @@ class PdfBook
         # On peut indiquer les pages sur lesquelles est inscrit le
         # paragraphe
         if paragraphe.paragraph?
+          write_at(suivi % {num: paragraphe.numero}, 0, 0)
           @pages[paragraphe.first_page] || begin
             @pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
           end
@@ -168,7 +174,7 @@ class PdfBook
       # 
       # - Page infos ? -
       # 
-      pdf.build_page_infos(pdfbook) if recette.page_info?
+      pdf.build_page_infos(self) if recette.page_info?
 
 
       # 
