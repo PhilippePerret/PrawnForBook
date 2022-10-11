@@ -13,6 +13,8 @@ module Prawn4book
         PdfBook.get_current.generate
       when 'open', 'ouvre'
         require_module('open', :open_something)
+      when 'tools', 'tool'
+        require_module('tools', :play_tools)
       when 'manuel'
         require_module('help', :open_user_manuel)
       when 'essais', 'sandbox' # pour faire des essais

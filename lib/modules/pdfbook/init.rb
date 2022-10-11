@@ -553,14 +553,6 @@ NUMPAGES_VALUES = [
     return true
   end
 
-  def OLD_enfiniravec_lelivre
-    # 
-    # On peut enregitrer le livre
-    # 
-    PdfBook.new.create_recipe(cdata)
-
-  end
-
   def self.cfolder
     @@cfolder ||= File.expand_path('.')
   end

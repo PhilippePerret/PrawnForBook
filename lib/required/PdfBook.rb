@@ -60,6 +60,10 @@ class PdfBook
     recette.collection?
   end
 
+  def has_text?
+    File.exist?(text_file)
+  end
+
 
   # --- Data Methods ---
 
@@ -67,6 +71,16 @@ class PdfBook
 
 
   # --- Paths Methods ---
+
+  def text_file
+    @text_file ||= begin
+      if File.exist?(pth = File.join(folder,'texte.md'))
+        pth
+      elsif File.exist?(pth = File.join(folder,'texte.txt'))
+        pth
+      end
+    end
+  end
 
   def recipe_path
     @recipe_path ||= File.join(folder,'recipe.yaml')
