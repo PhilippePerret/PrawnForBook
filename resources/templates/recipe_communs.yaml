@@ -26,7 +26,7 @@
   :ext: '10mm'
   :bot: '15mm'
   :int: '25mm'
-:interligne:      :collection # interlilgne
+:interligne:      null
 :leading:         1
 :opt_num_parag:   true # true => numéroter les paragraphes
 :num_page_style:  num_page # style de numérotation des pages
@@ -52,7 +52,9 @@
 # --- Entêtes du livre ---
 :headers: # tous les rangs
   - :pages: (10..200)
-    :disposition: "| -%titre1- |"
+    :disposition: 
+      :odd: "| -%titre1- |"
+      :even: "| -%titre1- |"
     :font: ArialNarrow
     :size: 8
     :style: :bold
@@ -60,7 +62,9 @@
 # --- Pieds de page ---
 :footers: # tous les rangs
   - :pages: (10..20)
-    :disposition: "-%titre1 | |"
+    :disposition:
+      :odd: "| -%num- |"
+      :even: "| -%num- |"
     :font: Arial
     :size: 8
     :style: :bold
@@ -79,3 +83,7 @@
   :level4:
     :font: Nunito
     :size: 16
+  :level5:
+    :font: Nunito
+    :size: 14
+    :style: :bold
