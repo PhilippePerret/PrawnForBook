@@ -271,6 +271,8 @@ module PrawnCustomBuilderModule # ce nom est absolument à respecter
 end #/module
 ~~~
 
+> Pour réaliser le texte des nouvelles pages, cf. [blocs de texte avec Prawn](#bloc-text-with-prawn).
+
 Ce fichier contient donc deux modules :
 
 * **ParserParagraphModule** définit la méthode `__paragraph_parser` qui parse les paragraphes.
@@ -422,3 +424,11 @@ L’application reconnaitra alors automatiquement les fichiers `.p4b.txt` et uti
 ### Choix d'une autre police
 
 Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.p4b.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
+
+
+
+## Prawn
+
+<a name="bloc-text-with-prawn"></a>
+
+### Blocs de texte avec Prawn

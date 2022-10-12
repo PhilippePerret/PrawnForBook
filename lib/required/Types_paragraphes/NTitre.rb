@@ -36,18 +36,7 @@ class NTitre
 
   # Pour instancier un titre non défini
   def self.init_data_title(key, level)
-    mg_bot = 50 - (level * 12)
-    mg_bot = 0 if mg_bot < 0
-    mg_top = 100 - (level * 15)
-    mg_top = 0 if mg_top < 0
-    dtitle = {
-      font: data_titles[:level1][:font],
-      size: (11 + ( (8 - level) * 2.5)).to_i,
-      margin_bottom: mg_bot,
-      margin_top:    mg_top,
-      style: :normal
-    }
-    data_titles.merge!(key => dtitle)
+    data_titles.merge!(key => {})
   end
 
   def self.data_titles

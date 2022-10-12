@@ -1,5 +1,12 @@
 # Todo
 
+* Pour le placement des éléments (et notamment les titres) au lieu de fonctionner en points, fonctionner en nombre de lignes de référence.
+  Par défaut, on part du principe que les lignes, comme dans un bon livre, sont posées sur une grille de référence. Cette grille est dépendante de la propriété `:interline` (interlignage — voir où je dois la définir, peut-être `pdf_config`, le deuxième argument de `Prawn::Document::generate`). Elle est peut-être aussi dépendante de la taille de la font de base (qu'il faut pouvoir définir)
+  À faire :
+    - voir comment définir l'interlignage
+    - voir comment calculer et surtout fixer la grille de référence (mais normalement, c'est en déplaçant le curseur de la hauteur voulu qu'on y parvient)
+    - voir comment faire pour que, dans un même texte qui passe à la ligne, les lignes s'appuient sur la grille de référence
+
 * [recette] Redéfinir les tailles des titres du livres (moins gros)
 
 * Dans le dossier du livre on peut trouver :
