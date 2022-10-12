@@ -45,6 +45,9 @@ class PdfBook
       PrawnDoc.extensions << PdfBookFormatageModule
     end
 
+    # 
+    # Parser personnalisé (if any)
+    # 
     require_module_parser if module_parser?
 
     #
@@ -140,8 +143,10 @@ class PdfBook
 
         # STDOUT.write green_point
 
+        paragraphe.page_numero = pdf.page_number
+
         if module_parser? && paragraphe.paragraph?
-          paragraphe.text = __paragraph_parser(paragraphe.text)
+          __paragraph_parser(paragraphe)
         end
 
         pdf.insert(paragraphe)
@@ -149,7 +154,11 @@ class PdfBook
         # On peut indiquer les pages sur lesquelles est inscrit le
         # paragraphe
         if paragraphe.paragraph?
-          write_at(suivi % {num: paragraphe.numero}, 0, 0)
+          # 
+          # Pour suivre le travail
+          # 
+          # write_at(suivi % {num: paragraphe.numero}, 0, 0)
+
           @pages[paragraphe.first_page] || begin
             @pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
           end
@@ -171,19 +180,30 @@ class PdfBook
 
       end
 
+      #
+      # Écriture des pages supplémentaires obtenues par le 
+      # parser, if any
+      # 
+      if module_parser?
+        extend PrawnCustomBuilderModule
+        __custom_builder(pdf)
+      end
+
       # 
       # - Page infos ? -
       # 
       pdf.build_page_infos(self) if recette.page_info?
 
-
       # 
-      # Écriture de la TABLE DES MATIÈRES
+      # - TABLE DES MATIÈRES -
       # 
       tdm.output(on_page) if table_des_matieres?
 
       #
-      # Définition des numéros de page ou numéros de paragraphes
+      # - PAGINATION -
+      # 
+      # Écriture des numéros de page ou numéros de paragraphes
+      # En bas de toutes les pages qui le nécessitent.
       # 
       pdf.set_pages_numbers(@pages)
 
@@ -193,8 +213,8 @@ class PdfBook
     if File.exist?(pdf_path)
       puts "Le book PDF a été produit avec succès !".vert
       puts "(in #{pdf_path})".gris
-      puts "\n"
-      open_book if Q.yes?('Voulez-vous le lire ?'.jaune)
+      puts "\n"      
+      open_book if CLI.option(:open)
     else
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
     end
@@ -293,8 +313,7 @@ class PdfBook
     extend ParserParagraphModule
   end
   def module_parser_path
-    @module_parser_path ||= begin
-    end
+    @module_parser_path ||= get_module_parser_path
   end
   def get_module_parser_path
     if collection?

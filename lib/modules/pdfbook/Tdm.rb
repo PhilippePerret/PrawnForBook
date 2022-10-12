@@ -44,7 +44,7 @@ class Tdm
     suivi = ('Écriture du titre #%{num}/' + content.count.to_s).vert
     content.each_with_index do |data_titre, idx|
       begin
-        write_at(suivi % {num: idx+1}, 2, 0)
+        write_at(suivi % {num: idx+1}, 2, 0) if debug?
         write_title(data_titre)
       rescue Exception => e
         puts "\nProblème avec le titre : #{data_titre.inspect}".rouge

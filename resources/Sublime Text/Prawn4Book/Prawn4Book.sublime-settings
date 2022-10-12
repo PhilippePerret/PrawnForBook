@@ -1,0 +1,28 @@
+{
+  "color_scheme": "Prawn4Book.sublime-color-scheme",
+  
+  "font_face": "GaramondBookITC",
+  
+  "font_face": "Arial Narrow",
+  "font_face": "Avenir Next",
+  "font_face": "Avenir Next Condensed",
+  "font_face": "Baskerville",
+  "font_face": "Bodoni 72",
+  "font_face": "Charter",
+  "font_face": "Didot",
+  "font_face": "Futura Lt BT PHIL",
+  "font_face": "Galatia SIL",
+  "font_face": "Optima",
+
+  "font_size": 24,
+  
+  "font_face": "ITC Garamond Std Light Condensed",
+  "font_size": 32,
+
+  "line_padding_top": 14,
+
+  "word_wrap": true,
+  "wrap_width_style":"min",
+  "wrap_width": 0
+
+}

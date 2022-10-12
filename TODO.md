@@ -1,12 +1,24 @@
 # Todo
 
-* Faire la classe PdfBook::Recette
+* Sortir une table des films
+  - la mettre sous forme de fichier csv ? en ajoutant un index qui sera le titre original en minuscule
+  - comparer la liste des films obtenus avec cette liste
+  - signaler les films non trouvés, pour
+    - soit les corriger dans le texte (typo)
+    - soit les ajouter dans la base des films
+
+* Sortir le scénodico de la même manière
+  - avec une liste de formes du mot qui correspond au même mot (pluriels, même régulier, etc.)
+  - comparer la liste des mots obtenus avec cette liste
+  - signaler les mots non trouvés pour :
+    - soit les corriger (typo dans le texte)
+    - soit les ajouter dans le scénodico (nouveau mot)
+
+* [recette] Redéfinir les tailles des titres du livres (moins gros)
 
 * Dans le dossier du livre on peut trouver :
-  - (`parser.rb`) un *parser* (qui parse les paragraphes et en tire des informations — dans la collection Narration, on relève les films et les mots techniques, indexés)
   - (`formater.rb`)un *formater* — qui va mettre en forme les balises se trouvant dans le texte
     * noter quand même qu'on doit proposer le même principe pour tout type de document : un code `balise:` amorçant un paragraphe détermine un type de paragraphe qui renverra au formater (`formate_balise(paragraphe)`) 
-    QUESTION : ne faut-il pas mettre 'balise::' pour éviter toute ambigüité avec les autres balisages. Par exemple, dans la collection, on peut avoir un paragraphe qui commence par "film:Her est un film" où "film" n'est pas une balise de formatage, mais une balise de film.
 
 * Poursuivre les essais sur la table des matières
   En profiter pour bien comprendre le fonctionnement des :

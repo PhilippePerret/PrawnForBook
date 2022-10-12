@@ -3,6 +3,7 @@ class PdfBook
 class NImage
 
   attr_reader :data
+  attr_accessor :page_numero
 
   def initialize(data)
     @data = data.merge!(type: 'image')

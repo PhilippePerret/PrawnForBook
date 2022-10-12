@@ -5,6 +5,7 @@ class NTextParagraph
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
   attr_accessor :last_page
+  attr_accessor :page_numero
 
   def self.get_next_numero
     @@last_numero ||= 0

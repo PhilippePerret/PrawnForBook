@@ -1,0 +1,21 @@
+%YAML 1.2
+# https://www.sublimetext.com/docs/syntax.html
+---
+name: Prawn4Book
+file_extensions: ['p4b.md', 'p4b.txt', 'p4b.text']
+scope: source.p4b
+
+contexts:
+  main:
+    #
+    # Note :  les aspects des scopes propres sont définis dans
+    #         Prawn4Book.sublime-color-scheme
+    #
+    - match: "^((cit|loi)::)+"
+      scope: meta.tag.known
+    - match: "^([a-z]+::)+"
+      scope: meta.tag.unknown
+    - match: \b(mais|où|et|donc|or|ni|car)\b
+      scope: source.p4b.conj
+    - match: \b(une|un|les|le|la|des)\b
+      scope: source.p4b.art

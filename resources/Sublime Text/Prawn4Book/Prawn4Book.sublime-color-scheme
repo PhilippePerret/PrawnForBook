@@ -1,0 +1,23 @@
+{
+  "name": "Color sheme pour Prawn4Book",
+  "globals": {
+    "background":"#FFFFFF",
+    "foreground":"#000000",
+    "caret":"#CCCCFF",
+    "selection":"#CCCCFF",
+    "selection_border":"#FFCCCC",
+    "inactive_selection":"#CCFFCC"
+  },
+  "rules":[
+    {
+      "name": "Méta tags",
+      "scope": "meta.tag.unknown",
+      "foreground": "#FF9999"
+    },
+    {
+      "name": "Tags connues",
+      "scope": "meta.tag.known",
+      "foreground": "#77DD77"
+    }
+  ]
+}

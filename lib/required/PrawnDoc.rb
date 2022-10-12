@@ -135,7 +135,7 @@ class PrawnDoc < Prawn::Document
 
     # puts "cursor avant écriture paragraphe = #{cursor}"
 
-    final_str = "#{cursor_on_baseline} #{parag.text}"
+    final_str = "#{parag.text}"
 
     font "Garamond", size: 11, font_style: :normal
     # 

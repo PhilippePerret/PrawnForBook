@@ -2,6 +2,8 @@ module Prawn4book
 class PdfBook
 class NTitre
 
+  attr_accessor :page_numero
+
   def self.font_family(level)
     key = "level#{level}".to_sym
     data_titles[key] || init_data_title(key, level)

@@ -1,0 +1,18 @@
+{
+  "dependencies":[
+    // {
+    //   "name":"six",
+    //   "load_order":"01",
+    //   "description":"Module utile pour Treetagger",
+    //   "author":"Unknown",
+    //   "issues":"https://github.com/benjaminp/six/issues",
+    //   "releases":[
+    //     {
+    //       "base":"https://github.com/benjaminp/six",
+    //       "tags":true,
+    //       "sublime_text":"*"
+    //     }
+    //   ]
+    // }
+  ]
+}

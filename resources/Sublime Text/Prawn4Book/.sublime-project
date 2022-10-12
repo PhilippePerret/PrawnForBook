@@ -1,0 +1,6 @@
+ "build_systems":[
+    {
+      "name": "Reload Current Package",
+      "target": "package_reloader_reload",
+    }
+  ]

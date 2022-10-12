@@ -1,14 +1,5 @@
-<style style="text/css">
-console {
-	background-color: #333333;
-  color:white;
-  font-family:courier;
-  font-size:11pt;
-  display:inline-block;
-  padding:0 12px;
- }
- console:before {content:"$> "}
-</style>
+<style style="text/css">console {background-color: #333333;color:white;font-family:courier;font-size:11pt;display:inline-block;padding:0 12px;}console:before{content:"$> "}</style>
+
 
 # Prawn4book<br />Manuel
 
@@ -85,6 +76,11 @@ Par défaut, l’application utilisera le fichier `texte.yaml` s’il existe. Po
 Si l’on est sûr de devoir reparser à chaque fois le texte (par exemple lorsque l’on travaille sur ce texte), on peut ajouter l’option `--no_save` à la commande `build` :
 
 <console>prawn-for-book build --no_save</console>
+
+### Ouvrir le fichier PDF produit
+
+Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `--open`.
+<console>prawn-for-book build --open</console>
 
 ---
 
@@ -252,8 +248,9 @@ Il suffit pour cela de créer un fichier de nom `parser.rb` dans le dossier du l
 
 ~~~ruby
 module ParserParagraphModule # ce nom est absolument à respecter
-  def	__paragraph_parser(str)
-    # Parse le paragraphe +str+
+  def	__paragraph_parser(paragraphe)
+    # Parse le paragraphe {PdfBook::NTextParagraph}
+    str = paragraphe.text
   end
   # ...
 end #/module
@@ -393,3 +390,35 @@ Les variables utilisables dans les entêtes et pieds de page sont toujours des m
 Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
 
 Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter. TODO: à l’avenir on pourra imaginer avoir des numéros différents suivant les parties.
+
+---
+
+<a name="annexe"></a>
+
+## Annexe
+
+## Ne pas afficher les espaces insécables
+
+Pour ne pas afficher les espaces insécables dans Sublime Text :
+
+* Sublime Text > Préférences > Settings - Syntax specific
+
+* ajouter dans la fenêtre droite :
+
+  ~~~json
+  {
+    	"draw_unicode_white_space": "none",
+  }
+  ~~~
+
+* enregistrer.
+
+## Package Sublime Text
+
+Pour travailler le texte, le mieux est d’utiliser un éditeur de texte. Sublime Text est mon éditeur de choix et on peut trouver dans le dossier `./resources/Sublime Text/` un package `Prawn4Book` qu’on peut ajouter au dossier `Packages` de son éditeur (dans Sublime Text, activer le menu “Sublime Text > Préférences > Browse packages…” et mettre le dossier `Prawn4Book` dans le dossier `Packages`.
+
+L’application reconnaitra alors automatiquement les fichiers `.p4b.txt` et utilisera un aspect agréable, tout mettant en exergue les éléments textuels particuliers (comme les balises de formatage des paragraphes).
+
+### Choix d'une autre police
+
+Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.p4b.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
