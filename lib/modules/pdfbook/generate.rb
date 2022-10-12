@@ -158,6 +158,7 @@ class PdfBook
           # Pour suivre le travail
           # 
           # write_at(suivi % {num: paragraphe.numero}, 0, 0)
+          STDOUT.write green_point
 
           @pages[paragraphe.first_page] || begin
             @pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
@@ -207,6 +208,10 @@ class PdfBook
       # 
       pdf.set_pages_numbers(@pages)
 
+
+      if ParserParagraphModule.respond_to?(:report)
+        ParserParagraphModule.report
+      end
 
     end #/PrawnDoc.generate
 

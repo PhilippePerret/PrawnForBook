@@ -25,9 +25,9 @@ class InputTextFile
   def define_path_from_arg(patharg)
     case patharg
     when TrueClass
-      txt_path = File.join(pdfbook.folder,'texte.txt')
+      txt_path = File.join(pdfbook.folder,'texte.p4b.txt')
       return txt_path if File.exist?(txt_path)
-      md_path  = File.join(pdfbook.folder,'texte.md')
+      md_path  = File.join(pdfbook.folder,'texte.p4b.md')
       return md_path if File.exist?(md_path)
       puts "Le fichier texte est introuvable…".rouge
       puts "(recherché dans '#{txt_path}' et\n'#{md_path}')".gris
@@ -96,7 +96,7 @@ class InputTextFile
   # @prop {String} Chemin d'accès au fichier de données des 
   # paragraphes, en format YAML
   def data_paragraphes_path
-    @data_paragraphes_path ||= File.join(pdfbook.folder, 'texte.yaml')
+    @data_paragraphes_path ||= File.join(pdfbook.folder, 'texte.p4b.yaml')
   end
 
   ##
