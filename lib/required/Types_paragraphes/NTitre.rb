@@ -7,7 +7,7 @@ class NTitre
   def self.font_family(level)
     key = "level#{level}".to_sym
     data_titles[key] || init_data_title(key, level)
-    data_titles[key][:font] || 'Arial'
+    data_titles[key][:font] || nil # DEFAULT_FONT
   end
 
   def self.font_size(level)
@@ -40,7 +40,7 @@ class NTitre
   end
 
   def self.data_titles
-    @@data_titles ||= PdfBook.current.recette[:titles]
+    @@data_titles ||= PdfBook.current.recette[:titles] || {}
   end
 
   attr_reader :data

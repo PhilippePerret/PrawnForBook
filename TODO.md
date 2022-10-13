@@ -1,11 +1,16 @@
 # Todo
 
+* Essais à faire :
+  - remplir de couleur (pour bien voir où est le bloc)
+  - "passer à la ligne" et prendre la nouvelle hauteur (cursor), en changeant la taille de la fonte, pour voir le rapport
 * Pour le placement des éléments (et notamment les titres) au lieu de fonctionner en points, fonctionner en nombre de lignes de référence.
   Par défaut, on part du principe que les lignes, comme dans un bon livre, sont posées sur une grille de référence. Cette grille est dépendante de la propriété `:interline` (interlignage — voir où je dois la définir, peut-être `pdf_config`, le deuxième argument de `Prawn::Document::generate`). Elle est peut-être aussi dépendante de la taille de la font de base (qu'il faut pouvoir définir)
   À faire :
     - voir comment définir l'interlignage
     - voir comment calculer et surtout fixer la grille de référence (mais normalement, c'est en déplaçant le curseur de la hauteur voulu qu'on y parvient)
     - voir comment faire pour que, dans un même texte qui passe à la ligne, les lignes s'appuient sur la grille de référence
+  Ensuite :
+    - lorsqu'on définit qu'un titre (:level1 par exemple) se trouve à `3` de ce qui précède, ça signifie qu'il faut laisser passer 3 lignes de référence avant d'écrire se titre. Ce qui peut se résumer à `move_cursor_to 3 * interligne`. Mais les titres ne sont pas toujours sur les lignes de la grille de référence. On peut aussi utiliser des demi-lignes. Par exemple 2.5 pour mettre le titre à 2.5 * interligne de la ligne précédente.
 
 * [recette] Redéfinir les tailles des titres du livres (moins gros)
 

@@ -209,7 +209,7 @@ class PdfBook
       pdf.set_pages_numbers(@pages)
 
 
-      if ParserParagraphModule.respond_to?(:report)
+      if module_parser? && ParserParagraphModule.respond_to?(:report)
         ParserParagraphModule.report
       end
 

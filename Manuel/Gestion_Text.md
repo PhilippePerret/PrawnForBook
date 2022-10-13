@@ -21,6 +21,7 @@
 | **`style`** : style de la fonte, en fonction de sa définition (`:normal`, `:italic`, etc.) |                                                              |                                                              |                                                              |                                                              |
 | **`:valign`** : alignement vertical                          |                                                              |                                                              |                                                              |                                                              |
 | **`indent_paragraphs`** : montant de l’indentation           |                                                              |                                                              |                                                              |                                                              |
+| **`:mode`** : si `:stroke` le texte est mis en gras (forcé en tout cas) |                                                              |                                                              |                                                              |                                                              |
 | **`direction`**                                              |                                                              |                                                              |                                                              |                                                              |
 | **Définition du texte**                                      |                                                              |                                                              |                                                              |                                                              |
 |                                                              |                                                              |                                                              | Définit le texte dans son bloc (avec `text`)                 |                                                              |
@@ -41,3 +42,22 @@ Penser à utiliser **`bounds.<prop>`** pour position et dimensionner les choses.
 ## Mouvement du curseur
 
 Cf. `pad`, `pad_top`, `pad_bottom` et `float` à la page 7 du manuel.
+
+### `move_down`, `move_up`
+
+Quand on utilise ces méthodes, elles ajoutent ou retranchent leur valeur à la position courante.
+
+Par exemple, avec :
+
+~~~ruby
+font 'Garamond', 11
+# la hauteur de ligne sera de 13.2
+
+text "Un texte en haut" # par exemple 462
+# Ici, on se trouve à 462 - 13.2 = 448.8
+move_down(10)
+# On descend de 10 unités, on se retrouve donc à :
+# 448.8 - 10 = 438.8
+text "Texte à 438.8"
+~~~
+

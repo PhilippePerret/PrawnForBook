@@ -23,12 +23,12 @@ class Recipe
     get(key)
   end
 
-  def get(key)
+  def get(key, default = nil)
     real_data[key.to_sym] || begin
       keydata = get_data(key)
       real_data.merge!(key.to_sym => keydata)
       keydata
-    end
+    end || default
   end
 
   def info(key)
@@ -62,7 +62,7 @@ class Recipe
   end
 
   def table_of_content?
-    :TRUE == @hastdm ||= true_or_false(get(:table_of_content)[:display] === true)
+    :TRUE == @hastdm ||= true_or_false(get(:table_of_content,{})[:display] === true)
   end
 
   def page_info?

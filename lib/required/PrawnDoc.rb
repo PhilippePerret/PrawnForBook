@@ -2,6 +2,14 @@ require 'prawn'
 require 'prawn/measurement_extensions'
 
 module Prawn4book
+
+DEFAULT_TOP_MARGIN    = 20
+DEFAULT_BOTTOM_MARGIN = 20
+DEFAULT_LEFT_MARGIN   = 20
+DEFAULT_RIGHT_MARGIN  = 20
+DEFAULT_FONT          = 'Arial'
+DEFAULT_SIZE_FONT     = 10
+
 class PrawnDoc < Prawn::Document
 
 # NARRATION_BOOK_LAYOUT = {
@@ -174,7 +182,7 @@ class PrawnDoc < Prawn::Document
   # 
   # @param {PdfBook::NTitre} titre Le titre à écrire
   def insert_titre(titre)
-    font "Nunito", style: titre.font_style
+    font titre.font_family, style: titre.font_style
     text titre.text, align: :left, size: titre.font_size
     #
     # On ajoute toujours le titre à la table des matières
@@ -309,22 +317,22 @@ class PrawnDoc < Prawn::Document
     @parag_number_width ||= 7.mm
   end
 
-  def top_mg; @top_mg ||= config[:top_margin]     end
+  def top_mg; @top_mg ||= config[:top_margin] || DEFAULT_TOP_MARGIN end
   def bot_mg
     @bot_mg ||= begin
-      config[:bottom_margin] + 20
+      (config[:bottom_margin] || DEFAULT_BOTTOM_MARGIN) + 20
     end
   end
   def ext_mg
     @ext_mg ||= begin
-      lm = config[:left_margin]
+      lm = config[:left_margin] || DEFAULT_LEFT_MARGIN
       lm += parag_number_width if paragraph_number?
       lm
     end
   end
   def int_mg
     @int_mg ||= begin
-      rm = config[:right_margin]
+      rm = config[:right_margin] || DEFAULT_RIGHT_MARGIN
       rm += parag_number_width if paragraph_number?
       rm
     end
@@ -341,12 +349,19 @@ class PrawnDoc < Prawn::Document
       height_of("Dans le pied de page")
     end
   end
-
   def footer_font_name
-    @footer_font_name ||= pdfbook.recette.footers[0][:font] || 'Times'
+    @footer_font_name ||= begin
+      if pdfbook.recette.footers && pdfbook.recette.footers[0]
+        pdfbook.recette.footers[0][:font] 
+      end || DEFAULT_FONT
+    end
   end
   def footer_font_size
-    @footer_font_size ||= pdfbook.recette.footers[0][:size] || 10
+    @footer_font_size ||= begin
+      if pdfbook.recette.footers && pdfbook.recette.footers[0]
+        pdfbook.recette.footers[0][:size] 
+      end || DEFAULT_SIZE_FONT
+    end
   end
 
   def pdfbook

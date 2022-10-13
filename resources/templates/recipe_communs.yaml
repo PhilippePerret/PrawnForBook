@@ -28,7 +28,7 @@
   :int: '25mm'
 :interligne:      null
 :leading:         1
-:opt_num_parag:   true # true => numéroter les paragraphes
+:opt_num_parag:   false # true => numéroter les paragraphes
 :num_page_style:  num_page # style de numérotation des pages
 
 # --- Pages à insérer ou à sauter ---

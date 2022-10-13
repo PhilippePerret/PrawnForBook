@@ -71,11 +71,13 @@ Par défaut, l’application utilisera le fichier `texte.yaml` s’il existe. Po
 
 <console>prawn-for-book build --force</console>
 
-### Ne pas enregistrer le fichier `texte.yaml`
+### Pour enregistrer le fichier `texte.yaml`
 
-Si l’on est sûr de devoir reparser à chaque fois le texte (par exemple lorsque l’on travaille sur ce texte), on peut ajouter l’option `--no_save` à la commande `build` :
+Si l’on est sûr de ne plus devoir parser le texte à chaque fois et qu'on veut préciser les choses au niveau de l'impression, on peut ajouter l’option `-save` (ou `--save`) à la commande `build` :
 
-<console>prawn-for-book build --no_save</console>
+<console>prawn-for-book build -save</console>
+
+Cela provoquera une version *Prawn4book* du texte qui permettra de préciser le formatage.
 
 ### Ouvrir le fichier PDF produit
 

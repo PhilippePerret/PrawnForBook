@@ -59,7 +59,7 @@ class InputTextFile
         end
       else
         parse.tap do |parags|
-          unless CLI.option(:no_save)
+          if CLI.option(:save)
             lespars = parags.map { |parag| parag.data }
             # 
             # ÉCRITURE DANS LE FICHIER texte.yaml
