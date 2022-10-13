@@ -40,6 +40,34 @@ class PrawnDoc < Prawn::Document
 
   # --- Lines Methods ---
 
+  ##
+  # @input  Reçoit la fonte concernée (*) et
+  #         Reçoit la hauteur de ligne voulue
+  # @output Return le leading à appliquer
+  # 
+  # Note : ne pas oublier d'indiquer la fonte en sortant de cette
+  # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
+  # prenant à l'entrée dans la méthode
+  def font2leading(fonte, size, hline, options = {})
+    lead  = 0.0
+    font fonte, size:size
+    h = height_of("A", leading:lead, size: size)
+    if (h - hline).abs > (h - 2*hline).abs
+      options.merge!(:greater => true) unless options.key?(:greater)
+    end
+    # puts "h = #{h}"
+    if h > hline && not(options[:greater] == true)
+      while h > hline
+        h = height_of("A", leading: lead -= 0.01, size: size)
+      end
+    else
+      while h % hline > 0.01
+        h = height_of("A", leading: lead += 0.01, size: size)
+      end
+    end
+    return lead
+  end
+
   def line_height
     @line_height ||= begin
       default_leading -1
@@ -54,15 +82,10 @@ class PrawnDoc < Prawn::Document
 
   # Méthode pour se déplacer sur la ligne suivante
   def next_baseline(xlines = 1)
-    puts "[next_baseline] Curseur à l'entrée : #{round(cursor)}"
     move_up(4)
-    puts "baseline : #{baseline_height}"
     c = cursor.freeze # p.e. 456
-    puts "Curseur : #{c}"
     d = c.to_i / baseline_height # p.e. 456 / 12 = 38
-    puts "d = #{d}"
     newc = (d - xlines) * baseline_height # p.e. (38 + 1) * 12 = 468
-    puts "Mettre le curseur à #{newc}"
     move_cursor_to(newc)
   end
 
@@ -102,139 +125,6 @@ class PrawnDoc < Prawn::Document
   end
 
   # --- Insertion Methods ---
-
-  ##
-  # INSERTION GÉNÉRALE
-  # 
-  # C'est la méthode qui est appelée pour tout type de paragraphe
-  # 
-  def insert(parag)
-    case parag
-    when Prawn4book::PdfBook::NTextParagraph
-      insert_paragraph(parag)
-    when Prawn4book::PdfBook::NImage
-      insert_image(parag)
-    when Prawn4book::PdfBook::NTitre
-      insert_titre(parag)
-    end
-  end
-
-  ## 
-  # INSERTION D'UN PARAGRAPHE
-  # -------------------------
-  # 
-  # @param {PdfBook::NTextParagraph} par Le paragraphe à insérer
-  # 
-  def insert_paragraph(parag)
-    #
-    # On positionne le cursor au bon endroit
-    # 
-    cursor_on_baseline = (((cursor.to_i * 10) / 132).to_f * 13.2).round(4).freeze
-    #
-    # Faut-il passer à la page suivante ?
-    #
-    if cursor_on_baseline < 10
-      start_new_page
-      cursor_on_baseline = cursor
-    else
-      move_cursor_to cursor_on_baseline
-    end
-
-    # 
-    # Indication de la première page du paragraphe
-    # 
-    parag.first_page = page_number
-
-    if paragraph_number? 
-      numero = parag.number.to_s
-
-      # 
-      # On place le numéro de paragraphe
-      # 
-      font "Bangla", size: 7
-      # 
-      # Taille du numéro si c'est en belle page, pour calcul du 
-      # positionnement exactement
-      # 
-      # Calcul de la position du numéro de paragraphe en fonction du
-      # fait qu'on se trouve sur une page gauche ou une page droite
-      # 
-      span_pos_num = 
-        if belle_page?
-          wspan = width_of(numero)
-          bounds.right + (parag_number_width - wspan)
-        else
-          - parag_number_width
-        end
-
-      @span_number_width ||= 1.cm
-
-      move_cursor_to cursor_on_baseline - 1
-      span(@span_number_width, position: span_pos_num) do
-        text "#{numero}", color: '777777'
-      end
-    end #/end if paragraph_number?
-
-    move_cursor_to cursor_on_baseline
-
-    # puts "cursor avant écriture paragraphe = #{cursor}"
-
-    final_str = "#{parag.text}"
-
-    font "Garamond", size: 11, font_style: :normal
-    # 
-    # Le paragraphe va-t-il passer à la page suivante ?
-    # (pour pouvoir calculer son numéro de dernière page)
-    # 
-    final_str_height = height_of(final_str)
-    chevauchement = cursor - final_str_height < 0
-
-    # 
-    # Écriture du paragraphe
-    # 
-    begin
-      text final_str, 
-        align: :justify, 
-        size: 11, 
-        font_style: :normal, 
-        inline_format: true
-    rescue Exception => e
-      puts "Problème avec le paragraphe #{final_str.inspect}".rouge
-      exit
-    end
-    # 
-    # On prend la dernière page du paragraphe, c'est celle sur 
-    # laquelle on se trouve maintenant
-    # 
-    parag.last_page = page_number # + (chevauchement ? 1 : 0)
-
-    # debug rapport
-    # puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
-
-  end
-
-  ##
-  # INSERTION D'UN TITRE
-  # 
-  # @param {PdfBook::NTitre} titre Le titre à écrire
-  def insert_titre(titre)
-    font titre.font_family, style: titre.font_style
-    text titre.text, align: :left, size: titre.font_size
-    #
-    # On ajoute toujours le titre à la table des matières
-    # 
-    tdm.add_title(titre, page_number)
-  end
-
-  ##
-  # Pour insérer une image dans le document
-  def insert_image(img)
-    if img.svg?
-      svg IO.read(img.path), color_mode: :cmyk
-    else
-      image img.path, x: 0
-    end
-  end
 
   ##
   # Définition des polices requises

@@ -70,22 +70,27 @@
 # --- Titres ---
 :titles:
   :level1:
+    :next_page: true
     :font: Nunito
     :size: 30
-    :margin_top: 100
-    :margin_bottom: 50
+    :margin_top: 0
+    :margin_bottom: 4
+    :leading: -2
   :level2:
     :font: Nunito
     :size: 26
     :margin_top:    75
     :margin_bottom: 35
+    :leading: -2
   :level3:
     :font: Nunito
     :size: 20
     :margin_top:    50
     :margin_bottom: 10
+    :leading: -2
   :level4:
     :font: Nunito
     :size: 16
     :margin_top:    25
     :margin_bottom: 0
+    :leading: -2

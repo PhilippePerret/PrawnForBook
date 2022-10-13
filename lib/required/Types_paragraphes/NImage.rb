@@ -11,6 +11,18 @@ class NImage
 
   # --- Helpers Methods ---
 
+  ##
+  # Méthode principale qui "imprime" le paragraphe dans le PDF
+  # du livre
+  # 
+  def print(pdf)
+    if svg?
+      pdf.svg IO.read(path), color_mode: :cmyk
+    else
+      pdf.image path, x: 0
+    end
+  end
+
   def margin_bottom 
     20
   end

@@ -149,7 +149,11 @@ class PdfBook
           __paragraph_parser(paragraphe)
         end
 
-        pdf.insert(paragraphe)
+        # 
+        # --- ÉCRITURE DU PARAGRAPHE ---
+        # 
+        paragraphe.print(pdf)
+
 
         # On peut indiquer les pages sur lesquelles est inscrit le
         # paragraphe

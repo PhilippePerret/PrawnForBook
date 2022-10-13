@@ -4,34 +4,40 @@ class NTitre
 
   attr_accessor :page_numero
 
+
+
   def self.font_family(level)
-    key = "level#{level}".to_sym
-    data_titles[key] || init_data_title(key, level)
-    data_titles[key][:font] || nil # DEFAULT_FONT
+    get_recipe(:font, level, DEFAULT_FONT)
   end
 
   def self.font_size(level)
-    key = "level#{level}".to_sym
-    data_titles[key] || init_data_title(key, level)
-    data_titles[key][:size] || (11 + ( (8 - level) * 2.5)).to_i
+    get_recipe(:size, level, (11 + ( (8 - level) * 2.5)).to_i)
   end
 
   def self.font_style(level)
-    key = "level#{level}".to_sym
-    data_titles[key] || init_data_title(key, level)
-    data_titles[key][:style] || :normal
+    get_recipe(:style, level, :normal)
   end
 
   def self.margin_bottom(level)
-    key = "level#{level}".to_sym
-    data_titles[key] || init_data_title(key, level)
-    data_titles[key][:margin_bottom] || 0
+    get_recipe(:margin_bottom, level, 0)
   end
 
   def self.margin_top(level)
+    get_recipe(:margin_top, level, 0)
+  end
+
+  def self.leading(level)
+    get_recipe(:leading, level, 0)
+  end
+
+  def self.next_page?(level)
+    get_recipe(:next_page, level, false) === true
+  end
+
+  def self.get_recipe(property, level, default_value)
     key = "level#{level}".to_sym
     data_titles[key] || init_data_title(key, level)
-    data_titles[key][:margin_top] || 0
+    data_titles[key][property] || default_value
   end
 
   # Pour instancier un titre non défini
@@ -50,6 +56,20 @@ class NTitre
   end
 
   # --- Helpers Methods ---
+
+  def print(pdf)
+    pdf.start_new_page if next_page?
+    pdf.font(font_family, style: font_style)
+    pdf.text self.text, align: :left, size: font_size, leading: leading
+    pdf.tdm.add_title(self, pdf.page_number)
+  end
+
+  def next_page?
+    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
+  end
+  def leading
+    @leading ||= self.class.leading(level)
+  end
 
   def font_family
     @font_family ||= self.class.font_family(level)

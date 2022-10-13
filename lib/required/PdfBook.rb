@@ -89,7 +89,7 @@ class PdfBook
   def image_path(relpath)
     if File.exist?(relpath)
       relpath
-    elsif File.exist?(pth = File.join(collection.folder,'images',relpath))
+    elsif collection? && File.exist?(pth = File.join(collection.folder,'images',relpath))
       return pth
     elsif File.exist?(pth = File.join(folder_images, relpath))
       return pth

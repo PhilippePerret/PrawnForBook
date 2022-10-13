@@ -23,6 +23,103 @@ class NTextParagraph
 
   # --- Helper Methods ---
 
+  ##
+  # Méthode principale d'écriture du paragraphe
+  # 
+  def print(pdf)
+    
+    parag = self
+
+    pdf.instance_eval do
+      #
+      # On positionne le cursor au bon endroit
+      # TODO
+      cursor_on_baseline = (((cursor.to_i * 10) / 132).to_f * 13.2).round(4).freeze
+      
+      #
+      # Faut-il passer à la page suivante ?
+      #
+      if cursor_on_baseline < 10
+        start_new_page
+        cursor_on_baseline = cursor
+      else
+        move_cursor_to cursor_on_baseline
+      end
+
+      # 
+      # Indication de la première page du paragraphe
+      # 
+      parag.first_page = page_number
+
+      if paragraph_number? 
+        numero = parag.number.to_s
+
+        # 
+        # On place le numéro de paragraphe
+        # 
+        font "Bangla", size: 7
+        # 
+        # Taille du numéro si c'est en belle page, pour calcul du 
+        # positionnement exactement
+        # 
+        # Calcul de la position du numéro de paragraphe en fonction du
+        # fait qu'on se trouve sur une page gauche ou une page droite
+        # 
+        span_pos_num = 
+          if belle_page?
+            wspan = width_of(numero)
+            bounds.right + (parag_number_width - wspan)
+          else
+            - parag_number_width
+          end
+
+        @span_number_width ||= 1.cm
+
+        move_cursor_to cursor_on_baseline - 1
+        span(@span_number_width, position: span_pos_num) do
+          text "#{numero}", color: '777777'
+        end
+      end #/end if paragraph_number?
+
+      move_cursor_to cursor_on_baseline
+
+      # puts "cursor avant écriture paragraphe = #{cursor}"
+
+      final_str = "#{parag.text}"
+
+      font "Garamond", size: 11, font_style: :normal
+      # 
+      # Le paragraphe va-t-il passer à la page suivante ?
+      # (pour pouvoir calculer son numéro de dernière page)
+      # 
+      final_str_height = height_of(final_str)
+      chevauchement = cursor - final_str_height < 0
+
+      # 
+      # Écriture du paragraphe
+      # 
+      begin
+        text final_str, 
+          align: :justify, 
+          size: 11, 
+          font_style: :normal, 
+          inline_format: true
+      rescue Exception => e
+        puts "Problème avec le paragraphe #{final_str.inspect}".rouge
+        exit
+      end
+      # 
+      # On prend la dernière page du paragraphe, c'est celle sur 
+      # laquelle on se trouve maintenant
+      # 
+      parag.last_page = page_number # + (chevauchement ? 1 : 0)
+
+      # debug rapport
+      # puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
+
+    end
+  end
+
   # def margin_bottom; 0  end
   def margin_bottom; 10  end
 
