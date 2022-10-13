@@ -11,6 +11,9 @@
   :ext: '20mm'
   :int: '20mm'
 :opt_para_num: false
+:default_font: Garamond
+:default_font_size: 11
+:default_baseline:  12
 :fonts:
   Garamond:
     :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"

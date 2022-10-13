@@ -1,5 +1,27 @@
 # Todo
 
+* Pour le calcul de la ligne de référence :
+  - il faut s'assurer que le leading joue entre les lignes
+  Faire une table avec comme clé 1 à <hauteur page> (ça a l'air d'être le case)
+  - le default_baseline défini doit influencer le leading pour que ça fonctionne avec un long paragraphe. QUESTION : comment calculer le leading en fonction du baseline, sachant qu'il n'y a pas de rapport a priori : quand le line_height est à 13.2 (Garamond 11), le leading est à 0. Le leading semble être une valeur proportionnel, ce qui n'est pas du tout arrangeant en l'occurence… Il faut trouver absolument un autre moyen, aller voir dans le code
+  à chaque unité, indiquer la ligne de référence correspondante
+  Quand on veut placer le curseur sur une ligne, on arrondit sa
+  hauteur (`to_i`) et on prend la valeur correspondante dans la
+  table
+  - faire un calcul pour voir si c'est plus rapide que de calculer
+  à chaque fois
+  - l'avantage du système de table est qu'on peut exceptionnellement
+    modifier manuelle les lignes de références
+  - appeler la table 'baselines'
+
+* Utiliser Prawn::View plutôt que Prawn::Document, comme le conseille la documentation
+
+* [RECETTE] Définir:
+  - default_font -> documenter
+  - default_font_size -> documenter
+  - default_leading -
+  -> documenter next_ref_line
+
 * Essais à faire :
   - remplir de couleur (pour bien voir où est le bloc)
   - "passer à la ligne" et prendre la nouvelle hauteur (cursor), en changeant la taille de la fonte, pour voir le rapport

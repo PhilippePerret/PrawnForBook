@@ -259,6 +259,10 @@ class PdfBook
         # Un fichier template
         template:           get_recipe(:template),
         text_formatter:     nil, # ?
+        # --- Extra definitions ---
+        default_font:       get_recipe(:default_font),
+        default_font_size:  get_recipe(:default_font_size),
+        default_baseline:  get_recipe(:default_baseline),
       }
     end
   end

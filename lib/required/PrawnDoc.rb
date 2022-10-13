@@ -38,6 +38,42 @@ class PrawnDoc < Prawn::Document
     # puts "[instantiation PrawnDoc] config = #{config.pretty_inspect}".jaune
   end
 
+  # --- Lines Methods ---
+
+  def line_height
+    @line_height ||= begin
+      default_leading -1
+      font default_font, size: default_font_size
+      height_of("A")
+    end
+  end
+
+  def baseline_height
+    @baseline_height ||= config[:default_baseline] || line_height
+  end
+
+  # Méthode pour se déplacer sur la ligne suivante
+  def next_baseline(xlines = 1)
+    puts "[next_baseline] Curseur à l'entrée : #{round(cursor)}"
+    move_up(4)
+    puts "baseline : #{baseline_height}"
+    c = cursor.freeze # p.e. 456
+    puts "Curseur : #{c}"
+    d = c.to_i / baseline_height # p.e. 456 / 12 = 38
+    puts "d = #{d}"
+    newc = (d - xlines) * baseline_height # p.e. (38 + 1) * 12 = 468
+    puts "Mettre le curseur à #{newc}"
+    move_cursor_to(newc)
+  end
+
+  def default_font
+    @default_font ||= config[:default_font]||DEFAULT_FONT
+  end
+
+  def default_font_size
+    @default_font_size ||= config[:default_font_size]||DEFAULT_SIZE_FONT
+  end
+
   ##
   # Méthode appelée quand on passe à une nouvelle page, de façon
   # volontaire ou naturelle.
@@ -292,13 +328,6 @@ class PrawnDoc < Prawn::Document
 
     end
 
-  end
-
-  ##
-  # Renvoie la distance du curseur actuel avec la prochaine ligne de
-  # base
-  def next_line_on_baseline
-    0
   end
 
 
