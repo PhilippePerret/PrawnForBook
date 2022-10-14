@@ -65,6 +65,12 @@ class PdfBook
     # 
     pdf = PrawnView.new(self, pdf_config)
 
+    # 
+    # Calcul de la table de références (pour les lignes de référence)
+    # 
+    pdf.table_reference_grid
+    sleep 20
+
     #
     # Y a-t-il une dernière page définie en options
     # 

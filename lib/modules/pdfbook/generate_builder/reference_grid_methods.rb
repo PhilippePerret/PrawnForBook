@@ -1,6 +1,53 @@
 module Prawn4book
 class PrawnView
 
+  # @prop La table de la grille de référence
+  # Elle permet d'obtenir en un instance (sans calcul) la 
+  # ligne de référence la plus proche d'une position.
+  # Par exemple, si le line_height (qui détermine la hauteur de
+  # ligne absolu) est de 12, que le document commence (sa première
+  # ligne) à 600, il y a donc trois lignes à :
+  #   600, 588 et 576
+  # La table indique que les lignes de 600 à 594 doivent se 
+  # positionner à 600, que les curseurs de 
+  #   594 (588 + 6) à 582 (588 - 6) doivent se positionner à 588,
+  # etc.
+  def table_reference_grid
+    @table_reference_grid ||= begin
+      lh = pdfbook.recette.line_height    # p.e. 13
+      moitielh = round(lh.to_f / 2, 1)    # p.e. 6.5
+      tp = bounds.top.to_i
+      puts "line_height: #{lh}"
+      puts "top page = #{tp.inspect}"
+      tbl       = {}
+      h         = tp.dup
+      ilineref  = -1
+      lineref   = tp
+      while h > 0
+        ilineref += 1
+        lineref  = tp - (ilineref * lh)
+        linerefsuiv = tp - ((ilineref + 1) * lh)
+        tbl.merge!(h.to_i => lineref)
+        (0..lh).each do |n|
+          if n < moitielh
+            tbl.merge!( (h - n).to_i => lineref)
+          else
+            tbl.merge!( (h - n).to_i => linerefsuiv)
+          end
+        end
+        h -= lh
+      end
+      puts "table de référence : #{tbl.pretty_inspect}"
+      sleep 30
+      tbl
+    end
+  end
+
+
+  def rectif_cursor
+    
+  end
+
 
   # Méthode pour se déplacer sur la ligne suivante
   def next_baseline(xlines = 1)

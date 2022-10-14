@@ -1,13 +1,5 @@
 # Todo
 
-* Pour le calcul de la ligne de référence :
-  On veut une hauteur de line qui sera la grille de référence 
-    -> line_height.
-  Par exemple 12
-  Pour obtenir cette line_height, il faut jouer sur le :leading et
-  le default_leading (qui sera appliqué partout).
-  Quelle est la formule ?
-
   - le default_baseline défini doit influencer le leading pour que ça fonctionne avec un long paragraphe. QUESTION : comment calculer le leading en fonction du baseline, sachant qu'il n'y a pas de rapport a priori : quand le line_height est à 13.2 (Garamond 11), le leading est à 0. Le leading semble être une valeur proportionnel, ce qui n'est pas du tout arrangeant en l'occurence… Il faut trouver absolument un autre moyen, aller voir dans le code
   à chaque unité, indiquer la ligne de référence correspondante
   Quand on veut placer le curseur sur une ligne, on arrondit sa

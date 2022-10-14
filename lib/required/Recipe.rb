@@ -99,6 +99,10 @@ class Recipe
     @numero_page_style ||= get(:num_page_style)
   end
 
+  def line_height
+    @line_height ||= get(:line_height, DEFAULT_LINE_HEIGHT)
+  end
+
 
   # --- Private Fonctional Methods ---
 
