@@ -2,6 +2,7 @@ require_relative 'generate_building_methods'
 require_relative 'generate_builder/margins_methods'
 require_relative 'generate_builder/paragraphes'
 require_relative 'generate_builder/reference_grid_methods'
+require_relative 'generate_builder/headers_footers'
 require_relative 'PdfBook_helpers'
 require_relative 'Tdm'
 
@@ -135,13 +136,13 @@ class PdfBook
     # 
     tdm.output(on_page) if table_des_matieres?
 
-      # #
-      # # - PAGINATION -
-      # # 
-      # # Écriture des numéros de page ou numéros de paragraphes
-      # # En bas de toutes les pages qui le nécessitent.
-      # # 
-      # pdf.set_pages_numbers(@pages)
+    #
+    # - PAGINATION -
+    # 
+    # Écriture des numéros de page ou numéros de paragraphes
+    # En bas de toutes les pages qui le nécessitent.
+    # 
+    pdf.set_pages_numbers(@pages)
 
 
       # if module_parser? && ParserParagraphModule.respond_to?(:report)
