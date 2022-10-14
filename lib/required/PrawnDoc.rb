@@ -3,12 +3,12 @@ require 'prawn/measurement_extensions'
 
 module Prawn4book
 
-DEFAULT_TOP_MARGIN    = 20
-DEFAULT_BOTTOM_MARGIN = 20
-DEFAULT_LEFT_MARGIN   = 20
-DEFAULT_RIGHT_MARGIN  = 20
-DEFAULT_FONT          = 'Arial'
-DEFAULT_SIZE_FONT     = 10
+# DEFAULT_TOP_MARGIN    = 20
+# DEFAULT_BOTTOM_MARGIN = 20
+# DEFAULT_LEFT_MARGIN   = 20
+# DEFAULT_RIGHT_MARGIN  = 20
+# DEFAULT_FONT          = 'Arial'
+# DEFAULT_SIZE_FONT     = 10
 
 class PrawnDoc < Prawn::Document
 
@@ -21,120 +21,108 @@ class PrawnDoc < Prawn::Document
 # MARGIN_ODD  = [20.mm, 15.mm, 20.mm, 25.mm]
 # MARGIN_EVEN = [20.mm, 25.mm, 20.mm, 15.mm]
 
-  attr_reader :config
+  # attr_reader :config
 
-  # Dernière page à imprimer (page du pdf), définie
-  # en options de la ligne de commande (pour le moment)
-  attr_accessor :last_page
+  # # Dernière page à imprimer (page du pdf), définie
+  # # en options de la ligne de commande (pour le moment)
+  # attr_accessor :last_page
 
-  # L'instance PdfBook::Tdm qui gère la table des
-  # matière. Permettra d'ajouter les titres pour construire
-  # la table des matières finales
-  attr_accessor :tdm
+  # # L'instance PdfBook::Tdm qui gère la table des
+  # # matière. Permettra d'ajouter les titres pour construire
+  # # la table des matières finales
+  # attr_accessor :tdm
 
-  def initialize(config = nil)
-    @config = config
-    super(config)
-    # puts "[instantiation PrawnDoc] config = #{config.pretty_inspect}".jaune
-  end
+  # def initialize(config = nil)
+  #   @config = config
+  #   super(config)
+  #   # puts "[instantiation PrawnDoc] config = #{config.pretty_inspect}".jaune
+  # end
 
   # --- Lines Methods ---
 
-  ##
-  # @input  Reçoit la fonte concernée (*) et
-  #         Reçoit la hauteur de ligne voulue
-  # @output Return le leading à appliquer
-  # 
-  # Note : ne pas oublier d'indiquer la fonte en sortant de cette
-  # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
-  # prenant à l'entrée dans la méthode
-  def font2leading(fonte, size, hline, options = {})
-    lead  = 0.0
-    font fonte, size:size
-    h = height_of("A", leading:lead, size: size)
-    if (h - hline).abs > (h - 2*hline).abs
-      options.merge!(:greater => true) unless options.key?(:greater)
-    end
-    # puts "h = #{h}"
-    if h > hline && not(options[:greater] == true)
-      while h > hline
-        h = height_of("A", leading: lead -= 0.01, size: size)
-      end
-    else
-      while h % hline > 0.01
-        h = height_of("A", leading: lead += 0.01, size: size)
-      end
-    end
-    return lead
-  end
+  # ##
+  # # @input  Reçoit la fonte concernée (*) et
+  # #         Reçoit la hauteur de ligne voulue
+  # # @output Return le leading à appliquer
+  # # 
+  # # Note : ne pas oublier d'indiquer la fonte en sortant de cette
+  # # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
+  # # prenant à l'entrée dans la méthode
+  # def font2leading(fonte, size, hline, options = {})
+  #   lead  = 0.0
+  #   font fonte, size:size
+  #   h = height_of("A", leading:lead, size: size)
+  #   if (h - hline).abs > (h - 2*hline).abs
+  #     options.merge!(:greater => true) unless options.key?(:greater)
+  #   end
+  #   # puts "h = #{h}"
+  #   if h > hline && not(options[:greater] == true)
+  #     while h > hline
+  #       h = height_of("A", leading: lead -= 0.01, size: size)
+  #     end
+  #   else
+  #     while h % hline > 0.01
+  #       h = height_of("A", leading: lead += 0.01, size: size)
+  #     end
+  #   end
+  #   return lead
+  # end
 
-  def line_height
-    @line_height ||= begin
-      default_leading -1
-      font default_font, size: default_font_size
-      height_of("A")
-    end
-  end
+  # # Méthode pour se déplacer sur la ligne suivante
+  # def next_baseline(xlines = 1)
+  #   move_up(4)
+  #   c = cursor.freeze # p.e. 456
+  #   d = c.to_i / line_height # p.e. 456 / 12 = 38
+  #   newc = (d - xlines) * line_height # p.e. (38 + 1) * 12 = 468
+  #   move_cursor_to(newc)
+  # end
 
-  def baseline_height
-    @baseline_height ||= config[:default_baseline] || line_height
-  end
+  # def default_font
+  #   @default_font ||= config[:default_font]||DEFAULT_FONT
+  # end
 
-  # Méthode pour se déplacer sur la ligne suivante
-  def next_baseline(xlines = 1)
-    move_up(4)
-    c = cursor.freeze # p.e. 456
-    d = c.to_i / baseline_height # p.e. 456 / 12 = 38
-    newc = (d - xlines) * baseline_height # p.e. (38 + 1) * 12 = 468
-    move_cursor_to(newc)
-  end
+  # def default_font_size
+  #   @default_font_size ||= config[:default_font_size]||DEFAULT_SIZE_FONT
+  # end
 
-  def default_font
-    @default_font ||= config[:default_font]||DEFAULT_FONT
-  end
+  # ##
+  # # Méthode appelée quand on passe à une nouvelle page, de façon
+  # # volontaire ou naturelle.
+  # # 
+  # def start_new_page(options = {})
+  #   # 
+  #   # Avant de passer à la page suivante, il faudra écrire dans le 
+  #   # pied de page les numéros de dernier et premier paragraphe
+  #   # 
 
-  def default_font_size
-    @default_font_size ||= config[:default_font_size]||DEFAULT_SIZE_FONT
-  end
+  #   # 
+  #   # Réglage des marges de la prochaine page
+  #   # 
+  #   super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
+  #   move_cursor_to_top_of_the_page
 
-  ##
-  # Méthode appelée quand on passe à une nouvelle page, de façon
-  # volontaire ou naturelle.
-  # 
-  def start_new_page(options = {})
-    # 
-    # Avant de passer à la page suivante, il faudra écrire dans le 
-    # pied de page les numéros de dernier et premier paragraphe
-    # 
+  # end
 
-    # 
-    # Réglage des marges de la prochaine page
-    # 
-    super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
-    move_cursor_to_top_of_the_page
+  # def move_cursor_to_top_of_the_page
+  #   move_cursor_to bounds.top
+  # end
 
-  end
-
-  def move_cursor_to_top_of_the_page
-    move_cursor_to 35 * 13.2 # pour les livres narration
-  end
-
-  # @predicate  Return true si c'est une belle page (aka page droite)
-  def belle_page?
-    page_number.odd?
-  end
+  # # @predicate  Return true si c'est une belle page (aka page droite)
+  # def belle_page?
+  #   page_number.odd?
+  # end
 
   # --- Insertion Methods ---
 
-  ##
-  # Définition des polices requises
-  # 
-  def define_required_fonts(fontes)
-    return if fontes.nil? || fontes.empty?
-    fontes.each do |fontname, fontdata|
-      font_families.update(fontname => fontdata)
-    end
-  end
+  # ##
+  # # Définition des polices requises
+  # # 
+  # def define_required_fonts(fontes)
+  #   return if fontes.nil? || fontes.empty?
+  #   fontes.each do |fontname, fontdata|
+  #     font_families.update(fontname => fontdata)
+  #   end
+  # end
 
   ##
   # Place les numéros de pages
@@ -220,42 +208,42 @@ class PrawnDoc < Prawn::Document
 
   end
 
-
-  def odd_margins
-    @odd_margins ||= [top_mg, int_mg, bot_mg, ext_mg]
-  end
-  def even_margins
-    @even_margins ||= [top_mg, ext_mg, bot_mg, int_mg]
-  end
-
-  def paragraph_number?
-    :TRUE == @hasparagnum ||= true_or_false(pdfbook.recette.paragraph_number?)
-  end
+  # def paragraph_number?
+  #   :TRUE == @hasparagnum ||= true_or_false(pdfbook.recette.paragraph_number?)
+  # end
 
   def parag_number_width
     @parag_number_width ||= 7.mm
   end
 
-  def top_mg; @top_mg ||= config[:top_margin] || DEFAULT_TOP_MARGIN end
-  def bot_mg
-    @bot_mg ||= begin
-      (config[:bottom_margin] || DEFAULT_BOTTOM_MARGIN) + 20
-    end
-  end
-  def ext_mg
-    @ext_mg ||= begin
-      lm = config[:left_margin] || DEFAULT_LEFT_MARGIN
-      lm += parag_number_width if paragraph_number?
-      lm
-    end
-  end
-  def int_mg
-    @int_mg ||= begin
-      rm = config[:right_margin] || DEFAULT_RIGHT_MARGIN
-      rm += parag_number_width if paragraph_number?
-      rm
-    end
-  end
+  # def odd_margins
+  #   @odd_margins ||= [top_mg, int_mg, bot_mg, ext_mg]
+  # end
+  # def even_margins
+  #   @even_margins ||= [top_mg, ext_mg, bot_mg, int_mg]
+  # end
+
+
+  # def top_mg; @top_mg ||= config[:top_margin] || DEFAULT_TOP_MARGIN end
+  # def bot_mg
+  #   @bot_mg ||= begin
+  #     (config[:bottom_margin] || DEFAULT_BOTTOM_MARGIN) + 20
+  #   end
+  # end
+  # def ext_mg
+  #   @ext_mg ||= begin
+  #     lm = config[:left_margin] || DEFAULT_LEFT_MARGIN
+  #     lm += parag_number_width if paragraph_number?
+  #     lm
+  #   end
+  # end
+  # def int_mg
+  #   @int_mg ||= begin
+  #     rm = config[:right_margin] || DEFAULT_RIGHT_MARGIN
+  #     rm += parag_number_width if paragraph_number?
+  #     rm
+  #   end
+  # end
 
 
   # --- Calcul Methods ---
@@ -281,10 +269,6 @@ class PrawnDoc < Prawn::Document
         pdfbook.recette.footers[0][:size] 
       end || DEFAULT_SIZE_FONT
     end
-  end
-
-  def pdfbook
-    @pdfbook ||= PdfBook.current
   end
 
 end #/class PrawnDoc < Prawn::Document

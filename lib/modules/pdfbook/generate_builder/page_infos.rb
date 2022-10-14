@@ -5,9 +5,9 @@
 
 =end
 module Prawn4book
-class PrawnDoc < Prawn::Document
+class PrawnView
 
-  def insert_page_infos(pdfbook)
+  def insert_page_infos
     # @pdfbook = pdfbook # déjà mis avant ?
     # 
     # Pour raccourcir
@@ -54,7 +54,6 @@ class PrawnDoc < Prawn::Document
     # Chaque élément contient :
     # 
     # ["valeur", margin bottom|nil]
-    page_info = book.recette[:page_info]
     editor    = book.recette.editor
     [
       [editor[:name]           , nil],
@@ -82,7 +81,8 @@ class PrawnDoc < Prawn::Document
       [page_info[:print]            , nil],
 
     ].each do |text, mg|
-      mg ||= LINE_HEIGHT
+      next if text.nil?
+      mg ||= line_height
       top += mg
       options[:at][1] = top
       text_box(text, options)
@@ -101,27 +101,29 @@ class PrawnDoc < Prawn::Document
   end
 
   def conception_redaction
-    ary = (recette.page_info[:conception]||[]) + recette.auteurs
+    ary = (page_info[:conception]||[]) + recette.auteurs
     ary.uniq.pretty_join
   end
 
   def mise_en_page
-    recette.page_info[:mep].uniq.pretty_join
+    page_info[:mep]&.pretty_join
   end
 
   def depot_legal
-    "Dépôt légal : #{recette.page_info[:depot_bnf]}"
+    "Dépôt légal : #{page_info[:depot_bnf]}"
   end
 
   def correction
-    recette.page_info[:corrections].pretty_join
+    page_info[:corrections]&.pretty_join
+  end
+
+  def page_info
+    @page_info ||= pdfbook.recette[:page_info] || {}
   end
 
   def recette
     @recette ||= pdfbook.recette
   end
 
-  LINE_HEIGHT = 16
-
-end #/class PrawnDoc
+end #/class PrawnView
 end #/module Prawn4book

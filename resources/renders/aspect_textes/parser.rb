@@ -339,7 +339,7 @@ module PrawnCustomBuilderModule # ce nom est absolument à respecter
 
       # line_height retourne la hauteur de ligne
       c1 = cursor.freeze
-      text "[#{round(c1)}] Font:#{default_font} - Size:#{default_font_size} — LineHeight: #{line_height} – Baseline:#{baseline_height}"
+      text "[#{round(c1)}] Font:#{default_font} - Size:#{default_font_size} — LineHeight: #{line_height}"
 
       # next_baseline Permet de passer à la ligne de référence 
       # suivante

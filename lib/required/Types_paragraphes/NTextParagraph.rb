@@ -86,6 +86,7 @@ class NTextParagraph
       # puts "cursor avant écriture paragraphe = #{cursor}"
 
       final_str = "#{parag.text}"
+      final_str = add_cursor_position(final_str) if add_cursor_position?
 
       font "Garamond", size: 11, font_style: :normal
       # 

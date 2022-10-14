@@ -1,10 +1,35 @@
 ---
-:book_title:    Le titre du livre à 07 10 2022 - 18:44
-:auteurs:      Philippe Perret
+:book_title:   Livre de test et d'aspect
+:auteurs:      ['Philippe PERRET']
 :book_id:      mon_livre
 :main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books/mon_livre"
 :text_path:   true
-:dimensions : ['127mm', '203.2mm']
+:dimensions: ['127mm', '203.2mm']
+:layout: :portrait
+:page_de_garde:       true
+:page_de_titre:       true
+:faux_titre:          true
+:table_des_matieres:  true
+:infos:
+  :display:     true
+  :isbn:        2546-6987-45879-8
+  :depot_bnf:   4e trimestre 2022
+  :cover:       "MM & PP" # auteurs de la couverture
+  :mep:         ['Cédric DE MONDÉNARD']
+  :conception:  ['Philippe PERRET']
+  :corrections: ['Marion MICHEL']
+  :print:       'Imprimé à la demande'
+:editor:
+  :name:  MAISON D’ÉDITIONS
+  :adresse: |
+    295 place des Lilas
+    13400 Aubagne
+  :site:      'https://icare-editions.fr'
+  :logo:      "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ICARE_EDITIONS/Divers/xImages/Logo/Officiel/logo-gris-moyen.jpg"
+  :siret:     '508 680 360 00023'
+  :mail:      editions@icare-editions.fr
+  :contact:   contact@icare-editions.fr
+
 :marges:
   :top: '20mm'
   :bot: '20mm'
@@ -13,7 +38,7 @@
 :opt_para_num: false
 :default_font: Garamond
 :default_font_size: 11
-:default_baseline:  12
+:line_height:  12.5
 :titles:
   :level1:
     :font: 'Nunito'
@@ -43,3 +68,5 @@
   Nunito:
     :normal: "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
     :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
+:page_info: 
+

@@ -84,6 +84,10 @@ Cela provoquera une version *Prawn4book* du texte qui permettra de préciser le 
 Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `--open`.
 <console>prawn-for-book build --open</console>
 
+### Position curseur des paragraphes
+
+Avec l'option `-c/--cursor` on peut demander à ce que les positions curseur soient ajoutées au livre.
+
 ---
 
 <a name="open-book"></a>
@@ -301,13 +305,57 @@ Ce fichier contient donc deux modules :
 
 ## Recette du livre
 
+### Définition
+
+La *recette du livre* permet de définir tous les aspects que devra prendre le livre, c’est-à-dire le fichier PDF prêt-à-imprimé. On définit dans ce fichier les polices utilisées (à empaqueter), les marges et la taille du papier, les titres, les lignes de base, le titre, les auteurs, etc.
+
 ### Création de la recette du livre
 
-On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.txt` ou `texte.md` — et en  jouant la commande : **`> prawn-for-book init`**.
+On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.p4b.txt` ou `text.p4be.md` — et en  jouant la commande : **`> prawn-for-book init`**.
 
-Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre.
+Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre ou de se servir d’un modèle prérempli. Passons en revue les différentes paramètres à régler.
 
-### Définition des fontes
+### Contenu de la recette du livre
+
+<a name="recette-metadata"></a>
+
+#### Informations générales
+
+~~~yaml
+:book_title:	Le titre du livre
+:auteurs: 		['Prénom NOM', 'Prénom NOM']
+:book_id:     identifiant_simple # nom du dossier par exemple
+:main_folder:	"/path/to/folder/principal/du/livre"
+:text_path:   true 	# pour dire texte.p4b.txt ou texte.p4b.md dans le 
+										# dossier du livre, sinon le path absolu
+~~~
+
+<a name="recette-aspect-general"></a>
+
+#### Aspect général du livre
+
+~~~yaml
+:dimentions: ['210mm', '297mm'] # Ne pas oublier les unités
+:layout: :portrait # ou :landscape
+:marges:
+	:top: '20mm'  # marge haut
+	:bot: '20mm'	# marge bas
+	:ext:	'30mm'  # marge extérieure (*)
+	:int: '15mm'  # marge intérieure (*)
+~~~
+> (\*) Prawn4Book est spécialement désigné pour créer des livres papier, donc les marges sont toujours définies avec la marge intérieure (côté pliure) et la marge extérieure (côté tranche — le vrai sens de "tranche").
+
+~~~yaml
+:default_font: 			FontName 	# font par défaut
+:default_font_size: 11				# taille de font par défaut
+:line_height:				12.5      # Hauteur de la ligne de référence
+~~~
+
+Cette donnée `:line_height` est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références**.
+
+<a name="recette-fonts"></a>
+
+#### Fontes
 
 On peut être assister pour la création de la donnée des fontes (qui nécessite de connaitre les chemins d’accès à toutes les fontes possibles) de cette manière :
 
@@ -343,13 +391,9 @@ dossier_fonts: &dosfonts "/Users/philippeperret/Library/Fonts"
 
 ~~~
 
+<a name="recette-header-footer"></a>
 
-
----
-
-<a name="header-footer"></a>
-
-## Entête et pied de page
+#### Entête et pied de page
 
 On peut définir les entêtes et les pieds de page dans le fichier recette du livre ou de la collection grâce aux données `:headers` et `:footers`.
 
@@ -394,6 +438,31 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 		:font: Arial
 		:size: 9
 ~~~
+
+<a name="recette-page-info"></a>
+
+#### Tous les types de page
+
+(c’est-à-dire la page à la fin du livre présentant les différentes informations sur ce livre)
+
+~~~yaml
+:page_de_garde:       true
+:page_de_titre:       true
+:faux_titre:          true
+:table_des_matieres:  true
+:infos:
+  :display:     true 			# pour la produire dans le livre
+  :isbn:        null
+  :depot_bnf:   3e trimestre 2022
+  :cover:       "MM & PP" # auteurs de la couverture
+  :mep:         ['Prénom NOM'] 	# mise en page
+  :conception:  ['Prénom NOM']	# conception du livre
+  :corrections: ['Prénom NOM']
+  :print:       'Imprimé à la demande'
+
+~~~
+
+
 
 ### Disposition
 
@@ -440,6 +509,8 @@ L’application reconnaitra alors automatiquement les fichiers `.p4b.txt` et uti
 ### Choix d'une autre police
 
 Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.p4b.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
+
+On peut ouvrir ce package dans Sublime Text à l’aide de `prawn-for-book open package-st`.
 
 
 

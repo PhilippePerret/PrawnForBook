@@ -1,4 +1,7 @@
 require_relative 'generate_building_methods'
+require_relative 'generate_builder/margins_methods'
+require_relative 'generate_builder/paragraphes'
+require_relative 'generate_builder/reference_grid_methods'
 require_relative 'PdfBook_helpers'
 require_relative 'Tdm'
 
@@ -57,170 +60,99 @@ class PdfBook
     @pages = {}
 
     #
-    # On doit définir la configuration
-    # C'est la propriété-méthode pdf_config qui s'en charge.
+    # Avec Prawn::View au lieu d'étende Prawn::Document
     # 
-    PrawnDoc.generate(pdf_path, pdf_config) do |pdf|
+    pdf = PrawnView.new(self, pdf_config)
 
-      #
-      # Y a-t-il une dernière page définie en options
-      # 
-      if CLI.options[:last]
-        pdf.last_page = CLI.options[:last].to_i
-      end
+    #
+    # Y a-t-il une dernière page définie en options
+    # 
+    if CLI.options[:last]
+      pdf.last_page = CLI.options[:last].to_i
+    end
 
-      # 
-      # On définit les polices requises pour le livre
-      # 
-      # define_required_fonts(self.config[:fonts])
-      pdf.define_required_fonts(book_fonts)
+    # 
+    # On définit les polices requises pour le livre
+    # 
+    # define_required_fonts(self.config[:fonts])
+    pdf.define_required_fonts(book_fonts)
 
-      # 
-      # Initier une première page, si on a demandé de la sauter
-      # au départ (on le demande pour qu'elle prennen en compte les
-      # définitions de marge, etc.)
-      # 
-      pdf.start_new_page if skip_page_creation?
+    # 
+    # Initier une première page, si on a demandé de la sauter
+    # au départ (on le demande pour qu'elle prennen en compte les
+    # définitions de marge, etc.)
+    # 
+    pdf.start_new_page if skip_page_creation?
 
-      #
-      # Initier la table des matières (je préfère faire mon 
-      # instance plutôt que d'utiliser l'outline de Prawn)
-      # 
-      tdm = PdfBook::Tdm.new(self, pdf)
-      pdf.tdm = tdm
-
-
-      pdf.start_new_page if page_de_garde?
-
-      pdf.build_faux_titre(self) if page_faux_titre?
-        
-      pdf.build_page_de_titre(self) if page_de_titre?
+    #
+    # Initier la table des matières (je préfère faire mon 
+    # instance plutôt que d'utiliser l'outline de Prawn)
+    # 
+    tdm = PdfBook::Tdm.new(self, pdf)
+    pdf.tdm = tdm
 
 
-      if table_des_matieres?
-
-        # Pour savoir sur quelle page construire la table des
-        # matière
-        on_page = pdf.page_number
-        pdf.font "Nunito", size: 20 # TODO À régler
-        pdf.text "Table des matières"
-
-        pdf.start_new_page
-
-        pdf.start_new_page
-
-      end
-
-      # 
-      # Pour commencer sur la belle page, on doit toujours ajouter
-      # une page blanche
-      # 
-      pdf.start_new_page
-
-      #
-      # On se place toujours en haut de la page pour commencer
-      #
-      # pdf.move_cursor_to_top_of_the_page
-
-      # interligne = recette[:interligne]
-
-      # 
-      # BOUCLE SUR TOUS LES PARAGRAPHES
-      # ===============================
-      # 
-      # On boucle sur tous les paragraphes du fichier d'entrée
-      # 
-      # Note : chaque paragraphe est une instance de classe de
-      # son type. Par exemple, les images sont des PdfBook::NImage,
-      # les titres sont des PdfBook::NTitre, etc.
-      # 
-      # Note : 'with_index' permet juste de faire des essais
-      # 
-      green_point = '.'.vert
-      clear
-      suivi = 'Écriture du paragraphe #%{num}…'.vert
-      inputfile.paragraphes.each_with_index do |paragraphe, idx|
-
-        # STDOUT.write green_point
-
-        paragraphe.page_numero = pdf.page_number
-
-        if module_parser? && paragraphe.paragraph?
-          __paragraph_parser(paragraphe)
-        end
-
-        # 
-        # --- ÉCRITURE DU PARAGRAPHE ---
-        # 
-        paragraphe.print(pdf)
+    pdf.start_new_page if page_de_garde?
 
 
-        # On peut indiquer les pages sur lesquelles est inscrit le
-        # paragraphe
-        if paragraphe.paragraph?
-          # 
-          # Pour suivre le travail
-          # 
-          # write_at(suivi % {num: paragraphe.numero}, 0, 0)
-          STDOUT.write green_point
-
-          @pages[paragraphe.first_page] || begin
-            @pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
-          end
-          @pages[paragraphe.last_page] || begin
-            @pages.merge!(paragraphe.last_page => {first_par:paragraphe.numero, last_par:nil})
-          end
-          # On le met toujours en dernier paragraphe de sa première page
-          @pages[paragraphe.first_page][:last_par] = paragraphe.numero
-        end
-
-        
-        break if pdf.page_number === pdf.last_page
-        
-        if paragraphe.margin_bottom.nil?
-          raise "Problème avec margin_bottom de : #{paragraphe.inspect}"
-        end
-
-        pdf.move_down( paragraphe.margin_bottom )
-
-      end
-
-      #
-      # Écriture des pages supplémentaires obtenues par le 
-      # parser, if any
-      # 
-      if module_parser?
-        extend PrawnCustomBuilderModule
-        __custom_builder(pdf)
-      end
-
-      # 
-      # - Page infos ? -
-      # 
-      pdf.build_page_infos(self) if recette.page_info?
-
-      # 
-      # - TABLE DES MATIÈRES -
-      # 
-      tdm.output(on_page) if table_des_matieres?
-
-      #
-      # - PAGINATION -
-      # 
-      # Écriture des numéros de page ou numéros de paragraphes
-      # En bas de toutes les pages qui le nécessitent.
-      # 
-      pdf.set_pages_numbers(@pages)
+    pdf.build_faux_titre if page_faux_titre?
+      
+    pdf.build_page_de_titre if page_de_titre?
 
 
-      if module_parser? && ParserParagraphModule.respond_to?(:report)
-        ParserParagraphModule.report
-      end
+    pdf.build_table_des_matieres if table_des_matieres?
 
-    end #/PrawnDoc.generate
+    # 
+    # Pour commencer sur la belle page, on doit toujours ajouter
+    # une page blanche
+    # 
+    pdf.start_new_page
+
+    # 
+    # BOUCLE SUR TOUS LES PARAGRAPHES
+    # ===============================
+    # 
+    # cf. modules/pdfbook/generate_builder/paragraphes.rb
+    # 
+    pdf.print_paragraphs(inputfile.paragraphes)
+
+    #
+    # Écriture des pages supplémentaires obtenues par le 
+    # parser, if any
+    # 
+    if module_parser?
+      extend PrawnCustomBuilderModule
+      __custom_builder(pdf)
+    end
+
+    # 
+    # - Page infos ? -
+    # 
+    pdf.build_page_infos if recette.page_info?
+
+    # 
+    # - TABLE DES MATIÈRES -
+    # 
+    tdm.output(on_page) if table_des_matieres?
+
+      # #
+      # # - PAGINATION -
+      # # 
+      # # Écriture des numéros de page ou numéros de paragraphes
+      # # En bas de toutes les pages qui le nécessitent.
+      # # 
+      # pdf.set_pages_numbers(@pages)
+
+
+      # if module_parser? && ParserParagraphModule.respond_to?(:report)
+      #   ParserParagraphModule.report
+      # end
+
+    # end #/PrawnDoc.generate
+    pdf.save_as(pdf_path)
 
     if File.exist?(pdf_path)
-      puts "Le book PDF a été produit avec succès !".vert
+      puts "\n\nLe book PDF a été produit avec succès !".vert
       puts "(in #{pdf_path})".gris
       puts "\n"      
       open_book if CLI.option(:open)

@@ -11,7 +11,7 @@
 :auteurs: ['Prénom NOM']
 :main_folder: "/absolute/path/to/this/folder"
 :text_path: true # true = texte.md ou texte.txt dans ce dossier
-:page_info:
+:infos:
   :display:     true
   :isbn:        null
   :depot_bnf:   3e trimestre 2022

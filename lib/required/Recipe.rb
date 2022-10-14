@@ -66,7 +66,7 @@ class Recipe
   end
 
   def page_info?
-    :TRUE == @writepageinfo ||= true_or_false(get(:page_info)[:display] === true)
+    :TRUE == @writepageinfo ||= true_or_false(get(:infos)[:display] === true)
   end
 
 

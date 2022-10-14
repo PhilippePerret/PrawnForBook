@@ -1,7 +1,7 @@
 module Prawn4book
-class PrawnDoc < Prawn::Document
+class PrawnView
 
-  def insert_page_de_titre(pdfbook)
+  def insert_page_de_titre
     #
     # Les informations du livre
     # 
@@ -59,5 +59,5 @@ class PrawnDoc < Prawn::Document
     
   end
 
-end #/class PrawnDoc
+end #/class PrawnView
 end #/module Prawn4book

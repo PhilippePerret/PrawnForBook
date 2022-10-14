@@ -1,7 +1,7 @@
 module Prawn4book
-class PrawnDoc < Prawn::Document
+class PrawnView
 
-  def insert_faux_titre(pdfbook)
+  def insert_faux_titre
     #
     # Le titre du livre
     # 
@@ -42,5 +42,5 @@ class PrawnDoc < Prawn::Document
     
   end
 
-end #/class PrawnDoc
+end #/class PrawnView
 end #/module Prawn4book

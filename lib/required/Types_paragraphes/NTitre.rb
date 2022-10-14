@@ -60,9 +60,17 @@ class NTitre
   def print(pdf)
     pdf.start_new_page if next_page?
     pdf.font(font_family, style: font_style)
-    pdf.text self.text, align: :left, size: font_size, leading: leading
+    pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true
     pdf.tdm.add_title(self, pdf.page_number)
   end
+
+  def formated_text(pdf)
+    str = text
+    str = pdf.add_cursor_position(str) if pdf.add_cursor_position?
+    return str
+  end
+
+  # --- Predicate Methods ---
 
   def next_page?
     :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
