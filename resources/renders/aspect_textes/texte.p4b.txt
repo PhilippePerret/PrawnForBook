@@ -1,8 +1,11 @@
-# Le grand titre
+# Livre de rendu et d'essai
 
-## Le sous-titre
-
-Un premier texte pour pour voir comment ça matche.
+## Fonction de ce livre
+Les deux principaux rôle de ce livre d'aspect de texte sont :
+* montrer l'aspect que prennent les textes (et donc les livres) quand on les élabore à l'aide de Prawn4Book,
+* permettre de faire des essais de mise en page de blocs spéciaux.
+## Première utilisation
+La première utilisation a permis, par exemple, de gérer la question de la grille de référence qui permet d'avoir toujours les textes placés sur la ligne de référence, sauf lorsqu'on précise qu'on ne le souhaite pas.
 
 Un autre paragraphe.
 

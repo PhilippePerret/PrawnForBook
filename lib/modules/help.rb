@@ -44,6 +44,12 @@ MINI_AIDE = <<-TEXT
 #{'prawn-for-book build'.jaune}
     Construire le livre du livre courant.
 
+#{'prawn-for-book open'.jaune}
+    Ouvrir le fichier PDF du livre courant.
+
+#{'prawn-for-book open -e'.jaune}
+    Ouvrir le fichier texte du livre courant dans l'éditeur de texte (Sublime Text).
+
 #{'prawn-for-book aide fontes'.jaune}
     Aide en ligne pour produire la donnée :fonts du 
     fichier recette.

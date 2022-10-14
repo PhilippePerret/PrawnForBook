@@ -1,7 +1,6 @@
 module Prawn4book
   
   def self.run
-    # puts "Je dois apprendre à jouer la commande #{CLI.main_command.inspect} de Prawn4book".jaune
     if help?
       require_module('help', :display_help)
     else
@@ -24,5 +23,6 @@ module Prawn4book
       end
     end
   end
+
 
 end #/module Prawn4book

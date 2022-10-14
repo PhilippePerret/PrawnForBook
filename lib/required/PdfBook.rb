@@ -25,7 +25,7 @@ class PdfBook
     if File.exist?(pdf_path)
       `osascript "#{APP_FOLDER}/resources/bin/open_book.scpt" "#{pdf_path}"`
     else
-      puts "Il faut produire le livre, avant de pouvoir le lire !".rouge
+      puts "Il faut produire le livre, avant de pouvoir le lire ! (jouer `prawn-for-book build')".rouge
     end
   end
 
@@ -106,15 +106,9 @@ class PdfBook
     @folder ||= File.join(recette[:main_folder])
   end
 
-
-  private
-
-    # --- PDF Methods & Props ---
-
-
-    def pdf_path
-      @pdf_path ||= File.join(folder,'book.pdf')
-    end
+  def pdf_path
+    @pdf_path ||= File.join(folder,'book.pdf')
+  end
 
 
 
