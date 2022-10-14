@@ -1,0 +1,19 @@
+# Le grand titre
+
+## Le sous-titre
+
+Un premier texte pour pour voir comment ça matche.
+
+Un autre paragraphe.
+
+IMAGE[img.jpg]
+
+## Un sous-titre sans grand titre, assez long pour qu'il passe à la ligne
+
+> Note : ce texte peut encore être modifié, il ne sert pas encore dans le détail de son contenu.
+
+Un autre paragraphe, long, pour devoir passer à la ligne pour pouvoir surveiller si le leading se comporte bien avec n'importe quel texte.
+
+# Un très grand titre pour le voir
+
+Un paragraphe juste sous le grand titre, sans sous-titre ajouté ni aucun sucre d'aucune espèce.
