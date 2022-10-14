@@ -6,7 +6,11 @@ module Prawn4book
   end
 
   def self.open_user_manuel
-    `open -a Preview "#{USER_MANUAL_PATH}"`
+    if CLI.option(:dev)
+      `open -a Typora "#{USER_MANUEL_MD_PATH}"`
+    else
+      `open -a Preview "#{USER_MANUAL_PATH}"`
+    end
   end
 
   def self.display_help
@@ -17,11 +21,6 @@ module Prawn4book
       less(INLINE_AIDE)
     end
   end
-
-
-# @constant
-# Chemin d'accès au manuel utilisateur
-USER_MANUAL_PATH = File.join(APP_FOLDER,'Manuel','Manuel.pdf')
 
 # @constant
 # Aide minimum qui s'affiche lorsque l'on met la
@@ -49,6 +48,10 @@ MINI_AIDE = <<-TEXT
     Aide en ligne pour produire la donnée :fonts du 
     fichier recette.
 
+---
+
+#{'prawn-for-book manuel -dev'.jaune}
+    Manuel PDF en version markdown (édition)
 
 TEXT
 

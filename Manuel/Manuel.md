@@ -142,7 +142,21 @@ module PrawnCustomBuilderModule
 end
 ~~~
 
+---
 
+## Texte du livre
+
+On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit que le texte se termine par **`.p4b.txt`** ou **`.p4b.md`** pour que Sublime Text applique le format *Prawn4Book*.
+
+### Package Sublime Text
+
+Ce package est défini dans le dossier package `Prawn4Book` de Sublime Text. On peut ouvrir ce package rapidement en jouant :
+
+<console>prawn-for-book open package-st</console>
+
+### Modifier l’aspect visuel du texte dans Sublime Text
+
+Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text* (<console>prawn-for-book open package-st</console>) et modifier le code dans le fichier `Prawn4Book.sublime-settings` (pour la police, la taille de police, etc.) ou le fichier `Prawn4Book.sublime-color-scheme` (pour modifier la colorisation syntaxique ou les scopes).
 
 
 
