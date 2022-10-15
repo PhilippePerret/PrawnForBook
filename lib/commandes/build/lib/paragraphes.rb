@@ -1,6 +1,8 @@
 module Prawn4book
 class PrawnView
 
+  attr_accessor :prev_paragraph
+
   # @param paragraphes {Array of AnyParagraph}
   def print_paragraphs(paragraphes)
     # On boucle sur tous les paragraphes du fichier d'entrée
@@ -50,6 +52,8 @@ class PrawnView
       end
       
       break if page_number === last_page
+
+      self.prev_paragraph = paragraphe
       
     end
     

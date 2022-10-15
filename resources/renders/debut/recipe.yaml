@@ -109,7 +109,7 @@
 # --- Titres ---
 :titles:
   :level1:
-    :next_page: false
+    :next_page: true
     :font: Nunito
     :size: 30
     :margin_top: 0
@@ -118,8 +118,8 @@
   :level2:
     :font: Nunito
     :size: 26
-    :margin_top:    3
-    :margin_bottom: 2
+    :margin_top:    2
+    :margin_bottom: 1
     :leading: -2
   :level3:
     :font: Nunito

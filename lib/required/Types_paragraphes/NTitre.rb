@@ -16,8 +16,28 @@ class NTitre < AnyParagraph
 
   def print(pdf)
     pdf.start_new_page if next_page?
-    pdf.font(font_family, style: font_style)
+    # 
+    # Espace avant
+    # (seulement si le paragraphe précédent n'avait pas de margin
+    #  bottom)
+    # 
+    unless pdf.prev_paragraph && pdf.prev_paragraph.titre? && pdf.prev_paragraph.margin_bottom
+      pdf.move_down(margin_top * pdf.line_height)
+    end
+    # 
+    # Écriture du titre
+    # 
+    ft = pdf.font(font_family, style: font_style)
+    pdf.move_up(ft.descender)
+    puts "font: height: #{ft.height_at(font_size)} - ascender:#{ft.ascender} - descender: #{ft.descender} - leading: #{leading}"
     pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true
+    # 
+    # Espace après
+    # 
+    pdf.move_down((margin_bottom - 1) * pdf.line_height)
+    # 
+    # Ajout du titre à la table des matières
+    # 
     pdf.tdm.add_title(self, pdf.page_number)
   end
 
@@ -32,6 +52,9 @@ class NTitre < AnyParagraph
   def next_page?
     :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
   end
+
+  def titre?; true end
+
   def leading
     @leading ||= self.class.leading(level)
   end
