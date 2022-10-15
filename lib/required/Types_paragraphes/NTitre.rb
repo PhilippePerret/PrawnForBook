@@ -1,6 +1,8 @@
+require_relative 'AnyParagraph'
+
 module Prawn4book
 class PdfBook
-class NTitre
+class NTitre < AnyParagraph
 
   attr_accessor :page_numero
 
@@ -12,7 +14,7 @@ class NTitre
 
   # --- Helpers Methods ---
 
-  def print(pdf, cursor_on_refgrid)
+  def print(pdf)
     pdf.start_new_page if next_page?
     pdf.font(font_family, style: font_style)
     pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true

@@ -1,11 +1,12 @@
+require_relative 'AnyParagraph'
 module Prawn4book
 class PdfBook
-class NTextParagraph
+class NTextParagraph < AnyParagraph
 
-  # @prop Première et dernière page du paragraphe
-  attr_accessor :first_page
-  attr_accessor :last_page
-  attr_accessor :page_numero
+  # # @prop Première et dernière page du paragraphe
+  # attr_accessor :first_page
+  # attr_accessor :last_page
+  # attr_accessor :page_numero
 
   def self.get_next_numero
     @@last_numero ||= 0
@@ -26,7 +27,7 @@ class NTextParagraph
   ##
   # Méthode principale d'écriture du paragraphe
   # 
-  def print(pdf, cursor_on_refgrid)
+  def print(pdf)
     
     parag = self
 
@@ -68,9 +69,14 @@ class NTextParagraph
         span(@span_number_width, position: span_pos_num) do
           text "#{numero}", color: '777777'
         end
+      
+        #
+        # Reprendre sa position 
+        # 
+        move_cursor_to(start_cursor)
+      
       end #/end if paragraph_number?
 
-      move_cursor_to start_cursor
 
       # puts "cursor avant écriture paragraphe = #{cursor}"
 
@@ -94,7 +100,7 @@ class NTextParagraph
           size: default_font_size, 
           font_style: default_font_style, 
           inline_format: true
-        puts "Après l'écriture du paragraphe : #{round(cursor)}"
+        puts "Cursor fin écriture parag : #{round(cursor)}"
       rescue Exception => e
         puts "Problème avec le paragraphe #{final_str.inspect}".rouge
         exit
@@ -109,8 +115,13 @@ class NTextParagraph
       # debug rapport
       # puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
 
-      move_cursor_to (cursor.to_i / line_height) * line_height
-      puts "Prochaine ligne à : #{round(cursor)}"
+      # 
+      # Vérification ligne de référence
+      # 
+      if (start_cursor - cursor) % line_height > 0.05
+        puts "Il y a un problème de leading… Le texte ne se trouve plus sur la ligne de référence…".rouge
+        puts "(start_cursor - cursor) % line_height = (#{round(start_cursor)} - #{round(cursor)}) % #{line_height} = #{(start_cursor - cursor) % line_height}".rouge
+      end
 
     end
   end

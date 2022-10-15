@@ -39,6 +39,8 @@ class Paragraphe
       parse_as_image(line) # => PdfBook::NImage
     when /^\#{1,6} /
       parse_as_titre(line) # => PdfBook::NTitre
+    when /^<\!(.+)\!>$/
+      PdfBook::P4BCode.new(line)
     else 
       PdfBook::NTextParagraph.new({raw_line: line})
     end

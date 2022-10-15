@@ -55,7 +55,6 @@ class PrawnView
     # 
     super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
     @table_reference_grid || begin
-      table_reference_grid
       define_default_leading
     end
     # 

@@ -1,6 +1,8 @@
+require_relative 'AnyParagraph'
+
 module Prawn4book
 class PdfBook
-class NImage
+class NImage < AnyParagraph
 
   attr_reader :data
   attr_accessor :page_numero
@@ -15,7 +17,7 @@ class NImage
   # Méthode principale qui "imprime" le paragraphe dans le PDF
   # du livre
   # 
-  def print(pdf, cursor_on_grid)
+  def print(pdf)
     if svg?
       pdf.svg IO.read(path), color_mode: :cmyk
     else
