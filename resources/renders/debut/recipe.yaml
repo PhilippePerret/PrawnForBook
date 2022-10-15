@@ -1,10 +1,35 @@
+---
+
+# --- Infos sur le livre ---
+:book_title: Titre du livre
+:book_subtitle: |
+  Le sous-titre du livre où
+  les retours chariot seront 
+  conservés et affiché
+:collection: true     # true => dans une collection
+:book_id: debut
+:auteurs: ['Prénom NOM']
+:main_folder: "/Users/philippeperret/Programmes/Prawn4book/resources/renders/debut"
+:text_path: true # true = texte.md ou texte.txt dans ce dossier
+:infos:
+  :display:     false
+  :isbn:        null
+  :depot_bnf:   3e trimestre 2022
+  :cover:       "MM & PP" # auteurs de la couverture
+  :mep:         ['Prénom NOM']
+  :conception:  ['Prénom NOM']
+  :corrections: ['Prénom NOM']
+  :print:       'Imprimé à la demande'
+
+# --- INFOS LIVRE ou COLLECTION ---
+
 :editor:
   :name:  Nom de l'éditeur
   :adresse: |
     xxx rue de Loraine 
     xxxxxx Ville
   :site:      'https://icare-editions.fr'
-  :logo:      "/path/to/logo.svg"
+  :logo:      null
   :siret:     '508 680 360 00023'
   :mail:      editor@edition.fr
   :contact:   contact@edition.fr
@@ -44,13 +69,13 @@
 # --- Pages à insérer ou à sauter ---
 # Table des matières : cf. plus bas
 :skip_page_creation:  true # true => ne pas écrire la 1re page (pour pouvoir appliquer sur la première la mise en page des pages impaires)
-:page_de_garde:   true  # true => insérer la page de garde
+:page_de_garde:   false  # true => insérer la page de garde
 :faux_titre:      false # true => insérer la page de faux-titre
-:page_de_titre:   true  # true => insérer la page de titre
+:page_de_titre:   false  # true => insérer la page de titre
 
 # --- Table Des Matières ---
 :table_of_content:
-  :display: true # true => afficher la table des matières
+  :display: false # true => afficher la table des matières
   # Page où insérer la table des matières. Si sa valeur est :flux 
   # elle sera placée en fonction des autres pages présentes
   :page_number: :flux 
@@ -80,7 +105,7 @@
 # --- Titres ---
 :titles:
   :level1:
-    :next_page: true
+    :next_page: false
     :font: Nunito
     :size: 30
     :margin_top: 0

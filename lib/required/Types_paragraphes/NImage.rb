@@ -15,7 +15,7 @@ class NImage
   # Méthode principale qui "imprime" le paragraphe dans le PDF
   # du livre
   # 
-  def print(pdf)
+  def print(pdf, cursor_on_grid)
     if svg?
       pdf.svg IO.read(path), color_mode: :cmyk
     else
@@ -23,8 +23,11 @@ class NImage
     end
   end
 
+  def margin_top
+    2
+  end
   def margin_bottom 
-    20
+    2
   end
 
   # --- Predicate Methods ---

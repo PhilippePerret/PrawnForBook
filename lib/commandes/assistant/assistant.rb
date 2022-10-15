@@ -1,4 +1,13 @@
 module Prawn4book
+  
+  # @runner
+  class Command
+    def proceed; end
+    def proceed_assistant_fontes
+      Prawn4book.assistant_fontes
+    end
+  end #/Command
+
   def self.assistant_fontes
     puts "Je dois apprendre à assister pour la création des fontes".jaune
     frecipe = File.join(cfolder,'recipe.yaml')

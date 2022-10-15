@@ -55,12 +55,17 @@ class PrawnView
     # Réglage des marges de la prochaine page
     # 
     super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
+    @table_reference_grid || begin
+      table_reference_grid
+      define_default_leading
+    end
     move_cursor_to_top_of_the_page
   end
 
   # --- Cursor Methods ---
 
   def move_cursor_to_top_of_the_page
+    # puts "Curseur placé en haut de page (à #{bounds.top})"
     move_cursor_to bounds.top
   end
 

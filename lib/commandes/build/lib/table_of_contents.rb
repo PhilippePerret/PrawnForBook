@@ -6,12 +6,14 @@
 module Prawn4book
 class PrawnView
 
+  attr_accessor :tdm_page
+
   # --- CONSTRUCTION DE LA TABLE DES MATIÈRES ---
 
   def build_table_des_matieres
     # Pour savoir sur quelle page construire la table des
     # matière
-    on_page = page_number
+    self.tdm_page = page_number
     font "Nunito", size: 20 # TODO À régler
     text "Table des matières"
     # TODO Développer la TOC ici

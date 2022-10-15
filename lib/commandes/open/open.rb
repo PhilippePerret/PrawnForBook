@@ -1,4 +1,9 @@
 module Prawn4book
+    
+  # @runner
+  class Command
+    def proceed; Prawn4book.open_something end
+  end #/Command
 
 
   def self.open_something

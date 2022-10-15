@@ -4,7 +4,71 @@ class NTitre
 
   attr_accessor :page_numero
 
+  attr_reader :data
 
+  def initialize(data)
+    @data = data.merge!(type: 'titre')
+  end
+
+  # --- Helpers Methods ---
+
+  def print(pdf, cursor_on_refgrid)
+    pdf.start_new_page if next_page?
+    pdf.font(font_family, style: font_style)
+    pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true
+    pdf.tdm.add_title(self, pdf.page_number)
+  end
+
+  def formated_text(pdf)
+    str = text
+    str = pdf.add_cursor_position(str) if pdf.add_cursor_position?
+    return str
+  end
+
+  # --- Predicate Methods ---
+
+  def next_page?
+    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
+  end
+  def leading
+    @leading ||= self.class.leading(level)
+  end
+
+  def font_family
+    @font_family ||= self.class.font_family(level)
+  end
+  # @prop La taille de la police en fonction du niveau de titre
+  # 
+  def font_size
+    @font_size ||= self.class.font_size(level)
+  end
+
+  def font_style
+    @font_style ||= self.class.font_style(level)
+  end
+
+  # @prop {Integer} Espace avec le texte suivant
+  def margin_bottom
+    @margin_bottom ||= self.class.margin_bottom(level)
+  end
+
+  # @prop {Integer} Espace avec le texte précédent
+  def margin_top
+    @margin_top ||= self.class.margin_top(level)
+  end
+
+  # --- Predicate Methods ---
+
+  def paragraph?; false end
+  def titre?    ; true  end
+
+  # --- Data Methods ---
+
+  def level ; @level  ||= data[:level]  end
+  def text  ; @text   ||= data[:text]   end
+
+
+  # --- MÉTHODES DE CLASSES ---
 
   def self.font_family(level)
     get_recipe(:font, level, DEFAULT_FONT)
@@ -48,64 +112,6 @@ class NTitre
   def self.data_titles
     @@data_titles ||= PdfBook.current.recette[:titles] || {}
   end
-
-  attr_reader :data
-
-  def initialize(data)
-    @data = data.merge!(type: 'titre')
-  end
-
-  # --- Helpers Methods ---
-
-  def print(pdf)
-    pdf.start_new_page if next_page?
-    pdf.font(font_family, style: font_style)
-    pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true
-    pdf.tdm.add_title(self, pdf.page_number)
-  end
-
-  def formated_text(pdf)
-    str = text
-    str = pdf.add_cursor_position(str) if pdf.add_cursor_position?
-    return str
-  end
-
-  # --- Predicate Methods ---
-
-  def next_page?
-    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
-  end
-  def leading
-    @leading ||= self.class.leading(level)
-  end
-
-  def font_family
-    @font_family ||= self.class.font_family(level)
-  end
-  # @prop La taille de la police en fonction du niveau de titre
-  # 
-  def font_size
-    @font_size ||= self.class.font_size(level)
-  end
-
-  def font_style
-    @font_style ||= self.class.font_style(level)
-  end
-
-  # @prop {Integer} Espace avec le texte suivant
-  def margin_bottom
-    @margin_bottom ||= self.class.margin_bottom(level)
-  end
-
-  # --- Predicate Methods ---
-
-  def paragraph?; false end
-  def titre?    ; true  end
-
-  # --- Data Methods ---
-
-  def level ; @level  ||= data[:level]  end
-  def text  ; @text   ||= data[:text]   end
 
 end #/class NTitre
 end #/class PdfBook

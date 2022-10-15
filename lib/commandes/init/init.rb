@@ -1,4 +1,12 @@
 module Prawn4book
+
+# ::runner
+class Command
+  def proceed
+    PdfBook.define_book_recipe
+  end
+end #/Command
+
 class PdfBook
 
   ##
@@ -197,9 +205,18 @@ class PdfBook
 
   def self.confirme_create_of(frecipe)
     if File.exist?(frecipe)
-      puts "FICHIER RECETTE PRODUIT AVEC SUCCÈS.".vert
-      if Q.yes?("Dois-je l'ouvrir ?".jaune)
-        `subl -n "#{frecipe}"`
+      puts "Fichier recette produit avec succès.".vert
+      if Q.yes?('Dois-je créer un fichier texte ?'.jaune)
+        ext = Q.select("Quel format ?".jaune) do |q|
+          q.choice 'Markdown', 'md'
+          q.choice 'Simple texte', 'txt'
+        end
+        fname = "texte.p4b.#{ext}"
+        fpath = File.join(File.dirname(frecipe),fname)
+        File.write(fpath, "<!-- Fichier texte -->")
+      end
+      if Q.yes?("Dois-je ouvrir le dossier dans l’éditeur ?".jaune)
+        `subl -n "#{File.dirname(frecipe)}"`
       end
     else
       puts "\nBizarrement, je ne trouve pas la recette du livre…".rouge

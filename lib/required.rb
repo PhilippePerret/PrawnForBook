@@ -4,7 +4,8 @@ require 'prawn'
 require "prawn/measurement_extensions" # Pour pouvoir utiliser 1.cm etc.
 
 require 'clir'
-CLI.set_options_table({e: :edition, c: :cursor})
+CLI.set_options_table({
+  e: :edition, c: :cursor, g: :grid})
 
 #
 # Pour insérer des svg dans les documents

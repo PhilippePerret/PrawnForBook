@@ -22,7 +22,7 @@ module Prawn4book
 class PdfBook
 
   def build_titre_liste
-    clear
+    clear unless debug?
     puts "Fabrication de la liste des titres…".bleu
 
     File.open(listing_path,'w') do |f|

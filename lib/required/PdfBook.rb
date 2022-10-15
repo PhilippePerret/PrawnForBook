@@ -9,16 +9,6 @@ class PdfBook
     @folder    = folder
   end
 
-  ##
-  # = main =
-  # 
-  # Méthode principale pour produire (aka "générer") le pdf
-  # final
-  # 
-  def generate
-    Prawn4book.require_module('pdfbook/generate')
-    generate_pdf_book
-  end
 
   # Pour ouvrir le livre dans Aperçu, en double pages
   def open_book

@@ -1,12 +1,9 @@
-require_relative 'generate_building_methods'
-require_relative 'generate_builder/margins_methods'
-require_relative 'generate_builder/paragraphes'
-require_relative 'generate_builder/reference_grid_methods'
-require_relative 'generate_builder/headers_footers'
-require_relative 'PdfBook_helpers'
-require_relative 'Tdm'
-
 module Prawn4book
+class Command
+  def proceed
+    PdfBook.current.generate_pdf_book
+  end
+end #/Command
 class PdfBook
 
   # Pour exposer les données des pages (à commencer par les
@@ -24,7 +21,7 @@ class PdfBook
   # Rappel : PrawnDoc hérite de Prawn::Document
   # 
   def generate_pdf_book
-    clear
+    clear unless debug?
     File.delete(pdf_path) if File.exist?(pdf_path)
 
     # 
@@ -66,23 +63,15 @@ class PdfBook
     pdf = PrawnView.new(self, pdf_config)
 
     # 
-    # Calcul de la table de références (pour les lignes de référence)
-    # 
-    pdf.table_reference_grid
-    sleep 20
-
-    #
-    # Y a-t-il une dernière page définie en options
-    # 
-    if CLI.options[:last]
-      pdf.last_page = CLI.options[:last].to_i
-    end
-
-    # 
     # On définit les polices requises pour le livre
     # 
     # define_required_fonts(self.config[:fonts])
     pdf.define_required_fonts(book_fonts)
+
+    #
+    # Y a-t-il une dernière page définie en options
+    # 
+    pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]
 
     # 
     # Initier une première page, si on a demandé de la sauter
@@ -90,6 +79,16 @@ class PdfBook
     # définitions de marge, etc.)
     # 
     pdf.start_new_page if skip_page_creation?
+
+    # # 
+    # # Calcul de la table de références (pour les lignes de référence)
+    # # 
+    # pdf.table_reference_grid
+
+    # # 
+    # # Calcul de leading par défaut 
+    # # 
+    # pdf.define_default_leading
 
     #
     # Initier la table des matières (je préfère faire mon 
@@ -116,14 +115,17 @@ class PdfBook
     pdf.start_new_page
 
     # 
-    # BOUCLE SUR TOUS LES PARAGRAPHES
-    # ===============================
+    # ========================
+    # - TOUS LES PARAGRAPHES -
+    # ========================
     # 
     # cf. modules/pdfbook/generate_builder/paragraphes.rb
     # 
     pdf.print_paragraphs(inputfile.paragraphes)
 
     #
+    # - PAGES SUPPLÉMENTAIRES -
+    # 
     # Écriture des pages supplémentaires obtenues par le 
     # parser, if any
     # 
@@ -140,7 +142,7 @@ class PdfBook
     # 
     # - TABLE DES MATIÈRES -
     # 
-    tdm.output(on_page) if table_des_matieres?
+    tdm.output(tdm_page) if table_des_matieres?
 
     #
     # - PAGINATION -
@@ -151,9 +153,9 @@ class PdfBook
     pdf.set_pages_numbers(@pages)
 
 
-      # if module_parser? && ParserParagraphModule.respond_to?(:report)
-      #   ParserParagraphModule.report
-      # end
+    if module_parser? && ParserParagraphModule.respond_to?(:report)
+      ParserParagraphModule.report
+    end
 
     # end #/PrawnDoc.generate
     pdf.save_as(pdf_path)

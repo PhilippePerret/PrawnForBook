@@ -341,16 +341,16 @@ module PrawnCustomBuilderModule # ce nom est absolument à respecter
       c1 = cursor.freeze
       text "[#{round(c1)}] Font:#{default_font} - Size:#{default_font_size} — LineHeight: #{line_height}"
 
-      # next_baseline Permet de passer à la ligne de référence 
+      # Permet de passer à la ligne de référence 
       # suivante
-      next_baseline
+      move_cursor_to cursor_to_refgrid_line(cursor)
 
       c2 = cursor.freeze
       text "[#{round(c2)}] Sur la ligne de référence [+#{round(c1 - c2)}]"
 
       # next_baseline(x) permet de passer à la xe ligne de référence
       # suivante
-      next_baseline(4)
+      move_cursor_to cursor_to_refgrid_line(cursor, 4)
 
       c3 = cursor.freeze
       text "[#{round(c3)}] Sur la 4e ligne de référence [+#{round(c2 - c3)}]"

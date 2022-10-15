@@ -14,8 +14,8 @@ class PrawnView
   # etc.
   def table_reference_grid
     @table_reference_grid ||= begin
-      lh = pdfbook.recette.line_height    # p.e. 13
-      moitielh = round(lh.to_f / 2, 1)    # p.e. 6.5
+      lh = line_height.dup              # p.e. 13
+      moitielh = round(lh.to_f / 2, 1)  # p.e. 6.5
       tp = bounds.top.to_i
       puts "line_height: #{lh}"
       puts "top page = #{tp.inspect}"
@@ -27,6 +27,7 @@ class PrawnView
         ilineref += 1
         lineref  = tp - (ilineref * lh)
         linerefsuiv = tp - ((ilineref + 1) * lh)
+        linerefsuiv = nil if linerefsuiv < 0
         tbl.merge!(h.to_i => lineref)
         (0..lh).each do |n|
           if n < moitielh
@@ -37,25 +38,42 @@ class PrawnView
         end
         h -= lh
       end
-      puts "table de référence : #{tbl.pretty_inspect}"
-      sleep 30
+      # puts "table de référence : #{tbl.pretty_inspect}"
       tbl
     end
   end
 
-
-  def rectif_cursor
-    
+  # @param {Cursor ?} curseur (souvent courant)
+  def cursor_to_refgrid_line(cur, nombre_de_lignes = nil)
+    cur_on_grid = table_reference_grid[cur.to_i]
+    if cur_on_grid.nil?
+      puts "cur_on_grid est nil…".rouge
+      puts "Avec cur.to_i = #{cur.to_i.inspect}".rouge
+      puts "Table : #{table_reference_grid}".rouge
+      nombre_de_lignes ||= 1
+      return cur + (nombre_de_lignes - 1) * line_height
+    end
+    if not(nombre_de_lignes.nil?)
+      puts "line_height = #{line_height.inspect} / nombre_de_lignes:#{nombre_de_lignes} / cur_on_grid:#{cur_on_grid}"
+      cur_on_grid += (nombre_de_lignes - 1) * line_height
+    elsif cur_on_grid < cur
+      cur_on_grid += line_height
+    end
+    puts "cur: #{round(cur)} / cur_on_grid: #{cur_on_grid}"
+    return cur_on_grid
   end
 
-
-  # Méthode pour se déplacer sur la ligne suivante
-  def next_baseline(xlines = 1)
-    move_up(4)
-    c = cursor.freeze # p.e. 456
-    d = c.to_i / line_height # p.e. 456 / 12 = 38
-    newc = (d - xlines) * line_height # p.e. (38 + 1) * 12 = 468
-    move_cursor_to(newc)
+  ##
+  # Méthode qui définit le leading par défaut en fonction de :
+  # - la police par défaut
+  # - la taille par défaut
+  # - le line_height du livre (~ grille de référence)
+  # 
+  def define_default_leading
+    self.default_leading = font2leading(
+      default_font, default_font_size, line_height
+    )
+    puts "\ndefault_leading = #{self.default_leading.inspect}".bleu
   end
 
   ##
@@ -95,7 +113,7 @@ class PrawnView
   end
 
   def line_height
-    @line_height ||= config[:line_height]||DEFAULT_LINE_HEIGHT
+    @line_height ||= pdfbook.recette[:line_height]||DEFAULT_LINE_HEIGHT
   end
 
 end #/class PrawnView

@@ -26,25 +26,11 @@ class NTextParagraph
   ##
   # Méthode principale d'écriture du paragraphe
   # 
-  def print(pdf)
+  def print(pdf, cursor_on_refgrid)
     
     parag = self
 
-    pdf.instance_eval do
-      #
-      # On positionne le cursor au bon endroit
-      # TODO
-      cursor_on_baseline = (((cursor.to_i * 10) / 132).to_f * 13.2).round(4).freeze
-      
-      #
-      # Faut-il passer à la page suivante ?
-      #
-      if cursor_on_baseline < 10
-        start_new_page
-        cursor_on_baseline = cursor
-      else
-        move_cursor_to cursor_on_baseline
-      end
+    pdf.update do
 
       # 
       # Indication de la première page du paragraphe
@@ -75,13 +61,13 @@ class NTextParagraph
 
         @span_number_width ||= 1.cm
 
-        move_cursor_to cursor_on_baseline - 1
+        move_cursor_to cursor_on_refgrid - 1
         span(@span_number_width, position: span_pos_num) do
           text "#{numero}", color: '777777'
         end
       end #/end if paragraph_number?
 
-      move_cursor_to cursor_on_baseline
+      move_cursor_to cursor_on_refgrid
 
       # puts "cursor avant écriture paragraphe = #{cursor}"
 
@@ -122,7 +108,8 @@ class NTextParagraph
   end
 
   # def margin_bottom; 0  end
-  def margin_bottom; 10  end
+  def margin_bottom; 1  end
+  def margin_top; nil end
 
   # --- Predicate Methods ---
 

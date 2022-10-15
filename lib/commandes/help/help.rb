@@ -1,5 +1,18 @@
 module Prawn4book
 
+class Command
+  def proceed
+    methode =
+      case ini_name
+      when 'manuel', 'manual' then :open_user_manuel
+      else 
+        help? ? :display_help : :display_mini_help
+      end
+    Prawn4book.send(methode)
+  end
+end #/Command
+
+
   def self.display_mini_help
     clear
     less(MINI_AIDE)
@@ -15,8 +28,9 @@ module Prawn4book
 
   def self.display_help
     clear
-    if CLI.components[0].in?(['fontes','fonts'])
-      require_module('assistant', :assistant_fontes)
+    if CLI.components[0] && CLI.components[0].in?(['fontes','fonts'])
+      cmd = Command.new('assistant').load
+      cmd.proceed_assistant_fontes
     else
       less(INLINE_AIDE)
     end
