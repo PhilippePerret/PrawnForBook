@@ -1,5 +1,8 @@
 # Todo
 
+* 600   600                   line_height = 15
+  585             593
+
 * Pour les titres, définir le leading une bonne fois pour toute pour le livre
   - le default_baseline défini doit influencer le leading pour que ça fonctionne avec un long paragraphe. QUESTION : comment calculer le leading en fonction du baseline, sachant qu'il n'y a pas de rapport a priori : quand le line_height est à 13.2 (Garamond 11), le leading est à 0. Le leading semble être une valeur proportionnel, ce qui n'est pas du tout arrangeant en l'occurence… Il faut trouver absolument un autre moyen, aller voir dans le code
   à chaque unité, indiquer la ligne de référence correspondante

@@ -36,6 +36,10 @@
   :ext: '10mm'
   :bot: '15mm'
   :int: '25mm'
+:default_font:        Garamond
+:default_font_size:   11
+:default_font_style:  :normal
+:line_height:         12.5
 :interligne:      null
 :leading:         1
 :opt_num_parag:   false # true => numéroter les paragraphes

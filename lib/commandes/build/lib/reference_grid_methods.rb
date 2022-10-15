@@ -1,6 +1,33 @@
 module Prawn4book
 class PrawnView
 
+  # Avec l'option -g/--grid, on peut afficher une grille de référence
+  # sur toutes les pages
+  # TODO: Pouvoir ne la dessiner que sur certaines pages avec :
+  #     --grid=4-12
+  def print_reference_grid
+    # h = bounds.top.dup
+    h = bounds.top.dup
+    stroke_color 51, 0, 0, 3
+    line_width(0.1)
+    while h > 0
+      puts "Ligne à #{round(h)}"
+      stroke_horizontal_line(0, bounds.width, at: h)
+      h -= line_height
+    end
+    stroke_color 0,0,0,100
+  end
+
+  def print_margins
+    stroke_color(88,0,58,28)
+    line_width(0.3)
+    stroke_horizontal_line(0, bounds.width, at: bounds.top)
+    stroke_horizontal_line(0, bounds.width, at: bounds.bottom)
+    stroke_vertical_line(0, bounds.top, at: bounds.left)
+    stroke_vertical_line(0, bounds.top, at: bounds.right)
+    stroke_color 0,0,0,100
+  end
+
   # @prop La table de la grille de référence
   # Elle permet d'obtenir en un instance (sans calcul) la 
   # ligne de référence la plus proche d'une position.
@@ -45,11 +72,15 @@ class PrawnView
 
   # @param {Cursor ?} curseur (souvent courant)
   def cursor_to_refgrid_line(cur, nombre_de_lignes = nil)
+    gcur = table_reference_grid[cur.to_i] || cur
+    puts "table_reference_grid[#{cur.to_i}] = #{gcur}"
+    return gcur
+
     cur_on_grid = table_reference_grid[cur.to_i]
     if cur_on_grid.nil?
-      puts "cur_on_grid est nil…".rouge
-      puts "Avec cur.to_i = #{cur.to_i.inspect}".rouge
-      puts "Table : #{table_reference_grid}".rouge
+      # puts "cur_on_grid est nil…".rouge
+      # puts "Avec cur.to_i = #{cur.to_i.inspect}".rouge
+      # puts "Table : #{table_reference_grid}".rouge
       nombre_de_lignes ||= 1
       return cur + (nombre_de_lignes - 1) * line_height
     end
@@ -110,6 +141,10 @@ class PrawnView
 
   def default_font_size
     @default_font_size ||= config[:default_font_size]||DEFAULT_SIZE_FONT
+  end
+
+  def default_font_style
+    @default_font_style ||= config[:default_font_style] || :normal
   end
 
   def line_height

@@ -207,7 +207,8 @@ class PdfBook
         # --- Extra definitions ---
         default_font:       get_recipe(:default_font),
         default_font_size:  get_recipe(:default_font_size),
-        default_baseline:  get_recipe(:default_baseline),
+        default_font_style: get_recipe(:default_font_style, :normal),
+        # default_baseline:  get_recipe(:default_baseline),
       }
     end
   end

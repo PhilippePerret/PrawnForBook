@@ -35,7 +35,6 @@ class PrawnView
   def initialize(pdfbook, config)
     @pdfbook  = pdfbook
     @config   = config
-    # @name     = name
   end
 
   def document
@@ -59,14 +58,26 @@ class PrawnView
       table_reference_grid
       define_default_leading
     end
+    # 
+    # Avec l'option -g/--grid on peut demander l'affichage de la 
+    # grille de référence
+    #
+    CLI.option(:display_grid) && print_reference_grid
+    # 
+    # Avec l'option --display_margins, on affiche les marges
+    # 
+    CLI.option(:display_margins) && print_margins
+    # 
+    # On replace toujours le curseur en haut de la page
+    # 
     move_cursor_to_top_of_the_page
   end
 
   # --- Cursor Methods ---
 
   def move_cursor_to_top_of_the_page
-    # puts "Curseur placé en haut de page (à #{bounds.top})"
     move_cursor_to bounds.top
+    puts "Curseur placé en haut de page (à #{bounds.top})"
   end
 
   def add_cursor_position(str)

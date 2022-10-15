@@ -32,6 +32,9 @@ class NTextParagraph
 
     pdf.update do
 
+      start_cursor = cursor.freeze
+      puts "Curseur au départ : #{round(start_cursor)}"
+
       # 
       # Indication de la première page du paragraphe
       # 
@@ -61,20 +64,20 @@ class NTextParagraph
 
         @span_number_width ||= 1.cm
 
-        move_cursor_to cursor_on_refgrid - 1
+        move_cursor_to( start_cursor - 1 )
         span(@span_number_width, position: span_pos_num) do
           text "#{numero}", color: '777777'
         end
       end #/end if paragraph_number?
 
-      move_cursor_to cursor_on_refgrid
+      move_cursor_to start_cursor
 
       # puts "cursor avant écriture paragraphe = #{cursor}"
 
       final_str = "#{parag.text}"
-      final_str = add_cursor_position(final_str) if add_cursor_position?
+      add_cursor_position? && final_str = add_cursor_position(final_str)
 
-      font "Garamond", size: 11, font_style: :normal
+      font default_font, size: default_font_size, font_style: default_font_style
       # 
       # Le paragraphe va-t-il passer à la page suivante ?
       # (pour pouvoir calculer son numéro de dernière page)
@@ -88,13 +91,15 @@ class NTextParagraph
       begin
         text final_str, 
           align: :justify, 
-          size: 11, 
-          font_style: :normal, 
+          size: default_font_size, 
+          font_style: default_font_style, 
           inline_format: true
+        puts "Après l'écriture du paragraphe : #{round(cursor)}"
       rescue Exception => e
         puts "Problème avec le paragraphe #{final_str.inspect}".rouge
         exit
       end
+
       # 
       # On prend la dernière page du paragraphe, c'est celle sur 
       # laquelle on se trouve maintenant
@@ -103,6 +108,9 @@ class NTextParagraph
 
       # debug rapport
       # puts "Parag ##{parag.numero.to_s.ljust(2)} first: #{parag.first_page.to_s.ljust(2)} last: #{parag.last_page.to_s.ljust(2)}"
+
+      move_cursor_to (cursor.to_i / line_height) * line_height
+      puts "Prochaine ligne à : #{round(cursor)}"
 
     end
   end
