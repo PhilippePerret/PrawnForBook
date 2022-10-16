@@ -20,7 +20,7 @@ end #/Command
 
   def self.open_user_manuel
     if CLI.option(:dev)
-      `open -a Typora "#{USER_MANUEL_MD_PATH}"`
+      `open -a Typora "#{USER_MANUAL_MD_PATH}"`
     else
       `open -a Preview "#{USER_MANUAL_PATH}"`
     end

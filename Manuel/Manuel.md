@@ -228,6 +228,12 @@ titre
 		
 ~~~
 
+<a name="exclude-paragraphes”"></a>
+
+### Exclure des paragraphes
+
+Cf.ci-dessous [les commentaires](#comments).
+
 <a name="comments"></a>
 
 ### Commentaires
