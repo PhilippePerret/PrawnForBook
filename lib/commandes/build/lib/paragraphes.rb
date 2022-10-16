@@ -1,7 +1,7 @@
 module Prawn4book
 class PrawnView
 
-  attr_accessor :prev_paragraph
+  attr_accessor :previous_paragraph
 
   # @param paragraphes {Array of AnyParagraph}
   def print_paragraphs(paragraphes)
@@ -53,7 +53,7 @@ class PrawnView
       
       break if page_number === last_page
 
-      self.prev_paragraph = paragraphe
+      self.previous_paragraph = paragraphe
       
     end
     

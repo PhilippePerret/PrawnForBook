@@ -6,18 +6,17 @@ class PrawnView
   # TODO: Pouvoir ne la dessiner que sur certaines pages avec :
   #     --grid=4-12
   def print_reference_grid
-    # h = bounds.top.dup
     define_default_leading
     font = font(default_font, size: default_font_size)
-    # puts "height:#{font.height} - height_at:#{font.height_at(default_font_size)} - descender:#{font.descender} - ascender:#{font.ascender}"
     baseline = font.ascender + 0.1
+    # puts "height:#{font.height} - height_at:#{font.height_at(default_font_size)} - descender:#{font.descender} - ascender:#{font.ascender}"
     # puts "baseline : #{baseline}"
 
     h = bounds.top.dup
     stroke_color 51, 0, 0, 3
     line_width(0.1)
     while h > 0
-      puts "Ligne à #{round(h)}"
+      puts "Ligne de référence à #{round(h)}".bleu if debug?
       stroke_horizontal_line(0, bounds.width, at: h - baseline)
       h -= line_height
     end

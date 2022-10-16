@@ -78,12 +78,28 @@ class InputTextFile
   # transformé en une instance correspondant à son type, image,
   # titre, bloc formaté, etc. pour produire la propriété @paragraphes
   # de l'input-file
-  # 
   def parse
+    # 
+    # @bypass_it Pour sauter les commentaires ou les textes "ex-commen-
+    # tés"
+    bypass_it = false
+    # 
+    # 
+    # Boucle sur tous les paragraphes du texte
+    # 
     File.read(path).split("\n").map do |par|
       par.strip
     end.reject do |par|
       par.empty?
+    end.reject do |par|
+      if par.start_with?('<!--')
+        bypass_it = true
+      elsif par.end_with?('-->')
+        bypass_it = false
+        true
+      else
+        bypass_it
+      end
     end.map do |par|
       #
       # Analyse du paragraphe pour savoir ce que c'est

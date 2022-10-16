@@ -15,14 +15,26 @@ class NTitre < AnyParagraph
   # --- Helpers Methods ---
 
   def print(pdf)
+    parag = self
+    # 
+    # Faut-il passer à la page suivante ?
+    # C'est le cas cas la propriété :next_page est à true dans la
+    # recette, pour ce titre.
+    # 
     pdf.start_new_page if next_page?
     # 
     # Espace avant
     # (seulement si le paragraphe précédent n'avait pas de margin
     #  bottom)
     # 
-    unless pdf.prev_paragraph && pdf.prev_paragraph.titre? && pdf.prev_paragraph.margin_bottom
-      pdf.move_down(margin_top * pdf.line_height)
+    pdf.update do
+      unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
+        move_down(parag.margin_top * line_height)
+      else
+        # Ajustement de la position pour se retrouver vraiment sur une
+        # ligne de référence
+        move_cursor_to((cursor.to_i / line_height) * line_height)
+      end
     end
     # 
     # Écriture du titre

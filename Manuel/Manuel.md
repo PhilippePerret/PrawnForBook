@@ -228,6 +228,39 @@ titre
 		
 ~~~
 
+<a name="comments"></a>
+
+### Commentaires
+
+Pour ajouter des commentaires dans un fichier texte destiné à l’impression, on le place entre commentaire markdown normaux. 
+
+~~~markdown
+<!-- Commentaire sur une ligne -->
+
+<!--
+Commentaires
+Sur plusieurs
+Lignes
+-->
+~~~
+
+Il est donc tout à fait possible d’exclure du texte en le mettant entre ces signes :
+
+~~~markdown
+# Titre principal
+<!--
+## Titre zappé
+Paragraphe zappé, non imprimé
+-->
+## Un titre pris en compte.
+~~~
+
+Noter que par rapport à du markdown pur, il est inutile de laisser des lignes vierges entre les types de paragraphes.
+
+---
+
+<a name="custom-formating"></a>
+
 ### Formatage personnalisé des paragraphes (`formater.rb`)
 
 Le principe est le suivant : 
