@@ -1,6 +1,20 @@
 module Prawn4book
 class PrawnView
 
+  # @return la hauteur de la ligne de référence au cursor
+  def line_reference
+    lr_inf = (cursor.to_i / line_height) * line_height
+    lr_sup = lr_inf + line_height
+    lr = 
+      if lr_sup - cursor > cursor - lr_inf
+        lr_inf
+      else
+        lr_sup
+      end
+    puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
+    lr
+  end
+
   # Avec l'option -g/--grid, on peut afficher une grille de référence
   # sur toutes les pages
   # TODO: Pouvoir ne la dessiner que sur certaines pages avec :
@@ -8,16 +22,19 @@ class PrawnView
   def print_reference_grid
     define_default_leading
     font = font(default_font, size: default_font_size)
-    baseline = font.ascender + 0.1
-    # puts "height:#{font.height} - height_at:#{font.height_at(default_font_size)} - descender:#{font.descender} - ascender:#{font.ascender}"
-    # puts "baseline : #{baseline}"
-
     h = bounds.top.dup
-    stroke_color 51, 0, 0, 3
+    stroke_color 51, 0, 0, 3 # bleu ciel
     line_width(0.1)
     while h > 0
       puts "Ligne de référence à #{round(h)}".bleu if debug?
-      stroke_horizontal_line(0, bounds.width, at: h - baseline)
+      float {
+        move_cursor_to(h + 4)
+        span(24, position: bounds.left - 24) do
+          font 'Arial', size:7
+          text round(h).to_s
+        end
+      }
+      stroke_horizontal_line(0, bounds.width, at: h)
       h -= line_height
     end
     stroke_color 0,0,0,100

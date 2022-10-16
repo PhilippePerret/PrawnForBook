@@ -112,7 +112,7 @@
     :next_page: true
     :font: Nunito
     :size: 30
-    :margin_top: 0
+    :margin_top: 2
     :margin_bottom: 4
     :leading: -2
   :level2:

@@ -12,53 +12,6 @@ class NTitre < AnyParagraph
     @data = data.merge!(type: 'titre')
   end
 
-  # --- Helpers Methods ---
-
-  def print(pdf)
-    parag = self
-    # 
-    # Faut-il passer à la page suivante ?
-    # C'est le cas cas la propriété :next_page est à true dans la
-    # recette, pour ce titre.
-    # 
-    pdf.start_new_page if next_page?
-    # 
-    # Espace avant
-    # (seulement si le paragraphe précédent n'avait pas de margin
-    #  bottom)
-    # 
-    pdf.update do
-      unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
-        move_down(parag.margin_top * line_height)
-      else
-        # Ajustement de la position pour se retrouver vraiment sur une
-        # ligne de référence
-        move_cursor_to((cursor.to_i / line_height) * line_height)
-      end
-    end
-    # 
-    # Écriture du titre
-    # 
-    ft = pdf.font(font_family, style: font_style)
-    pdf.move_up(ft.descender)
-    puts "font: height: #{ft.height_at(font_size)} - ascender:#{ft.ascender} - descender: #{ft.descender} - leading: #{leading}"
-    pdf.text formated_text(pdf), align: :left, size: font_size, leading: leading, inline_format: true
-    # 
-    # Espace après
-    # 
-    pdf.move_down((margin_bottom - 1) * pdf.line_height)
-    # 
-    # Ajout du titre à la table des matières
-    # 
-    pdf.tdm.add_title(self, pdf.page_number)
-  end
-
-  def formated_text(pdf)
-    str = text
-    str = pdf.add_cursor_position(str) if pdf.add_cursor_position?
-    return str
-  end
-
   # --- Predicate Methods ---
 
   def next_page?
