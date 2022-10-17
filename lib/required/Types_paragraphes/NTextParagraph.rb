@@ -17,7 +17,8 @@ class NTextParagraph < AnyParagraph
   attr_reader :numero
   alias :number :numero
 
-  def initialize(data)
+  def initialize(pdfbook,data)
+    super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
     @numero = self.class.get_next_numero
   end

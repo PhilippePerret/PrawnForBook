@@ -10,36 +10,52 @@ class PdfBook
   # paragraphes)
   attr_reader :pages
 
+  # @prop Instance {Prawn4book::PdfHelpers}
+  attr_reader :pdfhelpers
+
   ##
   # = main =
   # 
   # Méthode principale pour générer le PDF du livre
-  # Elle prépare le document Prawn::Document (PrawnDoc) et boucle
+  # Elle prépare le document Prawn::View (PrawnView) et boucle
   # sur tous les paragraphes du texte pour les formater et les
-  # ajouter.
+  # ajouter au PDF en les parsant/helpant/formatant.
   # 
-  # Rappel : PrawnDoc hérite de Prawn::Document
+  # Rappel : PrawnView hérite de Prawn::View (comme conseillé par
+  #          le code de Prawn)
   # 
   def generate_pdf_book
     clear unless debug?
+    
+    # 
+    # Détruire le fichier PDF final s'il existe déjà
+    # 
     File.delete(pdf_path) if File.exist?(pdf_path)
 
     # 
     # Si l'option '--force' a été ajoutée et que le fichier
     # texte.yaml existe, on le détruit après confirmation
+    # @DEPRECATED Maintenant, on ne compte plus faire un fichier
+    # texte.yaml, on compte ajouter des marques au fichier texte
+    # du livre (texte.p4b.md/txt)
+    # L'option '--force' (si on ne change pas son nom) permettra
+    # donc d'ignorer ces précisions dans les paragraphes.
     # 
     if CLI.option(:force) && File.exist?(inputfile.data_paragraphes_path)
       unless Q.no?("Es-tu certain de vouloir détruire le fichier 'texte.yaml' ?\nIl contient peut-être des informations précieuses sur le\ntraitement du texte…)".jaune)
         File.delete(inputfile.data_paragraphes_path)
       end
     end
+
+    #
+    # Avec Prawn::View au lieu d'étendre Prawn::Document
+    # 
+    pdf = PrawnView.new(self, pdf_config)
+
     
     #
-    # Au lieu d'un PrawnDoc héritant de Prawn::Document avec ses
-    # propres méthodes, on pourrait utiliser :
-    #     Prawn::Document.extensions << CustomsMethodsModule
-    # L'avantage serait de pouvoir des méthodes à la volée, dans le
-    # fichier recette.
+    # S'il existe un module de formatage propre au livre (ou à la
+    # collection) il faut le charger.
     #
     if module_formatage?
       require_module_formatage
@@ -52,15 +68,15 @@ class PdfBook
     require_module_parser if module_parser?
 
     #
+    # Helpers personnalisées (if any)
+    # 
+    require_modules_helpers(pdf) if module_helpers?
+
+    #
     # Pour consigner les informations sur les pages, à commencer
     # par les paragraphes (numéros) s'ils sont numérotés
     # 
     @pages = {}
-
-    #
-    # Avec Prawn::View au lieu d'étende Prawn::Document
-    # 
-    pdf = PrawnView.new(self, pdf_config)
 
     # 
     # On définit les polices requises pour le livre
@@ -237,6 +253,15 @@ class PdfBook
 
 
   # --- Formating Methods ---
+
+  # TODO: Mettre ces deux méthode dans Prawn4book::PdfHelper pour
+  # appeler une bonne fois pour toutes les fichiers candidats
+  def require_modules_helpers(pdf)
+    @pdfhelpers = PdfHelpers.create_instance(self, pdf)
+  end
+  def module_helpers?
+    PdfHelpers.modules_helpers?(self)
+  end
 
   ##
   # Traitement du module de formatage propre au livre s'il existe

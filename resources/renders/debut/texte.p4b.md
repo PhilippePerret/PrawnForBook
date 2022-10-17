@@ -1,5 +1,6 @@
 Paragraphe. cursor = #{round(pdf.cursor)}. line_ref = #{pdf.line_reference}. line height = #{pdf.line_height}.
 Autre paragraphe.
+#{display_lines_references}
 Un troisième paragraphe.
 Un quatrième paragraphe assez long pour qu'il puisse passer à la ligne suivante et faire le tour du quartier.
 Un cinquième paragraphe court.

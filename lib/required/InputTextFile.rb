@@ -55,7 +55,7 @@ class InputTextFile
     @paragraphes ||= begin
       if File.exist?(data_paragraphes_path)
         YAML.load_file(data_paragraphes_path, aliases: true).map do |dparag|
-          Paragraphe.dispatch_by_type(dparag)
+          Paragraphe.dispatch_by_type(pdfbook, dparag)
         end
       else
         parse.tap do |parags|
@@ -104,7 +104,7 @@ class InputTextFile
       #
       # Analyse du paragraphe pour savoir ce que c'est
       # 
-      Paragraphe.new(par).parse
+      Paragraphe.new(pdfbook, par).parse
       # => instance PdfBook::NImage, PdfBook::NTextParagraph
     end
   end

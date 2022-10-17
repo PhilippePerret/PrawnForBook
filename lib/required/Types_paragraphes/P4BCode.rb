@@ -3,7 +3,8 @@ module Prawn4book
 class PdfBook
 class P4BCode < AnyParagraph
 
-  def initialize(raw_code)
+  def initialize(pdfbook, raw_code)
+    super(pdfbook)
     @raw_code = raw_code
   end
 

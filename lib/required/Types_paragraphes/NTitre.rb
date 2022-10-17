@@ -8,7 +8,8 @@ class NTitre < AnyParagraph
 
   attr_reader :data
 
-  def initialize(data)
+  def initialize(pdfbook,data)
+    super(pdfbook)
     @data = data.merge!(type: 'titre')
   end
 

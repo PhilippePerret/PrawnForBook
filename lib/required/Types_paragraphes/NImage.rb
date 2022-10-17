@@ -7,7 +7,8 @@ class NImage < AnyParagraph
   attr_reader :data
   attr_accessor :page_numero
 
-  def initialize(data)
+  def initialize(pdfbook, data)
+    super(pdfbook)
     @data = data.merge!(type: 'image')
   end
 

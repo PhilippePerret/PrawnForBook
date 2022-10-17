@@ -201,9 +201,15 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 
 ---
 
-## Les paragraphes
+## Contenu du livre (les paragraphes)
 
 ---
+
+<a name="definition-paragraphe"></a>
+
+### Définition
+
+L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atome puisqu'on peut introduire des éléments sémantiques dans le paragraphe lui-même, qui seront évalués "en ligne").
 
 <a name="types-paragraphes"></a>
 
@@ -265,9 +271,56 @@ Noter que par rapport à du markdown pur, il est inutile de laisser des lignes v
 
 ---
 
+<a name="custom-modules-formatage"></a>
+
+### Méthodes de traitement et de formatage propres
+
+*Prawn-for-book* utilise 3 moyens de travailler avec les paragraphes au niveau du code :
+
+* un module de formatage personnalisé (`formater.rb`),
+* un module de méthodes d’*helpers* qui permettent un traitement ruby personnalisé (`helpers.rb`),
+* un module de méthode de `parsing` qui traite de façon propre le paragraphe (`parser.rb`).
+
+Ces trois fichiers (`parser.rb`, `helpers.rb` et `formater.rb`) sont propres à chaque livre ou chaque collection et seront toujours automatiquement chargés s’ils existent.
+
+<a name="custom-helpers"></a>
+
+#### Méthode d’helpers
+
+Les méthodes d'helpers s'utilisent dans le texte comme un code ruby :
+
+~~~text
+Ceci est un texte de paragraphe avec un #{code_ruby} qui sera évalué.
+~~~
+
+Cette méthode ou variable `code_ruby` doit être définie dans le fichier `helpers.rb` du [livre][] ou de la [collection][] de la manière suivante :
+
+~~~ruby
+# in ./dossier/livre/helpers.rb
+module PrawnHelpersMethods
+	def code_ruby
+		# On utilise ici 'pdfbook' et 'pdf' pour obtenir le livre ou
+		# son builder.
+		# On retourne la position actuelle du curseur dans le fichier
+		# pdf en l'arrondissant :
+		return round(pdf.cursor)
+	end
+end
+~~~
+
+Ces méthodes d'helpers doivent obligatoirement retourner le code (le texte) qui sera écrit à leur place dans le paragraphe.
+
+Les seules conventions a respecter ici sont :
+
+* le fichier doit impérativement s'appeler `helpers.rb` (au plusieur, car il y a plusieurs *helpers* mais l'application cherchera aussi le singulier),
+* le fichier doit impérativement se trouver à la racine du dossier du livre ou du dossier de la collection (les deux seront chargés s'ils existent — attention aux collisions),
+* le titre du module doit être **`PrawnHelpersMethods`** (noter les deux au pluriel et là c'est impératif).
+
+Chaque méthode peut utiliser `pdfbook` et `pdf` qui renvoient respectivement aux instances `Prawn4book::PdfBook` et `Prawn4book::PrawnView`. La première gère le livre en tant que livre (pour obtenir son titre, ses auteurs, etc.) et la seconde est une instance de `Prawn::View` (substitut de `Prawn::Document`) qui génère le document PDF pour l'impression.
+
 <a name="custom-formating"></a>
 
-### Formatage personnalisé des paragraphes (`formater.rb`)
+#### Formatage personnalisé des paragraphes (`formater.rb`)
 
 Le principe est le suivant : 
 
@@ -299,7 +352,7 @@ Ce code doit être placé dans un fichier **`formater.rb`** soit dans le dossier
 
 <a name="text-custom-parser"></a>
 
-### Parsing personnalisé des paragraphes (`parser.rb`)
+#### Parsing personnalisé des paragraphes (`parser.rb`)
 
 De la même manière que les paragraphes sont formatés (cf. ci-dessus), ils peuvent être parsés pour en tirer des informations utiles (pour faire un index, une bibliographie, etc.)
 

@@ -11,8 +11,17 @@ class PrawnView
       else
         lr_sup
       end
+    lr += ecart_line_reference
     puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
     lr
+  end
+
+  def ecart_line_reference
+    @ecart_line_reference ||= begin
+      tp = bounds.top
+      lrabs = (tp.to_i / line_height) * line_height
+      tp - lrabs
+    end
   end
 
   # Avec l'option -g/--grid, on peut afficher une grille de référence
@@ -26,7 +35,6 @@ class PrawnView
     stroke_color 51, 0, 0, 3 # bleu ciel
     line_width(0.1)
     while h > 0
-      puts "Ligne de référence à #{round(h)}".bleu if debug?
       float {
         move_cursor_to(h + 4)
         span(24, position: bounds.left - 24) do

@@ -12,18 +12,19 @@ class Paragraphe
   # contraire, reçoit les données dictionnaire de chaque paragraphe
   # et en fait l'élément qui correspond.
   # 
-  def self.dispatch_by_type(data)
+  def self.dispatch_by_type(pdfbook, data)
     case data[:type]
-    when 'image'  then PdfBook::NImage.new(data)
-    when 'titre'  then PdfBook::NTitre.new(data)
-                  else PdfBook::NTextParagraph.new(data)
+    when 'image'  then PdfBook::NImage.new(pdfbook, data)
+    when 'titre'  then PdfBook::NTitre.new(pdfbook, data)
+                  else PdfBook::NTextParagraph.new(pdfbook, data)
     end
   end
 
-
+  attr_reader :pdfbook
   attr_reader :line
 
-  def initialize(line)
+  def initialize(pdfbook, line)
+    @pdfbook = pdfbook
     @line = line
   end
 
@@ -40,9 +41,9 @@ class Paragraphe
     when /^\#{1,6} /
       parse_as_titre(line) # => PdfBook::NTitre
     when /^<\!(.+)\!>$/
-      PdfBook::P4BCode.new(line)
+      PdfBook::P4BCode.new(pdfbook, line)
     else 
-      PdfBook::NTextParagraph.new({raw_line: line})
+      PdfBook::NTextParagraph.new(pdfbook, {raw_line: line})
     end
   end
 
@@ -70,14 +71,14 @@ class Paragraphe
       dimg      = {}
     end
     dimg.merge!(path: img_path)
-    PdfBook::NImage.new(dimg)
+    PdfBook::NImage.new(pdfbook, dimg)
   end
 
   def parse_as_titre(line)
     prefix, titre = line.match(/^(\#{1,6}) (.+)$/)[1..2]
     level = prefix.length
     text  = titre.strip
-    PdfBook::NTitre.new({level:level, text:text})
+    PdfBook::NTitre.new(pdfbook, {level:level, text:text})
   end
 
 
