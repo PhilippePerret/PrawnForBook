@@ -37,13 +37,14 @@ class PrawnView
   def print_reference_grid
     define_default_leading
     font = font(default_font, size: default_font_size)
-    h = bounds.top.dup
+    h = bounds.top.dup - line_height
     stroke_color 51, 0, 0, 3 # bleu ciel
+    fill_color 51, 0, 0, 3 # bleu ciel
     line_width(0.1)
     while h > 0
       float {
         move_cursor_to(h + 4)
-        span(24, position: bounds.left - 24) do
+        span(20, position: bounds.left - 20) do
           font 'Arial', size:7
           text round(h).to_s
         end
@@ -51,7 +52,8 @@ class PrawnView
       stroke_horizontal_line(0, bounds.width, at: h)
       h -= line_height
     end
-    stroke_color 0,0,0,100
+    stroke_color  0, 0, 0, 100
+    fill_color    0, 0, 0, 100
   end
 
   def print_margins
