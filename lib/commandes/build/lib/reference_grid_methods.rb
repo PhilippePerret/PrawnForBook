@@ -13,9 +13,15 @@ class PrawnView
       end
     lr += ecart_line_reference
     puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
-    lr
+    lr - line_height
   end
 
+  # @prop Différence entre la ligne supérieure et la première
+  # ligne de référence. Cette valeur permet de calculer la position
+  # exacte de la ligne de référence par rapport à la page, entendu 
+  # que cette ligne de référence est un multiple de la hauteur de
+  # ligne (line_height) auquel on ajoute cet écart (cf. la méthode
+  # @line_reference ci-dessus).
   def ecart_line_reference
     @ecart_line_reference ||= begin
       tp = bounds.top

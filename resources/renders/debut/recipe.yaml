@@ -57,14 +57,14 @@
 :dimensions: ['127mm', '203.2mm'] # taille du livre
 :layout: :portrait
 :marges:
-  :top: '10mm'
+  :top: '20mm'
   :ext: '10mm'
   :bot: '10mm'
   :int: '25mm'
 :default_font: Garamond
 :default_font_size: 11
 :default_font_style: :normal
-:line_height:     18
+:line_height:     14
 :interligne:      null
 :leading:         1
 :opt_num_parag:   false # true => numéroter les paragraphes

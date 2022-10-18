@@ -53,7 +53,13 @@ class NTitre < AnyParagraph
       # Application de la fonte
       # 
       ft = font(font_family, style: font_style, size: font_size)
-    
+
+      #
+      # Positionnement sur la ligne de référence
+      # 
+      start_cursor = line_reference.dup
+      move_cursor_to start_cursor
+
       # 
       # Écriture du titre
       # 
@@ -82,7 +88,8 @@ class NTitre < AnyParagraph
       # 
       # On se place exactement où il faut
       # 
-      move_cursor_to(line_reference)
+      # Pour le moment, on le laisse faire au paragraphe suivant
+      # move_cursor_to(line_reference)
       
     end
 

@@ -14,7 +14,6 @@ class NTextParagraph < AnyParagraph
 
     pdf.update do
 
-      # start_cursor = cursor.freeze
       start_cursor = line_reference.dup
       move_cursor_to start_cursor
       puts "Curseur au départ du print paragraphe : #{round(start_cursor)}"
