@@ -28,6 +28,10 @@ class PdfBook
   end
   alias :recipe :recette
 
+  def page_index
+    @page_index ||= PageIndex.new(self)
+  end
+
   # def data
   #   @data ||= YAML.load_file(recipe_path, aliases: true)
   # end
@@ -44,6 +48,10 @@ class PdfBook
   end
 
   # --- Predicate Methods ---
+
+  def numero_are_page?
+    
+  end
 
   # @return true si le document appartient à une collection
   def collection?

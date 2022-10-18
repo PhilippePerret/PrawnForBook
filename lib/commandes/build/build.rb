@@ -142,6 +142,9 @@ class PdfBook
     #
     # - PAGES SUPPLÉMENTAIRES -
     # 
+    # Note : la page d'index s'appelle directement dans le
+    # texte par la marque '(( index ))'
+    # 
     # Écriture des pages supplémentaires obtenues par le 
     # parser, if any
     # 

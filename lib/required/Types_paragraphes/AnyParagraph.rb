@@ -18,7 +18,10 @@ class AnyParagraph
   # d'envoyer un texte déjà travaillé
   def formated_text(pdf, str = nil)
     str ||= text
-    str.gsub(/#\{(.+?)\}/) do
+    # 
+    # Traitement des codes ruby 
+    # 
+    str = str.gsub(/#\{(.+?)\}/) do
       code = $1.freeze
       methode = nil
       if code.match?(REG_HELPER_METHOD)
@@ -37,7 +40,26 @@ class AnyParagraph
         eval(code)
       end
     end
-  end
+
+    # 
+    # Traitement des mots indexé
+    # 
+    if str.match?('index:') || str.match?('index\(')
+      str = str.gsub(/index:(.+?)(\b)/) do
+        dmot = {mot: $1.freeze, page: first_page, paragraph:numero}
+        pdfbook.page_index.add(dmot)
+        dmot[:mot] + $2
+      end
+      str = str.gsub(/index\((.+?)\)/) do
+        mot, canon = $1.freeze.split('|')
+        dmot = {mot: mot, canon: canon, page: first_page, paragraph: numero}
+        pdfbook.page_index.add(dmot)
+        dmot[:mot]
+      end
+    end
+
+    return str
+  end #/formated_text
 
   def titre?; false end
 

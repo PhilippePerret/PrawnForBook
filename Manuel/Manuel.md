@@ -100,52 +100,6 @@ On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 
 ---
 
-<a name="build-index"></a>
-
-### Construction d’un index
-
-cf. [Parsing personnalisé du texte](text-custom-parser) pour savoir comment parser les paragraphes pour en tirer les informations importantes.
-
-Il s’agit donc, ici, de programmer la méthode `__paragraph_parser` pour qu’elle récupère les mots à indexer. Par exemple, si ces mots sont repérés par la balise `index:mot` ou `index:(groupe de mot)`, il suffit de faire :
-
-~~~ruby
-def __paragraph_parser(paragraph)
- 
-  @table_index ||= {}
-  paragraph.text.scan(/index[:\(](.+?)\)?/).each do |idiom|
-    @table_index.key?(idiom[0]) || @table_index.merge!(idiom[0] => [])
-    @table_index[idiom[0]] << {text: idiom, parag: paragraph}
-  end
-end 
-~~~
-
-À l’issue du traitement, la table `@table_index` (de l’instance `PdfBook`) contiendra en clé tous les mots trouvés et en valeur une liste de toutes les itérations.
-
-On peut donc faire ensuite :
-
-~~~ruby
-module Prawn4book
-  class PdfBook
-		attr_reader :table_index
-  end
-end
-
-module ParserParagraphModule
-  def __paragraph_parser(paragraph)
-    #... cf ci-dessus
-  end
-end
-
-module PrawnCustomBuilderModule
-  def __custom_builder(pdfbook, pdf)
-    pdfbook.table_index.each do |idiom, occurrences|
-      pdf.text "Index de '#{idiom}'"
-      pdf.text occurrences.map {|oc| oc[:parag].numero }.uniq.join(', ')
-    end
-  end
-end
-~~~
-
 ---
 
 ## Texte du livre
@@ -198,6 +152,100 @@ Mg Bot  -|
 ~~~
 
 Ce qui signifie que le haut et le bas du texte sont calculés en fonction des marges et des header et footer.
+
+---
+
+<a name="special-pages"></a>
+
+### Pages spéciales
+
+#### Table des matières
+
+La table des matières se construit sur la base des titres.
+
+Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
+
+<a name="page-index"></a>
+
+#### Page d'index
+
+Le plus simple pour construire un index dans un livre est d'utiliser la mise en forme par défaut, autant dans l'identification des mots à indexer que dans l'aspect de l'index final. Si l'on respecte ça, pour ajouter l'index, on a juste à insérer le texte suivant dans le texte du livre :
+
+~~~text
+
+(( index ))
+
+~~~
+
+À l'endroit de cette marque sera inséré un index contenant tous les mots indexés dans le texte.
+
+Par défaut, on repère les mots à indexer dans le texte par :
+
+~~~text
+
+Ceci est un index:mot unique à indexer.
+
+Ceux-là sont dans un index(groupe de mots) qu'il faut entièrement indexer.
+
+Ce index(mot|verbe) doit être indexé avec le mot "verbe" tandis que :
+
+Ces index(mots-là|idiome) doivent être indexé avec le mot "idiome".
+
+# La barre "|" sert souvent pour séparer les données dans P4B.
+
+~~~
+
+Si l'on veut utiliser une autre méthode pour indexer les mots, on peut définir la méthode `__paragraph_parser(paragraph` du [fichier `parser.rb`][] du livre ou de la collection.
+
+cf. [Parsing personnalisé du texte](text-custom-parser) pour savoir comment parser les paragraphes pour en tirer les informations importantes.
+
+Il s’agit donc, ici, de programmer la méthode `__paragraph_parser` pour qu’elle récupère les mots à indexer. Par exemple, si ces mots sont repérés par la balise `index:mot` ou `index:(groupe de mot)`, il suffit de faire :
+
+~~~ruby
+def __paragraph_parser(paragraph)
+ 
+  # Note : @table_index a déjà été initiée avant
+  paragraph.text.scan(/index[:\(](.+?)\)?/).each do |idiom|
+    @table_index.key?(idiom[0]) || @table_index.merge!(idiom[0] => [])
+    @table_index[idiom[0]] << {text: idiom, parag: paragraph}
+  end
+end 
+~~~
+
+À l’issue du traitement, la table `@table_index` (de l’instance `PdfBook`) contiendra en clé tous les mots trouvés et en valeur une liste de toutes les itérations.
+
+On peut donc faire ensuite :
+
+~~~ruby
+module Prawn4book
+  class PdfBook
+		attr_reader :table_index
+  end
+end
+
+module ParserParagraphModule
+  def __paragraph_parser(paragraph)
+    #... cf ci-dessus
+  end
+end
+
+module PrawnCustomBuilderModule
+  def __custom_builder(pdfbook, pdf)
+    pdfbook.table_index.each do |idiom, occurrences|
+      pdf.text "Index de '#{idiom}'"
+      pdf.text occurrences.map {|oc| oc[:parag].numero }.uniq.join(', ')
+    end
+  end
+end
+~~~
+
+
+<a name="bibliographie"></a>
+
+#### Page de bibliographie
+
+Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
+
 
 ---
 
@@ -318,7 +366,7 @@ Les seules conventions a respecter ici sont :
 
 Chaque méthode peut utiliser `pdfbook` et `pdf` qui renvoient respectivement aux instances `Prawn4book::PdfBook` et `Prawn4book::PrawnView`. La première gère le livre en tant que livre (pour obtenir son titre, ses auteurs, etc.) et la seconde est une instance de `Prawn::View` (substitut de `Prawn::Document`) qui génère le document PDF pour l'impression.
 
-<a name="custom-formating"></a>
+<a name="custom-formater"></a>
 
 #### Formatage personnalisé des paragraphes (`formater.rb`)
 
@@ -536,6 +584,8 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 
 <a name="recette-page-info"></a>
 
+<a name="all-types-pages"></a>
+
 #### Tous les types de page
 
 (c’est-à-dire la page à la fin du livre présentant les différentes informations sur ce livre)
@@ -544,7 +594,22 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 :page_de_garde:       true
 :page_de_titre:       true
 :faux_titre:          true
-:table_des_matieres:  true
+# --- Réglage de la table des matières ---
+:table_des_matieres:
+  :display: false # true pour l'afficher
+  :font:    'fontName'  # police à utiliser (elle doit être chargée)
+  :size:    11          # taille de la police
+  :line_height: null    # Hauteur de ligne. Par défaut, c'est 14
+  :from_top:    null    # Hauteur de la première ligne par rapport 
+                        # au bord haut de la page (hors marge)
+  :add_to_numero_with: null # largeur (en unité pdf) à ajouter au
+                            # numéro de page. Correspond à l'arrêt 
+                            # des pointillés reliant les titres aux
+                            # numéros des pages/paragraphes
+  indent_per_offset: null   # ou liste des indentations en fonction
+                            # du niveau de titre. Par défaut :
+                            #   [0, 2, 4, 6, 8]
+# --- Réglage de la page d'infos (fin du livre) ---
 :infos:
   :display:     true 			# pour la produire dans le livre
   :isbn:        null
@@ -558,6 +623,8 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 ~~~
 
 
+
+---
 
 ### Disposition
 
@@ -614,3 +681,9 @@ On peut ouvrir ce package dans Sublime Text à l’aide de `prawn-for-book open 
 <a name="bloc-text-with-prawn"></a>
 
 ### Blocs de texte avec Prawn
+
+
+
+[fichier `parser.rb`]: #text-custom-parser
+[fichier `formater.rb`]: #custom-formater
+[fichier `helpers.rb`]: #custom-helpers
