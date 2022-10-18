@@ -16,7 +16,7 @@ class NTextParagraph < AnyParagraph
 
       start_cursor = line_reference.dup
       move_cursor_to start_cursor
-      puts "Curseur au départ du print paragraphe : #{round(start_cursor)}"
+      # puts "Curseur au départ du print paragraphe : #{round(start_cursor)}"
 
       # 
       # Données textuelles du paragraphe
@@ -67,9 +67,8 @@ class NTextParagraph < AnyParagraph
 
       # puts "cursor avant écriture paragraphe = #{cursor}"
 
-      final_str = "[line reférence: #{round(line_reference)}|line_height:#{line_height}] #{parag.formated_text(self)}"
+      final_str = parag.formated_text(self)
       add_cursor_position? && final_str = add_cursor_position(final_str)
-
 
       ft = font fontFamily, size: fontSize, font_style: fontStyle
       # 
@@ -78,7 +77,6 @@ class NTextParagraph < AnyParagraph
       # 
       final_str_height = height_of(final_str)
       chevauchement = cursor - final_str_height < 0
-
 
       # 
       # Écriture du paragraphe
@@ -92,7 +90,7 @@ class NTextParagraph < AnyParagraph
         text final_str, align: :justify, size: fontSize, 
           font_style: fontStyle, inline_format: true
         move_down(ft.ascender)
-        puts "Cursor fin écriture parag : #{round(cursor)}"
+        # puts "Cursor fin écriture parag : #{round(cursor)}"
       rescue Exception => e
         puts "Problème avec le paragraphe #{final_str.inspect}".rouge
         exit

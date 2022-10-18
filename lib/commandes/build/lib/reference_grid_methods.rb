@@ -12,7 +12,7 @@ class PrawnView
         lr_sup
       end
     lr += ecart_line_reference
-    puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
+    # puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
     lr - line_height
   end
 

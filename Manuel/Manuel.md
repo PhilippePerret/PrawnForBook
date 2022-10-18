@@ -441,6 +441,9 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 :default_font: 			FontName 	# font par défaut
 :default_font_size: 11				# taille de font par défaut
 :line_height:				12.5      # Hauteur de la ligne de référence
+:num_page_style:    num_page	# Type de numérotation (
+															# 'num_page' 	 => par numéro de page
+															# 'num_parags' => par numéro de paragraphes
 ~~~
 
 Cette donnée `:line_height` est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références**.

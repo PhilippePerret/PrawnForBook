@@ -84,19 +84,12 @@ class NTitre < AnyParagraph
       debugit && puts(TB+"Curseur à la fin de l'écriture du titre: #{round(cursor)}")
       debugit && puts("/TITRE (#{titre.text})".jaune)
 
-      # 
-      # 
-      # On se place exactement où il faut
-      # 
-      # Pour le moment, on le laisse faire au paragraphe suivant
-      # move_cursor_to(line_reference)
-      
     end
 
     # 
     # Ajout du titre à la table des matières
     # 
-    pdf.tdm.add_title(self, pdf.page_number)
+    pdf.tdm.add_title(self, pdf.page_number, pdf.previous_text_paragraph.numero + 1)
   end
 
   def formated_text(pdf)

@@ -158,7 +158,7 @@ class PdfBook
     # 
     # - TABLE DES MATIÈRES -
     # 
-    tdm.output(tdm_page) if table_des_matieres?
+    tdm.output(pdf.tdm_page) if table_des_matieres?
 
     #
     # - PAGINATION -

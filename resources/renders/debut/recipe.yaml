@@ -67,8 +67,8 @@
 :line_height:     14
 :interligne:      null
 :leading:         1
-:opt_num_parag:   false # true => numéroter les paragraphes
-:num_page_style:  num_page # style de numérotation des pages
+:opt_num_parag:   true # true => numéroter les paragraphes
+:num_page_style:  num_parags # style de numérotation des pages
 
 # --- Pages à insérer ou à sauter ---
 # Table des matières : cf. plus bas
@@ -79,12 +79,10 @@
 
 # --- Table Des Matières ---
 :table_of_content:
-  :display: false # true => afficher la table des matières
+  :display: true # true => afficher la table des matières
   # Page où insérer la table des matières. Si sa valeur est :flux 
   # elle sera placée en fonction des autres pages présentes
-  :page_number: :flux 
-  # Distance du numéro de page avec la marge droite
-  :dist_num_from_rmargin: 0
+  :page_number: 4
 
 # --- Entêtes du livre ---
 :headers: # tous les rangs

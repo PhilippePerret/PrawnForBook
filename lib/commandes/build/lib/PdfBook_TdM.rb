@@ -5,20 +5,8 @@ module Prawn4book
 class PdfBook
 class Tdm
 
-  LINE_HEIGHT = 20
-
-  NUMERO_WIDTH = 50
-
-  #
-  # Distance du numéro de page/paragraphes avec la marge droite
-  # Peut-être redéfinie dans les recettes par 
-  # :tdm{:dist_num_from_rmargin}
-  NUMERO_FROM_RIGHT_MARGIN = 0
-
-
   # Instance Prawn4book::PdfBook
   attr_reader :pdfbook
-
   # Instance Praw4book::PrawnDoc < Prawn::Document
   attr_reader :pdf
 
@@ -33,83 +21,64 @@ class Tdm
     @content  = []
   end
 
+  # @const Valeurs par défaut pour les données absolues de la table
+  # des matières qui définissent les indentations suivant le niveau
+  # de titre, les polices, les tailles, etc. Tout ce qui va permettre
+  # de définir @data
+  # 
+  DEFAULT_VALUES = {
+    font:         'Garamond',
+    size:         10,
+    line_height:  14,
+    from_top:     50, # première ligne depuis le haut
+    add_to_numero_width: 20,
+    indent_per_offset: [0, 2, 4, 6, 8]
+  }
   #
   # Pour construire la table des matières sur la page
   # +on_page+
   # 
   def output(on_page)
-    pdf.go_to_page(on_page)
-    # pdf.stroke_axis # pour voir les axes
-    pdf.move_cursor_to(pdf.bounds.height - 50)
-    suivi = ('Écriture du titre #%{num}/' + content.count.to_s).vert
-    content.each_with_index do |data_titre, idx|
-      begin
-        write_at(suivi % {num: idx+1}, 2, 0) if debug?
-        write_title(data_titre)
-      rescue Exception => e
-        puts "\nProblème avec le titre : #{data_titre.inspect}".rouge
-        puts "-> #{e.message}".rouge
-        puts e.backtrace[-3..-1].join("\n").rouge
+    tdm = self
+    with_num_page = pdfbook.recipe[:num_page_style] == 'num_page'
+
+    pdf.update do 
+      
+      # - Positionnement -
+      go_to_page(on_page)
+      move_cursor_to(bounds.height - tdm.data[:from_top])
+      
+      # - Réglages -
+      tdm_line_height = tdm.data[:line_height]
+      font tdm.data[:font], size: tdm.data[:size]
+
+      # - Largeur pour le numéro -
+      largeur_numero = 0
+      tdm.content.each do |dtitre|
+        # dtitre.delete(:titre)
+        # puts "dtitre: #{dtitre.inspect}"
+        len = width_of((with_num_page ? dtitre[:page] : dtitre[:paragraph]).to_s)
+        largeur_numero = len if len > largeur_numero
+      end
+      largeur_numero += tdm.data[:add_to_numero_width]
+
+      tdm.content.each_with_index do |data_titre, idx|
+        numero_destination = (with_num_page ? data_titre[:page] : data_titre[:paragraph]).to_s
+        float {
+          span largeur_numero, position: :right do
+            text numero_destination.to_s
+          end
+        }
+        ititre  = data_titre[:titre]
+        indent  = 10 * tdm.data[:indent_per_offset][ititre.level - 1]
+        titre   = ititre.text
+        largeur_titre = bounds.width - largeur_numero
+        text_box "#{titre} #{' .' * 100}", at:[indent, cursor], width: largeur_titre - indent, height: 14, overflow: :truncate
+        move_down(tdm_line_height)
       end
     end
-    puts "\n\n"
   end
 
-  ##
-  # Écrit le titre défini par les +data+
-  # @param {Hash} data
-  #   :titre  Instance PdfBook::NTitre du titre
-  #           Définit notamment :text et :level
-  #   :page   Numéro de page où se trouve le titre
-  def write_title(data)
-    titre     = data[:titre]
-    return if titre.level > 4 # TODO pouvoir le définir
-    idxtitre  = titre.level - 1
-    indent    = [0, 15, 30, 45][idxtitre]  # TODO Pouvoir le régler
-    fsize     = [14, 12, 10, 10][idxtitre] # TODO Pouvoir le régler
-
-    # 
-    # Font pour ce niveau de titre
-    # 
-    # 
-    # Numéro pour la pagination
-    # 
-    numero = destination(data[:page])
-    numero = numero.to_s
-    # 
-    # Largeur de la pagination
-    # 
-    pdf.font 'Garamond', size: 11
-    wnum = pdf.width_of(numero)
-
-    hauteur_cursor = pdf.cursor.freeze
-
-    # 
-    # Écriture du texte
-    # 
-    pdf.font( 'Garamond', size: fsize)
-    # puts "Titre «#{titre.text.inspect}» (level: #{titre.level.inspect}) - indent:#{indent.inspect} — width num: #{wnum.inspect} - page_width: #{page_width.inspect}"
-    titre_width = page_width - (indent + wnum)
-    # puts "=> titre_width = #{titre_width.inspect}"
-    # pdf.text_box "#{titre.text}#{' .' * 50}", at: [indent, pdf.cursor], width:titre_width, overflow: :truncate #, height:LINE_HEIGHT
-    
-    # pdf.span pdf.bounds.width, position: indent, overflow: :truncate, inline_format: true do
-    #   pdf.text "#{titre.text}#{' .' * 30}", overflow: :truncate
-    # end
-
-    # 
-    # Écriture de la pagination
-    # 
-    pdf.move_cursor_to(hauteur_cursor)
-    pdf.font 'Garamond', size: 11
-    pdf.text_box "#{'. ' * 50} #{numero.strip}", width: page_width - wnum, align: :right, overflow: :truncate
-    # pdf.span page_width - wnum, position: 0 do
-    #   pdf.text "#{' .' * 50} #{numero}", align: :right
-    # end
-
-    pdf.move_down(LINE_HEIGHT)
-
-  end
 
   def page_width
     @page_width ||= pdf.bounds.width
@@ -126,7 +95,7 @@ class Tdm
       data_page = pdfbook.pages[num_page]
       "#{data_page[:first_par]}-#{data_page[:last_par]}"
     else
-      num_page
+      num_page.to_s
     end
   end
   alias dest destination
@@ -139,10 +108,16 @@ class Tdm
   # Pour ajouter le titre +titre+ {PdfBook::NTitre} à la
   # table des matières
   # 
-  def add_title(titre, num_page)
-    @content << {titre:titre, page: num_page}
+  def add_title(titre, num_page, num_parag)
+    @content << {titre:titre, page: num_page, paragraph: num_parag}
   end
 
+
+  # @prop Données absolues pour la table des matières
+  # (police, taille, etc.)
+  def data
+    @data ||= DEFAULT_VALUES.merge(pdfbook.recipe[:table_of_content]||{})
+  end
 
 end #/Tdm
 end #/class PdfBook

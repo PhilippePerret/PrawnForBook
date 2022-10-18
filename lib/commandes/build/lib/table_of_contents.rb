@@ -10,13 +10,16 @@ class PrawnView
 
   # --- CONSTRUCTION DE LA TABLE DES MATIÈRES ---
 
+  # Cette méthode ne sert qu'à construire les pages qui doivent
+  # servir pour la table des matières. La table des matières vérita-
+  # ble sera construite dans la méthode  :
+  #   Praw4book::PdfBook::Tdm#output
+  #   cf. le fichier PdfBook_TdM.rb
+  # 
   def build_table_des_matieres
-    # Pour savoir sur quelle page construire la table des
-    # matière
     self.tdm_page = page_number
     font "Nunito", size: 20 # TODO À régler
     text "Table des matières"
-    # TODO Développer la TOC ici
     start_new_page
     start_new_page
   end

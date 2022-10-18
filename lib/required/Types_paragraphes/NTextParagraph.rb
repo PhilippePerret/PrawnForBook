@@ -3,11 +3,6 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
-  # # @prop Première et dernière page du paragraphe
-  # attr_accessor :first_page
-  # attr_accessor :last_page
-  # attr_accessor :page_numero
-
   def self.get_next_numero
     @@last_numero ||= 0
     @@last_numero += 1
