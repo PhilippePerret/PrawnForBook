@@ -18,6 +18,11 @@
       "name": "Tags connues",
       "scope": "meta.tag.known",
       "foreground": "#77DD77"
+    },
+    {
+      "name": "Code à évaluer par Prawn",
+      "scope": "meta.code",
+      "foreground": "#2288AA"
     }
   ]
 }

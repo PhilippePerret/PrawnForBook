@@ -19,3 +19,5 @@ contexts:
       scope: source.p4b.conj
     - match: \b(une|un|les|le|la|des)\b
       scope: source.p4b.art
+    - match: \(\( .+? \)\)
+      scope: meta.code

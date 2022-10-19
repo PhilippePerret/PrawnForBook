@@ -874,7 +874,9 @@ L’application reconnaitra alors automatiquement les fichiers `.p4b.txt` et uti
 
 Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.p4b.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
 
-On peut ouvrir ce package dans Sublime Text à l’aide de `prawn-for-book open package-st`.
+On peut ouvrir ce package dans Sublime Text à l’aide de :
+
+<console>pfb open package-st</console>.
 
 
 

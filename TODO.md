@@ -1,7 +1,7 @@
 # Todo courant
 
-* Implémenter la bibligraphie (qui sera ici une filmographie)
 * Mettre en place le système des références
+  - utiliser une color syntaxic pour les ((...))
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo

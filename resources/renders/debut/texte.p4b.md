@@ -1,6 +1,6 @@
 Paragraphe. cursor = #{round(pdf.cursor)}. line_ref = #{pdf.line_reference}. line height = #{pdf.line_height}.
 Autre paragraphe. Le premier livre cité sera le livre(srps).
-#{display_lines_references}. Mais c'est aussi un paragraphe qui parle du livre livre(gat) et du livre livre(bee_cdl).
+#{display_lines_references}. Mais c'est aussi un paragraphe qui parle du livre livre(gat) et du livre livre(bee_cdl). Ce paragraphe contient une référence à reference(( ->reference) )).
 Un troisième paragraphe. Le mot indexé qu'il contient est index(ça roule|ça) et un film, le fameux film(titanic) qui va sombrer.
 Un quatrième paragraphe assez long pour qu'il puisse passer à la ligne suivante et faire le tour du quartier.
 Un cinquième paragraphe court. À nouveau une citation du livre(srps). Et une autre du livre(gat).
