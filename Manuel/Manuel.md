@@ -244,7 +244,158 @@ end
 
 #### Page de bibliographie
 
-Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
+Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre pour avoir un aperçu rapide des la définition d’une bibliographie.
+
+Une bibliographie nécessite :
+
+* de [définir **la balise**](#biblio-tag) qui va repérer les éléments dans le texte (par exemple `film` ou `livre`)
+* de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre,
+* de [définir **la page**](#page-biblio) sur laquelle sera écrite la bibliographie,
+* de [définir **les données**](#biblio-data) utilisées par la bibliographie,
+* de [définir **la mise en forme**](#mise-en-forme-biblio) utilisée pour le livre pour présenter les informations sur les éléments.
+
+<a name="biblio-tag"></a>
+
+##### La balise de la bibliographie
+
+La *balise* est le mot qui sera utilisé pour repérer dans le texte les éléments à ajouter à la bibliographie. Par exemple, pour une liste de films, on pourra utiliser `film` :
+
+~~~text
+Je vous parle d'un film qui s'appelle film(idFilmTitatic|Le Titanic) et se déroule dans un bateau.
+~~~
+
+Elle est définit dans la propriété `:tag` dans le livre de recette du livre ou de la collection :
+
+~~~yaml
+# in recipe.yaml
+# ...
+:biblio:
+	- :tag: film
+		# ...
+~~~
+
+Dans le texte, elle doit définir en premier argument l’identifiant de l’élément concerné dans [les données](#biblio-data).
+
+Cette balise permettra aussi de définir la bibliographie à inscrire dans le livre, sur la page voulue, avec la marque :
+
+~~~text
+(( biblio(film) ))
+~~~
+
+Pour plus de détail, cf. [la page de la bibliographie](#page-biblio)
+
+<a name="titre-biblio"></a>
+
+##### Le titre de la bibliographie
+
+Ce titre est celui qui apparaitra sur la page de bibliographie du livre. Il doit être défini entièrement, par exemple “Liste des films cités” ou “Liste des livres utiles”.
+
+Il est défini par la propriété `:title` dans la recette du livre ou de la collection.
+
+~~~yaml
+# in recipe.yaml
+# ...
+:biblio:
+	- :tag: film
+		:title: Liste des films cités
+~~~
+
+
+
+<a name="page-biblio"></a>
+
+##### La page de la bibliographie
+
+On utilisera simplement la marque suivante pour inscrire une bibliographie sur la page :
+
+~~~text
+(( biblio(<tag>) ))
+~~~
+
+… où `<tag>` est la balise définie dans la recette du livre (propriété `:tag`. 
+
+Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si ça doit être le cas, il faut l’indiquer explicitement avec le réglage `new_page: true` dans la recette.
+
+~~~yaml
+# in recipe.yaml
+# ...
+:biblio:
+	- :tag: film
+		:title: Liste des films
+		:new_page: true # => sur une nouvelle page
+~~~
+
+
+
+<a name="biblio-data"></a>
+
+##### Les données de la bibliographie
+
+Il y existe deux moyens de définir les données d’une bibliographie :
+
+* par fichier unique (l’extension indique comme les lire)
+* par fiches séparées (dans un dossier)
+
+La source des données est indiquée dans le fichier recette du livre ou de la collection par la propriété `:data` :
+
+~~~yaml
+# in recipe.yaml
+# ...
+:biblio:
+	- :tag: film
+		:title: Liste des films
+		:data:  data/films.yaml
+~~~
+
+Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
+
+Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML`.  Ces données doivent produire une table où l’on trouvera en clé l’identifiant de l’élément et en valeur ses propriétés, qui seront utilisées pour la bibliographie. Par exemple, pour un fichier `films.yaml` qui contiendrait les données des films :
+
+~~~yaml
+# in data/films.yaml
+---
+titanic:
+	title: The Titanic
+	title_fr: Le Titanic
+	annee: 1999
+	realisateur: James Cameron
+ditd:
+	title: Dancer in The Dark
+	annee: 2000
+	realisateur: Lars Von Trier
+# etc.
+~~~
+
+Voir ensuite dans [la partie mise en forme](#mise-en-forme-biblio) la façon d’utiliser ces données.
+
+<a name="mise-en-forme-biblio"></a>
+
+##### Mise en forme des données bibliographiques
+
+La mise en forme des bibliographies (ou de *la* bibliographie) doit être définie dans le [fichier `formater.rb`][].
+
+Il faut y définir une méthode préfixée `biblio_` suivi par la balise (`:tag`) de la bibliographie concernée. Ce sera par exemple la méthode `biblio_film` pour la liste des films.
+
+~~~ruby
+# in formater.rb
+module FormaterBibliographiesModule # attention au pluriel
+  
+  # Méthode mettant en forme les données à faire apparaitre et renvoyant
+  # le string correspondant.
+  def biblio_film(element) # l'element, ici, est un film, son instance
+    c = []
+    element.instance_eval do 
+      c << title
+      c << " (#{title_fr})" if title_fr
+      c << annee
+    end
+    return c.join(', ')
+  end
+  
+end #/module FormaterBibliographiesModule
+~~~
+
+Noter qu’avec cette formule, les données sont toujours présentées sur une ligne. À l’avenir, on pourra imaginer une méthode qui reçoit `pdf` (l’instance `{Prawn::View}`) et permette d’imprimer les données exactement comme on veut, même dans un affichage complexe.
 
 
 ---
@@ -368,7 +519,9 @@ Chaque méthode peut utiliser `pdfbook` et `pdf` qui renvoient respectivement au
 
 <a name="custom-formater"></a>
 
-#### Formatage personnalisé des paragraphes (`formater.rb`)
+#### Formatage personnalisé (`formater.rb`)
+
+##### Formatage des paragraphes
 
 Le principe est le suivant : 
 
@@ -392,11 +545,32 @@ module FormaterParagraphModule # Ce nom est absolument à respecter
 		return string_formated
 	end
 end
+
+module FormaterBibliographiesModule # ce nom est absolument à respect
+end #/module
 ~~~
 
 Ce code doit être placé dans un fichier **`formater.rb`** soit dans le dossier du livre soit dans le dossier de la collection si le livre appartient à une collection.
 
 > Noter que si collection et livre contient ce fichier, seul celui de la collection sera chargé.
+
+##### Formatage des éléments de bibliographie
+
+Le formatage est défini dans des méthodes `biblio_<tag>` dans un module **`FormaterBibliographiesModule`** du fichier `formater.rb`:
+
+~~~ruby
+# in formater.rb
+
+module FormaterBibliographiesModule
+  def biblio_film(film)
+    # ...
+  end
+end
+~~~
+
+Cf. la [section “mise en forme de la bibliographie”](#mise-en-forme-biblio) pour le détail.
+
+---
 
 <a name="text-custom-parser"></a>
 
@@ -619,7 +793,15 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
   :conception:  ['Prénom NOM']	# conception du livre
   :corrections: ['Prénom NOM']
   :print:       'Imprimé à la demande'
-
+  
+# --- Réglage des pages de bibliographie ---
+:biblio:
+	- :tag: livre 		  # tag utilisée dans le texte pour identifier les
+										  # éléments à bibliographier
+    :new_page: true   # true => mettre cette bibliographie sur une 
+                      # nouvelle page
+    :title: "Liste des ?"  # titre utilisé sur la page
+    :data:  "biblio/livres.yaml" # source des données
 ~~~
 
 

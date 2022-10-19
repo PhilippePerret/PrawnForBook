@@ -32,26 +32,16 @@ class PdfBook
     # 
     File.delete(pdf_path) if File.exist?(pdf_path)
 
+    #
+    # Le livre doit être conforme, c'est-à-dire posséder les 
+    # éléments requis
     # 
-    # Si l'option '--force' a été ajoutée et que le fichier
-    # texte.yaml existe, on le détruit après confirmation
-    # @DEPRECATED Maintenant, on ne compte plus faire un fichier
-    # texte.yaml, on compte ajouter des marques au fichier texte
-    # du livre (texte.p4b.md/txt)
-    # L'option '--force' (si on ne change pas son nom) permettra
-    # donc d'ignorer ces précisions dans les paragraphes.
-    # 
-    if CLI.option(:force) && File.exist?(inputfile.data_paragraphes_path)
-      unless Q.no?("Es-tu certain de vouloir détruire le fichier 'texte.yaml' ?\nIl contient peut-être des informations précieuses sur le\ntraitement du texte…)".jaune)
-        File.delete(inputfile.data_paragraphes_path)
-      end
-    end
+    check_if_conforme || return
 
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     # 
     pdf = PrawnView.new(self, pdf_config)
-
     
     #
     # S'il existe un module de formatage propre au livre (ou à la
@@ -59,7 +49,9 @@ class PdfBook
     #
     if module_formatage?
       require_module_formatage
-      PrawnDoc.extensions << PdfBookFormatageModule
+      if defined?(PdfBookFormatageModule)
+        PrawnView.extend PdfBookFormatageModule
+      end
     end
 
     # 
@@ -330,6 +322,41 @@ class PdfBook
     else
       foo
     end
+  end
+
+  # @return true si les données sont conformes, false dans le
+  # cas contraire.
+  # 
+  # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
+  # instancier les bibliographies qui sont définies.
+  def check_if_conforme
+    if recipe[:biblio]
+      dbibs = recipe[:biblio]
+      dbibs.is_a?(Array) || raise("La recette bibliographie (:biblio:) devrait être une liste (un item par type d'élément).")
+      unless dbibs.empty?
+        # 
+        # On doit charger les modules utiles aux bibliographies
+        # 
+        Bibliography.require_formaters(self)
+        module_formatage? || raise("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie.")
+        require_module_formatage
+        defined?(FormaterBibliographiesModule) || raise("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…")
+        dbibs.each do |dbib|
+          bib = Bibliography.instanciate(self, dbib)
+          bib.tag   || raise("Il faut définir dans la recette le :tag des bibliographies")
+          bib.title || raise("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'.")
+          bib.data[:data] || raise("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…")
+          File.exist?(bib.data_path.to_s) || raise("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…")
+          Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…")
+        end
+      end
+    end
+
+  rescue Exception => e
+    puts "#{e.message.rouge}\n\n"
+    return false
+  else
+    return true
   end
 
 end #/class PdfBook

@@ -108,3 +108,7 @@
     :margin_top:    1
     :margin_bottom: 0
     :leading: -2
+
+# Voir le manuel (p4b manuel) ou demander l'assistant
+# pour bibliographie : 'pfb aide biblio'
+:biblio: null

@@ -17,10 +17,30 @@ class P4BCode < AnyParagraph
       pdf.start_new_page
     when 'index'
       pdfbook.page_index.build(pdf)
+    when /^biblio/
+      treate_as_biblio(pdf)
     else
       puts "Je ne sais pas traiter #{raw_code.inspect}"
     end
 
+  end
+
+  # --- Formatage Methods ---
+
+  ##
+  # Traitement spécial quand le code est une marque de bibliographie,
+  # comme par exemple '(( biblio(livre) ))'
+  # Il faut :
+  #   - extraire le tag de la bibliographie
+  #   - prendre la bibliographie instanciée
+  #   - l'imprimer dans le livre
+  def treate_as_biblio(pdf)
+    bib_tag = raw_code.match(/^biblio\((.+)\)$/)[1]
+    bib = Bibliography.get(bib_tag) || begin
+      puts "Impossible de trouver la bibliographie '#{bib_tag}'…".rouge
+      return
+    end
+    bib.print(pdf)
   end
 
   # --- Predicate Methods ---

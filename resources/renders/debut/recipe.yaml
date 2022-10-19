@@ -131,3 +131,15 @@
     :margin_top:    1
     :margin_bottom: 0
     :leading: -2
+
+
+# --- Bibliographies ---
+:biblio:
+  - :tag: livre
+    :title: Liste des ouvrages cités
+    :data:  biblio/livres.yaml
+    :new_page: false
+  - :tag: film
+    :title: Films cités
+    :data: biblio/films
+    :new_page: false

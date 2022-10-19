@@ -1,9 +1,8 @@
 # Todo courant
 
-* Implémenter la table des matières
-* Implémenter l'index
 * Implémenter la bibligraphie (qui sera ici une filmographie)
 * Mettre en place le système des références
+* Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo
 
