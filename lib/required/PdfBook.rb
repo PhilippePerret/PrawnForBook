@@ -49,8 +49,9 @@ class PdfBook
 
   # --- Predicate Methods ---
 
-  def numero_are_page?
-    
+
+  def pagination_page?
+    :TRUE == @haspagenum ||= true_or_false(recette[:num_page_style] == 'num_page')  
   end
 
   # @return true si le document appartient à une collection

@@ -9,10 +9,17 @@
 
 **Prawn4book** est une application en ligne de commande permettant de transformer un texte en PDF prêt pour l’impression, grâce au (lovely) gem `Prawn`.
 
+<console>prawn-for-book</console>
+
+Ou son raccourci :
+
+<console>pfb</console>
+
 Tous les exemples de ce manuel présupposent qu’un alias de la commande a été créé, grâce à :
 
 ~~~bash
 > ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/prawn-for-book
+> ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/pfb
 ~~~
 
 > Noter ci-dessus que la commande sera `prawn-for-book` (qui est plus simple à taper)
@@ -251,7 +258,7 @@ Une bibliographie nécessite :
 * de [définir **la balise**](#biblio-tag) qui va repérer les éléments dans le texte (par exemple `film` ou `livre`)
 * de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre,
 * de [définir **la page**](#page-biblio) sur laquelle sera écrite la bibliographie,
-* de [définir **les données**](#biblio-data) utilisées par la bibliographie,
+* de [définir **les données**](#biblio-data) utilisées par la bibliographie et qu’elles soient valides,
 * de [définir **la mise en forme**](#mise-en-forme-biblio) utilisée pour le livre pour présenter les informations sur les éléments.
 
 <a name="biblio-tag"></a>
@@ -300,7 +307,16 @@ Il est défini par la propriété `:title` dans la recette du livre ou de la col
 		:title: Liste des films cités
 ~~~
 
+Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand titre. Mais on peut définir son niveau propre à l’aide de `:title_level: `:
 
+~~~yaml
+# in recipe.yaml
+# ...
+:biblio:
+	- :tag: film
+		:title: Liste des films cités
+		:title_level: 3
+~~~
 
 <a name="page-biblio"></a>
 
@@ -322,10 +338,11 @@ Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si �
 :biblio:
 	- :tag: film
 		:title: Liste des films
+		:title_level: 2
 		:new_page: true # => sur une nouvelle page
 ~~~
 
-
+> Noter que si le niveau de titre est 1 (ou non défini), et que les propriétés des titres de la recette définissent qu’il faut passer à une nouvelle page pour un grand titre, la bibliographie commencera alors automatiquement sur une nouvelle page.
 
 <a name="biblio-data"></a>
 
@@ -344,7 +361,8 @@ La source des données est indiquée dans le fichier recette du livre ou de la c
 :biblio:
 	- :tag: film
 		:title: Liste des films
-		:data:  data/films.yaml
+		:title_level: 2
+    :data:  data/films.yaml
 ~~~
 
 Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
@@ -365,6 +383,8 @@ ditd:
 	realisateur: Lars Von Trier
 # etc.
 ~~~
+
+**NOTE IMPORTANTE** : toute donnée bibliographique doit avoir une propriété `:title` qui sera écrite dans le texte à la place de la balise.
 
 Voir ensuite dans [la partie mise en forme](#mise-en-forme-biblio) la façon d’utiliser ces données.
 
@@ -664,8 +684,8 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 :default_font_size: 11				# taille de font par défaut
 :line_height:				12.5      # Hauteur de la ligne de référence
 :num_page_style:    num_page	# Type de numérotation (
-															# 'num_page' 	 => par numéro de page
-															# 'num_parags' => par numéro de paragraphes
+															# 'num_page' 	=> par numéro de page
+															# 'num_parag' => par numéro de paragraphes
 ~~~
 
 Cette donnée `:line_height` est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références**.

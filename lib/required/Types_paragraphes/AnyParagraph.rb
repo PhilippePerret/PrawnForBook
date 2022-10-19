@@ -61,12 +61,13 @@ class AnyParagraph
     #
     # Traitement des marques bibliograghiques (if any)
     # 
-    if BibliBibliographygraphy.any?
+    if Bibliography.any?
       str = str.gsub(Bibliography.reg_occurrences) do
         bib_tag = $1.freeze
-        bib_id, bib_titre = $2.freeze.split('|')
-        ibib = Bibliography.add_occurrence_to(bib_id, {page: first_page, paragraph: numero})
-        bib_titre || ibib.formated_title
+        item_id, item_titre = $2.freeze.split('|')
+        item_id = item_id.to_sym
+        ibib = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
+        item_titre || ibib.items[item_id].title
       end
     end
 

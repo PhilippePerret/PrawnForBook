@@ -8,6 +8,8 @@ class Bibliography
     # @prop Table des bibliographies
     attr_reader :items
 
+    attr_accessor :page_or_paragraph_key
+
     def require_formaters(pdfbook)
       require pdfbook.module_formatage_path
       Bibliography.extend FormaterBibliographiesModule
@@ -25,8 +27,12 @@ class Bibliography
     # @param bib_tag {String} Tag de la bibliographie
     # @param doccurrence {Hash} Données de l'occurrence
     # 
-    def add_occurrence_to(bib_tag, doccurrence)
-      raise "Je dois apprendre à ajouter l'occurrence"
+    # @return L'instance Bibliography concernée
+    # 
+    def add_occurrence_to(bib_tag, bib_id, doccurrence)
+      i = get(bib_tag)
+      i.add(bib_id, doccurrence)
+      return i
     end
 
     ##
@@ -70,24 +76,39 @@ class Bibliography
   def initialize(pdfbook, data)
     @pdfbook  = pdfbook
     @data     = data
-    @items    = []
+    @items    = {}
   end
 
   # --- Printing Methods ---
 
   ##
-  # Méthode principale appelée quand on doit écrire une table
-  # des matières
+  # Méthode principale appelée quand on doit écrire une bibliographie
   # 
   def print(pdf)
     if items.empty? 
       puts "Pas d'occurrence pour la bibliographie « #{title} ».".orange
       return
     end
-    ititre = PdfBook::NTitre.new(pdfbook, text: title, level:1)
+    # 
+    # Titre de la bibliographie
+    # 
+    ititre = PdfBook::NTitre.new(pdfbook, text:title, level:title_level)
     ititre.print(pdf)
-
-    puts "Je dois apprendre à imprimer une bibliographie".jaune
+    # 
+    # Méthode de classe propre à la bibliographie
+    # (définie dans le formater.rb)
+    # 
+    methode = "biblio_#{tag}".to_sym
+    # 
+    # Application de la fonte
+    # 
+    ft = pdf.font('Garamond', size: 10)
+    items.values.sort_by do |bibitem|
+      bibitem.keysort
+    end.each do |bibitem|
+      str = Bibliography.send(methode, bibitem)
+      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", inline_format: true
+    end
   end
 
   ##
@@ -100,17 +121,15 @@ class Bibliography
   #                     paragraphe (:paragraph)
   # 
   def add(item_id, doccurrence)
+    item_id = item_id.to_sym
     @items.key?(item_id) || begin
-      @items.merge!(item_id => BiblioItem.new(self, bibdata[item_id]))
+      ditem = bibdata[item_id] || raise("Impossible de trouver l'item de bibliographie ('#{tag}') #{item_id.inspect}")
+      @items.merge!(item_id => BibItem.new(self, ditem))
     end
     @items[item_id].add(doccurrence)
   end
 
   # --- Helpers Methods ---
-
-  def formated_title
-    raise "Je dois apprendre à formater le titre (en fonction de son dernier placement)"
-  end
 
   # --- Volatile Data ---
 
@@ -123,14 +142,16 @@ class Bibliography
         #
         tbl = {}
         Dir["#{data_path}/*.yaml"].each do |pth|
-          tbl.merge!(YAML.load_file(pth, aliases: true))
+          ditem = YAML.load_file(pth, aliases: true)
+          item_id = ditem[:id]||ditem['id']
+          tbl.merge!(item_id.to_sym => ditem)
         end
         tbl 
       else
         #
-        # Quand c'est un fichier 
+        # Quand c'est un fichier (donc déjà une table)
         # 
-        YAML.load_file(data_path, aliases: true)
+        YAML.load_file(data_path, aliases: true, symbolize_names: true)
       end
     end
   end
@@ -154,6 +175,8 @@ class Bibliography
 
   def tag; @tag ||= data[:tag]||data['tag'] end
   def title; @title ||= data[:title]||data[:titre]||data['title']||data['titre'] end
+  def title_level; @title_level ||= data[:title_level]||data['title_level']||1 end
+
 
 
   ###############################################################
@@ -177,10 +200,16 @@ class Bibliography
     # Noter que chacune d'entre elle pourra être atteinte sans la
     # connaitre grâce au missing_method
     attr_reader :data
+    # @prop Occurences de l'élément bibliographique.
+    attr_reader :items
 
     def initialize(biblio, data)
       @biblio = biblio
-      @data   = data
+      data || raise("@data est nul pour le bibitem")
+      # On symbolize les clés
+      tbl = {}
+      data.each {|k,v| tbl.merge!(k.to_sym => v)}
+      @data   = tbl
       @items  = []
     end
 
@@ -196,6 +225,18 @@ class Bibliography
       @items << doccur
     end
 
+    def occurrences_as_displayed_list
+      @occurrences_as_displayed_list ||= begin
+        items.map {|ditem| ditem[Bibliography.page_or_paragraph_key] }.join(', ')
+      end
+    end
+
+    def keysort
+      @keysort ||= title.normalized
+    end
+
   end #/class BibItem
+
+
 end #/class Bibliography
 end #/module Prawn4book

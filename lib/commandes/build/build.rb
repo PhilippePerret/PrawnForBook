@@ -55,6 +55,13 @@ class PdfBook
     end
 
     # 
+    # On définit la clé à utiliser (numéro de page ou numéro de
+    # paragraphe) pour les éléments de bibliographie (plus exacte- 
+    # ment : leurs occurrences)
+    # 
+    Bibliography.page_or_paragraph_key = pagination_page? ? :page : :paragraph
+
+    # 
     # Parser personnalisé (if any)
     # 
     require_module_parser if module_parser?
