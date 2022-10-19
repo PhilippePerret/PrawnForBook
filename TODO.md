@@ -1,33 +1,9 @@
 # Todo courant
 
-* Mettre en place le système des références
-  - utiliser une color syntaxic pour les ((...))
+* Mettre en place la gestion des footers/headers
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo
-
-* Mettre en place le système de référence
-  Le système est simple :
-    - on met une balise dans le texte (un drapeau)
-    - à un autre endroit, on dit "cf. <balise>"
-    - au moment du parsing, on remplace <balise> par le paragraphe (ou la page suivant les options) où se trouve la balise.
-  Donc :
-    - il faut déjà distinguer une balise de départ d'une balise d'arriver, par exemple '->balise' pour dire "aller à la balise 'balise'" et <balise> pour dire où est la balise
-    - on doit pouvoir définir la forme 
-  Quel caractère pourrait être le caractère Prawn ? 
-    - $balise et ->$balise
-    - #balise et ->#balise
-    - €(balise) et ->€balise      €(toc) pour la table des matières
-    - (( (balise) )) et (( ->(balise) )) (j'aime bien les doubles parenthèses comme signe général pour Prawn4Book). Ça sera toujours des codes à interpréter et à la fin de la fabrication du livre on pourra signaler les codes qui n'auraient pas été pris en compte.
-    Attention à bien toujours mettre une espace de chaque côté des doubles — petite vérification au parsing de tout le code. Si on trouve ')))' on signale une erreur
-  Comment identifier la balise ?
-    - un ID textuel, avec la possibilité de vérifier s'il est unique (`p4b check-id <id>`) (((toc))) pour la table des matières
-    - un ID unique et progressif ? (avec un outil qui permettre d'obtenir le dernier identifiant)
-    - un ID unique au hasard, produit par l'application (`p4b new-id`) — ça pourrait être le timestamp, mais c'est peut-être un peu long
-  Au moment, du parsing, on rassemble toutes les balises dans une table, en mémoriser leur page et leur paragraphe.
-  - Pour la table des matières, c'est peut-être une balise réservée, comme pour la page info, qui se mettent automatiquement :
-  - balise 'toc' => (( ->(toc) )) pour y faire référence
-  - balise 'page_infos' => (( ->(page_infos) )) pour y faire référence
 
 * Mettre en place la gestion de 'helpers.rb' ou 'helper.rb'
   Ça doit être "isolé" dans une classe particulière (PdfHelper)

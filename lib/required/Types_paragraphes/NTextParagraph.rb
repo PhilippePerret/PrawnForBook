@@ -3,8 +3,14 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
+  def self.init_first_turn
+    @@last_numero = 0
+  end
+  def self.init_second_turn
+    @@last_numero = 0
+  end
+
   def self.get_next_numero
-    @@last_numero ||= 0
     @@last_numero += 1
   end
 

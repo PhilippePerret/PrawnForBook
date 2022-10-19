@@ -71,12 +71,33 @@ class AnyParagraph
       end
     end
 
+    #
+    # Traitement des références
+    # 
+    if str.match?('\(\( \(')
+      str = str.gsub(REG_REFERENCE) do
+        ref_id = $1.freeze
+        pdfbook.table_references.add(ref_id, {page:first_page, paragraph:numero})
+        ''
+      end
+    end
+    # Appels de référence
+    if str.match?('\(\( \->\(')
+      str = str.gsub(REG_APPEL_REFERENCE) do
+        pdfbook.table_references.get($1.freeze)
+      end
+    end
+
     return str
   end #/formated_text
 
   def titre?; false end
 
 REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
+
+REG_REFERENCE       = /\(\( \((.+?)\) \)\)/
+REG_APPEL_REFERENCE = /\(\( +\->\((.+?)\) +\)\)/
+
 end #/class AnyParagraph
 end #/class PdfBook
 end #/module Prawn4book

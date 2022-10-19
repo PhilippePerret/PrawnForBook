@@ -13,6 +13,47 @@ class PdfBook
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
 
+  # @prop instance ReferencesTable gérant les références du livre
+  attr_reader :table_references
+
+  def generate_pdf_book
+    #
+    # Le livre doit être conforme, c'est-à-dire posséder les 
+    # éléments requis
+    # 
+    check_if_conforme || return
+    # 
+    # Instanciation de la table de référence
+    # 
+    @table_references = PdfBook::ReferencesTable.new(self)
+    # 
+    # Initialisations
+    # 
+    PdfBook::NTextParagraph.init_first_turn
+    table_references.init
+    # 
+    # Première passe, pour récupérer les références (if any)
+    # 
+    ok_book = build_pdf_book
+    # 
+    # Si des références ont été trouvées, on actualise le fichier
+    # des références du livre.
+    # 
+    table_references.save if table_references.any?
+    # 
+    # Si des appels de références ont été trouvées, on refait une
+    # passe pour les appliquer.
+    # 
+    if table_references.has_one_appel_sans_reference?
+      table_references.second_turn = true
+      PdfBook::NTextParagraph.init_second_turn
+      ok_book = build_pdf_book
+    end
+    if ok_book
+      open_book if CLI.option(:open)
+    end
+  end
+
   ##
   # = main =
   # 
@@ -24,19 +65,13 @@ class PdfBook
   # Rappel : PrawnView hérite de Prawn::View (comme conseillé par
   #          le code de Prawn)
   # 
-  def generate_pdf_book
+  def build_pdf_book
     clear unless debug?
     
     # 
     # Détruire le fichier PDF final s'il existe déjà
     # 
     File.delete(pdf_path) if File.exist?(pdf_path)
-
-    #
-    # Le livre doit être conforme, c'est-à-dire posséder les 
-    # éléments requis
-    # 
-    check_if_conforme || return
 
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
@@ -181,10 +216,11 @@ class PdfBook
     if File.exist?(pdf_path)
       puts "\n\nLe book PDF a été produit avec succès !".vert
       puts "(in #{pdf_path})".gris
-      puts "\n"      
-      open_book if CLI.option(:open)
+      puts "\n"
+      return true
     else
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
+      return false
     end
   end
 
