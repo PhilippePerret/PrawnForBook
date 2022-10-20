@@ -123,6 +123,26 @@ Ce package est défini dans le dossier package `Prawn4Book` de Sublime Text. On 
 
 Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text* (<console>prawn-for-book open package-st</console>) et modifier le code dans le fichier `Prawn4Book.sublime-settings` (pour la police, la taille de police, etc.) ou le fichier `Prawn4Book.sublime-color-scheme` (pour modifier la colorisation syntaxique ou les scopes).
 
+---
+
+<a name="aspect-livre"></a>
+
+## Aspect du livre (réglages)
+
+Pour gérer l’aspect général du livre, plusieurs options sont utiles.
+
+#### Affichage des marges
+
+On peut par exemple demander l’affichage des marges à l’aide de l’option **`--display_margins`**  au moment de la fabrication du livre :
+
+<console>pfb build --display_margins</console>
+
+#### Affichage de la grille de référence
+
+On peut afficher les lignes de la grille de référence (pour voir comment seront alignées les lignes du texte) à l’aide de l’option **`--display_grid`**  au moment de la fabrication du livre :
+
+<console>pfb build --display_grid</console> ou <console>pfb build -g</console>
+
 
 
 ---
