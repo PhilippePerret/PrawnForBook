@@ -6,12 +6,32 @@ class Command
       case ini_name
       when 'manuel', 'manual' then :open_user_manuel
       else 
+        # Note : les assistants passent aussi par ici
+        # cf. ci-dessous
         help? ? :display_help : :display_mini_help
       end
     Prawn4book.send(methode)
   end
 end #/Command
 
+
+  def self.display_help
+    clear
+    #
+    # L'élément après le "help/aide"
+    # 
+    chose = CLI.components[0].to_s
+
+    if chose.in?(['fontes','fonts'])
+      cmd = Command.new('assistant').load
+      cmd.proceed_assistant_fontes
+    elsif chose.in?(['biblio','bibliography','bibliographie'])
+      cmd = Command.new('assistant').load
+      cmd.proceed_assistant_biblio
+    else
+      less(INLINE_AIDE)
+    end
+  end
 
   def self.display_mini_help
     clear
@@ -26,15 +46,6 @@ end #/Command
     end
   end
 
-  def self.display_help
-    clear
-    if CLI.components[0] && CLI.components[0].in?(['fontes','fonts'])
-      cmd = Command.new('assistant').load
-      cmd.proceed_assistant_fontes
-    else
-      less(INLINE_AIDE)
-    end
-  end
 
 # @constant
 # Aide minimum qui s'affiche lorsque l'on met la
@@ -43,34 +54,38 @@ MINI_AIDE = <<-TEXT
 
 
 ********************************
-*** #{'prawn-for-book'.jaune} mini aide ***
+*** #{'pfb'.jaune} mini aide ***
 
-#{'prawn-for-book aide'.jaune}
-    Aide en ligne pour prawn-for-book
+#{'pfb aide'.jaune}
+    Aide en ligne pour pfb
 
-#{'prawn-for-book manuel'.jaune}
+#{'pfb manuel'.jaune}
     Manuel PDF
 
-#{'prawn-for-book init'.jaune}
+#{'pfb init'.jaune}
     Initier un nouveau livre dans le dossier
     courant.
 
-#{'prawn-for-book build'.jaune}
+#{'pfb build'.jaune}
     Construire le livre du livre courant.
 
-#{'prawn-for-book open'.jaune}
+#{'pfb open'.jaune}
     Ouvrir le fichier PDF du livre courant.
 
-#{'prawn-for-book open -e'.jaune}
+#{'pfb open -e'.jaune}
     Ouvrir le fichier texte du livre courant dans l'éditeur de texte (Sublime Text).
 
-#{'prawn-for-book aide fontes'.jaune}
-    Aide en ligne pour produire la donnée :fonts du 
+#{'pfb aide fontes'.jaune}
+    Assistant en ligne pour produire la donnée :fonts du 
+    fichier recette.
+
+#{'pfb aide biblio'.jaune}
+    Assistant en ligne pour produire la donnée :biblio du 
     fichier recette.
 
 ---
 
-#{'prawn-for-book manuel -dev'.jaune}
+#{'pfb manuel -dev'.jaune}
     Manuel PDF en version markdown (édition)
 
 TEXT
@@ -81,14 +96,14 @@ TEXT
 INLINE_AIDE = <<-TEXT
 
 ********************************
-***  AIDE DE #{'prawn-for-book'.jaune}  ***
+***  AIDE DE #{'pfb'.jaune}  ***
 ********************************
 
 L'application Prawn-For-Book permet de produire des PDF prêts à 
 l'impression (professionnelle) grâce à Ruby et le gem 'Prawn' à 
 partir d'un texte au format réduit.
 
-#{'prawn-for-book manuel'.jaune}
+#{'pfb manuel'.jaune}
     Pour ouvrir le manuel complet de l'application
 
 AIDE RAPIDE
@@ -99,7 +114,7 @@ Création d'un nouveau livre
 (ou d'une nouvelle collection)
 
 * Ouvrir un Terminal dans le dossier où créer le nouveau livre,
-* Jouer #{'prawn-for-book init'.jaune},
+* Jouer #{'pfb init'.jaune},
 * répondre aux questions posées
 > Cela produit le fichier 'receipe.yaml' qui contient la 
   "recette" du livre (ou la recette de la collection)

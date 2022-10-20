@@ -327,6 +327,10 @@ end
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre pour avoir un aperçu rapide des la définition d’une bibliographie.
 
+> On peut obtenir un assistant à la définition des bibliographies du livre ou de la collection en jouant la commande :
+>
+> <console>pfb aide biblio</console>
+
 Une bibliographie nécessite :
 
 * de [définir **la balise**](#biblio-tag) qui va repérer les éléments dans le texte (par exemple `film` ou `livre`)

@@ -6,10 +6,16 @@ module Prawn4book
     def proceed_assistant_fontes
       Prawn4book.assistant_fontes
     end
+    def proceed_assistant_biblio
+      Prawn4book.assistant_biblio
+    end
   end #/Command
 
+  def self.assistant_biblio
+    puts "Je dois apprendre à assister à la fabrication des bibliographies.".jaune
+  end
+
   def self.assistant_fontes
-    puts "Je dois apprendre à assister pour la création des fontes".jaune
     frecipe = File.join(cfolder,'recipe.yaml')
     unless File.exist?(frecipe)
       frecipe = File.join(cfolder,'recipe_collection.yaml')

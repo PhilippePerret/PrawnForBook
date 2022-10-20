@@ -1,11 +1,5 @@
 # Todo courant
 
-* traiter les références croisées (renvoyer le texte)
-  - ajouter le livre à la bibliographie
-  - dans le mode d'emploi, ajouter qu'il faut définir ce livre
-  - dans le check vérifier que ce livre soit défini avec le même identifiant
-* faire des essais de références croisées avec 'debut'
-
 * faire l'assistant bibliographie
 * Mettre en place la gestion des footers/headers
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
