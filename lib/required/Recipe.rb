@@ -76,8 +76,8 @@ class Recipe
     @title ||= get(:book_title)
   end
 
-  def editor
-    @editor ||= get(:editor)
+  def publisher
+    @publisher ||= get(:publisher)
   end
 
   def auteurs

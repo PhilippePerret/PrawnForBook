@@ -76,7 +76,6 @@ class PrawnView
     self.default_leading = font2leading(
       default_font, default_font_size, line_height
     )
-    puts "\ndefault_leading = #{self.default_leading.inspect}".bleu
   end
 
   ##

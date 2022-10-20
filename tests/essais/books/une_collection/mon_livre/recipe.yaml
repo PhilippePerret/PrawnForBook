@@ -10,7 +10,7 @@
 - Philippe PERRET
 :main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books/une_collection/mon_livre"
 :text_path: true
-:editor:          :collection
+:publisher:          :collection
 :dimensions:      :collection
 :marges:          :collection
 :interligne:      :collection

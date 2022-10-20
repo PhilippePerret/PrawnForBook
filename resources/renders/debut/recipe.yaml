@@ -23,7 +23,7 @@
 
 # --- INFOS LIVRE ou COLLECTION ---
 
-:editor:
+:publisher:
   :name:  Nom de l'éditeur
   :adresse: |
     xxx rue de Loraine 
@@ -31,7 +31,7 @@
   :site:      'https://icare-editions.fr'
   :logo:      null
   :siret:     '508 680 360 00023'
-  :mail:      editor@edition.fr
+  :mail:      publisher@edition.fr
   :contact:   contact@edition.fr
 
 # --- Fontes à empaqueter ---

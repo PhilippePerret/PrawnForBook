@@ -1,4 +1,4 @@
-:editor:
+:publisher:
   :name:  Nom de l'éditeur
   :adresse: |
     xxx rue de Loraine 
@@ -6,7 +6,7 @@
   :site:      'https://icare-editions.fr'
   :logo:      "/path/to/logo.svg"
   :siret:     '508 680 360 00023'
-  :mail:      editor@edition.fr
+  :mail:      publisher@edition.fr
   :contact:   contact@edition.fr
 
 # --- Fontes à empaqueter ---
@@ -53,6 +53,20 @@
   # :font:  "LaFonte"
   # :size:  15
 :page_de_titre:   true  # true => insérer la page de titre
+  # On peut définir plus précisément la page
+  # :font: "LaFonte"
+  # :sizes:
+  #   :collection_title: 14
+  #   :title: 34
+  #   :subtitle: 20
+  #   :author: 16
+  #   :publisher: 14
+  # :spaces_before:
+  #   :title: 5 # en nombre de lignes de référence
+  #   :subtitle: 1
+  #   :author: 2
+  # :logo:
+  #   :height: 10 # en millimètres
 
 # --- Table Des Matières ---
 :table_of_content:

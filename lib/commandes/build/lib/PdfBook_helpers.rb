@@ -25,9 +25,9 @@ class PdfBook
 
   # L'édition
   # 
-  def editor
-    @editor ||= begin
-      Editor.new( collection? ? collection.data[:editor] : recette[:editor])
+  def publisher
+    @publisher ||= begin
+      Editor.new( collection? ? collection.data[:publisher] : recette[:publisher])
     end
   end
 end #/class PdfBook

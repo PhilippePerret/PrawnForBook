@@ -54,17 +54,17 @@ class PrawnView
     # Chaque élément contient :
     # 
     # ["valeur", margin bottom|nil]
-    editor    = book.recette.editor
+    publisher    = book.recette.publisher
     [
-      [editor[:name]           , nil],
-      [editor[:site]           , nil],
-      [editor[:adresse]        , nil],
-      [editor[:mail]           , nil],
+      [publisher[:name]           , nil],
+      [publisher[:site]           , nil],
+      [publisher[:adresse]        , nil],
+      [publisher[:mail]           , nil],
       ['', nil],
-      [editor[:siret]          , nil],
+      [publisher[:siret]          , nil],
       ['——————', nil],
       ['Contact', nil],
-      [editor[:contact]        , nil],
+      [publisher[:contact]        , nil],
       ['——————', nil],
       [depot_legal                  , nil],
       ["ISBN : #{page_info[:isbn]}" , nil],

@@ -232,6 +232,14 @@ Pour la mise en forme des titres dans le livre, voir [les titres dans la recette
 
 ### Pages spéciales
 
+<a name="page-titre"></a>
+
+#### Page de titre
+
+La *page de titre* n'est pas à confondre avec la couverture (qui fait l'objet d'un fichier séparé pour un traitement différemment comme c'est souvent le cas). Il s'agit ici de la page, souvent après la page de faux titre et la page de garde qui présente toutes les informations générales sur le livre, titre, sous-titre, auteur, éditeur.
+
+Pour sa mise en page, voir la [recette concernant les pages spéciales](#all-types-pages).
+
 #### Table des matières
 
 La table des matières se construit sur la base des titres.
@@ -873,12 +881,12 @@ Les **`margin_top`** et **`margin_bottom`** se comptent toujours en nombre de li
 
 La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
 
-<a name="info-editor"></a>
+<a name="info-publisher"></a>
 
 #### Données de l'éditeur/éditions
 
 ~~~yaml
-:editor:
+:publisher:
 	:name: 	"Nom édition" # p.e. "Icare Éditions"
 	:adresse: |
 		Numéro Rue de la voie
@@ -1016,7 +1024,26 @@ Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépend
 														# n'est pas générée (ce qui permet de 
 														# contrôler cette première page)
 :page_de_garde:       true
-:page_de_titre:       true
+:page_de_titre:       true  # true => affichage de la page de titre
+														# avec les données par défaut
+	# Sinon, on peut définir les données précisément
+  # :sizes:  # Pour les tailles des différents éléments
+  #   :collection_title: 14
+  #   :title: 34
+  #   :subtitle: 20
+  #   :author: 16
+  #   :publisher: 14
+  # :spaces_before: # pour les "espaces avant" les éléments, en
+  #									# nombre de lignes de référence
+  #   :title: 5 # en nombre de lignes de référence
+  #   :subtitle: 1
+  #   :author: 2
+  # :logo:
+  #   :height: 10 # hauteur du logo en millimètres
+  #   # noter que le logo est toujours placé le plus en bas possible
+  #   # On peut forcer un ':logo: false' pour forcer à ne pas afficher
+  #   # le logo (s'il est défini dans la partie ':publisher')
+
 :faux_titre:          true
 	# On peut aussi définir la fonte et la taille :
   # :font:  "LaFonte"
