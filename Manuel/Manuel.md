@@ -817,10 +817,10 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 
 ~~~yaml
 :default_font: 			FontName 	# font par défaut
-:default_font_size: 11				# taille de font par défaut
+:default_font_size: 11				# taille de fonte par défaut
 :default_style:     :normal   # style par défaut
 :line_height:				12.5      # Hauteur de la ligne de référence
-:leading:           1 				# Espacement entre les mots
+:leading:           1 				# Espacement par défaut entre les mots
 :num_page_style:    num_page	# Type de numérotation (
 															# 'num_page' 	=> par numéro de page
 															# 'num_parag' => par numéro de paragraphes
