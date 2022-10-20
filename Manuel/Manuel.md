@@ -771,13 +771,16 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 	:bot: '20mm'	# marge bas
 	:ext:	'30mm'  # marge extérieure (*)
 	:int: '15mm'  # marge intérieure (*)
+:background: "/path/to/image/fond.jpg" # pour une image de fond
 ~~~
 > (\*) Prawn4Book est spécialement désigné pour créer des livres papier, donc les marges sont toujours définies avec la marge intérieure (côté pliure) et la marge extérieure (côté tranche — le vrai sens de "tranche").
 
 ~~~yaml
 :default_font: 			FontName 	# font par défaut
 :default_font_size: 11				# taille de font par défaut
+:default_style:     :normal   # style par défaut
 :line_height:				12.5      # Hauteur de la ligne de référence
+:leading:           1 				# Espacement entre les mots
 :num_page_style:    num_page	# Type de numérotation (
 															# 'num_page' 	=> par numéro de page
 															# 'num_parag' => par numéro de paragraphes
