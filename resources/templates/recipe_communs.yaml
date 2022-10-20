@@ -59,9 +59,17 @@
   :display: true # true => afficher la table des matières
   # Page où insérer la table des matières. Si sa valeur est :flux 
   # elle sera placée en fonction des autres pages présentes
+  :font:   'Garamond'
+  :size:   11
+  :line_height: null # 14 par défaut 
+  :from_top:    null # ou nombre de lignes depuis le haut
   :page_number: :flux 
-  # Distance du numéro de page avec la marge droite
-  :dist_num_from_rmargin: 0
+  # Valeur à ajouter à gauche au numéro (avant les
+  # pointillés)
+  :add_to_numero_with: 0
+  # Liste des indentations en fonction du niveau du titre
+  # Par défaut : [0, 2, 4, 6, 8]
+  :indent_per_offset: null
 
 # --- Entêtes du livre ---
 :headers: # tous les rangs

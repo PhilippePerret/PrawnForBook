@@ -186,6 +186,28 @@ Cette valeur influence de nombreux éléments du livre, dont :
 
 ---
 
+
+
+<a name="titles”"></a>
+
+### Les titres
+
+La base du texte étant du markdown, les titres s’‘indiquent avec des dièses en fonction de leur niveau :
+
+~~~text
+# Grand titre
+## Titre de chapitre
+### Titre de sous-chapitre
+#### Titre de section
+etc. si nécessaire.
+~~~
+
+Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
+
+
+
+---
+
 <a name="special-pages"></a>
 
 ### Pages spéciales
@@ -807,6 +829,30 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 
 La donnée **`:line_height`** est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références** c’est-à-dire la grille sur laquelle seront alignées toutes les lignes de texte pour produire un livre professionnel.
 
+<a name="data-titles"></a>
+
+#### Données des titres
+
+~~~yaml
+:titles:
+	:level1:
+		:next_page: true # true => nouvelle page pour ce titre
+		:font: "LaFonte"
+		:size: 30
+		:margin_top: 0
+		:margin_bottom: 4
+		:leading: -2
+	:level2:
+		# idem
+	:level3:
+		# idem
+	# etc.
+~~~
+
+Les **`margin_top`** et **`margin_bottom`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux lignes de référence.
+
+La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
+
 <a name="info-editor"></a>
 
 #### Données de l'éditeur/éditions
@@ -919,6 +965,24 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 		:size: 9
 ~~~
 
+##### Disposition
+
+Le pied de page et l’entête sont divisés en trois parties de taille variable en fonction du contenu. Dans le format (`:disposition`), ces trois parties sont définies par des `|`. 
+
+L’**alignement** s’indique par des tirets avant, après ou de chaque côté du contenu. Quand le tiret est à droite (`mot-`), le mot est aligné à gauche, quand le tiret est à gauche (`-mot`) le contenu est aligné à droite, quand les tirets encadrent le contenu (`-mot- `) — ou quand il n’y en a pas — le contenu est centré.
+
+##### Variables
+
+Les variables utilisables dans les entêtes et pieds de page sont toujours des mots simples commençant par `%`. 
+
+Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
+
+Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter. TODO: à l’avenir on pourra imaginer avoir des numéros différents suivant les parties.
+
+---
+
+
+
 <a name="recette-page-info"></a>
 
 <a name="all-types-pages"></a>
@@ -974,22 +1038,6 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 ~~~
 
 
-
----
-
-### Disposition
-
-Le pied de page et l’entête sont divisés en trois parties de taille variable en fonction du contenu. Dans le format (`:disposition`), ces trois parties sont définies par des `|`. 
-
-L’**alignement** s’indique par des tirets avant, après ou de chaque côté du contenu. Quand le tiret est à droite (`mot-`), le mot est aligné à gauche, quand le tiret est à gauche (`-mot`) le contenu est aligné à droite, quand les tirets encadrent le contenu (`-mot- `) — ou quand il n’y en a pas — le contenu est centré.
-
-### Variables
-
-Les variables utilisables dans les entêtes et pieds de page sont toujours des mots simples commençant par `%`. 
-
-Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
-
-Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter. TODO: à l’avenir on pourra imaginer avoir des numéros différents suivant les parties.
 
 ---
 
