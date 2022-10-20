@@ -752,11 +752,25 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 
 ~~~yaml
 :book_title:	Le titre du livre
+:book_subtitle: |
+	Sous-titre qui sera ajouté sous le titre dans la
+	page de titre. Tous les retours chariots ici
+	seront reproduits tels quels.
+:collection: 	false # true => appartient à une collection
 :auteurs: 		['Prénom NOM', 'Prénom NOM']
 :book_id:     identifiant_simple # nom du dossier par exemple
 :main_folder:	"/path/to/folder/principal/du/livre"
 :text_path:   true 	# pour dire texte.p4b.txt ou texte.p4b.md dans le 
 										# dossier du livre, sinon le path absolu
+~~~
+
+#### Informations générales pour une collection
+
+~~~yaml
+
+:name: "Nom humain de la collection"
+:short_name: "Nom raccourci" # pour les messages seulement
+:main_folder:	"/path/to/folder/principal/de/la/collection"
 ~~~
 
 <a name="recette-aspect-general"></a>
@@ -775,6 +789,10 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 ~~~
 > (\*) Prawn4Book est spécialement désigné pour créer des livres papier, donc les marges sont toujours définies avec la marge intérieure (côté pliure) et la marge extérieure (côté tranche — le vrai sens de "tranche").
 
+<a name="”recette-aspect-pages"></a>
+
+#### Aspect des pages
+
 ~~~yaml
 :default_font: 			FontName 	# font par défaut
 :default_font_size: 11				# taille de font par défaut
@@ -784,9 +802,27 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 :num_page_style:    num_page	# Type de numérotation (
 															# 'num_page' 	=> par numéro de page
 															# 'num_parag' => par numéro de paragraphes
+:opt_num_parag: 		false     # si true, on numérote les paragraphes.
 ~~~
 
-Cette donnée `:line_height` est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références**.
+La donnée **`:line_height`** est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références** c’est-à-dire la grille sur laquelle seront alignées toutes les lignes de texte pour produire un livre professionnel.
+
+<a name="info-editor"></a>
+
+#### Données de l'éditeur/éditions
+
+~~~yaml
+:editor:
+	:name: 	"Nom édition" # p.e. "Icare Éditions"
+	:adresse: |
+		Numéro Rue de la voie
+		XXXXX La Ville
+	:site:  	"https://site_editions.org"
+	:logo: 		"path/rel/or/abs/to/logo.svg"
+	:siret: 	null # Ou numéro de siret
+	:mail:  	mail@toedition.org
+	:contact: contact@toedition.org
+~~~
 
 <a name="recette-fonts"></a>
 
@@ -811,18 +847,27 @@ Par exemple :
 
 ~~~yaml
 # ...
+# Une variable pour simplifier
 dossier_fonts: &dosfonts "/Users/philippeperret/Library/Fonts"
+fonts_system:  &sysfonts "/System/Library/Fonts"
+prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fonts" 
+
+# Définition des fontes (note : ce sont celles par défaut quand on
+# utilise les templates)
 :fonts:
   Garamond:
     :normal: "*dosfonts/ITC - ITC Garamond Std Light Condensed.ttf"
-    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
+    :italic: "*dosfonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
   Bangla:
-    :normal: "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
-    :bold:   "/System/Library/Fonts/Supplemental/Bangla MN.ttc"
+    :normal: "*sysfonts/Supplemental/Bangla MN.ttc"
+    :bold:   "*sysfonts/Supplemental/Bangla MN.ttc"
   Avenir:
-    :normal: "/System/Library/Fonts/Avenir Next Condensed.ttc"
+    :normal: "*sysfonts/Avenir Next Condensed.ttc"
   Arial:
-    :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
+    :normal: "*dosfonts/Arial Narrow.ttf"
+  Nunito:
+    :normal: "*pfbfonts/Nunito_Sans/NunitoSans-Regular.ttf"
+    :bold:   "*pfbfonts/Nunito_Sans/NunitoSans-Bold.ttf"
 
 ~~~
 
@@ -883,9 +928,15 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 (c’est-à-dire la page à la fin du livre présentant les différentes informations sur ce livre)
 
 ~~~yaml
+:skip_page_creation:  true 	# à true, la première page automatique
+														# n'est pas générée (ce qui permet de 
+														# contrôler cette première page)
 :page_de_garde:       true
 :page_de_titre:       true
 :faux_titre:          true
+	# On peut aussi définir la fonte et la taille :
+  # :font:  "LaFonte"
+	# :size:  16
 # --- Réglage de la table des matières ---
 :table_des_matieres:
   :display: false # true pour l'afficher

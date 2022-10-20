@@ -40,7 +40,6 @@
 :default_font_size:   11
 :default_font_style:  :normal
 :line_height:         12.5
-:interligne:      null
 :leading:         1
 :opt_num_parag:   false # true => numéroter les paragraphes
 :num_page_style:  num_page # style de numérotation des pages
@@ -50,6 +49,9 @@
 :skip_page_creation:  true # true => ne pas écrire la 1re page (pour pouvoir appliquer sur la première la mise en page des pages impaires)
 :page_de_garde:   true  # true => insérer la page de garde
 :faux_titre:      false # true => insérer la page de faux-titre
+  # On peut définir les fontes et la taille :
+  # :font:  "LaFonte"
+  # :size:  15
 :page_de_titre:   true  # true => insérer la page de titre
 
 # --- Table Des Matières ---

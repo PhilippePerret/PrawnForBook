@@ -2,8 +2,9 @@
 
 # --- INFOS COLLECTION ---
 
-:name: Collection Narration
-:short_name: Narration
+:name:        Collection Narration
+:short_name:  Narration
+:main_folder: null
 
 # --- INFOS POUR LES LIVRES ---
 

@@ -6,6 +6,13 @@ class PrawnView
     # Le titre du livre
     # 
     titre = pdfbook.titre
+    # 
+    # Les données pour le faux-titre
+    # 
+    dfauxtitre = pdfbook.recipe[:faux_titre]
+    dfauxtitre = {
+      font: 'Garamond', size: 24
+    } if dfauxtitre === true
 
     #
     # On commence une nouvelle page
@@ -15,7 +22,7 @@ class PrawnView
     #
     # Mise en forme voulue
     # 
-    font "Garamond", size: 24 # TODO pouvoir le régler
+    font dfauxtitre[:font], size: dfauxtitre[:size]
 
     #
     # Calcul de la taille du titre pour le placer correctement
