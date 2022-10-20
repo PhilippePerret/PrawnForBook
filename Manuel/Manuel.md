@@ -162,6 +162,30 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 
 ---
 
+<a name="pagination"></a>
+
+### Pagination
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété           | valeurs possibles  |
+| -------------------------------------------------------- | ------- | ------------------- | ------------------ |
+|                                                          |         | **:num_page_style** | num_page/num_parag |
+
+*Prawn-for-book* permet de paginer de deux manières : 
+
+* à l’aide des numéros de pages,
+* à l’aide des numéros de paragraphes.
+
+Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont **`num_page`** (numéros de page) et **`num_parag`** (numérotation des paragraphes).
+
+Cette valeur influence de nombreux éléments du livre, dont :
+
+* les numéros en bas de page
+* les [index](#page-index)
+* les [repères bibliographiques](#mise-en-forme-biblio)
+* les marques de [références](#references)
+
+---
+
 <a name="special-pages"></a>
 
 ### Pages spéciales
@@ -219,7 +243,7 @@ def __paragraph_parser(paragraph)
 end 
 ~~~
 
-À l’issue du traitement, la table `@table_index` (de l’instance `PdfBook`) contiendra en clé tous les mots trouvés et en valeur une liste de toutes les itérations.
+À l’issue du traitement, la table `@table_index` (de l’instance `PdfBook`) contiendra en clé tous les mots trouvés et en valeur une liste de toutes les itérations. Cette liste contiendra la liste des pages ou la liste des paragraphes en fonction du [type de pagination](#pagination) adopté pour le livre ou la collection.
 
 On peut donc faire ensuite :
 
@@ -249,7 +273,7 @@ end
 
 <a name="bibliographie"></a>
 
-#### Page de bibliographie
+#### Pages de bibliographie
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre pour avoir un aperçu rapide des la définition d’une bibliographie.
 
@@ -412,10 +436,25 @@ module FormaterBibliographiesModule # attention au pluriel
     return c.join(', ')
   end
   
+  # Autre tournure possible
+  def biblio_autre(element)
+    '%{title.upcase} de %{writers}, %{year}' % element.data
+  end
+  
 end #/module FormaterBibliographiesModule
 ~~~
 
 Noter qu’avec cette formule, les données sont toujours présentées sur une ligne. À l’avenir, on pourra imaginer une méthode qui reçoit `pdf` (l’instance `{Prawn::View}`) et permette d’imprimer les données exactement comme on veut, même dans un affichage complexe.
+
+Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont cités les éléments, cette information est ajoutée automatiquement par l’application, après le titre et deux points. L’indication par page ou par paragraphe dépend du type de [pagination](#pagination) adoptée dans le livre. En conclusion, le listing final ressemblera à :
+
+~~~text
+<partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
+<partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
+<partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
+~~~
+
+
 
 
 ---
@@ -452,6 +491,62 @@ titre
 		Définit dans le texte par '#[#[#]] Titre'
 		
 ~~~
+
+---
+
+
+
+<a name="references"></a>
+
+### Références (et références croisées)
+
+On peut faire très simplement des références dans le livre (références à d'autres pages ou d'autres paragraphes, du livre ou d'autres livres) à l'aide des balises :
+
+~~~text
+(( (id_reference_unique) ))  <- référence
+
+(( ->(id_reference_unique) )) <- appel de référence
+~~~
+
+La référence sera tout simplement supprimée du texte (attention de ne pas laisser d’espaces). Pour l’appel de référence il sera toujours remplacé par *“la page xxx”* ou *“le paragraphe xxx”* en fonction de [la pagination souhaitée](#pagination).
+
+#### Références croisées
+
+Pour une *référence croisée*, c’est-à-dire la référence à un autre livre, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant.
+
+~~~text
+Pour trouver la référence croisée, rendez-vous sur la (( ->(IDLIVRE:id_reference_unique) )).
+~~~
+
+**ATTENTION**
+
+Mais avant tout, il faut comprendre que **ce livre doit absolument être répertorié dans la bibliographie `livre` du livre courant et l’identifiant du livre doit être le même que dans cette bibliographie**. Par exemple, si l’appel à la référence croisée est `idmybook`, alors :
+
+* la propriété `:biblio` de la recette du livre courant doit définir le tag ‘livre’ (=> bibliographie concernant des livres),
+* les [données bibliographiques](#biblio-data) de cette bibliographie (en fichier `yaml` unique ou en fiches dans un dossier) doivent obligatoirement définir l’élément d’identifiant `idmybook`,
+* comme requis par les données bibliographiques, cet élément doit définir la propriété `:title` (c’est elle qui sera utilisé pour l’appel de référence croisée).
+
+**/ATTENTION**
+
+Le chemin absolu ou relatif du livre doit être définit dans la [recette du livre ou de la collection][] dans une rubrique **`references`** et une sous-rubrique **`cross_references`** de cette façon :
+
+~~~yaml
+# in recipe.yaml ou recipe_collection.yaml
+# ...
+:references:
+	:cross_references:
+		:IDLIVRE: "/path/rel/or/abs/to/book/folder"
+		:IDAUTRELIVRE: "/path/to/book"
+		etc.
+~~~
+
+Grâce au chemin d’accès, on peut atteindre le fichier `references.yaml` qui contient les références relevées dans le livre. Grâce à l’identifiant on trouve le titre du livre dans les [données bibliographiques](#biblio-data) du livre courant.
+
+#### Fichier de références
+
+Les références du livre sont enregistrées dans un fichier `references.yaml` qui permettra à d’autres livres d’y faire… référence.
+
+---
 
 <a name="exclude-paragraphes”"></a>
 
@@ -635,9 +730,9 @@ Ce fichier contient donc deux modules :
 
 ---
 
-<a name="book-recipe"></a>
+<a name="recipe"></a>
 
-## Recette du livre
+## Recette du livre ou de la collection
 
 ### Définition
 
@@ -891,3 +986,4 @@ On peut ouvrir ce package dans Sublime Text à l’aide de :
 [fichier `parser.rb`]: #text-custom-parser
 [fichier `formater.rb`]: #custom-formater
 [fichier `helpers.rb`]: #custom-helpers
+[recette du livre ou de la collection]: #recipe

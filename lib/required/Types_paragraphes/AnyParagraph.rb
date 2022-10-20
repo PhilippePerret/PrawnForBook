@@ -84,7 +84,7 @@ class AnyParagraph
     # Appels de référence
     if str.match?('\(\( \->\(')
       str = str.gsub(REG_APPEL_REFERENCE) do
-        pdfbook.table_references.get($1.freeze)
+        pdfbook.table_references.get($1.freeze, self)
       end
     end
 

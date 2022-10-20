@@ -14,3 +14,8 @@ bee_cdl:
   auteurs: ['Philippe PERRET']
   annee: 2022
   editeur: Icare Éditions
+crbook:
+  title: Livre pour cross-références
+  auteurs: 'John DOO'
+  annee: 2000
+  editeur: Presses de la source

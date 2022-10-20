@@ -8,7 +8,7 @@ class NTitre < AnyParagraph
   def print(pdf)
     titre = self
 
-    debugit = true # debug?
+    debugit = debug?
 
     debugit && puts("\n\n\nTITRE « #{text} »".jaune)
     debugit && puts(TB+"Cursor arrivée dans print : #{round(pdf.cursor)}")

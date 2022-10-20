@@ -109,6 +109,18 @@
     :margin_bottom: 0
     :leading: -2
 
-# Voir le manuel (p4b manuel) ou demander l'assistant
-# pour bibliographie : 'pfb aide biblio'
+# --- BIBLIOGRAPHIES ---
+# Voir le manuel (pfb manuel) ou demander l'assistant
+# pour la bibliographie : 'pfb aide biblio'
 :biblio: null
+  #- :tag: "balise"
+  #  :title: "Titre sur la page"
+  #  :title_level: 1 # niveau du titre
+  #  :new_page:  false # true pour passer à la page
+# --- RÉFÉRENCES (croisées) ---
+# Voir le manuel (pfb manuel)
+:references:
+  :cross_references: null
+    # :IDLIVRE:
+    #   :path: "/path/rel/or/abs/to/book/folder"
+    #   :title: "Titre utilisé pour l'appel"

@@ -8,6 +8,8 @@ class Bibliography
     # @prop Table des bibliographies
     attr_reader :items
 
+    # @prop {Symbol} :page ou :paragraph en fonction du type de
+    # pagination du livre.
     attr_accessor :page_or_paragraph_key
 
     def require_formaters(pdfbook)
@@ -30,9 +32,19 @@ class Bibliography
     # @return L'instance Bibliography concernée
     # 
     def add_occurrence_to(bib_tag, bib_id, doccurrence)
-      i = get(bib_tag)
+      i = get(bib_tag) || begin
+        erreur_fatale ERRORS[:biblio][:biblio_undefined] % [bib_tag, bib_id]
+      end
       i.add(bib_id, doccurrence)
       return i
+    end
+
+    # Ajoute une occurrence pour un livre
+    # La méthode est utilisée pour le moment pour les références
+    # croisée
+    # 
+    def add_occurrence_book(book_id, paragraph)
+      add_occurrence_to('livre', book_id, {page: paragraph.first_page, paragraph: paragraph.numero})
     end
 
     ##
@@ -86,7 +98,7 @@ class Bibliography
   # 
   def print(pdf)
     if items.empty? 
-      puts "Pas d'occurrence pour la bibliographie « #{title} ».".orange
+      puts (MESSAGES[:biblio][:no_occurrence] % [title]).orange
       return
     end
     # 
@@ -123,7 +135,9 @@ class Bibliography
   def add(item_id, doccurrence)
     item_id = item_id.to_sym
     @items.key?(item_id) || begin
-      ditem = bibdata[item_id] || raise("Impossible de trouver l'item de bibliographie ('#{tag}') #{item_id.inspect}")
+      ditem = bibdata[item_id] || begin
+        erreur_fatale(ERRORS[:biblio][:bib_item_unknown] % [item_id.inspect, tag])
+      end
       @items.merge!(item_id => BibItem.new(self, ditem))
     end
     @items[item_id].add(doccurrence)

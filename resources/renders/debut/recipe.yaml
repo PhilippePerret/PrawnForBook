@@ -143,3 +143,9 @@
     :title: Films cités
     :data: biblio/films
     :new_page: false
+
+# --- Références ---
+:references:
+  :cross_references:
+    :autrelivre: "faux/path"
+    :crbook: "../cross_book"
