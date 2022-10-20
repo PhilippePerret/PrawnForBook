@@ -78,14 +78,6 @@ Par défaut, l’application utilisera le fichier `texte.yaml` s’il existe. Po
 
 <console>prawn-for-book build --force</console>
 
-### Pour enregistrer le fichier `texte.yaml`
-
-Si l’on est sûr de ne plus devoir parser le texte à chaque fois et qu'on veut préciser les choses au niveau de l'impression, on peut ajouter l’option `-save` (ou `--save`) à la commande `build` :
-
-<console>prawn-for-book build -save</console>
-
-Cela provoquera une version *Prawn4book* du texte qui permettra de préciser le formatage.
-
 ### Ouvrir le fichier PDF produit
 
 Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `--open`.
@@ -103,11 +95,11 @@ Avec l'option `-c/--cursor` on peut demander à ce que les positions curseur soi
 
 On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 
-<console>prawn-for-book open book</console>
+<console>pfb open book</console>
 
 ---
 
----
+<a name="texte-livre"></a>
 
 ## Texte du livre
 
@@ -342,6 +334,13 @@ Une bibliographie nécessite :
 <a name="biblio-tag"></a>
 
 ##### La balise de la bibliographie
+
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété    | valeurs possibles |
+| -------------------------------------------------------- | ------- | ------------ | ----------------- |
+|                                                          |         | **:biblio:** | null/table        |
+
+
 
 La *balise* est le mot qui sera utilisé pour repérer dans le texte les éléments à ajouter à la bibliographie. Par exemple, pour une liste de films, on pourra utiliser `film` :
 
@@ -583,6 +582,13 @@ Mais avant tout, il faut comprendre que **ce livre doit absolument être répert
 **/ATTENTION**
 
 Le chemin absolu ou relatif du livre doit être définit dans la [recette du livre ou de la collection][] dans une rubrique **`references`** et une sous-rubrique **`cross_references`** de cette façon :
+
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété        | valeurs possibles     |
+| -------------------------------------------------------- | ------- | ---------------- | --------------------- |
+|                                                          |         | **:references:** | null/table de données |
+
+
 
 ~~~yaml
 # in recipe.yaml ou recipe_collection.yaml
@@ -865,6 +871,11 @@ La donnée **`:line_height`** est particulièrement importante puisqu’elle dé
 
 #### Données des titres
 
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété    | valeurs possibles |
+| -------------------------------------------------------- | ------- | ------------ | ----------------- |
+|                                                          |         | **:titles:** | Table par titre   |
+
 ~~~yaml
 :titles:
 	:level1:
@@ -889,6 +900,11 @@ La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘
 
 #### Données de l'éditeur/éditions
 
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété       | valeurs possibles |
+| -------------------------------------------------------- | ------- | --------------- | ----------------- |
+|                                                          |         | **:publisher:** | Table de données  |
+
 ~~~yaml
 :publisher:
 	:name: 	"Nom édition" # p.e. "Icare Éditions"
@@ -905,6 +921,11 @@ La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘
 <a name="recette-fonts"></a>
 
 #### Fontes
+
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété   | valeurs possibles |
+| -------------------------------------------------------- | ------- | ----------- | ----------------- |
+|                                                          |         | **:fonts:** | Table de données  |
 
 On peut être assister pour la création de la donnée des fontes (qui nécessite de connaitre les chemins d’accès à toutes les fontes possibles) de cette manière :
 
@@ -953,7 +974,9 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 #### Entête et pied de page
 
-On peut définir les entêtes et les pieds de page dans le fichier recette du livre ou de la collection grâce aux données `:headers` et `:footers`.
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                       | valeurs possibles |
+| -------------------------------------------------------- | ------- | ------------------------------- | ----------------- |
+|                                                          |         | **:headers:**<br />**:footers** | Liste de données  |
 
 > Noter qu’ils sont au pluriel
 
