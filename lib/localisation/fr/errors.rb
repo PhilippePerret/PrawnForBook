@@ -2,11 +2,21 @@ module Prawn4book
 
 ERRORS = {
 
+  # --- Application --- #
+
+  require_a_book_or_collection: "Il faut se trouver dans un dossier de livre ou de collection.",
+
+  # --- Recette --- #
 
   # --- Bibliographie --- #
+
   biblio: {
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
+    title_already_exists: "Ce titre existe déjà.",
+    tag_already_exists: "Ce tag est déjà utilisé.",
+    not_an_existing_file: "Le path fourni ne renvoie ni à un fichier ni à un dossier (en valeur absolue ou relative).",
+
   }, #/biblio
 
   # --- Références --- #

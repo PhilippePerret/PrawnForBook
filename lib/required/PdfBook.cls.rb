@@ -2,19 +2,34 @@ module Prawn4book
 class PdfBook
 class << self
 
+  # @return true si on se trouve dans un dossier de livre
+  # ou de collection
+  def current?
+    File.exist?(File.join(cfolder,'recipe.yaml')) || 
+    File.exist?(File.join(cfolder,'recipe_collection.yaml'))
+  end
+
+  def collection?
+    current? && File.exist?(File.join(cfolder,'recipe_collection.yaml'))
+  end
+
+  def cfolder
+    @cfolder ||= begin
+      compun = CLI.components[1]
+      if compun && File.exist?(compun) && File.directory?(compun)
+        compun
+      else
+        File.expand_path('.')
+      end
+    end
+  end
+
   # @return une instance du book courant
   #
   # Soit ce livre est défini par le dossier courant (s'il contient
   # les éléments requis) soit il est défini par le premier argument
   # 
   def get_current
-    if CLI.components[1]
-      puts "Je dois prendre le livre #{CLI.components[1].inspect}"
-      cfolder = CLI.components[1]
-    else
-      cfolder = File.expand_path('.')
-    end
-
     # 
     # Le livre existe-t-il vraiment ? Si oui, on le prend, sinon,
     # on lève une exception.

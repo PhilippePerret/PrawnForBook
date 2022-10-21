@@ -35,6 +35,18 @@ class Recipe
     real_data[:info][key]
   end
 
+  ##
+  # Actualisation des données en mergean les nouvelles
+  def update(newdata)
+    @data = data.merge!(newdata)
+    File.write(pdfbook.recipe_path, data.to_yaml)
+  end
+
+  def update_collection(newdata)
+    @data_collection = data_collection.merge!(newdata)
+    File.write(pdfbook.collection.recipe_path, data.to_yaml)
+  end
+
 
   # --- Precidate Methods ---
 
