@@ -27,8 +27,7 @@ module Prawn4book
   def self.assistant_biblio(pdfbook)
     clear 
 
-    dMessages = MESSAGES[:assistant][:biblio]
-    puts dMessages[:intro].bleu
+    puts MESSAGES[:biblio][:intro_assistant].bleu
 
     # 
     # Table des identifiants et table des titres, pour vérifier
@@ -45,13 +44,13 @@ module Prawn4book
         already_titles.merge!(dbib[:title] => true)
         "'#{dbib[:tag]}' (#{dbib[:title]})" 
       end.pretty_join
-      puts (dMessages[:has_already_biblio] % bibs).bleu
+      puts (MESSAGES[:biblio][:has_already_biblio] % bibs).bleu
       Q.yes?(PROMPTS[:devons_nous_en_creer_dautres].jaune) || return
     end
 
     puts "\n\n"
 
-    new_tags = []
+    new_tags = [] # pour les messages finaux
 
     # Tant qu'on veut introduire des bibliographies
     while true
@@ -62,7 +61,7 @@ module Prawn4book
         # Le titre de la bibliographie
         # 
         while dbiblio[:title].nil?
-          btitre ||= Q.ask(PROMPTS[:biblio][:title_of_new_biblio].jaune)
+          btitre = Q.ask(PROMPTS[:biblio][:title_of_new_biblio].jaune).to_s.strip
           btitre = btitre.strip
           if already_titles[btitre]
             puts ERRORS[:biblio][:title_already_exists].rouge
@@ -74,7 +73,7 @@ module Prawn4book
         # L'identifiant unique de la bibliographie
         # 
         while dbiblio[:tag].nil?
-          btag ||= Q.ask(PROMPTS[:biblio][:tag_uniq_and_simple_minuscules].jaune)
+          btag = Q.ask(PROMPTS[:biblio][:tag_uniq_and_simple_minuscules].jaune).to_s.strip
           if already_tags[btag]
             puts ERRORS[:biblio][:tag_already_exists].rouge
           else
@@ -122,6 +121,7 @@ module Prawn4book
       baspect = dbiblio.delete(:aspect)
       dbiblios << dbiblio
       new_tags << dbiblio[:tag]
+      puts MESSAGES[:biblio][:consigned].vert
       
       #
       # Demande pour une autre, sinon on arrête
@@ -148,10 +148,11 @@ module Prawn4book
     #
     # Aide finale :
     # 
+    clear
     bibun = new_tags.first # pour les exemples ci-dessous
     puts MESSAGES[:biblio][:bibs_created_with_success].vert
     method_list = new_tags.map {|t| "\t- biblio_#{t}" }.join("\n")
-    puts (MESSAGES[:biblio][:explaination_after_create] % [method_list,bibun,bibun]).jaune
+    puts (MESSAGES[:biblio][:explaination_after_create] % [method_list,bibun,bibun]).bleu
 
   end
 
@@ -175,9 +176,9 @@ module Prawn4book
   end
 
 MENU_BIB_ASPECT = [
-  {name:PROMPTS[:By_default],   value: :default},
-  {name:PROMPTS[:Personnalisé], value: :custom},
-  {name:PROMPTS[:i_dont_know],  value: nil}
+  {name:PROMPTS[:By_default]  , value: :default},
+  {name:PROMPTS[:Customised]  , value: :custom},
+  {name:PROMPTS[:i_dont_know] , value:  nil}
 ]
 
 

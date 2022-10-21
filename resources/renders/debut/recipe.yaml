@@ -123,6 +123,11 @@
   :title: Films cités
   :data: biblio/films
   :new_page: false
+- :title: Liste des gadgets
+  :tag: gadget
+  :data: biblio/gadgets.yaml
+  :title_level: 1
+  :new_page: true
 :references:
   :cross_references:
     :autrelivre: faux/path

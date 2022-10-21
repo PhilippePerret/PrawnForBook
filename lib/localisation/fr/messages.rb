@@ -10,26 +10,28 @@ MESSAGES = {
 
   }, #/ :recipe
 
+  # --- Bibliographie --- #
+
+  biblio: {
+
+    no_occurrence: "Aucune occurrence pour la bibliographie « %s ».",
+    
+    intro_assistant: "Nous allons programmer les bibliographies du livre courant",
+    has_already_biblio: "Ce livre définit déjà les bibliographies %s.",
+    bibs_created_with_success: "Les bibliographies ont été créées avec succès.",
+    consigned: "Bibliographie consignée.",
+
+  }, #/ :biblio
+
+
   # --- Assistants --- #
+
   assistant: {
 
     require_book_folder: "Cet assistant doit être appelé depuis le dossier d'un livre.",
 
-    biblio: {
-
-      intro: "Nous allons programmer les bibliographies du livre courant",
-      has_already_biblio: "Ce livre définit déjà les bibliographies %s.",
-      bibs_created_with_success: "Les bibliographies ont été créées avec succès.",
-    }, #/assistant:biblio
-
   }, #/assistant
 
-  # --- Bibliographie --- #
-  biblio: {
-
-    no_occurrence: "Aucune occurrence pour la bibliographie « %s ».",
-
-  }, #/biblio
 
 }
 
@@ -38,7 +40,8 @@ MESSAGES[:biblio].merge!(explaination_after_create: <<-TEXT)
 Il vous reste quelques petites choses à faire :
 
 Le module FormaterBibliographiesModule du fichier formater.rb doit
-définir la ou les méthodes :%s
+définir la ou les méthodes :
+%s
 … qui vont permettre de formater les éléments dans la bibliographie.
 
 Pour ajouter un élément bibliographique, adopter par exemple pour la
