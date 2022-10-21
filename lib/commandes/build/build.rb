@@ -198,12 +198,12 @@ class PdfBook
     tdm.output(pdf.tdm_page) if table_des_matieres?
 
     #
-    # - PAGINATION -
+    # - ENTETE & PIED DE PAGE -
     # 
     # Écriture des numéros de page ou numéros de paragraphes
     # En bas de toutes les pages qui le nécessitent.
     # 
-    pdf.set_pages_numbers(@pages)
+    pdf.build_headers_and_footers(self, @pages)
 
 
     if module_parser? && ParserParagraphModule.respond_to?(:report)

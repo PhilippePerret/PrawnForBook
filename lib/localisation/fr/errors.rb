@@ -8,6 +8,17 @@ ERRORS = {
 
   # --- Recette --- #
 
+  recipe: {
+
+    headers: {
+      required: 'La définition des entêtes (:headers) est absolument requise.',
+    },
+    footers: {
+      requires: 'La définition des pieds de pages (:footers) est absolument requise.',
+    },
+
+  }, #/ :recipe
+
   # --- Bibliographie --- #
 
   biblio: {

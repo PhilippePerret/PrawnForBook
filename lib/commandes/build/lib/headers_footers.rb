@@ -2,6 +2,99 @@ module Prawn4book
 class PrawnView
 
   ##
+  # = main =
+  # 
+  # Méthode principale qui construit les entêtes et pieds de page
+  # sur tout le livre.
+  def build_headers_and_footers(pdfbook, data_pages)
+    Header.build(pdfbook, data_pages)
+    Footer.build(pdfbook, data_pages)
+  end
+
+  ##########################################################
+  #
+  # Class PrawnView::AbstractHeadFoot
+  #
+  # Classe abstraite pour Header et Footer
+  #
+  ##########################################################
+  class AbstractHeadFoot
+    class << self
+      attr_reader :pdfbook
+      # = main =
+      # 
+      # Méthode principale pour construire les entêtes et les
+      # pieds de pages
+      # 
+      def build(pdfbook, data_pages)
+        init(pdfbook)
+        data.each { |ditem| new(ditem).build }
+      end
+      def init(pdfbook)
+        @pdfbook = pdfbook
+      end
+      def data
+        @data ||= pdfbook.recipe.get(things) || fatal_error(ERRORS[:recipe][things][:required])
+      end
+    end #/ << self
+
+    # --- INSTANCE (headers and footers) ---
+    
+    attr_reader :data
+    def initialize(data)
+      @data = data
+    end
+
+    # Méthode générique pour construire l'entête ou le pied
+    # de page
+    def build
+      puts "\nJe dois apprendre à construire un #{self.class.thing} de la page #{pages.first} à la page #{pages.last}".jaune      
+    end
+
+    def pages
+      @pages ||= begin
+        d = data[:pages]
+        d = eval(d) if d.is_a?(String)
+        d.to_a
+      end
+    end
+
+  end #/ class AbstractHeadFoot
+
+
+  ##########################################################
+  #
+  # Class PrawnView::Header
+  #
+  # Construction des entêtes
+  #
+  ##########################################################
+
+  class Header < AbstractHeadFoot
+    def self.things; :headers end
+    def self.thing;  :header  end
+
+  end
+
+
+  ##########################################################
+  #
+  # Class PrawnView::Footer
+  #
+  # Construction des pieds de page
+  #
+  ##########################################################
+
+  class Footer < AbstractHeadFoot
+    def self.things; :footers end
+    def self.thing;  :footer  end 
+
+  end
+
+
+
+
+  ##
   # Place les numéros de pages
   # (note : ne devrait pas être utilisé puisqu'on mettra plutôt
   #  le numéro des paragraphes)
