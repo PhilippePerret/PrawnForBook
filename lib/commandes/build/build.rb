@@ -243,7 +243,8 @@ class PdfBook
   # 
   DEFAULT_DATA_PAGE = {
     first_par:nil, last_par: nil,
-    title1: '', title2:'', title3:'', title4:'', title5:'', title6:''
+    title1: '', title2:'', title3:'', title4:'', title5:'', title6:'',
+    TITLE1: '', TITLE2:'', TITLE3:'', TITLE4:'', TITLE5:'', TITLE6:''
   }
 
   def add_page(num_page)
@@ -255,7 +256,10 @@ class PdfBook
     # On lui donne tous les titres courants
     # 
     current_titles.each do |ktitre, titre|
-      pages.merge!(ktitre => titre)
+      pages.merge!(
+        ktitre => titre,
+        ktitre.upcase => (titre && titre.upcase)
+      )
     end
   end
 
@@ -317,7 +321,10 @@ class PdfBook
     # S'il faut créer cette nouvelle page
     # 
     pages[num_page] || add_page(num_page)
-    pages[num_page].merge!(ktitre => parag.text)
+    pages[num_page].merge!(
+      ktitre => parag.text,
+      ktitre.upcase => parag.text.upcase
+    )
     # 
     # Tous les titres de niveau suivant doivent être
     # ré-initialisés

@@ -5,7 +5,7 @@
 - :pages: "(2..8)"
   :disposition:
     :even: "%{title1}- |  |"
-    :odd: "| | -%{title1}"
+    :odd: "| | -%{TITLE1}"
   :font: Arial
   :size: 8
   :style: :normal

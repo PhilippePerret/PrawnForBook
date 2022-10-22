@@ -61,12 +61,9 @@ class PrawnView
     # de page
     # 
     def build(pdf)
-      puts "\nJ'apprends à construire un #{self.class.thing} de la page #{pages.first} à la page #{pages.last}".jaune      
       @font_size = data[:size] || 9
       @font_face = data[:font] || 'Arial'
       # page_count = pdf.page_count.freeze
-
-
 
       pdf.font(@font_face, size: @font_size)
 
@@ -114,7 +111,7 @@ class PrawnView
       return nil if cas.nil? # case non définie
       return '' if data_pages[numero_page].nil?
       dtemp = {}.merge(data_pages[numero_page])
-      puts "dtemp = #{dtemp.inspect}"
+      # puts "dtemp = #{dtemp.inspect}"
       if cas.match?(/%{numero}/)
         pagine = pdfbook.pagination_page? ? numero_page : paragraphs_for(numero_page)
         pagine ||= numero_page # le cas échéant (pas de paragraphe)
