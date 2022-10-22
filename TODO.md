@@ -1,6 +1,6 @@
 # Todo courant
 
-* Quand il n'y a pas de paragraphes, essayer de mettre le numéro de page en entête/pied de page (mais il faudrait pouvoir l'activer ou le désactiver)
+* Choix de la fonte par défaut : prendre la première trouvée
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo

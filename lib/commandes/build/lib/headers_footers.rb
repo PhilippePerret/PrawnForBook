@@ -126,8 +126,10 @@ class PrawnView
     # 
     def paragraphs_for(numpage)
       dp = data_pages[numpage]
-      return '' if dp.nil?
-      "#{dp[:first_par]}-#{dp[:last_par]}"
+      return nil if dp.nil?
+      dp = "#{dp[:first_par]}-#{dp[:last_par]}"
+      return nil if dp == '-'
+      return dp
     end
 
     ## Retourne la procédure pour écrire l'élément (soit le header
