@@ -30,7 +30,7 @@ class PrawnView
       def build(pdfbook, pdf, data_pages)
         init(pdfbook, data_pages)
         data.each { |ditem| new(ditem).build(pdf) }
-        puts "Data page: #{data_pages.inspect}".bleu
+        # puts "Data page: #{data_pages.inspect}".bleu
       end
       def init(pdfbook, data_pages)
         @pdfbook    = pdfbook
