@@ -16,7 +16,7 @@ class PrawnView
   #   Praw4book::PdfBook::Tdm#output
   #   cf. le fichier PdfBook_TdM.rb
   # 
-  def build_table_des_matieres
+  def build_table_of_contents
     self.tdm_page = page_number
     font "Nunito", size: 20 # TODO À régler
     text "Table des matières"

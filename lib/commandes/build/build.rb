@@ -165,7 +165,7 @@ class PdfBook
       
     pdf.build_page_de_titre if page_de_titre?
 
-    pdf.build_table_des_matieres if table_des_matieres?
+    pdf.build_table_of_contents if table_of_contents?
 
     # 
     # Pour commencer sur la belle page, on doit toujours ajouter
@@ -204,7 +204,7 @@ class PdfBook
     # 
     # - TABLE DES MATIÈRES -
     # 
-    tdm.output(pdf.tdm_page) if table_des_matieres?
+    tdm.output(pdf.tdm_page) if table_of_contents?
 
     #
     # - ENTETE & PIED DE PAGE -
@@ -339,7 +339,7 @@ class PdfBook
 
   # --- Predicate Methods ---
 
-  def table_des_matieres?     ;recette.table_of_content?    end
+  def table_of_contents?     ;recette.table_of_content?    end
   def skip_page_creation?     ;recette.skip_page_creation?  end
   def page_de_garde?          ;recette.page_de_garde?       end
   def page_faux_titre?        ;recette.page_faux_titre?     end

@@ -1,5 +1,6 @@
 # Todo courant
 
+* Construire la table des matières à la marque `(( toc ))`
 * Mettre en place la gestion des footers/headers
   -> TRAITER les titres (dans les pages data_pages)
 * Dessiner les lignes de référence et les marges à la toute fin,

@@ -222,6 +222,22 @@ Pour qu'un grand titre se retrouve toujours sur une belle page (ie la page impai
 
 Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
 
+---
+
+<a name="mark-new-pages"></a>
+
+### Marque de nouvelle page
+
+Pour forcer le passage à la page suivante, on utilise dans le texte, seul sur un paragraphe, l’’une de ces deux marques :
+
+~~~text
+(( new_page ))
+
+<!-- OU -->
+
+(( nouvelle_page ))
+~~~
+
 
 
 ---
@@ -240,7 +256,25 @@ Pour sa mise en page, voir la [recette concernant les pages spéciales](#all-typ
 
 #### Table des matières
 
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété              | valeurs possibles    |
+| -------------------------------------------------------- | ------- | ---------------------- | -------------------- |
+|                                                          |         | **:table_of_contents** | Table de valeurs cf. |
+
 La table des matières se construit sur la base des titres.
+
+Elle s’inscrit dans le livre à l’endroit où est placé dans le texte un : 
+
+~~~text
+(( toc ))
+
+<!-- OU -->
+
+(( tdm ))
+~~~
+
+> “toc” signifie “Table of Contents” ou “Table des matières” en anglais.
+
+**ATTENTION** : La construction de la table des matières n’ajoute pas automatiquement de nouvelles pages si la table déborde de la page qui lui est réservée  (tout simplement parce qu’’alors tous les numéros de pages seraient obsolètes…). Si la table des matières tient sur plusieurs page, il faut donc ajouter autant de [marques de nouvelles pages](#mark-new-pages) que voulus.
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
 
@@ -1084,8 +1118,8 @@ Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépend
   # :font:  "LaFonte"
 	# :size:  16
 # --- Réglage de la table des matières ---
-:table_des_matieres:
-  :display: false # true pour l'afficher
+# Elle sera affichée à la marque '(( toc ))'
+:table_of_contents:
   :font:    'fontName'  # police à utiliser (elle doit être chargée)
   :size:    11          # taille de la police
   :line_height: null    # Hauteur de ligne. Par défaut, c'est 14

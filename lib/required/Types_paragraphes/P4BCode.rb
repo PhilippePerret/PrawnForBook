@@ -13,7 +13,10 @@ class P4BCode < AnyParagraph
   def print(pdf)
     
     case raw_code
-    when 'new_page'
+    when 'new_page', 'nouvelle_page'
+      pdf.start_new_page
+    when 'tdm', 'toc'
+      pdf.numero_page_toc = pdf.page_number
       pdf.start_new_page
     when 'index'
       pdfbook.page_index.build(pdf)

@@ -9,7 +9,7 @@
 :page_de_garde:       true
 :page_de_titre:       true
 :faux_titre:          true
-:table_des_matieres:  true
+:table_of_contents:  true
 :infos:
   :display:     true
   :isbn:        2546-6987-45879-8

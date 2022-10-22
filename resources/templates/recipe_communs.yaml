@@ -69,15 +69,12 @@
   #   :height: 10 # en millimètres
 
 # --- Table Des Matières ---
+# Elle sera affichée à la marque '(( toc ))'
 :table_of_content:
-  :display: true # true => afficher la table des matières
-  # Page où insérer la table des matières. Si sa valeur est :flux 
-  # elle sera placée en fonction des autres pages présentes
   :font:   'Garamond'
   :size:   11
   :line_height: null # 14 par défaut 
   :from_top:    null # ou nombre de lignes depuis le haut
-  :page_number: :flux 
   # Valeur à ajouter à gauche au numéro (avant les
   # pointillés)
   :add_to_numero_with: 0
