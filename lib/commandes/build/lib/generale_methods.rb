@@ -57,6 +57,11 @@ class PrawnView
     @table_reference_grid || begin
       define_default_leading
     end
+    #
+    # Ajouter une page dans la donnée @pages du book
+    # 
+    pdfbook.add_page(page_number)
+    
     # 
     # Avec l'option -g/--grid on peut demander l'affichage de la 
     # grille de référence

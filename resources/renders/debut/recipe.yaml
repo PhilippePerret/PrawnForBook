@@ -2,23 +2,28 @@
 :info: {}
 :num_page_style: num_parags
 :headers:
-- :pages: "(10..200)"
+- :pages: "(2..8)"
   :disposition:
-    :odd: "| -%titre1- |"
-    :even: "| -%titre1- |"
-  :font: ArialNarrow
-  :size: 8
-  :style: :bold
-:footers:
-- :pages: "(10..20)"
-  :disposition:
-    :odd: "| -%num- |"
-    :even: "| -%num- |"
+    :even: "%{title1}- |  |"
+    :odd: "| | -%{title1}"
   :font: Arial
   :size: 8
-  :style: :bold
-:page_info: {}
-:table_des_matières: {}
+  :style: :normal
+# - :pages: "(9..14)"
+#   :disposition:
+#     :even: "%{title2}- | |"
+#     :odd: "| | -%{title2}"
+#   :font: Arial
+#   :size: 8
+#   :style: :normal
+:footers:
+- :pages: "(4..14)"
+  :disposition:
+    :odd: "| -%{numero}- |"
+    :even: "| -%{numero}- |"
+  :font: Arial
+  :size: 8
+  :style: :normal
 :book_title: Titre du livre
 :book_subtitle: "Le sous-titre du livre où\nles retours chariot seront \nconservés
   et affiché\n"
@@ -85,8 +90,9 @@
 :page_de_garde: false
 :faux_titre: false
 :page_de_titre: false
+:page_info: true
 :table_of_content:
-  :display: true
+  :display: false
   :page_number: 4
 :titles:
   :level1:

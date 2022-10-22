@@ -10,6 +10,12 @@ class PdfBook
   # paragraphes)
   attr_reader :pages
 
+  # Pour exposer les titres courants par niveau en cours
+  # de fabrication (pour alimenter la données pages et 
+  # permettre ensuite le traitement des pieds de page et
+  # entêtes)
+  attr_reader :current_titles
+
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
 
@@ -22,6 +28,10 @@ class PdfBook
     # éléments requis
     # 
     check_if_conforme || return
+    # 
+    # Initialiser le suivi des titres par niveau
+    # 
+    @current_titles = {}
     # 
     # Instanciation de la table de référence
     # 
@@ -155,7 +165,6 @@ class PdfBook
       
     pdf.build_page_de_titre if page_de_titre?
 
-
     pdf.build_table_des_matieres if table_des_matieres?
 
     # 
@@ -203,7 +212,7 @@ class PdfBook
     # Écriture des numéros de page ou numéros de paragraphes
     # En bas de toutes les pages qui le nécessitent.
     # 
-    pdf.build_headers_and_footers(self, @pages)
+    pdf.build_headers_and_footers(self, pdf, @pages)
 
 
     if module_parser? && ParserParagraphModule.respond_to?(:report)
@@ -222,6 +231,103 @@ class PdfBook
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
       return false
     end
+  end
+
+
+  # --- Titles Methods ---
+  
+  # Donnée de page par défaut
+  # 
+  # Il s'agit des données qui servent à consigner les premiers et
+  # derniers paragraphes de chaque page, ainsi que le titre courant
+  # 
+  DEFAULT_DATA_PAGE = {
+    first_par:nil, last_par: nil,
+    title1: '', title2:'', title3:'', title4:'', title5:'', title6:''
+  }
+
+  def add_page(num_page)
+    #
+    # On met les valeurs par défaut dans la donnée de page
+    # 
+    pages.merge!(num_page => DEFAULT_DATA_PAGE.dup)
+    #
+    # On lui donne tous les titres courants
+    # 
+    current_titles.each do |ktitre, titre|
+      pages.merge!(ktitre => titre)
+    end
+  end
+
+  # Lorsqu'un paragraphe (NTextParagraph) est créé, on renseigne
+  # la ou les pages sur lesquels il se trouve
+  # 
+  # @param parag {NTextParagraph} L'instance du paragraphe qui
+  #               vient d'être imprimé
+  def set_paragraphs_in_pages(parag)
+    # 
+    # Numéro de ce paragraphe
+    # 
+    parag_numero = parag.numero
+    # 
+    # Faut-il créer la page de départ du paragraphe ?
+    # 
+    pages[parag.first_page] || add_page(parag.first_page)
+    # 
+    # On prend la page de départ du paragraphe
+    # 
+    page_debut_parag = pages[parag.first_page]
+    # 
+    # Si le premier paragraphe de la page de départ du 
+    # paragraphe n'est pas défini, c'est le paragraphe
+    if page_debut_parag[:first_par].nil?
+      page_debut_parag.merge!(first_par: parag_numero)
+    end
+    # 
+    # Faut-il créer la page de fin du paragraphe ?
+    # 
+    pages[parag.last_page] || add_page(parag.last_page)
+    # 
+    # On prend la page de fin du paragraphe
+    # 
+    page_fin_parag = pages[parag.last_page]
+    # 
+    # Si le premier paragraphe de la page de fin n'est
+    # pas défini, on le met à ce paragraphe
+    # 
+    if page_fin_parag[:first_par].nil?
+      page_fin_parag.merge!(first_par: parag_numero)
+    end
+    # 
+    # Dans tous les cas on met le dernier paragraphe de
+    # la page à ce paragraphe
+    # 
+    page_fin_parag.merge!(last_par: parag_numero)
+  end
+
+  # Pour mettre le paragraphe +parag+ en titre courant de son niveau
+  # @param parag {PdfBook::NTitre}
+  # @param num_page {Integer} Numéro de la page courante au moment du
+  #                 titre. Noter qu'elle a été ajoutée à @pages à
+  #                 l'écriture du paragraphe.
+  def set_current_title(parag, num_page)
+    ktitre = "title#{parag.level}".to_sym
+    @current_titles.merge!(ktitre => parag.text)
+    # 
+    # S'il faut créer cette nouvelle page
+    # 
+    pages[num_page] || add_page(num_page)
+    pages[num_page].merge!(ktitre => parag.text)
+    # 
+    # Tous les titres de niveau suivant doivent être
+    # ré-initialisés
+    # 
+    ((parag.level + 1)..6).each do |level|
+      ktit = "title#{level}".to_sym
+      @current_titles.merge!(ktit => nil)
+      pages[num_page].merge!(ktit => "")
+    end
+
   end
 
   # --- Predicate Methods ---

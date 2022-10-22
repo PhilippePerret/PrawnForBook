@@ -6,9 +6,9 @@ class PrawnView
   # 
   # Méthode principale qui construit les entêtes et pieds de page
   # sur tout le livre.
-  def build_headers_and_footers(pdfbook, data_pages)
-    Header.build(pdfbook, data_pages)
-    Footer.build(pdfbook, data_pages)
+  def build_headers_and_footers(pdfbook, pdf, data_pages)
+    Header.build(pdfbook, pdf, data_pages)
+    Footer.build(pdfbook, pdf, data_pages)
   end
 
   ##########################################################
@@ -21,34 +21,284 @@ class PrawnView
   class AbstractHeadFoot
     class << self
       attr_reader :pdfbook
+      attr_reader :data_pages
       # = main =
       # 
       # Méthode principale pour construire les entêtes et les
       # pieds de pages
       # 
-      def build(pdfbook, data_pages)
-        init(pdfbook)
-        data.each { |ditem| new(ditem).build }
+      def build(pdfbook, pdf, data_pages)
+        init(pdfbook, data_pages)
+        data.each { |ditem| new(ditem).build(pdf) }
+        puts "Data page: #{data_pages.inspect}".bleu
       end
-      def init(pdfbook)
-        @pdfbook = pdfbook
+      def init(pdfbook, data_pages)
+        @pdfbook    = pdfbook
+        @data_pages = data_pages
       end
       def data
         @data ||= pdfbook.recipe.get(things) || fatal_error(ERRORS[:recipe][things][:required])
       end
     end #/ << self
 
+
     # --- INSTANCE (headers and footers) ---
+
     
     attr_reader :data
     def initialize(data)
       @data = data
+      analyse_disposition
     end
 
+    # Raccourcis
+    def pdfbook     ; self.class.pdfbook    end
+    def data_pages  ; self.class.data_pages end
+
+    # = MAIN BUILDER =
+    # 
     # Méthode générique pour construire l'entête ou le pied
     # de page
-    def build
-      puts "\nJe dois apprendre à construire un #{self.class.thing} de la page #{pages.first} à la page #{pages.last}".jaune      
+    # 
+    def build(pdf)
+      puts "\nJ'apprends à construire un #{self.class.thing} de la page #{pages.first} à la page #{pages.last}".jaune      
+      @font_size = data[:size] || 9
+      @font_face = data[:font] || 'Arial'
+      # page_count = pdf.page_count.freeze
+
+
+
+      pdf.font(@font_face, size: @font_size)
+
+      proc_for_odd = hdft_procedure_for(pdf, :odd)
+      proc_for_even = hdft_procedure_for(pdf, :even)
+      
+      # 
+      # Séparation des pages impaires et paires
+      # 
+      odd_pages   = [] # impaires
+      even_pages  = [] # paires
+      pages.to_a.each do |ipage|
+        (ipage.odd? ? odd_pages : even_pages) << ipage
+      end
+
+      num_page = pdfbook.pagination_page?
+
+      # 
+      # INSCRIPTION DES HEADERS OU FOOTERS
+      # 
+      pdf.repeat even_pages, dynamic: true do
+        contents = {
+          left:   content_for(even_left_temp,   pdf.page_number), 
+          center: content_for(even_center_temp, pdf.page_number),
+          right:  content_for(even_right_temp,  pdf.page_number)
+        }
+        pdf.update do
+          proc_for_even.call(contents)
+        end
+      end
+      pdf.repeat odd_pages, dynamic: true do
+        contents = {
+          left:   content_for(odd_left_temp,   pdf.page_number), 
+          center: content_for(odd_center_temp, pdf.page_number),
+          right:  content_for(odd_right_temp,  pdf.page_number)
+        }
+        pdf.update do
+          proc_for_odd.call(contents)
+        end
+      end
+
+    end
+
+    def content_for(cas, numero_page)
+      return nil if cas.nil? # case non définie
+      return '' if data_pages[numero_page].nil?
+      dtemp = {}.merge(data_pages[numero_page])
+      puts "dtemp = #{dtemp.inspect}"
+      if cas.match?(/%{numero}/)
+        pagine = pdfbook.pagination_page? ? numero_page : paragraphs_for(numero_page)
+        pagine ||= numero_page # le cas échéant (pas de paragraphe)
+        dtemp.merge!(numero: pagine.to_s)
+      end
+      cas % dtemp
+    end
+
+    ##
+    # Retourne la pagination pour les paragraphes de la page
+    # +numpage+
+    # 
+    def paragraphs_for(numpage)
+      dp = data_pages[numpage]
+      return '' if dp.nil?
+      "#{dp[:first_par]}-#{dp[:last_par]}"
+    end
+
+    ## Retourne la procédure pour écrire l'élément (soit le header
+    # soit le footer en fonction de l'instance appelée)
+    # 
+    def hdft_procedure_for(pdf, side)
+
+      cL = send("#{side}_left".to_sym)
+      cM = send("#{side}_center".to_sym)
+      cR = send("#{side}_right".to_sym)
+
+      w = pdf.bounds.width
+      pct100 = pct2width(w, 100)
+      pct50  = pct2width(w, 50)
+      pct33  = pct2width(w, 33)
+      pct66  = pct2width(w, 66)
+      pct34  = pct2width(w, 34)
+      # 
+      # Top et Hauteur
+      # 
+      top, height = self.class.calc_top_and_height(pdf)
+      # 
+      # Préparation des données
+      # 
+      cusdata = {height: height, size: @font_size}
+      #
+      # Pour mettre les données du text_box (et les débugguer)
+      # 
+      dtb = nil
+
+      laproc = 
+      if cL && cM.nil? && cR.nil?
+        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cL))
+        Proc.new do |contents|
+          pdf.text_box(contents[:left].to_s, dtb)
+        end
+      elsif cL.nil? && cM && cR.nil?
+        # Seulement au milieu
+        dtb = cusdata.merge(width: pct100, at: [0, top], align: align_of(cM))
+        Proc.new do |contents|
+          pdf.text_box(contents[:center].to_s, dtb)
+        end
+      elsif cL.nil? && cL.nil? && cR
+        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cR))
+        Proc.new do |contents|
+          pdf.text_box(contents[:right].to_s, dtb)
+        end
+      elsif cL && cM && cR.nil?
+        dtb_left    = cusdata.merge(width:pct34, at:[0, top], align:align_of(cL))
+        dtb_center  = cusdata.merge(width:pct66, at:[pct34, top], align:align_of(cM))
+        Proc.new do |contents|
+          pdf.text_box(contents[:left].to_s, dtb_left)
+          pdf.text_box(contents[:center].to_s, dtb_center)
+        end
+      elsif cL && cM.nil? && cR
+        lL = 0
+        wL = pct50
+        lR = pct50
+        wR = pct50
+      elsif cL.nil? && cM && cR
+        lM = pct33
+        wM = pct34
+        lR = pct66
+        wR = pct34
+      elsif cL && cM && cR
+        lL = 0
+        wL = pct33
+        lM = pct33
+        wM = pct34
+        lR = pct2width(w, 67)
+        wR = pct33
+      end
+
+      # Debug
+      puts "Data procédure pour #{side.inspect} : #{dtb.inspect}"
+
+      return laproc
+    end
+
+    # --- "Bords" (left, center, right) par "Side" (odd, even) ---
+
+    def odd_left
+      @odd_left ||= hdispositions[:odd][:left]
+    end
+    def odd_left_temp
+      @odd_left_temp ||= retire_tirets_align_in(odd_left)
+    end
+    def odd_center
+      @odd_center ||= hdispositions[:odd][:center]
+    end
+    def odd_center_temp
+      @odd_center_temp ||= retire_tirets_align_in(odd_center)
+    end
+    def odd_right
+      @odd_right ||= hdispositions[:odd][:right]
+    end
+    def odd_right_temp
+      @odd_right_temp ||= retire_tirets_align_in(odd_right)
+    end
+
+    def even_left
+      @even_left ||= hdispositions[:even][:left]
+    end
+    def even_left_temp
+      @even_left_temp ||= retire_tirets_align_in(even_left)
+    end
+    def even_right
+      @even_right ||= hdispositions[:even][:right]
+    end
+    def even_right_temp
+      @even_right_temp ||= retire_tirets_align_in(even_right)
+    end
+    def even_center
+      @even_center ||= hdispositions[:even][:center]
+    end
+    def even_center_temp
+      @even_center_temp ||= retire_tirets_align_in(even_center)
+    end
+
+    # --- Dispositions --- 
+
+    def hdispositions; @hdispositions end
+
+    def disposition
+      @disposition ||= data[:disposition] || erreur_fatale(ERRORS[things][:dispositions_required])
+    end
+
+    def analyse_disposition
+      odd_disp  = decompose_disp(disposition[:odd])
+      even_disp = decompose_disp(disposition[:even])
+      @hdispositions = {
+        odd:  {left: odd_disp[0], center:odd_disp[1], right:odd_disp[2]},
+        even: {left: even_disp[0], center:even_disp[1], right:even_disp[2]}
+      }
+    end
+
+    def decompose_disp(disp)
+      return disp if disp.is_a?(Hash)
+      disp.split('|').map do |s|
+        s = s.strip
+        s == '' ? nil : s
+      end
+    end
+
+    # Méthode qui retire les '-' au début ou à la fin des contenus
+    # des cases de headers et footers
+    # 
+    def retire_tirets_align_in(str)
+      return nil if str.nil?
+      str = str[1..-1] if str.start_with?('-')
+      str = str[0..-2] if str.end_with?('-')
+      return str
+    end
+
+
+    # --- Dimensions Methods --- #
+
+    def align_of(content)
+      case content
+      when /^\-.+\-$/ then :center
+      when /^\-/    then :right
+      else :left
+      end
+    end
+
+   def pct2width(w, pct)
+      return nil if pct.nil?
+      round(w * pct / 100)
     end
 
     def pages
@@ -71,9 +321,17 @@ class PrawnView
   ##########################################################
 
   class Header < AbstractHeadFoot
-    def self.things; :headers end
-    def self.thing;  :header  end
-
+    class << self
+      def things; :headers end
+      def thing;  :header  end
+      def calc_top_and_height(pdf)
+        @calc_top_and_height ||= begin
+          height = 20
+          top = pdf.bounds.top + height
+          [top, height]
+        end
+      end
+    end #/<< self
   end
 
 
@@ -86,9 +344,17 @@ class PrawnView
   ##########################################################
 
   class Footer < AbstractHeadFoot
-    def self.things; :footers end
-    def self.thing;  :footer  end 
-
+    class << self
+      def things; :footers end
+      def thing;  :footer  end 
+      def calc_top_and_height(pdf)
+        @calc_top_and_height ||= begin
+          height = 20
+          top = pdf.bounds.bottom
+          [top, height]
+        end
+      end
+    end #/<< self
   end
 
 

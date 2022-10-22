@@ -216,6 +216,12 @@ etc. si nécessaire.
 
 Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
 
+#### Grand titre sur une belle page
+
+Pour qu'un grand titre se retrouve toujours sur une belle page (ie la page impaire, à gauche), on doit mettre sa propriété `:belle_page` à `true` dans la [recette du livre ou de la collection][].
+
+Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
+
 
 
 ---
@@ -880,6 +886,8 @@ La donnée **`:line_height`** est particulièrement importante puisqu’elle dé
 :titles:
 	:level1:
 		:next_page: true # true => nouvelle page pour ce titre
+		:belle_page: false 	# mettre à true pour que le titre soit
+												# toujours sur une belle page (impaire)
 		:font: "LaFonte"
 		:size: 30
 		:margin_top: 0

@@ -27,4 +27,9 @@ module FormaterBibliographiesModule
       return c.join('')
     end
   end
+
+  def biblio_gadget(gad)
+    
+    
+  end
 end

@@ -4,6 +4,7 @@ class PrawnView
   attr_accessor :previous_paragraph
   attr_accessor :previous_text_paragraph
 
+
   # @param paragraphes {Array of AnyParagraph}
   def print_paragraphs(paragraphes)
     # On boucle sur tous les paragraphes du fichier d'entrée
@@ -33,6 +34,7 @@ class PrawnView
       # --- ÉCRITURE DU PARAGRAPHE ---
       # 
       paragraphe.print(self)
+      STDOUT.write green_point
 
 
       # On peut indiquer les pages sur lesquelles est inscrit le
@@ -40,20 +42,24 @@ class PrawnView
       if paragraphe.paragraph?
         # - Suivi du travail -
         # write_at(suivi % {num: paragraphe.numero}, 0, 0)
-        STDOUT.write green_point
+        pdfbook.set_paragraphs_in_pages(paragraphe)
+      end
 
-        pdfbook.pages[paragraphe.first_page] || begin
-          pdfbook.pages.merge!(paragraphe.first_page => {first_par:paragraphe.numero, last_par:nil})
-        end
-        pdfbook.pages[paragraphe.last_page] || begin
-          pdfbook.pages.merge!(paragraphe.last_page => {first_par:paragraphe.numero, last_par:nil})
-        end
-        # On le met toujours en dernier paragraphe de sa première page
-        pdfbook.pages[paragraphe.first_page][:last_par] = paragraphe.numero
+      #
+      # Si ce paragraphe est un titre, on le mémorise comme titre
+      # courant de son niveau. L'information est utile pour régler
+      # les titres des nouvelles pages.
+      # 
+      if paragraphe.titre?
+        pdfbook.set_current_title(paragraphe, page_number)
       end
       
       break if page_number === last_page
 
+      #
+      # On consigne ce dernier paragraphe
+      # (utile par exemple pour savoir s'il faut appliquer le
+      #  margin_top du paragraphe suivant)
       self.previous_paragraph = paragraphe
       if paragraphe.paragraph?
         self.previous_text_paragraph = paragraphe

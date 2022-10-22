@@ -6,7 +6,7 @@ class PdfBook
   # PDF prêt à l'impression.
   # 
   def initialize(folder)
-    @folder    = folder
+    @folder         = folder
   end
 
   # Pour actualiser le fichier recette
@@ -62,6 +62,7 @@ class PdfBook
   def inputfile
     @inputfile = InputTextFile.new(self, recette[:text_path])
   end
+
 
   # --- Predicate Methods ---
 
