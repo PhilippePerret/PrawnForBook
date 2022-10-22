@@ -7,7 +7,6 @@ DEFAULT_TOP_MARGIN    = 20
 DEFAULT_BOTTOM_MARGIN = 20
 DEFAULT_LEFT_MARGIN   = 20
 DEFAULT_RIGHT_MARGIN  = 20
-DEFAULT_FONT          = 'Arial'
 DEFAULT_SIZE_FONT     = 10
 DEFAULT_LINE_HEIGHT   = 12
 
@@ -96,7 +95,7 @@ class PrawnView
       float {
         move_cursor_to(h + 4)
         span(20, position: bounds.left - 20) do
-          font 'Arial', size:7
+          font pdfbook.second_font, size:7
           text round(h).to_s
         end
       }
@@ -137,7 +136,7 @@ class PrawnView
   end
 
   def add_cursor_position(str)
-    "<font size=\"8\" name=\"Arial\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
+    "<font size=\"8\" name=\"#{pdfbook.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
   end
 
   # --- Predicate Methods ---

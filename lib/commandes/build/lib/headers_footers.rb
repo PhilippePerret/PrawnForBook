@@ -62,8 +62,7 @@ class PrawnView
     # 
     def build(pdf)
       @font_size = data[:size] || 9
-      @font_face = data[:font] || 'Arial'
-      # page_count = pdf.page_count.freeze
+      @font_face = data[:font] || pdfbook.second_font
 
       pdf.font(@font_face, size: @font_size)
 
@@ -104,7 +103,6 @@ class PrawnView
           proc_for_odd.call(contents)
         end
       end
-
     end
 
     def content_for(cas, numero_page)
@@ -470,7 +468,7 @@ class PrawnView
     @footer_font_name ||= begin
       if pdfbook.recette.footers && pdfbook.recette.footers[0]
         pdfbook.recette.footers[0][:font] 
-      end || DEFAULT_FONT
+      end || pdfbook.second_font
     end
   end
   def footer_font_size

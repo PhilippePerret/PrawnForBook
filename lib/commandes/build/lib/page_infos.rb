@@ -34,7 +34,7 @@ class PrawnView
     #
     # Mise en forme voulue
     # 
-    font "Garamond", size: 12 # TODO pouvoir le régler
+    font pdfbook.first_font, size: 12
 
     #
     # Options générales

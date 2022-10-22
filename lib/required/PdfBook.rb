@@ -35,6 +35,30 @@ class PdfBook
     end
   end
 
+  # --- Objects Methods ---
+
+  def font_or_default(font_name)
+    fontes.key?(font_name) ? font_name : second_font  
+  end
+
+  ##
+  # Première fonte définie (pour valeur par défaut de certains
+  # texte majeurs)
+  # 
+  def first_font
+    @first_font ||= fontes.keys[0]
+  end
+
+  # @prop Seconde fonte définie (ou première si une seule) pour 
+  # valeur par défaut de certains texte mineurs.
+  def second_font
+    @second_font ||= fontes.keys[1] || first_font
+  end
+
+  def fontes
+    @fontes ||= recette[:fonts]
+  end
+
   # @prop Instance {PdfBook::Recipe} de la recette du livre
   # @usage
   #   <book>.recette[key] # => valeur dans la recette du livre

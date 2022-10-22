@@ -47,7 +47,7 @@ class PrawnView
       float {
         move_cursor_to(h + 4)
         span(20, position: bounds.left - 20) do
-          font 'Arial', size:7
+          font pdfbook.second_font, size:7
           text round(h).to_s
         end
       }
@@ -98,7 +98,7 @@ class PrawnView
   end
 
   def default_font
-    @default_font ||= config[:default_font]||DEFAULT_FONT
+    @default_font ||= config[:default_font]||pdfbook.second_font
   end
 
   def default_font_size

@@ -36,7 +36,7 @@ class NTextParagraph < AnyParagraph
         # 
         # On place le numéro de paragraphe
         # 
-        font "Bangla", size: 7
+        font pdfbook.font_or_default("Bangla"), size: 7
         # 
         # Taille du numéro si c'est en belle page, pour calcul du 
         # positionnement exactement
@@ -124,15 +124,15 @@ class NTextParagraph < AnyParagraph
   end
 
   def font_family(pdf)
-    @font_family ||= pdf.default_font # TODO Pouvoir changer
+    @font_family ||= pdf.default_font
   end
 
   def font_size(pdf)
-    @font_size ||= pdf.default_font_size # TODO Pouvoir changer
+    @font_size ||= pdf.default_font_size
   end
 
   def font_style(pdf)
-    @font_style ||= pdf.default_font_style # TODO Pouvoir changer
+    @font_style ||= pdf.default_font_style
   end
 
 end #/class NTextParagraph

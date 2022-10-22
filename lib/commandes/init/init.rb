@@ -318,18 +318,18 @@ class PdfBook
       header: {
         from_page: 10, to_page: 200,
         disposition: '| -%titre1- |',
-        style: {font: "ArialNarrow", size:8, style: :bold}
+        style: {font:pdfbook.second_font, size:8, style: :bold}
       },
       footer: {
         from_page: 1, to_page: 220,
         disposition: '| | -%num',
-        style: {font:'ArialNarrow', size:9}
+        style: {font:pdfbook.second_font, size:9}
       },
       titles: {
-        level1: { font: 'Nunito', size: 30 },
-        level2: { font: 'Nunito', size: 26 },
-        level3: { font: 'Nunito', size: 20 },
-        level4: { font: 'Nunito', size: 16 },
+        level1: { font: pdfbook.second_font, size: 30 },
+        level2: { font: pdfbook.second_font, size: 26 },
+        level3: { font: pdfbook.second_font, size: 20 },
+        level4: { font: pdfbook.second_font, size: 16 },
       }
 
     )

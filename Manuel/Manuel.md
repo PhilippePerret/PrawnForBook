@@ -1024,6 +1024,12 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 ~~~
 
+> L’ordre des fonts ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
+
+
+
+---
+
 <a name="recette-header-footer"></a>
 
 #### Entête et pied de page

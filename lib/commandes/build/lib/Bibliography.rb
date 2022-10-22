@@ -114,7 +114,7 @@ class Bibliography
     # 
     # Application de la fonte
     # 
-    ft = pdf.font('Garamond', size: 10)
+    ft = pdf.font(pdfbook.first_font, size: 10)
     items.values.sort_by do |bibitem|
       bibitem.keysort
     end.each do |bibitem|

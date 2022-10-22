@@ -11,7 +11,7 @@ class PrawnView
     # 
     dfauxtitre = pdfbook.recipe[:faux_titre]
     dfauxtitre = {
-      font: 'Garamond', size: 24
+      font: pdfbook.first_font, size: 24
     } if dfauxtitre === true
 
     #

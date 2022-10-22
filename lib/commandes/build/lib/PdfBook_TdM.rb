@@ -29,7 +29,7 @@ class Tdm
   DEFAULT_VALUES = {
     title:        MESSAGES[:toc][:title],
     title_level:  2,
-    font:         'Garamond',
+    font:         pdfbook.first_font,
     size:         10,
     first_line:   3,
     line_height:  14,
