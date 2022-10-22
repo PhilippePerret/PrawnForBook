@@ -15,10 +15,19 @@ class NTitre < AnyParagraph
     # 
     # Faut-il passer à la page suivante ?
     # C'est le cas si la propriété :next_page est à true dans la
-    # recette, pour ce titre.
+    # recette, pour ce titre. Ou si c'est sur une belle page que le
+    # titre doit être affiché.
     # 
-    pdf.start_new_page if next_page?
+    pdf.start_new_page if next_page? || belle_page?
+    # 
+    # Si le titre doit être affiché sur une belle page, et qu'on se
+    # trouve sur une page paire, il faut encore passer à la page
+    # suivante.
+    # 
+    pdf.start_new_page if belle_page? && pdf.page_number.even?
+
     debugit && puts(TB+"Cursor de nouvelle page : #{round(pdf.cursor)}")
+
     # 
     # Espace avant
     # (seulement si le paragraphe précédent n'avait pas de margin

@@ -19,6 +19,10 @@ class NTitre < AnyParagraph
     :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
   end
 
+  def belle_page?
+    :TRUE == @onbellepage ||= true_or_false(self.class.belle_page?(level))
+  end
+
   def titre?; true end
 
   def leading
@@ -87,6 +91,10 @@ class NTitre < AnyParagraph
 
   def self.next_page?(level)
     get_recipe(:next_page, level, false) === true
+  end
+
+  def self.belle_page?(level)
+    get_recipe(:belle_page, level, false) === true
   end
 
   def self.get_recipe(property, level, default_value)

@@ -97,6 +97,7 @@
 :titles:
   :level1:
     :next_page: true
+    :belle_page: true
     :font: Nunito
     :size: 30
     :margin_top: 4
@@ -123,10 +124,12 @@
 :biblio:
 - :tag: livre
   :title: Liste des ouvrages cités
+  :title_level: 2
   :data: biblio/livres.yaml
   :new_page: false
 - :tag: film
   :title: Films cités
+  :title_level: 2
   :data: biblio/films
   :new_page: false
 :references:
