@@ -1,6 +1,14 @@
 module Prawn4book
 class PrawnView
 
+  # Pour placer le curseur sur la ligne de référence la plus
+  # proche de la hauteur +hauteur+
+  # 
+  def move_cursor_to_lineref(hauteur)
+    move_cursor_to(hauteur)
+    move_cursor_to(line_reference.dup)
+  end
+
   # @return la hauteur de la ligne de référence au cursor
   def line_reference
     lr_inf = (cursor.to_i / line_height) * line_height

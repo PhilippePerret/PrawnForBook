@@ -16,8 +16,7 @@ class P4BCode < AnyParagraph
     when 'new_page', 'nouvelle_page'
       pdf.start_new_page
     when 'tdm', 'toc'
-      pdf.numero_page_toc = pdf.page_number
-      pdf.start_new_page
+      pdf.init_table_of_contents
     when 'index'
       pdfbook.page_index.build(pdf)
     when /^biblio/

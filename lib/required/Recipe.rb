@@ -73,10 +73,6 @@ class Recipe
     :TRUE == @haspagetitre ||= true_or_false(get(:page_de_titre) === true)
   end
 
-  def table_of_content?
-    :TRUE == @hastdm ||= true_or_false(get(:table_of_content,{})[:display] === true)
-  end
-
   def page_info?
     :TRUE == @writepageinfo ||= true_or_false(get(:infos)[:display] === true)
   end

@@ -27,8 +27,11 @@ class Tdm
   # de définir @data
   # 
   DEFAULT_VALUES = {
+    title:        MESSAGES[:toc][:title],
+    title_level:  2,
     font:         'Garamond',
     size:         10,
+    first_line:   3,
     line_height:  14,
     from_top:     50, # première ligne depuis le haut
     add_to_numero_width: 20,
@@ -38,19 +41,27 @@ class Tdm
   # Pour construire la table des matières sur la page
   # +on_page+
   # 
-  def output(on_page)
+  def build
     tdm = self
     with_num_page = pdfbook.recipe[:num_page_style] == 'num_page'
+
+    # 
+    # Quelques valeurs
+    # 
+    tdm_line_height = data[:line_height]
+    toc_first_line  = data[:first_line]
+    fonte           = data[:font]
+    font_size       = data[:size]
+    dtoc = data
 
     pdf.update do 
       
       # - Positionnement -
-      go_to_page(on_page)
-      move_cursor_to(bounds.height - tdm.data[:from_top])
-      
+      go_to_page(dtoc[:page_number])
+      move_cursor_to_lineref (bounds.height - toc_first_line * tdm_line_height)
+
       # - Réglages -
-      tdm_line_height = tdm.data[:line_height]
-      font tdm.data[:font], size: tdm.data[:size]
+      font(fonte, size: font_size)
 
       # - Largeur pour le numéro -
       largeur_numero = 0
@@ -60,7 +71,7 @@ class Tdm
         len = width_of((with_num_page ? dtitre[:page] : dtitre[:paragraph]).to_s)
         largeur_numero = len if len > largeur_numero
       end
-      largeur_numero += tdm.data[:add_to_numero_width]
+      largeur_numero += dtoc[:add_to_numero_width]
 
       tdm.content.each_with_index do |data_titre, idx|
         numero_destination = (with_num_page ? data_titre[:page] : data_titre[:paragraph]).to_s
@@ -70,7 +81,7 @@ class Tdm
           end
         }
         ititre  = data_titre[:titre]
-        indent  = 10 * tdm.data[:indent_per_offset][ititre.level - 1]
+        indent  = 10 * dtoc[:indent_per_offset][ititre.level - 1]
         titre   = ititre.text
         largeur_titre = bounds.width - largeur_numero
         text_box "#{titre} #{' .' * 100}", at:[indent, cursor], width: largeur_titre - indent, height: 14, overflow: :truncate
@@ -79,11 +90,9 @@ class Tdm
     end
   end
 
-
   def page_width
     @page_width ||= pdf.bounds.width
   end
-
 
   ##
   # En règle général, la valeur retournée est le numéro de page

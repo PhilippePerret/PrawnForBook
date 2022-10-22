@@ -1120,18 +1120,20 @@ Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépend
 # --- Réglage de la table des matières ---
 # Elle sera affichée à la marque '(( toc ))'
 :table_of_contents:
-  :font:    'fontName'  # police à utiliser (elle doit être chargée)
-  :size:    11          # taille de la police
-  :line_height: null    # Hauteur de ligne. Par défaut, c'est 14
-  :from_top:    null    # Hauteur de la première ligne par rapport 
-                        # au bord haut de la page (hors marge)
-  :add_to_numero_with: null # largeur (en unité pdf) à ajouter au
-                            # numéro de page. Correspond à l'arrêt 
-                            # des pointillés reliant les titres aux
-                            # numéros des pages/paragraphes
-  indent_per_offset: null   # ou liste des indentations en fonction
-                            # du niveau de titre. Par défaut :
-                            #   [0, 2, 4, 6, 8]
+	:title: 	"Table des matières" # si false, pas de titre
+	:title_level: 	2 					# niveau de titre du titre ci-dessus
+  :font:    			'fontName'  # police à utiliser (elle doit être chargée)
+  :size:    			11          # taille de la police
+  :line_height: 	null    		# Hauteur de ligne. Par défaut, c'est 14
+  :first_line:    null    		# Hauteur de la première ligne par rapport 
+                        			# au bord haut de la page (hors marge)
+  :add_to_numero_with: null 	# largeur (en unité pdf) à ajouter au
+                            	# numéro de page. Correspond à l'arrêt 
+                            	# des pointillés reliant les titres aux
+                            	# numéros des pages/paragraphes
+  indent_per_offset: null   	# ou liste des indentations en fonction
+                            	# du niveau de titre. Par défaut :
+                              #   [0, 2, 4, 6, 8]
 # --- Réglage de la page d'infos (fin du livre) ---
 :infos:
   :display:     true 			# pour la produire dans le livre

@@ -2,6 +2,14 @@ module Prawn4book
 
 MESSAGES = {
 
+  # --- Table des matières --- #
+
+  toc: {
+
+    title: 'Table des matières',
+
+  }, #/:toc
+
   # --- Recette --- #
 
   recipe: {

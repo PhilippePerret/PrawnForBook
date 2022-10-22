@@ -32,11 +32,6 @@ class PrawnView
   # la table des matières finales
   attr_accessor :tdm
 
-  # Numéro de la page sur laquelle doit être inscrite la table
-  # des matières. Elle se règle dans P4BCode.rb lorsque la
-  # balise '(( toc ))' ou '(( tdm ))' est rencontrée
-  attr_accessor :numero_page_toc
-
   def initialize(pdfbook, config)
     @pdfbook  = pdfbook
     @config   = config
@@ -94,6 +89,10 @@ class PrawnView
   end
 
   # --- Predicate Methods ---
+
+  def table_of_contents?
+    :TRUE == @hastoc ||= true_or_false(not(tdm.data[:page_number].nil?))
+  end
 
   def paragraph_number?
     :TRUE == @hasparagnum ||= true_or_false(pdfbook.recette.paragraph_number?)

@@ -92,8 +92,8 @@
 :page_de_titre: false
 :page_info: true
 :table_of_content:
-  :display: false
-  :page_number: 4
+  # :title: false # pas de titre
+  :first_line:  10
 :titles:
   :level1:
     :next_page: true
