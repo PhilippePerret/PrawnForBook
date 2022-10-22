@@ -160,46 +160,46 @@ class PrawnView
 
       laproc = 
       if cL && cM.nil? && cR.nil?
-        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cL))
+        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cL,:left))
         Proc.new do |contents|
           pdf.text_box(contents[:left].to_s, dtb)
         end
       elsif cL.nil? && cM && cR.nil?
         # Seulement au milieu
-        dtb = cusdata.merge(width: pct100, at: [0, top], align: align_of(cM))
+        dtb = cusdata.merge(width: pct100, at: [0, top], align: align_of(cM,:center))
         Proc.new do |contents|
           pdf.text_box(contents[:center].to_s, dtb)
         end
       elsif cL.nil? && cL.nil? && cR
-        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cR))
+        dtb = cusdata.merge(width:pct100, at:[0, top], align:align_of(cR, :right))
         Proc.new do |contents|
           pdf.text_box(contents[:right].to_s, dtb)
         end
       elsif cL && cM && cR.nil?
-        dtb_left    = cusdata.merge(width:pct34, at:[0, top], align:align_of(cL))
-        dtb_center  = cusdata.merge(width:pct66, at:[pct34, top], align:align_of(cM))
+        dtb_left    = cusdata.merge(width:pct34, at:[0, top], align:align_of(cL,:left))
+        dtb_center  = cusdata.merge(width:pct66, at:[pct34, top], align:align_of(cM,:center))
         Proc.new do |contents|
           pdf.text_box(contents[:left].to_s  , dtb_left)
           pdf.text_box(contents[:center].to_s, dtb_center)
         end
       elsif cL && cM.nil? && cR
-        dtb_left    = cusdata.merge(width:pct50, at:[0, top], align:align_of(cL))
-        dtb_right   = cusdata.merge(width:pct50, at:[pct50, top], align:align_of(cR))
+        dtb_left    = cusdata.merge(width:pct50, at:[0, top], align:align_of(cL,:left))
+        dtb_right   = cusdata.merge(width:pct50, at:[pct50, top], align:align_of(cR,:right))
         Proc.new do |contents|
           pdf.text_box(contents[:left].to_s , dtb_left)
           pdf.text_box(contents[:right].to_s, dtb_right)
         end
       elsif cL.nil? && cM && cR
-        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM))
-        dtb_right   = cusdata.merge(width:pct34, at:[pct66, top], align:align_of(cR))
+        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM, :center))
+        dtb_right   = cusdata.merge(width:pct34, at:[pct66, top], align:align_of(cR,:right))
         Proc.new do |contents|
           pdf.text_box(contents[:center].to_s, dtb_center)
           pdf.text_box(contents[:right].to_s , dtb_right)
         end
       elsif cL && cM && cR
-        dtb_left    = cusdata.merge(width:pct33, at:[0, top], align:align_of(cL))
-        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM))
-        dtb_right   = cusdata.merge(width:pct33, at:[lR, top], align:align_of(cR))
+        dtb_left    = cusdata.merge(width:pct33, at:[0, top], align:align_of(cL,:left))
+        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM,:center))
+        dtb_right   = cusdata.merge(width:pct33, at:[lR, top], align:align_of(cR,:right))
         Proc.new do |contents|
           pdf.text_box(contents[:left].to_s  , dtb_left)
           pdf.text_box(contents[:center].to_s, dtb_center)
@@ -291,11 +291,11 @@ class PrawnView
 
     # --- Dimensions Methods --- #
 
-    def align_of(content)
+    def align_of(content, default)
       case content
       when /^\-.+\-$/ then :center
       when /^\-/    then :right
-      else :left
+      else default
       end
     end
 

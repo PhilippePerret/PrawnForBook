@@ -1038,9 +1038,73 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 | -------------------------------------------------------- | ------- | ------------------------------- | ----------------- |
 |                                                          |         | **:headers:**<br />**:footers** | Liste de données  |
 
-> Noter qu’ils sont au pluriel
+> Noter qu’ils sont au pluriel car le principe est que pour chaque rang de page on peut définir un pied de page et une entête différents.
 
-Le principe est que pour chaque rang de page on peut définir un pied de page et une entête différents.
+##### Cases et contenus
+
+On considère qu’un entête et un pied de page est divisé en trois “cases” occupant chacune un tiers de la largeur de la page. Bien entendu, pour définir les entêtes et les pieds de page du livre, ces trois cases n’ont pas à être définis.
+
+On définit le contenu de ces trois cases en l’indiquant par une marque entre des “|” qui divisent les cases :
+
+~~~ruby
+"<case gauche> | <case centrale> | <case droite>"
+~~~
+
+Pour le moment, les contenus peuvent être :
+
+* un contenu fixe, qui ne change pas dans le rang de pages défini,
+* le numéro de page ou de paragraphes suivant le type de pagination,
+* le titre courant, normal ou en capitales, par niveau.
+
+Ces données s’indiquent de cette manière :
+
+~~~ruby
+"CONTENU FIXE | %{numero} | %{title4}"
+# "CONTENU FIXE" sera affiché à gauche sur toutes les pages
+# Au centre, le numéro de la page
+# À gauche, le titre de quatrième degré courant
+
+"%{TITLE1} | | %{TITLE2}"
+# => Le titre de niveau 1 courant sera affiché en capitales
+# sur la moitié gauche de la page
+# => Le titre de niveau 2 courant sera affiché en capitales
+# sur la moitié droite de la page.
+# Notez qu'on indique clairement que c'est la moitié qui est
+# vide
+~~~
+
+> Noter, dans le dernier exemple, qu’on indique clairement que c’est la partie centrale qui est vide, ce que n’indiquerait pas la marque `%{TITLE1} | %{TITLE2}` où il serait considéré que c’est la partie gauche et la partie centrale qui sont occupées.
+
+##### Alignements du contenu
+
+On peut ensuite indiquer l’alignement de chaque contenu dans la case correspondante à l’aide d’un simple tiret.
+
+* `contenu-` indique un alignement à gauche,
+* `-contenu` indique un alignement à droite,
+* `-contenu-` indique un alignement au centre.
+
+Par défaut, la case à gauche s’aligne à gauche, la case à droite s‘aligne à droite, la case centrale s’aligne au centre.
+
+Par exemple :
+
+~~~ruby
+" %{title1} | -%{numero} | -ŒIL-"
+# => Le titre de niveau 1 courant sera affiché à gauche avec
+# un alignement à gauche (par défaut)
+# => Le numéro de page sera placé au centre, aligné à droite
+# => Le texte fixe "ŒIL" sera placé à droite, au centre de la
+# case.
+~~~
+
+##### Rangs de pages
+
+On peut définir autant d’entête et de pieds de page différents que l’on veut. Chacun doit simplement définir son *rang de pages* à l’aide de la propriété `:pages` et un rang indiqué par `(premiere_page..derniere_page)`. Par exemple : `(4..6)` pour définir la page 4 à la page 6.
+
+##### Dans la recette du livre ou de la collection
+
+On peut donc définir chaque rang d’entête (`header`) ou de pied de page (`footer`) de cette manière :
+
+> Noter que le nom (`name`) est purement informatif, il ne sert à rien dans la mise en page.
 
 ~~~yaml
 :default: &styleheader 
@@ -1051,7 +1115,7 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 	- :name:  	"Nom de ce premier rang"
 		# Définition des pages qui utiliseront cet entête. Un rang de la
 		# première page à la dernière.
-		:pages: (12..15)
+		:pages: "(12..15)"
 		# Disposition de l'entête. Il est toujours constitué de 3 sections,
 		# le milieu, le côté gauche et le côté droit. Ils sont délimités
 		# par des "|". Le tiret '-' permet de définir l'alignement dans cette
@@ -1067,6 +1131,8 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 		:size:  11
 	# Un autre rang
 	- :name:    'Nom de ce second rang' # juste pour information
+		:pages: ...
+		:disposition: ...
 		# etc.
 #
 # --- PIEDS DE PAGE ---
@@ -1074,7 +1140,7 @@ Le principe est que pour chaque rang de page on peut définir un pied de page et
 # Les définitions sont les mêmes que pour les entêtes.
 :footers:
 	- :name: "Pied de page pour l'introduction"
-		:pages: (1..5)
+		:pages: '(1..5)'
 		:disposition:    ' | -%num- | '
 		:font: Arial
 		:size: 9
