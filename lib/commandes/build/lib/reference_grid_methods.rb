@@ -43,12 +43,6 @@ class PrawnView
   # TODO: Pouvoir ne la dessiner que sur certaines pages avec :
   #     --grid=4-12
   def print_reference_grid
-    define_default_leading
-    font = font(default_font, size: default_font_size)
-    h = bounds.top.dup - line_height
-    stroke_color 51, 0, 0, 3 # bleu ciel
-    fill_color 51, 0, 0, 3 # bleu ciel
-    line_width(0.1)
     while h > 0
       float {
         move_cursor_to(h + 4)
@@ -60,19 +54,8 @@ class PrawnView
       stroke_horizontal_line(0, bounds.width, at: h)
       h -= line_height
     end
-    stroke_color  0, 0, 0, 100
-    fill_color    0, 0, 0, 100
   end
 
-  def print_margins
-    stroke_color(88,0,58,28)
-    line_width(0.3)
-    stroke_horizontal_line(0, bounds.width, at: bounds.top)
-    stroke_horizontal_line(0, bounds.width, at: bounds.bottom)
-    stroke_vertical_line(0, bounds.top, at: bounds.left)
-    stroke_vertical_line(0, bounds.top, at: bounds.right)
-    stroke_color 0,0,0,100
-  end
 
   ##
   # Méthode qui définit le leading par défaut en fonction de :

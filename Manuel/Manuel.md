@@ -127,15 +127,27 @@ Pour gérer l’aspect général du livre, plusieurs options sont utiles.
 
 On peut par exemple demander l’affichage des marges à l’aide de l’option **`--display_margins`**  au moment de la fabrication du livre :
 
-<console>pfb build --display_margins</console>
+<console>pfb build -display_margins</console>
+
+Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les marges (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
+
+<console>pfb build -display_margins grid=4-12</console>
+
+… pour n’afficher les marges que sur les pages de 4 à 12.	
 
 #### Affichage de la grille de référence
 
 On peut afficher les lignes de la grille de référence (pour voir comment seront alignées les lignes du texte) à l’aide de l’option **`--display_grid`**  au moment de la fabrication du livre :
 
-<console>pfb build --display_grid</console> ou <console>pfb build -g</console>
+<console>pfb build -display_grid</console> ou <console>pfb build -g</console>
 
+Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les lignes de références (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
 
+<console>pfb build -display_grid grid=4-12</console>
+
+… pour n’afficher la grille de référence que sur les pages de 4 à 12.	
+
+#### 
 
 ---
 

@@ -1,11 +1,6 @@
 # Todo courant
 
-* Construire la table des matières à la marque `(( toc ))`
-* Mettre en place la gestion des footers/headers
-  -> TRAITER les titres (dans les pages data_pages)
-* Dessiner les lignes de référence et les marges à la toute fin,
-  avec un pdf.repeat (`dynamic: false`). Les méthodes se trouve dans 
-  generale_methods.rb
+* Quand il n'y a pas de paragraphes, essayer de mettre le numéro de page en entête/pied de page (mais il faudrait pouvoir l'activer ou le désactiver)
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo

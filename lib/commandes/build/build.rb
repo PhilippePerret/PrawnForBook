@@ -59,6 +59,7 @@ class PdfBook
       PdfBook::NTextParagraph.init_second_turn
       ok_book = build_pdf_book
     end
+
     if ok_book
       open_book if CLI.option(:open)
     end
@@ -217,7 +218,17 @@ class PdfBook
       ParserParagraphModule.report
     end
 
-    # end #/PrawnDoc.generate
+    # Avec l'option -g/--grid on peut demander l'affichage de la 
+    # grille de référence
+    #
+    pdf.draw_reference_grids if display_reference_grid?
+
+    # 
+    # Avec l'option --display_margins, on affiche les marges
+    # 
+    pdf.draw_margins if display_margins?
+
+    
     pdf.save_as(pdf_path)
 
     if File.exist?(pdf_path)
@@ -229,6 +240,13 @@ class PdfBook
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
       return false
     end
+  end
+
+  def display_reference_grid?
+    CLI.option(:display_grid)
+  end
+  def display_margins?
+    CLI.option(:display_margins)
   end
 
 

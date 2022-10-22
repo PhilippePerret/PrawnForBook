@@ -63,18 +63,70 @@ class PrawnView
     pdfbook.add_page(page_number)
     
     # 
-    # Avec l'option -g/--grid on peut demander l'affichage de la 
-    # grille de référence
-    #
-    CLI.option(:display_grid) && print_reference_grid
-    # 
-    # Avec l'option --display_margins, on affiche les marges
-    # 
-    CLI.option(:display_margins) && print_margins
-    # 
     # On replace toujours le curseur en haut de la page
     # 
     move_cursor_to_top_of_the_page
+  end
+
+  def draw_reference_grids
+    define_default_leading
+    font = font(default_font, size: default_font_size)
+    stroke_color 51, 0, 0, 3 # bleu ciel
+    fill_color 51, 0, 0, 3 # bleu ciel
+    line_width(0.1)
+    puts "CLI.params = #{CLI.params.inspect}".jaune
+    if CLI.params[:grid]
+      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
+      kpages = (pfirst..plast)
+    else
+      kpages = :all
+    end
+    repeat kpages do
+      print_reference_grid
+    end
+    stroke_color  0, 0, 0, 100
+    fill_color    0, 0, 0, 100
+  end
+  # Pour dessiner la grille de référence sur toutes les pages ou 
+  # seulement les pages choisies.
+  # Option : -display_grid
+  def print_reference_grid
+    h = bounds.top.dup - line_height
+    while h > 0
+      float {
+        move_cursor_to(h + 4)
+        span(20, position: bounds.left - 20) do
+          font 'Arial', size:7
+          text round(h).to_s
+        end
+      }
+      stroke_horizontal_line(0, bounds.width, at: h)
+      h -= line_height
+    end
+  end
+
+  # Pour dessiner les marges sur toutes les pages (ou seulement
+  # celles choisies)
+  # Option : -display_margins
+  def draw_margins
+    stroke_color(88,0,58,28)
+    line_width(0.3)
+    if CLI.params[:grid]
+      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
+      kpages = (pfirst..plast)
+    else
+      kpages = :all
+    end
+    repeat kpages do
+      print_margins
+    end
+    stroke_color 0,0,0,100
+  end
+  def print_margins
+    stroke_horizontal_line(0, bounds.width, at: bounds.top)
+    stroke_horizontal_line(0, bounds.width, at: bounds.bottom)
+    stroke_vertical_line(0, bounds.top, at: bounds.left)
+    stroke_vertical_line(0, bounds.top, at: bounds.right)
   end
 
   # --- Cursor Methods ---
