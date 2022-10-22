@@ -1,6 +1,5 @@
 # Todo courant
 
-* Finir les procédures des différents headers et footers
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo

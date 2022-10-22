@@ -179,30 +179,36 @@ class PrawnView
         dtb_left    = cusdata.merge(width:pct34, at:[0, top], align:align_of(cL))
         dtb_center  = cusdata.merge(width:pct66, at:[pct34, top], align:align_of(cM))
         Proc.new do |contents|
-          pdf.text_box(contents[:left].to_s, dtb_left)
+          pdf.text_box(contents[:left].to_s  , dtb_left)
           pdf.text_box(contents[:center].to_s, dtb_center)
         end
       elsif cL && cM.nil? && cR
-        lL = 0
-        wL = pct50
-        lR = pct50
-        wR = pct50
+        dtb_left    = cusdata.merge(width:pct50, at:[0, top], align:align_of(cL))
+        dtb_right   = cusdata.merge(width:pct50, at:[pct50, top], align:align_of(cR))
+        Proc.new do |contents|
+          pdf.text_box(contents[:left].to_s , dtb_left)
+          pdf.text_box(contents[:right].to_s, dtb_right)
+        end
       elsif cL.nil? && cM && cR
-        lM = pct33
-        wM = pct34
-        lR = pct66
-        wR = pct34
+        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM))
+        dtb_right   = cusdata.merge(width:pct34, at:[pct66, top], align:align_of(cR))
+        Proc.new do |contents|
+          pdf.text_box(contents[:center].to_s, dtb_center)
+          pdf.text_box(contents[:right].to_s , dtb_right)
+        end
       elsif cL && cM && cR
-        lL = 0
-        wL = pct33
-        lM = pct33
-        wM = pct34
-        lR = pct2width(w, 67)
-        wR = pct33
+        dtb_left    = cusdata.merge(width:pct33, at:[0, top], align:align_of(cL))
+        dtb_center  = cusdata.merge(width:pct34, at:[pct33, top], align:align_of(cM))
+        dtb_right   = cusdata.merge(width:pct33, at:[lR, top], align:align_of(cR))
+        Proc.new do |contents|
+          pdf.text_box(contents[:left].to_s  , dtb_left)
+          pdf.text_box(contents[:center].to_s, dtb_center)
+          pdf.text_box(contents[:right].to_s , dtb_right)
+        end
       end
 
       # Debug
-      puts "Data procédure pour #{side.inspect} : #{dtb.inspect}"
+      # puts "Data procédure pour #{side.inspect} : #{dtb.inspect}"
 
       return laproc
     end
