@@ -98,6 +98,9 @@ class PdfBook
       if defined?(PdfBookFormatageModule)
         PrawnView.extend PdfBookFormatageModule
       end
+      if defined?(FormaterParagraphModule)
+        NTextParagraph.include(FormaterParagraphModule)
+      end
     end
 
     # 

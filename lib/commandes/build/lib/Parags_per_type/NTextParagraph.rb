@@ -10,7 +10,19 @@ class NTextParagraph < AnyParagraph
   # 
   def print(pdf)
     
+    if own_builder?
+      return own_builder(pdf)
+      # on s'arrête, c'est le builder qui construit le paragraphe
+    elsif own_formaters?
+      own_formaters
+      # et on continue
+    end
+
     parag = self
+
+    mg_left   = self.margin_left
+    mg_right  = self.margin_right
+    indent    = self.indent
 
     pdf.update do
 
@@ -65,12 +77,24 @@ class NTextParagraph < AnyParagraph
         # en dessous
         # 
         move_up( ft.ascender - line_height)
-        text final_str, align: :justify, size: fontSize, 
-          font_style: fontStyle, inline_format: true
+        if mg_left
+          wbox = bounds.width - (mg_left + mg_right)
+          text_box(
+            final_str, 
+            at:[mg_left, cursor], size: fontSize, 
+            font_style: fontStyle, align: :justify, 
+            inline_format: true
+          )
+          move_down(final_str_height)
+        else
+          text(final_str, align: :justify, size: fontSize, 
+                  font_style: fontStyle, inline_format: true)
+        end
         move_down(ft.ascender)
         # puts "Cursor fin écriture parag : #{round(cursor)}"
       rescue Exception => e
         puts "Problème avec le paragraphe #{final_str.inspect}".rouge
+        puts "Erreur : #{e.message}"
         exit
       end
 
@@ -137,6 +161,12 @@ class NTextParagraph < AnyParagraph
     @margin_top || 0
   end
 
+  def margin_left; @margin_left ||= 0 end
+  def margin_left=(val); @margin_left = val end
+
+  def margin_right; @margin_right ||= 0 end
+  def margin_right=(val); @margin_right = val end
+
   def font_family(pdf)
     @font_family ||= begin
       pdf.default_font
@@ -164,12 +194,61 @@ class NTextParagraph < AnyParagraph
     @font_style = val
   end
 
+  def method_missing(method_name, *args, &block)
+    if method_name.to_s.end_with?('=')
+      prop_name = method_name.to_s[0..-2].to_sym
+      puts 
+      if self.instance_variables.include?(prop_name)
+        self.instance_variable_set(prop_name, args)
+      else
+        puts "instances_varialbes : #{self.instance_variables.inspect}"
+        raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
+      end
+    end
+  end
+
   # @return le style qui est peut-être défini par un code en ligne
   # au-dessus du paragraphe.
   def inline_style(key, default)
     return default if pfbcode.nil?
     pfbcode.parag_style[key] || default
   end
+
+  def own_builder?
+    return false if styled_tags.nil?
+    styled_tags.each do |tag|
+      if self.respond_to?("build_#{tag}_paragraph".to_sym)
+        @own_builder_method = "build_#{tag}_paragraph".to_sym
+        return true
+      end
+    end
+    return false
+  end
+
+  # Constructeur propre
+  def own_builder(pdf)
+    send(@own_builder_method, self, pdf)
+  end
+
+  def own_formaters?
+    return false if styled_tags.nil?
+    @own_formaters_methods = []
+    styled_tags.each do |tag|
+      if self.respond_to?("formate_#{tag}".to_sym)
+        @own_formaters_methods << "formate_#{tag}".to_sym
+        # Il faut toutes les récupérerer
+      end
+    end
+    return @own_formaters_methods.any?
+  end
+
+  def own_formaters
+    @own_formaters_methods.each do |formater|
+      send(formater, self)
+    end
+  end
+
+
 
 end #/class NTextParagraph
 end #/class PdfBook

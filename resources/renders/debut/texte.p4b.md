@@ -23,7 +23,7 @@ dict::text::Texte décrivant l'entrée de dictionnaire précédente pour voir ce
 # Un grand titre
 tip::Un paragraphe après le titre principal pour voir s'il sera à bonne distance, avec passage à la ligne pour en profiter aussi pour voir le leading courant. Il est dans le style 'tip' qui est un formatage complexe.
 Un paragraphe normal.
-gros::Ce paragraphe reçoit un formatage simple.
+gros::Ce paragraphe reçoit un <b>formatage</b> simple.
 
 (( {margin_left:50, width:"50%", margin_top: -100} ))
 IMAGE[images/logo.svg]

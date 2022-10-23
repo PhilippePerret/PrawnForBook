@@ -2,12 +2,16 @@ module FormaterParagraphModule
 
   # Définition simple d'un style de paragraphe
   def formate_gros(par)
-    
+    par.font_family = 'Bangla'
+    par.font_style  = :bold
+    par.font_size   = 13
+    par.margin_left = 50
   end
 
   # Constructeur complexe
   def build_tip_paragraph(par, pdf)
-    
+    pdf.font("Bangla", size: 6)
+    pdf.text "À FORMATER : #{par.text}"
   end
 
 end
