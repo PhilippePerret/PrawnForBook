@@ -12,6 +12,9 @@ Un énième paragraphe assez long pour qu'il puisse passer à la ligne suivante 
 Un énième paragraphe court.
 Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes. Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes et même aller bien au-delà pour bien les remplir.
 
+dict::entry::Entrée de dictionnaire
+dict::text::Texte décrivant l'entrée de dictionnaire précédente pour voir ce que ça donne avec un texte assez long.
+
 # Un grand titre
 Un paragraphe après le titre principal pour voir s'il sera à bonne distance, avec passage à la ligne pour en profiter aussi pour voir le leading courant.
 Ce paragraphe contient un mot index:compliqué à indexer. Même pas vrai.

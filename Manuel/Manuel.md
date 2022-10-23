@@ -578,24 +578,119 @@ L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atom
 
 ### Les différents types de paragraphe
 
-~~~
-Simple paragraphe
+* [Paragraphes de texte](#paragraph-text),
+* [Titres](#paragraph-titre),
+* [Images](#paragraph-image),
+* [Pfb-codes](#paragraph-code).
 
-		Définit dans le texte par un texte ne répondant pas aux critères 
-		suivants. Un paragraphe peut commencer par autant de balises que
-		nécessaire pour spécifier les choses. Par exemple :
-		citation:bold:center: Une citation qui doit être centrée.
-		
-image
+<a name="paragraph-text"></a>
 
-		Définit dans le texte par 'IMAGE[<data>]'
-		Comme pour les simples paragraphes elle peut être précédée par des 
-		étiquettes de définition.
-		
-titre
-		Définit dans le texte par '#[#[#]] Titre'
-		
+#### Paragraphes de texte
+
+Le paragraphe de texte se définit simplement en l'écrivant dans la page.
 ~~~
+Définit dans le texte par un texte ne répondant pas aux critères suivants. Un paragraphe peut commencer par autant de balises que
+nécessaire pour spécifier les choses. Par exemple :
+citation:bold:center: Une citation qui doit être centrée.
+~~~
+
+Il peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
+
+~~~
+Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
+~~~
+
+Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être communes (propres à l’’application) ou personnalisées.
+
+##### Personnalisation des paragraphes texte
+
+##### Styles paragraphes texte commun
+
+| Balise            | Description                                         | Exemples |
+| ----------------- | --------------------------------------------------- | -------- |
+| **dict::entry::** | Entrée de dictionnaire                              |          |
+| **dict::text::**  | Description de l’entrée, le texte suivant l’entrée. |          |
+|                   |                                                     |          |
+
+<a name="paragraph-titre"></a>
+
+#### Titres
+
+Le titre se définit comme en [markdown](https://fr.wikipedia.org/wiki/Markdown) c'est-à-dire à l'aide de dièses.
+
+~~~
+# Un grand titre
+## Un chapitre
+### Un sous-chapitre
+etc.
+~~~
+
+<a name="paragraph-image"></a>
+
+#### Images
+
+Les images se définissent à l'aide de la balise :
+
+~~~
+IMAGE[<data>]
+~~~
+
+Les données sont composées d’un chemin d’accès à l’image, puis de données qui définissent l’image. Le **chemin d’accès** doit être soit absolu soit relatif.
+
+> Tip : Il est préférence de mettre les images dans un dossier `images` se trouvant dans le dossier du livre ou de la collection et d’y faire référence simplement par `images/mon_image.jpg`.
+
+Les images peuvent être de tout format, mais puisqu’elles sont destinées à l’impression, leur espace colorimétrique doit être le [modèle colorimétrique CMJN (Cyan, Magenta, Jaune, Noir)](https://www.toutes-les-couleurs.com/code-couleur-cmjn.php).
+
+~~~text
+Ci-dessous une image qui sera présentée sur toute la largeur de la page (hors-marge).
+
+IMAGE[images/pour_voir.jpg]
+L'image gardera de l'air avant ce texte, même s'il est collé dans le texte.
+
+Une image qui sera réduite de moitié.
+
+IMAGE[images/red.jpg|width:50%]
+~~~
+
+**Propriétés de l’image**
+
+Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour les images :
+
+| Propriété   | Description                                                  | Valeurs possibles          |
+| ----------- | ------------------------------------------------------------ | -------------------------- |
+| width       | Dimension de l’image par rapport à elle-même                 | Pourcentage, valeurs fixes |
+| width_space | Quantité d’espace horizontal que l’image doit couvrir, en pourcentage. `100%` signifie que l’image doit couvrir toute la largeur de la page même les marges. | Pourcentage                |
+| TODO        |                                                              |                            |
+
+<a name="paragraph-code"></a>
+
+#### Les paragraphes-codes (pfb-code)
+
+Ces paragraphes sont des paragraphes simple, contenant un seul “mot-programme”, et permettent notamment de gérer le contenu du livre. On trouve par exemple :
+
+~~~text
+Pour passer la suite à la page suivante :
+
+(( new_page )) 
+
+Pour l'inscription de l'index :
+
+(( index ))
+
+Pour l'inscription de la table des matières :
+
+(( tdm ))
+
+Pour l'inscription d'une bibliographie :
+
+(( biblio(films) ))
+
+Etc.
+~~~
+
+
+
+
 
 ---
 
