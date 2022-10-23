@@ -66,7 +66,7 @@ class NTitre < AnyParagraph
   # --- MÉTHODES DE CLASSES ---
 
   def self.font_family(level)
-    get_recipe(:font, level, pdfbook.first_font)
+    get_recipe(:font, level, PdfBook.current.first_font)
   end
 
   def self.font_size(level)

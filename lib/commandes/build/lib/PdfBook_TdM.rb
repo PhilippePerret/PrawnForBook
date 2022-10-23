@@ -29,7 +29,7 @@ class Tdm
   DEFAULT_VALUES = {
     title:        MESSAGES[:toc][:title],
     title_level:  2,
-    font:         pdfbook.first_font,
+    font:         nil, # réglé plus tard
     size:         10,
     first_line:   3,
     line_height:  14,
@@ -125,7 +125,10 @@ class Tdm
   # @prop Données absolues pour la table des matières
   # (police, taille, etc.)
   def data
-    @data ||= DEFAULT_VALUES.merge(pdfbook.recipe[:table_of_content]||{})
+    @data ||= begin
+      DEFAULT_VALUES.merge!(font: pdfbook.first_font)
+      DEFAULT_VALUES.merge(pdfbook.recipe[:table_of_content]||{})
+    end
   end
 
 end #/Tdm

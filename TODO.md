@@ -1,5 +1,6 @@
 # Todo courant
 
+* Il faut descendre le numéro du paragraphe
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
 
 # Todo

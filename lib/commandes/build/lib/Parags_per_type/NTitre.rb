@@ -45,9 +45,9 @@ class NTitre < AnyParagraph
       leading     = titre.leading
       level       = titre.level
 
-      # unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
-      #   move_down(topMargin * line_height)
-      # end
+      unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
+        move_cursor_to_lineref(topMargin * line_height)
+      end
 
       # 
       # Margin top du titre
