@@ -11,13 +11,23 @@ Un sixième index(paragraphe assez long|paragraphe), celui-ci, pour couvrir troi
 Un énième paragraphe avec une taille de police beaucoup plus grande (à 22).
 Un énième paragraphe assez long pour qu'il puisse passer à la ligne suivante et faire le tour du quartier.
 Un énième paragraphe court.
+
+(( {width:"50%", margin_left:20} ))
+IMAGE[images/logo-gris-petit.jpg]
+
 Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes. Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes et même aller bien au-delà pour bien les remplir.
 
 dict::entry::Entrée de dictionnaire
 dict::text::Texte décrivant l'entrée de dictionnaire précédente pour voir ce que ça donne avec un texte assez long.
 
 # Un grand titre
-Un paragraphe après le titre principal pour voir s'il sera à bonne distance, avec passage à la ligne pour en profiter aussi pour voir le leading courant.
+tip::Un paragraphe après le titre principal pour voir s'il sera à bonne distance, avec passage à la ligne pour en profiter aussi pour voir le leading courant. Il est dans le style 'tip' qui est un formatage complexe.
+Un paragraphe normal.
+gros::Ce paragraphe reçoit un formatage simple.
+
+(( {margin_left:50, width:"50%", margin_top: -100} ))
+IMAGE[images/logo.svg]
+
 Ce paragraphe contient un mot index:compliqué à indexer. Même pas vrai.
 # Titre principal
 ## Titre du chapitre

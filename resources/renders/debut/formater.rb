@@ -1,3 +1,17 @@
+module FormaterParagraphModule
+
+  # Définition simple d'un style de paragraphe
+  def formate_gros(par)
+    
+  end
+
+  # Constructeur complexe
+  def build_tip_paragraph(par, pdf)
+    
+  end
+
+end
+
 module FormaterBibliographiesModule
 
   def biblio_livre(book)

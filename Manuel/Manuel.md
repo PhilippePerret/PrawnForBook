@@ -594,23 +594,168 @@ nécessaire pour spécifier les choses. Par exemple :
 citation:bold:center: Une citation qui doit être centrée.
 ~~~
 
-Il peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
+Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
+
+* [stylisation par défaut](style-parag-par-defaut),
+* [stylisation en ligne de portion de textes dans le paragraphe](#style-parag-dans-texte),
+* [stylisation *inline* (en ligne)](#style-parag-inline),
+* [stylisation par balise initiale](#style-parag-balise).
+
+<a name="style-parag-par-defaut"></a>
+
+**STYLE PAR DÉFAUT DU PARAGRAPHE**
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété               | valeurs possibles                  |
+| -------------------------------------------------------- | ------- | ----------------------- | ---------------------------------- |
+|                                                          |         | **:default_font:**      | Nom de fonte (police) chargée      |
+|                                                          |         | **:default_font_size:** | Nombre entier                      |
+|                                                          |         | **:default_font_style** | Un des styles défini pour la fonte |
+
+On définit le style du paragraphe par défaut dans la [recette du livre ou de la collection][] en définissant les propriétés `:default_font` (nom de la fonte, qui [doit être chargé dans le document](#fontes)), `:default_font_size`  (taille de la police) et `:default_font_style` (style défini pour la fonte, en général ‘:nomal’.
+
+<a name="style-parag-dans-texte"></a>
+
+**STYLE DE PORTIONS DE TEXTES DANS LE PARAGRAPHE **
+
+Le paragraphe peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
 
 ~~~
 Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
 ~~~
 
-Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être communes (propres à l’’application) ou personnalisées.
+<a name="style-parag-inline"></a>
 
-##### Personnalisation des paragraphes texte
+**STYLISATION “INLINE” DU PARAGRAPHE**
 
-##### Styles paragraphes texte commun
+Un paragraphe peut être complètement modifié en utilisant ce qu’on appelle la *stylisation inline* qui consiste à ajouter une ligne juste au-dessus du paragraphe qui contient ses propriétés modifiées. Par exemple :
 
-| Balise            | Description                                         | Exemples |
-| ----------------- | --------------------------------------------------- | -------- |
-| **dict::entry::** | Entrée de dictionnaire                              |          |
-| **dict::text::**  | Description de l’entrée, le texte suivant l’entrée. |          |
-|                   |                                                     |          |
+~~~text
+Un paragraphe au style par défaut.
+
+(( {<data>} ))
+Le paragraphe influencé par les <data> ci-dessus.
+~~~
+
+> Noter les `(( ... ))` (doubles-parenthèses) qui sont la marque de Prawn-for-book et les crochets qui vont définir une table de propriété (un *dictionnaire*, comme dans un langage de programmation.
+
+On peut, à la base, changer par exemple la taille du texte pour ce paragraphe avec la propriété `:font_size`.
+
+~~~text
+(( {font-size:22} ))
+Ce paragraphe aura une taille de 22 pour la police courante.
+~~~
+
+La propriété `font_family` permet de changer de fonte (à nouveau il faut que cette [fonte soit accessible](#fontes)).
+
+~~~text
+(( {font_family: "Arial"} ))
+Ce paragraphe sera en Arial, dans la taille par défaut de la police par défaut.
+~~~
+
+On peut mettre plusieurs propriétés en les séparant par des virgules :
+
+~~~text
+(( {margin_left: 40, margin_top: 50} ))
+IMAGE[images/mon_image.svg]
+~~~
+
+L’image ci-dessus se retrouvera à 40 [points-pdf][] de la marge gauche et à 50 [points-pdf][] de son contenu précédent.
+
+Les propriétés qu’on peut définir sont les suivantes :
+
+| <span style="display:inline-block;width:200px;">Propriété</span> | <span style="display:inline-block;width:300px;">Description</span> | <span style="display:inline-block;width:250px;">Valeurs</span> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **font_family**                                              | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
+| **font_size**                                                | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
+| **font_style**                                               | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
+| **kerning**                                                  | Éloignement des lettres                                      | Entier ou flottant. P.e. `kernel:2`                          |
+| **word_space**                                               | Espacement entre les mots                                    | Entier ou flottant. P.e. `word_space: 1.6`                   |
+| **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
+| **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
+| **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |
+| **margin_left**                                              | Distance de la marge gauche                                  | Idem                                                         |
+| **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
+| **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
+
+<a name="style-parag-balise"></a>
+
+**STYLISATION DU PARAGRAPHE PAR BALISE INITIALE**
+
+Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
+
+<a name="styles-paragraphes-personnels"></a>
+
+**Personnalisation des paragraphes texte (style de paragraphe personnalisés**
+
+Les *styles de paragraphes personnalisés* doivent être identifiés par une *balise* qui sera placée au début du paragraphe à stylisé. Par exemple, si ma balise est `gros`, cela donnera : 
+
+~~~text
+gros::Le paragraphe qui sera mis dans le style personnalisé "gros".
+~~~
+
+Ensuite, pour fonctionner, il faut dire à *Prawn-for-book* comment styliser ce paragraphe.
+
+Il existe deux manières de le faire :
+
+* la manière simple, en ne se servant que des propriétés ci-dessus. Dans cette utilisation, le style permet simplement de ne pas avoir à répéter toute la ligne de définition du paragraphe avant le paragraphe. 
+
+  Pour cette manière, il faut définir dans le module **`FormaterParagraphModule`**  du  [fichier `formater.rb`][] la méthode **`<balise>_formater(paragraph)`** qui reçoit en premier paramètre l’instance du paragraphe. Ensuite, à l’intérieur de cette méthode, on définit toutes les valeurs :
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def formate_gros(par)
+      par.font = "Arial"
+      par.font_size = 14
+      par.margin_left = "10%"
+      par.kerning = 1.2
+      par.margin_top = 4
+      par.margin_bottom = 12
+      par.text = "FIXED: #{par.text)"
+    end
+  end
+  ~~~
+  ou : 
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def formate_gros(par)
+      par.instance_eval do 
+        font = "Arial"
+        font_size = 14
+        # ...
+        text = "FIXED: #{text}"
+      end
+    end
+  end
+  ~~~
+
+* la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. Elle consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def build_gros_paragraph(par, pdf)
+      pdf.update do
+        font(par.font, size: par.font_size)
+        bounding_box([100, cursor], width: bounds.width/2, height: 100) do
+          transparent(0.5) { stroke_bounds }
+          image icone_tip, at: [...]
+          text par.text, 
+        end
+      end
+    end
+  end
+  ~~~
+
+
+<a name="styles-paragraphes-communs"></a>
+
+**Styles paragraphes texte commun**
+
+| Balise                   | Description                                         | Exemples |
+| ------------------------ | --------------------------------------------------- | -------- |
+| **dict::entry::** [TODO] | Entrée de dictionnaire                              |          |
+| **dict::text::** [TODO]  | Description de l’entrée, le texte suivant l’entrée. |          |
+|                          |                                                     |          |
 
 <a name="paragraph-titre"></a>
 
@@ -1380,6 +1525,22 @@ Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépend
 
 ## Annexe
 
+<a name="points-pdf"></a>
+
+### Points PDF
+
+Par défaut, les valeurs sont comprises en *points-PDF*. La valeur 12, par exemple, sera considérée comme “12 points-PDF”. 
+
+Mais on peut tout à fait utiliser d’autres mesures en ajoutant l’’unité après la valeur, séparée par un point (**pas une espace**). Par exemple :
+
+~~~ruby
+12.mm # pour 12 millimètre
+1.3.cm # pour 1 centimètre et 3 millimètre
+# etc.
+~~~
+
+Les unités possibles sont : `mm` (millimètres), `cm` (centimètres), `dm` (décimètres), `ft` (unités impériales — anglaises), `pt` (points).
+
 ## Ne pas afficher les espaces insécables
 
 Pour ne pas afficher les espaces insécables dans Sublime Text :
@@ -1424,3 +1585,5 @@ On peut ouvrir ce package dans Sublime Text à l’aide de :
 [fichier `formater.rb`]: #custom-formater
 [fichier `helpers.rb`]: #custom-helpers
 [recette du livre ou de la collection]: #recipe
+[points-pdf]: #points-pdf
+[fichier `helper.rb`]: 

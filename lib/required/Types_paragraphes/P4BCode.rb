@@ -62,6 +62,12 @@ class P4BCode < AnyParagraph
     bib.print(pdf)
   end
 
+  # Pour pouvoir obtenir une valeur de style "inline" en faisant
+  # simplement 'pfbcode[:width]' (depuis un paragraphe)
+  def [](key)
+    parag_style[key]
+  end
+
   # --- Predicate Methods ---
   def paragraph?  ; false end
   def pfbcode?    ; true  end

@@ -71,7 +71,7 @@ class Paragraphe
     return iparag
   end
 
-  def parse_as_image(line, pfbcode = nil)
+  def parse_as_image(line)
     dimg = line.match(REG_IMAGE)[1]
     dimg || raise("L'image '#{line}' est mal formatée.")
     if dimg.start_with?('{') && dimg.end_with?('}')
@@ -102,7 +102,7 @@ class Paragraphe
     end
     dimg.merge!(
       path:     img_path,
-      pdfcode:  self.class.code_for_next_paragraph # code avant (if any)
+      pfbcode:  self.class.code_for_next_paragraph # code avant (if any)
     )
     return PdfBook::NImage.new(pdfbook, dimg)
   end
