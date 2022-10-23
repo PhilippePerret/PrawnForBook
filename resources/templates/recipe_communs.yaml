@@ -42,6 +42,10 @@
 :line_height:         12.5
 :leading:         1
 :opt_num_parag:   false # true => numéroter les paragraphes
+# Si on numérote les paragraphes, ces propriétés peuvent être
+# utiles (cf. le manuel, "Numérotation des paragraphes")
+# :num_parag:
+#   :top_adjustment: 0
 :num_page_style:  num_page # style de numérotation des pages
 
 # --- Pages à insérer ou à sauter ---

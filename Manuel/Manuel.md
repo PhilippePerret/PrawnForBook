@@ -199,7 +199,7 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 * à l’aide des numéros de pages,
 * à l’aide des numéros de paragraphes.
 
-Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont **`num_page`** (numéros de page) et **`num_parag`** (numérotation des paragraphes).
+Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont **`num_page`** (numéros de page) et **`num_parag`** ([numérotation des paragraphes](#numerotation-paragraphes)).
 
 Cette valeur influence de nombreux éléments du livre, dont :
 
@@ -596,6 +596,44 @@ titre
 		Définit dans le texte par '#[#[#]] Titre'
 		
 ~~~
+
+---
+
+<a name="numerotation-paragraphes"></a>
+
+### Numérotation des paragraphes
+
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété           | valeurs possibles |
+| -------------------------------------------------------- | ------- | ------------------- | ----------------- |
+|                                                          |         | **:opt_num_parag:** | true/false        |
+|                                                          |         | **:num_parag:**     | Table de valeurs  |
+
+
+
+Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:opt_num_parag` de la [recette du livre ou de la collection][] à `true`.
+
+~~~yaml
+:opt_num_parag: true
+~~~
+
+L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
+
+~~~yaml
+:num_parag:
+	:font: NomDeFonte # clé de :fonts
+	:size: 7
+~~~
+
+Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:top_adjustment` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
+
+~~~yaml
+:num_parag:
+	# ...
+	:top_adjustment: 1
+~~~
+
+Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
 
 ---
 

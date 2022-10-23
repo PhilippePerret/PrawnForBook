@@ -14,9 +14,8 @@ class NTextParagraph < AnyParagraph
 
     pdf.update do
 
-      start_cursor = line_reference.dup
-      move_cursor_to start_cursor
-      # puts "Curseur au départ du print paragraphe : #{round(start_cursor)}"
+      move_cursor_to_lineref(cursor)
+      start_cursor = cursor
 
       # 
       # Données textuelles du paragraphe
@@ -30,37 +29,46 @@ class NTextParagraph < AnyParagraph
       # 
       parag.first_page = page_number
 
+      # 
+      # S'il faut numéroter les paragraphes, on place un numéro
+      # en regard du paragraphe.
+      # 
       if paragraph_number? 
         numero = parag.number.to_s
 
         # 
-        # On place le numéro de paragraphe
+        # Fonte spécifique pour cette numérotation
         # 
-        font pdfbook.font_or_default("Bangla"), size: 7
-        # 
-        # Taille du numéro si c'est en belle page, pour calcul du 
-        # positionnement exactement
-        # 
-        # Calcul de la position du numéro de paragraphe en fonction du
-        # fait qu'on se trouve sur une page gauche ou une page droite
-        # 
-        span_pos_num = 
-          if belle_page?
-            wspan = width_of(numero)
-            bounds.right + (parag_number_width - wspan)
-          else
-            - parag_number_width
-          end
+        font(pdfbook.num_parag_font, size: pdfbook.num_parag_font_size) do
+        
+          # 
+          # Calcul de la position du numéro de paragraphe en fonction du
+          # fait qu'on se trouve sur une page gauche ou une page droite
+          # 
+          span_pos_num = 
+            if belle_page?
+              wspan = width_of(numero)
+              bounds.right + (parag_number_width - wspan)
+            else
+              - parag_number_width
+            end
 
-        @span_number_width ||= 1.cm
+          @span_number_width ||= 1.cm
 
-        move_cursor_to( start_cursor - 1 )
-        span(@span_number_width, position: span_pos_num) do
-          text "#{numero}", color: '777777'
-        end
-      
+          float {
+            move_down(7 + pdfbook.recipe.get(:num_parag, {})[:top_adjustment].to_i)
+            span(@span_number_width, position: span_pos_num) do
+              text "#{numero}", color: '777777'
+            end
+          }
+        end #/font
+
+        # move_cursor_to( start_cursor - 1 )
+        # span(@span_number_width, position: span_pos_num) do
+        #   text "#{numero}", color: '777777'
+        # end
         # Reprendre la position de départ
-        move_cursor_to(start_cursor)
+        # move_cursor_to(start_cursor)
       
       end #/end if paragraph_number?
 

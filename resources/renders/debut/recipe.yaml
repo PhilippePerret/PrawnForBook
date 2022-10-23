@@ -86,6 +86,8 @@
 :interligne:
 :leading: 1
 :opt_num_parag: true
+:num_parag:
+  :top_adjustment: 0
 :skip_page_creation: true
 :page_de_garde: false
 :faux_titre: false
