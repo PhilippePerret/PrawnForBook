@@ -19,7 +19,7 @@ class PrawnView
     suivi = 'Écriture du paragraphe #%{num}…'.vert
     paragraphes.each_with_index do |paragraphe, idx|
 
-      # STDOUT.write green_point
+      next if paragraphe.not_printed?
 
       paragraphe.page_numero = page_number
 
@@ -35,7 +35,6 @@ class PrawnView
       # 
       paragraphe.print(self)
       STDOUT.write green_point
-
 
       # On peut indiquer les pages sur lesquelles est inscrit le
       # paragraphe

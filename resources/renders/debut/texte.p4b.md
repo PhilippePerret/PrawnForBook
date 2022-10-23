@@ -7,7 +7,8 @@ Un troisième paragraphe. Le mot indexé qu'il contient est index(ça roule|ça)
 Un quatrième paragraphe assez long pour qu'il puisse passer à la ligne suivante et faire le tour du quartier.
 Un cinquième paragraphe court. À nouveau une citation du livre(srps). Et une autre du livre(gat). Juste ici une référence croisée à un autre livre (voir (( ->(crbook:lesrefs) ))).
 Un sixième index(paragraphe assez long|paragraphe), celui-ci, pour couvrir trois lignes complètes. Un sixième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes et même aller bien au-delà pour bien les remplir.
-Un énième paragraphe.
+(( {font_size: 22} ))
+Un énième paragraphe avec une taille de police beaucoup plus grande (à 22).
 Un énième paragraphe assez long pour qu'il puisse passer à la ligne suivante et faire le tour du quartier.
 Un énième paragraphe court.
 Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes. Un énième paragraphe assez long, celui-ci, pour couvrir trois lignes complètes et même aller bien au-delà pour bien les remplir.

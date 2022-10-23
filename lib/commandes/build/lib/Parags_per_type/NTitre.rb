@@ -104,7 +104,7 @@ class NTitre < AnyParagraph
 
   def formated_text(pdf)
     str = text
-    str = pdf.add_cursor_position(str) if pdf.add_cursor_position?
+    str = pdf.add_cursor_position(str) if add_cursor_position?
     return str
   end
 

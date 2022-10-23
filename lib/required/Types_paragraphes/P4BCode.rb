@@ -5,14 +5,21 @@ class P4BCode < AnyParagraph
 
   attr_reader :raw_code
 
+  # {Hash} Contenant la définition qui doit affecter le paragraphe
+  # suivant (cette instance a été mise dans son :pfbcode)
+  # p.e. {font_size: 42}
+  attr_reader :parag_style
+
   def initialize(pdfbook, raw_code)
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
+    treat_as_next_parag_code if @raw_code.match?(/^\{.+?\}$/)
   end
 
   def print(pdf)
-    
     case raw_code
+    when /^\{.+?\}$/
+      # Rien à faire de ce paragraphe
     when 'new_page', 'nouvelle_page'
       pdf.start_new_page
     when 'tdm', 'toc'
@@ -25,6 +32,16 @@ class P4BCode < AnyParagraph
       puts "Je ne sais pas traiter #{raw_code.inspect}"
     end
 
+  end
+
+  ##
+  # Traitement d'un code qui doit affecter le paragraphe
+  # suivant.
+  # 
+  def treat_as_next_parag_code
+    @is_for_next_paragraph = true
+    @isnotprinted = true # pour ne pas l'imprimer
+    @parag_style = eval(raw_code)
   end
 
   # --- Formatage Methods ---
@@ -46,7 +63,12 @@ class P4BCode < AnyParagraph
   end
 
   # --- Predicate Methods ---
-  def paragraph?; false end
+  def paragraph?  ; false end
+  def pfbcode?    ; true  end
+
+  def for_next_paragraph?
+    @is_for_next_paragraph === true
+  end
 
 end #/class P4BCode
 end #/class PdfBook

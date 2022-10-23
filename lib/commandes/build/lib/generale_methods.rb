@@ -73,7 +73,6 @@ class PrawnView
     stroke_color 51, 0, 0, 3 # bleu ciel
     fill_color 51, 0, 0, 3 # bleu ciel
     line_width(0.1)
-    puts "CLI.params = #{CLI.params.inspect}".jaune
     if CLI.params[:grid]
       pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
       kpages = (pfirst..plast)
@@ -152,10 +151,6 @@ class PrawnView
   # @predicate True si c'est une belle page (aka page droite)
   def belle_page?
     page_number.odd?
-  end
-
-  def add_cursor_position?
-    :TRUE == @addcurspos ||= true_or_false(CLI.option(:cursor))
   end
 
   # --- Doc Definition Methods ---

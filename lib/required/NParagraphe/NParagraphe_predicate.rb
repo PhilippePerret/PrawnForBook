@@ -1,5 +1,5 @@
 module Prawn4book
-class PdfBook # < Prawn::Document
+class PdfBook
 class NParagraphe
 
   # --- Predicate Methods ---

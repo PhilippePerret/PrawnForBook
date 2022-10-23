@@ -52,23 +52,7 @@ class InputTextFile
   # permet de définir très précisément comment il faut traiter les
   # choses (kerning, passage à la page suivante, etc.).
   def paragraphes
-    @paragraphes ||= begin
-      if File.exist?(data_paragraphes_path)
-        YAML.load_file(data_paragraphes_path, aliases: true).map do |dparag|
-          Paragraphe.dispatch_by_type(pdfbook, dparag)
-        end
-      else
-        parse.tap do |parags|
-          if CLI.option(:save)
-            lespars = parags.map { |parag| parag.data }
-            # 
-            # ÉCRITURE DANS LE FICHIER texte.yaml
-            # 
-            File.write(data_paragraphes_path, lespars.to_yaml)
-          end
-        end
-      end
-    end
+    @paragraphes ||= parse
   end
 
   ##
@@ -105,7 +89,7 @@ class InputTextFile
       # Analyse du paragraphe pour savoir ce que c'est
       # 
       Paragraphe.new(pdfbook, par).parse
-      # => instance PdfBook::NImage, PdfBook::NTextParagraph
+      # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
     end
   end
 

@@ -88,10 +88,36 @@ class AnyParagraph
       end
     end
 
+    # S'il le faut (options), ajouter la position du curseur en
+    # début de paragraphe.
+    str = pdf.add_cursor_position(str) if add_cursor_position?
+
     return str
   end #/formated_text
 
-  def titre?; false end
+  def titre?    ; false end
+  def pfbcode?  ; false end
+  def add_cursor_position?
+    self.class.add_cursor_position?
+  end
+
+  # Sera mis à true pour les paragraphes qui ne doivent pas être
+  # imprimés, par exemple les paragraphes qui définissent des 
+  # propriétés pour les paragraphes suivants.
+  def not_printed?
+    @isnotprinted === true
+  end
+
+  def pfbcode
+    @pfbcode ||= data[:pfbcode]
+  end
+  
+  class << self
+    def add_cursor_position?
+      :TRUE == @addcurspos ||= true_or_false(CLI.option(:cursor))
+    end
+  end
+
 
 REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 
