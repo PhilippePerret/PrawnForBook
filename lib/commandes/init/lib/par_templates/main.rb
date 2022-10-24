@@ -47,11 +47,11 @@ class InitedThing
     require_relative 'builders/recipe'
     return proceed_build_recipe
   end
-  def build_formater
-    puts "Je dois apprendre à créer le formater pour #{a_thing}".jaune
-  end
   def build_parser
-    puts "Je dois apprendre à créer le parser pour #{a_thing}".jaune
+    proceed_build_file('parser.rb')
+  end
+  def build_formater
+    proceed_build_file('formater.rb')
   end
   def build_helpers
     puts "Je dois apprendre à créer le fichier helpers pour #{a_thing}".jaune
@@ -62,8 +62,6 @@ class InitedThing
   end
 
   def confirmation_finale
-    clear unless debug?
-
     puts "
     À présent, vous pouvez jouer ces commandes :
     
@@ -85,7 +83,11 @@ class InitedThing
     end    
   end
 
-end 
+  def template_for(filename)
+    File.join(Prawn4book::templates_folder, filename)
+  end
+
+end #/class InitedThing
 
 class InitedBook < InitedThing
   def thing; "book" end
@@ -98,7 +100,20 @@ class InitedBook < InitedThing
   def in_collection?
     File.exist?(File.join(File.dirname(folder),'recipe_collection.yaml'))
   end
+
+  # @return le path à un fichier de la collection (si le livre
+  # appartient à une collection)
+  def collection_file(filename)
+    in_collection? && File.join(folder_collection, filename)
+  end
   
+  # @prop Dossier de la collection (si le livre appartient à une
+  # collection)
+  def folder_collection
+    @folder_collection ||= begin
+      in_collection? && File.dirname(folder)
+    end
+  end
   def recipe_name
     @recipe_name ||= 'recipe.yaml' 
   end
@@ -109,6 +124,7 @@ class InitedCollection < InitedThing
   def a_thing; "une collection" end
   def of_the_thing;"de la collection" end
   def collection?; true end
+  def in_collection?; false end
   def book?; false end
   
   def recipe_name

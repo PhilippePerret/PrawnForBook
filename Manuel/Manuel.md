@@ -89,13 +89,7 @@ Certaines options permettent de travailler le livre avant sa fabrication défini
 
 Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des essais minimum avec KDP :
 
-<console>prawn-for-book build -last=24</console>
-
-### Forcer le re-parsing du texte
-
-Par défaut, l’application utilisera le fichier `texte.yaml` s’il existe. Pour détruire ce texte, ce qui provoquera le reparsing du texte original, ajouter l’option `--force`.
-
-<console>prawn-for-book build --force</console>
+<console>pfb build -last=24</console>
 
 ### Ouvrir le fichier PDF produit
 
@@ -1063,6 +1057,7 @@ QUI SERA DÉFINIE dans le fichier 'formater.rb' définissant le module 'Formater
 ~~~
 
 ~~~ruby
+# in ./formater.rb
 module FormaterParagraphModule # Ce nom est absolument à respecter
 	def	__formate_custag(string)
 		# ...

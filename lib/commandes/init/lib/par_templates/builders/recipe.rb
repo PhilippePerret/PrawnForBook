@@ -7,10 +7,11 @@ class InitedThing
   # 
   def proceed_build_recipe
 
-    # TODO: étudier le cas où le livre est dans le dossier
-    # d'une collection
     if book? && in_collection?
-      puts "Je dois apprendre à demander quoi faire quand book in collection.".jaune
+      puts "
+      Ce livre est dans une collection. Je ne dois mettre dans sa 
+      recette que les propriétés propre à un livre.
+      ".jaune
     end
 
     #
@@ -26,18 +27,26 @@ class InitedThing
     #
     # Assembler le fichier recette 
     #
-
-    # Copie du code propre au livre ou à la collection 
-    fsource = File.join(Prawn4book::templates_folder, recipe_name)
-    FileUtils.cp(fsource, recipe_path)
-    # Ajout du code commun
-    fcommun = File.join(Prawn4book::templates_folder,'recipe_communs.yaml')
-    File.open(recipe_path,'a') { |f| f.puts File.read(fcommun) }
+    build_recipe
 
     #
     # Confirmation création
     # 
     return confirm_create_recipe
+  end
+
+  ##
+  # Méthode qui construit le fichier recette
+  # 
+  def build_recipe
+    # Copie du code propre au livre ou à la collection 
+    fsource = template_for(recipe_name)
+    FileUtils.cp(fsource, recipe_path)
+    # Ajout du code commun (sauf si c'est un livre dans un collection)
+    unless in_collection?
+      fcommun = template_for('recipe_communs.yaml')
+      File.open(recipe_path,'a') { |f| f.puts File.read(fcommun) }
+    end
   end
 
   def keep_recipe_file_if_exist?
