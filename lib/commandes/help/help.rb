@@ -83,6 +83,10 @@ MINI_AIDE = <<-TEXT
     Assistant en ligne pour produire la donnée :biblio du 
     fichier recette.
 
+#{'pfb upgrade'.jaune}
+    Pour mettre à niveau le livre ou la collection courante, 
+    c'est-à-dire, principalement, pour créer les nouveaux éléments.
+
 ---
 
 #{'pfb manuel -dev'.jaune}

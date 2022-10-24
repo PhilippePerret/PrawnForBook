@@ -7,22 +7,27 @@
 
 [TOC]
 
-**Prawn4book** est une application en ligne de commande permettant de transformer un texte en PDF prêt pour l’impression, grâce au (lovely) gem `Prawn`.
+**Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un texte simple en véritable PDF prêt pour l’impression, grâce au (lovely) gem **`Prawn`** (d’où le nom de l’application.
 
-<console>prawn-for-book</console>
-
-Ou son raccourci :
+Sa commande simple est (*) : 
 
 <console>pfb</console>
 
-Tous les exemples de ce manuel présupposent qu’un alias de la commande a été créé, grâce à :
+Ou en version longue (*) :
 
-~~~bash
+<console>prawn-for-book</console>
+
+> (*) En présupposant bien sûr que des alias de commande ont été créé, sur MacOs grâce à :
+> ~~~bash
 > ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/prawn-for-book
 > ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/pfb
-~~~
+> ~~~
+>
+> Et sur Windows grâce à :
+>
+> TODO ?
 
-> Noter ci-dessus que la commande sera `prawn-for-book` (qui est plus simple à taper)
+
 
 <a name="init-book-pdf"></a>
 
@@ -30,9 +35,23 @@ Tous les exemples de ce manuel présupposent qu’un alias de la commande a ét�
 
 * Créer un dossier dans lequel seront mis tous les éléments du livre,
 * ouvrir une fenêtre Terminal dans ce dossier,
-* jouer la commande <console>prawn-for-book init</console>,
+* jouer la commande <console>pfb init</console>,
 * choisir de construire un nouveau livre,
 * suivre le processus proposé et choisi.
+
+
+
+---
+
+<a name="upgrade-book"></a>
+
+### Mettre un livre à niveau (upgrade)
+
+* Ouvrir un Terminal dans le dossier du livre ou de la collection
+* jouer la commande <console>pfb upgrade</console>
+* suivre le processus en répondant aux questions.
+
+Les nouveaux éléments sont automatiquement créés ou actualisés.
 
 ---
 

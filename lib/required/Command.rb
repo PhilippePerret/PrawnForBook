@@ -9,6 +9,7 @@ class Command
   end
 
   def run
+    Object.const_set('COMMAND_FOLDER', folder)
     self.load.proceed
   end
 
