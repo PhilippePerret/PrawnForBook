@@ -2,8 +2,8 @@
 # https://www.sublimetext.com/docs/syntax.html
 ---
 name: Prawn4Book
-file_extensions: ['pfb.md', 'p4b.md', 'p4b.txt', 'pfb.txt']
-scope: source.p4b
+file_extensions: ['pfb.md', 'pfb.txt']
+scope: source.pfb
 
 contexts:
   main:
