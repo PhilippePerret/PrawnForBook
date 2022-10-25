@@ -1,5 +1,8 @@
 # Todo courant
 
+* Rationnaliser l'utilisation des formater.rb, helpers.rb et parser.rb
+  - déjà, il y a du formater dans parser.rb
+  - ensuite, il faut trouver les moyens de conserver les données
 * Traitement des données ajoutées avant un paragraphe
 * Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
   - mise en forme des mots spéciaux (à définir) (une balise doit renvoyer à une méthode d'helper)

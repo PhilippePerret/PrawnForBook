@@ -54,11 +54,10 @@ class InitedThing
     proceed_build_file('formater.rb')
   end
   def build_helpers
-    puts "Je dois apprendre à créer le fichier helpers pour #{a_thing}".jaune
+    proceed_build_file('helpers.rb')
   end
   def build_texte
-    require_relative 'builders/texte'
-    return proceed_build_text_file
+    proceed_build_file('texte.p4b.md')
   end
 
   def confirmation_finale

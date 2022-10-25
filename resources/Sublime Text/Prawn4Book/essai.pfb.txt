@@ -1,0 +1,6 @@
+Ceci est juste un essai pour voir ce que ça donne. C'est un texte proximot pour voir !
+Pour aujourd'hui, ça suffira, c'est-à-dire qu'il faut voir ? (( (reference) ))
+Ceci est un grand texte pour voir ce que je vais pouvoir faire.
+Encore une phrase pour voir.
+
+(( biblio(livre) ))

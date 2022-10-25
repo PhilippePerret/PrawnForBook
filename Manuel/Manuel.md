@@ -116,7 +116,7 @@ On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 
 ## Texte du livre
 
-On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit que le texte se termine par **`.p4b.txt`** ou **`.p4b.md`** pour que Sublime Text applique le format *Prawn4Book*.
+On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit que le texte se termine par **`.pfb.txt`** ou **`.pfb.md`** pour que Sublime Text applique le format *Prawn4Book*.
 
 ### Package Sublime Text
 
@@ -638,7 +638,7 @@ Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras
 
 <a name="style-parag-inline"></a>
 
-**STYLISATION “INLINE” DU PARAGRAPHE**
+**STYLISATION “INLINE” DU PARAGRAPHE — `(( {<hash} ))`**
 
 Un paragraphe peut être complètement modifié en utilisant ce qu’on appelle la *stylisation inline* qui consiste à ajouter une ligne juste au-dessus du paragraphe qui contient ses propriétés modifiées. Par exemple :
 
@@ -1002,26 +1002,34 @@ Ces trois fichiers (`parser.rb`, `helpers.rb` et `formater.rb`) sont propres à 
 
 <a name="custom-helpers"></a>
 
-#### Méthode d’helpers
+#### Méthode d’helpers —`(( #<method>(<args>) ))`
 
 Les méthodes d'helpers s'utilisent dans le texte comme un code ruby :
 
 ~~~text
-Ceci est un texte de paragraphe avec un #{code_ruby} qui sera évalué.
+Ceci est un texte de paragraphe avec un (( #code_ruby_simple )) qui sera évalué.
+
+Ceci est un paragraphe avec qui devra apprendre à dire (( #code_ruby("bonjour tout le monde") )).
 ~~~
 
-Cette méthode ou variable `code_ruby` doit être définie dans le fichier `helpers.rb` du [livre][] ou de la [collection][] de la manière suivante :
+> Attention : ne pas oublier les espaces à l’intérieur des parenthèses, comme c’est le cas avec le signe de Prawn, les doubles parenthèses.
+
+Cette méthode ou variable `code_ruby_simple` doit être définie en *Ruby* dans le fichier `helpers.rb` du [livre][] ou de la [collection][] de la manière suivante :
 
 ~~~ruby
 # in ./dossier/livre/helpers.rb
 module PrawnHelpersMethods
-	def code_ruby
+	def code_ruby_simple
 		# On utilise ici 'pdfbook' et 'pdf' pour obtenir le livre ou
 		# son builder.
 		# On retourne la position actuelle du curseur dans le fichier
 		# pdf en l'arrondissant :
 		return round(pdf.cursor)
 	end
+  
+  def code_ruby(str)
+    return "« #{str} »"
+  end
 end
 ~~~
 
@@ -1029,11 +1037,69 @@ Ces méthodes d'helpers doivent obligatoirement retourner le code (le texte) qui
 
 Les seules conventions a respecter ici sont :
 
-* le fichier doit impérativement s'appeler `helpers.rb` (au plusieur, car il y a plusieurs *helpers* mais l'application cherchera aussi le singulier),
-* le fichier doit impérativement se trouver à la racine du dossier du livre ou du dossier de la collection (les deux seront chargés s'ils existent — attention aux collisions),
+* le fichier doit impérativement s'appeler `helpers.rb` (au pluriel, car il y a plusieurs *helpers* mais l'application cherchera aussi le singulier),
+* le fichier doit impérativement se trouver à la racine du dossier du livre ou du dossier de la collection (les deux seront chargés s'ils existent — attention aux collisions de noms),
 * le titre du module doit être **`PrawnHelpersMethods`** (noter les deux au pluriel et là c'est impératif).
 
-Chaque méthode peut utiliser `pdfbook` et `pdf` qui renvoient respectivement aux instances `Prawn4book::PdfBook` et `Prawn4book::PrawnView`. La première gère le livre en tant que livre (pour obtenir son titre, ses auteurs, etc.) et la seconde est une instance de `Prawn::View` (substitut de `Prawn::Document`) qui génère le document PDF pour l'impression.
+Les méthodes ont accès à **`pdfbook`** et **`pdf`** qui renvoient respectivement aux instances `Prawn4book::PdfBook` et `Prawn4book::PrawnView`. La première gère le livre en tant que livre (pour obtenir son titre, ses auteurs, etc.) et la seconde est une instance de `Prawn::View` (substitut de `Prawn::Document`) qui génère le document PDF pour l'impression.
+
+On peut par exemple obtenir le numéro de la page avec `pdf.page_number` et la consigner :
+
+~~~text
+Ceci est un paragraphe avec au bout un code qui sera caché (remplacé par un string vide) pour savoir le numéro de cette page et le numéro de ce paragraphe.(( #consigne_page('page_a_memoriser') ))(( #consigne_paragraphe('par2memo') ))
+~~~
+
+… avec les deux méthodes d’helpers définies ainsi :
+
+~~~ruby
+# in helpers.rb
+module PrawnHelpersMethods
+  def consigne_page(id)
+  	@pages_memorisees ||= {}
+    @pages_memorisees.merge!(id => pdf.page_number)
+    return ''
+  end
+  
+  def	consigne_paragraphe(id)
+    @paragraphes_memorises ||= {}
+    @paragraphes_memorises.merge!(id => pdf.paragraph_number)
+    return ''
+  end
+end
+~~~
+
+Grâce à `pdfbook`, on a accès à l’intégralité des valeurs de la recette. Ce qui signifie qu’on peut consigner n’importe quelle valeur dans la recette, qu’on pourra récupérer dans ces helpers. Par exemple, si on définit dans la recette :
+
+~~~yaml
+# in recipe.yaml
+---
+# ...
+:ma_couleur_preferee: '#2569F8'
+:une_autre_couleur:   '#45DF56'
+~~~
+
+… alors on pourra utiliser dans le helper :
+
+~~~ruby
+module PrawnHelpersMethods
+  # @return le texte +str+ en le mettant à la couleur +which_color+ qui est
+  # une couleur hexa définie dans la recette du livre
+  def	colorise(str, which_color)
+    code_couleur = pdfbook.recipe.get(which_color)
+    return "<font color=\"#{code_couleur}\">#{str}</font>
+  end
+end 
+~~~
+
+… et l’utiliser dans le texte avec :
+
+~~~text
+Ce paragraphe contient un (( #colorise("texte", :ma_couleur_preferee) )) qui sera dans ma couleur préférée et un (( colorise("autre texte", :une_autre_couelur) )) qui sera dans une autre couleur.
+~~~
+
+Ce texte, une fois construit, produira :
+
+TODO: montrer l’image produite.
 
 <a name="custom-formater"></a>
 
@@ -1144,7 +1210,7 @@ La *recette du livre* permet de définir tous les aspects que devra prendre le l
 
 ### Création de la recette du livre
 
-On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.p4b.txt` ou `text.p4be.md` — et en  jouant la commande : **`> prawn-for-book init`**.
+On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.pfb.txt` ou `text.pfb.md` — et en  jouant la commande : **`> prawn-for-book init`**.
 
 Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre ou de se servir d’un modèle prérempli. Passons en revue les différentes paramètres à régler.
 
@@ -1164,7 +1230,7 @@ Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du
 :auteurs: 		['Prénom NOM', 'Prénom NOM']
 :book_id:     identifiant_simple # nom du dossier par exemple
 :main_folder:	"/path/to/folder/principal/du/livre"
-:text_path:   true 	# pour dire texte.p4b.txt ou texte.p4b.md dans le 
+:text_path:   true 	# pour dire texte.pfb.txt ou texte.pfb.md dans le 
 										# dossier du livre, sinon le path absolu
 ~~~
 
@@ -1575,11 +1641,11 @@ Pour ne pas afficher les espaces insécables dans Sublime Text :
 
 Pour travailler le texte, le mieux est d’utiliser un éditeur de texte. Sublime Text est mon éditeur de choix et on peut trouver dans le dossier `./resources/Sublime Text/` un package `Prawn4Book` qu’on peut ajouter au dossier `Packages` de son éditeur (dans Sublime Text, activer le menu “Sublime Text > Préférences > Browse packages…” et mettre le dossier `Prawn4Book` dans le dossier `Packages`.
 
-L’application reconnaitra alors automatiquement les fichiers `.p4b.txt` et utilisera un aspect agréable, tout mettant en exergue les éléments textuels particuliers (comme les balises de formatage des paragraphes).
+L’application reconnaitra alors automatiquement les fichiers `.pfb.txt` et utilisera un aspect agréable, tout mettant en exergue les éléments textuels particuliers (comme les balises de formatage des paragraphes).
 
 ### Choix d'une autre police
 
-Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.p4b.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
+Plus tard, la procédure pourra être automatisée, mais pour le moment, pour modifier la police utilisée dans le document `.pfb.txt` (ou markdown), il faut éditer le fichier `Prawn4Book.sublime-settings` du package et choisir la `"font_face"` qui convient (en ajouter une si nécessaire). Régler aussi le `"font_size"` et `"line_padding_top"` pour obtenir le meilleur effet voulu pour un travail confortable sur le texte.
 
 On peut ouvrir ce package dans Sublime Text à l’aide de :
 
