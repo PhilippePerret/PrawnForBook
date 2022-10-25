@@ -27,7 +27,7 @@ class InitedThing
     #
     # Assembler le fichier recette 
     #
-    build_recipe
+    assemble_recipe
 
     #
     # Confirmation création
@@ -38,7 +38,7 @@ class InitedThing
   ##
   # Méthode qui construit le fichier recette
   # 
-  def build_recipe
+  def assemble_recipe
     # Copie du code propre au livre ou à la collection 
     fsource = template_for(recipe_name)
     FileUtils.cp(fsource, recipe_path)
@@ -51,7 +51,7 @@ class InitedThing
 
   def keep_recipe_file_if_exist?
     return nil unless File.exist?(recipe_path)
-    ask_what_to_do_with_file(recipe_path, 'fichier recette')
+    File.ask_what_to_do_with_file(recipe_path, 'fichier recette')
   end
 
   def confirm_create_recipe

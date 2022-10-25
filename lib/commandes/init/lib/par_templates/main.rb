@@ -34,30 +34,29 @@ class InitedThing
   # Main méthode qui initie la chose
   # 
   def init
-    build_recipe || return
-    if book?
-      build_texte || return
-    end
-    build_parser
-    build_formater
-    build_helpers
-    confirmation_finale
+    build_recipe        || return
+    build_texte_if_book || return
+    build_parser        || return
+    build_formater      || return
+    build_helpers       || return
+    confirmation_finale || return
   end
   def build_recipe
     require_relative 'builders/recipe'
     return proceed_build_recipe
   end
   def build_parser
-    proceed_build_file('parser.rb')
+    BuilderFile.new(self).build('parser.rb')
   end
   def build_formater
-    proceed_build_file('formater.rb')
+    BuilderFile.new(self).build('formater.rb')
   end
   def build_helpers
-    proceed_build_file('helpers.rb')
+    BuilderFile.new(self).build('helpers.rb')
   end
-  def build_texte
-    proceed_build_file('texte.p4b.md')
+  def build_texte_if_book
+    return if not(book?)
+    BuilderFile.new(self).build('texte.pfb.md')
   end
 
   def confirmation_finale
@@ -70,7 +69,7 @@ class InitedThing
 
     #{'pfb build -open'.jaune}
         pour produire la première version du livre en PDF 
-        prêt à l'impression.
+        prêt à l'impression (et l'ouvrir pour le lire).
 
     ".bleu
     
@@ -95,6 +94,7 @@ class InitedBook < InitedThing
   def of_the_thing;"du livre" end
   def collection?; false end
   def book?; true end
+
   # @return true si le livre est dans une collection
   def in_collection?
     File.exist?(File.join(File.dirname(folder),'recipe_collection.yaml'))

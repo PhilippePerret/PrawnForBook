@@ -1,11 +1,20 @@
+require_relative '../required/utils'
+require 'delegate'
+
 module Prawn4book
 class InitedThing
+class BuilderFile < SimpleDelegator
 
   attr_reader :build_fname
 
-  def proceed_build_file(filename)
+  # def initialize(initedthing, filename)
+  #   @build_fname = filename
+  # end
 
+  def build(filename)
     @build_fname = filename
+
+    puts "@build_fname = #{build_fname.inspect}".jaune
 
     #
     # Que faut-il faire si c'est un livre dans une collection et
@@ -67,12 +76,13 @@ class InitedThing
 
   def keep_file_if_exist?
     return nil unless File.exist?(build_fpath)
-    ask_what_to_do_with_file(build_fpath, build_fname)
+    File.ask_what_to_do_with_file(build_fpath, build_fname)
   end
 
   def build_fpath
     @build_fpath ||= File.join(folder, build_fname)
   end
 
+end #/class BuilderFile
 end #/class InitedThing
 end #/module Prawn4book
