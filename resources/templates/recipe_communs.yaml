@@ -89,7 +89,8 @@
 # --- Entêtes du livre ---
 # <headers>
 :headers: # tous les rangs
-  - :pages: (10..200)
+  - :name: "Nom du premier header"
+    :first_page: null
     :disposition: 
       :odd: "| -%%titre1- |"
       :even: "| -%%titre1- |"

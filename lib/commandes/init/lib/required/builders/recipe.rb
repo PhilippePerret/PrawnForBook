@@ -159,18 +159,23 @@ class InitedThing
       if @data_biblio
         code = remplace_between_balises_with(code,'biblios', @data_fontes.to_yaml)      
       end
-
+      # 
+      # Si les headers et footers sont définis, on les
+      # inscrit
+      # 
+      if @data_headers_footers
+        code = remplace_between_balises_with(code,'headers', @data_headers_footers[:headers].to_yaml)
+        code = remplace_between_balises_with(code,'footers', @data_headers_footers[:footers].to_yaml)
+      end
     end
 
     return code
   end
 
 
-
   # --- Les méthodes plus complexes ---
   def get_values_for_biblios(askit)
     return unless askit
-    Q.yes?(PROMPTS[:biblio][:wannado_define_biblios].jaune) || return
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
     @data_biblio = Prawn4book.define_bibliographies(pdfbook)
     return true
@@ -178,7 +183,6 @@ class InitedThing
 
   def get_values_for_fontes(askit)
     return unless askit
-    Q.yes?(PROMPTS[:fonts][:wannado_choose_fonts].jaune) || return
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_fontes"
     @data_fontes = Prawn4book.get_name_fonts(main_folder: folder)
     return true
@@ -186,10 +190,8 @@ class InitedThing
 
   def get_values_for_headers_and_footers(askit)
     return unless askit
-    # Note : on doit supprimer de '# <headers>' à </headers> dans le
-    # template recette et le remplacer par le code
-    # Idem pour '# <footers>' et '</footers>'
-    
+    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
+    @data_headers_footers = Prawn4book.define_headers_footers
     return true
   end
 

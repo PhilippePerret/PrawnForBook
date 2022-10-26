@@ -19,5 +19,5 @@ USER_MANUAL_MD_PATH = File.join(APP_FOLDER,'Manuel','Manuel.md')
 
 # --- Chargement de toutes les locales ---
 LANG = CLI.params[:lang] || 'fr'
-LOCALISATION_FOLDER = File.join(LIB_FOLDER,'localisation',LANG)
+LOCALISATION_FOLDER = File.join(LIB_FOLDER,'locales',LANG)
 Dir["#{LOCALISATION_FOLDER}/**/*.rb"].each{|m|require(m)}

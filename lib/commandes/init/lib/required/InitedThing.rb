@@ -14,8 +14,6 @@ class BuilderFile < SimpleDelegator
   def build(filename)
     @build_fname = filename
 
-    puts "@build_fname = #{build_fname.inspect}".jaune
-
     #
     # Que faut-il faire si c'est un livre dans une collection et
     # que la collection possède ce fichier ?
