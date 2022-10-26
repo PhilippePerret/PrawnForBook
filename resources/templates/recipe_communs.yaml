@@ -1,17 +1,17 @@
 :publisher:
-  :name:  Nom de l'éditeur
+  :name:  "%{publisher_name}"
   :adresse: |
-    xxx rue de Loraine 
-    xxxxxx Ville
-  :site:      'https://icare-editions.fr'
-  :logo:      "/path/to/logo.svg"
+    %{publisher_address}
+  :site:      '%{publisher_site}'
+  :logo:      '%{publisher_logo}'
   :siret:     '508 680 360 00023'
-  :mail:      publisher@edition.fr
-  :contact:   contact@edition.fr
+  :mail:      '%{publisher_mail}'
+  :contact:   '%{publisher_contact}'
 
 # --- Fontes à empaqueter ---
 # Jouer la commande 'prawn-for-book aide fontes' pour obtenir
 # de l'aide pour les fontes
+# <fontes>
 :fonts:
   Garamond:
     :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
@@ -26,37 +26,37 @@
   Nunito:
     :normal: "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
     :bold:   "/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
-
+# </fontes>
 # --- Options pour les pages ---
 
-:dimensions: ['127mm', '203.2mm'] # taille du livre
-:layout: :portrait
+:dimensions: ['%{book_width}', '%{book_height}'] # taille du livre
+:layout: :%{orientation}
 :marges:
-  :top: '25mm'
-  :ext: '10mm'
-  :bot: '15mm'
-  :int: '25mm'
+  :top: '%{topmargin}'
+  :ext: '%{extmargin}'
+  :bot: '%{botmargin}'
+  :int: '%{intmargin}'
 :default_font:        Garamond
 :default_font_size:   11
 :default_font_style:  :normal
 :line_height:         12.5
 :leading:         1
-:opt_num_parag:   false # true => numéroter les paragraphes
+:opt_num_parag:   %{numparag} # true => numéroter les paragraphes
 # Si on numérote les paragraphes, ces propriétés peuvent être
 # utiles (cf. le manuel, "Numérotation des paragraphes")
 # :num_parag:
 #   :top_adjustment: 0
-:num_page_style:  num_page # style de numérotation des pages
+:num_page_style:  %{numpage} # style de numérotation des pages
 
 # --- Pages à insérer ou à sauter ---
 # Table des matières : cf. plus bas
 :skip_page_creation:  true # true => ne pas écrire la 1re page (pour pouvoir appliquer sur la première la mise en page des pages impaires)
-:page_de_garde:   true  # true => insérer la page de garde
-:faux_titre:      false # true => insérer la page de faux-titre
+:page_de_garde:   %{pagegarde}  # true => insérer la page de garde
+:faux_titre:      %{fauxtitre} # true => insérer la page de faux-titre
   # On peut définir les fontes et la taille :
   # :font:  "LaFonte"
   # :size:  15
-:page_de_titre:   true  # true => insérer la page de titre
+:page_de_titre:   %{pagetitre}  # true => insérer la page de titre
   # On peut définir plus précisément la page
   # :font: "LaFonte"
   # :sizes:
@@ -87,26 +87,30 @@
   :indent_per_offset: null
 
 # --- Entêtes du livre ---
+# <headers>
 :headers: # tous les rangs
   - :pages: (10..200)
     :disposition: 
-      :odd: "| -%titre1- |"
-      :even: "| -%titre1- |"
+      :odd: "| -%%titre1- |"
+      :even: "| -%%titre1- |"
     :font: ArialNarrow
     :size: 8
     :style: :bold
-
+# </headers>
 # --- Pieds de page ---
+# <footers>
 :footers: # tous les rangs
   - :pages: (10..20)
     :disposition:
-      :odd: "| -%num- |"
-      :even: "| -%num- |"
+      :odd: "| -%%num- |"
+      :even: "| -%%num- |"
     :font: Arial
     :size: 8
     :style: :bold
+# </footers>
 
 # --- Titres ---
+# <titles> (pour l'assistant)
 :titles:
   :level1:
     :next_page: true
@@ -133,15 +137,17 @@
     :margin_top:    1
     :margin_bottom: 0
     :leading: -2
-
+# </titles>
 # --- BIBLIOGRAPHIES ---
 # Voir le manuel (pfb manuel) ou demander l'assistant
 # pour la bibliographie : 'pfb aide biblio'
+#<biblio> (marque pour assistant)
 :biblio: null
   #- :tag: "balise"
   #  :title: "Titre sur la page"
   #  :title_level: 1 # niveau du titre
   #  :new_page:  false # true pour passer à la page
+#</biblio>
 # --- RÉFÉRENCES (croisées) ---
 # Voir le manuel (pfb manuel)
 :references:

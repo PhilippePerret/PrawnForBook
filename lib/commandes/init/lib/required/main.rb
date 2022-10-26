@@ -1,20 +1,5 @@
 module Prawn4book
-class PdfBook
-class << self
 
-  def proceed_init_par_templates(cdata)
-    @inited = case cdata[:what]
-    when :book then InitedBook.new
-    when :collection then InitedCollection.new
-    end
-    # 
-    # On y va
-    # 
-    @inited.init
-  end
-end #/<< self
-end #/class PdfBook
-  
 # @prop Dossier contenant tous les templates
 def self.templates_folder
   @templates_folder ||= File.join(APP_FOLDER,'resources','templates')

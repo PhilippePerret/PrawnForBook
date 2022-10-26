@@ -13,10 +13,10 @@ def self.ask_what_to_do_with_file(pth, what)
   end
 end
 ACTIONS_ON_FILE_EXIST = [
-  {name:'Le conserver'                , value: :keep},
-  {name:'En faire une copie'          , value: :copy},
-  {name:'Le détruire définitivement'  , value: :destroy},
-  {name:'Renoncer'                    , value: :cancel}
+  {name:'Le conserver'            , value: :keep},
+  {name:'En faire une copie'      , value: :copy},
+  {name:'Le refaire complètement' , value: :destroy},
+  {name:'Renoncer'                , value: :cancel}
 ]
 
 end #/class File

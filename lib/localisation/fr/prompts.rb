@@ -15,11 +15,11 @@ PROMPTS = {
 
   # --- Application ---
 
-
   # --- Recette --- #
   recipe: {
     should_i_open_recipe_file: 'Dois-je ouvrir le fichier recette ?',
     should_i_add_code_to_recipe: 'Dois-je ajouter le code ci-dessus au fichier recette ?',
+    wannado_define_titles: "Voulez définir les propriétés pour les titres ?",
   }, # / :recipe
 
   # --- Fontes --- #
@@ -32,6 +32,7 @@ PROMPTS = {
     what_is_font_name: "Nom de police principal pour la fonte '%s' : ",
     which_style_for_font: "Quel style donner à cette fonte ?",
     choose_the_fonts: "Choisir les fonts…",
+    wannado_choose_fonts: "Voulez-vous définir les fontes ?",
 
   }, #/ :fonts
 
