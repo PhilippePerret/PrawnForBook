@@ -9,7 +9,7 @@ module Prawn4book
     end
     def proceed_assistant_biblio
       pdfbook = check_if_current_book_or_return || return
-      Prawn4book.assistant('biblio',pdfbook)
+      Prawn4book.assistant('biblios',pdfbook)
     end
 
     def check_if_current_book_or_return

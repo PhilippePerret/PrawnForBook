@@ -2,6 +2,8 @@ module Prawn4book
 
 MESSAGES = {
 
+  define_default_values_for: "Définition des valeurs par défaut pour %s…",
+
   # --- Table des matières --- #
 
   toc: {

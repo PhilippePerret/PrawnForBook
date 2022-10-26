@@ -2,7 +2,7 @@ module Prawn4book
   
   # --- Assistant pour les bibliographies ---
 
-  def self.assistant_biblio(pdfbook)
+  def self.assistant_biblios(pdfbook)
     clear 
 
     puts MESSAGES[:biblio][:intro_assistant].bleu
@@ -27,6 +27,54 @@ module Prawn4book
     end
 
     puts "\n\n"
+
+    dbiblios = define_bibliographies(
+      pdfbook, 
+      dbiblios, 
+      {already_titles: already_titles, already_tags: already_tags}
+    )
+    
+    #
+    # Enregistrement de la donnée :biblio avec les nouvelles données
+    # 
+    if pdfbook.collection?
+      pdfbook.recipe.update_collection(biblio: dbiblios)
+    else
+      pdfbook.recipe.update(biblio: dbiblios)
+    end
+
+    #
+    # Aide finale :
+    # 
+    clear
+    bibun = new_tags.first # pour les exemples ci-dessous
+    puts MESSAGES[:biblio][:bibs_created_with_success].vert
+    method_list = new_tags.map {|t| "\t- biblio_#{t}" }.join("\n")
+    puts (MESSAGES[:biblio][:explaination_after_create] % [method_list,bibun,bibun]).bleu
+
+  end
+
+  ##
+  # Pour définir les bibliographies
+  # 
+  # @param pdfbook  {PdfBook} Instance du livre à construire
+  # @param dbiblios {Array} Liste actuelles des bibliographies
+  #                 Liste vide par défaut.
+  # @param options  {Hash} Options, comme par exemple les titres ou
+  #                 les biblio-tags qui existent déjà.
+  #                 Table vide par défaut.
+  # 
+  # @return {Hash} dbiblios avec les nouvelles bibliographies
+  # 
+  # Note :  c'est méthode est faite pour être appelée de l'extérieur,
+  #         par exemple lorsque l'on init un nouveau livre.
+  # 
+  def self.define_bibliographies(pdfbook, dbiblios = nil, options = nil)
+    options   ||= {}
+    dbiblios  ||= []
+
+    already_titles  = options[:already_titles]  || {}
+    already_tags    = options[:already_tags]    || {}
 
     new_tags = [] # pour les messages finaux
 
@@ -113,26 +161,10 @@ module Prawn4book
       already_tags.merge!(dbiblio[:tag] => true)
 
     end #/while (tant qu'on veut des bibliographies)
-    
-    #
-    # Enregistrement de la donnée :biblio avec les nouvelles données
-    # 
-    if pdfbook.collection?
-      pdfbook.recipe.update_collection(biblio: dbiblios)
-    else
-      pdfbook.recipe.update(biblio: dbiblios)
-    end
 
-    #
-    # Aide finale :
-    # 
-    clear
-    bibun = new_tags.first # pour les exemples ci-dessous
-    puts MESSAGES[:biblio][:bibs_created_with_success].vert
-    method_list = new_tags.map {|t| "\t- biblio_#{t}" }.join("\n")
-    puts (MESSAGES[:biblio][:explaination_after_create] % [method_list,bibun,bibun]).bleu
+    # return dbiblios
+  end #/define_bibliographies
 
-  end
 
   def self.ask_for_bib_data(pdfbook, dbiblio)
     pth = Q.ask(PROMPTS[:biblio][:folder_or_file_of_data_biblio].jaune)

@@ -5,15 +5,38 @@ module Prawn4book
 # --- Sert autant aux templates qu'à l'assistant
 # ---
 
+# Pour le menu principal qui présente toutes les données à définir
+# pour choisir celle qu'on veut faire maintenant.
+CHOIX_DATA2DEFINE = [
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:publisher]), value: :publisher},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:format_book]), value: :format},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:wanted_pages]), value: :wanted_pages},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:book_infos]), value: :infos},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:recipe_options]), value: :options},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:fonts]), value: :fontes},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:titles]), value: :titles},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:headers_and_footers]), value: :headers_and_footers},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:biblios]), value: :biblios},
+  {name:PROMPTS[:finir]+" (#{TERMS[:other_default_values]})", value: :finir}
+]
+DATA2DEFINE_VALUE_TO_INDEX = {}
+CHOIX_DATA2DEFINE.each_with_index do |dvalue, idx|
+  DATA2DEFINE_VALUE_TO_INDEX.merge!(dvalue[:value] => idx)
+end
+
+NAME_LIST = "(Prénom NOM, Prénom NOM, etc.)"
+
 DATA_VALUES_MINIMALES = [
   {k: :thing_title, q:'Titre du livre ou de la collection', df: 'Title'},
-  {k: :thing_id, q: 'ID (seulement des minuscules et tiret_plat', df: 'monlivre'}
+  {k: :thing_id, q: 'ID (seulement des minuscules et tiret_plat', df: 'monlivre'},
+  {k: :auteurs, q:"Auteurs #{NAME_LIST}", df:'Prénom NOM', treate_as: :names_list},
+  {k: :subtitle, q:'Sous-titre (lignes superposées)', t: :text, df: "Le sous-titre du livre\noù les retours chariots seront\nconservés et affichés", treate_as: :multiline_text, indent: '  '}
 ]
 
 RECIPE_VALUES_FOR_PUBLISHER = [
   # k: pour 'key', q: pour 'question', df: pour 'défaut', t: pour 'type'
   {k: :publisher_name, q:"Nom de l'éditeur", df: "Publisher Name"},
-  {k: :publisher_address, q:"Adresse de l'éditeur", df:'', t: :text},
+  {k: :publisher_address, q:"Adresse de l'éditeur", df:'', t: :text, treate_as: :multiline_text, indent: '  '},
   {k: :publisher_site, q:"Site de l'éditeur", df: 'https://editeur.com'},
   {k: :publisher_logo, q:"Chemin au logo (commencer par 'images/...')", df:'images/logo.jpg'},
   {k: :publisher_mail, q:"Mail de l'éditeur", df: 'mail@editor.com'},
@@ -30,13 +53,19 @@ RECIPE_VALUES_FOR_FORMAT = [
   {k: :intmargin, q:'Marge intérieure (avec unité)', df:'25mm'},
 ]
 RECIPE_VALUES_FOR_WANTED_PAGES = [
-  {k: :pagegarde, q:'Dois-je imprimer une page de garde ?', df:true, t: :yes},
-  {k: :fauxtitre, q:'Dois-je imprimer la page de faux titre (titre seul) ?', df:false, t: :yes},
+  {k: :pagegarde, q:'Dois-je laisser une page de garde ?', df:true, t: :yes},
+  {k: :fauxtitre, q:'Dois-je imprimer la page de faux titre (titre seul) ?', df:true, t: :yes},
   {k: :pagetitre, q:'Dois-je imprimer la page de titre (titre et infos) ?', df:true, t: :yes},
   {k: :pageinfos, q:'Dois-je imprimer la page d’informations (fin du livre) ?', df:true, t: :yes},
 ]
 RECIPE_VALUES_FOR_INFOS = [
-  {k: :isbn, q: 'ISBN du livre', df: 'null'}
+  {k: :book_conception, q:"Conception du livre #{NAME_LIST}", df:'Prénom NOM', treate_as: :names_list},
+  {k: :cover_conception, q:"Conception de la couverture #{NAME_LIST}", df:'MM & PP', treate_as: :names_list},
+  {k: :isbn, q: 'ISBN du livre', df: 'null'},
+  {k: :depot, q: 'Dépôt BNF', df: "1er trimestre #{Time.now.year}"},
+  {k: :mep, q:"Mise en page #{NAME_LIST}", df:'Prénom NOM', treate_as: :names_list},
+  {k: :correction, q:"Corrections #{NAME_LIST}", df:'Prénom NOM', treate_as: :names_list},
+  {k: :mark_print, q:'Impression', df:'Imprimé à la demande'},
 ]
 
 RECIPE_VALUES_FOR_OPTIONS = [

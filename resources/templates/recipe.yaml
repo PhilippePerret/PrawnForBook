@@ -3,23 +3,21 @@
 # --- Infos sur le livre ---
 :book_title: %{thing_title}
 :book_subtitle: |
-  Le sous-titre du livre où
-  les retours chariot seront 
-  conservés et affiché
+  %{subtitle}
 :collection: true     # true => dans une collection
 :book_id: %{thing_title}
-:auteurs: ['Prénom NOM']
+:auteurs: %{auteurs}
 :main_folder: %{main_folder}
 :text_path: true # true = texte.md ou texte.txt dans ce dossier
 :infos:
   :display:     %{pageinfos}
   :isbn:        %{isbn}
-  :depot_bnf:   3e trimestre 2022
-  :cover:       "MM & PP" # auteurs de la couverture
-  :mep:         ['Prénom NOM']
-  :conception:  ['Prénom NOM']
-  :corrections: ['Prénom NOM']
-  :print:       'Imprimé à la demande'
+  :depot_bnf:   %{depot}
+  :cover:       %{cover_conception}
+  :mep:         %{mep}
+  :conception:  %{book_conception}
+  :corrections: %{correction}
+  :print:       %{mark_print}
 
 # --- INFOS LIVRE ou COLLECTION ---
 

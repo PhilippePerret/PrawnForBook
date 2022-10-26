@@ -10,10 +10,7 @@ class InitedThing
   def proceed_build_recipe
 
     if book? && in_collection?
-      puts "
-      Ce livre est dans une collection. Je ne dois mettre dans sa 
-      recette que les propriétés propre à un livre.
-      ".jaune
+      puts PROMPTS[:recipe][:warning_book_in_collection].jaune
     end
 
     #
@@ -30,7 +27,7 @@ class InitedThing
     # Demander les informations minimale
     # 
     get_template_data || return
-    puts "@template_data = #{@template_data.pretty_inspect}"
+    # puts "@template_data = #{@template_data.pretty_inspect}"
 
     #
     # Assembler le fichier recette 
@@ -50,25 +47,64 @@ class InitedThing
   def get_template_data
     @template_data = {}
     @template_data.merge!(main_folder: folder)
+    clear unless debug?
     @template_data.merge!(ask_for_or_default(DATA_VALUES_MINIMALES))
-    puts "
-    (si vous ne définissez pas certaines valeurs maintenant, il 
-     faudra le faire « à la main » dans le fichier recette
-     directement, plus tard)
-    ".bleu
-    askit = Q.yes?("Voulez-vous définir tout de suite les autres valeurs ?".jaune)
-    get_values_for_publisher(askit)
-    get_values_for_format(askit)
-    get_values_for_wanted_pages(askit)
-    get_values_for_infos(askit) if book?
-    get_values_for_options(askit)
+    puts PROMPTS[:recipe][:init_intro_define_values].bleu
+    askit = Q.yes?(PROMPTS[:recipe][:wannado_define_all_values].jaune)
+
+    clear unless debug?
+
     # 
-    # Données plus complexes
+    # Toutes les choses à pouvoir définir
+    # Chaque fois qu'un élément est défini, on l'exclut de
+    # la liste
     # 
-    get_values_for_fontes
-    get_values_for_titles
-    get_values_for_headers_and_footers
-    get_values_for_bibliographies
+    data2define = [
+      :publisher, :format, :wanted_pages, :infos, :options,
+      :fontes, :titles, :headers_and_footers, :biblios
+    ]
+
+    if askit
+      # 
+      # On boucle sur toutes les choses à pouvoir définir
+      # 
+      while data2define.any?
+        clear unless debug?
+        case (choix = Q.select(PROMPTS[:recipe][:which_data_recipe_to_define].jaune, CHOIX_DATA2DEFINE, per_page:CHOIX_DATA2DEFINE.count))
+        when :finir then break
+        else
+          meth = "get_values_for_#{choix}".to_sym
+          if send(meth, true) # true ≠ par défaut
+            # 
+            # Les valeurs ont été données, on peut retirer cet
+            # élément de la liste des valeurs à définir et empêcher
+            # ce menu de pouvoir être rechoisi (surtout pour marquer
+            # ce qui est fait)
+            # 
+            data2define.delete(choix)
+            idx = DATA2DEFINE_VALUE_TO_INDEX[choix]
+            CHOIX_DATA2DEFINE[idx].merge!(disabled: '(OK)')
+          end
+        end
+
+      end #/while data2define.any?
+    
+    end # S'il fallait définir les valeurs tout de suite
+
+    # 
+    # AUTRES VALEURS -> PAR DÉFAUT
+    # ----------------------------
+    # 
+    # On a fini de définir les valeurs choisie
+    # Il faut définir les valeurs qui restent en mettant leur
+    # valeur par défaut
+    # 
+    data2define.each do |kwhat|
+      puts (MESSAGES[:define_default_values_for] % kwhat.to_s).bleu
+      meth = "get_values_for_#{kwhat}".to_sym
+      send(meth, false)
+    end
+
     return true
   end
 
@@ -90,7 +126,8 @@ class InitedThing
   # 
   # Sont nécessaires pour cette opération :
   #   @template_data (pour remplacer les %{...})
-  #   @titles_data    : pour mettre dans <titles>..
+  #   @titles_data    : pour mettre dans <titles>.
+  # 
   def assemble_code
     # Copie du code propre au livre ou à la collection 
     code = File.read(template_for(recipe_name))
@@ -116,6 +153,12 @@ class InitedThing
       if @data_fontes
         code = remplace_between_balises_with(code,'fontes', @data_fontes.to_yaml)
       end
+      # 
+      # Si les bibliographies sont définies
+      # 
+      if @data_biblio
+        code = remplace_between_balises_with(code,'biblios', @data_fontes.to_yaml)      
+      end
 
     end
 
@@ -125,25 +168,33 @@ class InitedThing
 
 
   # --- Les méthodes plus complexes ---
-  def get_values_for_bibliographies
-    # Note : on doit supprimer de '# <biblio>' à </biblio> dans le
-    # template recette et le remplacer par le code
+  def get_values_for_biblios(askit)
+    return unless askit
+    Q.yes?(PROMPTS[:biblio][:wannado_define_biblios].jaune) || return
+    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
+    @data_biblio = Prawn4book.define_bibliographies(pdfbook)
+    return true
   end
 
-  def get_values_for_fontes
+  def get_values_for_fontes(askit)
+    return unless askit
     Q.yes?(PROMPTS[:fonts][:wannado_choose_fonts].jaune) || return
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_fontes"
     @data_fontes = Prawn4book.get_name_fonts(main_folder: folder)
+    return true
   end
 
-  def get_values_for_headers_and_footers
+  def get_values_for_headers_and_footers(askit)
+    return unless askit
     # Note : on doit supprimer de '# <headers>' à </headers> dans le
     # template recette et le remplacer par le code
     # Idem pour '# <footers>' et '</footers>'
     
+    return true
   end
 
-  def get_values_for_titles
+  def get_values_for_titles(askit)
+    return unless askit
     Q.yes?(PROMPTS[:recipe][:wannado_define_titles].jaune) || return
     # Note : on doit supprimer de '# <titles>' à </titles> dans le
     # template recette et le remplacer par le code
@@ -182,40 +233,26 @@ class InitedThing
       end
       level += 1
     end
+    return true
   end
 
   # --- Toutes les méthodes pour demander les informations
   #     de la recette ---
 
   def get_values_for_publisher(askit)
-    get_values_for(
-      askit ? "Voulez-vous renseigner les données de l'éditeur ?" : nil, 
-      RECIPE_VALUES_FOR_PUBLISHER
-    )
+    get_values_for(askit, RECIPE_VALUES_FOR_PUBLISHER)
   end
   def get_values_for_format(askit)
-    get_values_for(
-      askit ? "Voulez-vous renseigner les données de format (taille livre, marges, etc.) ?" : nil, 
-      RECIPE_VALUES_FOR_FORMAT
-    )
+    get_values_for(askit, RECIPE_VALUES_FOR_FORMAT)
   end
   def get_values_for_wanted_pages(askit)
-    get_values_for(
-      askit ? "Voulez-vous définir les pages qui doivent être introduites ?" : nil,
-      RECIPE_VALUES_FOR_WANTED_PAGES
-    )
+    get_values_for(askit, RECIPE_VALUES_FOR_WANTED_PAGES)
   end
   def get_values_for_infos(askit)
-    get_values_for(
-      askit ? "Voulez-vous définir les informations du livre (isbn, metteur en page, etc.) ?" : nil,
-      RECIPE_VALUES_FOR_INFOS
-    )
+    get_values_for(askit, RECIPE_VALUES_FOR_INFOS)
   end
   def get_values_for_options(askit)
-    get_values_for(
-      askit ? "Voulez-vous définir certaines options (pagination, etc.) ?" : nil,
-      RECIPE_VALUES_FOR_OPTIONS
-    )
+    get_values_for(askit, RECIPE_VALUES_FOR_OPTIONS)
   end
 
   # --- Generic Methods ---
@@ -243,8 +280,9 @@ class InitedThing
   # +data_values+ et les mettre dans @template_data
   # Si +question+ est nil, ce sont les valeurs par défaut qui seront
   # mise dans la table.
-  def get_values_for(question, data_values)
-    if question && Q.yes?(question.jaune)
+  def get_values_for(askit, data_values)
+    if askit
+      # Mode interactif
       @template_data.merge!(ask_for_or_default(data_values))
     else
       # Valeurs par défaut
@@ -252,14 +290,18 @@ class InitedThing
         @template_data.merge!(dvalue[:k] => dvalue[:df])
       end
     end
+    return true
   end
 
   def ask_for_or_default(dvalues)
     tbl = {}
     dvalues.each do |dvalue|
+      # 
+      # On demande la valeur à l'utilisateur
+      # 
       reponse = case dvalue[:t]
         when :text
-          Q.multiline("#{dvalue[:q]} : ".jaune)
+          Q.multiline("#{dvalue[:q]} : ".jaune).join("\n")
         when :yes
           Q.yes?(dvalue[:q].jaune, default: dvalue[:df])
         when :select
@@ -267,6 +309,20 @@ class InitedThing
         else
           Q.ask("#{dvalue[:q]} : ".jaune, default: dvalue[:df])
         end
+      # 
+      # Y a-t-il une méthode de traitement de la donnée ?
+      # 
+      case dvalue[:treate_as]
+      when :names_list 
+        reponse = reponse.split(',').map{|e|e.strip}
+      when :multiline_text
+        indent = dvalue[:indent]||'  '
+        reponse = reponse.split("\n").map{|e|e.strip}.join("\n#{indent}")
+      end
+
+      # 
+      # Consignation de la donnée
+      # 
       tbl.merge!(dvalue[:k] => reponse)
     end
     return tbl

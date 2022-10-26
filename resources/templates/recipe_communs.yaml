@@ -141,13 +141,13 @@
 # --- BIBLIOGRAPHIES ---
 # Voir le manuel (pfb manuel) ou demander l'assistant
 # pour la bibliographie : 'pfb aide biblio'
-#<biblio> (marque pour assistant)
-:biblio: null
+# <biblios> (marque pour assistant)
+:biblios: null
   #- :tag: "balise"
   #  :title: "Titre sur la page"
   #  :title_level: 1 # niveau du titre
   #  :new_page:  false # true pour passer à la page
-#</biblio>
+# </biblio>
 # --- RÉFÉRENCES (croisées) ---
 # Voir le manuel (pfb manuel)
 :references:

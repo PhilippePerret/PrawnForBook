@@ -1,5 +1,19 @@
 module Prawn4book
 
+TERMS = {
+  biblios: 'bibliographies',
+  book_infos: 'informations sur le livre (dernières pages)',
+  fonts: 'fontes',
+  format: 'format',
+  format_book: 'format (taille livre, marges, etc.)',
+  headers_and_footers:'entêtes et pieds de page',
+  other_default_values:'autres valeurs par défaut',
+  publisher: 'éditeur/édition',
+  recipe_options: 'options (pagination, etc.)',
+  titles: 'titres',
+  wanted_pages: 'pages désirée (faux-titre, infos, etc.)', 
+}
+
 PROMPTS = {
 
   # --- Généralités ---
@@ -17,9 +31,12 @@ PROMPTS = {
 
   # --- Recette --- #
   recipe: {
+    data_for: 'Données %s',
+    wannado_define_all_values: "Voulez-vous définir tout de suite les valeurs ?",
     should_i_open_recipe_file: 'Dois-je ouvrir le fichier recette ?',
     should_i_add_code_to_recipe: 'Dois-je ajouter le code ci-dessus au fichier recette ?',
     wannado_define_titles: "Voulez définir les propriétés pour les titres ?",
+    which_data_recipe_to_define: "Quelles données voulez-vous définir ?",
   }, # / :recipe
 
   # --- Fontes --- #
@@ -38,6 +55,7 @@ PROMPTS = {
 
   # --- Bibliographie ---
   biblio: {
+    wannado_define_biblios: "Voulez-vous définir les bibliographies ?",
     title_of_new_biblio: "Titre de la nouvelle bibliographie : ",
     tag_uniq_and_simple_minuscules: "Identifiant singulier, unique et simple (minuscules) : ",
     title_level: "Niveau de titre",
@@ -49,4 +67,23 @@ PROMPTS = {
   }, #/:biblio
 
 }
+
+PROMPTS[:recipe].merge!(warning_book_in_collection: <<-TEXT)
+
+  Ce livre est dans une collection. Je ne dois mettre dans sa 
+  recette que les propriétés propre à un livre.
+
+TEXT
+
+PROMPTS[:recipe].merge!(init_intro_define_values: <<-TEXT)
+
+  (si vous ne définissez pas certaines valeurs maintenant, il 
+   faudra le faire « à la main » dans le fichier recette
+   directement, plus tard — ou à l'aide d'assistants
+   Ces valeurs concernent toute la recette du livre, les marges,
+   les bibliographies, les fontes, les infos éditeurs, etc.
+  )
+
+TEXT
+
 end #/module Prawn4book
