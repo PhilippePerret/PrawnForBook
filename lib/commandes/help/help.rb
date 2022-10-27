@@ -21,13 +21,17 @@ end #/Command
     # L'élément après le "help/aide"
     # 
     chose = CLI.components[0].to_s
-
-    if chose.in?(['fontes','fonts'])
-      cmd = Command.new('assistant').load
-      cmd.proceed_assistant_fontes
-    elsif chose.in?(['biblio','bibliography','bibliographie'])
-      cmd = Command.new('assistant').load
-      cmd.proceed_assistant_biblio
+    cmd = Command.new('assistant').load
+    whats = case chose
+    when 'fontes','fonts','police','polices'
+      'fontes'
+    when 'biblio','bibliography','bibliographies'
+      'biblios'
+    when 'entete','header','headers','footer','footers','pied-de-page'
+      'headers_footers'
+    end
+    if whats
+      cmd.proceed_assistant_for(whats)
     else
       less(INLINE_AIDE)
     end

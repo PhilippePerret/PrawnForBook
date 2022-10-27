@@ -1,8 +1,76 @@
 module Prawn4book
 class << self
 
+  # = main =
+  # 
+  # Méthode principale appelée quand on veut éditer les 
+  # headers/footers d'un livre ou d'une collection.
+  # 
+  def assistant_headers_footers(pdfbook)
+    whats = Q.select("Que voulez-vous éditer ?".jaune,MENU_HEADERS_OR_FOOTERS,per_page:MENU_HEADERS_OR_FOOTERS.count) || return
+    choose_and_edit_header_or_footer(pdfbook, whats)
+  end
+
+  ##
+  # Méthode permettant de choisir le footer ou le header à éditer
+  # et/ou en créer un nouveau.
+  # 
+  def choose_and_edit_header_or_footer(pdfbook, whats)
+    # 
+    # Choisir la chose à éditer (l'entête parmi les entêtes ou
+    # le pied de page parmi les pieds de page)
+    # 
+    # TODO : ne pas oublier le choix : en créer un nouveau
+    # TODO : ne pas oublier le choix : en supprimer un
+    puts "Je dois apprendre à relever les headers/footers et proposer d'en choisir un".jaune
+    data_ini = pdfbook.recipe.get(whats)
+    # puts "Données initiales : #{data_ini.inspect}"
+    choices = make_choices_from_headfoot(data_ini)
+    case datael = Q.select("Quel élément voulez-vous modifier ?".jaune, choices, per_page:choices.count)
+    when :cancel then return
+    when :newone
+      puts "Je dois apprendre à initier un nouvel élément #{whats}.".jaune
+      datael = nil
+    else
+
+    end
+    # 
+    # Mettre la chose choisie en édition et relever la valeur
+    # renvoyer pour l'enregistrer
+    # 
+    puts "Je dois apprendre à envoyer la chose à l'édition et recevoir les nouvelles données".jaune
+    # 
+    # Enregistrement des nouveaux headers ou footers
+    # 
+    puts "Je dois apprendre à enregistrer les #{whats}".jaune
+    # remplace_between_balises_with(code_init, whats, new_whats)
+  end
+
+  # Reçoit les données headers ou footers et retourne une liste
+  # pour Tty-prompt, pour en choisir un
+  def make_choices_from_headfoot(elements)
+    elements.map do |delement|
+      nom = delement[:name] || begin
+        if delement[:first_page] && delement[:last_page]
+          "De page #{delement[:first_page]} à page #{delement[:last_page]}"
+        else
+          dispo = delement[:disposition]
+          "#{dispo[:even]} ||| #{dispo[:odd]}"
+        end
+      end
+      {name: nom, value: delement}
+    end + [
+      {name: "\n  En créer un nouveau", value: :newone},
+      {name: 'Renoncer', value: :cancel}
+    ]
+  end
+
+  # 
   # @return une table contenant :headers et :footers, la définition
   # des entêtes et pieds de page
+  # 
+  # Note : Cette méthode est appelée directement lors de l'init d'un
+  # dossier livre ou collection.
   # 
   def define_headers_footers
     @datahf = {headers: {}, footers: {}}
@@ -10,9 +78,13 @@ class << self
     @datahf.merge!(footers: define_headers_or_footers(:footer))
   end
 
+  #
   # @return la liste des +thing+ définis
   # 
-  # @param {Symbol} thing   La chose symbolique (:header ou :footer)
+  # @param thing  {Symbol} La chose symbolique (:header ou :footer)
+  # @param cdata  {Hash} Données du livre/collection dont on doit 
+  #               modifier les headers et/ou footers.
+  # 
   def define_headers_or_footers(thing, cdata = nil)
     
     liste = []
@@ -52,60 +124,7 @@ class << self
         datah.merge!(name: (datah[:temp_name] % [human_thing, defaut]))
       end
 
-      while true
-        clear unless debug?
-        # 
-        # L'user doit choisir la donnée à définir
-        # 
-        case choix = Q.select("Définir :".jaune, DATA_HEADER_FOOTER, per_page:DATA_HEADER_FOOTER.count)
-        when :save then break
-        else
-          #
-          # Pour définir une valeur
-          # 
-          idx     = DATA_FH_VALUE_TO_INDEX[choix]
-          datah   = DATA_HEADER_FOOTER[idx]
-          defaut  = dhf[:choix] || datah[:df]
-          defaut = defaut.call(thing) if defaut.is_a?(Proc)
-          # 
-          # Demande de la réponse à l'user
-          # 
-          reponse = case datah[:t]
-          when :method
-            send(datah[:method], thing, dhf[choix])
-          when :select
-            Q.select(datah[:name].jaune, datah[:values], per_page:datah[:values].count, default:defaut)
-          else
-            Q.ask(datah[:name].jaune, default: defaut)
-          end
-          # 
-          # Traitement de la réponse
-          # 
-          case datah[:treate_as]
-          when :integer
-            reponse = reponse.to_i unless reponse.nil?
-          when :float
-            reponse = reponse.to_f unless reponse.nil?
-          when :symbol
-            reponse = reponse.to_sym unless reponse.nil?
-          end
-          # 
-          # Consignation de la réponse
-          # 
-          # puts "Pour #{choix.inspect}, je mets la réponse :\n#{reponse.inspect}"
-          # Q.yes?("Poursuivre ?")
-          dhf.merge!(choix => reponse)
-          # 
-          # Affichage de la réponse dans les menus
-          # 
-          rep_aff = 
-            case choix
-            when :disposition then valeur_defaut_for(reponse, thing)
-            else reponse
-            end
-          datah.merge!(name: (datah[:temp_name] % [human_thing, rep_aff]))
-        end
-      end #/tant qu'on veut définir LE header ou LE footer
+      dhf = edit_header_footer(datah, thing)
 
       # 
       # On met en forme la donnée finale qui sera écrite
@@ -121,12 +140,92 @@ class << self
     return liste
   end
 
+  ##
+  # Pour éditer l'élément en question
+  # 
+  # @param datah {Hash} Données simples pour le header ou le footer
+  #               Seule la propriété :disposition est différente de
+  #               la propriété enregistrée et devra être traitée en
+  #               aval et en amont (cf. [1] ci-dessous)
+  # @param thing  {Symbol} Soit :header soit :footer
+  # 
+  # [1] La propriété :disposition contient l'header aussi bien que
+  #     le footer, pour avoir un aperçu des deux. Chercher la marque
+  #     « [REPERE 001] » pour voir à quoi ressemble la donnée.
+  # 
+  # [2] Il faut utiliser la méthode `disposition_headfoot_default'
+  #     pour obtenir une valeur par défaut et y injecter les valeurs
+  #     courant si c'est un header/footer précis qui est édité.
+  # [3] Il faut utiliser la méthode :
+  #     ddispo_to_disposition(dhf[:disposition])[thing] pour 
+  #     recomposer la donnée :odd et :even simple.
+  # 
+  def edit_header_footer(datah, thing)
+    while true
+      clear unless debug?
+      # 
+      # L'user doit choisir la donnée à définir
+      # 
+      case choix = Q.select("Définir :".jaune, DATA_HEADER_FOOTER, per_page:DATA_HEADER_FOOTER.count)
+      when :save then break
+      else
+        #
+        # Pour définir une valeur
+        # 
+        idx     = DATA_FH_VALUE_TO_INDEX[choix]
+        datah   = DATA_HEADER_FOOTER[idx]
+        defaut  = dhf[:choix] || datah[:df]
+        defaut = defaut.call(thing) if defaut.is_a?(Proc)
+        # 
+        # Demande de la réponse à l'user
+        # 
+        reponse = case datah[:t]
+        when :method
+          send(datah[:method], thing, dhf[choix])
+        when :select
+          Q.select(datah[:name].jaune, datah[:values], per_page:datah[:values].count, default:defaut)
+        else
+          Q.ask(datah[:name].jaune, default: defaut)
+        end
+        # 
+        # Traitement de la réponse
+        # 
+        case datah[:treate_as]
+        when :integer
+          reponse = reponse.to_i unless reponse.nil?
+        when :float
+          reponse = reponse.to_f unless reponse.nil?
+        when :symbol
+          reponse = reponse.to_sym unless reponse.nil?
+        end
+        # 
+        # Consignation de la réponse
+        # 
+        # puts "Pour #{choix.inspect}, je mets la réponse :\n#{reponse.inspect}"
+        # Q.yes?("Poursuivre ?")
+        dhf.merge!(choix => reponse)
+        # 
+        # Affichage de la réponse dans les menus
+        # 
+        rep_aff = 
+          case choix
+          when :disposition then valeur_defaut_for(reponse, thing)
+          else reponse
+          end
+        datah.merge!(name: (datah[:temp_name] % [human_thing, rep_aff]))
+      end
+    end #/tant qu'on veut définir LE header ou LE footer
+    
+    return dhf
+  end
+
   # --- Disposition Methods ---
 
   ##
   # La propriété :disposition étant complexe, on la traite dans une
   # méthode propre.
   # 
+  # [REPERE 001]
   # @param ddispo  {Hash} Table des données de header et footer 
   #             complète décomposée en :
   #             {
@@ -281,7 +380,7 @@ class << self
   # Noter que même si seul l'entête ou le pied de page est traité,
   # les deux valeurs sont nécessaires pour en définir un des deux.
   # 
-  def disposition_headfoot_default
+  def disposition_headfoot_default(empty_one = false)
     dispo = {}
     [:header, :footer].each do |bkey| # pour "block key"
       dispo.merge!(bkey => {})
@@ -292,6 +391,7 @@ class << self
         end
       end
     end
+    return dispo if empty_one
     dispo[:footer][:even][:center][:content]  = 'numero'
     dispo[:footer][:even][:center][:align]    = :center
     dispo[:footer][:odd][:center][:content]   = 'numero'
@@ -355,4 +455,12 @@ DATA_FH_VALUE_TO_INDEX = {}
 DATA_HEADER_FOOTER.each_with_index do |dval, idx|
   DATA_FH_VALUE_TO_INDEX.merge!(dval[:value] => idx)
 end
+
+MENU_HEADERS_OR_FOOTERS = [
+  {name:"Les entêtes de page", value: :headers},
+  {name:'Les pieds de page', value: :footers},
+  {name: 'Renoncer', value: nil}
+]
+
+
 end #/module Prawn4book

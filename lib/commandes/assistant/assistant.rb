@@ -2,14 +2,11 @@ module Prawn4book
   
   # @runner
   class Command
-    def proceed; end
-    def proceed_assistant_fontes
+    def proceed; end # méthode appelée par défaut
+
+    def proceed_assistant_for(what)
       pdfbook = check_if_current_book_or_return || return
-      Prawn4book.assistant('fontes',pdfbook)
-    end
-    def proceed_assistant_biblio
-      pdfbook = check_if_current_book_or_return || return
-      Prawn4book.assistant('biblios',pdfbook)
+      Prawn4book.proceed_assistant(what,pdfbook)
     end
 
     def check_if_current_book_or_return
