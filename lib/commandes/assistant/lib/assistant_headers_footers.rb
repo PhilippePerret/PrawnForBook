@@ -48,7 +48,7 @@ class << self
       # 
       DATA_HEADER_FOOTER.each do |datah|
         defaut = datah[:df]
-        default = defaut.call(thing) if defaut.is_a?(Proc)
+        defaut = defaut.call(thing) if defaut.is_a?(Proc)
         datah.merge!(name: (datah[:temp_name] % [human_thing, defaut]))
       end
 
@@ -159,7 +159,7 @@ class << self
       # Pour visualiser l'état
       # 
       clear
-      puts mise_en_forme_disposition_headfoot(ddispo)
+      puts mise_en_forme_disposition_headfoot(ddispo, thing)
       # 
       # Pour choisir l'élément à modifier
       # 
@@ -231,7 +231,7 @@ class << self
   # Construit un affichage des entêtes et pieds de page, pour voir
   # ce qui sera affiché.
   # Cf. la composition de +dhf+ ci-dessus
-  def mise_en_forme_disposition_headfoot(ddispo)
+  def mise_en_forme_disposition_headfoot(ddispo, thing)
     # Pour le nom des variables :
     #   h(ead)/f(oot) e(ven)/o(dd) l(eft)/c(enter)/r(ight)
     b = {}
@@ -244,11 +244,18 @@ class << self
         end
       end
     end
-    <<~TEXT  
+
+    color_header = thing == :header ? :blanc : :gris
+    color_footer = thing == :footer ? :blanc : :gris
+    <<-TEXT.send(color_header) + 
      ----------------------------------------------------------------------
     | #{b[:hel]} #{b[:hec]} #{b[:her]} ||| #{b[:hol]} #{b[:hoc]} #{b[:hor]} |
     |                                  |||                                  |
+    TEXT
+    <<-TEXT.send(:gris) +
     /                                  ///                                  /
+    TEXT
+    <<-TEXT.send(color_footer)
     |                                  |||                                  |
     | #{b[:fel]} #{b[:fec]} #{b[:fer]} ||| #{b[:fol]} #{b[:foc]} #{b[:for]} |
      ----------------------------------------------------------------------
@@ -338,7 +345,7 @@ DATA_HEADER_FOOTER = [
   {name: nil, temp_name: "Nom pour mémoire du %s (%s) :", value: :name, df:'Name'},
   {name: nil, temp_name: "Première page du %s (%s) :", value: :first_page, df:'0', treate_as: :integer},
   {name: nil, temp_name: "Dernière page du %s (%s) :", value: :last_page, df:'100', treate_as: :integer},
-  {name: nil, temp_name: "Disposition du %s (%s) :", value: :disposition, df:->(thg){thg == :headers ? 'TITLE1 | | ||| | | title2' : '| | numero | ||| | numero | '}, treate_as: :disposition, t: :method, method: :define_disposition_headfoot},
+  {name: nil, temp_name: "Disposition des %ss (paire/impaire) (%s) :", value: :disposition, df: ->(thg){thg == :header ? 'TITLE1 | | ||| | | title2' : '| | numero | ||| | numero | '}, treate_as: :disposition, t: :method, method: :define_disposition_headfoot},
   {name: nil, temp_name: "Police du %s (%s) :", value: :font, df:'Arial'},
   {name: nil, temp_name: "Taille de police du %s (%s) :", value: :size, df:'12', treate_as: :float},
   {name: nil, temp_name: "Style de police du %s (%s)", value: :style, df: 'Normal', treate_as: :symbol, t: :select, values: CHOIX_TYPE_FONT},
