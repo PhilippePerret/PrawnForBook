@@ -92,8 +92,8 @@
   - :name: "Nom du premier header"
     :first_page: null
     :disposition: 
-      :odd: "| -%%titre1- |"
-      :even: "| -%%titre1- |"
+      :odd: "| -%%title1- |"
+      :even: "| -%%title1- |"
     :font: ArialNarrow
     :size: 8
     :style: :bold
@@ -103,8 +103,8 @@
 :footers: # tous les rangs
   - :pages: (10..20)
     :disposition:
-      :odd: "| -%%num- |"
-      :even: "| -%%num- |"
+      :odd: "| -%%numero- |"
+      :even: "| -%%numero- |"
     :font: Arial
     :size: 8
     :style: :bold

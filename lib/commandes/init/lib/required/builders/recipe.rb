@@ -268,8 +268,9 @@ class InitedThing
   # pouvoir les modifier par l'assistant.
   # 
   def remplace_between_balises_with(str, tag_name, code)
+    code = code[4..-1] if code.start_with?("---")
     tag_in  = "# <#{tag_name}>"
-    tag_out = "</#{tag_name}>"
+    tag_out = "# </#{tag_name}>"
     dec_in  = str.index(tag_in) || raise("La balise '# <titles>' est malheureusement introuvable.")
     dec_in += tag_in.length
     dec_out = str.index(tag_out) || raise("La balise '</titles>' est malheureusement introuvable.")
