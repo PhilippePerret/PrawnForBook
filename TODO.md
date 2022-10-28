@@ -1,5 +1,8 @@
 # Todo courant
 
+* Corrections/affinements par rapport au premier livre Narration
+  -> cf. le fichier TODO de la collection
+
 * Rationnaliser l'utilisation des formater.rb, helpers.rb et parser.rb
   - déjà, il y a du formater dans parser.rb
   - ensuite, il faut trouver les moyens de conserver les données
