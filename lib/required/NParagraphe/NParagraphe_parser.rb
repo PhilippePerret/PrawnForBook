@@ -5,27 +5,31 @@ class Paragraphe
 
   REG_IMAGE = /^IMAGE\[(.+?)\]$/
 
-
-  #
-  # La méthode précédente (parse) s'occupe d'un texte pas encore
-  # analysé et enregistré dans son fichier YAML. Cette méthode, au
-  # contraire, reçoit les données dictionnaire de chaque paragraphe
-  # et en fait l'élément qui correspond.
-  # 
-  def self.dispatch_by_type(pdfbook, data)
-    case data[:type]
-    when 'image'  then PdfBook::NImage.new(pdfbook, data)
-    when 'titre'  then PdfBook::NTitre.new(pdfbook, data)
-                  else PdfBook::NTextParagraph.new(pdfbook, data)
+  class << self
+    #
+    # La méthode précédente (parse) s'occupe d'un texte pas encore
+    # analysé et enregistré dans son fichier YAML. Cette méthode, au
+    # contraire, reçoit les données dictionnaire de chaque paragraphe
+    # et en fait l'élément qui correspond.
+    # 
+    def dispatch_by_type(pdfbook, data)
+      case data[:type]
+      when 'image'  then PdfBook::NImage.new(pdfbook, data)
+      when 'titre'  then PdfBook::NTitre.new(pdfbook, data)
+                    else PdfBook::NTextParagraph.new(pdfbook, data)
+      end
     end
-  end
 
-  def self.code_for_next_paragraph=(pfbcode)
-    @@codenextparag = pfbcode
-  end
-  def self.code_for_next_paragraph
-    @@codenextparag
-  end
+    def code_for_next_paragraph=(pfbcode)
+      @codenextparag = pfbcode
+    end
+    def code_for_next_paragraph
+      @codenextparag
+    end
+
+  end #/<< self
+
+  ##################    INSTANCE    ##################
 
   attr_reader :pdfbook
   attr_reader :line

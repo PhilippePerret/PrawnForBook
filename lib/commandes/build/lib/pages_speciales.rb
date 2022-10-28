@@ -42,17 +42,17 @@ class PrawnView
   # Construction du faux titre
   #
   def build_faux_titre
-    require_relative 'generate_builder/faux_titre'
+    require_relative 'faux_titre'
     insert_faux_titre
   end
 
   def build_page_de_titre
-    require_relative 'generate_builder/page_de_titre'
+    require_relative 'page_de_titre'
     insert_page_de_titre
   end
 
   def build_page_infos
-    require_relative 'generate_builder/page_infos'
+    require_relative 'page_infos'
     insert_page_infos
   end
 

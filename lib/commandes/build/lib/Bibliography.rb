@@ -12,6 +12,10 @@ class Bibliography
     # pagination du livre.
     attr_accessor :page_or_paragraph_key
 
+    def init
+      @items = {}
+    end
+
     def require_formaters(pdfbook)
       require pdfbook.module_formatage_path
       Bibliography.extend FormaterBibliographiesModule
@@ -51,7 +55,7 @@ class Bibliography
     # @return l'instance de la bibliographie de tag +bib_tag+
     # 
     def get(bib_tag)
-      @items[bib_tag]
+      items[bib_tag]
     end
 
     # @return {Regexp} L'expression régulière pour capter toutes
@@ -67,15 +71,14 @@ class Bibliography
     # et l'enregistre dans les items de bibliographie.
     # 
     def instanciate(pdfbook, data)
-      @items ||= {}
       bib = Bibliography.new(pdfbook, data)
-      @items.merge!(bib.tag => bib)
+      items.merge!(bib.tag => bib)
       return bib
     end
 
   end #/<< self
 
-  # --- INSTANCE ---
+  #####################     INSTANCE     #####################
 
   attr_reader :pdfbook
   attr_reader :data
@@ -253,4 +256,7 @@ class Bibliography
 
 
 end #/class Bibliography
+
+Bibliography.init
+
 end #/module Prawn4book

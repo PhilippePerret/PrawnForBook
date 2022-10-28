@@ -108,11 +108,12 @@ class NTextParagraph < AnyParagraph
       # Vérification ligne de référence
       # 
       # if (start_cursor - cursor) % line_height > 0.05
-      if (start_cursor - cursor) % line_height > 0.1
-        puts "Il y a un problème de leading… Le texte « #{final_str} » ne se trouve plus sur la ligne de référence…".rouge
-        puts "(start_cursor - cursor) % line_height = (#{round(start_cursor)} - #{round(cursor)}) % #{line_height} = #{(start_cursor - cursor) % line_height}".rouge
+      if debug?
+        if (start_cursor - cursor) % line_height > 0.1
+          puts "Il y a un problème de leading… Le texte « #{final_str} » ne se trouve plus sur la ligne de référence…".rouge
+          puts "(start_cursor - cursor) % line_height = (#{round(start_cursor)} - #{round(cursor)}) % #{line_height} = #{(start_cursor - cursor) % line_height}".rouge
+        end
       end
-
     end
   end
 

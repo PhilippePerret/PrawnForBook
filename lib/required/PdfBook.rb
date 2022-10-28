@@ -48,6 +48,7 @@ class PdfBook
   def first_font
     @first_font ||= fontes.keys[0]
   end
+  alias :default_font :first_font
 
   # @prop Seconde fonte définie (ou première si une seule) pour 
   # valeur par défaut de certains texte mineurs.
