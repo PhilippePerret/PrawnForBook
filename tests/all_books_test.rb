@@ -24,6 +24,12 @@
 =end
 require 'test_helper'
 
+#
+# Mettre à true si on veut un message d'erreur plus complet
+# (à true, la construction est lancée avec l'option -x/--debug)
+# 
+OPTION_DEBUG = false
+
 class BigAllBooksTest < Minitest::Test
 
   def setup
@@ -33,31 +39,35 @@ class BigAllBooksTest < Minitest::Test
     
   end
 
-  def test_de_tous_les_livres_construits
 
     excludes = ['without_recipe']
 
     folder = File.join(TEST_FOLDER,'tested_books','books')
     Dir["#{folder}/*"].each do |book_folder|
       begin
+
+  # def test_de_tous_les_livres_construits
+        
         book_name = File.basename(book_folder)
         next if excludes.include?(book_name)
-        Dir.chdir(book_folder) do
-          puts "Constructrion du livre #{book_name}".bleu
-          res = `pfb build`
-          if res.match?(/\[0;91m/) # texte en rouge
-            message {"Une erreur de construction"}
-            puts "#ERR de construction : ".rouge
-            puts res
 
+        define_method "test_book_#{book_name}".to_sym do
+
+          Dir.chdir(book_folder) do
+            puts "Constructrion du livre #{book_name}".bleu
+            res = `pfb build#{OPTION_DEBUG ? ' -x', ''}`
+            # refute_match(/\[0;91m/, res, message { "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}"})
+            refute_match /\[0;91m/, res, "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}"
           end
-        end
+        end #/define method
+      
+  # end #/test
+
       rescue Exception => e
         puts "#{e.message} avec le dossier #{book_name}".rouge
       end
     end
 
-  end
 
   def test_de_toutes_les_livres_de_collection_construits
     folder = File.join(TEST_FOLDER,'tested_books','collections')

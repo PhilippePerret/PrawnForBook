@@ -385,11 +385,23 @@ class PdfBook
     end
 
   rescue Exception => e
-    puts "#{e.message.rouge}\n\n"
+    puts formated_error(e)
     return false
   else
     return true
   end
 
+  def formated_error(err)
+    if debug?
+      trace = err.backtrace[0..-4].map.with_index do |line, idx|
+        color = idx == 0 ? :rouge : :orange
+        prefix = idx == 0 ? '🧨 ' : '   '
+        (" #{prefix}" + line.gsub(/#{APP_FOLDER}/,'')).send(color)
+      end.join("\n")
+    else
+      trace = '🧨 ' + err.backtrace.first.gsub(/#{APP_FOLDER}/,'')
+    end
+    puts "#ERR: #{err.message}\n#{trace}".rouge
+  end
 end #/class PdfBook
 end #/module Prawn4book
