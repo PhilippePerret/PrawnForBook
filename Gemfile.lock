@@ -1,15 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.1.0)
+    afm (0.2.2)
     ansi (1.5.0)
     builder (3.2.4)
+    hashery (2.1.2)
     minitest (5.16.3)
     minitest-reporters (1.5.0)
       ansi
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    pdf-inspector (1.3.0)
+      pdf-reader (>= 1.0, < 3.0.a)
+    pdf-reader (2.11.0)
+      Ascii85 (~> 1.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     ruby-progressbar (1.11.0)
+    ruby-rc4 (0.1.5)
+    ttfunk (1.7.0)
 
 PLATFORMS
   ruby
@@ -17,6 +30,8 @@ PLATFORMS
 DEPENDENCIES
   minitest
   minitest-reporters
+  pdf-inspector
+  pdf-reader
 
 BUNDLED WITH
    2.1.4

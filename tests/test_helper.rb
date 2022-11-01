@@ -1,7 +1,12 @@
 require "minitest/autorun"
 require 'minitest/reporters'
 
-require_relative '../lib/required'
+require 'prawn'
+require 'pdf/inspector'
+require 'pdf/reader'
+require 'clir'
+
+# require_relative '../lib/required'
 
 TEST_FOLDER = __dir__.freeze
 

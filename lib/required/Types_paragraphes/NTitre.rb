@@ -13,18 +13,6 @@ class NTitre < AnyParagraph
     @data = data.merge!(type: 'titre')
   end
 
-  # --- Predicate Methods ---
-
-  def next_page?
-    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
-  end
-
-  def belle_page?
-    :TRUE == @onbellepage ||= true_or_false(self.class.belle_page?(level))
-  end
-
-  def titre?; true end
-
   def leading
     @leading ||= self.class.leading(level)
   end
@@ -53,6 +41,14 @@ class NTitre < AnyParagraph
   end
 
   # --- Predicate Methods ---
+
+  def next_page?
+    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
+  end
+
+  def belle_page?
+    :TRUE == @onbellepage ||= true_or_false(self.class.belle_page?(level))
+  end
 
   def paragraph?; false end
   def titre?    ; true  end
