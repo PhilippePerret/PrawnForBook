@@ -34,7 +34,7 @@ class << self
     # Le livre existe-t-il vraiment ? Si oui, on le prend, sinon,
     # on lève une exception.
     # 
-    if File.exist?(cfolder) && File.exist?(File.join(cfolder,'recipe.yaml'))
+    if File.exist?(cfolder) && (File.exist?(File.join(cfolder,'recipe.yaml')) || File.exist?(File.join(cfolder,'texte.pfb.md')))
       PdfBook.new(cfolder)
     else
       raise "Impossible de trouver le livre '#{cfolder}'… Ce n'est pas un dossier de livre PDF."

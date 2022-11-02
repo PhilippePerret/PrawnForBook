@@ -9,6 +9,20 @@ module Prawn4book
 class PdfBook
 class Recipe
 
+  # @constant Données par défaut. 
+  # Elles sont très importantes puisqu'elles sont utilisées lorsque
+  # le livre ne possède pas de recette.
+  # 
+  DEFAULT_DATA = {
+    info: {},
+    num_page_style: 'num_page',
+    fonts:      {},
+    headers:    {},
+    footers:    {},
+    page_info:  {},
+    table_des_matières: {},
+  }
+
   attr_reader :pdfbook
   attr_reader :real_data
 
@@ -125,7 +139,11 @@ class Recipe
 
   def data
     @data ||= begin
-      DEFAULT_DATA.merge!(YAML.load_file(pdfbook.recipe_path, aliases: true))
+      dt = {}
+      if File.exist?(pdfbook.recipe_path)
+        dt = YAML.load_file(pdfbook.recipe_path, aliases: true) || {}
+      end
+      DEFAULT_DATA.merge!(dt)
     end
   end
 
@@ -151,15 +169,6 @@ class Recipe
         return File.exist?(datacoll)
       end
     end
-
-DEFAULT_DATA = {
-  info: {},
-  num_page_style: 'num_page',
-  headers: {},
-  footers: {},
-  page_info: {},
-  table_des_matières: {},
-}
 
 end #/class Recipe
 end #/class PdfBook

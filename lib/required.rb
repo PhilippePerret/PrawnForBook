@@ -1,7 +1,9 @@
 require 'yaml'
 require 'fileutils'
+
 require 'prawn'
 require "prawn/measurement_extensions" # Pour pouvoir utiliser 1.cm etc.
+Prawn::Fonts::AFM.hide_m17n_warning = true
 
 require 'clir'
 CLI.set_options_table({

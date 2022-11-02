@@ -13,9 +13,10 @@ class InputTextFile
   # Instanciation du fichier à partir de son path
   # 
   # @param pdfbook {Prawn4book} Instance du PdfBook contenant ce texte
-  # @param patharg {Bool|Path} Soit true si le fichier porte le nom
-  #             normal (texte.txt ou texte.md) soit le chemin d'accès
-  #             complet
+  # @param patharg {Bool|Path} 
+  #                 SI true => le fichier porte le nom officiel (texte.pfb.txt ou texte.pfb.md) 
+  #                 SI nil  => idem
+  #                 SINON   => le chemin d'accès complet
   #
   def initialize(pdfbook, patharg)
     @pdfbook  = pdfbook
@@ -24,7 +25,7 @@ class InputTextFile
 
   def define_path_from_arg(patharg)
     case patharg
-    when TrueClass
+    when TrueClass, NilClass
       txt_path = File.join(pdfbook.folder,'texte.pfb.txt')
       return txt_path if File.exist?(txt_path)
       md_path  = File.join(pdfbook.folder,'texte.pfb.md')
