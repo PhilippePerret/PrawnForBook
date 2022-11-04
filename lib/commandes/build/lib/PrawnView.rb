@@ -37,7 +37,10 @@ class PrawnView
   end
 
   def document
-    @document ||= Prawn::Document.new(config)
+    @document ||= begin
+      # spy "Config pour initialiser Prawn::Document :\n#{config.pretty_inspect}".jaune
+      Prawn::Document.new(config)
+    end
   end
 
   # --- Builing General Methods ---

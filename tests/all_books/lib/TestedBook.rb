@@ -1,3 +1,4 @@
+# encoding: UTF-8
 =begin
 
   class TestedBook
@@ -6,7 +7,7 @@
   Elle doit permettre de tester en profondeur les livres produits.
 
 =end
-
+require_relative 'TestedBook_Assertions'
 class TestedBook
   
   include Minitest::Assertions
@@ -23,8 +24,8 @@ class TestedBook
   # 
   def check
     assert File.exist?(book_path), "Le livre n'a pas été produit…"
-    assert File.exist?(checkup_path), "Le fichier checkup.txt n'existe pas…"
-    File.readlines(checkup_path).each do |line|
+    assert File.exist?(expectations_file_path), "Le fichier 'expectations' n'existe pas…"
+    File.readlines(expectations_file_path).each do |line|
       next if line.start_with?('#')
       line = line.strip
       next if line.empty?
@@ -36,26 +37,23 @@ class TestedBook
     end
   end
 
-  # --- ASSERTIONS METHODS ---
-
-  def should_have_texte(textes)
-
-    textes = [textes] if textes.is_a?(String)
-    textes.each do |texte|
-      assert_include text_inspector.strings, texte
-    end
-  end
-
 
   # --- Propriétés utiles ---
 
-  def text_inspector
-    @text_inspector ||= PDF::Inspector::Text.analyze(book_path)
+  # Le texte entier simple, ligne après ligne
+  def whole_string
+    @whole_string ||= text_inspector.strings.join("\n")
   end
 
-  def pages_inspector
-    @pages_inspector ||= PDF::Inspector::Page.analyze(book_path)
+  def text_inspector
+    @text_inspector ||= PDF::Inspector::Text.analyze_file(book_path)
   end
+  alias :texter :text_inspector
+
+  def pages_inspector
+    @pages_inspector ||= PDF::Inspector::Page.analyze_file(book_path)
+  end
+  alias :pager :pages_inspector
 
   # --- Fonctional Methods ---
 
@@ -66,8 +64,8 @@ class TestedBook
   # --- Path Properties ---
 
   # @prop Fichier contenant le check du pdf à faire
-  def checkup_path
-    @checkup_path ||= File.join(folder,'checkup.txt')
+  def expectations_file_path
+    @expectations_file_path ||= File.join(folder,'expectations')
   end
 
   def name # le nom du dossier

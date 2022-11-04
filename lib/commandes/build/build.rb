@@ -23,6 +23,7 @@ class PdfBook
   attr_reader :table_references
 
   def generate_pdf_book
+    spy "Génération du livre #{ensured_title.inspect}".bleu
     #
     # Le livre doit être conforme, c'est-à-dire posséder les 
     # éléments requis
@@ -37,7 +38,7 @@ class PdfBook
     # 
     @table_references = PdfBook::ReferencesTable.new(self)
     # 
-    # Initialisations
+    # INITIALISATIONS
     # 
     PdfBook::NTextParagraph.init_first_turn
     table_references.init
@@ -87,6 +88,8 @@ class PdfBook
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     # 
+    spy "pdf_config: #{pdf_config.pretty_inspect}" if test?
+    
     pdf = PrawnView.new(self, pdf_config)
     
     #
@@ -111,12 +114,12 @@ class PdfBook
     Bibliography.page_or_paragraph_key = pagination_page? ? :page : :paragraph
 
     # 
-    # Parser personnalisé (if any)
+    # CUSTOM PARSER (if any)
     # 
     require_module_parser if module_parser?
 
     #
-    # Helpers personnalisées (if any)
+    # CUSTOM HELPERS (if any)
     # 
     require_modules_helpers(pdf) if module_helpers?
 
@@ -127,19 +130,19 @@ class PdfBook
     @pages = {}
 
     # 
-    # On définit les polices requises pour le livre
+    # FONTS
     # 
-    # define_required_fonts(self.config[:fonts])
     pdf.define_required_fonts(book_fonts)
 
     #
     # Y a-t-il une dernière page définie en options
+    # Si oui, on ne doit construire le livre que juste que là
     # 
     pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]
 
     # 
     # Initier une première page, si on a demandé de la sauter
-    # au départ (on le demande pour qu'elle prennen en compte les
+    # au départ (on le demande pour qu'elle prenne en compte les
     # définitions de marge, etc.)
     # 
     pdf.start_new_page if skip_page_creation?
@@ -170,10 +173,9 @@ class PdfBook
     pdf.build_page_de_titre if page_de_titre?
 
     # 
-    # Pour commencer sur la belle page, on doit toujours ajouter
-    # une page blanche
+    # Commencer toujours sur la BELLE PAGE
     # 
-    pdf.start_new_page
+    pdf.start_new_page if pdf.page_number.even?
 
     # 
     # ========================

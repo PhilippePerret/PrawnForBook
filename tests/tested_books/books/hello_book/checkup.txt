@@ -1,5 +1,0 @@
-# Première ligne juste pour voir
-:assert_equal ::: 4 ::: 2 + 2
-
-:should_have_texte ::: "Bonjour tout le monde"
-

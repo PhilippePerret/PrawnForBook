@@ -1,0 +1,2 @@
+:should_have_page_count ::: 3
+:should_have_text ::: "Un livre sans première page automatique."

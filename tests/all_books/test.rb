@@ -23,7 +23,7 @@
 
 =end
 require 'test_helper'
-require_relative 'tested_books/lib/TestedBook'
+require_relative 'lib/TestedBook'
 #
 # Mettre à true si on veut un message d'erreur plus complet
 # (à true, la construction est lancée avec l'option -x/--debug)
@@ -44,36 +44,42 @@ class BigAllBooksTest < Minitest::Test
     
   end
 
+  def self.define_test_method_for_book(book_folder)
+    begin
 
-    excludes = [] # ['without_recipe']
+      book = TestedBook.new(book_folder)
+      # return if excludes.include?(book.name)
 
-    folder = File.join(TEST_FOLDER,'tested_books','books')
-    Dir["#{folder}/*"].each do |book_folder|
-      begin
+      define_method "test_book_#{book.name}".to_sym do
 
-        book = TestedBook.new(book_folder)
-        next if excludes.include?(book.name)
-
-        define_method "test_book_#{book.name}".to_sym do
-
-          Dir.chdir(book_folder) do
-            STDOUT.write "\nConstructrion du livre #{book.name}... ".bleu
-            book.delete_pdf
-            res = `pfb build#{OPTION_DEBUG ? ' -x' : ''}`
-            refute_match /\[0;91m/, res, "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}"
-            book.check
-          end
-        end #/define method
-      
-      rescue Exception => e
-        puts "#{e.message} avec le dossier #{book.name}".rouge
-      end
-    end
-
-
-  def test_de_toutes_les_livres_de_collection_construits
-    folder = File.join(TEST_FOLDER,'tested_books','collections')
+        Dir.chdir(book_folder) do
+          STDOUT.write "\nConstructrion du livre #{book.name}... ".bleu
+          book.delete_pdf
+          res = `pfb build#{OPTION_DEBUG ? ' -x' : ''}`
+          # sleep 2
+          refute_match /\[0;91m/, res, "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}"
+          book.check
+        end
+      end #/define method
     
+    rescue Exception => e
+      puts "#{e.message} avec le dossier #{book.name}".rouge
+    end    
+  end
+
+
+  excludes = [] # ['without_recipe']
+
+  folder = File.join(__dir__,'books')
+  Dir["#{folder}/*"].each do |book_folder|
+    define_test_method_for_book(book_folder)
+  end
+
+
+  folder = File.join(__dir__,'collections')
+  Dir["#{folder}/*/*"].each do |book_folder|
+    next unless File.directory?(book_folder)
+    define_test_method_for_book(book_folder)
   end
 
 end #/Minitest

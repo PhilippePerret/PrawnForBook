@@ -41,12 +41,13 @@ class PdfBook
   # --- Configuration Pdf Methods ---
 
   # @prop Configuration pour le second argument de la méthode
-  # #generate de Prawn::Document (en fait PdfBook::PrawnDoc)
+  # #generate de Prawn::View (en fait PdfBook::PrawnView)
   # TODO : la composer en fonction de la recette du livre ou de la
   # collection
   def pdf_config
     @pdf_config ||= begin
       {
+        skip_page_creation: skip_page_creation?,
         page_size:          proceed_unit(get_recipe(:dimensions)),
         page_layout:        get_recipe(:layout, :portrait),
         margin:             proceed_unit(get_recipe(:margin)),

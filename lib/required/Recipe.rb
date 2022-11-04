@@ -72,7 +72,7 @@ class Recipe
   end
 
   def skip_page_creation?
-    :TRUE == @skipfirst ||= true_or_false(get(:skip_page_creation?) === true)
+    :TRUE == @skipfirst ||= true_or_false(get(:skip_page_creation) === true)
   end
 
   def page_de_garde?
@@ -141,7 +141,7 @@ class Recipe
     @data ||= begin
       dt = {}
       if File.exist?(pdfbook.recipe_path)
-        dt = YAML.load_file(pdfbook.recipe_path, aliases: true) || {}
+        dt = YAML.load_file(pdfbook.recipe_path, aliases: true, symbolize_names: true) || {}
       end
       DEFAULT_DATA.merge!(dt)
     end

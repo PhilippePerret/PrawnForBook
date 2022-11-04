@@ -12,15 +12,29 @@ endobj
 endobj
 3 0 obj
 << /Type /Pages
-/Count 2
-/Kids [5 0 R 7 0 R]
+/Count 1
+/Kids [5 0 R]
 >>
 endobj
 4 0 obj
-<< /Length 4
+<< /Length 339
 >>
 stream
 q
+
+BT
+36.0 733.436 Td
+/F1.0 10 Tf
+[<556e20646f7373696572206c697672652073616e732072656365747465> 15 <2e>] TJ
+ET
+
+
+BT
+36.0 697.436 Td
+/F1.0 10 Tf
+[<496c20646f6974207175616e64206dea6d6520ea74726520636f6e737472> -15 <7569742c206d6169732061> 20 <76> 25 <656320746f75746573206c65732076> 25 <616c65757273207061722064e966> 30 <6175742e>] TJ
+ET
+
 Q
 
 endstream
@@ -35,48 +49,12 @@ endobj
 /ArtBox [0 0 612 792]
 /Contents 4 0 R
 /Resources << /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font << /F1.0 6 0 R
+>>
 >>
 >>
 endobj
 6 0 obj
-<< /Length 339
->>
-stream
-q
-
-BT
-20.0 749.436 Td
-/F1.0 10 Tf
-[<556e20646f7373696572206c697672652073616e732072656365747465> 15 <2e>] TJ
-ET
-
-
-BT
-20.0 713.436 Td
-/F1.0 10 Tf
-[<496c20646f6974207175616e64206dea6d6520ea74726520636f6e737472> -15 <7569742c206d6169732061> 20 <76> 25 <656320746f75746573206c65732076> 25 <616c65757273207061722064e966> 30 <6175742e>] TJ
-ET
-
-Q
-
-endstream
-endobj
-7 0 obj
-<< /Type /Page
-/Parent 3 0 R
-/MediaBox [0 0 612 792]
-/CropBox [0 0 612 792]
-/BleedBox [0 0 612 792]
-/TrimBox [0 0 612 792]
-/ArtBox [0 0 612 792]
-/Contents 6 0 R
-/Resources << /ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-/Font << /F1.0 8 0 R
->>
->>
->>
-endobj
-8 0 obj
 << /Type /Font
 /Subtype /Type1
 /BaseFont /Helvetica
@@ -84,21 +62,19 @@ endobj
 >>
 endobj
 xref
-0 9
+0 7
 0000000000 65535 f 
 0000000015 00000 n 
 0000000109 00000 n 
 0000000158 00000 n 
-0000000221 00000 n 
-0000000274 00000 n 
-0000000516 00000 n 
-0000000906 00000 n 
-0000001172 00000 n 
+0000000215 00000 n 
+0000000605 00000 n 
+0000000871 00000 n 
 trailer
-<< /Size 9
+<< /Size 7
 /Root 2 0 R
 /Info 1 0 R
 >>
 startxref
-1269
+968
 %%EOF

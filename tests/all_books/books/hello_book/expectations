@@ -1,0 +1,3 @@
+# hello_book (livre hyper simple)
+:should_have_text ::: "Bonjour tout le monde !"
+:should_have_page_count ::: 1

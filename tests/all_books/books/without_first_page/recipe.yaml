@@ -1,0 +1,5 @@
+---
+# Recette du livre without_first_page
+
+skip_page_creation: true
+page_de_garde: true

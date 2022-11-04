@@ -35,6 +35,12 @@ class PdfBook
     end
   end
 
+  # --- Helpers Methods ---
+
+  def ensured_title
+    @ensured_title ||= title || File.basename(folder)
+  end
+
   # --- Objects Methods ---
 
   def font_or_default(font_name)
@@ -109,6 +115,7 @@ class PdfBook
   # --- Data Methods ---
 
   def titre; recette.title end
+  alias :title :titre
 
 
   # --- Paths Methods ---
