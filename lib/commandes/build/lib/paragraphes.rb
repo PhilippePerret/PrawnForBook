@@ -22,7 +22,7 @@ class PrawnView
       next if paragraphe.not_printed?
 
       paragraphe.page_numero = page_number
-      # spy "Page ##{page_number} pour le paragraphe #{idx}"
+      spy "Page ##{page_number} pour le paragraphe #{idx}"
 
       # 
       # --- PRÉ-TRAITEMENT DU PARAGRAPHE ---

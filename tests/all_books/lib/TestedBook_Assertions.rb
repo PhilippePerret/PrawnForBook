@@ -11,13 +11,18 @@ class TestedBook
 
   def should_contain(textes)
     textes = [textes] if textes.is_a?(String)
+    spy "whole_string: #{whole_string.inspect}"
     textes.each do |texte|
       assert_match texte, whole_string
     end
   end
 
   def should_have_page_count(nombre)
-    assert_equal nombre, pager.pages.size, "Le livre devrait avoir #{nombre} page(s). Il en a #{pager.pages.size}."
+    assert_equal( nombre, pagtor.pages.size, "Le livre devrait avoir #{nombre} page(s). Il en a #{pagtor.pages.size}.")
+  end
+
+  def should_have_font(font_name, properties = nil)
+    assert(fonts.key?(font_name.to_sym), "Le livre devrait contenir/définir la police #{font_name.inspect}.")
   end
 
 end #/class TestedBook

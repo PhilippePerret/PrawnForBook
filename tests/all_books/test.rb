@@ -24,6 +24,17 @@
 =end
 require 'test_helper'
 require_relative 'lib/TestedBook'
+
+# 
+# INCLUSIONS ET EXCLUSIONS DE FICHIERS
+# (à partir du nom du dossier)
+# 
+EXCLUDES_BY_NAME  = []
+# EXCLUDES_IF_MATCH = /position/
+INCLUDES_IF_MATCH = /font/
+
+
+
 #
 # Mettre à true si on veut un message d'erreur plus complet
 # (à true, la construction est lancée avec l'option -x/--debug)
@@ -47,8 +58,13 @@ class BigAllBooksTest < Minitest::Test
   def self.define_test_method_for_book(book_folder)
     begin
 
+      bookname = File.basename(book_folder)
+      return if defined?(EXCLUDES_BY_NAME) && EXCLUDES_BY_NAME.include?(bookname)
+      return if defined?(EXCLUDES_IF_MATCH) && bookname.match?(EXCLUDES_IF_MATCH)
+      return if defined?(INCLUDES_IF_MATCH) && not(bookname.match?(INCLUDES_IF_MATCH))
+
       book = TestedBook.new(book_folder)
-      # return if excludes.include?(book.name)
+
 
       define_method "test_book_#{book.name}".to_sym do
 

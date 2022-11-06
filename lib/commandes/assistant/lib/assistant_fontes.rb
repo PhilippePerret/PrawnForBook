@@ -1,6 +1,10 @@
 module Prawn4book
   # --- Assistant pour les fontes ---
 
+  def self.cfolder
+    File.expand_path('.')
+  end
+
   def self.assistant_fontes(pdfbook)
     frecipe = File.join(cfolder,'recipe.yaml')
     unless File.exist?(frecipe)
@@ -11,6 +15,11 @@ module Prawn4book
     end
 
     new_fonts = get_name_fonts({main_folder: cfolder})
+
+    #
+    # Aucune fonte choisie
+    # 
+    return if new_fonts.empty?
 
     # 
     # Ajout des fontes
@@ -93,8 +102,11 @@ DATA_STYLES_FONTS = [
         nfont = File.basename(fpath)
         next if nfont.start_with?('Noto') # il y en a trop
         {name: nfont, value: fpath}
+      end.compact.sort_by do |dh|
+        dh[:name]
       end
-      fontes_choisies += Q.multi_select(PROMPTS[:fonts][:choose_the_fonts].jaune, fontes, per_page: fontes.count)
+      ppage = [fontes.count, console_height - 5].min
+      fontes_choisies += Q.multi_select(PROMPTS[:fonts][:choose_the_fonts].jaune, fontes, per_page: ppage)
     end #/while
 
     return fontes_choisies

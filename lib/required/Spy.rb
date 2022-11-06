@@ -1,15 +1,20 @@
 # encoding: UTF-8
-
 =begin
+
+  Module Spy
+  ----------
+  Pour débuggage dans une autre fenêtre de Terminal
+  version 0.1.0
 
   @usage
 
   spy(message)
 
 =end
+require 'clir'
 
 def spy(msg)
-  return unless test?
+  # return unless test?
   @dterm ||= DebugInOtherTerm.new
   @dterm << msg
 end
@@ -56,7 +61,7 @@ class DebugInOtherTerm
 
   def get_data_if_file_exists
     if exist?
-      puts "Le fichier existe".orange
+      puts "Le fichier .debugterm existe".orange if debug?
       return good_term?(File.read(path).split("\t"))
     else
       return false
@@ -68,9 +73,8 @@ class DebugInOtherTerm
     t, d, m, l = dterm_recorded
     now = Time.now
     dterm = get_term(t)
-    puts "dterm = #{dterm.inspect}"
     if dterm.any? && now.day == d.to_i && now.month == m.to_i && dterm[:logging] == l
-      puts "La fenêtre terminale est valide.".orange
+      puts "La fenêtre terminale est valide.".orange if debug?
       @term     = t
       @logging  = l
       return true
@@ -113,18 +117,19 @@ class DebugInOtherTerm
     def memorize_debug_term
       now = Time.now
       line = "#{term}\t#{now.day}\t#{now.month}\t#{logging}"
-      puts "Enregistrement de la ligne : #{line.inspect}"
+      puts "Enregistrement de la ligne : #{line.inspect}" if debug?
       File.write(path, line)      
     end
 
     def choose_the_term
       open_new_term_window if all_terms.count == 0
       puts ""
+      my = self
       dterm = Q.select("Quelle fenêtre Terminal choisir pour le débug ?\n(tape `tty` dans la fenêtre voulue pour le savoir)\n".bleu, echo: false) do |q|
-        q.choices all_terms
+        q.choices my.all_terms
         q.choice "Ouvrir une autre fenêtre", false
         q.choice "Renoncer", nil
-        q.per_page all_terms.count + 2
+        q.per_page my.all_terms.count + 2
       end
       return dterm if dterm
       #

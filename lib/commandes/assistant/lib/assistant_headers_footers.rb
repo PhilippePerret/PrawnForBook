@@ -106,7 +106,7 @@ class << self
         name:         "Name of the #{thing}",
         first_page:   4,
         last_page:    200,
-        font:         'Arial', # TODO Mettre font par défaut
+        font:         :"F1.0",
         size:         11,
         style:        :normal,
         disposition:  dispo,

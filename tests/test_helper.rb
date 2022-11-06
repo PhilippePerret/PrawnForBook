@@ -1,3 +1,4 @@
+require 'pretty_inspect'
 require "minitest/autorun"
 require 'minitest/reporters'
 
@@ -16,6 +17,9 @@ reporter_options = {
 }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
+require_relative '../lib/required/constants'
+require_relative '../lib/required/Spy'
+spy "Initiation du Terminal d'espionnage…".bleu
 
 
 
@@ -34,3 +38,4 @@ class Minitest::Test
     end 
   end
 end
+
