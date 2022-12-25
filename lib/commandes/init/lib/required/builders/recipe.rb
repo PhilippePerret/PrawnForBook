@@ -38,6 +38,14 @@ class InitedThing
     assemble_recipe
 
     #
+    # Image de logo
+    # Si elle est définie, mais qu'elle n'existe pas, on utilise
+    # le logo type (dans ressources/templates/logo.jpg) qu'on met
+    # à l'endroit voulu avec le nom voulu
+    # 
+    traite_logo
+
+    #
     # Confirmation création
     # 
     return confirm_create_recipe
@@ -108,7 +116,28 @@ class InitedThing
       send(meth, false)
     end
 
+    #
+    # La première font, qui servira de font par défaut
+    # 
+    @template_data.merge!(first_font_name: (@data_fontes ? @data_fontes.keys.first : 'Arial' ))
+
     return true
+  end
+
+  ##
+  # Traitement du logo
+  # 
+  def traite_logo
+    if @template_data[:publisher_logo]
+      logo_path = File.join(folder, @template_data[:publisher_logo])
+      if not File.exist?(logo_path)
+        mkdir(File.dirname(logo_path))
+        FileUtils.cp( File.join(Prawn4book::templates_folder,'logo.jpg') , logo_path)
+      end
+    else
+      puts "Le logo n'est pas défini".jaune
+      sleep 5
+    end
   end
 
 

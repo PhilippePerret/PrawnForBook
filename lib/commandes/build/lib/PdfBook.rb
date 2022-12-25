@@ -158,9 +158,13 @@ class PdfBook
     foo = [foo] if valeur_string_seule
     foo = foo.map do |n|
       if n.is_a?(String)
-        unite   = n[-2..-1]
-        nombre  = n[0..-3].to_f
-        nombre.send(unite.to_sym)
+        if n.numeric?
+          n.to_f
+        else
+          unite   = n[-2..-1]
+          nombre  = n[0..-3].to_f
+          nombre.send(unite.to_sym)
+        end
       else
         n
       end

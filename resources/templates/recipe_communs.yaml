@@ -9,7 +9,7 @@
   :contact:   '%{publisher_contact}'
 
 # --- Fontes à empaqueter ---
-# Jouer la commande 'prawn-for-book aide fontes' pour obtenir
+# Jouer la commande 'pfb aide fontes' pour obtenir
 # de l'aide pour les fontes
 # <fontes>
 :fonts:
@@ -36,7 +36,7 @@
   :ext: '%{extmargin}'
   :bot: '%{botmargin}'
   :int: '%{intmargin}'
-:default_font:        Garamond
+:default_font:        '%{first_font_name}'
 :default_font_size:   11
 :default_font_style:  :normal
 :line_height:         12.5
@@ -75,7 +75,7 @@
 # --- Table Des Matières ---
 # Elle sera affichée à la marque '(( toc ))'
 :table_of_content:
-  :font:   'Garamond'
+  :font:   '%{first_font_name}'
   :size:   11
   :line_height: null # 14 par défaut 
   :from_top:    null # ou nombre de lignes depuis le haut
@@ -92,9 +92,9 @@
   - :name: "Nom du premier header"
     :first_page: null
     :disposition: 
-      :odd: "| -%%title1- |"
-      :even: "| -%%title1- |"
-    :font: ArialNarrow
+      :odd: "| -%%%%title1- |"
+      :even: "| -%%%%title1- |"
+    :font: Helvetica
     :size: 8
     :style: :bold
 # </headers>
@@ -103,9 +103,9 @@
 :footers: # tous les rangs
   - :pages: (10..20)
     :disposition:
-      :odd: "| -%%numero- |"
-      :even: "| -%%numero- |"
-    :font: Arial
+      :odd: "| -%%%%numero- |"
+      :even: "| -%%%%numero- |"
+    :font: Helvetica
     :size: 8
     :style: :bold
 # </footers>

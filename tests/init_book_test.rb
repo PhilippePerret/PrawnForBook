@@ -63,7 +63,7 @@ class InitBookTestor < Minitest::Test
         },
       format: {
           width: '127mm',
-          height: '203.2',
+          height: '203mm',
           orientation: 'portrait',
           top_margin: '20mm',
           ext_margin: '15mm',
@@ -215,12 +215,21 @@ class InitBookTestor < Minitest::Test
     end
     mini_success "Les fichiers de base ont été créés avec succès."
 
+    # # 
+    # # Il faut mettre le logo dans le dossier image 
+    # # NON, normalement, le constructeur s'en charge
+    # # 
+    # folder_images = File.join(book_folder, 'images')
+    # logo_path = File.join(folder_images, 'logo.jpg')
+    # FileUtils.cp(File.join('resources','templates','logo.jpg'), logo_path)
+    # mkdir(folder_images)
+
     action "Je demande la construction du livre…"
     tosa.run "cd '#{book_folder}'"
     tosa.run 'pfb build'
     sleep 5
 
-    book_pdf = File.join(book_folder,'book_pdf')
+    book_pdf = File.join(book_folder,'book.pdf')
     assert File.exist?(book_pdf), "Le fichier PDF du livre devrait exister (à l'adresse #{book_pdf.inspect}…"
 
     tosa.finish

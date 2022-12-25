@@ -202,7 +202,7 @@ class PdfBook
     # Écriture des pages supplémentaires obtenues par le 
     # parser, if any
     # 
-    if module_parser?
+    if module_parser? && defined?(PrawnCustomBuilderModule)
       extend PrawnCustomBuilderModule
       __custom_builder(pdf)
     end
