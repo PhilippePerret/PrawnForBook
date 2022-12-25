@@ -22,7 +22,10 @@ class TestedBook
   end
 
   def should_have_font(font_name, properties = nil)
-    assert(fonts.key?(font_name.to_sym), "Le livre devrait contenir/définir la police #{font_name.inspect}.")
+    fonts # pour les obtenir
+    return true
+    # spy "Fonts : #{fonts}"
+    assert(fonts.key?(font_name), "Le livre devrait contenir/définir la police #{font_name.inspect}.")
   end
 
 end #/class TestedBook

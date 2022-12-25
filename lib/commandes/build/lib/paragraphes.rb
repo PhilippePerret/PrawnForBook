@@ -5,7 +5,7 @@ class PrawnView
   attr_accessor :previous_text_paragraph
 
 
-  # @param paragraphes {Array of AnyParagraph}
+  # @param [Array<AnyParagraph>] paragraphes Les paragraphes à écrire.
   def print_paragraphs(paragraphes)
     # On boucle sur tous les paragraphes du fichier d'entrée
     # 
@@ -27,6 +27,12 @@ class PrawnView
       # 
       # --- PRÉ-TRAITEMENT DU PARAGRAPHE ---
       # 
+      # S'il existe un module parser et que le paragraphe est vraiment
+      # un paragraphe (et non pas une définition, un style ou autre)
+      # alors on parse ce paragraphe pour en tirer les informations
+      # utiles ou faire des remplacements (par exemple des références
+      # ou des prises de mots d'index)
+      # 
       if pdfbook.module_parser? && paragraphe.paragraph?
         pdfbook.__paragraph_parser(paragraphe)
       end
@@ -37,8 +43,9 @@ class PrawnView
       paragraphe.print(self)
       STDOUT.write green_point
 
-      # On peut indiquer les pages sur lesquelles est inscrit le
-      # paragraphe
+      #
+      # Si c'est un texte, on consigne le paragraphe dans sa page
+      #
       if paragraphe.paragraph?
         # - Suivi du travail -
         # write_at(suivi % {num: paragraphe.numero}, 0, 0)

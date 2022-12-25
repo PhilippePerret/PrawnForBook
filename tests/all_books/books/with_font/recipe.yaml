@@ -1,11 +1,11 @@
 ---
 :info: {}
 :num_page_style: num_page
-# :fonts:
-#   Garamond:
-#     :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
-#   Arial:
-#     :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
+:fonts:
+  Garamond:
+    :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
+  Arial:
+    :normal: "/Users/philippeperret/Library/Fonts/Arial Narrow.ttf"
 #   # Arial:
 #   #   :normal: "/System/Library/Fonts/Supplemental/Arial.ttf"
 #   #   :bold:   "/System/Library/Fonts/Supplemental/Arial Bold.ttf"

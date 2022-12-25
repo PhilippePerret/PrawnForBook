@@ -6,7 +6,8 @@ class P4BCode < AnyParagraph
   attr_reader :raw_code
 
   # {Hash} Contenant la définition qui doit affecter le paragraphe
-  # suivant (cette instance a été mise dans son :pfbcode)
+  # suivant (cette instance a été mise dans la propriété :pfbcode
+  # du paragraphe)
   # p.e. {font_size: 42}
   attr_reader :parag_style
 
@@ -19,7 +20,9 @@ class P4BCode < AnyParagraph
   def print(pdf)
     case raw_code
     when /^\{.+?\}$/
-      # Rien à faire de ce paragraphe
+      # Rien à faire de ce paragraphe puisque c'est une définition
+      # du style, position, etc. du paragraphe suivant.
+      spy "Parag_style = #{parag_style.inspect}"
     when 'new_page', 'nouvelle_page'
       pdf.start_new_page
     when 'tdm', 'toc'

@@ -10,17 +10,29 @@ class NTextParagraph < AnyParagraph
   # 
   def print(pdf)
     
+    #
+    # Si le paragraphe possède son propre builder, on utilise ce
+    # dernier pour le construire et on s'en retourne.
+    # 
     if own_builder?
-      return own_builder(pdf)
-      # on s'arrête, c'est le builder qui construit le paragraphe
-    elsif own_formaters?
-      own_formaters
-      # et on continue
+      return own_builder(pdf) # stop
+    end
+    #
+    # Si le paragraphe possède un formateur, on s'en sert pour 
+    # formater le paragraphe et on poursuit.
+    # 
+    if own_formaters?
+      own_formaters # on poursuit
     end
 
     parag = self
 
+    # spy "pfbcode = #{self.pfbcode}"
+
     mg_left   = self.margin_left
+    if pfbcode && pfbcode[:margin_left]
+      mg_left += pfbcode[:margin_left]
+    end
     mg_right  = self.margin_right
     indent    = self.indent
 
@@ -29,8 +41,14 @@ class NTextParagraph < AnyParagraph
       #
       # Placement du cursor sur la bonne ligne de référence
       # 
-      move_cursor_to_lineref(cursor)
-      start_cursor = cursor
+      theline = cursor
+      # spy "cursor = #{theline.inspect}"
+      if parag.pfbcode && parag.pfbcode[:margin_top]
+        theline -= parag.pfbcode[:margin_top]
+      end
+      # spy "cursor rectifié = #{theline.inspect}"
+      move_cursor_to_lineref(theline)
+      start_cursor = theline
       # spy "start_cursor = #{start_cursor}"
     end
 

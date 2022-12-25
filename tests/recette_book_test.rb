@@ -5,6 +5,8 @@ require 'test_helper'
 
 =end
 
+require_relative '../lib/required'
+
 class InitPdfBookTest < Minitest::Test
 
   def setup

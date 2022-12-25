@@ -1,3 +1,4 @@
 (( {font_family: "Garamond"} ))
 Bonjour tout le monde ! en Garamond.
-Bonjour tout le monde !
+(( {font_family: "Arial"} ))
+Bonjour tout le monde ! en Arial.

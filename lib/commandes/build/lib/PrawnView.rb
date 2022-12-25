@@ -164,7 +164,7 @@ class PrawnView
   def define_required_fonts(fontes)
     return if fontes.nil? || fontes.empty?
     fontes.each do |fontname, fontdata|
-      font_families.update(fontname => fontdata)
+      font_families.update(fontname.to_s => fontdata)
     end
   end
 

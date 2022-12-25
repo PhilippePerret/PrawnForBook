@@ -1,3 +1,10 @@
+=begin
+
+  Commande 'build'
+  Commande principale qui construit le livre à partir de la recette
+  et du texte fourni.
+
+=end
 module Prawn4book
 class Command
   def proceed
@@ -74,8 +81,8 @@ class PdfBook
   # sur tous les paragraphes du texte pour les formater et les
   # ajouter au PDF en les parsant/helpant/formatant.
   # 
-  # Rappel : PrawnView hérite de Prawn::View (comme conseillé par
-  #          le code de Prawn)
+  # @note
+  #   PrawnView hérite de Prawn::View (comme conseillé par le code de Prawn.
   # 
   def build_pdf_book
     clear unless debug?
@@ -135,7 +142,7 @@ class PdfBook
     pdf.define_required_fonts(book_fonts)
 
     #
-    # Y a-t-il une dernière page définie en options
+    # Y a-t-il une DERNIÈRE PAGE définie en options
     # Si oui, on ne doit construire le livre que juste que là
     # 
     pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]

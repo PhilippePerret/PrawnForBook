@@ -31,7 +31,7 @@ require_relative 'lib/TestedBook'
 # 
 EXCLUDES_BY_NAME  = []
 # EXCLUDES_IF_MATCH = /position/
-INCLUDES_IF_MATCH = /font/
+# INCLUDES_IF_MATCH = /font/
 
 
 
@@ -65,6 +65,8 @@ class BigAllBooksTest < Minitest::Test
 
       book = TestedBook.new(book_folder)
 
+      puts "Construction de la méthode \"test_book_#{book.name}\"".jaune
+      sleep 2
 
       define_method "test_book_#{book.name}".to_sym do
 
@@ -73,7 +75,7 @@ class BigAllBooksTest < Minitest::Test
           book.delete_pdf
           res = `pfb build#{OPTION_DEBUG ? ' -x' : ''}`
           # sleep 2
-          refute_match /\[0;91m/, res, "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}"
+          refute_match(/\[0;91m/, res, "La construction n'aurait pas du produire d'erreur. Elle a produit :\n#{res}")
           book.check
         end
       end #/define method
@@ -84,7 +86,7 @@ class BigAllBooksTest < Minitest::Test
   end
 
 
-  excludes = [] # ['without_recipe']
+  # excludes = [] # ['without_recipe']
 
   folder = File.join(__dir__,'books')
   Dir["#{folder}/*"].each do |book_folder|

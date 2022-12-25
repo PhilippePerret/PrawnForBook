@@ -117,7 +117,7 @@ class TestedBook
     @fonts ||= begin
       tbl = {}
       reador.pages.each do |page|
-        tbl.merge!(page.fonts)
+        # TODO
       end
       # spy "fontes : #{tbl.pretty_inspect}"
       tbl

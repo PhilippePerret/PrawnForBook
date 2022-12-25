@@ -654,7 +654,7 @@ Le paragraphe influencé par les <data> ci-dessus.
 On peut, à la base, changer par exemple la taille du texte pour ce paragraphe avec la propriété `:font_size`.
 
 ~~~text
-(( {font-size:22} ))
+(( {font_size:22} ))
 Ce paragraphe aura une taille de 22 pour la police courante.
 ~~~
 
