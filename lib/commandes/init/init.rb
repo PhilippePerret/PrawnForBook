@@ -23,10 +23,16 @@ class << self
   # 
   def init_new_book_or_collection(cdata = nil, force = false)
     clear
-    @inited = case choose_what
+    thing = choose_what
+    this_thing = thing == :book ? 'ce livre' : 'cette collection'
+    thing_name = Q.ask("Nom du dossier de #{this_thing} :".jaune) || return
+    thing_path = File.expand_path(File.join('.', thing_name))
+    Q.yes?("Le chemin d'accès à #{this_thing} sera-t-il bien le dossier #{thing_path.inspect} ?".jaune) || return
+    mkdir(thing_path)
+    @inited = case thing
     when NilClass     then return
-    when :book        then InitedBook.new
-    when :collection  then InitedCollection.new
+    when :book        then InitedBook.new(thing_path)
+    when :collection  then InitedCollection.new(thing_path)
     end
     # 
     # On y va

@@ -19,3 +19,7 @@ require_relative 'required/constants'
 
 
 Dir["#{__dir__}/required/**/*.rb"].each{|m|require(m)}
+
+module Prawn4book
+  include UtilsMethods
+end 

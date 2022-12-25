@@ -70,9 +70,11 @@ class DebugInOtherTerm
 
   # @return TRUE si la fenêtre terminal est la bonne
   def good_term?(dterm_recorded)
+    # puts "dterm_recorded = #{dterm_recorded.inspect}"
     t, d, m, l = dterm_recorded
     now = Time.now
     dterm = get_term(t)
+    # puts "dterm = #{dterm.inspect}"
     if dterm.any? && now.day == d.to_i && now.month == m.to_i && dterm[:logging] == l
       puts "La fenêtre terminale est valide.".orange if debug?
       @term     = t
@@ -89,6 +91,7 @@ class DebugInOtherTerm
     all_terms.each do |dterm|
       return dterm[:value] if dterm[:name] == tm
     end
+    {}
   end
 
   # @prop {Array} Liste des terminaux

@@ -1,6 +1,9 @@
 module Prawn4book
 class InitedThing
 
+  require 'lib/required/utils'
+  include UtilsMethods
+
   attr_reader :template_data
 
   # Création de la recette (livre ou collection)
@@ -145,19 +148,19 @@ class InitedThing
       # Si les titres sont redéfinis
       # 
       if @data_titles
-        code = remplace_between_balises_with(code, 'titles', @data_titles.to_yaml)
+        code = remplace_between_balises_with(code, 'titles', {titles: @data_titles}.to_yaml)
       end
       #
       # Si les fontes sont définies
       # 
       if @data_fontes
-        code = remplace_between_balises_with(code,'fontes', @data_fontes.to_yaml)
+        code = remplace_between_balises_with(code,'fontes', {fonts: @data_fontes}.to_yaml)
       end
       # 
       # Si les bibliographies sont définies
       # 
       if @data_biblio
-        code = remplace_between_balises_with(code,'biblios', @data_fontes.to_yaml)      
+        code = remplace_between_balises_with(code,'biblios', {biblios: @data_biblio}.to_yaml)      
       end
       # 
       # Si les headers et footers sont définis, on les
@@ -290,7 +293,17 @@ class InitedThing
         when :yes
           Q.yes?(dvalue[:q].jaune, default: dvalue[:df])
         when :select
-          Q.select("#{dvalue[:q]} : ".jaune, dvalue[:values], default: dvalue[:df])
+          values = dvalue[:values]
+          # 
+          # Si une valeur par défaut est définie, il faut la chercher
+          # 
+          if dvalue[:df]
+            default_value = nil
+            values.each_with_index do |dval, idx|
+              default_value = (idx + 1) and break if dval[:value] == dvalue[:df]
+            end
+          end
+          Q.select("#{dvalue[:q]} : ".jaune, values, {per_page: values.count, default: default_value})
         else
           Q.ask("#{dvalue[:q]} : ".jaune, default: dvalue[:df])
         end
@@ -302,7 +315,8 @@ class InitedThing
         reponse = reponse.split(',').map{|e|e.strip}
       when :multiline_text
         indent = dvalue[:indent]||'  '
-        reponse = reponse.split("\n").map{|e|e.strip}.join("\n#{indent}")
+        # reponse = reponse.strip.split("\n").map{|e|e.strip}.join("\n#{indent}").gsub(/\n\n+/,"\n")
+        reponse = reponse.strip.gsub(/\n\n+/,"\n").split("\n").map { |e| e.strip }.join("\n#{indent}")
       end
 
       # 

@@ -1,4 +1,4 @@
-module Prawn4book
+module UtilsMethods
 
 ##
 # Permet de charger un module +name+ en appelant éventuellement
@@ -29,7 +29,7 @@ def remplace_between_balises_with(str, tag_name, code)
   dec_in += tag_in.length
   dec_out = str.index(tag_out) || raise("La balise '</#{tag_name}>' est malheureusement introuvable.")
   dec_out -= 1
-  code = str[0..dec_in] + code + str[dec_out..-1]    
+  code = str[0..dec_in] + "\n" + code + str[dec_out..-1]    
 end
 
 end #/module Prawn4book

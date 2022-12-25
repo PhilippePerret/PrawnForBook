@@ -5,7 +5,6 @@ manuel
 
 =end
 require 'test_helper'
-require 'osascript'
 
 class BaseCommandTests < Minitest::Test
 

@@ -10,6 +10,10 @@ end
 # Classe abstraite pour la chose à initier, livre ou collection
 # 
 class InitedThing
+  def initialize(folder_path = nil)
+    @folder = folder_path
+  end
+  
   def folder
     @folder ||= PdfBook.cfolder
   end

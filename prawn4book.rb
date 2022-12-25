@@ -8,5 +8,7 @@
 
 =end
 
+$LOAD_PATH.unshift __dir__
+
 require_relative 'lib/required'
 Prawn4book.run

@@ -36,7 +36,7 @@ DATA_VALUES_MINIMALES = [
 RECIPE_VALUES_FOR_PUBLISHER = [
   # k: pour 'key', q: pour 'question', df: pour 'défaut', t: pour 'type'
   {k: :publisher_name, q:"Nom de l'éditeur", df: "Publisher Name"},
-  {k: :publisher_address, q:"Adresse de l'éditeur", df:'', t: :text, treate_as: :multiline_text, indent: '  '},
+  {k: :publisher_address, q:"Adresse de l'éditeur", df:'', t: :text, treate_as: :multiline_text, indent: '    '},
   {k: :publisher_site, q:"Site de l'éditeur", df: 'https://editeur.com'},
   {k: :publisher_logo, q:"Chemin au logo (commencer par 'images/...')", df:'images/logo.jpg'},
   {k: :publisher_mail, q:"Mail de l'éditeur", df: 'mail@editor.com'},

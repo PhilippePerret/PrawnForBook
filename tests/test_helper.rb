@@ -6,6 +6,9 @@ require 'prawn'
 require 'pdf/inspector'
 require 'pdf/reader'
 require 'clir'
+require 'clirtest'
+require 'osascript'
+require 'osatest'
 
 # require_relative '../lib/required'
 
@@ -20,22 +23,3 @@ Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_opti
 require_relative '../lib/required/constants'
 require_relative '../lib/required/Spy'
 spy "Initiation du Terminal d'espionnage…".bleu
-
-
-
-# --- TEST D'INTÉGRATION ---
-# 
-# @usage
-#   run_(<cmd>, [<input>])
-# 
-ENV['CLI_TEST'] = 'true'
-class Minitest::Test
-  def run_(cmd, inputs = nil)
-    if inputs
-      ENV['CLI_TEST_INPUTS'] = inputs.to_json
-      res = `#{COMMAND_NAME} #{cmd}`
-      return res
-    end 
-  end
-end
-
