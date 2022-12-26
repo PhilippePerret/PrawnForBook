@@ -12,7 +12,7 @@ class SpecialPage
       puts "Assistant #{page_name}\n".bleu
       data_choix = Q.select("Définir :".jaune, choices_properties, {per_page:choices_properties.count})
       case data_choix
-      when NilClass then return
+      when NilClass then break
       when :save
         save_recipe_data
         break
@@ -25,6 +25,8 @@ class SpecialPage
         set_current_value_for(data_choix[:simple_key], value)
       end
     end
+    clear unless debug?
+    return true
   end
 
   def edit_value(data_choix)

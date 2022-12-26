@@ -1,6 +1,6 @@
 module Prawn4book
 class Pages
-class PageDeTitre
+class TableOfContent
 
   # = main =
   #
@@ -16,6 +16,6 @@ class PageDeTitre
   #   Les principales méthodes se trouvent dans la classe mère
   # 
 
-end #/class PageDeTitre
+end #/class TableOfContent
 end #/class Pages
 end #/module Prawn4book

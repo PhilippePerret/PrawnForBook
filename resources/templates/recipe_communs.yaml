@@ -76,6 +76,7 @@
 # --- Table Des Matières ---
 # Elle sera affichée à la marque '(( toc ))'
 :table_of_content:
+# <table_of_content>
   :font:   '%{first_font_name}'
   :size:   11
   :line_height: null # 14 par défaut 
@@ -86,6 +87,7 @@
   # Liste des indentations en fonction du niveau du titre
   # Par défaut : [0, 2, 4, 6, 8]
   :indent_per_offset: null
+# </table_of_content>
 
 # --- Entêtes du livre ---
 # <headers>

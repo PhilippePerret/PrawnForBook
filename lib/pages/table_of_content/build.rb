@@ -1,15 +1,15 @@
 module Prawn4book
 class Pages
-class PageDeTitre
+class TableOfContent
 
   # = main =
   #
-  # Méthode principale permettant de construire la page
+  # Méthode principale construisant la page
   # 
   def build(pdf)
     
   end
 
-end #/class PageDeTitre
+end #/class TableOfContent
 end #/class Pages
 end #/module Prawn4book

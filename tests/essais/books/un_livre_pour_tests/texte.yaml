@@ -1,8 +1,0 @@
----
-- :level: 1
-  :text: Le grand titre
-  :type: titre
-- :raw_line: Un premier texte pour pour voir comment ça matche. C'est un paragraphe qui doit être assez long en tout cas suffisamment pour revenir plusieurs fois à la ligne et repartir de la même manière de l'autre côté car c'est le seul moyen de voir s'il est bien justifié comme il doit l'être, ce qui n'est pas toujours évident au vu des productions de document PDF et des livres qui sortent un peu partout.
-  :type: paragraph
-- :raw_line: "> Note : ce texte peut encore être modifié, il ne sert pas encore dans le détail de son contenu. À l'avenir ce paragraphe devra quand même être noté comme :note, un nouveau style de paragraphe."
-  :type: paragraph

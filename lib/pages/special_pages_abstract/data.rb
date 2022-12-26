@@ -10,7 +10,23 @@ module Prawn4book
 class SpecialPage
 
 
-  # @return [Any] value pour +simple_key+
+  # @return [Any] Valeur pour la clé +simple_key+ défini dans le
+  # fichier recette ou par défaut dans les données PAGE_DATA
+  # 
+  # @note
+  #   Méthode utilisée particulièrement par le builder pour 
+  #   construire la page. Elle renvoie donc toujours une valeur.
+  # 
+  # @param [String] simple_key Clé "simple", c'est-à-dire une clé
+  #   de premier niveau (mise à plat de la table des données dans la
+  #   recette). Par exemple, si la recette définit data[:sub_title][:size]
+  #   alors la clé simple sera "sub_title-size"
+  # 
+  def get_value(simple_key)
+    get_current_value_for(simple_key) || default_value_for(simple_key)
+  end
+
+  # @return [Any] value pour +simple_key+ ou nil si aucune
   # 
   # @param [String] simple_key La clé de l'élément ramenée au premier
   #                 degré, pour gérer la hiérarchie. Par exemple, si,
@@ -22,6 +38,22 @@ class SpecialPage
     cval = recipe_data
     while key = dkey.shift
       cval = cval[key] || return # non définie
+    end
+    return cval
+  end
+
+  # @return [Any] value pour +simple_key+ ou nil si aucune
+  # 
+  # @param [String] simple_key La clé de l'élément ramenée au premier
+  #                 degré, pour gérer la hiérarchie. Par exemple, si,
+  #   dans la donnée YAML, l'élément se trouve à [:sub_title][:size]
+  #   alors la clé simple sera 'sub_title-size'
+  # 
+  def default_value_for(simple_key)
+    dkey = simple_key.split('-').map {|n| n.to_sym}
+    cval = DATA_PAGE
+    while key = dkey.shift
+      cval = cval[key]
     end
     return cval
   end
@@ -61,7 +93,7 @@ class SpecialPage
 
   # @return [Hash] Les données recette POUR CETTE PAGE
   def recipe_data
-    @recipe_data ||= get_data_in_recipe[tag_name.to_sym]
+    @recipe_data ||= get_data_in_recipe[tag_name.to_sym] || {}
   end
 
   # @return [Hash] Les données de la page dans le fichier de

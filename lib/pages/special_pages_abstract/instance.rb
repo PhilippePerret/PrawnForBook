@@ -4,6 +4,19 @@
 
 =end
 module Prawn4book
+class Pages
+
+  #
+  # Pour lancer un assistant avec :
+  #   Prawn4book::Pages.run_assistant('page-de-titre')
+  # 
+  def self.run_assistant(which)
+    classe = self.const_get(which.gsub(/\-/,'_').camelize)
+    page = classe.new(File.expand_path('.'))
+    page.define
+  end
+  
+end #/ class Pages
 class SpecialPage
 
   # [String] Le dossier dans lequel on se trouve.

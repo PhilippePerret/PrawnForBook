@@ -1,6 +1,7 @@
 require 'pretty_inspect'
 require "minitest/autorun"
 require 'minitest/reporters'
+require 'yaml'
 
 require 'prawn'
 require 'pdf/inspector'

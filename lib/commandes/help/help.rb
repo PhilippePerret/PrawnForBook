@@ -50,9 +50,7 @@ end #/Command
 
   def self.traite_as_assistant_page_speciale(what)
     require "lib/pages/#{what}"
-    classe = Prawn4book::Pages.const_get(what.camelize)
-    page = classe.new(File.expand_path('.'))
-    page.define
+    Prawn4book::Pages.run_assistant(what)
   end
 
   def self.display_mini_help
@@ -80,6 +78,9 @@ MINI_AIDE = <<-TEXT
 
 #{'pfb aide'.jaune}
     Aide en ligne pour pfb
+
+#{'pfb assistant'.jaune}
+    Permet de choisir un assistant et de le jouer.
 
 #{'pfb manuel'.jaune}
     Manuel PDF
@@ -140,6 +141,7 @@ Création d'un nouveau livre
 (ou d'une nouvelle collection)
 
 * Ouvrir un Terminal dans le dossier où créer le nouveau livre,
+  (le dossier qui contiendra le dossier du livre)
 * Jouer #{'pfb init'.jaune},
 * répondre aux questions posées
 > Cela produit le fichier 'receipe.yaml' qui contient la 
