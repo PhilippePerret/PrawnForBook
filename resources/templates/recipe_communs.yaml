@@ -57,7 +57,8 @@
   # :font:  "LaFonte"
   # :size:  15
 :page_de_titre:   %{pagetitre}  # true => insérer la page de titre
-  # On peut définir plus précisément la page
+# <page_de_titre> # marque pour l'assistant
+  # On peut définir plus précisément la page de titre
   # :font: "LaFonte"
   # :sizes:
   #   :collection_title: 14
@@ -71,7 +72,7 @@
   #   :author: 2
   # :logo:
   #   :height: 10 # en millimètres
-
+# </page_de_titre> # marque pour l'assistant
 # --- Table Des Matières ---
 # Elle sera affichée à la marque '(( toc ))'
 :table_of_content:

@@ -10,7 +10,10 @@ require 'clirtest'
 require 'osascript'
 require 'osatest'
 
-# require_relative '../lib/required'
+
+# Pour charger plus facilement les modules de l'application
+$LOAD_PATH.unshift File.dirname(__dir__)
+
 
 TEST_FOLDER = __dir__.freeze
 

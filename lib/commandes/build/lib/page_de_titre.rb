@@ -19,21 +19,21 @@ class PrawnView
     dpagetitre = {} if dpagetitre === true
     dpagetitre[:font]   ||= pdfbook.default_font
     # - tailles de fontes -
-    dpagetitre[:sizes]  ||= {}
-    dpagetitre[:sizes][:title]      ||= 34
-    dpagetitre[:sizes][:subtitle]   ||= 20
-    dpagetitre[:sizes][:author]     ||= 16
-    dpagetitre[:sizes][:publisher]  ||= 14
+    dpagetitre[:sizes]                    ||= {}
+    dpagetitre[:sizes][:title]            ||= 34
+    dpagetitre[:sizes][:subtitle]         ||= 20
+    dpagetitre[:sizes][:author]           ||= 16
+    dpagetitre[:sizes][:publisher]        ||= 14
     dpagetitre[:sizes][:collection_title] ||= 14
     # - espaces entre les éléments -
-    dpagetitre[:spaces_before] ||= {}
+    dpagetitre[:spaces_before]            ||= {}
     dpagetitre[:spaces_before][:title]    ||= 4
     dpagetitre[:spaces_before][:subtitle] ||= 1
     dpagetitre[:spaces_before][:author]   ||= 2
     # - Logo -
     unless dpagetitre[:logo] === false
-      dpagetitre[:logo] ||= {}
-      dpagetitre[:logo][:height] ||= 10
+      dpagetitre[:logo]           ||= {}
+      dpagetitre[:logo][:height]  ||= 10
     end
 
     sizes   = dpagetitre[:sizes]

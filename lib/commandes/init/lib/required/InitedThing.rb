@@ -11,6 +11,10 @@ class BuilderFile < SimpleDelegator
   #   @build_fname = filename
   # end
 
+  # = main = 
+  # 
+  # Construction du fichier de recette 
+  # 
   def build(filename)
     @build_fname = filename
 
