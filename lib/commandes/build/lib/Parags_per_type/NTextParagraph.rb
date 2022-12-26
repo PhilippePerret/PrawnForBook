@@ -237,7 +237,6 @@ class NTextParagraph < AnyParagraph
   def method_missing(method_name, *args, &block)
     if method_name.to_s.end_with?('=')
       prop_name = method_name.to_s[0..-2].to_sym
-      puts 
       if self.instance_variables.include?(prop_name)
         self.instance_variable_set(prop_name, args)
       else

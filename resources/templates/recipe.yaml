@@ -1,17 +1,28 @@
 ---
 
 # --- Infos sur le livre ---
+#<book_data>
 :book_title: %{thing_title}
 :book_subtitle: |
   %{subtitle}
 :collection: true     # true => dans une collection
 :book_id: %{thing_title}
 :auteurs: %{auteurs}
+:isbn:    %{isbn}
+:publisher:
+  :name:  "%{publisher_name}"
+  :adresse: |
+    %{publisher_address}
+  :site:      '%{publisher_site}'
+  :logo:      '%{publisher_logo}'
+  :siret:     '508 680 360 00023'
+  :mail:      '%{publisher_mail}'
+  :contact:   '%{publisher_contact}'
+#</book_data>
 :main_folder: %{main_folder}
 :text_path: true # true = texte.md ou texte.txt dans ce dossier
 :infos:
   :display:     %{pageinfos}
-  :isbn:        %{isbn}
   :depot_bnf:   %{depot}
   :cover:       %{cover_conception}
   :mep:         %{mep}

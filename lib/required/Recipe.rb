@@ -84,7 +84,7 @@ class Recipe
   end
 
   def page_de_titre?
-    :TRUE == @haspagetitre ||= true_or_false(get(:page_de_titre) === true)
+    :TRUE == @haspagetitre ||= true_or_false(not(get(:page_de_titre) === false))
   end
 
   def page_info?
@@ -94,16 +94,23 @@ class Recipe
 
   # --- Precise Recipe Data ---
 
+  def book_id
+    @book_id ||= book_data[:book_id]
+  end
   def title
-    @title ||= get(:book_title)
+    @title ||= book_data[:book_title]
   end
-
+  def subtitle
+    @subtitle ||= book_data[:book_subtitle].gsub(/\\n/, "\n")
+  end
   def publisher
-    @publisher ||= get(:publisher)
+    @publisher ||= book_data[:publisher]
   end
-
   def auteurs
-    @auteurs ||= get(:auteurs)
+    @auteurs ||= book_data[:auteurs]
+  end
+  def book_data
+    @book_data ||= get(:book_data)
   end
 
   def page_info

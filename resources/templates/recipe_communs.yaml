@@ -1,12 +1,3 @@
-:publisher:
-  :name:  "%{publisher_name}"
-  :adresse: |
-    %{publisher_address}
-  :site:      '%{publisher_site}'
-  :logo:      '%{publisher_logo}'
-  :siret:     '508 680 360 00023'
-  :mail:      '%{publisher_mail}'
-  :contact:   '%{publisher_contact}'
 
 # --- Fontes à empaqueter ---
 # Jouer la commande 'pfb aide fontes' pour obtenir

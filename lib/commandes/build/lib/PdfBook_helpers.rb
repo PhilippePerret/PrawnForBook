@@ -9,8 +9,8 @@ class PdfBook
   # Le sous-titre, s'il existe
   def formated_sous_titre
     @formated_sous_titre ||= begin
-      if recette[:book_subtitle]
-        "(#{recette[:book_subtitle].strip})"
+      if recette.subtitle
+        "(#{recette.subtitle.strip})"
       end
     end
   end
@@ -19,7 +19,7 @@ class PdfBook
   # 
   def formated_auteurs
     @formated_auteurs ||= begin
-      recette[:auteurs].pretty_join
+      (recette[:auteurs]||['Auteur BOOK']).pretty_join
     end
   end
 
@@ -27,7 +27,8 @@ class PdfBook
   # 
   def publisher
     @publisher ||= begin
-      Editor.new( collection? ? collection.data[:publisher] : recette[:publisher])
+      dpub = collection? ? collection.data[:publisher] : recette.publisher
+      Editor.new(dpub) if dpub
     end
   end
 end #/class PdfBook

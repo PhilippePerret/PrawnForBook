@@ -9,11 +9,19 @@
 module Prawn4book
 class SpecialPage
 
+  def yes_no_answers
+    [
+      {name: 'Oui', value: 'true'},
+      {name: 'Non', value: 'false'}
+    ]
+  end
+
 
   # @return [Any] Valeur pour la clé +simple_key+ défini dans le
   # fichier recette ou par défaut dans les données PAGE_DATA
   # 
   # @note
+  #   Alias très partique : v
   #   Méthode utilisée particulièrement par le builder pour 
   #   construire la page. Elle renvoie donc toujours une valeur.
   # 
@@ -25,6 +33,7 @@ class SpecialPage
   def get_value(simple_key)
     get_current_value_for(simple_key) || default_value_for(simple_key)
   end
+  alias :v :get_value
 
   # @return [Any] value pour +simple_key+ ou nil si aucune
   # 
@@ -51,11 +60,16 @@ class SpecialPage
   # 
   def default_value_for(simple_key)
     dkey = simple_key.split('-').map {|n| n.to_sym}
-    cval = DATA_PAGE
+    cval = klasse::PAGE_DATA
     while key = dkey.shift
       cval = cval[key]
+      # puts "cval = #{cval.inspect} (simple key #{simple_key})"
     end
-    return cval
+    cval || begin
+      puts "La valeur par défaut pour #{simple_key.inspect} n'est pas définie…".rouge
+      return nil
+    end
+    cval[:default]
   end
 
   def set_current_value_for(simple_key, value)

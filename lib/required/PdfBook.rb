@@ -79,10 +79,6 @@ class PdfBook
     @page_index ||= PageIndex.new(self)
   end
 
-  # def data
-  #   @data ||= YAML.load_file(recipe_path, aliases: true)
-  # end
-
   def collection
     @collection ||= collection? ? Collection.new(self) : nil
   end

@@ -2,6 +2,15 @@
 
 Ce dossier contient tout ce qui est nécessaire pour gérer une page spéciale en particulier, à commencer par la page de titre du livre ou la table des matières.
 
+Il a même été généralisé pour pouvoir donner beaucoup plus d'information, comme le montre tous les dossiers présents.
+
+## Création rapide d'une nouvelle page/conteneur de données
+
+- ouvrir un Terminal à ce dossier,
+- jouer la commande `./new[TAB][RETURN]`
+
+## Description des dossiers
+
 Chaque dossier contient au moins 3 modules :
 
 - 'build' pour la construction de la page (utilisé par le constructeur du livre),

@@ -3,6 +3,7 @@
   Méthodes communes pour la construction
 
 =end
+module Prawn4book; class PrawnView; end; end
 module Prawn4book
 class Pages
 
@@ -23,11 +24,12 @@ class SpecialPage
   attr_reader :folder
 
   ##
-  # Instanciate la page
+  # Instanciate l'assistant
   # 
-  # @param [String] path Dossier courant (où a été lancé la commande)
-  # 
+  # @param [String|Prawn4book::PrawnView] path Dossier courant (où a été lancé la commande) ou le PrawnView du document traité
+  #      
   def initialize(path)
+    path = path.pdfbook.folder if path.instance_of?(Prawn4book::PrawnView)
     @folder = path
     @thing  = thing  
   end

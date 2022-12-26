@@ -1,10 +1,20 @@
 ---
 
 # --- INFOS COLLECTION ---
-
+#<collection_data>
 :name:        Collection Narration
 :short_name:  Narration
 :main_folder: null
+:publisher:
+  :name:  "%{publisher_name}"
+  :adresse: |
+    %{publisher_address}
+  :site:      '%{publisher_site}'
+  :logo:      '%{publisher_logo}'
+  :siret:     '508 680 360 00023'
+  :mail:      '%{publisher_mail}'
+  :contact:   '%{publisher_contact}'
+#</collection_data>
 
 # --- INFOS POUR LES LIVRES ---
 

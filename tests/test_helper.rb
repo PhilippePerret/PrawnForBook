@@ -24,6 +24,17 @@ reporter_options = {
 }
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(reporter_options)]
 
+# 
+# Avant que PDF::Checker soit vraiment un GEM
+$LOAD_PATH.unshift File.join(Dir.home,'Programmes','Gems','pdf-checker','lib')
+require 'pdf/checker'
+
+
 require_relative '../lib/required/constants'
 require_relative '../lib/required/Spy'
-spy "Initiation du Terminal d'espionnage…".bleu
+if CLI.options[:spy]
+  spy "Initiation du Terminal d'espionnage…".bleu 
+else
+  puts "Ajouter l'option -spy pour utiliser l'espion".jaune
+  sleep 1
+end
