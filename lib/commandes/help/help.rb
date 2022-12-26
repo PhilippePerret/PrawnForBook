@@ -21,7 +21,6 @@ end #/Command
     # L'élément après le "help/aide"
     # 
     chose = CLI.components[0].to_s
-    cmd = Command.new('assistant').load
     whats = case chose
     when 'fontes','fonts','police','polices'
       'fontes'
@@ -29,12 +28,31 @@ end #/Command
       'biblios'
     when 'entete','header','headers','footer','footers','pied-de-page'
       'headers_footers'
+    else
+      # 
+      # C'est le nouvel assistant de page spéciale
+      # 
+      chose = chose.gsub(/\-/, '_').downcase
+      if File.exist?(File.join(APP_FOLDER,'lib','pages',chose))
+        traite_as_assistant_page_speciale(chose)
+        return
+      end
+      puts "Je ne sais pas comment traiter l'aide pour #{chose.inspect}.".rouge
+      return
     end
+    cmd = Command.new('assistant').load
     if whats
       cmd.proceed_assistant_for(whats)
     else
       less(INLINE_AIDE)
     end
+  end
+
+  def self.traite_as_assistant_page_speciale(what)
+    require "lib/pages/#{what}"
+    classe = Prawn4book::Pages.const_get(what.camelize)
+    page = classe.new(File.expand_path('.'))
+    page.define
   end
 
   def self.display_mini_help

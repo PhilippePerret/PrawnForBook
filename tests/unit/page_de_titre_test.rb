@@ -7,17 +7,18 @@ class PageTitreUnitTest < Minitest::Test
 
   def setup
     super
+    make_book_valid
   end
   def teardown
     super
   end
 
   def page_titre
-    @page_titre ||= Prawn4book::Pages::PageDeTitre.new(book)
+    @page_titre ||= Prawn4book::Pages::PageDeTitre.new(book_folder)
   end
 
   def page_titre_collection
-    @page_titre_collection ||= Prawn4book::Pages::PageDeTitre.new(collection)
+    @page_titre_collection ||= Prawn4book::Pages::PageDeTitre.new(collection_folder)
   end
 
   def test_tag_name
@@ -81,6 +82,12 @@ class PageTitreUnitTest < Minitest::Test
 
 
   private
+
+  def make_book_valid
+    if not File.exist?(book.recipe_path)
+      File.write(book.recipe_path, "---\n:book_title: Un livre pour test\n:book_id: livre_essais")
+    end
+  end
 
   def book
     @book ||= Prawn4book::PdfBook.new(book_folder)

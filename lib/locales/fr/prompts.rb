@@ -22,6 +22,7 @@ PROMPTS = {
   Folder: 'Dossier : ',
   finir: 'Finir', 
   save: 'Enregistrer',
+  cancel: 'Renoncer',
 
   by_default: "par défaut",
   By_default: "Par défaut",

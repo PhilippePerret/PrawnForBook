@@ -10,6 +10,42 @@ module Prawn4book
 class SpecialPage
 
 
+  # @return [Any] value pour +simple_key+
+  # 
+  # @param [String] simple_key La clé de l'élément ramenée au premier
+  #                 degré, pour gérer la hiérarchie. Par exemple, si,
+  #   dans la donnée YAML, l'élément se trouve à [:sub_title][:size]
+  #   alors la clé simple sera 'sub_title-size'
+  # 
+  def get_current_value_for(simple_key)
+    dkey = simple_key.split('-').map {|n| n.to_sym}
+    cval = recipe_data
+    while key = dkey.shift
+      cval = cval[key] || return # non définie
+    end
+    return cval
+  end
+
+  def set_current_value_for(simple_key, value)
+    dkey = simple_key.split('-').map {|n| n.to_sym}
+    cprop = recipe_data
+    while key = dkey.shift
+      cprop.key?(key) || cprop.merge!(key => {})
+      if dkey.empty?
+        cprop[key] = value
+      else
+        cprop = cprop[key]
+      end
+    end
+    # puts "Nouvelle recette : #{recipe_data.inspect}"
+  end
+
+  # En fin de définition, on peut sauver la recette
+  def save_recipe_data
+    set_data_in_recipe(recipe_data)
+    puts "Données recette pour #{page_name.downcase} enregistrées avec succès.".vert
+  end
+
   # @return [String] The tag name for comments in the recipe
   # yaml file.
   # @example
@@ -20,6 +56,12 @@ class SpecialPage
 
   def book?
     :TRUE == @isbook ||= true_or_false(thing.instance_of?(Prawn4book::PdfBook))
+  end
+
+
+  # @return [Hash] Les données recette POUR CETTE PAGE
+  def recipe_data
+    @recipe_data ||= get_data_in_recipe[tag_name.to_sym]
   end
 
   # @return [Hash] Les données de la page dans le fichier de
@@ -107,13 +149,13 @@ class SpecialPage
   # @return [String] Le fichier recette du livre courant
   # 
   def book_recipe_path
-    @recipe_path ||= File.join(thing.folder, 'recipe.yaml')
+    @recipe_path ||= File.join(folder, 'recipe.yaml')
   end
 
   # @return [String] Le fichier recette de la collection 
   # courante (if any)
   def collection_recipe_path
-    @collection_recipe_path ||= File.join(thing.folder, 'recipe_collection.yaml')
+    @collection_recipe_path ||= File.join(folder, 'recipe_collection.yaml')
   end
 
 end #/class SpecialPage

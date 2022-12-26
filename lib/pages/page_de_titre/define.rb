@@ -7,7 +7,8 @@ class PageDeTitre
   # Méthode principale permettant de définir la page
   # 
   def define
-    
+    super
+    puts "Je dois apprendre à définir la page de titre.".jaune
   end
 
 end #/class PageDeTitre
