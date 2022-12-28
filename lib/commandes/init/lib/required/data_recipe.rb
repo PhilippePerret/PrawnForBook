@@ -24,13 +24,6 @@ CHOIX_DATA2DEFINE.each_with_index do |dvalue, idx|
   DATA2DEFINE_VALUE_TO_INDEX.merge!(dvalue[:value] => idx)
 end
 
-RECIPE_VALUES_FOR_WANTED_PAGES = [
-  {k: :pagegarde, q:'Dois-je laisser une page de garde ?', df:true, t: :yes},
-  {k: :fauxtitre, q:'Dois-je imprimer la page de faux titre (titre seul) ?', df:true, t: :yes},
-  {k: :pagetitre, q:'Dois-je imprimer la page de titre (titre et infos) ?', df:true, t: :yes},
-  {k: :pageinfos, q:'Dois-je imprimer la page d’informations (fin du livre) ?', df:true, t: :yes},
-]
-
 RECIPE_VALUES_FOR_OPTIONS = [
   {k: :numparag, q:'Dois-je numéroter les paragraphes ?', df:false, t: :yes},
   {k: :numpage, q:'Pagination avec :', df: 'num_page', t: :select, values:[{name:'numéro page', value:'num_page'},{name:'numéros paragraphes', value:'num_parag'}]},

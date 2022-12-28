@@ -1,6 +1,8 @@
 module Prawn4book
 
 TERMS = {
+  yes: 'oui',
+  no:   'non',
   biblios: 'bibliographies',
   book_data: 'données générales du livre',
   book_infos: 'informations sur le livre (dernières pages)',

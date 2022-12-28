@@ -22,8 +22,12 @@ class SpecialPage
     return_data = options && options[:return_data]
     while true
       clear unless debug?
-      puts "Assistant #{page_name}\n".bleu
-      data_choix = Q.select("Définir :".jaune, choices_properties, {per_page:choices_properties.count})
+      puts "Assistant #{page_name}".upcase.bleu
+      begin
+        data_choix = Q.select(nil, choices_properties, {per_page:choices_properties.count, show_help:nil})
+      rescue TTY::Reader::InputInterrupt
+        return nil
+      end
       case data_choix
       when NilClass
         return nil if return_data
@@ -104,16 +108,33 @@ class SpecialPage
           end
         end
       end
-      [{name: PROMPTS[:save], value: :save}] + choices + [ {name:PROMPTS[:cancel].rouge, value:nil} ]
+      choices = ultime_mise_en_forme_choices(choices)
+      [{name: PROMPTS[:save], value: :save}] + choices + [ {name:"#{PROMPTS[:cancel]} (^c)".rouge, value:nil} ]
     end
   end
 
   def add_choice(choices, dchoice, simple_key)
     @choice_index ||= 0
     @choice_index += 1 # le premier est "Enregistrer"
-    puts "simple_key = #{simple_key.inspect}"
-    val = get_current_value_for(simple_key) || dchoice[:default]
-    choices << {name: "#{dchoice[:name]} : #{val}", value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
+    val = get_value(simple_key)
+    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
+  end
+
+  # @return [Array<Hash>] Liste des choix bien formatés
+  # @params [Array<Hash>] choices Liste des choix pour le select de 
+  #                   tty-promp mais où les :name(s) ne sont pas 
+  #                   encore réglés. Ici, on va ajouter la valeur et
+  #                   régler la longueur pour que tout soit aligné.
+  def ultime_mise_en_forme_choices(choices)
+    max_len = 0
+    choices.each do |dchoix|
+      max_len = dchoix[:name].length if dchoix[:name].length > max_len
+    end
+    choices.each do |dchoix|
+      dchoix[:name] = "#{dchoix[:name].ljust(max_len)} : #{dchoix[:value][:value]}"
+    end
+
+    return choices
   end
 
 

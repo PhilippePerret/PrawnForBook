@@ -26,7 +26,9 @@ class SpecialPage
   def polices_default
     {'Times' => true, 'Helvetica' => true, 'Courier' => true}
   end
-
+  def first_police_name
+    police_names.first[:value]
+  end
 
   # @return [Any] Valeur pour la clé +simple_key+ défini dans le
   # fichier recette ou par défaut dans les données PAGE_DATA
@@ -80,7 +82,14 @@ class SpecialPage
       puts "La valeur par défaut pour #{simple_key.inspect} n'est pas définie…".rouge
       return nil
     end
-    cval[:default]
+    # 
+    # Valeur retournée
+    # 
+    case cval[:default]
+    when Symbol then send(cval[:default])
+    when Proc   then cval[:default].call
+    else cval[:default]
+    end
   end
 
   def set_current_value_for(simple_key, value)

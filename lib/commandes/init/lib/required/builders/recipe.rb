@@ -4,8 +4,6 @@ class InitedThing
   require 'lib/required/utils'
   include UtilsMethods
 
-  attr_reader :template_data
-
   # = main =
   # 
   # CRÉATION DE LA RECETTE (livre ou collection)
@@ -236,37 +234,58 @@ class InitedThing
   # --- Toutes les méthodes pour demander les informations
   #     de la recette ---
 
-  def define_and_set_values_for_format(askit)
-    define_and_set_values_for(askit, RECIPE_VALUES_FOR_FORMAT)
+  ##
+  # Pour définir les pages à afficher dans le livre
+  # 
+  PAGES = [
+    {name:'Page de garde', value: :page_de_garde, default: true},
+    {name:'Page de faux titre (seulement titre)', value: :faux_titre, default: false},
+    {name:'Page de titre (titre avec auteurs et édition)', value: :page_de_titre, default: true},
+    {name:'Page d’information (fin du livre)', value: :page_infos, default: true}
+  ]
+  def define_and_set_values_for_wanted_pages
+    cur_data = recipe.inserted_pages
+    while true
+      choices = PAGES.map.with_index do |dchoix, idx|
+        dd = dchoix.dup
+        curval = cur_data[dd[:value]]
+        curval_real = curval.nil? ? dd[:default] : curval
+        color_meth  = curval_real ? :bleu : :orange
+        curval_str  = curval_real ? TERMS[:yes] : TERMS[:no]
+        dd[:name]   = "#{dd[:name]} : #{curval_str}".send(color_meth)
+        dd
+      end.unshift({name: PROMPTS[:save].vert, value: :save})
+      clear unless debug?
+      puts "PAGES À INSÉRER DANS LE LIVRE".bleu
+      type_page = Q.select(nil, choices, {per_page: choices.count, show_help:false})
+      break if type_page == :save
+      oui = Q.yes?("Afficher la page : #{type_page.to_s.gsub(/_/,' ')} ?".jaune)
+      cur_data.merge!(type_page => oui)
+    end
+    # Enregistrement des informations
+    recipe.insert_bloc_data('inserted_pages', cur_data)
   end
-  def define_and_set_values_for_wanted_pages(askit)
-    define_and_set_values_for(askit, RECIPE_VALUES_FOR_WANTED_PAGES)
-  end
-  def define_and_set_values_for_infos(askit)
-    define_and_set_values_for(askit, RECIPE_VALUES_FOR_INFOS)
-  end
+
+
+
+
   def define_and_set_values_for_options(askit)
     define_and_set_values_for(askit, RECIPE_VALUES_FOR_OPTIONS)
   end
 
   # --- Generic Methods ---
 
+  def recipe
+    owner.recipe
+  end
 
   ##
   # Méthode générique pour demander les valeurs définies par 
   # +data_values+ et les mettre dans @template_data
   # Si +question+ est nil, ce sont les valeurs par défaut qui seront
   # mise dans la table.
-  def define_and_set_values_for(askit, data_values)
-    if askit
-      # Mode interactif
-      @template_data.merge!(ask_for_or_default(data_values))
-    else
-      # Valeurs par défaut
-      data_values.each do |dvalue|
-        @template_data.merge!(dvalue[:k] => dvalue[:df])
-      end
-    end
+  def define_and_set_values_for(data_values)
+    @template_data.merge!(ask_for_or_default(data_values))
     return true
   end
 

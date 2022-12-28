@@ -187,19 +187,19 @@ class Recipe
   end
 
   def page_de_garde?
-    :TRUE == @haspagegarde ||= true_or_false(get(:page_de_garde) === true)
+    :TRUE == @haspagegarde ||= true_or_false(inserted_pages[:page_de_garde])
   end
 
   def page_faux_titre?
-    :TRUE == @hasfauxtitre ||= true_or_false(get(:faux_titre) === true)
+    :TRUE == @hasfauxtitre ||= true_or_false(inserted_pages[:faux_titre])
   end
 
   def page_de_titre?
-    :TRUE == @haspagetitre ||= true_or_false(not(get(:page_de_titre) === false))
+    :TRUE == @haspagetitre ||= true_or_false(inserted_pages[:page_de_titre])
   end
 
   def page_info?
-    :TRUE == @writepageinfo ||= true_or_false(get(:infos,{})[:display] === true)
+    :TRUE == @writepageinfo ||= true_or_false(inserted_pages[:page_infos])
   end
 
 
@@ -247,13 +247,17 @@ class Recipe
   def fonts_data
     @fonts_data ||= get(:fonts, {})
   end
-  
+
   def book_data
     @book_data ||= get(:book_data, {})
   end
 
   def titles_data
     @book_titles ||= get(:titles, {})
+  end
+
+  def inserted_pages
+    @inserted_pages ||= get(:inserted_pages, {})
   end
 
 
