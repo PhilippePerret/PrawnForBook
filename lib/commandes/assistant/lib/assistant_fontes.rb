@@ -22,12 +22,12 @@ module Prawn4book
     return if new_fonts.empty?
 
     # 
-    # Ajout des fontes
+    # Insertion des fontes dans le fichier recette
     # 
     if Q.yes?(PROMPTS[:recipe][:should_i_add_code_to_recipe].jaune)
       fontes = pdfbook.recipe[:fonts] || {}
       fontes.merge!(new_fonts)
-      pdfbook.update_recipe(fonts: fontes)
+      pdfbook.recipe.insert_bloc_data(:fonts, {fonts: fontes})
       puts MESSAGES[:recipe][:fonts_can_be_added].bleu
     end
     # 

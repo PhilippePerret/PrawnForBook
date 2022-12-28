@@ -43,7 +43,7 @@ class << self
     # Enregistrement des nouveaux headers ou footers
     # 
     puts "Je dois apprendre à enregistrer les #{whats}".jaune
-    # remplace_between_balises_with(code_init, whats, new_whats)
+    # pdfbook.recipe.insert_bloc_data(whats, new_whats)
   end
 
   # Reçoit les données headers ou footers et retourne une liste

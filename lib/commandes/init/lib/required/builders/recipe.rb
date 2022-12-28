@@ -6,11 +6,13 @@ class InitedThing
 
   attr_reader :template_data
 
-  # Création de la recette (livre ou collection)
+  # = main =
+  # 
+  # CRÉATION DE LA RECETTE (livre ou collection)
   # 
   # @return true en cas de succès, false otherwise
   # 
-  def proceed_build_recipe
+  def build_recipe
 
     if book? && in_collection?
       puts PROMPTS[:recipe][:warning_book_in_collection].jaune
@@ -19,23 +21,18 @@ class InitedThing
     #
     # Que faut-il faire si un fichier recette existe déjà ?
     # 
-    case keep_recipe_file_if_exist?
-    when :keep    then return true
-    when :cancel  then return false
-    else
-      # on continue
-    end
+    return unless keep_recipe_file_if_exist?
 
     #
-    # Demander les informations minimale
+    # Demander les informations sur le livre
     # 
-    get_template_data || return
+    define_all_data || return
     # puts "@template_data = #{@template_data.pretty_inspect}"
 
     #
     # Assembler le fichier recette 
-    #
-    assemble_recipe
+    # NON : maintenant, il se construit au fur et à mesure
+    # assemble_recipe
 
     #
     # Image de logo
@@ -55,73 +52,72 @@ class InitedThing
   # Méthode pour demander toutes les informations que l'utilisateur
   # veut entrer.
   # 
-  def get_template_data
-    @template_data = {}
-    @template_data.merge!(main_folder: folder)
-    clear unless debug?
-    @template_data.merge!(ask_for_or_default(DATA_VALUES_MINIMALES))
-    puts PROMPTS[:recipe][:init_intro_define_values].bleu
-    askit = Q.yes?(PROMPTS[:recipe][:wannado_define_all_values].jaune)
-
+  def define_all_data
     clear unless debug?
 
     # 
-    # Toutes les choses à pouvoir définir
-    # Chaque fois qu'un élément est défini, on l'exclut de
-    # la liste
+    # Table pour obtenir l'index des choix
+    # (tout en clonant la liste)
     # 
-    data2define = [
-      :publisher, :format, :wanted_pages, :infos, :options,
-      :fontes, :titles, :headers_and_footers, :biblios
-    ]
+    @table_choix2index = {}
+    choices = CHOIX_DATA2DEFINE.map.with_index { |dchoix, idx| 
+      @table_choix2index.merge!(dchoix[:value] => idx)
+      dchoix.merge(defined: false)
+    }
 
-    if askit
-      # 
-      # On boucle sur toutes les choses à pouvoir définir
-      # 
-      while data2define.any?
-        clear unless debug?
-        case (choix = Q.select(PROMPTS[:recipe][:which_data_recipe_to_define].jaune, CHOIX_DATA2DEFINE, per_page:CHOIX_DATA2DEFINE.count))
-        when :finir then break
-        else
-          meth = "get_values_for_#{choix}".to_sym
-          if send(meth, true) # true ≠ par défaut
-            # 
-            # Les valeurs ont été données, on peut retirer cet
-            # élément de la liste des valeurs à définir et empêcher
-            # ce menu de pouvoir être rechoisi (surtout pour marquer
-            # ce qui est fait)
-            # 
-            data2define.delete(choix)
-            idx = DATA2DEFINE_VALUE_TO_INDEX[choix]
-            CHOIX_DATA2DEFINE[idx].merge!(disabled: '(OK)')
-          end
+    while true
+      clear unless debug?
+      thing2define = Q.select("Que voulez-vous définir ?".jaune, choices, {per_page:choices.count})
+      case thing2define
+      when :finir
+        # 
+        # Pour en finir avec la définition du livre/de la collection
+        # @note
+        #   Maintenant, la recette est enregistrée au fur et à mesure
+        return true
+
+      when :book_data, :book_format
+        # 
+        # Ici passent toutes les choses qu'on peut définir par le biais
+        # du système des "pages spéciales"
+        # 
+        if edit_with_special_pages(thing2define)
+          mark_choix_ok(thing2define, choices)
         end
-
-      end #/while data2define.any?
-    
-    end # S'il fallait définir les valeurs tout de suite
-
-    # 
-    # AUTRES VALEURS -> PAR DÉFAUT
-    # ----------------------------
-    # 
-    # On a fini de définir les valeurs choisie
-    # Il faut définir les valeurs qui restent en mettant leur
-    # valeur par défaut
-    # 
-    data2define.each do |kwhat|
-      puts (MESSAGES[:define_default_values_for] % kwhat.to_s).bleu
-      meth = "get_values_for_#{kwhat}".to_sym
-      send(meth, false)
+      else
+        # 
+        # Ici passent toutes les choses définies par des méthodes
+        # de ce fichier.
+        # 
+        if send(:"define_and_set_values_for_#{thing2define}")
+          mark_choix_ok(thing2define, choices)
+        end
+      end
     end
 
-    #
-    # La première font, qui servira de font par défaut
-    # 
-    @template_data.merge!(first_font_name: (@data_fontes ? @data_fontes.keys.first : 'Arial' ))
-
     return true
+  end
+
+  ##
+  # Pour indiquer que les données ont été fournies
+  # 
+  def mark_choix_ok(what, choices)
+    dchoix = choices[@table_choix2index[what]]
+    dchoix.merge!({
+      defined: true,
+      name: "#{dchoix[:name]} (OK)".vert
+    })
+  end
+  
+  ##
+  # Pour éditer les données +balise+ avec le module des Pages Spéciales
+  # 
+  # @param [String|Symbol] balise La chose à éditer, par exemple :book_data ou :page_de_titre
+  def edit_with_special_pages(balise)
+    balise = balise.to_s
+    require "lib/pages/#{balise}"
+    klass = Prawn4book::Pages.const_get(balise.camelize)
+    return klass.define(owner.folder)
   end
 
   ##
@@ -140,6 +136,27 @@ class InitedThing
     end
   end
 
+  # --- Méthodes de définition des données ---
+
+  def define_and_set_values_for_fonts
+    require_assistant('fontes')
+    data_fontes = Prawn4book.get_name_fonts(main_folder: folder)
+    owner.recipe.insert_bloc_data(:fonts, {fonts: data_fontes})
+    return true
+  end
+
+  def define_and_set_values_for_titles
+    require_assistant('titres')
+    data_titres = Prawn4book.define_titles(owner)
+    owner.recipe.insert_bloc_data(:titles, {titles: data_titres})
+    return true
+  end
+
+  def require_assistant(name)
+    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_#{name}"
+  end
+
+  # --- Mettre ci-dessous les méthodes obsolètes ---
 
   ##
   # Méthode qui construit le code final de la recette
@@ -149,6 +166,7 @@ class InitedThing
   #  par défaut)
   # 
   def assemble_recipe
+    raise "OBSOLÈTE (le code est construit petit à petit"
     code_final = assemble_code
     File.open(recipe_path,'wb') { |f| f.puts code_final }
   end
@@ -174,11 +192,6 @@ class InitedThing
       ccommun = File.read(template_for('recipe_communs.yaml'))
       code = code + (ccommun % template_data)
       # 
-      # Si les titres sont redéfinis
-      # 
-      if @data_titles
-        code = remplace_between_balises_with(code, 'titles', {titles: @data_titles}.to_yaml)
-      end
       #
       # Si les fontes sont définies
       # 
@@ -204,89 +217,36 @@ class InitedThing
     return code
   end
 
-
   # --- Les méthodes plus complexes ---
-  def get_values_for_biblios(askit)
+  def define_and_set_values_for_biblios(askit)
     return unless askit
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
     @data_biblio = Prawn4book.define_bibliographies(pdfbook)
     return true
   end
 
-  def get_values_for_fontes(askit)
-    return unless askit
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_fontes"
-    @data_fontes = Prawn4book.get_name_fonts(main_folder: folder)
-    return true
-  end
 
-  def get_values_for_headers_and_footers(askit)
+  def define_and_set_values_for_headers_and_footers(askit)
     return unless askit
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
     @data_headers_footers = Prawn4book.define_headers_footers
     return true
   end
 
-  def get_values_for_titles(askit)
-    return unless askit
-    Q.yes?(PROMPTS[:recipe][:wannado_define_titles].jaune) || return
-    # Note : on doit supprimer de '# <titles>' à </titles> dans le
-    # template recette et le remplacer par le code
-    level = 1
-    @data_titles = {}
-    while level < 7
-      @data_titles.merge!( level => {level: level} )
-      belle_page = Q.no?("Faut-il mettre le titre de niveau #{level} sur une belle page (droite) ?".jaune)
-      if belle_page
-        next_page = false
-      else
-        next_page = Q.yes?("Faut-il passer à la page suivante pour le titre de niveau #{level} ?".jaune)
-      end
-      @data_titles[level].merge!(
-        next_page: next_page, belle_page: belle_page
-      )
-      TITLES_DATAS.each do |question, property, default|
-        question  = question % @data_titles[level]
-        default   = default.call(level) if default.is_a?(Proc)
-        reponse   = Q.ask(question.jaune, default: default)
-        reponse   = reponse.to_i unless property == :font
-        @data_titles[level].merge!(property => reponse)
-      end
-      level += 1
-      break if level > 6
-      Q.yes?("Faut-il régler le titre de niveau #{level} ?".jaune) || break
-    end
-    # 
-    # Mettre les valeurs restantes par défaut
-    # 
-    while level < 7
-      @data_titles.merge!( level => {belle_page:false, next_page: false})
-      TITLES_DATAS.each do |question, property, default|
-        default = default.call(level) if default.is_a?(Proc)
-        @data_titles[level].merge!(property => default)
-      end
-      level += 1
-    end
-    return true
-  end
-
   # --- Toutes les méthodes pour demander les informations
   #     de la recette ---
 
-  def get_values_for_publisher(askit)
-    get_values_for(askit, RECIPE_VALUES_FOR_PUBLISHER)
+  def define_and_set_values_for_format(askit)
+    define_and_set_values_for(askit, RECIPE_VALUES_FOR_FORMAT)
   end
-  def get_values_for_format(askit)
-    get_values_for(askit, RECIPE_VALUES_FOR_FORMAT)
+  def define_and_set_values_for_wanted_pages(askit)
+    define_and_set_values_for(askit, RECIPE_VALUES_FOR_WANTED_PAGES)
   end
-  def get_values_for_wanted_pages(askit)
-    get_values_for(askit, RECIPE_VALUES_FOR_WANTED_PAGES)
+  def define_and_set_values_for_infos(askit)
+    define_and_set_values_for(askit, RECIPE_VALUES_FOR_INFOS)
   end
-  def get_values_for_infos(askit)
-    get_values_for(askit, RECIPE_VALUES_FOR_INFOS)
-  end
-  def get_values_for_options(askit)
-    get_values_for(askit, RECIPE_VALUES_FOR_OPTIONS)
+  def define_and_set_values_for_options(askit)
+    define_and_set_values_for(askit, RECIPE_VALUES_FOR_OPTIONS)
   end
 
   # --- Generic Methods ---
@@ -297,7 +257,7 @@ class InitedThing
   # +data_values+ et les mettre dans @template_data
   # Si +question+ est nil, ce sont les valeurs par défaut qui seront
   # mise dans la table.
-  def get_values_for(askit, data_values)
+  def define_and_set_values_for(askit, data_values)
     if askit
       # Mode interactif
       @template_data.merge!(ask_for_or_default(data_values))
@@ -357,7 +317,7 @@ class InitedThing
   end
 
   def keep_recipe_file_if_exist?
-    return nil unless File.exist?(recipe_path)
+    return true unless File.exist?(recipe_path)
     File.ask_what_to_do_with_file(recipe_path, 'fichier recette')
   end
 

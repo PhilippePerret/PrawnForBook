@@ -1,11 +1,12 @@
 module Prawn4book
 class Pages
-class BookData
+class BookFormat
 
-  # @note
-  #   cf. PageSpeciale#define
+  # = main =
+  #
+  # Méthode principale permettant de définir la page
   # 
-  def define(options = nil)
+  def define
     super
   end
 
@@ -15,6 +16,6 @@ class BookData
   #   Les principales méthodes se trouvent dans la classe mère
   # 
 
-end #/class BookData
+end #/class BookFormat
 end #/class Pages
 end #/module Prawn4book

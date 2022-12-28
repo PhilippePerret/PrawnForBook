@@ -1,11 +1,17 @@
 # Todo courant
 
-* Greffer PDF::Checker sur les tests pour tester les rendus
+* Poursuivre la création des pages spéciales (ou blocs spéciaux)
+  - ajouter la propriété 'required' aux propriétés des pages spéciales
+  - les utiliser pour l'init
+  - modifier le test de l'init
+  - faire le bloc 'page_properties' (largeur livre, hauteur livre, orientation, 4 marges, indentation, hauteur de ligne, aligné sur ligne de base, aspect des titres, police et taille par défaut)
 * Il faudrait des modules indépendants pour gérer 1) avec l'assistant et 2) avec l'initiateur de livre les choses principales que sont :
 - la page des informations de fin
 - peut-être les pieds et entête de page
 - la page d'index
 - les pages de références (plusieurs références possibles)
+
+* Pouvoir récupérer les informations de fontes actuelles lorsqu'on les édite (pour le moment, on est toujours obligé de recommencer du départ)
 
 * Le test 'init_book_test.rb' s'attache à tester la création assistée d'un nouveau livre.
   Il faut poursuivre cette exploration, notamment pour :

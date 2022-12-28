@@ -46,7 +46,11 @@ class SpecialPage
     @page_name ||= klasse.to_s.split('::').last.decamelize.titleize.gsub(/_/,' ')
   end
 
-
+  #
+  # @return [Prawn4book::PdfBook|Prawn4book::Collection] La chose concernée.
+  # @note
+  #   On peut aussi utiliser l'alias #owner
+  # 
   def thing
     @thing ||= begin
       if File.exist?(book_recipe_path)
@@ -54,11 +58,14 @@ class SpecialPage
       elsif File.exist?(collection_recipe_path)
         Prawn4book::Collection.new(folder)
       else
-        puts ERRORS[:require_a_book_or_collection].rouge
-        exit
+        # Si aucun fichier recette n'est défini, on considère que
+        # c'est d'un livre dont il s'agit.
+        Prawn4book::PdfBook.new(folder)
       end
     end
   end
+  alias :owner :thing
+
 
 end #/class SpecialPage
 end #/module Prawn4book

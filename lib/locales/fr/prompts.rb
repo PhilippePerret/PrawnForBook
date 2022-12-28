@@ -2,11 +2,12 @@ module Prawn4book
 
 TERMS = {
   biblios: 'bibliographies',
+  book_data: 'données générales du livre',
   book_infos: 'informations sur le livre (dernières pages)',
   fonts: 'fontes',
   footer: 'pied de page',
   format: 'format',
-  format_book: 'format (taille livre, marges, etc.)',
+  book_format: 'format (taille livre, marges, etc.)',
   header: 'entête',
   headers_and_footers:'entêtes et pieds de page',
   other_default_values:'autres valeurs par défaut',
@@ -36,7 +37,6 @@ PROMPTS = {
   # --- Recette --- #
   recipe: {
     data_for: 'Données %s',
-    wannado_define_all_values: "Voulez-vous définir tout de suite les valeurs ?",
     should_i_open_recipe_file: 'Dois-je ouvrir le fichier recette ?',
     should_i_add_code_to_recipe: 'Dois-je ajouter le code ci-dessus au fichier recette ?',
     wannado_define_titles: "Voulez définir les propriétés pour les titres ?",
@@ -77,15 +77,5 @@ PROMPTS[:recipe].merge!(warning_book_in_collection: <<-TEXT)
 
 TEXT
 
-PROMPTS[:recipe].merge!(init_intro_define_values: <<-TEXT)
-
-  (si vous ne définissez pas certaines valeurs maintenant, il 
-   faudra le faire « à la main » dans le fichier recette
-   directement, plus tard — ou à l'aide d'assistants
-   Ces valeurs concernent toute la recette du livre, les marges,
-   les bibliographies, les fontes, les infos éditeurs, etc.
-  )
-
-TEXT
 
 end #/module Prawn4book

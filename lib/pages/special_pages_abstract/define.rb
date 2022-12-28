@@ -6,14 +6,30 @@
 module Prawn4book
 class SpecialPage
 
-  def define
+  def self.define(path)
+    instance = new(path)
+    return instance.define
+  end
+
+  # = main =
+  #
+  # Méthode principale permettant de définir la page
+  # 
+  # @param [Hash] options Options de définition
+  # @option options [Boolean] :return_data If true, the method returns data rather that recording it in the recipe file.
+  # 
+  def define(options = nil)
+    return_data = options && options[:return_data]
     while true
-      clear
+      clear unless debug?
       puts "Assistant #{page_name}\n".bleu
       data_choix = Q.select("Définir :".jaune, choices_properties, {per_page:choices_properties.count})
       case data_choix
-      when NilClass then break
+      when NilClass
+        return nil if return_data
+        break
       when :save
+        return recipe_data if return_data
         save_recipe_data
         break
       else
@@ -95,6 +111,7 @@ class SpecialPage
   def add_choice(choices, dchoice, simple_key)
     @choice_index ||= 0
     @choice_index += 1 # le premier est "Enregistrer"
+    puts "simple_key = #{simple_key.inspect}"
     val = get_current_value_for(simple_key) || dchoice[:default]
     choices << {name: "#{dchoice[:name]} : #{val}", value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
   end

@@ -9,11 +9,22 @@
 module Prawn4book
 class SpecialPage
 
+  # Pour le :values d'une donnée true/false
   def yes_no_answers
     [
       {name: 'Oui', value: 'true'},
       {name: 'Non', value: 'false'}
     ]
+  end
+
+  # Pour la :values d'une donnée de type select
+  def police_names(default_name = nil)
+    (get_data_in_recipe[:fonts]||polices_default).map do |font_name, dfont|
+      {name: font_name, value: font_name}
+    end
+  end
+  def polices_default
+    {'Times' => true, 'Helvetica' => true, 'Courier' => true}
   end
 
 
@@ -128,64 +139,9 @@ class SpecialPage
   #   commentaires du fichier
   # 
   def set_data_in_recipe(new_data)
-    code     = raw_code
-    new_data = {tag_name.to_sym => new_data}
-    inserted = new_data.to_yaml
-    inserted = inserted[4..-1].strip if inserted.start_with?("---")
-    tag_in  = "#<#{tag_name}>"
-    tag_out = "#</#{tag_name}>"
-    dec_in  = code.index(tag_in)
-    dec_out = code.index(tag_out)
-    if dec_in.nil?
-      # 
-      # Dans le cas d'une balise introuvable, on met le code à la 
-      # fin, en ajoutant la balise. On vérifie quand même qu'aucune
-      # balise de fin
-      # 
-      code = [code, tag_in, inserted.strip, tag_out].join("\n")
-      dec_out.nil? || begin
-        puts <<~TXT.orange
-          Attention, une balise de fin (#{tag_out}) existe dans le fichier
-          recette (sans balise de début). Il faudrait la supprimer pour
-          ne pas avoir de problème.
-        TXT
-        sleep 4
-      end
-    else
-      # 
-      # Quand la balise d'ouverture a été trouvée
-      # 
-      dec_in += tag_in.length
-      # 
-      # Note : si on a trouvé la balise d'ouverture, il faut impérativement
-      # trouver la balise de fermeture
-      # 
-      dec_out || raise("La balise '</#{tag_name}>' est introuvable.")
-      dec_out > dec_in || begin
-        dec_out = code.index(tag_out, dec_in)
-        if dec_out.nil?
-          raise("Une balise '</#{tag_name}>' a été trouvée, mais avant la balise de début…")
-        else
-          puts <<~TXT.orange
-            Attention : une balise de fin a été trouvée avant la balise
-            de début. Il faudrait la supprimer.
-            (je poursuis quand même en tenant compte de la deuxième)
-          TXT
-          sleep 4
-        end
-      end
-      dec_out -= 1
-      code = [code[0..dec_in].strip, inserted.strip, code[dec_out..-1].strip].join("\n")
-    end
-    File.write(recipe_path, code)
+    owner.recipe.insert_bloc_data(tag_name, new_data)
   end
-
-
-
-  def raw_code
-    File.exist?(recipe_path) ? File.read(recipe_path) : "---\n"
-  end
-
+  
   # @return [String] Le fichier recette en fonction du fait qu'on
   # gère un livre ou une collection
   def recipe_path
