@@ -147,7 +147,7 @@ CHOIX_SAVE    = {name: PROMPTS[:save].vert, value: :save}
 
 CHOICES_TITRES = [
     CHOIX_SAVE,
-    {name: "#{(' ' * 10)}( Police/taille - Nombre de lignes avant/après - leading", disabled:')'}
+    {name: "#{(' ' * 10)}( Police/taille - Nombre de lignes avant/après - leading".gris, disabled:')'}
   ] + (1..7).map do |niv|
   {name: "Titre de niveau #{niv}", value: niv}
 end
