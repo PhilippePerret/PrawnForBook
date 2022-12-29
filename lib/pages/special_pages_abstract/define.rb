@@ -109,7 +109,7 @@ class SpecialPage
         end
       end
       choices = ultime_mise_en_forme_choices(choices)
-      [{name: PROMPTS[:save], value: :save}] + choices + [ {name:"#{PROMPTS[:cancel]} (^c)".rouge, value:nil} ]
+      [{name: PROMPTS[:save].bleu, value: :save}] + choices + [ {name:"#{PROMPTS[:cancel]} (^c)".rouge, value:nil} ]
     end
   end
 
@@ -129,8 +129,7 @@ class SpecialPage
     max_len = 0
     choices.each do |dchoix|
       max_len = dchoix[:name].length if dchoix[:name].length > max_len
-    end
-    choices.each do |dchoix|
+    end.each do |dchoix|
       dchoix[:name] = "#{dchoix[:name].ljust(max_len)} : #{dchoix[:value][:value]}"
     end
 

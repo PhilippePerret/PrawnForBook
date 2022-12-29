@@ -7,6 +7,10 @@ class Collection
     define_folder_from_arg(arg)
   end
 
+  def is_collection?
+    true
+  end
+
   ##
   # Définit le dossier de la collection en fonction de
   # l'argument transmis en argument à l'instantiation
@@ -53,13 +57,6 @@ class Collection
   # --- Data Methods ---
 
   def name            ; data[:name]             end
-  # def dimensions      ; data[:dimensions]       end
-  # def num_page_style  ; data[:num_page_style]   end
-  # def marges          ; data[:marges]           end
-  # def interligne      ; data[:interligne]       end
-  # def opt_num_parag   ; data[:opt_num_parag]    end
-  # def fonts           ; data[:fonts]            end
-    
 
   def data
     @data ||= YAML.load_file(recipe_path, aliases: true)
@@ -67,9 +64,7 @@ class Collection
 
   # --- Path Methods ---
 
-  def recipe_path
-    @recipe_path ||= File.join(folder, 'recipe_collection.yaml')
-  end
+  def recipe_name ; 'recipe_collection.yaml' end
 
 end #/class Collection
 end #/module Prawn4book

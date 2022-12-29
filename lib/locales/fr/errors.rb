@@ -5,10 +5,12 @@ ERRORS = {
   # --- Application --- #
 
   require_a_book_or_collection: "Il faut se trouver dans un dossier de livre ou de collection.",
-
+  unfound_folder: "Le dossier '%s' est introuvable…",
+  
   # --- Recette --- #
 
   recipe: {
+    main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
 
     headers: {
       required: 'La définition des entêtes (:headers) est absolument requise.',

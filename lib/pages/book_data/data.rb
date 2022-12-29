@@ -12,15 +12,6 @@ class BookData
   # telles qu'elles sont définies dans le fichier recipe.yaml
   # 
   PAGE_DATA = {
-    # Par exemple :
-    # fonts: {
-    #   title: {name:"Police du titre", default: 'Times', values: :police_names},
-    #   subtitle: {name:"Police du sous-titre", default: 'Times', values: :police_names},
-    # },
-    # sizes: {
-    #   title: {name:"Taille du titre", default: 18},
-    #   subtitle: {name:'Taille du sous-titre', default: 16},
-    # },
     book_title: {name:'Titre du livre', default:'Mon beau livre'},
     book_subtitle: {name:'Sous-titre du livre (\n pour retour ligne)', default: nil},
     collection: {name: 'Appartient à une collection', default: 'false', values: :yes_no_answers},

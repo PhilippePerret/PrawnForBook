@@ -25,20 +25,6 @@ class InitedThing
     # Demander les informations sur le livre
     # 
     define_all_data || return
-    # puts "@template_data = #{@template_data.pretty_inspect}"
-
-    #
-    # Assembler le fichier recette 
-    # NON : maintenant, il se construit au fur et à mesure
-    # assemble_recipe
-
-    #
-    # Image de logo
-    # Si elle est définie, mais qu'elle n'existe pas, on utilise
-    # le logo type (dans ressources/templates/logo.jpg) qu'on met
-    # à l'endroit voulu avec le nom voulu
-    # 
-    traite_logo
 
     #
     # Confirmation création
@@ -54,18 +40,20 @@ class InitedThing
     clear unless debug?
 
     # 
-    # Table pour obtenir l'index des choix
-    # (tout en clonant la liste)
+    # Préparation de la liste des choix
     # 
     @table_choix2index = {}
     choices = CHOIX_DATA2DEFINE.map.with_index { |dchoix, idx| 
       @table_choix2index.merge!(dchoix[:value] => idx)
       dchoix.merge(defined: false)
-    }
+    } + [CHOIX_FINIR]
 
     while true
       clear unless debug?
-      thing2define = Q.select("Que voulez-vous définir ?".jaune, choices, {per_page:choices.count})
+      # 
+      # On demande à l'utilisateur ce qu'il veut définir
+      # 
+      thing2define = Q.select(PROMPTS[:recipe][:which_data_recipe_to_define].jaune, choices, {per_page:choices.count})
       case thing2define
       when :finir
         # 
@@ -74,7 +62,7 @@ class InitedThing
         #   Maintenant, la recette est enregistrée au fur et à mesure
         return true
 
-      when :book_data, :book_format
+      when :book_data, :book_format, :page_infos
         # 
         # Ici passent toutes les choses qu'on peut définir par le biais
         # du système des "pages spéciales"
@@ -118,28 +106,11 @@ class InitedThing
     return klass.define(owner.folder)
   end
 
-  ##
-  # Traitement du logo
-  # 
-  def traite_logo
-    if @template_data[:publisher_logo]
-      logo_path = File.join(folder, @template_data[:publisher_logo])
-      if not File.exist?(logo_path)
-        mkdir(File.dirname(logo_path))
-        FileUtils.cp( File.join(Prawn4book::templates_folder,'logo.jpg') , logo_path)
-      end
-    else
-      puts "Le logo n'est pas défini".jaune
-      sleep 5
-    end
-  end
-
   # --- Méthodes de définition des données ---
 
   def define_and_set_values_for_fonts
     require_assistant('fontes')
-    data_fontes = Prawn4book.get_name_fonts(main_folder: folder)
-    owner.recipe.insert_bloc_data(:fonts, {fonts: data_fontes})
+    Prawn4book.assistant_fontes(owner)
     return true
   end
 
@@ -152,67 +123,6 @@ class InitedThing
 
   def require_assistant(name)
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_#{name}"
-  end
-
-  # --- Mettre ci-dessous les méthodes obsolètes ---
-
-  ##
-  # Méthode qui construit le code final de la recette
-  # et l'inscrit dans le fichier
-  # 
-  # (en remplaçant les données par celles fournies ou les données
-  #  par défaut)
-  # 
-  def assemble_recipe
-    raise "OBSOLÈTE (le code est construit petit à petit"
-    code_final = assemble_code
-    File.open(recipe_path,'wb') { |f| f.puts code_final }
-  end
-
-  ##
-  # Assemblage du code pour former le code complet
-  # 
-  # Sont nécessaires pour cette opération :
-  #   @template_data (pour remplacer les %{...})
-  #   @titles_data    : pour mettre dans <titles>.
-  # 
-  def assemble_code
-    # Copie du code propre au livre ou à la collection 
-    code = File.read(template_for(recipe_name))
-    # 
-    # On remplace les variables %{…}
-    # 
-    code = code % template_data
-    # 
-    # Ajout du code commun (sauf si c'est un livre dans un collection)
-    # 
-    if not(in_collection?)
-      ccommun = File.read(template_for('recipe_communs.yaml'))
-      code = code + (ccommun % template_data)
-      # 
-      #
-      # Si les fontes sont définies
-      # 
-      if @data_fontes
-        code = remplace_between_balises_with(code,'fontes', {fonts: @data_fontes}.to_yaml)
-      end
-      # 
-      # Si les bibliographies sont définies
-      # 
-      if @data_biblio
-        code = remplace_between_balises_with(code,'biblios', {biblios: @data_biblio}.to_yaml)      
-      end
-      # 
-      # Si les headers et footers sont définis, on les
-      # inscrit
-      # 
-      if @data_headers_footers
-        code = remplace_between_balises_with(code,'headers', @data_headers_footers[:headers].to_yaml)
-        code = remplace_between_balises_with(code,'footers', @data_headers_footers[:footers].to_yaml)
-      end
-    end
-
-    return code
   end
 
   # --- Les méthodes plus complexes ---
@@ -266,15 +176,10 @@ class InitedThing
     recipe.insert_bloc_data('inserted_pages', cur_data)
   end
 
-
-
-
-  def define_and_set_values_for_options(askit)
-    define_and_set_values_for(askit, RECIPE_VALUES_FOR_OPTIONS)
-  end
-
   # --- Generic Methods ---
 
+  ##
+  # @return [Recipe] La recette actuelle du livre
   def recipe
     owner.recipe
   end

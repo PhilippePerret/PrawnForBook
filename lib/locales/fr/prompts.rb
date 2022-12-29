@@ -41,7 +41,7 @@ PROMPTS = {
     data_for: 'Données %s',
     should_i_open_recipe_file: 'Dois-je ouvrir le fichier recette ?',
     should_i_add_code_to_recipe: 'Dois-je ajouter le code ci-dessus au fichier recette ?',
-    wannado_define_titles: "Voulez définir les propriétés pour les titres ?",
+    wannado_define_titles: "Voulez-vous définir les propriétés pour les titres ?",
     which_data_recipe_to_define: "Quelles données voulez-vous définir ?",
   }, # / :recipe
 

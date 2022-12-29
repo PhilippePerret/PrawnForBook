@@ -17,6 +17,10 @@ require 'prawn-svg'
 
 require_relative 'required/constants'
 
+require_relative 'required/PrawnOwner'
+module Prawn4book; class PdfBook < PrawnOwner; end; end
+module Prawn4book; class Collection < PrawnOwner; end; end
+
 
 Dir["#{__dir__}/required/**/*.rb"].each{|m|require(m)}
 

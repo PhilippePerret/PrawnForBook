@@ -6,28 +6,13 @@
 
 =end
 module Prawn4book
-class PdfBook
 class Recipe
 
-  # @constant Données par défaut. 
-  # Elles sont très importantes puisqu'elles sont utilisées lorsque
-  # le livre ne possède pas de recette.
-  # 
-  DEFAULT_DATA = {
-    info: {},
-    num_page_style: 'num_page',
-    fonts:      {},
-    headers:    {},
-    footers:    {},
-    page_info:  {},
-    table_des_matières: {},
-  }
-
-  attr_reader :pdfbook
+  attr_reader :owner
   attr_reader :real_data
 
-  def initialize(pdfbook)
-    @pdfbook = pdfbook
+  def initialize(owner)
+    @owner = owner
     @real_data = {}
   end
 
@@ -66,7 +51,7 @@ class Recipe
   def update_collection(newdata)
     warn "Ne pas utiliser cette méthode, elle détruit les commentaires."
     # @data_collection = data_collection.merge!(newdata)
-    # File.write(pdfbook.collection.recipe_path, data.to_yaml)
+    # File.write(owner.collection.recipe_path, data.to_yaml)
   end
 
   ##
@@ -247,6 +232,7 @@ class Recipe
   def fonts_data
     @fonts_data ||= get(:fonts, {})
   end
+  alias :fonts :fonts_data
 
   def book_data
     @book_data ||= get(:book_data, {})
@@ -260,6 +246,9 @@ class Recipe
     @inserted_pages ||= get(:inserted_pages, {})
   end
 
+  def page_infos
+    @page_infos ||= get(:page_infos, {})
+  end
 
   # --- Private Fonctional Methods ---
 
@@ -282,15 +271,17 @@ class Recipe
     end
   end
 
+  DEFAULT_DATA = {}
+
   def data_collection
-    @data_collection ||= collection? ? pdfbook.collection.data : {}
+    @data_collection ||= collection? ? owner.collection.data : {}
   end
 
 
   private
 
   def path
-    @path ||= pdfbook.recipe_path
+    @path ||= owner.recipe_path
   end
 
     ##
@@ -300,7 +291,7 @@ class Recipe
       datacoll = data[:collection]
       return false if datacoll.nil?
       if datacoll === true
-        return File.exist?(File.join(File.dirname(pdfbook.folder),'recipe_collection.yaml'))
+        return File.exist?(File.join(File.dirname(owner.folder),'recipe_collection.yaml'))
       else
         # Si :collection n'est pas true, c'est le path du dossier
         # de la collection, quand le livre ne se trouve pas dedans
@@ -310,5 +301,4 @@ class Recipe
     end
 
 end #/class Recipe
-end #/class PdfBook
 end #/module Prawn4book

@@ -19,7 +19,7 @@ class SpecialPage
 
   # Pour la :values d'une donnée de type select
   def police_names(default_name = nil)
-    (get_data_in_recipe[:fonts]||polices_default).map do |font_name, dfont|
+    ((get_data_in_recipe[:fonts]||{}).merge(polices_default)).map do |font_name, dfont|
       {name: font_name, value: font_name}
     end
   end

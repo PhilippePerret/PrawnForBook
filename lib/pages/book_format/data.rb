@@ -30,7 +30,8 @@ class BookFormat
       default_size: {name:'Taille de fonte par défaut'        , default: 12},
       indent:       {name:'Indentation du premier paragraphe' , default: '0mm'},
       line_height:  {name:'Hauteur de lignes (en points-pdf)' , default: 14.0},
-      interline:    {name:'Espace entre paragraphes'          , default: 0.0}
+      interline:    {name:'Espace entre paragraphes'          , default: 0.0},
+      numerotation: {name:'Numérotation du livre'             , default:'pages', values: :values_numerotations},
     },
   }
 
@@ -39,6 +40,14 @@ class BookFormat
   # commencer par les méthodes qui doivent définir les :values des
   # propriétés à valeurs définies
   # 
+
+  def values_numerotations
+    [
+      {name:'Numéroter les pages'       , value: 'pages'  },
+      {name:'Numéroter les paragraphes' , value: 'parags' },
+      {name:'Pas de numérotation'       , value: 'none'   },
+    ]
+  end
 
 end #/class BookFormat
 end #/class Pages
