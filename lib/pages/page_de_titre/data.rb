@@ -34,14 +34,11 @@ class PageDeTitre
 
 
   def self.police_names(default_name = nil)
-    (get_data_in_recipe[:fonts]||polices_default).map do |font_name, dfont|
+    (get_data_in_recipe[:fonts]||DEFAUT_FONTS).map do |font_name, dfont|
       {name: font_name, value: font_name}
     end
   end
 
-  def self.polices_default
-    {'Times' => true, 'Helvetica' => true, 'Courier' => true}
-  end
 end #/class PageDeTitre
 end #/class Pages
 end #/module Prawn4book

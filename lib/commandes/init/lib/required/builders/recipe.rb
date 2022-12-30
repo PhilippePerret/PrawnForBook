@@ -51,9 +51,14 @@ class InitedThing
     while true
       clear unless debug?
       # 
+      # Titre de la page
+      # 
+      puts MESSAGES[:recipe][:title_data_to_define].bleu
+
+      # 
       # On demande à l'utilisateur ce qu'il veut définir
       # 
-      thing2define = Q.select(PROMPTS[:recipe][:which_data_recipe_to_define].jaune, choices, {per_page:choices.count})
+      thing2define = Q.select(nil, choices, {per_page:choices.count})
       case thing2define
       when :finir
         # 
@@ -121,28 +126,21 @@ class InitedThing
     return true
   end
 
+  # --- Les méthodes plus complexes ---
+
+  def define_and_set_values_for_biblios
+    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
+    Prawn4book::Assistant.assistant_biblios(owner)
+  end
+
+  def define_and_set_values_for_headers_and_footers
+    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
+    Prawn4book::Assistant.assistant_headers_footers(owner)
+  end
+
   def require_assistant(name)
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_#{name}"
   end
-
-  # --- Les méthodes plus complexes ---
-  def define_and_set_values_for_biblios(askit)
-    return unless askit
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
-    @data_biblio = Prawn4book::Assistant.define_bibliographies(pdfbook)
-    return true
-  end
-
-
-  def define_and_set_values_for_headers_and_footers(askit)
-    return unless askit
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
-    @data_headers_footers = Prawn4book::Assistant.define_headers_footers
-    return true
-  end
-
-  # --- Toutes les méthodes pour demander les informations
-  #     de la recette ---
 
   ##
   # Pour définir les pages à afficher dans le livre

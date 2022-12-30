@@ -1,16 +1,227 @@
+=begin
+
+  Nouveaux principes pour la version 2
+
+    * la hiérarchie a changé, on a maintenant
+      - les dispositions qui définissent leur nom, leurs pages et
+        l'enête et le pied de page qu'elles utilisent.
+    * les entête et les pieds de page sont définis indépendamment,
+      pour pouvoir utiliser n'importe lequel avec n'importe quelle
+      disposition et même plusieurs dispositions
+    * on peut utiliser indifféremment un entête pour l'entête ou un
+      pied de page et inversement.
+
+  Comme les entête et pieds de paes sont interchangeables, ici, on 
+  les appelle des HEADFOOTERS
+
+=end
+require 'lib/modules/tty_facilitators'
 module Prawn4book
 class Assistant
+
+  # --- Assistant pour les bibliographies ---
+
+  def self.assistant_headers_footers(owner)
+    AssistantHeadersFooters::new(owner).define_headers_and_footers
+  end
+
+
+class AssistantHeadersFooters
+  include TTYFacilitators
+
+  attr_reader :owner
+  def initialize(owner)
+    @owner = owner
+  end
+
+  def save
+    owner.recipe.insert_bloc_data('headers_footers', {
+      dispositions: data_dispositions,
+      headfooters:  data_headfooters
+    })
+  end
+
+  def data_dispositions
+    @data_dispositions ||= hf_data[:dispositions]||{}
+  end
+  def data_headfooters
+    @data_headfooters ||= hf_data[:headfooters]||{}
+  end
+  def hf_data
+    @hf_data ||= owner.recipe.headers_footers_data
+  end
+
+  ##
+  # Méthode principale pour définir les entêtes et pieds de pages
+  # 
+  # Le choix se fait hiérarchiquement :
+  #   - on affiche d'abord la liste des dispositions déjà 
+  #     enregistrées s'il y en a.
+  # 
+  def define_headers_and_footers
+    msg = nil
+    while true
+      clear unless debug?
+      # 
+      # Si un message est à écrire
+      # 
+      puts msg unless msg.nil?
+      # 
+      # Les menus
+      # 
+      choices = choices_for_dispositions
+      # 
+      # Pour choisir la disposition à créer ou à éditer
+      # 
+      case (foo = Q.select(nil, choices, {per_page:choices.count, show_help:false, echo:false}))
+      when :finir then break
+      when :new   then edit_disposition(nil)
+      else             edit_disposition(foo)
+      end
+    end #/boucle jusqu'à fin
+  end
+
+  # @return [Array<Hash>] Les tty-choices pour le menu principal
+  # 
+  def choices_for_dispositions
+    data_dispositions.map do |dispo_id, data_dispo|
+      {name: data_dispo[:name], value: data_dispo}
+    end + [
+      {name: PROMPTS[:headfoot][:new_dispo].bleu, value: :new},
+      CHOIX_FINIR
+    ]
+  end
+
+  ##
+  # Méthode principale pour définir ou éditer une disposition
+  # 
+  def edit_disposition(data_dispo)
+    # 
+    # Pour savoir s'il s'agit d'une nouvelle disposition
+    # 
+    is_new_dispo = data_dispo.nil?
+    data_dispo = {} if data_dispo.nil?
+    # 
+    # On utilise le facilitateur
+    # 
+    tty_define_object_with_data(DATA_DISPOSITION, data_dispo)
+
+    puts "data_dispo à la fin : #{data_dispo.inspect}"
+    sleep 10
+    # 
+    # On enregistre les nouvelles données
+    # 
+    save
+  end
+
+  ##
+  # Pour éditer un head-foot
+  # 
+  def edit_headfoot(hf_data)
+    # 
+    # Pour savoir s'il s'agit d'un nouvel headfoot
+    # 
+    is_new = hf_data.nil?
+    hf_data = {} if is_new
+    # 
+    # On utilise le facilitateur
+    # 
+    tty_define_object_with_data(DATA_HEADFOOT, hf_data)
+    # 
+    # ID si nouveau
+    # 
+    if is_new
+      hf_data.merge!(id: "HF#{Time.now.to_i}")
+    end
+
+    puts "hf_data : #{hf_data.inspect}"
+    sleep 10
+
+    # 
+    # Enregistrer la nouvelle donnée
+    # 
+    save
+
+    return hf_data[:id]
+  end
+
+#############       MÉTHODES POUR TTY-FACILITATOR      #############
+  
+
+  ##
+  # Méthode pour pouvoir choisir ou définir un headfoot
+  # 
+  # @param [Hash] dispo_data Les données de la disposition qui veut
+  #     se choisir un headfoot (donc pour son header ou son footer)
+  # 
+  # @return [String] Identifiant du headfoot choisi
+  def choose_headfoot_id(dispo_data)
+    # 
+    # Liste des headfoots + bouton pour en créer un nouveau
+    # 
+    choices = data_headfooters.map do |hf_id, hf_data|
+      {name: hf_data[:name], value: hf_id}
+    end + [
+      CHOIX_NEW
+    ]
+    # 
+    # Permettre à l'utilisateur d'en choisir un
+    # 
+    case (choix = Q.select(PROMPTS[:headfoot][:headfoot_to_choose].jaune, choices, {per_page:choices.count, show_help:false, echo:false}))
+    when :new   then edit_headfoot(nil)
+    else return choix # identifiant du headfoot
+    end
+  end
+
+  ##
+  # Retourne les polices pour un menu facilitator
+  # 
+  def police_names
+    owner.recipe.fonts_data.keys + DEFAUT_FONTS.keys
+  end
+
+#
+# Données pour les DISPOSITIONS
+# 
+# Les "dispositions" définissent les entêtes et pieds de pages à 
+# utiliser sur un rang de pages données.
+# 
+DATA_DISPOSITION = [
+  {name: 'Titre pour mémoire', value: :title, required: true},
+  {name: 'De la page' , value: :first_page, type: :int},
+  {name: 'À la page'  , value: :last_page, type: :int},
+  {name: 'Entête'     , value: :header_name, type: :custom, meth: :choose_headfoot_id},
+  {name: 'Footer'     , value: :footer_name}
+]
+
+
+CHOIX_ALIGN_CONTENU_HEADFOOT = [
+  {name: 'Centré dans la page' , value: :center},
+  {name: 'À gauche de la page' , value: :left},
+  {name: 'À droite de la page' , value: :right},
+]
+
+CHOIX_CASSE_TITRE = [
+  {name:'Tout majuscule', value: :all_caps},
+  {name:'Comme un titre', value: :title},
+  {name:'Tout minuscule', value: :min}
+]
+
+DATA_HEADFOOT = [
+  {name: 'Nom du "headfoot"'  , value: :name, required: true},
+  {name: 'Police'             , value: :font, values: :police_names},
+  {name: 'Taille'             , value: :int, default: 11},
+  {name: 'Style'              , value: :sym, values: DATA_STYLES_FONTS, default: 2},
+  {name: 'Dispo page gauche'  , value: :left_dispo  , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
+  {name: 'Dispo page droite'  , value: :right_dispo , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
+  {name: 'Niveau de titre'    , value: :title_level , values: (1..7), default: 1},
+  {name: 'Casse du titre'     , value: :title_casse , values: CHOIX_CASSE_TITRE, default: 1},
+]
+
+###################       ANCIENNES MÉTHODES      ###################
+  
 class << self
 
-  # = main =
-  # 
-  # Méthode principale appelée quand on veut éditer les 
-  # headers/footers d'un livre ou d'une collection.
-  # 
-  def assistant_headers_footers(pdfbook)
-    whats = Q.select("Que voulez-vous éditer ?".jaune,MENU_HEADERS_OR_FOOTERS,per_page:MENU_HEADERS_OR_FOOTERS.count) || return
-    choose_and_edit_header_or_footer(pdfbook, whats)
-  end
 
   ##
   # Méthode permettant de choisir le footer ou le header à éditer
@@ -407,62 +618,14 @@ class << self
 end #/<< self class Assistant
 
 
-HEADFOOT_DISPO_PARTIES = [
-  {name: '|xxx|   |   |||   |   |   | de %s', value: [:even, :left]},
-  {name: '|   |xxx|   |||   |   |   | de %s', value: [:even, :center]},
-  {name: '|   |   |xxx|||   |   |   | de %s', value: [:even, :right]},
-  {name: '|   |   |   |||xxx|   |   | de %s', value: [:odd,  :left]},
-  {name: '|   |   |   |||   |xxx|   | de %s', value: [:odd,  :center]},
-  {name: '|   |   |   |||   |   |xxx| de %s', value: [:odd,  :right]},
-  {name:"\n  Remettre valeurs par défaut", value: :default},
-  {name:'Finir', value: :finir}
-]
 
-CHOIX_TYPE_FONT = [
-  {name: 'Normal' , value: :normal},
-  {name: 'Italic' , value: :italic},
-  {name: 'Bold'   , value: :bold}
-]
 
-CHOIX_CONTENU_HEADFOOT = [
-  {name: 'Aucun contenu'                          , value:  nil},
-  {name: 'Numéro de page (ou de paragraphe)'      , value: 'numero'},
-  {name: 'Titre 1 en capitales'                   , value: 'TITLE1'},
-  {name: 'Titre 1 en majuscules et minuscules'    , value: 'title1'},
-  {name: 'Titre 2 en capitales'                   , value: 'TITLE2'},
-  {name: 'Titre 2 en majuscules et minuscules'    , value: 'Title2'},
-  {name: 'Titre 3 en capitales'                   , value: 'TITLE3'},
-  {name: 'Titre 3 en majuscules et minuscules'    , value: 'Title3'},
-  {name: 'Autre…'                                 , value: :other}
-]
-
-CHOIX_ALIGN_CONTENU_HEADFOOT = [
-  {name: 'centré', value: :center},
-  {name: 'aligné à gauche', value: :left},
-  {name: 'aligné à droite', value: :right},
-]
-
-DATA_HEADER_FOOTER = [
-  {name: nil, temp_name: "Nom pour mémoire du %s (%s) :", value: :name, df:'Name'},
-  {name: nil, temp_name: "Première page du %s (%s) :", value: :first_page, df:'0', treate_as: :integer},
-  {name: nil, temp_name: "Dernière page du %s (%s) :", value: :last_page, df:'100', treate_as: :integer},
-  {name: nil, temp_name: "Disposition des %ss (paire/impaire) (%s) :", value: :disposition, df: ->(thg){thg == :header ? 'TITLE1 | | ||| | | title2' : '| | numero | ||| | numero | '}, treate_as: :disposition, t: :method, method: :define_disposition_headfoot},
-  {name: nil, temp_name: "Police du %s (%s) :", value: :font, df:'Arial'},
-  {name: nil, temp_name: "Taille de police du %s (%s) :", value: :size, df:'12', treate_as: :float},
-  {name: nil, temp_name: "Style de police du %s (%s)", value: :style, df: 'Normal', treate_as: :symbol, t: :select, values: CHOIX_TYPE_FONT},
-  {name: nil, temp_name: PROMPTS[:save], value: :save}
-]
-DATA_FH_VALUE_TO_INDEX = {}
-DATA_HEADER_FOOTER.each_with_index do |dval, idx|
-  DATA_FH_VALUE_TO_INDEX.merge!(dval[:value] => idx)
+DATA_DISPOSITION_TO_INDEX = {}
+DATA_DISPOSITION.each_with_index do |dval, idx|
+  DATA_DISPOSITION_TO_INDEX.merge!(dval[:value] => idx)
 end
 
-MENU_HEADERS_OR_FOOTERS = [
-  {name:"Les entêtes de page", value: :headers},
-  {name:'Les pieds de page', value: :footers},
-  {name: 'Renoncer', value: nil}
-]
 
-
+end #/class AssistantHeadersFooters
 end #/class Assistant
 end #/module Prawn4book

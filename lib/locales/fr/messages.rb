@@ -17,6 +17,7 @@ MESSAGES = {
 
   recipe: {
 
+    title_data_to_define: 'DONNÉES DE LA RECETTE DU OU DES LIVRES',
     fonts_can_be_added: 'Ces fontes peuvent être ajoutées aux fontes déjà présentes.',
 
   }, #/ :recipe
@@ -25,7 +26,7 @@ MESSAGES = {
 
   biblio: {
 
-    
+
     no_occurrence: "Aucune occurrence pour la bibliographie « %s ».",
     
     intro_assistant: "

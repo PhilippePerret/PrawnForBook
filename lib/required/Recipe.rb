@@ -254,6 +254,10 @@ class Recipe
     @page_infos ||= get(:page_infos, {})
   end
 
+  def headers_footers_data
+    @headers_footers_data ||= get(:headers_footers, {})
+  end
+
   # --- Private Fonctional Methods ---
 
   def get_data(key)

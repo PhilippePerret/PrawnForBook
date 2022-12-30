@@ -21,3 +21,29 @@ USER_MANUAL_MD_PATH = File.join(APP_FOLDER,'Manuel','Manuel.md')
 LANG = CLI.params[:lang] || 'fr'
 LOCALISATION_FOLDER = File.join(LIB_FOLDER,'locales',LANG)
 Dir["#{LOCALISATION_FOLDER}/**/*.rb"].each{|m|require(m)}
+
+#
+# Pour les select tty-prompt
+# 
+CHOIX_SAVE  = {name: Prawn4book::PROMPTS[:save].bleu  , value: :save}
+CHOIX_NEW   = {name: Prawn4book::PROMPTS[:New].bleu   , value: :new}
+CHOIX_FINIR = {name: Prawn4book::PROMPTS[:Finir].bleu , value: :finir}
+
+#
+# Fontes PDF par défaut
+# TODO Mieux régler
+DEFAUT_FONTS = {
+  'Times'     => {regular: true}, 
+  'Helvetica' => {regular: true}, 
+  'Courier'   => {regular: true}
+}
+DATA_STYLES_FONTS = [
+  {name: 'Normal'         , value: :normal      , index:1},
+  {name: 'Regular'        , value: :regular     , index:2},
+  {name: 'Italic'         , value: :italic      , index:3},
+  {name: 'Bold'           , value: :bold        , index:4},
+  {name: 'Extra-bold'     , value: :extra_bold  , index:5},
+  {name: 'Light'          , value: :light       , index:6},
+  {name: 'Extra-light'    , value: :extra_light , index:7},
+]
+

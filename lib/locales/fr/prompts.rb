@@ -22,12 +22,15 @@ TERMS = {
 PROMPTS = {
 
   # --- Généralités ---
-  Edit: 'Éditer', 
-  Folder: 'Dossier : ',
-  finir: 'Finir',
-  end_without_save: 'Finir sans enregistrer',
-  save: 'Enregistrer',
   cancel: 'Renoncer',
+  Define: 'Définir',
+  Edit: 'Éditer', 
+  end_without_save: 'Finir sans enregistrer',
+  Finir: 'Finir',
+  finir: 'Finir',
+  Folder: 'Dossier : ',
+  New: 'Nouveau',
+  save: 'Enregistrer',
 
   by_default: "par défaut",
   By_default: "Par défaut",
@@ -73,6 +76,11 @@ PROMPTS = {
     should_i_create_file_in: "Dois-je créer un fichier YAML dans %s avec l'identifiant '%s' ?",
   }, #/:biblio
 
+  # --- Headers et footers ---
+  headfoot: {
+    new_dispo: 'Nouvelle disposition', 
+    headfoot_to_choose: 'Head-foot à utiliser'
+  },
 }
 
 PROMPTS[:recipe].merge!(warning_book_in_collection: <<-TEXT)

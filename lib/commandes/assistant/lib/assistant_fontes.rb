@@ -246,16 +246,6 @@ class FontAssistant
     end
   end
 
-  DATA_STYLES_FONTS = [
-    {name: 'Normal'         , value: :normal      , index:1},
-    {name: 'Regular'        , value: :regular     , index:2},
-    {name: 'Italic'         , value: :italic      , index:3},
-    {name: 'Bold'           , value: :bold        , index:4},
-    {name: 'Extra-bold'     , value: :extra_bold  , index:5},
-    {name: 'Light'          , value: :light       , index:6},
-    {name: 'Extra-light'    , value: :extra_light , index:7},
-  ]
-
   def prepare_folder_fonts_choices
     # Toute première préparation, pour mettre le nom original de côté
     if DATA_FONTS_FOLDERS.first[:raw_name].nil?

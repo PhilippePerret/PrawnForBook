@@ -11,17 +11,44 @@ module Prawn4book
         assistant || return
         case assistant[:type]
         when :page
-          require assistant[:path]
-          Prawn4book::Pages.run_assistant(File.basename(assistant[:path]))
+          run_assistant_page(assistant[:path])
         when :assistant
           proceed_assistant_for(assistant[:what])
+        end
+      else
+        # 
+        # Si un objet est déjà défini
+        # 
+        what = CLI.components.first
+        if File.exist?(File.join(__dir__, 'lib', "assistant_#{what}.rb"))
+          proceed_assistant_for(what)
+        elsif File.exist?(file = File.join(folder_pages,"#{what}"))
+          run_assistant_page(file)
+        else
+          puts "Je ne sais pas comment assister #{what.inspect}…".orange
         end
       end
     end # méthode appelée par défaut
 
+    def run_assistant_page(path)
+      require path
+      Prawn4book::Pages.run_assistant(File.basename(path))
+    end
+
+    def proceed_assistant_for(what)
+      pdfbook = check_if_current_book_or_return || return
+      require_relative "lib/assistant_#{what}"
+      Prawn4book::Assistant.send("assistant_#{what}".to_sym, pdfbook)
+    end
+
+
+    def folder_pages
+      @folder_pages ||= File.join(APP_FOLDER,'lib','pages')
+    end
+
     def choices_assistants
       @choices_assistants ||= begin
-        cs = Dir["#{APP_FOLDER}/lib/pages/*"].map do |assistant_page_folder|
+        cs = Dir["#{folder_pages}/*"].map do |assistant_page_folder|
           next unless File.directory?(assistant_page_folder)
           assistant_name = File.basename(assistant_page_folder).titleize.gsub(/_/,' ')
           next if assistant_name == 'Special pages abstract'
@@ -38,11 +65,6 @@ module Prawn4book
       end
     end
 
-    def proceed_assistant_for(what)
-      pdfbook = check_if_current_book_or_return || return
-      require_relative "lib/assistant_#{what}"
-      Prawn4book::Assistant.send("assistant_#{what}".to_sym, pdfbook)
-    end
 
     def check_if_current_book_or_return
       PdfBook.current? || begin
