@@ -110,7 +110,7 @@ class InitedThing
 
   def define_and_set_values_for_fonts
     require_assistant('fontes')
-    Prawn4book.assistant_fontes(owner)
+    Prawn4book::Assistant.assistant_fontes(owner)
     return true
   end
 
@@ -129,7 +129,7 @@ class InitedThing
   def define_and_set_values_for_biblios(askit)
     return unless askit
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
-    @data_biblio = Prawn4book.define_bibliographies(pdfbook)
+    @data_biblio = Prawn4book::Assistant.define_bibliographies(pdfbook)
     return true
   end
 
@@ -137,7 +137,7 @@ class InitedThing
   def define_and_set_values_for_headers_and_footers(askit)
     return unless askit
     require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
-    @data_headers_footers = Prawn4book.define_headers_footers
+    @data_headers_footers = Prawn4book::Assistant.define_headers_footers
     return true
   end
 

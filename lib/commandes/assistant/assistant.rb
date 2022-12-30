@@ -29,8 +29,8 @@ module Prawn4book
         end.compact
         # TODO Ajouter les autres assistants
         Dir["#{APP_FOLDER}/lib/commandes/assistant/lib/assistant_*.rb"].each do |pth|
-          file_name = File.basename(pth)
-          assistant_name = file_name.titleize.gsub(/_/, ' ').sub(/\.rb$/,'')
+          file_name = File.basename(pth).sub(/\.rb$/,'')
+          assistant_name = file_name.titleize.gsub(/_/, ' ')
           cs << {name:assistant_name, value: {type: :assistant, what: file_name.sub(/^assistant_/,'')}}
         end
         cs << {name: PROMPTS[:cancel], value: nil}
@@ -40,7 +40,8 @@ module Prawn4book
 
     def proceed_assistant_for(what)
       pdfbook = check_if_current_book_or_return || return
-      Prawn4book.proceed_assistant(what,pdfbook)
+      require_relative "lib/assistant_#{what}"
+      Prawn4book::Assistant.send("assistant_#{what}".to_sym, pdfbook)
     end
 
     def check_if_current_book_or_return
@@ -52,15 +53,4 @@ module Prawn4book
     end
   end #/Command
 
-  ##
-  # Méthode générale pour appeler les assistants
-  # 
-  def self.proceed_assistant(what,pdfbook)
-    require_relative "lib/assistant_#{what}"
-    send("assistant_#{what}".to_sym,pdfbook)    
-  end
-
-  # def self.cfolder
-  #   @@cfolder ||= File.expand_path('.')
-  # end
 end #/Prawn4book

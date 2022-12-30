@@ -1,7 +1,5 @@
 module Prawn4book
-    def self.cfolder
-    File.expand_path('.')
-  end
+class Assistant
 
   def self.assistant_titres(pdfbook)
     # 
@@ -171,4 +169,5 @@ MAIN_TITRES_PROPERTIES.each_with_index do |dchoix, idx|
   TABLE_TITRES_PROPERTIES.merge!(dchoix[:value] => dchoix.merge(index: idx))
 end
 
+end #/class Assistant
 end #/module Prawn4book

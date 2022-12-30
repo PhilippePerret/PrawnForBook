@@ -1,4 +1,5 @@
 module Prawn4book
+class Assistant
 class << self
 
   # = main =
@@ -403,7 +404,7 @@ class << self
     return dispo
   end
 
-end #/<< self module
+end #/<< self class Assistant
 
 
 HEADFOOT_DISPO_PARTIES = [
@@ -463,4 +464,5 @@ MENU_HEADERS_OR_FOOTERS = [
 ]
 
 
+end #/class Assistant
 end #/module Prawn4book

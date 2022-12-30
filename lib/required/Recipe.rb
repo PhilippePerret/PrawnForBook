@@ -242,6 +242,10 @@ class Recipe
     @book_titles ||= get(:titles, {})
   end
 
+  def biblios_data
+    @biblio_data ||= get(:biblios, {})
+  end
+
   def inserted_pages
     @inserted_pages ||= get(:inserted_pages, {})
   end

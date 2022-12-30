@@ -1,9 +1,7 @@
 module Prawn4book
-  # --- Assistant pour les fontes ---
+class Assistant
 
-  def self.cfolder
-    File.expand_path('.')
-  end
+  # --- Assistant pour les fontes ---
 
   def self.assistant_fontes(owner)
     FontAssistant.new(owner).define_fonts
@@ -302,4 +300,5 @@ class FontAssistant
   ]
 
 end #/class FontAssistant
+end #/class Assistant
 end #/module Prawn4book

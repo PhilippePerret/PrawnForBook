@@ -22,8 +22,10 @@ TERMS = {
 PROMPTS = {
 
   # --- Généralités ---
+  Edit: 'Éditer', 
   Folder: 'Dossier : ',
-  finir: 'Finir', 
+  finir: 'Finir',
+  end_without_save: 'Finir sans enregistrer',
   save: 'Enregistrer',
   cancel: 'Renoncer',
 
@@ -60,6 +62,7 @@ PROMPTS = {
 
   # --- Bibliographie ---
   biblio: {
+    new_one: "Nouvelle bibliographie",
     title_of_new_biblio: "Titre de la nouvelle bibliographie : ",
     tag_uniq_and_simple_minuscules: "Identifiant singulier, unique et simple (minuscules) : ",
     title_level: "Niveau de titre",

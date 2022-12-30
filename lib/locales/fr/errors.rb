@@ -29,7 +29,8 @@ ERRORS = {
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
     title_already_exists: "Ce titre existe déjà.",
-    tag_already_exists: "Ce tag est déjà utilisé.",
+    tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
+    bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',
     not_an_existing_file: "Le path fourni ne renvoie ni à un fichier ni à un dossier (en valeur absolue ou relative).",
 
   }, #/biblio
