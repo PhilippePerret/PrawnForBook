@@ -12,12 +12,12 @@ class BookData
   # telles qu'elles sont définies dans le fichier recipe.yaml
   # 
   PAGE_DATA = {
-    book_title: {name:'Titre du livre', default:'Mon beau livre'},
-    book_subtitle: {name:'Sous-titre du livre (\n pour retour ligne)', default: nil},
-    collection: {name: 'Appartient à une collection', default: 'false', values: :yes_no_answers},
-    book_id: {name: 'ID du livre (lettres simples et "_"', default:'beau_livre'},
-    auteurs: {name: 'Auteurs du livre (Prenom NOM, Prenom NOM,...)', default:'Auteur BOOK'},
-    isbn: {name: 'ISBN', default: nil},
+    book_title:     {name:'Titre du livre'                    , default:nil, required: true},
+    book_subtitle:  {name:'Sous-titre du livre (\n = return)' , default: nil},
+    collection:     {name:'Appartient à une collection'       , default: 'false', values: :yes_no_answers},
+    book_id:        {name:'ID du livre (lettres simples et "_"', default:nil, required: true},
+    auteurs:        {name:'Auteurs du livre (Prenom NOM, Prenom NOM,...)', default: nil},
+    isbn:           {name:'ISBN', default: nil},
   }
 
   # 
@@ -28,7 +28,7 @@ class BookData
   # Par exemple :
   # def police_names(default_name = nil)
   #   (get_data_in_recipe[:fonts]||polices_default).map do |font_name, dfont|
-  #     {name: font_name, value: font_name}
+  #       {name: font_name, value: font_name}
   #   end
   # end
   # def polices_default

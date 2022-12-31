@@ -19,7 +19,14 @@ class SpecialPage
   # @option options [Boolean] :return_data If true, the method returns data rather that recording it in the recipe file.
   # 
   def define(options = nil)
+    # 
+    # Faudra-t-il enregistrer dans la recette ou simplement retourner
+    # les données ?
+    # 
     return_data = options && options[:return_data]
+    # 
+    # Boucle pour définir toutes les données
+    # 
     while true
       clear unless debug?
       puts "Assistant #{page_name}".upcase.bleu
@@ -42,7 +49,7 @@ class SpecialPage
         value = edit_value(data_choix)
         data_choix[:value] = value
         # choices_properties[data_choix[:index]][:value] = data_choix
-        choices_properties[data_choix[:index]][:name] = "#{data_choix[:name]} : #{value}"
+        # choices_properties[data_choix[:index]][:name] = "#{data_choix[:name]} : #{value}"
         set_current_value_for(data_choix[:simple_key], value)
       end
     end
@@ -112,18 +119,11 @@ class SpecialPage
       end
       choices
     end
-    choices, selected = ultime_mise_en_forme_choices(@choices_properties)
+    choices, selected = ultime_mise_en_forme_choices(@choices_properties.dup)
     choices.unshift(CHOIX_SAVE)
     choices.push(CHOIX_CANCEL)
     
     return [choices, selected]
-  end
-
-  def add_choice(choices, dchoice, simple_key)
-    @choice_index ||= 0
-    @choice_index += 1 # le premier est "Enregistrer"
-    val = get_value(simple_key)
-    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
   end
 
   # @return [Array<Array<Hash>, Integer>] Liste des choix bien formatés en premier argument et index du choix à sélectionner en second.
@@ -137,15 +137,26 @@ class SpecialPage
     choices.each do |dchoix|
       max_len = dchoix[:name].length if dchoix[:name].length > max_len
     end.each do |dchoix|
-      value = dchoix[:value]
-      selected = dchoix[:index] if selected.nil? && not(value.nil?)
-      dchoix[:name] = "#{dchoix[:name].ljust(max_len)} : #{dchoix[:value][:value]}"
+      dvalue_choix = dchoix[:value]
+      next unless dvalue_choix.is_a?(Hash)
+      unless dchoix[:raw_name]
+        dchoix.merge!(raw_name: dchoix[:name].freeze)
+      end
+      value = dvalue_choix[:value]
+      selected = dvalue_choix[:index] if selected.nil? && value.nil?
+      dchoix[:name] = "#{dchoix[:raw_name].ljust(max_len)} : #{value}"
       dchoix[:name] = dchoix[:name].vert unless value.nil?
     end
 
     return [choices, selected]
   end
 
+  def add_choice(choices, dchoice, simple_key)
+    @choice_index ||= 1 # le premier est "Enregistrer"
+    @choice_index += 1 
+    val = get_value(simple_key)
+    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
+  end
 
 end #/class SpecialPage
 end #/module Prawn4book

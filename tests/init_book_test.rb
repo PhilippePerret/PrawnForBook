@@ -105,9 +105,9 @@ class InitBookTestor < Minitest::Test
       book_data[:folder]    , :RET,       # dossier
       :RET, # confirmation du path du dossier
       :RET, # Pour choisir les données générales
-      :DOWN, :RET, book_data[:title], :RET,       # le titre
-      book_data[:id]        , :RET,       # identifiant
-      book_data[:auteur]    , :RET,       # auteur
+      :DOWN, :RET, book_data[:title], :RET,     # le titre
+      book_data[:id]        , :RET,             # identifiant
+      book_data[:auteur]    , :RET,             # auteur
       book_data[:subtitle]  , {key:'d', modifiers:[:control]},
       :RET, #pour définir tout de suite les valeurs
       #  - Éditor -
