@@ -13,6 +13,7 @@ CHOIX_DATA2DEFINE = [
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:book_format])   , value: :book_format},
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:titles])        , value: :titles},
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:wanted_pages])  , value: :wanted_pages},
+  {name:(PROMPTS[:recipe][:data_for] % TERMS[:publishing])    , value: :publishing},
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:book_infos])    , value: :page_infos},
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:headers_and_footers]), value: :headers_and_footers},
   {name:(PROMPTS[:recipe][:data_for] % TERMS[:biblios]), value: :biblios},

@@ -59,7 +59,11 @@ class InitedThing
       # 
       # On demande à l'utilisateur ce qu'il veut définir
       # 
-      thing2define = Q.select(nil, choices, {per_page:choices.count, show_help:false, echo:false})
+      begin
+        thing2define = Q.select(nil, choices, {per_page:choices.count, show_help:false, echo:false})
+      rescue TTY::Reader::InputInterrupt
+        return nil
+      end
       case thing2define
       when :cancel
         # 
@@ -137,6 +141,11 @@ class InitedThing
   def define_and_set_values_for_biblios
     require_assistant('biblios')
     Prawn4book::Assistant.assistant_biblios(owner)
+  end
+
+  def define_and_set_values_for_publishing
+    require_assistant('publishing')
+    Prawn4book::Assistant.assistant_publishing(owner)
   end
 
   def define_and_set_values_for_headers_and_footers

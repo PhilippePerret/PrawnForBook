@@ -18,15 +18,6 @@ class BookData
     book_id: {name: 'ID du livre (lettres simples et "_"', default:'beau_livre'},
     auteurs: {name: 'Auteurs du livre (Prenom NOM, Prenom NOM,...)', default:'Auteur BOOK'},
     isbn: {name: 'ISBN', default: nil},
-    publisher: {
-      name: {name:'Nom de l’éditeur', default: 'Mes Éditions'},
-      adresse: {name:'Adresse (num rue - code ville)', default: nil},
-      site: {name:'Site internet', default: nil},
-      logo: {name:'Logo (chemin dans dossier)', default: nil},
-      siret: {name: 'Numéro SIRET', default: nil},
-      mail: {name: 'Mail général', default: nil},
-      contact: {name:'Mail de contact', default: nil},
-    },
   }
 
   # 

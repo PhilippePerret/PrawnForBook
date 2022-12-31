@@ -21,7 +21,7 @@ class InitBookTestor < Minitest::Test
   def test_init_book_complete
 
     resume "
-    Test d'une création complète d'un livre
+    Test d'une création complète d'un livre (à l'aide de l'initiateur)
     "
 
     synopsis "
@@ -56,14 +56,14 @@ class InitBookTestor < Minitest::Test
       TXT
       editor: {
           name: 'Icare Éditions',
-          adresse: "295 impasse des Fauvettes\n13400 Aubagne",
+          adresse: "295 impasse des Fauvettes\\n13400 Aubagne",
           site: 'https://www.icare-editions.fr',
           mail: 'editions@icare-editions.fr',
           contact: 'contact@icare-editions.fr',
         },
       format: {
           width: '127mm',
-          height: '203mm',
+          height: '203.2mm',
           orientation: 'portrait',
           top_margin: '20mm',
           ext_margin: '15mm',
@@ -103,8 +103,9 @@ class InitBookTestor < Minitest::Test
     tosa << [
       :RET,           # un livre
       book_data[:folder]    , :RET,       # dossier
-      :RET, # confirmation du dossier
-      book_data[:title]     , :RET,       # le titre
+      :RET, # confirmation du path du dossier
+      :RET, # Pour choisir les données générales
+      :DOWN, :RET, book_data[:title], :RET,       # le titre
       book_data[:id]        , :RET,       # identifiant
       book_data[:auteur]    , :RET,       # auteur
       book_data[:subtitle]  , {key:'d', modifiers:[:control]},

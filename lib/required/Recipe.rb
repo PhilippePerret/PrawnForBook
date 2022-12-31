@@ -199,8 +199,8 @@ class Recipe
   def subtitle
     @subtitle ||= book_data[:book_subtitle].gsub(/\\n/, "\n")
   end
-  def publisher
-    @publisher ||= book_data[:publisher]
+  def publishing
+    @publishing ||= get(:publishing, {})
   end
   def auteurs
     @auteurs ||= book_data[:auteurs]

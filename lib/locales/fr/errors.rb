@@ -14,7 +14,7 @@ ERRORS = {
   
   invalid_data: "La donnée %s de value %s est invalide.", 
 
-  # --- Recette --- #
+  # --- Recette en général --- #
 
   recipe: {
     main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
@@ -28,7 +28,15 @@ ERRORS = {
       dispositions_required: 'La disposition des pieds de page (:disposition) est requise (consulter le manuel)',
     },
 
+
   }, #/ :recipe
+
+  # --- Maison d'éditions ---
+
+    publishing: {
+      logo_unfound: "Logo introuvable à l'adresse '%s'",
+      logo_not_same_extname: "Les deux images doivent avoir la même extension", 
+    },
 
   # --- Bibliographie --- #
 

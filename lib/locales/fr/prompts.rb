@@ -4,7 +4,7 @@ TERMS = {
   yes: 'oui',
   no:   'non',
   biblios: 'bibliographies',
-  book_data: 'données du livre',
+  book_data: 'du livre',
   book_infos: 'informations (last page) sur le livre',
   fonts: 'fontes',
   footer: 'pied de page',
@@ -14,6 +14,7 @@ TERMS = {
   headers_and_footers:'entêtes et pieds de page',
   other_default_values:'autres valeurs par défaut',
   publisher: 'éditeur/édition',
+  publishing: 'maison d’édition',
   recipe_options: 'options (pagination, etc.)',
   titles: 'titres',
   wanted_pages: 'pages désirée (faux-titre, infos, etc.)', 
@@ -50,6 +51,12 @@ PROMPTS = {
     wannado_define_titles: "Voulez-vous définir les propriétés pour les titres ?",
     which_data_recipe_to_define: "Quelles données voulez-vous définir ?",
   }, # / :recipe
+
+  # --- Maison d'édition ---
+  publishing: {
+    ask_move_logo: "Copier un logo existant déjà ?",
+    ask_for_logo_original_path: "Chemin d'accès complet au logo à copier",
+  },
 
   # --- Fontes --- #
   fonts: {

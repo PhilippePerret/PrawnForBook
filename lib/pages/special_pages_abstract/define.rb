@@ -23,13 +23,14 @@ class SpecialPage
     while true
       clear unless debug?
       puts "Assistant #{page_name}".upcase.bleu
+      choices, selected = choices_properties
       begin
-        data_choix = Q.select(nil, choices_properties, {per_page:choices_properties.count, show_help:nil})
+        data_choix = Q.select(nil, choices, {per_page:choices.count, default:selected, show_help:nil})
       rescue TTY::Reader::InputInterrupt
         return nil
       end
       case data_choix
-      when NilClass
+      when NilClass, :cancel
         return nil if return_data
         break
       when :save
@@ -81,7 +82,8 @@ class SpecialPage
     end
   end
 
-  # @return [Array<Hash>] La liste des choix de propriétés
+  # @return [Array<Hash>, Selected] La liste des choix de propriétés
+  #   l'index de l'élément à sélectionner
   # @note
   #   Pour gérer la hiérarchie (imbrications), on ajoute '-' entre
   #   chaque propriété. Par exemple, @@data[:size][:sub_title] deviendra
@@ -108,9 +110,13 @@ class SpecialPage
           end
         end
       end
-      choices = ultime_mise_en_forme_choices(choices)
-      [{name: PROMPTS[:save].bleu, value: :save}] + choices + [ {name:"#{PROMPTS[:cancel]} (^c)".rouge, value:nil} ]
+      choices
     end
+    choices, selected = ultime_mise_en_forme_choices(@choices_properties)
+    choices.unshift(CHOIX_SAVE)
+    choices.push(CHOIX_CANCEL)
+    
+    return [choices, selected]
   end
 
   def add_choice(choices, dchoice, simple_key)
@@ -120,20 +126,24 @@ class SpecialPage
     choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
   end
 
-  # @return [Array<Hash>] Liste des choix bien formatés
+  # @return [Array<Array<Hash>, Integer>] Liste des choix bien formatés en premier argument et index du choix à sélectionner en second.
   # @params [Array<Hash>] choices Liste des choix pour le select de 
   #                   tty-promp mais où les :name(s) ne sont pas 
   #                   encore réglés. Ici, on va ajouter la valeur et
   #                   régler la longueur pour que tout soit aligné.
   def ultime_mise_en_forme_choices(choices)
-    max_len = 0
+    max_len   = 0
+    selected  = nil
     choices.each do |dchoix|
       max_len = dchoix[:name].length if dchoix[:name].length > max_len
     end.each do |dchoix|
+      value = dchoix[:value]
+      selected = dchoix[:index] if selected.nil? && not(value.nil?)
       dchoix[:name] = "#{dchoix[:name].ljust(max_len)} : #{dchoix[:value][:value]}"
+      dchoix[:name] = dchoix[:name].vert unless value.nil?
     end
 
-    return choices
+    return [choices, selected]
   end
 
 

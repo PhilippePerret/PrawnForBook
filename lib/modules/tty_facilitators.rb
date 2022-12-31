@@ -126,7 +126,11 @@ class TTYDefiner
       # 
       # Pour sélectionner la valeur à définir
       # 
-      case (prop = Q.select(PROMPTS[:Define].jaune, choices, {per_page:choices.count, default: selected, show_help:false, echo:false}))
+      begin
+        case (prop = Q.select(PROMPTS[:Define].jaune, choices, {per_page:choices.count, default: selected, show_help:false, echo:false}))
+      rescue TTY::Reader::InputInterrupt
+        return false
+      end
       when :finir
         return true unless (msg = object_data_valid?)
       when :cancel
@@ -162,17 +166,26 @@ class TTYDefiner
         dchoix.merge(raw_name: name, index: idx + 2) #  + 2 car 1) commence à 1 et 2) le choix "Finir" sera ajouté au-dessus
       end.each do |dchoix|
         hd = dchoix[:required] ? '* '.rouge : '  '
+
         dchoix[:raw_name] = hd + dchoix[:raw_name].ljust(max_len)
       end
     end
     selected = nil
     cs = @abs_data_preparees.map do |dchoix|
       prop      = dchoix[:value]
-      selected  = dchoix[:index] if selected.nil? && odata[prop].nil?
-      dchoix.merge(name: "#{dchoix[:raw_name]} : #{odata[prop]||'---'}")
+      value     = odata[prop]
+      thename   =
+        if value.nil?
+          selected  = dchoix[:index] if selected.nil?
+          "#{dchoix[:raw_name]} : ---"
+        else
+          "#{dchoix[:raw_name]} : #{value}".vert
+        end
+      dchoix.merge(name: thename)
     end
-
-    return [[CHOIX_FINIR] + cs + [CHOIX_CANCEL], selected]
+    cs.unshift(CHOIX_FINIR)
+    cs.push(CHOIX_CANCEL)
+    return [ cs, selected ]
   end
 
   ##
@@ -281,7 +294,11 @@ class TTYDefiner
     end
     if data_choix[:valid_if]
       ok = run_method_validate(data_choix[:valid_if], value, odata)
-      return (ERRORS[:invalid_data] % [prop.inspect, value.inspect]).rouge
+      if ok
+        return nil
+      else
+        return (ERRORS[:invalid_data] % [prop.inspect, value.inspect]).rouge
+      end
     end
     return nil # ok
   end
