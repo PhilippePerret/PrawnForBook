@@ -25,18 +25,20 @@ Dir["#{LOCALISATION_FOLDER}/**/*.rb"].each{|m|require(m)}
 #
 # Pour les select tty-prompt
 # 
-CHOIX_SAVE  = {name: Prawn4book::PROMPTS[:save].bleu  , value: :save}
-CHOIX_NEW   = {name: Prawn4book::PROMPTS[:New].bleu   , value: :new}
-CHOIX_FINIR = {name: Prawn4book::PROMPTS[:Finir].bleu , value: :finir}
-
+CHOIX_SAVE    = {name: Prawn4book::PROMPTS[:save].bleu  , value: :save}
+CHOIX_NEW     = {name: Prawn4book::PROMPTS[:New].bleu   , value: :new}
+CHOIX_FINIR   = {name: Prawn4book::PROMPTS[:Finir].bleu , value: :finir}
+CHOIX_CANCEL  = {name: Prawn4book::PROMPTS[:cancel].bleu, value: :cancel}
+CHOIX_ABANDON = {name: Prawn4book::PROMPTS[:Abandon].bleu, value: :cancel}
 #
 # Fontes PDF par défaut
 # TODO Mieux régler
 DEFAUT_FONTS = {
-  'Times'     => {regular: true}, 
-  'Helvetica' => {regular: true}, 
-  'Courier'   => {regular: true}
+  'Times'     => { regular: true }, 
+  'Helvetica' => { regular: true }, 
+  'Courier'   => { regular: true }
 }
+
 DATA_STYLES_FONTS = [
   {name: 'Normal'         , value: :normal      , index:1},
   {name: 'Regular'        , value: :regular     , index:2},

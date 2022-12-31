@@ -6,7 +6,14 @@ ERRORS = {
 
   require_a_book_or_collection: "Il faut se trouver dans un dossier de livre ou de collection.",
   unfound_folder: "Le dossier '%s' est introuvable…",
+
+  # --- Général --- #
+
+  required_property: "La propriété %s est requise.",
+  required_asterisk_properties: "Toutes les propriétés marquées d'un astérisque rouge sont requises.",
   
+  invalid_data: "La donnée %s de value %s est invalide.", 
+
   # --- Recette --- #
 
   recipe: {
@@ -32,6 +39,7 @@ ERRORS = {
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',
     not_an_existing_file: "Le path fourni ne renvoie ni à un fichier ni à un dossier (en valeur absolue ou relative).",
+    warn_end_with_s: "Ce tag finit par 's'. En général, les tags sont au singulier.\nMais si vous êtes sûr de vous, pas de problème.",
 
   }, #/biblio
 

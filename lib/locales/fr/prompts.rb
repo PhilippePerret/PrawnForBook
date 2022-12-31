@@ -4,8 +4,8 @@ TERMS = {
   yes: 'oui',
   no:   'non',
   biblios: 'bibliographies',
-  book_data: 'données générales du livre',
-  book_infos: 'informations sur le livre (dernières pages)',
+  book_data: 'données du livre',
+  book_infos: 'informations (last page) sur le livre',
   fonts: 'fontes',
   footer: 'pied de page',
   format: 'format',
@@ -22,6 +22,7 @@ TERMS = {
 PROMPTS = {
 
   # --- Généralités ---
+  Abandon: 'Abandonner', # plus fort que "Renoncer"
   cancel: 'Renoncer',
   Define: 'Définir',
   Edit: 'Éditer', 

@@ -22,6 +22,4 @@ CHOIX_DATA2DEFINE.each_with_index do |dvalue, idx|
   DATA2DEFINE_VALUE_TO_INDEX.merge!(dvalue[:value] => idx)
 end
 
-CHOIX_FINIR = {name:PROMPTS[:finir].bleu, value: :finir}
-
 end # module Prawn4book

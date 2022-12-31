@@ -8,7 +8,8 @@ class InitedThing
   # 
   # CRÉATION DE LA RECETTE (livre ou collection)
   # 
-  # @return true en cas de succès, false otherwise
+  # @return true en cas de succès, false otherwise ou en cas de 
+  # renoncement.
   # 
   def build_recipe
 
@@ -46,20 +47,27 @@ class InitedThing
     choices = CHOIX_DATA2DEFINE.map.with_index { |dchoix, idx| 
       @table_choix2index.merge!(dchoix[:value] => idx)
       dchoix.merge(defined: false)
-    } + [CHOIX_FINIR]
+    } + [CHOIX_FINIR, CHOIX_ABANDON]
 
     while true
       clear unless debug?
       # 
       # Titre de la page
       # 
-      puts MESSAGES[:recipe][:title_data_to_define].bleu
+      puts "\n  #{MESSAGES[:recipe][:title_data_to_define]}".bleu
 
       # 
       # On demande à l'utilisateur ce qu'il veut définir
       # 
-      thing2define = Q.select(nil, choices, {per_page:choices.count})
+      thing2define = Q.select(nil, choices, {per_page:choices.count, show_help:false, echo:false})
       case thing2define
+      when :cancel
+        # 
+        # Pour renoncer à la suite
+        # (mais noter que la recette aura pu être déjà enregistrée
+        #  puisqu'elle l'est petit à petit)
+        # 
+        return false
       when :finir
         # 
         # Pour en finir avec la définition du livre/de la collection
@@ -121,20 +129,18 @@ class InitedThing
 
   def define_and_set_values_for_titles
     require_assistant('titres')
-    data_titres = Prawn4book.define_titles(owner)
-    owner.recipe.insert_bloc_data(:titles, {titles: data_titres})
-    return true
+    Prawn4book::Assistant.assistant_titres(owner)
   end
 
   # --- Les méthodes plus complexes ---
 
   def define_and_set_values_for_biblios
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_biblios"
+    require_assistant('biblios')
     Prawn4book::Assistant.assistant_biblios(owner)
   end
 
   def define_and_set_values_for_headers_and_footers
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_headers_footers"
+    require_assistant('headers_footers')
     Prawn4book::Assistant.assistant_headers_footers(owner)
   end
 
