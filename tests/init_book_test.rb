@@ -44,16 +44,14 @@ class InitBookTestor < Minitest::Test
     tosa.run 'pfb init'
 
     book_data = {
-      folder:   'book_essais',
-      title:    "Un livre d’essais",
-      id:       'book_essais',
-      auteur:   'Philippe Perret',
-      subtitle: <<~TXT,
-      Un livre en essai pour faire
-      des tests notamment au niveau
-      des interlignes et lignes de
-      références.
-      TXT
+      general: {
+        folder:   'book_essais',
+        title:    "Un livre d’essais",
+        id:       'book_essais',
+        auteur:   'Philippe Perret',
+        subtitle: "Un livre en essai pour faire\\ndes tests notamment au niveau\\ndes interlignes et lignes de\\nréférences.",
+        isbn:     '546-5-12598-24-7',
+      },
       editor: {
           name: 'Icare Éditions',
           adresse: "295 impasse des Fauvettes\\n13400 Aubagne",
@@ -99,16 +97,25 @@ class InitBookTestor < Minitest::Test
     FileUtils.rm_rf(book_folder) if File.exist?(book_folder)
     refute File.exist?(book_folder)
 
-    action "Je rentre les informations en répondant aux questions…"
+    action "Je rentre les informations générales…"
+    dd = book_data[:general]
     tosa << [
       :RET,           # un livre
-      book_data[:folder]    , :RET,       # dossier
+      dd[:folder]    , :RET,       # dossier
       :RET, # confirmation du path du dossier
       :RET, # Pour choisir les données générales
-      :DOWN, :RET, book_data[:title], :RET,     # le titre
-      book_data[:id]        , :RET,             # identifiant
-      book_data[:auteur]    , :RET,             # auteur
-      book_data[:subtitle]  , {key:'d', modifiers:[:control]},
+      :RET, dd[:title], :RET,      # le titre
+      :RET, dd[:subtitle], :RET,   # le sous-titre
+      dd[:id]        , :RET,       # identifiant
+      dd[:auteur]    , :RET,       # auteur
+      dd[:isbn]      , :RET,       # ISBN
+      # Toutes les données générales
+      :RET # on peut enregistrer les données générales
+    ]
+
+    # Première vérification de la recette
+    check_recipe_content(dd)
+    tosa << [
       :RET, #pour définir tout de suite les valeurs
       #  - Éditor -
       :RET, # données éditeur
