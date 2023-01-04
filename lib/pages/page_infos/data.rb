@@ -27,20 +27,20 @@ class PageInfos
   # 
   PAGE_DATA = {
     conception: {
-      patro: {name:'Conception', default: 'Prénom NOM'},
+      patro: {name:'Conception (Prénom NOM)', default: nil},
       mail:  {name:'Mail du concepteur', default: nil}
     },
     mise_en_page: {
-      patro: {name:"Mise en page", default: 'Prénom NOM'},
+      patro: {name:"Mise en page (Prénom NOM)", default: nil},
       mail:  {name:'Mail du metteur en page', default: nil},
     },
-    correction: {
-      patro: {name:'Corrections', default: 'Prénom NOM'},
-      mail:  {name:'Mail du correcteur', default: nil}, 
-    },
     cover: {
-      patro: {name:'Couverture', default: 'Prénom NOM'},
+      patro: {name:'Couverture (Prénom NOM)', default: nil},
       mail:  {name:'Mail du créateur de couverture', default: nil}, 
+    },
+    correction: {
+      patro: {name:'Corrections (Prénom NOM)', default: nil},
+      mail:  {name:'Mail du correcteur', default: nil}, 
     },
     aspect: {
       libelle: {

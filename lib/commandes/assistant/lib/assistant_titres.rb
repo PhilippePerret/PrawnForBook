@@ -64,11 +64,11 @@ class AssistantTitres
       dtitre = @data_titres[:"level#{niveau}"]
       if dtitre
         curdata << "#{dtitre[:font]||'-'}/#{dtitre[:size]||'-'}"
-        curdata << "#{dtitre[:mtop]||'-'}/#{dtitre[:mbot]||'-'}"
+        curdata << "#{dtitre[:lines_before]||'-'}/#{dtitre[:lines_after]||'-'}"
         curdata << "#{dtitre[:leading]||'-'}"
       end
       curdata = curdata.join(' - ')
-      color_meth = (dtitre && dtitre[:font] && dtitre[:size] && dtitre[:mtop]) ? :vert : :blanc
+      color_meth = (dtitre && dtitre[:font] && dtitre[:size] && dtitre[:lines_before]) ? :vert : :blanc
       {name: "#{dchoix[:name]} : #{curdata}".send(color_meth), value: niveau}
     end
   end
@@ -86,72 +86,6 @@ class AssistantTitres
     tty_define_object_with_data(TITRES_PROPERTIES, dtitre)
 
   end
-
-  # def OLD_define_title_level(niveau)
-  #   key_niveau = "level#{niveau}".to_sym
-  #   @data_titres[key_niveau] || @data_titres.merge!(key_niveau => {})
-  #   # 
-  #   # Les données actuelles du titre
-  #   # 
-  #   dtitre = @data_titres[key_niveau]
-  #   # 
-  #   # Préparation des choix (en mettant la valeur actuelle)
-  #   # 
-  #   choices = (niveau > 2 ? TITRES_PROPERTIES : MAIN_TITRES_PROPERTIES).map.with_index do |c, idx| 
-  #     nc    = c.dup
-  #     prop  = nc[:value]
-  #     next nc if prop == :save
-  #     value = dtitre[prop]
-  #     color_meth = value.nil? ? :jaune : :vert
-  #     nc.merge!(name: "#{c[:name]} : #{value||'-'}".send(color_meth))
-  #   end
-  #   while true
-  #     clear unless debug?
-  #     # 
-  #     # Premier menu sélectionné
-  #     # 
-  #     first_undefined = nil
-  #     choices[1..-1].each_with_index do |dchoix, idx|
-  #       value = @data_titres[key_niveau][dchoix[:value]]
-  #       first_undefined = (idx + 2) and break if value.nil?
-  #     end
-  #     # 
-  #     # Choisir la propriété à définir
-  #     # 
-  #     puts "\n  DÉFINITION DU TITRE DE NIVEAU #{niveau}".bleu
-  #     case (choix = Q.select(nil, choices, {per_page: choices.count, default:first_undefined, show_help:false}))
-  #     when :save then return
-  #     else
-  #       @data_titres[key_niveau].merge!(
-  #         choix => define_prop_title(niveau, choix)
-  #       )
-  #       index_choix = TABLE_TITRES_PROPERTIES[choix][:index]
-  #       choices[index_choix][:name] = "#{MAIN_TITRES_PROPERTIES[index_choix][:name]} : #{@data_titres[key_niveau][choix]}".vert
-  #     end
-  #   end
-  # end
-
-  # def define_prop_title(niveau, prop)
-  #   data_choix = TABLE_TITRES_PROPERTIES[prop]
-  #   question   = "#{data_choix[:name]} pour le titre de niveau #{niveau}"
-  #   data_titre = @data_titres[:"level#{niveau}"]
-  #   default    = data_titre ? data_titre[prop] : nil
-  #   value = 
-  #     case data_choix[:type]
-  #     when :bool
-  #       Q.yes?("#{question} ?".jaune)
-  #     when :font
-  #       choices = choices_fonts
-  #       Q.select("Choisir la police : ".jaune, choices, {per_page:choices.count})
-  #     else
-  #       Q.ask("#{question} : ".jaune, {default: default})
-  #     end
-  #   case data_choix[:type]
-  #   when :int   then return value.to_i
-  #   when :float then return value.to_f
-  #   else return value
-  #   end
-  # end
 
   def choices_fonts
     fontes = []
@@ -173,13 +107,13 @@ end
 
 
 TITRES_PROPERTIES = [
-  {name: "Fonte"                          , value: :font, type: :string, values: :choices_fonts},
-  {name: "Taille police"                  , value: :size, type: :float},
-  {name: "Nombre de lignes passées avant" , value: :mtop, type: :int},
-  {name: 'Nombre de lignes passées après' , value: :mbot, type: :int},
-  {name: 'Interlignage'                   , value: :leading, type: :float},
-  {name: 'Placer ce titre sur une nouvelle page'        , value: :newpage     , type: :bool, if: ->(dd){dd[:level] < 2} },
-  {name: 'Placer toujours ce titre sur une belle page'  , value: :bellepage   , type: :bool, if: ->(dd){dd[:level] < 2} },
+  {name: "Fonte"                                        , value: :font, type: :string, values: :choices_fonts},
+  {name: "Taille police"                                , value: :size, type: :float},
+  {name: "Nombre de lignes passées avant"               , value: :lines_before, type: :int},
+  {name: 'Nombre de lignes passées après'               , value: :lines_after, type: :int},
+  {name: 'Interlignage'                                 , value: :leading, type: :float},
+  {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){dd[:level] < 2} },
+  {name: 'Placer toujours ce titre sur une belle page'  , value: :belle_page   , type: :bool, if: ->(dd){dd[:level] < 2} },
 ]
 MAIN_TITRES_PROPERTIES = TITRES_PROPERTIES + [
 ]

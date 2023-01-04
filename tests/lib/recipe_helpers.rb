@@ -11,18 +11,19 @@ class Test
       @recipe_path = path
       @tosa = tosa
     end
+
     def goto(what)
-      case what
-      when :titres
-        tosa.fast [*3.down, :RET]
-      when :inserted_pages
-        tosa.fast [*4.down, :RET]
-      when :publisher
-        tosa.fast [*5.down, :RET]
-      when :infos
-        tosa.fast [*6.down, :RET]
-      end
+      tosa.fast [index_of_key(what).down, :RET]
     end
+
+    def index_of_key(key)
+      @value_to_index ||= begin
+        require 'lib/commandes/init/lib/required/data_recipe.rb'
+        Prawn4book::DATA2DEFINE_VALUE_TO_INDEX
+      end
+      return @value_to_index[key] + 1
+    end
+    
     ##
     # Pour choisir une fonte dans celles définies
     # @example

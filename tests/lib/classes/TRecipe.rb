@@ -32,9 +32,12 @@ class TRecipe
       assert dr.key?(group_key), "La recette devrait contenir la clé générale #{group_key.inspect}."
       dr = dr[group_key]
     end
-    missing_data = []
-    error_data   = []
+    missing_data  = []
+    error_data    = []
     error_message = []
+    # --- On checke ---
+    search_in_hash(dsearch, dr)
+    # --- Conclusion ---
     unless missing_data.empty?
       error_message << "Des données sont manquantes : #{missing_data.pretty_join}"
     end
@@ -46,6 +49,23 @@ class TRecipe
     end
     error_message = error_message.join("\n")
     assert_empty(error_message, error_message)
+  end
+
+  def search_in_hash(searched, expected)
+    searched.each do |k, v|
+      assert expected[k], "Les données qui suivent devraient connaitre la clé #{k.inspect} : #{expected.inspect}"
+      case v
+      when Hash
+        search_in_hash(v, expected[k])
+      else
+        ex = expected[k]
+        if v.is_a?(String)
+          v   = v .gsub(/\\n/,'').gsub(/\\/,'')
+          ex  = ex.gsub(/\\n/,'').gsub(/\\/,'')
+        end
+        assert_equal(ex, v)
+      end
+    end
   end
 
   def should_exist

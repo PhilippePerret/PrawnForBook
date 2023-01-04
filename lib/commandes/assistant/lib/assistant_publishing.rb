@@ -61,9 +61,9 @@ class AssistantPublishing
   end
 
 DATA_PUBLISHING = [
-  {name:'Nom de l’éditeur'                , default: 'Mes Éditions', value: :name},
+  {name:'Nom de l’éditeur'                , value: :name    , default: nil},
   {name:'Adresse (lignes avec \n)'        , value: :adresse },
-  {name:'Site internet'                   , type: :url, default: nil, value: :site},
+  {name:'Site internet'                   , type: :url      , default: nil, value: :site},
   {name:'Logo (chemin dans dossier)'      , value: :logo_path, valid_if: :logo_exist?},
   {name: 'Numéro SIRET'                   , value: :siret},
   {name: 'Mail général'                   , value: :mail},

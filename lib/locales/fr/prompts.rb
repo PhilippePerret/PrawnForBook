@@ -1,23 +1,24 @@
 module Prawn4book
 
 TERMS = {
-  yes: 'oui',
-  no:   'non',
+  book_format: 'format (taille livre, marges, etc.)',
   biblios: 'bibliographies',
   book_data: 'du livre',
   book_infos: 'informations (last page) sur le livre',
   fonts: 'fontes',
   footer: 'pied de page',
   format: 'format',
-  book_format: 'format (taille livre, marges, etc.)',
   header: 'entête',
   headers_and_footers:'entêtes et pieds de page',
+  inserted_pages: 'Page à insérer (faux-titre, etc.)',
+  no:   'non',
   other_default_values:'autres valeurs par défaut',
   publisher: 'éditeur/édition',
   publishing: 'maison d’édition',
   recipe_options: 'options (pagination, etc.)',
   titles: 'titres',
-  wanted_pages: 'pages désirée (faux-titre, infos, etc.)', 
+  wanted_pages: 'pages désirée (faux-titre, infos, etc.)',
+  yes: 'oui',
 }
 
 PROMPTS = {

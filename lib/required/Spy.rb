@@ -14,7 +14,7 @@
 require 'clir'
 
 def spy(msg)
-  # return unless test?
+  return unless debug?
   @dterm ||= DebugInOtherTerm.new
   @dterm << msg
 end

@@ -46,7 +46,9 @@ class InitedThing
     choices = CHOIX_DATA2DEFINE.map.with_index { |dchoix, idx| 
       @table_choix2index.merge!(dchoix[:value] => idx)
       dchoix.merge(defined: false)
-    } + [CHOIX_FINIR, CHOIX_ABANDON]
+    }
+    choices.unshift(CHOIX_FINIR)
+    choices.push(CHOIX_ABANDON)
 
     while true
       clear unless debug?
@@ -165,7 +167,7 @@ class InitedThing
     {name:'Page de titre (titre avec auteurs et édition)', value: :page_de_titre, default: true},
     {name:'Page d’information (fin du livre)', value: :page_infos, default: true}
   ]
-  def define_and_set_values_for_wanted_pages
+  def define_and_set_values_for_inserted_pages
     cur_data = recipe.inserted_pages
     while true
       choices = PAGES.map.with_index do |dchoix, idx|
