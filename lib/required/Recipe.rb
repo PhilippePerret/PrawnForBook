@@ -75,7 +75,7 @@ class Recipe
     tag_in  = "#<#{tag_name}>"
     tag_out = "#</#{tag_name}>"
 
-   if dec_in.nil?
+    if dec_in.nil?
       # 
       # Balise inexistante => on met le bloc de code à la fin.
       # 
@@ -158,58 +158,97 @@ class Recipe
   end
 
 
-  # --- Precidate Methods ---
+  # --- PRECIDATE METHODS ---
 
   def collection?
     :TRUE == @incollection ||= true_or_false(check_if_collection)
   end
+  def numeroration?
+    :TRUE == @numeroter ||= true_or_false(book_format[:text][:numerotation] != 'none')
+  end
   def paragraph_number?
-    :TRUE == @numeroterpar ||= true_or_false(get(:opt_num_parag))
+    :TRUE == @numeroterpar ||= true_or_false(book_format[:text][:numerotation] == 'parags')
+  end
+  def page_number?
+    :TRUE == @numeroterpage ||= true_or_false(book_format[:text][:numerotation] == 'pages')
   end
 
   def skip_page_creation?
-    :TRUE == @skipfirst ||= true_or_false(get(:skip_page_creation) === true)
+    :TRUE == @skipfirst ||= true_or_false(book_format[:page][:skip_page_creation])
+  end
+
+  # --- Pages insérées ---
+
+  DEFAULT_INSERTED_PAGES = {
+    page_de_garde:true, faux_titre:false, page_de_titre:true, page_infos:true
+  }
+  def inserted_page?(key)
+    if inserted_pages.key?(key)
+      return inserted_pages[key]
+    elsif DEFAULT_INSERTED_PAGES.key?(key)
+      return DEFAULT_INSERTED_PAGES[key]
+    else
+      raise "Impossible de trouver la donnée par défaut de la page à insérer de clé #{key.inspect}."
+    end
   end
 
   def page_de_garde?
-    :TRUE == @haspagegarde ||= true_or_false(inserted_pages[:page_de_garde])
+    :TRUE == @haspagegarde ||= true_or_false(inserted_page?(:page_de_garde))
   end
 
   def page_faux_titre?
-    :TRUE == @hasfauxtitre ||= true_or_false(inserted_pages[:faux_titre])
+    :TRUE == @hasfauxtitre ||= true_or_false(inserted_page?(:faux_titre))
   end
 
   def page_de_titre?
-    :TRUE == @haspagetitre ||= true_or_false(inserted_pages[:page_de_titre])
+    :TRUE == @haspagetitre ||= true_or_false(inserted_page?(:page_de_titre))
   end
 
   def page_info?
-    :TRUE == @writepageinfo ||= true_or_false(inserted_pages[:page_infos])
+    :TRUE == @writepageinfo ||= true_or_false(inserted_page?(:page_infos))
   end
 
 
-  # --- Precise Recipe Data ---
+  # --- Volatile Data ---
+
+  def dimensions
+    @dimensions ||= [book_format[:book][:width], book_format[:book][:height]]
+  end
+
+  # Font par défaut (la première définie ou par défaut)
+  def default_font
+    @default_font ||= fonts_data.values.first
+  end
+  def default_font_name
+    @default_font_name ||= begin
+      (default_font ? fonts_data.keys : DEFAULT_FONTS_KEYS).first
+    end
+  end
+  def default_font_style
+    @default_font_style ||= begin
+      if default_font then default_font[:style] end || :regular
+    end
+  end
+  def default_font_size
+    @default_font_size ||= begin
+      if default_font then default_font[:size] end || 12
+    end
+  end
+
+
+  # --- Group Recipe Data ---
 
   def book_id
-    @book_id ||= book_data[:book_id]
+    @book_id ||= book_data[:id]
   end
   def title
-    @title ||= book_data[:book_title]
+    @title ||= book_data[:title]
   end
   def subtitle
-    @subtitle ||= book_data[:book_subtitle].gsub(/\\n/, "\n")
-  end
-  def publishing
-    @publishing ||= get(:publishing, {})
+    @subtitle ||= book_data[:subtitle].gsub(/\\n/, "\n")
   end
   def auteurs
     @auteurs ||= book_data[:auteurs]
-  end
-
-
-
-  def page_info
-    @page_info ||= get(:page_info)
   end
 
   def headers
@@ -229,29 +268,88 @@ class Recipe
 
   # --- Blocs de données ---
 
+  ##
+  # Méthode générale utilisée pour peupler une donnée avec ses valeurs
+  # par défaut.
+  # @note
+  #   La méthode s'appuie sur les données définies dans les "pages
+  #   spcéciales" (fichier data.rb) qui définissent forcément les
+  #   valeurs par défaut.
+  def self.peuple_with_default_data(receiver, referencer)
+    referencer.each do |k, v|
+      if v.key?(:default) # => une valeur
+        receiver.merge!(k => v[:default]) unless receiver.key?(k)
+      else
+        receiver.merge!(k => {}) unless receiver.key?(k)
+        v.each do |sk, sv|
+          if sv.key?(:default) # => une valeur
+            receiver[k].merge!(sk => sv[:default]) unless receiver[k].key?(sk)
+          else # => une groupe de valeurs
+            receiver[k].merge!(sk => {}) unless receiver[k].key?(sk)
+            sv.each do |ssk, ssv|
+              receiver[k][sk].merge!(ssk => ssv[:default]) unless receiver[k][sk].key?(ssk)
+            end
+          end
+        end
+      end
+    end
+    return receiver
+  end
+
+  def book_format
+    @book_format ||= begin
+      require 'lib/pages/book_format/data.rb'
+      self.class.peuple_with_default_data(get(:book_format, {}), Pages::BookFormat::PAGE_DATA)
+    end
+  end
+
+  def book_data
+    @book_data ||= begin
+      require 'lib/pages/book_data/data.rb'
+      self.class.peuple_with_default_data(get(:book_data, {}), Pages::BookData::PAGE_DATA)
+    end
+  end
+
+  def page_infos
+    @page_infos ||= begin
+      require 'lib/pages/page_infos/data.rb'
+      self.class.peuple_with_default_data(get(:page_infos, {}), Pages::PageInfos::PAGE_DATA)
+    end
+  end
+
+  def page_de_titre
+    @page_de_titre ||= begin
+      require 'lib/pages/page_de_titre/data.rb'
+      self.class.peuple_with_default_data(get(:page_de_titre, {}), Pages::PageDeTitre::PAGE_DATA)
+    end
+  end
+
+  def table_of_content
+    @table_of_content ||= begin
+      require 'lib/pages/table_of_content/data.rb'
+      self.class.peuple_with_default_data(get(:table_of_content, {}), Pages::TableOfContent::PAGE_DATA)
+    end
+  end
+
+  def publishing
+    @publishing ||= get(:publishing, {})
+  end
+
   def fonts_data
     @fonts_data ||= get(:fonts, {})
   end
   alias :fonts :fonts_data
-
-  def book_data
-    @book_data ||= get(:book_data, {})
-  end
 
   def titles_data
     @book_titles ||= get(:titles, {})
   end
 
   def biblios_data
-    @biblio_data ||= get(:biblios, {})
+    @biblios_data ||= get(:biblios, {})
   end
 
   def inserted_pages
     @inserted_pages ||= get(:inserted_pages, {})
-  end
-
-  def page_infos
-    @page_infos ||= get(:page_infos, {})
   end
 
   def headers_footers_data

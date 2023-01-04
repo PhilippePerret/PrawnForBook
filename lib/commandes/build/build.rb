@@ -42,6 +42,10 @@ class PdfBook
     @current_titles = {}
     # 
     # Instanciation de la table de référence
+    # @note
+    #   Les références sont une liste de cibles dans le texte ou dans
+    #   le texte d'un autre livre, qui peuvent être atteinte depuis
+    #   un pointeur dans le texte.
     # 
     @table_references = PdfBook::ReferencesTable.new(self)
     # 
@@ -371,25 +375,23 @@ class PdfBook
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
   def check_if_conforme
-    if recipe[:biblio]
-      dbibs = recipe[:biblio]
-      dbibs.is_a?(Array) || raise("La recette bibliographie (:biblio:) devrait être une liste (un item par type d'élément).")
-      unless dbibs.empty?
-        # 
-        # On doit charger les modules utiles aux bibliographies
-        # 
-        Bibliography.require_formaters(self)
-        module_formatage? || raise("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie.")
-        require_module_formatage
-        defined?(FormaterBibliographiesModule) || raise("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…")
-        dbibs.each do |dbib|
-          bib = Bibliography.instanciate(self, dbib)
-          bib.tag   || raise("Il faut définir dans la recette le :tag des bibliographies")
-          bib.title || raise("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'.")
-          bib.data[:data] || raise("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…")
-          File.exist?(bib.data_path.to_s) || raise("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…")
-          Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…")
-        end
+    unless recipe.biblios_data.empty?
+      dbibs = recipe.biblios_data
+      dbibs.is_a?(Hash) || raise("La recette bibliographie (:biblios:) devrait être une table (un item par type d'élément).")
+      # 
+      # On doit charger les modules utiles aux bibliographies
+      # 
+      Bibliography.require_formaters(self)
+      module_formatage? || raise("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie.")
+      require_module_formatage
+      defined?(FormaterBibliographiesModule) || raise("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…")
+      dbibs.each do |bib_id, dbib|
+        bib = Bibliography.instanciate(self, dbib)
+        bib.tag   || raise("Il faut définir dans la recette le :tag des bibliographies")
+        bib.title || raise("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'.")
+        bib.data[:data] || raise("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…")
+        File.exist?(bib.data_path.to_s) || raise("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…")
+        Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…")
       end
     end
 

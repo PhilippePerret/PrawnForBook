@@ -24,6 +24,7 @@ class BookFormat
         bot: {name:'Marge basse (avec unité)'      , default: '15mm'},
         int: {name:'Marge intérieure (avec unité)' , default: '25mm'},
       },
+      skip_page_creation: {name:'Passer la page de création', default: true, type: :bool},
     },
     text: {
       default_font: {name:'Fonte par défaut'                  , default: :first_police_name, values: :police_names},

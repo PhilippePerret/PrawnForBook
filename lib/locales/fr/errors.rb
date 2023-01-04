@@ -35,7 +35,7 @@ ERRORS = {
 
     publishing: {
       logo_unfound: "Logo introuvable à l'adresse '%s'",
-      logo_not_same_extname: "Les deux images doivent avoir la même extension", 
+      logo_not_same_extname: "Les deux images doivent avoir la même extension.", 
     },
 
   # --- Bibliographie --- #

@@ -48,27 +48,24 @@ class PdfBook
     @pdf_config ||= begin
       {
         skip_page_creation: skip_page_creation?,
-        page_size:          proceed_unit(get_recipe(:dimensions)),
-        page_layout:        get_recipe(:layout, :portrait),
-        margin:             proceed_unit(get_recipe(:margin)),
-        left_margin:        conf_margin(:left) ||conf_margin(:ext),
-        right_margin:       conf_margin(:right)||conf_margin(:int),
+        page_size:          proceed_unit(recipe.dimensions),
+        page_layout:        recipe.book_format[:book][:orientation],
+        ext_margin:         conf_margin(:ext),
+        int_margin:         conf_margin(:int),
         top_margin:         conf_margin(:top),
-        bottom_margin:      conf_margin(:bot),
+        bot_margin:         conf_margin(:bot),
         background:         get_recipe(:background),
-        default_leading:    get_recipe(:leading),
+        default_leading:    recipe.book_format[:text][:interligne]),
         optimize_objects:   get_recipe(:optimize_objects, true),
         compress:           get_recipe(:compress),
-        # {Hash} Des variables (méta-propriété personnalisées)
-        # (:title, :author, etc.)
-        info:               get_recipe(:info),
-        # Un fichier template
+        infos:              recipe.page_infos,
         template:           get_recipe(:template),
         text_formatter:     nil, # ?
         # --- Extra definitions ---
-        default_font:       get_recipe(:default_font),
-        default_font_size:  get_recipe(:default_font_size),
-        default_font_style: get_recipe(:default_font_style, :normal),
+        default_font:       recipe.default_font,
+        default_font_name:  recipe.default_font_name,
+        default_font_size:  recipe.default_font_size,
+        default_font_style: recipe.default_font_style),
       }
     end
   end
@@ -76,7 +73,7 @@ class PdfBook
   # Fontes utilisées dans le boucle (définies dans le fichier de
   # recette du livre ou de la collection)
   def book_fonts
-    @book_fonts ||= recette[:fonts]
+    @book_fonts ||= recipe.fonts_data
   end
 
   def get_recipe(property, default_value = nil)
@@ -85,14 +82,7 @@ class PdfBook
 
   # Retourne la configuration du livre pour la marge +side+
   def conf_margin(side)
-    @marges ||= recette[:marges]
-    mgs = 
-      if @marges.is_a?(Hash)
-        @marges[side]
-      else
-        @marges
-      end
-    proceed_unit(mgs)
+    proceed_unit(recipe.book_format[:page][:margins][side])
   end
 
 
