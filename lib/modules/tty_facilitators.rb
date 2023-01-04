@@ -32,6 +32,7 @@ TYPES DE DONNÉE
 :int      Un entier
 :float    Un flottant
 :sym      Un symbol
+:url      Une adresse web
 
 
 ATTRIBUT SYMBOL OU PROCÉDURE

@@ -39,6 +39,8 @@ DEFAUT_FONTS = {
   'Courier'   => { regular: true }
 }
 
+DEFAULT_FONTS_KEYS = DEFAUT_FONTS.keys
+
 DATA_STYLES_FONTS = [
   {name: 'Normal'         , value: :normal      , index:1},
   {name: 'Regular'        , value: :regular     , index:2},

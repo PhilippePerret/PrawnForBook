@@ -166,6 +166,8 @@ class FontAssistant
       
       # 
       # On ajoute cette donnée fonte aux données fontes courantes
+      # @note
+      #   On l'ajoute toujours au début
       # 
       @fonts_data.merge!(font_name => {}) unless @fonts_data.key?(font_name)
       @fonts_data[font_name].merge!(font_style => font_path)

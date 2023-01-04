@@ -154,16 +154,15 @@ class AssistantTitres
   # end
 
   def choices_fonts
-    fontes = DEFAULT_FONTS.dup
+    fontes = []
     fontes += owner.recipe.fonts_data.keys unless owner.recipe.fonts_data.empty?
+    fontes += DEFAULT_FONTS_KEYS.dup
     cs = []
     fontes.each do |fontname|
       cs << {name:fontname, value:fontname}
     end
     return cs
   end
-
-DEFAULT_FONTS = ['Times','Helvetica','Courier']
 
 CHOICES_TITRES = [
     CHOIX_SAVE,
