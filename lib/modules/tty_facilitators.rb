@@ -128,15 +128,15 @@ class TTYDefiner
       # 
       begin
         case (prop = Q.select(PROMPTS[:Define].jaune, choices, {per_page:choices.count, default: selected, show_help:false, echo:false}))
+        when :finir
+          return true unless (msg = object_data_valid?)
+        when :cancel
+          return false
+        else 
+          define_object_property(prop, odata)
+        end
       rescue TTY::Reader::InputInterrupt
         return false
-      end
-      when :finir
-        return true unless (msg = object_data_valid?)
-      when :cancel
-        return false
-      else 
-        define_object_property(prop, odata)
       end
     end #/fin while
   end
@@ -267,6 +267,7 @@ class TTYDefiner
         when :string  then value.to_s
         when NilClass then value
         when :custom  then value
+        when :bool    then value
         else klasse.send(data_choix[:type], value)
         end
       end

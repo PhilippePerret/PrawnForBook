@@ -155,8 +155,9 @@ class FontAssistant
       # une fonte déjà définie et possédant ce style.
       # 
       default_selected = DATA_STYLES_FONTS.select.with_index do |dstyle, idx|
-          is_known_font && dstyle[:value] == fonts_table_by_path[font_path][:style]
-        end.first[:index]
+            is_known_font && dstyle[:value] == fonts_table_by_path[font_path][:style]
+          end.first
+      default_selected = default_selected[:index] unless default_selected.nil?
 
       # 
       # CHOISIR LE STYLE

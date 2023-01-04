@@ -16,7 +16,7 @@ class BookData
     book_subtitle:  {name:'Sous-titre du livre (\n = return)' , default: nil},
     collection:     {name:'Appartient à une collection'       , default: 'false', values: :yes_no_answers},
     book_id:        {name:'ID du livre (lettres simples et "_"', default:nil, required: true},
-    auteurs:        {name:'Auteurs du livre (Prenom NOM, Prenom NOM,...)', default: nil},
+    auteurs:        {name:'Auteurs du livre (Prenom NOM,...)', default: nil},
     isbn:           {name:'ISBN', default: nil},
   }
 

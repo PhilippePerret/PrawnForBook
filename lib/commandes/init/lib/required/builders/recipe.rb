@@ -12,7 +12,6 @@ class InitedThing
   # renoncement.
   # 
   def build_recipe
-
     if book? && in_collection?
       puts PROMPTS[:recipe][:warning_book_in_collection].jaune
     end

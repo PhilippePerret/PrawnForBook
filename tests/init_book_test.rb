@@ -5,6 +5,7 @@ nouveau livre from scratch
 
 =end
 require 'test_helper'
+require_relative 'lib/required'
 
 class InitBookTestor < Minitest::Test
 
@@ -60,13 +61,13 @@ class InitBookTestor < Minitest::Test
           contact: 'contact@icare-editions.fr',
         },
       format: {
-          width: '127mm',
-          height: '203.2mm',
-          orientation: 'portrait',
-          top_margin: '20mm',
-          ext_margin: '15mm',
-          bot_margin: '20mm',
-          int_margin: '25mm',
+          width: '203.5mm',
+          height: '125mm',
+          orientation: 'landscape',
+          top_margin: '10mm',
+          ext_margin: '11mm',
+          bot_margin: '12mm',
+          int_margin: '13mm',
         },
       infos: {
           concepteur: 'Benoit Padrix',
@@ -82,20 +83,18 @@ class InitBookTestor < Minitest::Test
         },
       fontes: true,
       titres: {
-        niv1_belle_page: 'y',
-        new_page_after_niv1: 'y',
-        font_niv1: 'Geneva',
-        size_niv1: '18',
-        top_niv1: '2',
-        bot_niv1: '4',
-        leading_niv1: '0',
+        level1: {
+            font:"Keyb", size:24, new_page: :RET
+          }
         },
     }
 
     # - On détruit le dossier du livre avant de commencer -
-    book_folder = File.join(__dir__,'essais', book_data[:folder])
+    book_folder = File.join(__dir__,'essais', book_data[:general][:folder])
     FileUtils.rm_rf(book_folder) if File.exist?(book_folder)
     refute File.exist?(book_folder)
+
+    checker_recipe = TRecipe.new(File.join(book_folder,'recipe.yaml'))
 
     action "Je rentre les informations générales…"
     dd = book_data[:general]
@@ -109,14 +108,107 @@ class InitBookTestor < Minitest::Test
       dd[:id]        , :RET,       # identifiant
       dd[:auteur]    , :RET,       # auteur
       dd[:isbn]      , :RET,       # ISBN
-      # Toutes les données générales
-      :RET # on peut enregistrer les données générales
     ]
 
     # Première vérification de la recette
-    check_recipe_content(dd)
+    checker_recipe.has_data(dd)
+
+    # --- Définition des fontes ---
+    action "Je choisis les fontes"
     tosa << [
-      :RET, #pour définir tout de suite les valeurs
+      :DOWN, :RET,    # pour définir les fontes
+      :RET,           # dans dossier système
+      *6.down,
+      :SPACE,         # je choisis la sixième
+      :DOWN, :SPACE,  # je choisis la septième
+      :DOWN, :SPACE,  # je choisis la huitième
+      :RET,           # Je valide le choix
+      "Geneva", :RET, # Nom de la première police
+      :RET,           # style normal
+      "Keyb", :RET,   # Nom de deuxième police
+      :DOWN, :RET,    # style Regular
+      "Foufe", :RET,  # Nom de troisième police
+      *2.DOWN, :RET,  # style italique
+      *3.down, :RET   # pour finir
+    ]
+
+    rdata = checker_recipe.get_data[:fonts]
+    assert rdata, "Les fontes devraient être définies"
+    [
+      ['Geneva', :normal],
+      ['Keyb', :regular],
+      ['Foufe', :italic]
+    ].each do |font_name, font_style|
+      font_name = font_name.to_sym
+      assert rdata.key?(font_name), "Les fontes devrait définir le nom #{font_name.inspect}"
+      assert rdata[font_name].key?(font_style), "La police #{font_name.inspect} devrait définir le style #{font_style.inspect}."
+    end
+
+    # --- Définition du format
+    action "Je fais entrer les données de format du livre"
+    tosa << [:DOWN, :DOWN, :RET] # pour définir le format
+    dd = book_data[:format]
+    tosa << [:DOWN, :RET, dd[:width], :RET]     # largeur du livre
+    tosa << [*2.DOWN, :RET, dd[:height], :RET]  # hauteur du livre
+    tosa << [*3.down, :RET]                     # l'orientation
+    if dd[:orientation] == 'portrait'
+      tosa << :RET
+    else
+      tosa << [:DOWN, :RET]
+    end
+    # - les marges -
+    [:top, :ext, :bot, :int].each_with_index do |bord, idx|
+      value = dd["#{bord}_margin".to_sym]
+      tosa << [*(4 + idx).down, :RET, value, :RET]
+    end
+    #  On s'arrête là pour le format
+    # Note TODO : l'idée est de faire un tableau qui dise comment
+    # modifier une valeur. Par exemple, pour modifier la marge
+    # haute, on saura qu'il faut 4.down, :RET, value, :RET et 
+    # enregistrer avec un nouveau :RET
+    tosa << :RET # enregistrer le format
+
+    data_titre = {
+      font:           [:RET],
+      size:           [*1.DOWN, :RET],
+      line_before:    [*2.DOWN, :RET],
+      line_after:     [*3.DOWN, :RET],
+      interlignage:   [*4.DOWN, :RET],
+    }
+    data_tosa = {
+      titres: {
+        move_n_choose: [*3.down, :RET],
+        level1: {
+          move_n_choose: [:DOWN, :RET],
+          new_page:       [*5.DOWN, :RET],
+          belle_page:     [*6.DOWN, :RET],
+        },
+        level2: { move_n_choose: [*2.DOWN, :RET]},
+        level3: { move_n_choose: [*3.DOWN, :RET]},
+        level4: { move_n_choose: [*4.DOWN, :RET]},
+        level5: { move_n_choose: [*5.DOWN, :RET]},
+        level6: { move_n_choose: [*6.DOWN, :RET]},
+        level7: { move_n_choose: [*7.DOWN, :RET]},
+      }
+    }
+    Object.const_set('DATA_TOSA', data_tosa)
+    (1..7).each do |niv|
+      DATA_TOSA[:titres][:"level#{niv}"].merge!(data_titre)
+    end
+    tosa << DATA_TOSA[:titres][:move_n_choose] # pour Les données titres
+    tosa << DATA_TOSA[:titres][:level1][:move_n_choose] # éditer les données du titre 1
+    
+    [
+      :leve1
+    ].each do |levelX|
+      tosa << DATA_TOSA[:titres][levelX][:move_n_choose]
+      [:font, :size, :new_page].each do |prop|
+        value = book_data[:titres][levelX]
+      end
+    end
+    return
+
+    tosa << [
       #  - Éditor -
       :RET, # données éditeur
       book_data[:editor][:name], :RET,

@@ -135,7 +135,8 @@ class SpecialPage
     max_len   = 0
     selected  = nil
     choices.each do |dchoix|
-      max_len = dchoix[:name].length if dchoix[:name].length > max_len
+      choix_len = (dchoix[:raw_name]||dchoix[:name]).length
+      max_len = choix_len if choix_len > max_len
     end.each do |dchoix|
       dvalue_choix = dchoix[:value]
       next unless dvalue_choix.is_a?(Hash)
