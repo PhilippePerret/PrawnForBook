@@ -32,7 +32,7 @@ class PageInfos
     },
     mise_en_page: {
       patro: {name:"Mise en page (Prénom NOM)", default: nil},
-      mail:  {name:'Mail du metteur en page', default: nil},
+      mail:  {name:'Mail du metteur en page'  , default: nil},
     },
     cover: {
       patro: {name:'Couverture (Prénom NOM)', default: nil},

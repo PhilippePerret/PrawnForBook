@@ -198,8 +198,8 @@ DATA_DISPOSITION = [
   {name: 'Titre pour mémoire', value: :name, required: true},
   {name: 'De la page' , value: :first_page, type: :int},
   {name: 'À la page'  , value: :last_page, type: :int},
-  {name: 'Entête'     , value: :header_name, type: :custom, meth: :choose_headfoot_id},
-  {name: 'Footer'     , value: :footer_name, type: :custom, meth: :choose_headfoot_id}
+  {name: 'Entête'     , value: :header_id, type: :custom, meth: :choose_headfoot_id},
+  {name: 'Footer'     , value: :footer_id, type: :custom, meth: :choose_headfoot_id}
 ]
 
 
@@ -215,14 +215,20 @@ CHOIX_CASSE_TITRE = [
   {name:'Tout minuscule', value: :min}
 ]
 
+VALUES_NIVEAU_TITRE_OU_NUM_PAGE = [
+  {name:"Numéro de page", value: 0}
+]
+(1..7).each do |n|
+  VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:"Titre de niveau #{n}", value: n}
+
 DATA_HEADFOOT = [
   {name: 'Nom du "headfoot"'  , value: :name, required: true},
-  {name: 'Police'             , value: :font, values: :police_names},
-  {name: 'Taille'             , value: :int, default: 11, values: (7..30)},
-  {name: 'Style'              , value: :sym, values: DATA_STYLES_FONTS, default: 2},
+  {name: 'Police'             , value: :font        , values: :police_names},
+  {name: 'Taille'             , value: :size        , type: :int, default: 11, values: (7..30)},
+  {name: 'Style'              , value: :style       , type: :sym, values: DATA_STYLES_FONTS, default: 2},
   {name: 'Dispo page gauche'  , value: :left_dispo  , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
   {name: 'Dispo page droite'  , value: :right_dispo , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
-  {name: 'Niveau de titre'    , value: :title_level , values: (1..7), default: 1},
+  {name: 'Niveau de titre'    , value: :title_level , values: (1..7), default: 0},
   {name: 'Casse du titre'     , value: :title_casse , values: CHOIX_CASSE_TITRE, default: 1},
 ]
 

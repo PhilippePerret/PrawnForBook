@@ -37,7 +37,7 @@ class PrawnView
         @data_pages = data_pages
       end
       def data
-        @data ||= pdfbook.recipe.get(things) || fatal_error(ERRORS[:recipe][things][:required])
+        @data ||= pdfbook.recipe.headers_footers
       end
     end #/ << self
 
@@ -78,7 +78,7 @@ class PrawnView
         (ipage.odd? ? odd_pages : even_pages) << ipage
       end
 
-      num_page = pdfbook.pagination_page?
+      num_page = pdfbook.page_number?
 
       # 
       # INSCRIPTION DES HEADERS OU FOOTERS
@@ -111,7 +111,7 @@ class PrawnView
       dtemp = {}.merge(data_pages[numero_page])
       # puts "dtemp = #{dtemp.inspect}"
       if cas.match?(/%{numero}/)
-        pagine = pdfbook.pagination_page? ? numero_page : paragraphs_for(numero_page)
+        pagine = pdfbook.page_number? ? numero_page : paragraphs_for(numero_page)
         pagine ||= numero_page # le cas échéant (pas de paragraphe)
         dtemp.merge!(numero: pagine.to_s)
       end

@@ -84,8 +84,8 @@ class ReferencesTable
   # --- Helpers Methods ---
 
   def call_to(ref, cross_book_title = nil)
-    ref = pdfbook.pagination_page? ? ref[:page] : ref[:paragraph]
-    ref = pdfbook.pagination_page? ? "page #{ref}" : "paragraphe #{ref}"
+    ref = pdfbook.page_number? ? ref[:page] : ref[:paragraph]
+    ref = pdfbook.page_number? ? "page #{ref}" : "paragraphe #{ref}"
     ref = "#{ref} de <i>#{cross_book_title.upcase}</i>" if cross_book_title
     # TODO : AJOUTER À LA LISTE DES LIVRES (BIBLIOGRAPHIE)
     return ref

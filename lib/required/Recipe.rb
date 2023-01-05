@@ -204,7 +204,7 @@ class Recipe
     :TRUE == @haspagetitre ||= true_or_false(inserted_page?(:page_de_titre))
   end
 
-  def page_info?
+  def page_infos?
     :TRUE == @writepageinfo ||= true_or_false(inserted_page?(:page_infos))
   end
 
@@ -250,12 +250,15 @@ class Recipe
   def auteurs
     @auteurs ||= book_data[:auteurs]
   end
-
-  def headers
-    @headers ||= get(:headers)
+  def isbn
+    @isbn ||= book_data[:isbn] || '---'
   end
-  def footers
-    @footers ||= get(:footers)
+  def depot_legal
+    @depot_legal ||= book_data[:depot_legal]
+  end
+
+  def headers_footers
+    @headers ||= get(:headers_footers)
   end
 
   def style_numero_page
@@ -332,7 +335,7 @@ class Recipe
   end
 
   def publishing
-    @publishing ||= get(:publishing, {})
+    @publishing ||= get(:publishing, nil)
   end
 
   def fonts_data

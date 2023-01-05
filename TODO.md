@@ -5,6 +5,26 @@
   Quand j'y arriverai, il sera temps de tester un livre avec 
   PDF::Checker
 
+* Il faut repenser encore le fonctionnement des headers/footers
+  Une disposition doit contenir ce qu'il contient :
+    - un nom
+    - un début et fin de page
+    - un header
+    - un footer
+  C'est au-niveau des headers/footers que ça doit changer : on 
+  doit, pour chacun d'eux, définir le contenu des au moins 6 parties :
+    - droite de page gauche, droite de page droite
+    - centre de page gauche, centre de page droite
+    - gauche de page gauche, gauche de page droite
+  * Il faut pouvoir mettre : un titre ou un numéro de page
+  * On doit pouvoir définir au centre pour les deux (donc ne définir
+    qu'un seul centre ou définir un centre différent pour chaque page)
+  * Il faut définir un header par défaut (sans rien) et un footer
+    par défaut (avec numéro de page sur gauche de gauche et droite de
+    droite)
+  => Ré-écrire le mode d'emploi (peut-être, dans le mode d'emploi, conseiller d'utiliser l'assistant et voir ensuite les données inscrites pour s'en inspirer)
+
+* Se servir de `Prawn::Fonts::AFM::BUILT_INS` pour définir les polices par défaut accessible dans Prawn.
 
 
 * Corrections/affinements par rapport au premier livre Narration

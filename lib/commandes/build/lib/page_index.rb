@@ -31,7 +31,7 @@ class PageIndex
     # 
     # La clé à utiliser pour la page ou le paragraphe
     # 
-    key_num = pdfbook.pagination_page? ? :page : :paragraph
+    key_num = pdfbook.page_number? ? :page : :paragraph
     # 
     # Le titre de la page d'index
     # 

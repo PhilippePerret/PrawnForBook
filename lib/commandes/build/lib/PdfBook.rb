@@ -31,42 +31,53 @@ class PdfBook
   end
 
 
-  # --- Predicate Methods ---
+  # --- Predicate Methods (shortcuts) ---
 
-  def skip_page_creation?  ;recette.skip_page_creation?  end
-  def page_de_garde?       ;recette.page_de_garde?       end
-  def page_faux_titre?     ;recette.page_faux_titre?     end
-  def page_de_titre?       ;recette.page_de_titre?       end
+  def skip_page_creation?   ;recette.skip_page_creation?  end
+  def page_de_garde?        ;recette.page_de_garde?       end
+  def page_faux_titre?      ;recette.page_faux_titre?     end
+  def page_de_titre?        ;recette.page_de_titre?       end
+  def page_infos?           ;recette.page_infos?          end
+  def page_number?          ;recette.page_number?         end
 
   # --- Configuration Pdf Methods ---
 
-  # @prop Configuration pour le second argument de la méthode
-  # #generate de Prawn::View (en fait PdfBook::PrawnView)
-  # TODO : la composer en fonction de la recette du livre ou de la
-  # collection
+  # @return [Hash] La configuration qui sert de second argument pour 
+  # la méthode #generate de Prawn::View (en fait PdfBook::PrawnView)
+  # Donc il ne faut pas y mettre n'importe quoi, mais seulement les
+  # valeurs attendues par la méthode, qu'on peut trouver ici :
+  #   https://prawnpdf.org/api-docs/2.3.0/Prawn/Document.html#generate-class_method
+  #   (chercher VALID_OPTIONS)
   def pdf_config
     @pdf_config ||= begin
       {
+        # Options qu'on trouve dans [1]
         skip_page_creation: skip_page_creation?,
-        page_size:          proceed_unit(recipe.dimensions),
-        page_layout:        recipe.book_format[:book][:orientation],
-        ext_margin:         conf_margin(:ext),
-        int_margin:         conf_margin(:int),
+        page_size:          proceed_unit(recipe.dimensions), # p.e. "a4"
+        page_layout:        recipe.book_format[:book][:orientation].to_sym,
+        margin:             conf_margin(:top),
+        left_margin:        conf_margin(:ext),
+        right_margin:       conf_margin(:int),
         top_margin:         conf_margin(:top),
         bot_margin:         conf_margin(:bot),
-        background:         get_recipe(:background),
-        default_leading:    recipe.book_format[:text][:interligne]),
-        optimize_objects:   get_recipe(:optimize_objects, true),
         compress:           get_recipe(:compress),
-        infos:              recipe.page_infos,
-        template:           get_recipe(:template),
+        background:         get_recipe(:background),
+        info:               nil, # ?
         text_formatter:     nil, # ?
+        print_scaling:      nil, # ?
+        # Autres options
+        default_leading:    recipe.book_format[:text][:interligne],
+        optimize_objects:   get_recipe(:optimize_objects, true),
+        infos:              recipe.page_infos,
+        template:           get_recipe(:template, nil),
         # --- Extra definitions ---
         default_font:       recipe.default_font,
         default_font_name:  recipe.default_font_name,
         default_font_size:  recipe.default_font_size,
-        default_font_style: recipe.default_font_style),
-      }
+        default_font_style: recipe.default_font_style,
+      }.tap do |h|
+        spy "options pour #generate : #{h.pretty_inspect}"
+      end
     end
   end
 

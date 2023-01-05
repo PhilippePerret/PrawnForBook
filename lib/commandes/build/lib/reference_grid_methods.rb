@@ -65,7 +65,7 @@ class PrawnView
   # 
   def define_default_leading
     self.default_leading = font2leading(
-      default_font, default_font_size, line_height
+      default_font_name, default_font_size, line_height
     )
   end
 
@@ -97,16 +97,16 @@ class PrawnView
     return lead
   end
 
-  def default_font
-    @default_font ||= config[:default_font]||pdfbook.second_font
+  def default_font_name
+    @default_font_name ||= config[:default_font_name]
   end
 
   def default_font_size
-    @default_font_size ||= config[:default_font_size]||DEFAULT_SIZE_FONT
+    @default_font_size ||= config[:default_font_size]
   end
 
   def default_font_style
-    @default_font_style ||= config[:default_font_style] || :normal
+    @default_font_style ||= config[:default_font_style]
   end
 
   def line_height

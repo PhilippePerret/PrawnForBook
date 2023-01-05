@@ -62,12 +62,7 @@ class PdfBook
 
 
   # --- Predicate Methods ---
-
-
-  def pagination_page?
-    recette.pagination_page?
-  end
-
+  
   # @return true si le document appartient à une collection
   def collection?
     recette.collection?

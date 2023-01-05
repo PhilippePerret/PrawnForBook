@@ -31,6 +31,7 @@ class PdfBook
 
   def generate_pdf_book
     spy "Génération du livre #{ensured_title.inspect}".bleu
+
     #
     # Le livre doit être conforme, c'est-à-dire posséder les 
     # éléments requis
@@ -99,7 +100,7 @@ class PdfBook
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     # 
-    spy "pdf_config: #{pdf_config.pretty_inspect}" if test?
+    spy "pdf_config: #{pdf_config.pretty_inspect}"
     
     pdf = PrawnView.new(self, pdf_config)
     
@@ -122,7 +123,7 @@ class PdfBook
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
     # ment : leurs occurrences)
     # 
-    Bibliography.page_or_paragraph_key = pagination_page? ? :page : :paragraph
+    Bibliography.page_or_paragraph_key = page_number? ? :page : :paragraph
 
     # 
     # CUSTOM PARSER (if any)
@@ -146,7 +147,7 @@ class PdfBook
     pdf.define_required_fonts(book_fonts)
 
     #
-    # Y a-t-il une DERNIÈRE PAGE définie en options
+    # Y a-t-il une DERNIÈRE PAGE définie en options de commande
     # Si oui, on ne doit construire le livre que juste que là
     # 
     pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]
@@ -175,9 +176,7 @@ class PdfBook
     tdm = PdfBook::Tdm.new(self, pdf)
     pdf.tdm = tdm
 
-
     pdf.start_new_page if page_de_garde?
-
 
     pdf.build_faux_titre if page_faux_titre?
       
@@ -214,7 +213,7 @@ class PdfBook
     # 
     # - Page infos ? -
     # 
-    pdf.build_page_infos if recette.page_info?
+    pdf.build_page_infos if page_infos?
 
     # 
     # - TABLE DES MATIÈRES -

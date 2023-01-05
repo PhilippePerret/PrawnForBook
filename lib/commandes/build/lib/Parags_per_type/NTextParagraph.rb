@@ -209,7 +209,7 @@ class NTextParagraph < AnyParagraph
 
   def font_family(pdf)
     @font_family ||= begin
-      pdf.default_font
+      pdf.default_font_name
     end
   end
   def font_family=(val)

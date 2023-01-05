@@ -26,10 +26,7 @@ class PdfBook
   # L'édition
   # 
   def publisher
-    @publisher ||= begin
-      dpub = collection? ? collection.data[:publisher] : recette.publisher
-      Editor.new(dpub) if dpub
-    end
+    @publisher ||= Editor.new(recette.publishing) if recette.publishing
   end
 end #/class PdfBook
 

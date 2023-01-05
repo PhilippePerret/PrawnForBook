@@ -19,16 +19,6 @@ ERRORS = {
   recipe: {
     main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
 
-    headers: {
-      required: 'La définition des entêtes (:headers) est absolument requise.',
-      dispositions_required: 'La disposition des entêtes (:disposition) est requise (consulter le manuel)',
-    },
-    footers: {
-      requires: 'La définition des pieds de pages (:footers) est absolument requise.',
-      dispositions_required: 'La disposition des pieds de page (:disposition) est requise (consulter le manuel)',
-    },
-
-
   }, #/ :recipe
 
   # --- Maison d'éditions ---

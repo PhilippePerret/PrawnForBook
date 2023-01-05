@@ -72,7 +72,7 @@ class PrawnView
 
   def draw_reference_grids
     define_default_leading
-    font = font(default_font, size: default_font_size)
+    font = font(default_font_name, size: default_font_size)
     stroke_color 51, 0, 0, 3 # bleu ciel
     fill_color 51, 0, 0, 3 # bleu ciel
     line_width(0.1)
