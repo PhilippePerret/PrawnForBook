@@ -7,20 +7,25 @@ module Prawn4book
         check_if_current_book_or_return || return
         clear unless debug?
         puts "LISTE DES ASSISTANTS\n".bleu
-        assistant = Q.select("Quel assistant lancer ?".jaune, choices_assistants, {per_page: choices_assistants.count})
-        assistant || return
-        case assistant[:type]
+        # choices = choices_with_precedences(choices_assistant)
+        # assistant = Q.select("Quel assistant lancer ?".jaune, choices, {per_page: choices.count})
+
+        dass = choices_with_precedences(choices_assistants,__dir__) do 
+          "Quel assistant lancer ?"
+        end || return
+
+        case dass[:type]
         when :page
-          run_assistant_page(assistant[:path])
+          run_assistant_page(dass[:path])
         when :assistant
-          proceed_assistant_for(assistant[:what])
+          proceed_assistant_for(dass[:what])
         end
       else
         # 
         # Si un objet est déjà défini
         # 
         what = CLI.components.first
-        if File.exist?(File.join(__dir__, 'lib', "assistant_#{what}.rb"))
+        if File.exist?(File.join(__dir__, 'assistants', "#{what}.rb"))
           proceed_assistant_for(what)
         elsif File.exist?(file = File.join(folder_pages,"#{what}"))
           run_assistant_page(file)
@@ -37,7 +42,7 @@ module Prawn4book
 
     def proceed_assistant_for(what)
       pdfbook = check_if_current_book_or_return || return
-      require_relative "lib/assistant_#{what}"
+      require_relative "assistants/#{what}"
       Prawn4book::Assistant.send("assistant_#{what}".to_sym, pdfbook)
     end
 
@@ -55,10 +60,10 @@ module Prawn4book
           {name: "Assistant #{assistant_name}", value: {type: :page, path: assistant_page_folder}}
         end.compact
         # TODO Ajouter les autres assistants
-        Dir["#{APP_FOLDER}/lib/commandes/assistant/lib/assistant_*.rb"].each do |pth|
+        Dir["#{APP_FOLDER}/lib/commandes/assistant/assistants/*.rb"].each do |pth|
           file_name = File.basename(pth).sub(/\.rb$/,'')
           assistant_name = file_name.titleize.gsub(/_/, ' ')
-          cs << {name:assistant_name, value: {type: :assistant, what: file_name.sub(/^assistant_/,'')}}
+          cs << {name:"Assistant #{assistant_name}", value: {type: :assistant, what: file_name.sub(/^assistant_/,'')}}
         end
         cs << {name: PROMPTS[:cancel], value: nil}
         cs

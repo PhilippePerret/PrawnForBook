@@ -155,7 +155,7 @@ class InitedThing
   end
 
   def require_assistant(name)
-    require "#{COMMANDS_FOLDER}/assistant/lib/assistant_#{name}"
+    require "#{COMMANDS_FOLDER}/assistant/assistants/#{name}"
   end
 
   ##

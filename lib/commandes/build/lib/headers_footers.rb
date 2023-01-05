@@ -28,6 +28,7 @@ class PrawnView
       # pieds de pages
       # 
       def build(pdfbook, pdf, data_pages)
+        return # pour le moment (il faut tout revoir)
         init(pdfbook, data_pages)
         data.each { |ditem| new(ditem).build(pdf) }
         # puts "Data page: #{data_pages.inspect}".bleu

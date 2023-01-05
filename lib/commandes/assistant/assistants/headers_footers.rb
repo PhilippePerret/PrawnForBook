@@ -182,10 +182,34 @@ class AssistantHeadersFooters
   end
 
   ##
+  # Pour choisir l'élément à placer dans l'head-foot, le numéro de
+  # page ou le titre, la casse, 
+  # Optionnellement : la police, la taille, le style, 
+  def define_headfoot_element(hf_data)
+    puts "Données reçues : #{hf_data.inspect}".jaune
+    sleep 1
+    tty_define_object_with_data(DATA_HEADFOOT_ELEMENT, hf_data)    
+  end
+
+  ##
   # Retourne les polices pour un menu facilitator
   # 
   def police_names
     owner.recipe.fonts_data.keys + DEFAUT_FONTS.keys
+  end
+
+  def police_names_or_default
+    [{name:'Par défaut', value: :default}] + police_names
+  end
+
+  def font_sizes_or_default
+    [{name:'Par défaut', value: :default}] + (7..20).map do |n|
+      {name: "#{n}pt", value: n}
+    end   
+  end
+
+  def font_styles_or_default
+    [{name:'Par défaut', value: :default}] + DATA_STYLES_FONTS
   end
 
 #
@@ -210,28 +234,40 @@ CHOIX_ALIGN_CONTENU_HEADFOOT = [
 ]
 
 CHOIX_CASSE_TITRE = [
-  {name:'Tout majuscule', value: :all_caps},
-  {name:'Comme un titre', value: :title},
-  {name:'Tout minuscule', value: :min}
+  {name:'Ne pas modifier' , value: :keep},
+  {name:'Tout majuscule'  , value: :all_caps},
+  {name:'Comme un titre'  , value: :title},
+  {name:'Tout minuscule'  , value: :min}
 ]
 
 VALUES_NIVEAU_TITRE_OU_NUM_PAGE = [
-  {name:"Numéro de page", value: 0}
+  {name:"Aucun"         , value: :none},
+  {name:"Numérotation"  , value: :numero},
 ]
 (1..7).each do |n|
-  VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:"Titre de niveau #{n}", value: n}
+  VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:"Titre de niveau #{n}", value: "titre#{n}".to_sym}
+end
 
 DATA_HEADFOOT = [
-  {name: 'Nom du "headfoot"'  , value: :name, required: true},
-  {name: 'Police'             , value: :font        , values: :police_names},
-  {name: 'Taille'             , value: :size        , type: :int, default: 11, values: (7..30)},
-  {name: 'Style'              , value: :style       , type: :sym, values: DATA_STYLES_FONTS, default: 2},
-  {name: 'Dispo page gauche'  , value: :left_dispo  , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
-  {name: 'Dispo page droite'  , value: :right_dispo , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
-  {name: 'Niveau de titre'    , value: :title_level , values: (1..7), default: 0},
-  {name: 'Casse du titre'     , value: :title_casse , values: CHOIX_CASSE_TITRE, default: 1},
+  {name: 'Nom du "headfoot"'    , value: :name, required: true},
+  {name: 'Police'               , value: :font        , values: :police_names},
+  {name: 'Taille'               , value: :size        , type: :int, default: 11, values: (7..30)},
+  {name: 'Style'                , value: :style       , type: :sym, values: DATA_STYLES_FONTS, default: 2},
+  {name: 'Page G | x |   |   |' , value: :pg_left     , type: :custom, meth: :define_headfoot_element},
+  {name: '       |   | x |   |' , value: :pg_center   , type: :custom, meth: :define_headfoot_element },
+  {name: '       |   |   | x |' , value: :pg_right    , type: :custom, meth: :define_headfoot_element },
+  {name: 'Page D | x |   |   |' , value: :pd_left     , type: :custom, meth: :define_headfoot_element },
+  {name: '       |   | x |   |' , value: :pd_center   , type: :custom, meth: :define_headfoot_element },
+  {name: '       |   |   | x |' , value: :pd_right    , type: :custom, meth: :define_headfoot_element },
 ]
 
+DATA_HEADFOOT_ELEMENT = [
+  {name: 'Contenu'  , value: :content , values: VALUES_NIVEAU_TITRE_OU_NUM_PAGE, default: 1},
+  {name: 'Casse'    , value: :casse   , values: CHOIX_CASSE_TITRE, default: 1},
+  {name: 'Police'   , value: :font    , default: nil, values: :police_names_or_default},
+  {name: 'Taille'   , value: :size    , default: nil, values: :font_sizes_or_default},
+  {name: 'Style'    , value: :style   , default: nil, values: :font_styles_or_default},
+]
 end #/class AssistantHeadersFooters
 end #/class Assistant
 end #/module Prawn4book

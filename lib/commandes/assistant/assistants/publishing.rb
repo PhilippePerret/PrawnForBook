@@ -28,7 +28,7 @@ class AssistantPublishing
   end
 
   def logo_exist?(value, dpublishing)
-    return true if value.nil? || value.empty? || value = '---'
+    return true if value.nil? || value.empty? || value == '---'
     logo_path = File.join(owner.folder, value)
     return true if File.exist?(logo_path)
     puts (ERRORS[:publishing][:logo_unfound] % logo_path).rouge

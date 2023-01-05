@@ -4,6 +4,9 @@
   livre à partir des nouvelles propriétés d'une recette.
   Quand j'y arriverai, il sera temps de tester un livre avec 
   PDF::Checker
+  Pour le moment, le PDF est produit, mais c'est juste une horreur
+  - le texte n'est pas affiché
+  - la page d'infos est complètement tronquée
 
 * Il faut repenser encore le fonctionnement des headers/footers
   Une disposition doit contenir ce qu'il contient :
