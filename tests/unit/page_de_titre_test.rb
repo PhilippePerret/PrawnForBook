@@ -98,11 +98,11 @@ class PageTitreUnitTest < Minitest::Test
   end
   
   def book_folder
-    @book_folder ||= File.join(TEST_FOLDER,'essais','books','un_livre_pour_tests')
+    @book_folder ||= File.join(TEST_FOLDER,'assets','essais','books','un_livre_pour_tests')
   end
 
   def collection_folder
-    @collection_folder ||= File.join(TEST_FOLDER,'essais','books','une_collection')
+    @collection_folder ||= File.join(TEST_FOLDER,'assets','essais','books','une_collection')
   end
 
 end #/class PageTitreUnitTest

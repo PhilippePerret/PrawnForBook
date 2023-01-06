@@ -34,7 +34,6 @@ CHOIX_ABANDON = {name: Prawn4book::PROMPTS[:Abandon].bleu, value: :cancel}
 # Fontes PDF par défaut
 # TODO Mieux régler
 DEFAUT_FONTS = {
-  'Times'     => { regular: true }, 
   'Helvetica' => { regular: true }, 
   'Courier'   => { regular: true }
 }

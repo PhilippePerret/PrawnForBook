@@ -1,0 +1,17 @@
+---
+#<book_data>
+:book_data:
+  :title: Test de la page de titre
+  :subtitle: Un sous-titre sur\nplusieurs lignes sous\nle titre principal
+  :id: for_page_titre
+  :auteurs: Philippe PERRET
+#</book_data>
+#<publishing>
+:publishing:
+  :name: Icare Éditions
+  :logo_path: images/logo.jpg
+#</publishing>
+#<inserted_pages>
+:inserted_pages:
+  :page_infos: false
+#</inserted_pages>

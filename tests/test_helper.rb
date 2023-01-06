@@ -17,6 +17,7 @@ $LOAD_PATH.unshift File.dirname(__dir__)
 
 
 TEST_FOLDER = __dir__.freeze
+ASSETS_FOLDER = File.join(TEST_FOLDER,'assets')
 
 reporter_options = { 
   color: true,          # pour utiliser les couleurs
@@ -38,3 +39,15 @@ else
   puts "Ajouter l'option -spy pour utiliser l'espion".jaune
   sleep 1
 end
+
+module Minitest
+  class Test
+    def new_tosa
+      return OSATest.new({
+        app:'Terminal',
+        delay: 0.5,
+        window_bounds: [0,0,1200,800]
+      })
+    end
+  end #/class Test
+end #/module Minitest

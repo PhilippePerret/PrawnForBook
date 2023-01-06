@@ -24,7 +24,7 @@ class PageTitreAssistant < Minitest::Test
     "
 
 
-    book_folder = File.join(TEST_FOLDER,'essais','books','un_livre_pour_tests')
+    book_folder = File.join(TEST_FOLDER,'assets','essais','books','un_livre_pour_tests')
     book_recipe = File.join(book_folder,'recipe.yaml')
     book_path   = File.join(book_folder,'book.pdf')
 
