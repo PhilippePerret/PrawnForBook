@@ -27,8 +27,6 @@
     droite)
   => Ré-écrire le mode d'emploi (peut-être, dans le mode d'emploi, conseiller d'utiliser l'assistant et voir ensuite les données inscrites pour s'en inspirer)
 
-* Se servir de `Prawn::Fonts::AFM::BUILT_INS` pour définir les polices par défaut accessible dans Prawn.
-
 
 * Corrections/affinements par rapport au premier livre Narration
   -> cf. le fichier TODO de la collection
