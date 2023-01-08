@@ -32,21 +32,37 @@ CHOIX_CANCEL  = {name: "#{Prawn4book::PROMPTS[:cancel]} (^c)".orange, value: :ca
 CHOIX_ABANDON = {name: Prawn4book::PROMPTS[:Abandon].bleu, value: :cancel}
 #
 # Fontes PDF par défaut
-# TODO Mieux régler
-DEFAUT_FONTS = {
-  'Helvetica' => { regular: true }, 
-  'Courier'   => { regular: true }
-}
+#
 
-DEFAULT_FONTS_KEYS = DEFAUT_FONTS.keys
+# DEFAULT_FONTS_KEYS = DEFAUT_FONTS.keys
+DEFAUT_FONTS = {}
+DEFAULT_FONTS_KEYS = Prawn::Fonts::AFM::BUILT_INS.map do |font_def|
+  font_name, font_style = font_def.split('-')
+  font_style = case font_style
+      when NilClass       then :regular
+      when 'Bold'         then :bold
+      when 'BoldOblique'  then :bold_oblique
+      when 'Oblique'      then :oblique
+      when 'BoldItalic'   then :bold_italic
+      when 'Italic'       then :italic
+      else
+        raise "Erreur systémique : Le style de fonte #{font_style.inspect} est inconnu."
+      end
+  DEFAUT_FONTS.merge!(font_name => {}) unless DEFAUT_FONTS.key?(font_name)
+  DEFAUT_FONTS[font_name].merge!(font_style => true)
+  font_name # => map
+end.uniq
 
 DATA_STYLES_FONTS = [
-  {name: 'Normal'         , value: :normal      , index:1},
-  {name: 'Regular'        , value: :regular     , index:2},
-  {name: 'Italic'         , value: :italic      , index:3},
-  {name: 'Bold'           , value: :bold        , index:4},
-  {name: 'Extra-bold'     , value: :extra_bold  , index:5},
-  {name: 'Light'          , value: :light       , index:6},
-  {name: 'Extra-light'    , value: :extra_light , index:7},
+  {name: 'Normal'         , value: :normal        , index:1},
+  {name: 'Regular'        , value: :regular       , index:2},
+  {name: 'Italic'         , value: :italic        , index:3},
+  {name: 'Bold'           , value: :bold          , index:4},
+  {name: 'Extra-bold'     , value: :extra_bold    , index:5},
+  {name: 'Light'          , value: :light         , index:6},
+  {name: 'Extra-light'    , value: :extra_light   , index:7},
+  {name: 'Oblique'        , value: :oblique       , index:8},
+  {name: 'Bold Oblique'   , value: :bold_oblique  , index:9},
+  {name: 'Bold Italic'    , value: :bold_italic   , index:10},
 ]
 
