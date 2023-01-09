@@ -34,12 +34,11 @@ class PageTitreTest < Minitest::Test
 
     # Les formules que j'aimerais bien avoir : 
     pdf.has(10.pages)
-    pdf.page(2).contains("Bonjour").close_to(100,20).with({font:'Helvetica', style: :normal})
+    pdf.page(2).has_text("Bonjour").close_to(100,20).with({font:'Helvetica', style: :normal})
 
     pdf.should_have(3.pages)
-    page(2).of(pdf).should_contain("Bonjour").close_to(100,20)
-    pdf.should_contain("Bonjour").at(page: 2, close_to: [100,20])
-    pdf.page(2)
+    pdf.page(2).not.has_texte("Bonjour").close_to(100,20)
+    pdf.has_text("Bonjour").at(page: 2, close_to: [100,20])
 
   end
 

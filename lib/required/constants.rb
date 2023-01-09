@@ -45,8 +45,9 @@ DEFAULT_FONTS_KEYS = Prawn::Fonts::AFM::BUILT_INS.map do |font_def|
       when 'Oblique'      then :oblique
       when 'BoldItalic'   then :bold_italic
       when 'Italic'       then :italic
+      when 'Roman'        then :roman
       else
-        raise "Erreur systémique : Le style de fonte #{font_style.inspect} est inconnu."
+        raise "Erreur systémique : Le style de fonte #{font_style.inspect} est inconnu (pour la font #{font_def.inspect})."
       end
   DEFAUT_FONTS.merge!(font_name => {}) unless DEFAUT_FONTS.key?(font_name)
   DEFAUT_FONTS[font_name].merge!(font_style => true)
@@ -64,5 +65,6 @@ DATA_STYLES_FONTS = [
   {name: 'Oblique'        , value: :oblique       , index:8},
   {name: 'Bold Oblique'   , value: :bold_oblique  , index:9},
   {name: 'Bold Italic'    , value: :bold_italic   , index:10},
+  {name: 'Roman'          , value: :roman         , index:11},
 ]
 

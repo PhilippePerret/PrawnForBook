@@ -39,7 +39,7 @@ class PrawnView
   def document
     @document ||= begin
       # spy "Config pour initialiser Prawn::Document :\n#{config.pretty_inspect}".jaune
-      Prawn::Document.new(config)
+      Prawn::RectifiedDocument.new(config)
     end
   end
 
