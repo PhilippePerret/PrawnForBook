@@ -183,12 +183,28 @@ class Recipe
     page_de_garde:true, faux_titre:false, page_de_titre:true, page_infos:true
   }
   def inserted_page?(key)
+    return false unless page_enable?(key)
     if inserted_pages.key?(key)
       return inserted_pages[key]
     elsif DEFAULT_INSERTED_PAGES.key?(key)
       return DEFAULT_INSERTED_PAGES[key]
     else
       raise "Impossible de trouver la donnée par défaut de la page à insérer de clé #{key.inspect}."
+    end
+  end
+
+  ##
+  # Méthode qui s'assure que les données sont suffisante pour 
+  # afficher la page de clé +key+
+  # @param [Symbol] key Clé de la page, parmi :page_de_garde, :faux_titre, page_de_titre, :page_infos
+  def page_enable?(key)
+    case key
+    when :page_de_garde then true # toujours
+    when :faux_titre    then not(title.nil? || auteurs.nil?)
+    when :page_de_titre
+      not(title.nil? || auteurs.nil?) 
+    when :page_infos
+      not(publishing.nil?)
     end
   end
 
@@ -245,7 +261,7 @@ class Recipe
     @title ||= book_data[:title]
   end
   def subtitle
-    @subtitle ||= book_data[:subtitle].gsub(/\\n/, "\n")
+    @subtitle ||= book_data[:subtitle]&.gsub(/\\n/, "\n")
   end
   def auteurs
     @auteurs ||= book_data[:auteurs]

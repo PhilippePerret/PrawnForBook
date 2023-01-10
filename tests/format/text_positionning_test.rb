@@ -14,7 +14,7 @@ class TextPositioningTest < Minitest::Test
 
   def teardown
     super
-    # File.delete(pdf_path) if File.exist?(pdf_path)
+    File.delete(pdf_path) if File.exist?(pdf_path)
   end
 
   def pdf_path

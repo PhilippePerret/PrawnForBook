@@ -8,7 +8,6 @@ module Prawn4book
 class PrawnView
 
   def insert_page_infos
-    # @pdfbook = pdfbook # déjà mis avant ?
     # 
     # Pour raccourcir
     # 
@@ -55,6 +54,8 @@ class PrawnView
     # 
     # ["valeur", margin bottom|nil]
     publisher = recette.publishing
+    # 
+    # On écrit toutes les informations
     [
       [publisher[:name]           , nil],
       [publisher[:site]           , nil],
