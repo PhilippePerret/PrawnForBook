@@ -1,5 +1,8 @@
 module GeneratedBook
 class Book
+  include Prawn::Measurements
+  # Notamment la méthode pt2mm(<pts>) qui permet d'obtenir la dimension
+  # en millimètre pour la dimension en ps-points.
 
   def self.erase_if_exist
     FileUtils.rm_rf(folder) if File.exist?(folder)

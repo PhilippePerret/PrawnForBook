@@ -7,11 +7,11 @@ module Prawn4book
         check_if_current_book_or_return || return
         clear unless debug?
         puts "LISTE DES ASSISTANTS\n".bleu
-        # choices = choices_with_precedences(choices_assistant)
-        # assistant = Q.select("Quel assistant lancer ?".jaune, choices, {per_page: choices.count})
 
-        dass = choices_with_precedences(choices_assistants,__dir__) do 
-          "Quel assistant lancer ?"
+        dass = precedencize(choices_assistants,__dir__) do |q|
+          q.question "Quel assistant lancer ?"
+          q.precedences_per_index
+          q.add_choice_cancel(**{name:"Renoncer"})
         end || return
 
         case dass[:type]
@@ -65,7 +65,6 @@ module Prawn4book
           assistant_name = file_name.titleize.gsub(/_/, ' ')
           cs << {name:"Assistant #{assistant_name}", value: {type: :assistant, what: file_name.sub(/^assistant_/,'')}}
         end
-        cs << {name: PROMPTS[:cancel], value: nil}
         cs
       end
     end

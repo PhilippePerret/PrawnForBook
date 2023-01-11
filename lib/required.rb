@@ -1,5 +1,6 @@
 require 'yaml'
 require 'fileutils'
+require 'precedences'
 
 require 'prawn'
 require "prawn/measurement_extensions" # Pour pouvoir utiliser 1.cm etc.

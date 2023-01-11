@@ -16,7 +16,7 @@ class AssistantPublishing
 
   def define_publishing(options = nil)
     dpublishing = owner.recipe.publishing
-    if tty_define_object_with_data(DATA_PUBLISHING, dpublishing)
+    if tty_define_object_with_data(DATA_PUBLISHING, dpublishing || {})
       owner.recipe.insert_bloc_data('publishing', dpublishing)
     end
   end
@@ -68,7 +68,6 @@ DATA_PUBLISHING = [
   {name: 'Numéro SIRET'                   , value: :siret},
   {name: 'Mail général'                   , value: :mail},
   {name:'Mail de contact'                 , value: :contact},
-
 ]
 
 end #/class AssistantPublishing
