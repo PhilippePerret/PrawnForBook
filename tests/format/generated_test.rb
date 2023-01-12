@@ -13,7 +13,7 @@
 
 =end
 require 'test_helper'
-require_relative 'generated_book_utils'
+require_relative 'generated_book/required'
 class GeneratedBookTestor < Minitest::Test
 
   # Instance GeneratedBook::Book (réinitialisée à chaque test)
@@ -29,11 +29,16 @@ class GeneratedBookTestor < Minitest::Test
     super
   end
 
+  def focus?
+    true
+  end
+
   def pdf
     @pdf ||= PDF::Checker.new(book.book_path)
   end
 
   def test_book_is_built_only_with_simple_text
+    return if focus?
     resume "
     On peut construire un livre avec un simple fichier texte
     de nom 'texte.pfb.md'
@@ -41,13 +46,26 @@ class GeneratedBookTestor < Minitest::Test
     book.build
   end
 
+  def test_book_with_leading
+    # return true if focus?
+    recette = {leading: 20}
+    book.recipe.build_with(recette)
+    book.build_text(:plusieurs_lignes)
+    # ===> TEST <===
+    book.build
+    # --- Vérifications ---
+    pagetrois = pdf.page(3)
+    pagetrois.has_font("Times-Roman").with(**{size: 10})
+  end
+
   def test_simple_book
+    return true if focus?
     # 
     # HOT: L'idée, en travaillant ce test, et de voir les données
     # minimales qu'il faut fournir pour pouvoir construire un livre
     # Dans l'idéal, seul le texte devrait être nécessaire
     props = {margin: 10.mm}
-    book.build_recipe_with(**props)
+    book.recipe.build_with(**props)
     # ===> TEST <===
     book.build
     # --- Vérification ---

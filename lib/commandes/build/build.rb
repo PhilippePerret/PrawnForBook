@@ -100,7 +100,7 @@ class PdfBook
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     # 
-    spy "pdf_config: #{pdf_config.pretty_inspect}"
+    spy "\n+++ pdf_config (pour PrawnView): #{pdf_config.pretty_inspect}"
     
     pdf = PrawnView.new(self, pdf_config)
     

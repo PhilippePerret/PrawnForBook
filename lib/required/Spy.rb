@@ -14,9 +14,13 @@
 require 'clir'
 
 def spy(msg)
-  return unless debug?
+  return unless debug? || spy?
   @dterm ||= DebugInOtherTerm.new
   @dterm << msg
+end
+
+def spy?
+  :TRUE == @spysrunning ||= true_or_false(CLI.options[:spy])
 end
 
 #

@@ -16,7 +16,7 @@ class PrawnView
     # Note : 'with_index' permet juste de faire des essais
     green_point = '.'.vert
     clear unless debug?
-    suivi = 'Écriture du paragraphe #%{num}…'.vert
+    spy 'Écriture du paragraphe #%{num}…'.vert
     paragraphes.each_with_index do |paragraphe, idx|
 
       next if paragraphe.not_printed?

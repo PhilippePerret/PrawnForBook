@@ -31,7 +31,7 @@ class BookFormat
       default_size: {name:'Taille de fonte par défaut'        , default: 12},
       indent:       {name:'Indentation du premier paragraphe' , default: '0mm'},
       line_height:  {name:'Hauteur de lignes (en points-pdf)' , default: 14.0},
-      interline:    {name:'Espace entre paragraphes'          , default: 0.0},
+      leading:      {name:'Espace entre paragraphes'          , default: 0.0},
       numerotation: {name:'Numérotation du livre'             , default:'pages', values: :values_numerotations},
     },
   }

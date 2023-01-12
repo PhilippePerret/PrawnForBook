@@ -19,15 +19,13 @@ class SpecialPage
 
   # Pour la :values d'une donnée de type select
   def police_names(default_name = nil)
-    ((get_data_in_recipe[:fonts]||{}).merge(polices_default)).map do |font_name, dfont|
+    ((get_data_in_recipe[:fonts]||{}).merge(DEFAUT_FONTS)).map do |font_name, dfont|
       {name: font_name, value: font_name}
     end
   end
-  def polices_default
-    {'Times' => true, 'Helvetica' => true, 'Courier' => true}
-  end
   def first_police_name
-    police_names.first[:value]
+    spy "first_police_name = #{DEFAULT_FONTS_KEYS.first.inspect}".bleu
+    DEFAULT_FONTS_KEYS.first
   end
 
   # @return [Any] Valeur pour la clé +simple_key+ défini dans le

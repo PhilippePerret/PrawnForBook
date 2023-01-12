@@ -33,11 +33,12 @@ require 'pdf/checker'
 
 require_relative '../lib/required/constants'
 require_relative '../lib/required/Spy'
-if CLI.options[:spy]
+RUN_SPY = true
+if RUN_SPY
+  CLI.options.merge!(spy: true)
   spy "Initiation du Terminal d'espionnage…".bleu 
 else
-  puts "Ajouter l'option -spy pour utiliser l'espion".jaune
-  sleep 1
+  puts "Mettre RUN_SPY à true dans test_helper.rb pour utiliser l'espion".jaune
 end
 
 module Minitest

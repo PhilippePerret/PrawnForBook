@@ -77,8 +77,10 @@ class NTextParagraph < AnyParagraph
     # modifier l'aspect)
     # 
     fontFamily  = font_family(pdf)
-    fontSize    = font_size(pdf)
     fontStyle   = font_style(pdf)
+    # fontFamily = "Times-Roman"
+    # fontStyle  = :regular
+    fontSize    = font_size(pdf)
 
     pdf.update do
       # 

@@ -52,12 +52,9 @@ class TableOfContent
   # propriétés à valeurs définies
   # 
   def police_names(default_name = nil)
-    (get_data_in_recipe[:fonts]||polices_default).map do |font_name, dfont|
+    (get_data_in_recipe[:fonts]||DEFAULT_FONTS).map do |font_name, dfont|
       {name: font_name, value: font_name}
     end
-  end
-  def polices_default
-    {'Times' => true, 'Helvetica' => true, 'Courier' => true}
   end
 
   def separateurs

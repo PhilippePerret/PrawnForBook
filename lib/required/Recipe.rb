@@ -237,7 +237,7 @@ class Recipe
   end
   def default_font_name
     @default_font_name ||= begin
-      (default_font ? fonts_data.keys : DEFAULT_FONTS_KEYS).first
+      (default_font ? fonts_data.keys : ["Times-Roman"]).first
     end
   end
   def default_font_style
@@ -247,7 +247,7 @@ class Recipe
   end
   def default_font_size
     @default_font_size ||= begin
-      if default_font then default_font[:size] end || 12
+      if default_font then default_font[:size] end || 10
     end
   end
 
