@@ -1,0 +1,102 @@
+require 'timeout'
+
+module GeneratedBook
+class Book
+  include Prawn::Measurements
+  # Notamment la méthode pt2mm(<pts>) qui permet d'obtenir la dimension
+  # en millimètre pour la dimension en ps-points.
+
+  def self.erase_if_exist
+    FileUtils.rm_rf(folder) if File.exist?(folder)
+  end
+
+  # --- Chemins d'accès utiles ---
+  #
+  # @return [String] Chemin d'accès au livre. Ce sera toujours celui-là
+  def self.book_path
+    @book_path ||= File.join(folder, 'book.pdf')
+  end
+  def self.text_path
+    @text_path ||= File.join(folder, 'texte.pfb.md')
+  end
+  def self.folder
+    mkdir(File.join(__dir__, 'book_generated'))
+  end
+
+###################       INSTANCE      ###################
+  
+  ##
+  # Méthode principale construisant le livre
+  def build
+    ensure_book_valid
+    `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --grid`
+    # 
+    # On attend que le livre soit construit
+    # (au bout de 20 secondes, on produit une erreur)
+    # 
+    Timeout.timeout(20) do 
+      until File.exist?(book_path)
+        sleep 0.2
+      end
+    end
+  end
+
+  # --- Utils Methods ---
+
+  # Méthode très importante qui s'asssure que le livre est valide
+  # 
+  # À la base, il s'agit simplement de s'assure que le texte et la
+  # recette existe, mais ensuite, suivant la recette et le texte,
+  # il y aura plus de choses à vérifier, comme les références, les
+  # bibliographies etc.
+  def ensure_book_valid
+    texte_exist? || build_text
+  end
+
+  # --- Text Methods ---
+
+  def texte_exist?
+    File.exist?(text_path)
+  end
+
+  # Construit le fichier texte avec le contenu +content+
+  # @param [String|Symbol] content  Contenu du livre. C'est soit un texte simple, soit un symbole qui renvoie à un texte du dossier 'textes' du dossier courant.
+  def build_text(content = nil)
+    # 
+    # Construire le dossier au cas où
+    # 
+    mkdir(folder)
+    # 
+    # Définir le contenu textuel du livre
+    # 
+    content = case content
+    when String 
+      content
+    when NilClass
+      "Bonjour tout le monde !"
+    when Symbol 
+      rf = File.join(__dir__,'textes', "#{content}.pfb.md")
+      File.exist?(rf) || raise("Le fichier #{rf.inspect} est introuvable.")
+      File.read(rf)
+    end
+    # 
+    # Écriture du texte
+    # 
+    File.write(text_path, content)
+  end
+
+  # --- Volatile Data ---
+
+  def recipe
+    @recipe ||= Recipe.new(self)
+  end
+
+
+  # --- Path Data ---
+
+  def folder      ; @folder       ||= self.class.folder       end
+  def text_path   ; @text_path    ||= self.class.text_path    end
+  def book_path   ; @book_path    ||= self.class.book_path    end
+
+end #/class Book
+end #/module GeneratedBook

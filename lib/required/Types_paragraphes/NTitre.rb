@@ -17,17 +17,17 @@ class NTitre < AnyParagraph
     @leading ||= self.class.leading(level)
   end
 
-  def font_family
-    @font_family ||= self.class.font_family(level)
+  def font
+    @font ||= self.class.font(level)
   end
   # @prop La taille de la police en fonction du niveau de titre
   # 
-  def font_size
-    @font_size ||= self.class.font_size(level)
+  def size
+    @size ||= self.class.size(level)
   end
 
-  def font_style
-    @font_style ||= self.class.font_style(level)
+  def style
+    @style ||= self.class.style(level)
   end
 
   # @prop {Integer} Espace avec le texte suivant
@@ -61,15 +61,15 @@ class NTitre < AnyParagraph
 
   # --- MÉTHODES DE CLASSES ---
 
-  def self.font_family(level)
+  def self.font(level)
     get_data(:font, level)
   end
 
-  def self.font_size(level)
+  def self.size(level)
     get_data(:size, level)
   end
 
-  def self.font_style(level)
+  def self.style(level)
     get_data(:style, level)
   end
 

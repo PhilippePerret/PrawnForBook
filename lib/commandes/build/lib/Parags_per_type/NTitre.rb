@@ -19,37 +19,36 @@ class NTitre < AnyParagraph
     # 
     spy "next_page? est #{next_page?.inspect}"
     spy "belle_page? est #{belle_page?.inspect}"
-    pdf.start_new_page if next_page? || belle_page?
+    
+    if next_page? || belle_page?
+      spy "Nouvelle page".bleu
+      pdf.start_new_page 
+    end
     # 
     # Si le titre doit être affiché sur une belle page, et qu'on se
     # trouve sur une page paire, il faut encore passer à la page
     # suivante.
     # 
-    pdf.start_new_page if belle_page? && pdf.page_number.even?
+    if belle_page? && pdf.page_number.even?
+      psy "Nouvelle page pour se trouver sur une belle page".bleu
+      pdf.start_new_page
+    end
 
     pdf.update do
-      # 
-      # Les données de l'instance titre
-      # 
-      topMargin   = titre.margin_top
-      botMargin   = titre.margin_bottom
-      font_family = titre.font_family
-      font_style  = titre.font_style
-      font_size   = titre.font_size
-      leading     = titre.leading
-      level       = titre.level
 
       # unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
       #   move_cursor_to_lineref(topMargin * line_height)
       # end
 
-      line_ref = ( (cursor / line_height) - 1) * line_height
       spy "Position du cursor : #{cursor.inspect}".bleu
+      line_ref = ( (cursor / line_height) - 1) * line_height
       spy "line_ref pour le titre : #{line_ref.inspect}".bleu
       move_cursor_to(line_ref)
+      spy "Position cursor après déplacement : #{cursor.inspect}".bleu
 
       # # 
-      # # Margin top du titre
+      # # Position top du titre (en fonction des nombres
+      # # de lignes qu'il doit laisser avant)
       # # 
       # if (topMargin - 1) > 0
       #   move_down((topMargin - 1) * line_height)
@@ -59,8 +58,9 @@ class NTitre < AnyParagraph
       #
       # Application de la fonte
       # 
-      ft = font(font_family, style: font_style, size: font_size)
-
+      ft = font(titre.font, style: titre.style, size: titre.size)
+      spy "font.ascender du titre : #{ft.ascender}".bleu
+      
       # #
       # # Positionnement sur la ligne de référence
       # # 
@@ -72,9 +72,9 @@ class NTitre < AnyParagraph
       # 
       # move_up(ft.ascender) # ajustement ligne de référence # <===== !!!!
       ftext = titre.formated_text(self)
-      text ftext, align: :left, size: font_size, leading: leading, inline_format: true
-      move_down(ft.ascender)
-    
+      text ftext, align: :left, size: titre.size, leading: leading, inline_format: true
+      # move_down(ft.ascender)
+      spy "Cursor après écriture titre : #{cursor.inspect}".bleu
       # # 
       # # Espace après (if any)
       # #

@@ -133,8 +133,10 @@ class PrawnView
   # --- Cursor Methods ---
 
   def move_cursor_to_top_of_the_page
-    move_cursor_to bounds.top
-    # puts "Curseur placé en haut de page (à #{round(cursor)})"
+    # move_cursor_to bounds.top
+    self.y = bounds.top
+    spy "bounds.top = #{bounds.top.inspect}".bleu
+    spy "Curseur placé en haut de page (à #{round(cursor)})".bleu
   end
 
   def add_cursor_position(str)

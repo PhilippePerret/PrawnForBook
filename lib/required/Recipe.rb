@@ -444,7 +444,7 @@ class Recipe
       end
     end
 
-    spy "tdata des titres = #{tdata.inspect}"
+    # spy "tdata des titres = #{tdata.inspect}"
     return tdata
   end
 
