@@ -16,13 +16,18 @@ class PrawnView
     # Note : 'with_index' permet juste de faire des essais
     green_point = '.'.vert
     clear unless debug?
-    spy 'Écriture du paragraphe #%{num}…'.vert
     paragraphes.each_with_index do |paragraphe, idx|
 
       next if paragraphe.not_printed?
 
+      if paragraphe.paragraph?
+        spy "Écriture du paragraphe-texte #{paragraphe.numero}…".vert
+      elsif paragraphe.titre?
+        spy "Écriture du paragraphe-titre index #{idx} #{paragraphe.text.inspect}".vert
+      end
+
       paragraphe.page_numero = page_number
-      spy "Page ##{page_number} pour le paragraphe #{idx}"
+      spy "Page du paragraphe #{idx} : ##{page_number}"
 
       # 
       # --- PRÉ-TRAITEMENT DU PARAGRAPHE ---
@@ -47,15 +52,21 @@ class PrawnView
       # Si c'est un texte, on consigne le paragraphe dans sa page
       #
       if paragraphe.paragraph?
-        # - Suivi du travail -
-        # write_at(suivi % {num: paragraphe.numero}, 0, 0)
         pdfbook.set_paragraphs_in_pages(paragraphe)
       end
 
       #
-      # Si ce paragraphe est un titre, on le mémorise comme titre
-      # courant de son niveau. L'information est utile pour régler
-      # les titres des nouvelles pages.
+      # Traitement particulier si c'est un titre
+      #   
+      # - on doit trouver sa ligne de base en fonction de line_height
+      #   du nombre de lignes qu'il faut laisser avant et après 
+      #   (l'idée, pour le moment, est de toujours replacer le curseur
+      #    au bon endroit)
+      # - traite le cas où le texte de la suite serait sur une autre
+      #   page TODO
+      # - on le mémorise comme titre courant de son niveau. 
+      #   L'information est utile pour régler les titres des 
+      #   nouvelles pages.
       # 
       if paragraphe.titre?
         pdfbook.set_current_title(paragraphe, page_number)

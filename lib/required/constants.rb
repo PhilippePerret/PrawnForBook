@@ -54,6 +54,8 @@ DEFAULT_FONTS_KEYS = Prawn::Fonts::AFM::BUILT_INS.map do |font_def|
   font_name # => map
 end.uniq
 
+# puts "DEFAUT_FONTS : #{DEFAUT_FONTS.inspect}"
+
 DATA_STYLES_FONTS = [
   {name: 'Normal'         , value: :normal        , index:1},
   {name: 'Regular'        , value: :regular       , index:2},

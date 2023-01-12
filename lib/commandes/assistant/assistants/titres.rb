@@ -112,7 +112,7 @@ TITRES_PROPERTIES = [
   {name: "Nombre de lignes passées avant"               , value: :lines_before, type: :int},
   {name: 'Nombre de lignes passées après'               , value: :lines_after, type: :int},
   {name: 'Interlignage'                                 , value: :leading, type: :float},
-  {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){dd[:level] < 2} },
+  {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){dd[:level] < 2}, default: true },
   {name: 'Placer toujours ce titre sur une belle page'  , value: :belle_page   , type: :bool, if: ->(dd){dd[:level] < 2} },
 ]
 MAIN_TITRES_PROPERTIES = TITRES_PROPERTIES + [

@@ -3,7 +3,7 @@
 	[
 		{
 			"path": ".",
-      "file_exclude_patterns":["Rake*", "Gem*",".debugterm",".git*"]
+      "file_exclude_patterns":["Rake*", "Gem*",".debugterm"]
 		}
 	],
 }

@@ -281,8 +281,12 @@ class Recipe
     @numero_page_style ||= get(:num_page_style)
   end
 
+  def leading
+    book_format[:text][:leading]
+  end
+
   def line_height
-    @line_height ||= get(:line_height, DEFAULT_LINE_HEIGHT)
+    book_format[:text][:line_height]
   end
 
   # --- Blocs de données ---
@@ -359,8 +363,14 @@ class Recipe
   end
   alias :fonts :fonts_data
 
+  # @return [Hash<Hash>] Les données pour les six niveaux de
+  # titre.
+  # @note
+  #   Que ces données soient définies ou non, elles ont toujours
+  #   une valeur. Les valeurs par défaut sont fixées par la méthode
+  #   get_all_titles_data
   def titles_data
-    @book_titles ||= get(:titles, {})
+    @book_titles ||= get_all_titles_data
   end
 
   def biblios_data
@@ -404,6 +414,54 @@ class Recipe
 
 
   private
+
+  ##
+  # @return [Hash] Une table contenant toutes les données pour les
+  # titres qu'ils soient définis ou non
+  def get_all_titles_data
+    tdata = get(:titles, {})
+    # 
+    # On s'assure qu'il y ait une donnée par niveau de titre
+    # 
+    (1..6).each do |niveau|
+      klevel = :"level#{niveau}"
+      tdata.key?(klevel) || tdata.merge!(klevel => {})
+      # 
+      # On s'assure que chaque titre définissent bien chaque donnée
+      # 
+      [:font, :size, :lines_before, :lines_after, :leading, :style
+      ].each do |prop|
+        tdata[klevel].key?(prop) || begin
+          tdata[klevel].merge!(prop => title_default_value_prop(prop, niveau))
+        end
+      end
+      if niveau == 1
+        # 
+        # Spécialement pour le titre de niveau 1
+        # 
+        tdata[klevel].key?(:next_page)  || tdata[klevel].merge!(next_page: true)
+        tdata[klevel].key?(:belle_page) || tdata[klevel].merge!(belle_page: false)
+      end
+    end
+
+    spy "tdata des titres = #{tdata.inspect}"
+    return tdata
+  end
+
+  # Définit et @return la valeur par défaut de la propriété +prop+
+  # pour un titre de niveau +niveau+
+  # @api private
+  def title_default_value_prop(prop, niveau)
+    case prop
+    when :font          then "Helvetica"
+    when :size          then 28 - (niveau * 2)
+    when :style         then :regular
+    when :leading       then 0.0
+    when :lines_before  then 7 - niveau
+    when :lines_after   then niveau > 3 ? 0 : (4 - niveau)
+    end
+  end
+
 
   def path
     @path ||= owner.recipe_path

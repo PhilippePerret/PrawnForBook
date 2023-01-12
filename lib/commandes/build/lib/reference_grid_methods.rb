@@ -78,23 +78,23 @@ class PrawnView
   # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
   # prenant à l'entrée dans la méthode
   def font2leading(fonte, size, hline, options = {})
-    lead  = 0.0
+    # spy "Leading = #{leading.inspect}".bleu
     font fonte, size:size
-    h = height_of("A", leading:lead, size: size)
+    h = height_of("A", leading:leading, size: size)
     if (h - hline).abs > (h - 2*hline).abs
       options.merge!(:greater => true) unless options.key?(:greater)
     end
-    # puts "h = #{h}"
+    incleading = leading.dup
     if h > hline && not(options[:greater] == true)
       while h > hline
-        h = height_of("A", leading: lead -= 0.01, size: size)
+        h = height_of("A", leading: incleading -= 0.01, size: size)
       end
     else
       while h % hline > 0.01
-        h = height_of("A", leading: lead += 0.01, size: size)
+        h = height_of("A", leading: incleading += 0.01, size: size)
       end
     end
-    return lead
+    return incleading
   end
 
   def default_font_name
@@ -109,9 +109,9 @@ class PrawnView
     @default_font_style ||= config[:default_font_style]
   end
 
-  def line_height
-    @line_height ||= pdfbook.recette[:line_height]||DEFAULT_LINE_HEIGHT
-  end
+  # - shortcut -
+  def leading     ; pdfbook.recette.leading       end
+  def line_height ; pdfbook.recette.line_height   end
 
 end #/class PrawnView
 end #/module Prawn4book

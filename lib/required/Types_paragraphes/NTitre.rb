@@ -31,13 +31,13 @@ class NTitre < AnyParagraph
   end
 
   # @prop {Integer} Espace avec le texte suivant
-  def margin_bottom
-    @margin_bottom ||= self.class.margin_bottom(level)
+  def lines_after
+    @lines_after ||= self.class.lines_after(level)
   end
 
   # @prop {Integer} Espace avec le texte précédent
-  def margin_top
-    @margin_top ||= self.class.margin_top(level)
+  def lines_before
+    @lines_before ||= self.class.lines_before(level)
   end
 
   # --- Predicate Methods ---
@@ -62,50 +62,52 @@ class NTitre < AnyParagraph
   # --- MÉTHODES DE CLASSES ---
 
   def self.font_family(level)
-    get_recipe(:font, level, PdfBook.current.first_font)
+    get_data(:font, level)
   end
 
   def self.font_size(level)
-    get_recipe(:size, level, (11 + ( (8 - level) * 2.5)).to_i)
+    get_data(:size, level)
   end
 
   def self.font_style(level)
-    get_recipe(:style, level, :normal)
+    get_data(:style, level)
   end
 
-  def self.margin_bottom(level)
-    get_recipe(:margin_bottom, level, 0)
+  def self.lines_after(level)
+    get_data(:lines_after, level)
   end
 
-  def self.margin_top(level)
-    get_recipe(:margin_top, level, 0)
+  def self.lines_before(level)
+    get_data(:lines_before, level)
   end
 
   def self.leading(level)
-    get_recipe(:leading, level, 0)
+    get_data(:leading, level)
   end
 
   def self.next_page?(level)
-    get_recipe(:next_page, level, false) === true
+    val = get_data(:next_page, level) === true
+    return val
   end
 
   def self.belle_page?(level)
-    get_recipe(:belle_page, level, false) === true
+    get_data(:belle_page, level) === true
   end
 
-  def self.get_recipe(property, level, default_value)
-    key = "level#{level}".to_sym
-    data_titles[key] || init_data_title(key, level)
-    data_titles[key][property] || default_value
-  end
-
-  # Pour instancier un titre non défini
-  def self.init_data_title(key, level)
-    data_titles.merge!(key => {})
+  ##
+  # @return [Any] La valeur +property+ pour le niveau de titre
+  # +level+
+  def self.get_data(property, niveau)
+    key_niveau = :"level#{niveau}"
+    unless data_titles[key_niveau].key?(property)
+      spy "data_titles[key_niveau] ne connait que les clés : #{data_titles[key_niveau].keys.inspect}".rouge
+      exit
+    end
+    return data_titles[key_niveau][property]
   end
 
   def self.data_titles
-    @@data_titles ||= PdfBook.current.recette[:titles] || {}
+    @@data_titles ||= PdfBook.current.recette.titles_data
   end
 
 end #/class NTitre

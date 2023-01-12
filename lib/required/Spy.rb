@@ -48,7 +48,7 @@ class DebugInOtherTerm
   # Pour écrire dans la fenêtre de débuggage
   #
   def write(msg)
-    `printf '#{msg.gsub(/'/,'’')}\n' > #{term}`
+    `printf '#{msg.gsub(/'/,'’').gsub(/\{/,'')}\n' > #{term}`
   end
   alias :<< :write
 

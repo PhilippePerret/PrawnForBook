@@ -7,6 +7,9 @@ class NTextParagraph < AnyParagraph
 
   ##
   # Méthode principale d'écriture du paragraphe
+  # @note
+  #   C'est vraiment cette méthode qui écrit un paragraphe texte,
+  #   en plaçant le curseur, en réglant les propriétés, etc.
   # 
   def print(pdf)
     
@@ -36,21 +39,21 @@ class NTextParagraph < AnyParagraph
     mg_right  = self.margin_right
     indent    = self.indent
 
-    pdf.update do
 
-      #
-      # Placement du cursor sur la bonne ligne de référence
-      # 
-      theline = cursor
-      # spy "cursor = #{theline.inspect}"
-      if parag.pfbcode && parag.pfbcode[:margin_top]
-        theline -= parag.pfbcode[:margin_top]
-      end
-      # spy "cursor rectifié = #{theline.inspect}"
-      move_cursor_to_lineref(theline)
-      start_cursor = theline
-      # spy "start_cursor = #{start_cursor}"
-    end
+    #
+    # Placement du cursor sur la bonne ligne de référence
+    # 
+    # pdf.update do
+    #   theline = cursor
+    #   # spy "cursor = #{theline.inspect}"
+    #   if parag.pfbcode && parag.pfbcode[:margin_top]
+    #     theline -= parag.pfbcode[:margin_top]
+    #   end
+    #   # spy "cursor rectifié = #{theline.inspect}"
+    #   move_cursor_to_lineref(theline)
+    #   start_cursor = theline
+    #   # spy "start_cursor = #{start_cursor}"
+    # end
 
     # 
     # Indication de la première page du paragraphe
@@ -107,9 +110,9 @@ class NTextParagraph < AnyParagraph
     end
 
 
-    #
-    # ÉCRITURE DU PARAGRAPHE
-    # 
+    ###########################
+    #  ÉCRITURE DU PARAGRAPHE #
+    ###########################
     begin
       options = {
         inline_format:  true,
@@ -118,16 +121,18 @@ class NTextParagraph < AnyParagraph
         size:           fontSize
       }
       if mg_left > 0
-      
+        #
+        # Écriture du paragraphe dans une boite
+        # 
         wbox = pdf.bounds.width - (mg_left + mg_right)
         options.merge!(at: [mg_left, pdf.cursor])
       
-        print_paragraph_in_text_box(pdf, final_str, options)
-      
+        pdf.text_box(final_str, **options)
       else
-      
-        print_paragraph_as_text(pdf, final_str, options)
-      
+        # 
+        # Écriture du paragraphe dans le flux (texte normal)
+        # 
+        pdf.text(final_str, **options)
       end
     rescue Exception => e
       puts "Problème avec le paragraphe #{final_str.inspect}".rouge
@@ -141,21 +146,6 @@ class NTextParagraph < AnyParagraph
     # 
     self.last_page = pdf.page_number
 
-  end
-
-  ##
-  # Impression naturelle du texte (sans contrainte, dans le flux, par
-  # opposition au placement dans un text_box)
-  # 
-  def print_paragraph_as_text(pdf, str, options)
-    pdf.text(str, options)
-  end
-
-  ##
-  # Impression du texte dans un text_box pour placement particulier
-  # 
-  def print_paragraph_in_text_box(pdf, str, options)
-    pdf.text_box(str, options)
   end
 
   ##
