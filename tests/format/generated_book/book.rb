@@ -29,7 +29,7 @@ class Book
   # Méthode principale construisant le livre
   def build
     ensure_book_valid
-    `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --grid`
+    `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid`
     # 
     # On attend que le livre soit construit
     # (au bout de 20 secondes, on produit une erreur)

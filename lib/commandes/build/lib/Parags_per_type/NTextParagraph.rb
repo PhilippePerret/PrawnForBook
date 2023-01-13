@@ -30,8 +30,6 @@ class NTextParagraph < AnyParagraph
 
     parag = self
 
-    # spy "pfbcode = #{self.pfbcode}"
-
     mg_left   = self.margin_left
     if pfbcode && pfbcode[:margin_left]
       mg_left += pfbcode[:margin_left]
@@ -39,21 +37,6 @@ class NTextParagraph < AnyParagraph
     mg_right  = self.margin_right
     indent    = self.indent
 
-
-    #
-    # Placement du cursor sur la bonne ligne de référence
-    # 
-    # pdf.update do
-    #   theline = cursor
-    #   # spy "cursor = #{theline.inspect}"
-    #   if parag.pfbcode && parag.pfbcode[:margin_top]
-    #     theline -= parag.pfbcode[:margin_top]
-    #   end
-    #   # spy "cursor rectifié = #{theline.inspect}"
-    #   move_cursor_to_lineref(theline)
-    #   start_cursor = theline
-    #   # spy "start_cursor = #{start_cursor}"
-    # end
 
     # 
     # Indication de la première page du paragraphe
@@ -81,8 +64,6 @@ class NTextParagraph < AnyParagraph
     # 
     fontFamily  = font_family(pdf)
     fontStyle   = font_style(pdf)
-    # fontFamily = "Times-Roman"
-    # fontStyle  = :regular
     fontSize    = font_size(pdf)
 
     pdf.update do
@@ -114,25 +95,38 @@ class NTextParagraph < AnyParagraph
     #  ÉCRITURE DU PARAGRAPHE #
     ###########################
     begin
-      options = {
-        inline_format:  true,
-        align:          :justify,
-        font_style:     fontStyle,
-        size:           fontSize
-      }
-      if mg_left > 0
-        #
-        # Écriture du paragraphe dans une boite
-        # 
-        wbox = pdf.bounds.width - (mg_left + mg_right)
-        options.merge!(at: [mg_left, pdf.cursor])
-      
-        pdf.text_box(final_str, **options)
-      else
-        # 
-        # Écriture du paragraphe dans le flux (texte normal)
-        # 
-        pdf.text(final_str, **options)
+      pdf.update do
+        options = {
+          inline_format:  true,
+          align:          :justify,
+          font_style:     fontStyle,
+          size:           fontSize
+        }
+        if mg_left > 0
+          #
+          # Écriture du paragraphe dans une boite
+          # 
+          wbox = bounds.width - (mg_left + mg_right)
+          options.merge!(at: [mg_left, cursor])
+          # - dans un text box -
+          text_box(final_str, **options)
+        else
+          # 
+          # Écriture du paragraphe dans le flux (texte normal)
+          # 
+
+          # 
+          # Calcul de la ligne de référence sur laquelle poser le
+          # texte et déplacement du curseur
+          # 
+          move_cursor_to_next_reference_line
+          spy "Position cursor pour écriture du texte) : #{cursor.inspect}".bleu
+
+          # --- Écriture ---
+          float do 
+            text(final_str, **options)
+          end
+        end
       end
     rescue Exception => e
       puts "Problème avec le paragraphe #{final_str.inspect}".rouge

@@ -25,9 +25,9 @@ module Prawn
     # cas [0.0, 12.0]
     # 
     def move_cursor_to(new_y)
-      self.y = new_y + font.ascender + bounds.absolute_bottom
+      # self.y = new_y + font.ascender + bounds.absolute_bottom
       # Original is : 
-      # self.y = new_y + bounds.absolute_bottom
+      self.y = new_y + bounds.absolute_bottom
     end
   end #/class MyDocument
 end #/module Prawn

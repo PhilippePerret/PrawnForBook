@@ -17,6 +17,7 @@ require_relative 'generated_book/required'
 class GeneratedBookTestor < Minitest::Test
 
   # Instance GeneratedBook::Book (réinitialisée à chaque test)
+  #
   attr_reader :book
 
   def setup
@@ -34,6 +35,93 @@ class GeneratedBookTestor < Minitest::Test
 
   def pdf
     @pdf ||= PDF::Checker.new(book.book_path)
+  end
+
+
+  def test_texte_simple_on_first_line
+    return true if focus?
+    GeneratedBook::Book.erase_if_exist
+    resume "
+    S'assure qu'une simple ligne de texte s'affiche bien sur
+    la première ligne de référence.
+    "  
+
+    Object.const_set('StrucData', Struct.new(:book, :line_height, :margin_top, :margin_bot, :book_height, :texte) do
+      def test
+        # ===> TEST <===
+        book.recipe.build_with({
+          margin_top:   margin_top,
+          margin_bot:   margin_bot,
+          book_height:  book_height,
+          line_height:  line_height,
+        })
+        book.build_text(texte)
+        book.build
+
+        # === VÉRIFICATION ===
+        pdf.page(3).has_text(texte).at(book_height - (margin_top + line_height))        
+      end
+      def pdf
+        @pdf ||= PDF::Checker.new(book.book_path)
+      end
+    end)
+
+    StrucData.new(
+      book,
+      line_height = 30,
+      margin_top  = 0,
+      margin_bot  = 0, # la définir permet d'avoir un compte rond
+      book_height = 600,
+      texte       = "zéro marge et hauteur de 600 pt"
+    ).test
+
+    StrucData.new(
+      book,
+      line_height = 30,
+      margin_top  = 40,
+      margin_bot  = 40, # la définir permet d'avoir un compte rond
+      book_height = 700,
+      texte       = "Marge 40 et hauteur de 700 pt"
+    ).test
+
+    StrucData.new(
+      book,
+      line_height = 15,
+      margin_top  = 20,
+      margin_bot  = 20, # la définir permet d'avoir un compte rond
+      book_height = 500,
+      texte       = "Marges 20 et hauteur de 500"
+    ).test
+
+  end
+
+  def test_simple_grand_titre
+    # return true if focus?
+    GeneratedBook::Book.erase_if_exist
+    resume "
+    S'assure qu'un grand titre se place bien dans la page
+    "
+
+    action "J'écris un grand titre sans autres pages"
+    grand_titre = "Un Grand Titre"
+    book.recipe.build_with({
+      book_height:            750,
+      margin_top:             0,
+      margin_bot:             0, # la définir permet d'avoir un compte rond
+      line_height:            30,
+      titre1_on_next_page:    false,
+      titre1_on_belle_page:   false,
+      titre1_lines_before:    0,
+      page_de_garde:          false,
+      page_de_titre:          false,
+      page_infos:             false,
+    })
+    book.build_text("# #{grand_titre}")
+    book.build
+
+    # ===> Vérifications <===
+    pdf.page(1).has_text(grand_titre).at(720)
+    
   end
 
   def test_book_is_built_only_with_simple_text
@@ -73,23 +161,30 @@ class GeneratedBookTestor < Minitest::Test
   end
 
   def test_book_with_titre
+    return if focus?
+
     resume "
     Dans ce test, je regarde si même avec des titres, les choses
     reste bien situés au même endroit.
     "
     # return true if focus?
     GeneratedBook::Book.erase_if_exist
-    line_height = 25
+    line_height = 20
     grand_titre = "Un grand titre"
     ligne_apres = "Une ligne après le titre"
+    autre_titre = "Autre titre"
+    sous_titre  = "Un sous titre deuxième"
+    autre_texte = "Une autre ligne de texte après le sous-titre pour voir."
+    ligne_longue = "Et un paragraphe assez long pour voir si toutes ses lignes se posent bien sur des lignes de référence."
     book.recipe.build_with({
-      leading:0,
       line_height: line_height
     })
-    book.build_text("Une ligne de texte.\n# #{grand_titre}\n#{ligne_apres}")
+    book.build_text("Une ligne de texte.\n# #{grand_titre}\n#{ligne_apres}\n#{ligne_longue}\n# #{autre_titre}\n## #{sous_titre}\n#{autre_texte}")
     
     # ==> CONSTRUCTION <===
     book.build
+
+    `open -a Preview "#{book.book_path}"`
 
     # --- Calculs ---
     ptrois  = pdf.page(3)

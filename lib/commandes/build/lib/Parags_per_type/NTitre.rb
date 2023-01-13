@@ -17,9 +17,6 @@ class NTitre < AnyParagraph
     # recette, pour ce titre. Ou si c'est sur une belle page que le
     # titre doit être affiché.
     # 
-    spy "next_page? est #{next_page?.inspect}"
-    spy "belle_page? est #{belle_page?.inspect}"
-    
     if next_page? || belle_page?
       spy "Nouvelle page".bleu
       pdf.start_new_page 
@@ -34,54 +31,71 @@ class NTitre < AnyParagraph
       pdf.start_new_page
     end
 
+    #
+    # Donnée utiles (pour raccourci)
+    # 
+    linesBefore = self.lines_before
+    linesAfter  = self.lines_after - 1 # 1 est ajoutée au texte suivant
+
     pdf.update do
 
-      # unless previous_paragraph && previous_paragraph.titre? && previous_paragraph.margin_bottom
-      #   move_cursor_to_lineref(topMargin * line_height)
-      # end
-
-      spy "Position du cursor : #{cursor.inspect}".bleu
-      line_ref = ( (cursor / line_height) - 1) * line_height
-      spy "line_ref pour le titre : #{line_ref.inspect}".bleu
-      move_cursor_to(line_ref)
-      spy "Position cursor après déplacement : #{cursor.inspect}".bleu
-
-      # # 
-      # # Position top du titre (en fonction des nombres
-      # # de lignes qu'il doit laisser avant)
-      # # 
-      # if (topMargin - 1) > 0
-      #   move_down((topMargin - 1) * line_height)
-      #   debugit && puts(TB+"Cursor après ajout top-margin: #{round(cursor)} [(#{topMargin} - 1) * #{line_height}]")
-      # end
-
+      #
+      # On place le titre au bon endroit en fonction des lignes
+      # qu'il faut avant
+      # 
+      if linesBefore > 0
+        move_down(linesBefore * line_height)
+        spy "Ligne avant le titre : #{linesBefore}"
+      else
+        spy "Pas de lignes avant le titre".gris
+      end
       #
       # Application de la fonte
       # 
       ft = font(titre.font, style: titre.style, size: titre.size)
-      spy "font.ascender du titre : #{ft.ascender}".bleu
-      
-      # #
-      # # Positionnement sur la ligne de référence
-      # # 
-      # start_cursor = line_reference.dup
-      # move_cursor_to start_cursor
 
+      # 
+      # Formatage du titre
+      # 
+      ftext = titre.formated_text(self)
+
+      # 
+      # On déplace le curseur sur la prochaine ligne
+      # de base (en tenant compte de la hauteur de la
+      # police du titre)
+
+      move_cursor_to_next_reference_line
+      msg_spy = <<~TEXT
+      [Ajustement titre]
+        titre formaté : #{ftext}
+        move up 3
+        ft ascender = #{ft.ascender}
+        ft descender = #{ft.descender}
+        ascender - descender = #{ft.ascender - ft.descender}
+        height of titre = #{height_of(ftext)}
+      [/Ajustement titre]
+      TEXT
+      spy msg_spy.jaune
+      move_up(ft.descender)
+      spy "Position cursor pour écriture du titre) : #{cursor.inspect}".bleu
+      
       # 
       # Écriture du titre
       # 
       # move_up(ft.ascender) # ajustement ligne de référence # <===== !!!!
-      ftext = titre.formated_text(self)
       text ftext, align: :left, size: titre.size, leading: leading, inline_format: true
-      # move_down(ft.ascender)
       spy "Cursor après écriture titre : #{cursor.inspect}".bleu
-      # # 
-      # # Espace après (if any)
-      # #
-      # if ( botMargin - 1 ) > 0
-      #   move_down((botMargin - 1) * line_height)
-      # end
 
+      #
+      # On place le cursor sur la ligne suivante en fonction
+      # du nombre de lignes qu'il faut laisser après
+      # 
+      if linesAfter > 0
+        move_down(linesAfter * line_height)
+        spy "Lignes après le titre : #{linesAfter.inspect}"
+      else
+        spy "Pas de lignes après le titre".gris
+      end
     end
 
     # 

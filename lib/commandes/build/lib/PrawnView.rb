@@ -2,14 +2,6 @@ require 'prawn'
 require 'prawn/measurement_extensions'
 
 module Prawn4book
-
-DEFAULT_TOP_MARGIN    = 20
-DEFAULT_BOTTOM_MARGIN = 20
-DEFAULT_LEFT_MARGIN   = 20
-DEFAULT_RIGHT_MARGIN  = 20
-DEFAULT_SIZE_FONT     = 10
-DEFAULT_LINE_HEIGHT   = 12
-
 class PrawnView
   include Prawn::View
 
@@ -70,39 +62,118 @@ class PrawnView
     move_cursor_to_top_of_the_page
   end
 
+  def move_cursor_to_top_of_the_page
+    move_cursor_to bounds.top # - line_height
+    # spy "bounds.top = #{bounds.top.inspect}".bleu
+    spy "Curseur placé tout en haut (à #{round(cursor)})".bleu
+  end
+
+  ##
+  # Quel que soit la position actuel du curseur, on le place sur la
+  # prochaine ligne de référence (grille de référence pour aligner
+  # toutes les lignes de texte)
+  # 
+  def move_cursor_to_next_reference_line
+    line_ref = calc_ref_line
+    spy "line_ref pour prochaine écriture du curseur : #{line_ref.inspect}".bleu
+    move_cursor_to(line_ref)
+  end
+
+  ##
+  # Calcul et renvoie la ligne de référence en fonction de la 
+  # position actuelle du curseur.
+  # 
+  def calc_ref_line
+
+    cur_dist_from_top = bounds.top - cursor
+    cur_num_ref_line  = (cur_dist_from_top / line_height).floor
+    new_num_ref_line  = cur_num_ref_line + 1
+    new_dist_from_top = new_num_ref_line * line_height
+    absolute_line_ref = bounds.top - new_dist_from_top
+    line_ref          = absolute_line_ref + font.ascender
+
+    msg_spy = <<~TEXT
+    [calcul line ref]
+      cursor départ : #{cursor.inspect}
+      Distance depuis le haut efficace = #{cur_dist_from_top}
+      Indice ligne référence courante = #{cur_num_ref_line}
+      (line_height = #{line_height})
+      Indice nouvelle ligne référence = #{new_num_ref_line}
+      Nouvelle distance depuis le haut efficace = #{new_dist_from_top}
+      Absolute Line Ref (sans la fonte) = #{absolute_line_ref}
+      line_ref = #{line_ref}
+
+      font : #{font.inspect}
+      ascender : #{font.ascender}
+      descender: #{font.descender}
+    [/calcul line ref]
+    TEXT
+    spy msg_spy.bleu
+
+    return line_ref    
+  end
+
+  # Méthode appelée quand on doit dessiner la grille de base
+  # dans le document.
   def draw_reference_grids
-    define_default_leading
+    define_default_leading # utile ?
     font = font(default_font_name, size: default_font_size)
-    stroke_color 51, 0, 0, 3 # bleu ciel
-    fill_color 51, 0, 0, 3 # bleu ciel
+    # 
+    # Aspect des lignes (bleues et fines)
+    # 
+    stroke_color 51, 0, 0, 3  # bleu ciel
+    fill_color 51, 0, 0, 3    # bleu ciel
     line_width(0.1)
+    # 
+    # La grille peut n'être inscrite que sur quelques pages, 
+    # définies par le paramètre 'grid=start-end' en ligne de commande
+    # 
     if CLI.params[:grid]
       pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
       kpages = (pfirst..plast)
     else
       kpages = :all
     end
+    # 
+    # Boucle sur toutes les pages voulues pour écrire la grille de
+    # référence.
+    # 
     repeat kpages do
       print_reference_grid
     end
+    # 
+    # On remet la couleur initiale pour retourner en noir
+    # 
     stroke_color  0, 0, 0, 100
     fill_color    0, 0, 0, 100
   end
+
   # Pour dessiner la grille de référence sur toutes les pages ou 
   # seulement les pages choisies.
   # Option : -display_grid
   def print_reference_grid
-    h = bounds.top.dup - line_height
+    #
+    # On commence toujours en haut
+    # 
+    h = bounds.top.dup # - line_height
     while h > 0
+      # 
+      # Prochaine position (définition de l'écartement entre les lignes)
+      # 
+      h -= line_height
+      break if h < 0
+      # 
+      # Écriture de la position top
+      # 
       float {
         move_cursor_to(h + 4)
-        span(20, position: bounds.left - 20) do
-          font pdfbook.second_font, size:7
+        spy "[Grille référence] Cursor à #{cursor.inspect}".bleu_clair
+        span(40, position: bounds.left - 20) do
+          font pdfbook.second_font, size:6
           text round(h).to_s
         end
       }
       stroke_horizontal_line(0, bounds.width, at: h)
-      h -= line_height
     end
   end
 
@@ -130,14 +201,7 @@ class PrawnView
     stroke_vertical_line(0, bounds.top, at: bounds.right)
   end
 
-  # --- Cursor Methods ---
 
-  def move_cursor_to_top_of_the_page
-    # move_cursor_to bounds.top
-    self.y = bounds.top
-    spy "bounds.top = #{bounds.top.inspect}".bleu
-    spy "Curseur placé en haut de page (à #{round(cursor)})".bleu
-  end
 
   def add_cursor_position(str)
     "<font size=\"8\" name=\"#{pdfbook.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"

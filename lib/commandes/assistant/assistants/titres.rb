@@ -115,8 +115,7 @@ TITRES_PROPERTIES = [
   {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){dd[:level] < 2}, default: true },
   {name: 'Placer toujours ce titre sur une belle page'  , value: :belle_page   , type: :bool, if: ->(dd){dd[:level] < 2} },
 ]
-MAIN_TITRES_PROPERTIES = TITRES_PROPERTIES + [
-]
+MAIN_TITRES_PROPERTIES = TITRES_PROPERTIES + []
 
 TABLE_TITRES_PROPERTIES = {}
 MAIN_TITRES_PROPERTIES.each_with_index do |dchoix, idx|

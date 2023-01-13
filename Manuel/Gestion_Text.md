@@ -61,3 +61,26 @@ move_down(10)
 text "Texte à 438.8"
 ~~~
 
+---
+
+<a name="dimension-page"></a>
+
+## Dimensions de la page
+
+Pour avoir les mesures exactes des positions il faut savoir **10 ps-points sont ajoutés tout autour de la page**.
+
+Ainsi :
+
+~~~
+Si la page (totale, page_size) est : 400 x 700 (700 pts de hauteur)
+Que la marge est de 20 pts
+Alors le bord haut (bounds.top) sera à 700 - (20 x 2) - (10 x 2)
+=> La hauteur efficace - (marge haut + 10 + marge bas + 10)
+=> 740
+
+La première ligne de référence sera à :
+	hauteur efficace - hauteur de ligne
+Si la hauteur de ligne est 30
+Alors la première ligne sera à 740 - 30 => 710
+~~~
+

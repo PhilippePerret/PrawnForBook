@@ -86,12 +86,11 @@ class NTitre < AnyParagraph
   end
 
   def self.next_page?(level)
-    val = get_data(:next_page, level) === true
-    return val
+    level == 1 && get_data(:next_page, level) === true
   end
 
   def self.belle_page?(level)
-    get_data(:belle_page, level) === true
+    level == 1 && get_data(:belle_page, level) === true
   end
 
   ##
@@ -100,8 +99,7 @@ class NTitre < AnyParagraph
   def self.get_data(property, niveau)
     key_niveau = :"level#{niveau}"
     unless data_titles[key_niveau].key?(property)
-      spy "data_titles[key_niveau] ne connait que les clés : #{data_titles[key_niveau].keys.inspect}".rouge
-      exit
+      spy "data_titles[key_niveau] ne connait pas la clé #{property.inspect}. Ne connait que les clés : #{data_titles[key_niveau].keys.inspect}".rouge
     end
     return data_titles[key_niveau][property]
   end

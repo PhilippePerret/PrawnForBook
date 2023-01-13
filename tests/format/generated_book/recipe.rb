@@ -60,8 +60,26 @@ private
   end
 
   REAL_PATH_DATA = {
-    leading:      [:book_format, :text],
-    line_height:  [:book_format, :text],
+    leading:      [:book_format, :text, :leading],
+    line_height:  [:book_format, :text, :line_height],
+    book_height:  [:book_format, :book, :height],
+    page_height:  [:book_format, :book, :height],
+    height:       [:book_format, :book, :height],
+    margin_top:   [:book_format, :page, :margins, :top],
+    margin_left:  [:book_format, :page, :margins, :left],
+    margin_bot:   [:book_format, :page, :margins, :bot],
+    margin_bottom:[:book_format, :page, :margins, :bot],
+    margin_right: [:book_format, :page, :margins, :right],
+    indent:       [:book_format, :text, :index],
+    # - les pages à insérer -
+    page_de_titre:  [:inserted_pages, :page_de_titre],
+    page_de_garde:  [:inserted_pages, :page_de_garde],
+    faux_titre:     [:inserted_pages, :faux_titre],
+    page_infos:     [:inserted_pages, :page_infos],
+    # - les titres -
+    titre1_on_next_page:  [:titles,  :level1, :next_page],
+    titre1_on_belle_page: [:titles, :level1, :belle_page],
+    titre1_lines_before:  [:titles, :level1, :lines_before],
   }
   # @api private
   def realize_properties(props)
@@ -69,13 +87,19 @@ private
     props.each do |key, value|
       dpath = REAL_PATH_DATA[key] || []
       la = real_props
-      dpath.each do |sk|
+      last_index = dpath.count - 1
+      dpath.each_with_index do |sk, idx|
         la.merge!(sk => {}) unless la.key?(sk)
-        la = la[sk]
+        if idx == last_index
+          la[sk] = value
+        else
+          la = la[sk]
+        end
       end
-      la.merge!(key => value)
+      # la.merge!(key => value)
     end
 
+    puts "real_props = #{real_props.inspect}".bleu
     return real_props
   end
 
