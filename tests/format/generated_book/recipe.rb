@@ -80,6 +80,7 @@ private
     titre1_on_next_page:  [:titles,  :level1, :next_page],
     titre1_on_belle_page: [:titles, :level1, :belle_page],
     titre1_lines_before:  [:titles, :level1, :lines_before],
+    titre1_lines_after:   [:titles, :level1, :lines_after],
   }
   # @api private
   def realize_properties(props)

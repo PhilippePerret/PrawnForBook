@@ -96,7 +96,7 @@ class GeneratedBookTestor < Minitest::Test
   end
 
   def test_simple_grand_titre
-    # return true if focus?
+    return true if focus?
     GeneratedBook::Book.erase_if_exist
     resume "
     S'assure qu'un grand titre se place bien dans la page
@@ -121,8 +121,113 @@ class GeneratedBookTestor < Minitest::Test
 
     # ===> Vérifications <===
     pdf.page(1).has_text(grand_titre).at(720)
-    
   end
+
+
+  def test_simple_titre_avec_lines_before
+    return true if focus?
+    GeneratedBook::Book.erase_if_exist
+    resume "
+    S'assure qu'un grand titre se place bien dans la page avec
+    des lignes avant (lines_before)
+    "
+
+    action "J'écris un grand titre sans autres pages"
+    grand_titre = "Un Grand Titre"
+    book.recipe.build_with({
+      book_height:            750,
+      margin_top:             0,
+      margin_bot:             0, # la définir permet d'avoir un compte rond
+      line_height:            30,
+      titre1_on_next_page:    false,
+      titre1_on_belle_page:   false,
+      titre1_lines_before:    4,
+      page_de_garde:          false,
+      page_de_titre:          false,
+      page_infos:             false,
+    })
+    book.build_text("# #{grand_titre}")
+    book.build
+
+    # ===> Vérifications <===
+    pdf.page(1).has_text(grand_titre).at(720 - 4 * 30)
+  end
+    
+
+  def test_simple_grand_titre_suivi_de_texte_sans_espace
+    return true if focus?
+    GeneratedBook::Book.erase_if_exist
+    resume "
+    S'assure qu'un grand titre se place bien dans la page et que le
+    texte qui le suit aussi (avec 0 lignes entre les deux).
+    "
+
+    action "J'écris un grand titre sans autres pages"
+    line_height = 30
+    grand_titre = "Un Grand Titre"
+    texte_part1 = "Un long texte pour voir"
+    texte = "#{texte_part1} comment il va s'afficher de ligne en ligne sous le titre"
+    book.recipe.build_with({
+      book_height:            750,
+      margin_top:             0,
+      margin_bot:             0, # la définir permet d'avoir un compte rond
+      line_height:            line_height,
+      titre1_on_next_page:    false,
+      titre1_on_belle_page:   false,
+      titre1_lines_before:    0,
+      titre1_lines_after:     0,
+      page_de_garde:          false,
+      page_de_titre:          false,
+      page_infos:             false,
+    })
+    book.build_text("# #{grand_titre}\n\n#{texte}")
+    book.build
+
+    # ===> Vérifications <===
+    assert(File.exist?(book.book_path), "Le PDF du livre devrait exister.")
+    pdf.page(1).has_text(grand_titre).at(750 - line_height)
+    pdf.page(1).has_text(texte_part1).at(720 - line_height)
+  end
+
+
+  def test_simple_grand_titre_suivi_de_texte_with_lines_after_default
+    # return true if focus?
+    GeneratedBook::Book.erase_if_exist
+    resume "
+    S'assure qu'un grand titre se place bien dans la page et que le
+    texte qui le suit se place bien 3 lignes plus loin (valeur par
+    défaut).
+    "
+
+    action "J'écris un grand titre sans autres pages"
+    grand_titre = "Un Grand Titre"
+    texte_part1 = "Un long texte pour voir"
+    texte = "#{texte_part1} comment il va s'afficher de ligne en ligne sous le titre"
+    line_height = 25
+    book.recipe.build_with({
+      book_height:            700,
+      margin_top:             0,
+      margin_bot:             0, # la définir permet d'avoir un compte rond
+      line_height:            line_height,
+      titre1_on_next_page:    false,
+      titre1_on_belle_page:   false,
+      titre1_lines_before:    0,
+      page_de_garde:          false,
+      page_de_titre:          false,
+      page_infos:             false,
+    })
+    book.build_text("# #{grand_titre}\n\n#{texte}")
+    book.build
+
+    # ===> Vérifications <===
+    pdf.page(1).has_text(grand_titre).at(700 - line_height)
+    pdf.page(1).has_text(texte_part1).at(700 -  3 * line_height)
+  end
+
+
+
+
+
 
   def test_book_is_built_only_with_simple_text
     return if focus?
@@ -191,7 +296,6 @@ class GeneratedBookTestor < Minitest::Test
     pquat   = pdf.page(4)
     page_height = ptrois.height.freeze
     top_margin    = 20.mm
-    margin_top    = (top_margin).round(3)
     hauteur_base  = page_height - top_margin
     puts "Hauteur de page : #{page_height.inspect}"
     puts "Top de base : #{hauteur_base.inspect}"

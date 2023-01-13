@@ -65,19 +65,6 @@ class NTitre < AnyParagraph
       # police du titre)
 
       move_cursor_to_next_reference_line
-      msg_spy = <<~TEXT
-      [Ajustement titre]
-        titre formaté : #{ftext}
-        move up 3
-        ft ascender = #{ft.ascender}
-        ft descender = #{ft.descender}
-        ascender - descender = #{ft.ascender - ft.descender}
-        height of titre = #{height_of(ftext)}
-      [/Ajustement titre]
-      TEXT
-      spy msg_spy.jaune
-      move_up(ft.descender)
-      spy "Position cursor pour écriture du titre) : #{cursor.inspect}".bleu
       
       # 
       # Écriture du titre
