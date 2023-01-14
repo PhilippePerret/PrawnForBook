@@ -65,8 +65,8 @@ DATA_PUBLISHING = [
   {name:'Adresse (lignes avec \n)'        , value: :adresse },
   {name:'Site internet'                   , type: :url      , default: nil, value: :site},
   {name:'Logo (chemin dans dossier)'      , value: :logo_path, valid_if: :logo_exist?},
-  {name: 'Numéro SIRET'                   , value: :siret},
-  {name: 'Mail général'                   , value: :mail},
+  {name:'Numéro SIRET'                    , value: :siret},
+  {name:'Mail général'                    , value: :mail},
   {name:'Mail de contact'                 , value: :contact},
 ]
 

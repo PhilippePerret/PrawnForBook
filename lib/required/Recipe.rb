@@ -301,16 +301,22 @@ class Recipe
   def self.peuple_with_default_data(receiver, referencer)
     referencer.each do |k, v|
       if v.key?(:default) # => une valeur
-        receiver.merge!(k => v[:default]) unless receiver.key?(k)
+        valdef = v[:default]
+        valdef = valdef.call if valdef.is_a?(Proc)
+        receiver.merge!(k => valdef) unless receiver.key?(k)
       else
         receiver.merge!(k => {}) unless receiver.key?(k)
         v.each do |sk, sv|
           if sv.key?(:default) # => une valeur
-            receiver[k].merge!(sk => sv[:default]) unless receiver[k].key?(sk)
+            svaldef = sv[:default]
+            svaldef = svaldef.call if svaldef.is_a?(Proc)
+            receiver[k].merge!(sk => svaldef) unless receiver[k].key?(sk)
           else # => une groupe de valeurs
             receiver[k].merge!(sk => {}) unless receiver[k].key?(sk)
             sv.each do |ssk, ssv|
-              receiver[k][sk].merge!(ssk => ssv[:default]) unless receiver[k][sk].key?(ssk)
+              ssvaldef = ssv[:default]
+              ssvaldef = ssvaldef.call if ssvaldef.is_a?(Proc)
+              receiver[k][sk].merge!(ssk => ssvaldef) unless receiver[k][sk].key?(ssk)
             end
           end
         end
@@ -355,7 +361,7 @@ class Recipe
   end
 
   def publishing
-    @publishing ||= get(:publishing, nil)
+    @publishing ||= get(:publishing, {})
   end
 
   def fonts_data

@@ -47,8 +47,6 @@ class PrawnView
   end
 
   def build_page_de_titre
-    # require_relative 'page_de_titre'
-    # insert_page_de_titre
     require 'lib/pages/page_de_titre'
     page = Prawn4book::Pages::PageDeTitre.new(self)
     page.build(self)

@@ -166,9 +166,9 @@ class PdfBook
     tdm = PdfBook::Tdm.new(self, pdf)
     pdf.tdm = tdm
 
-    pdf.start_new_page if page_de_garde?
+    pdf.start_new_page      if page_de_garde?
 
-    pdf.build_faux_titre if page_faux_titre?
+    pdf.build_faux_titre    if page_faux_titre?
       
     pdf.build_page_de_titre if page_de_titre?
 

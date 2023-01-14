@@ -14,10 +14,9 @@ class PrawnOwner
     @ensured_title ||= title || File.basename(folder)
   end
 
-  def titre; recette.title end
+  def titre       ; recette.title     end
   alias :title :titre
-
-
+    
   ##
   # Première fonte définie (pour valeur par défaut de certains
   # texte majeurs)

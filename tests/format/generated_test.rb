@@ -412,27 +412,4 @@ class GeneratedBookTestor < Minitest::Test
   end
 
 
-
-
-  # TODO: Test du découpe du paragraphe en plusieurs lignes,
-  # pour voir si chaque ligne se positionnera bien en fonction
-  # du line_height
-
-  # TODO: Essayer de générer une erreur lorsque le line_height
-  # est trop petit par rapport à la font par défaut (on doit tester
-  # line_height par rapport à pdf.height_of(texte_par_defaut))
-
-  # TODO: Test d'un titre trop bas dans la page => il doit passer
-  # sur la page suivante
-  # Faut-il un paramètre "lié au paragraphe suivant" ?
-
-  # TODO: Avec un positionnement forcé dans le texte lui-même
-  # * en utilisant '(( move_down(5) ))' pour dire "descendre de
-  #   5 lignes de référence"
-  # * en utilisant '(( move_to(10) ))' pour dire "se positionner
-  #   sur la 10e ligne de référence"
-  # 
-
-  
-
 end #/class GeneratedBookTestor

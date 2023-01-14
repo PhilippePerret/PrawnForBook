@@ -209,6 +209,7 @@ class TTYDefiner
   def define_object_property(prop, odata)
     data_choix  = table_prop_to_dchoix[prop]
     def_value   = data_choix[:default]
+    def_value   = def_value.call if def_value.is_a?(Proc)
     cur_value   = odata[prop]
     # --- Valeur choisie ---
     question = "  #{data_choix[:name]} : ".jaune

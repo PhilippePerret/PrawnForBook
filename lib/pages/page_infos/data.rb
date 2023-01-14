@@ -25,6 +25,8 @@ class PageInfos
   # Table des données recette pour la page
   # telles qu'elles sont définies dans le fichier recipe.yaml
   # 
+  # Mis dans :page_infos dans la recette
+  # 
   PAGE_DATA = {
     conception: {
       patro: {name:'Conception (Prénom NOM)', default: nil},

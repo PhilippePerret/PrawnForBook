@@ -10,21 +10,26 @@ class PdfBook
     @folder = folder
   end
 
-  # Pour actualiser le fichier recette
-  # S'il s'agit d'une collection, on actualise le fichier recette
-  # de cette collection. C'est pour cette raison que pdfbook.recipe
-  # ne doit pas être appelée directement par les méthodes.
-  # 
-  # @param new_data {Hash} Table ne contenant que les nouvelles
-  #                 données à enregistrer.
-  # 
-  def update_recipe(new_data)
-    if collection?
-      recipe.update_collection(new_data)
-    else
-      recipe.update(new_data)
-    end
-  end
+  def sous_titre  ; recette.subtitle  end
+  alias :subtitle :sous_titre
+  def auteurs     ; recette.auteurs   end
+
+
+  # # Pour actualiser le fichier recette
+  # # S'il s'agit d'une collection, on actualise le fichier recette
+  # # de cette collection. C'est pour cette raison que pdfbook.recipe
+  # # ne doit pas être appelée directement par les méthodes.
+  # # 
+  # # @param new_data {Hash} Table ne contenant que les nouvelles
+  # #                 données à enregistrer.
+  # # 
+  # def update_recipe(new_data)
+  #   if collection?
+  #     recipe.update_collection(new_data)
+  #   else
+  #     recipe.update(new_data)
+  #   end
+  # end
 
 
   # Pour ouvrir le livre dans Aperçu, en double pages

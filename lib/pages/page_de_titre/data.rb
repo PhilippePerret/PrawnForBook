@@ -7,13 +7,16 @@ module Prawn4book
 class Pages
 class PageDeTitre
 
+  # On peut récupérer ces valeurs par
+  #   recipe.page_de_titre
+  # 
   PAGE_DATA = {
     fonts: {
-      title: {name:"Police du titre", default: 'Times', values: :police_names},
-      subtitle: {name:"Police du sous-titre", default: 'Times', values: :police_names},
-      author: {name:"Police de l'auteur", default: 'Times', values: :police_names},
-      publisher: {name:"Police de l'édition", default: 'Times', values: :police_names},
-      collection_title: {name:"Police du nom de la collection", default: 'Times', values: :police_names},
+      title: {name:"Police du titre", default: ->(){self.first_police_name}, values: :police_names},
+      subtitle: {name:"Police du sous-titre", default: ->(){self.first_police_name}, values: :police_names},
+      author: {name:"Police de l'auteur", default: ->(){self.first_police_name}, values: :police_names},
+      publisher: {name:"Police de l'édition", default: ->(){self.first_police_name}, values: :police_names},
+      collection_title: {name:"Police du nom de la collection", default: ->(){self.first_police_name}, values: :police_names},
     },
     sizes: {
       title: {name:"Taille du titre", default: 18},
@@ -31,13 +34,6 @@ class PageDeTitre
       height: {name:'Hauteur du logo (pixels)', default: 10},
     },
   }
-
-
-  def self.police_names(default_name = nil)
-    (get_data_in_recipe[:fonts]||DEFAUT_FONTS).map do |font_name, dfont|
-      {name: font_name, value: font_name}
-    end
-  end
 
 end #/class PageDeTitre
 end #/class Pages

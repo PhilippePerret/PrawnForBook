@@ -17,6 +17,12 @@ class SpecialPage
     ]
   end
 
+  def self.first_police_name
+    spy "first_police_name = #{DEFAULT_FONTS_KEYS.first.inspect}".bleu
+    DEFAULT_FONTS_KEYS.first
+    "Times-Roman"
+  end
+
   # Pour la :values d'une donnée de type select
   def police_names(default_name = nil)
     ((get_data_in_recipe[:fonts]||{}).merge(DEFAUT_FONTS)).map do |font_name, dfont|
@@ -24,8 +30,7 @@ class SpecialPage
     end
   end
   def first_police_name
-    spy "first_police_name = #{DEFAULT_FONTS_KEYS.first.inspect}".bleu
-    DEFAULT_FONTS_KEYS.first
+    self.class.first_police_name
   end
 
   # @return [Any] Valeur pour la clé +simple_key+ défini dans le

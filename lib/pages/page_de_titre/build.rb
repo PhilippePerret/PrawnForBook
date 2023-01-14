@@ -2,46 +2,90 @@ module Prawn4book
 class Pages
 class PageDeTitre
 
-  attr_reader :pdfbook
-
   # = main =
   #
   # Méthode principale permettant de construire la page
   # 
   def build(pdf)
-    @pdfbook = pdf.pdfbook
-    line_height = pdf.line_height
-    
-    if collection?
-      titre_collection = pdfbook.collection.name
-    end
+    spy "\n\n-> Construction de la page de titre".jaune
+    book = pdf.pdfbook
 
     #
-    # Nouvelle page
+    # Les données de fontes
     # 
-    pdf.start_new_page
+    dtitre = book.recipe.page_de_titre
+    spy "dtitre = #{dtitre.inspect}".bleu
 
-    # 
-    # Le titre de la collection s'il est requis
-    if collection?
-      redef_current_font(v('fonts-collection_title'), pdf)
-      pdf.move_cursor_to pdf.bounds.height
-      pdf.text titre_collection, {align: :center, size: v('sizes-collection_title')}      
+    pdf.update do
+
+      #
+      # Toujours une nouvelle page
+      # 
+      start_new_page
+
+      # 
+      # Calculer la position des éléments en fonction de
+      # la hauteur de page disponible
+      # 
+      height = bounds.top - bounds.bottom
+      spy "Hauteur efficiente : #{height.inspect}"
+      un_tiers = (height / 3).round # pour le titre
+
+      #
+      # LA COLLECTION se place sur la deuxième ligne à partir du
+      # haut.
+      # 
+      spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}"
+      spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}"
+      font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
+      move_cursor_to(bounds.top - line_height)
+      text( "La collection", **{align: :center})
+
+      #
+      # Le TITRE DU LIVRE
+      # (se place à un tiers)
+      #
+      font(dtitre[:fonts][:title], size: dtitre[:sizes][:title])
+      move_cursor_to(bounds.top - height / 3)
+      text( book.title , **{align: :center})
+
+      #
+      # S'il y a un SOUS-TITRE, on le place
+      # 
+      if book.subtitle
+        font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
+        subtitle = book.subtitle.split('\\n')
+        subtitle.each do |seg|
+          text(seg , **{align: :center})
+        end
+      end
+
+      #
+      # Les ou les AUTEURS 
+      # 
+      move_down(line_height) # une de plus
+      font(dtitre[:fonts][:author], size: dtitre[:sizes][:author])
+      text book.auteurs, **{align: :center}
+
+      #
+      # La MAISON D'ÉDITION
+      # 
+      publisher = book.recipe.publishing
+      logo      = publisher[:logo_path] 
+      # --- logo ---
+      logo_height = dtitre[:logo][:height]
+      # --- Hauteur de la marque ---
+      pub_top = bounds.bottom + 4 * line_height
+      if logo
+        pub_top += logo_height # + haut
+      end
+      move_cursor_to(pub_top)
+      spy "publisher: #{publisher.inspect}"
+      font(dtitre[:fonts][:publisher], size: dtitre[:sizes][:publisher])
+      text publisher[:name], **{align: :center}
     end
 
-    redef_current_font(v('fonts-title'), pdf)
-    pdf.move_down(v('spaces_before-title') * line_height)
-    pdf.text( book_title, {align: :center, size: v('sizes-title')})
-
-    if book_subtitle
-      redef_current_font(v('fonts-subtitle'), pdf)
-      pdf.move_down(v('spaces_before-subtitle') * line_height)
-      pdf.text( book_subtitle, {align: :center, size:v('sizes-subtitle')})
-    end
-
-    redef_current_font(v('fonts-author'), pdf)
-    pdf.move_down(v('spaces_before-author') * line_height)
-    pdf.text(authors, {align: :center, size: v('sizes-author')})
+    return
 
     # 
     # L'édition et le logo
@@ -63,20 +107,21 @@ class PageDeTitre
     # 
     pdf.start_new_page
 
+    spy "<- Fin de la construction de la page de titre".jaune
   end
 
   # - Predicate methods -
-  def collection? ; :TRUE == @iscollection ||= true_or_false(pdfbook.collection?) end
+  def collection? ; :TRUE == @iscollection ||= true_or_false(book.collection?) end
   def logo?
     :TRUE == @withlogo ||= true_or_false(publisher.logo? && logo)
   end
 
   # - shortcuts -
-  def book_title    ; @book_titre ||= pdfbook.titre end
-  def publisher     ; @publisher ||= pdfbook.publisher end
-  def book_subtitle ; @book_subtitle ||= pdfbook.formated_sous_titre end
-  def authors       ; @authors ||= pdfbook.formated_auteurs end
-  def logo          ; @logo ||= pdfbook.publisher.logo end
+  def book_title    ; @book_titre ||= book.titre end
+  def publisher     ; @publisher ||= book.publisher end
+  def book_subtitle ; @book_subtitle ||= book.formated_sous_titre end
+  def authors       ; @authors ||= book.formated_auteurs end
+  def logo          ; @logo ||= book.publisher.logo end
 
 
 end #/class PageDeTitre

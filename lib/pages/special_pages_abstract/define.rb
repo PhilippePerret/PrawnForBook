@@ -75,7 +75,9 @@ class SpecialPage
         # 
         # Valeur à rentrer explicitement
         # 
-        Q.ask("#{data_choix[:name].jaune} : ".jaune, {default: data_choix[:value]||data_choix[:default]})
+        defvalue = data_choix[:default]
+        defvalue = defvalue.call if defvalue.is_a?(Proc)
+        Q.ask("#{data_choix[:name].jaune} : ".jaune, {default: data_choix[:value]||defvalue})
       end
     #
     # Transformation automatique du type en fonction du type de la
@@ -156,7 +158,9 @@ class SpecialPage
     @choice_index ||= 1 # le premier est "Enregistrer"
     @choice_index += 1 
     val = get_value(simple_key)
-    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: dchoice[:default]}
+    defvalue = dchoice[:default]
+    defvalue = defvalue.call if defvalue.is_a?(Proc)
+    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: defvalue}
   end
 
 end #/class SpecialPage
