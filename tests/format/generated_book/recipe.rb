@@ -46,7 +46,7 @@ def build_with(props, **options)
 end
 
 def path
-  @path ||= File.join(book.folder,'recipe.yaml')
+  @path ||= File.join(mkdir(book.folder),'recipe.yaml')
 end
 
 private
@@ -77,10 +77,14 @@ private
     faux_titre:     [:inserted_pages, :faux_titre],
     page_infos:     [:inserted_pages, :page_infos],
     # - les titres -
-    titre1_on_next_page:  [:titles,  :level1, :next_page],
+    titre1_on_next_page:  [:titles, :level1, :next_page],
     titre1_on_belle_page: [:titles, :level1, :belle_page],
     titre1_lines_before:  [:titles, :level1, :lines_before],
     titre1_lines_after:   [:titles, :level1, :lines_after],
+    titre1_font_size:     [:titles, :level1, :size],
+    titre2_lines_before:  [:titles, :level2, :lines_before],
+    titre2_lines_after:   [:titles, :level2, :lines_after],
+    titre2_font_size:     [:titles, :level2, :size],
   }
   # @api private
   def realize_properties(props)
@@ -100,7 +104,7 @@ private
       # la.merge!(key => value)
     end
 
-    puts "real_props = #{real_props.inspect}".bleu
+    # puts "real_props = #{real_props.inspect}".bleu
     return real_props
   end
 

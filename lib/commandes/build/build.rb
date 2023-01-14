@@ -159,16 +159,6 @@ class PdfBook
     # 
     pdf.start_new_page if skip_page_creation?
 
-    # # 
-    # # Calcul de la table de références (pour les lignes de référence)
-    # # 
-    # pdf.table_reference_grid
-
-    # # 
-    # # Calcul de leading par défaut 
-    # # 
-    # pdf.define_default_leading
-
     #
     # Initier la table des matières (je préfère faire mon 
     # instance plutôt que d'utiliser l'outline de Prawn)

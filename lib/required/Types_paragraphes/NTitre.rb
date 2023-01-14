@@ -74,11 +74,15 @@ class NTitre < AnyParagraph
   end
 
   def self.lines_after(level)
-    get_data(:lines_after, level)
+    laft = get_data(:lines_after, level)
+    # laft = 1 if laft === 0
+    return laft
   end
 
   def self.lines_before(level)
-    get_data(:lines_before, level)
+    lbef = get_data(:lines_before, level)
+    # lbef = 1 if level > 1 && lbef === 0
+    return lbef
   end
 
   def self.leading(level)

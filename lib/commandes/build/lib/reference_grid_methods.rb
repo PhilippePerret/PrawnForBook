@@ -101,7 +101,7 @@ class PrawnView
       # 
       float {
         move_cursor_to(h + 4)
-        spy "[Grille référence] Cursor à #{cursor.inspect}".bleu_clair
+        # spy "[Grille référence] Cursor à #{cursor.inspect}".bleu_clair
         span(40, position: bounds.left - 20) do
           font pdfbook.second_font, size:6
           text round(h + 20).to_s

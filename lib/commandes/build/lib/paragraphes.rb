@@ -77,14 +77,17 @@ class PrawnView
       #
       # On consigne ce dernier paragraphe
       # (utile par exemple pour savoir s'il faut appliquer le
-      #  margin_top du paragraphe suivant)
+      #  lines_before du paragraphe suivant)
+      # 
       self.previous_paragraph = paragraphe
-      if paragraphe.paragraph?
-        self.previous_text_paragraph = paragraphe
-      end
+      self.previous_text_paragraph = paragraphe if paragraphe.paragraph?
       
     end
     
+  end
+
+  def previous_paragraph_titre?
+    previous_paragraph && previous_paragraph.titre?
   end
 
 

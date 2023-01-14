@@ -32,16 +32,41 @@ class NTitre < AnyParagraph
     end
 
     #
-    # Donnée utiles (pour raccourci)
+    # Application de la fonte
     # 
-    linesBefore = self.lines_before
-    linesAfter  = self.lines_after - 1 # 1 est ajoutée au texte suivant
+    ft = pdf.font(titre.font, style: titre.style, size: titre.size)
+
+    # 
+    # Formatage du titre
+    # 
+    ftext = titre.formated_text(self)
+
+    #
+    # Nombre de lignes avant
+    # 
+    # Si le paragraphe précédent était un titre, on n'applique pas
+    # le réglage linesBefore de ce titre.
+    # Si le titre est trop grand pour la page, il faut ajouter des
+    # :lines_before
+    # 
+    # QUESTION : en haut de page, faut-il systématiquement supprimer
+    # les lignes avant ? Faudrait-il un paramètre 
+    #   :skip_lines_before_on_page_top
+    if pdf.previous_paragraph_titre?
+      linesBefore = 0 
+    else
+      linesBefore = self.lines_before
+    end
+    # 
+    # Nombre de lignes après
+    # 
+    linesAfter  = self.lines_after
 
     pdf.update do
 
       #
       # On place le titre au bon endroit en fonction des lignes
-      # qu'il faut avant
+      # qu'il faut avant.
       # 
       if linesBefore > 0
         move_down(linesBefore * line_height)
@@ -49,27 +74,26 @@ class NTitre < AnyParagraph
       else
         spy "Pas de lignes avant le titre".gris
       end
-      #
-      # Application de la fonte
-      # 
-      ft = font(titre.font, style: titre.style, size: titre.size)
-
-      # 
-      # Formatage du titre
-      # 
-      ftext = titre.formated_text(self)
 
       # 
       # On déplace le curseur sur la prochaine ligne
-      # de base (en tenant compte de la hauteur de la
-      # police du titre)
-
+      # de base
+      # 
       move_cursor_to_next_reference_line
-      
+
+      #
+      # Si c'est un titre (ou pas…) et qu'il va manger sur la
+      # marge haute, on le descend d'autant de lignes de référence
+      # que nécessaire pour qu'il tienne dans la page.
+      # 
+      text_height = height_of(ftext)
+      while (cursor - 2 * line_height) + text_height > bounds.top
+        move_down(line_height)
+      end
+
       # 
       # Écriture du titre
       # 
-      # move_up(ft.ascender) # ajustement ligne de référence # <===== !!!!
       text ftext, align: :left, size: titre.size, leading: leading, inline_format: true
       spy "Cursor après écriture titre : #{cursor.inspect}".bleu
 

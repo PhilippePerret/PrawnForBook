@@ -1290,13 +1290,13 @@ La donnée **`:line_height`** est particulièrement importante puisqu’elle dé
 ~~~yaml
 :titles:
 	:level1:
-		:next_page: true # true => nouvelle page pour ce titre
+		:next_page: true 		# true => nouvelle page pour ce titre
 		:belle_page: false 	# mettre à true pour que le titre soit
 												# toujours sur une belle page (impaire)
 		:font: "LaFonte"
 		:size: 30
-		:margin_top: 0
-		:margin_bottom: 4
+		:lines_before: 0
+		:lines_after: 4
 		:leading: -2
 	:level2:
 		# idem
@@ -1305,7 +1305,17 @@ La donnée **`:line_height`** est particulièrement importante puisqu’elle dé
 	# etc.
 ~~~
 
-Les **`margin_top`** et **`margin_bottom`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux lignes de référence.
+Les **`lines_before`** et **`lines_after`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux lignes de référence.
+
+* par défaut, les titres se placent toujours sur des lignes de référence,
+
+* on parle toujours du **nombre de lignes ENTRE les éléments**. C’est-à-dire que si `:lines_after` est réglé à 4 pour un titre, on trouvera 4 lignes entre ce titre et l’élément suivant. Donc l’élément suivant sera posé sur une 5e ligne
+
+* le `:line_before` d’un titre suivant s’annule si le titre précédent en possède déjà un. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
+
+  > Bien noter que c’est vrai dans tous les cas. Par exemple, si un titre de niveau 1 a son `:lines_after` réglé à 0, un titre de niveau supérieur aura beau avoir son `:lines_before` réglé à 4 ou 6, le titre de niveau supérieur sera “collé” au titre de niveau 1.
+
+* on peut mettre une valeur flottante pour qu’un titre se place entre deux lignes de référence
 
 La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
 
