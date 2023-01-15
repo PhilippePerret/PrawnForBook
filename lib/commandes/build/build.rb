@@ -99,9 +99,7 @@ class PdfBook
 
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
-    # 
-    spy "\n+++ pdf_config (pour PrawnView): #{pdf_config.pretty_inspect}"
-    
+    #    
     pdf = PrawnView.new(self, pdf_config)
     
     #
@@ -364,33 +362,69 @@ class PdfBook
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
   def check_if_conforme
-    spy "recipe.biblios_data = #{recipe.biblios_data.inspect}"
+    # 
+    # Si la page de titre est demandée, il faut s'assurer que les
+    # informations minimales sont fournies (titre et auteur) et que
+    # s'il faut un logo, son path est défini et renvoie à un fichier
+    # existant.
+    # 
+    if recipe.page_de_titre?
+      spy "La page de titre est démandée".jaune
+      not(titre.nil?)     || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, le titre du livre est requis."))
+      not(auteurs.nil?)   || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, l'auteur du livre est requis."))
+      (logo_defined? && logo_exists?) ||raise(PrawnBuildingError.new("Impossible de faire la page de titre, le logo est introuvable."))
+    else
+      spy "La page de titre N'EST PAS démandée".jaune
+    end
+
+    # 
+    # Les bibliographies doivent être bien définies
+    # 
     unless recipe.biblios_data.empty?
       dbibs = recipe.biblios_data
-      dbibs.is_a?(Hash) || raise("La recette bibliographie (:biblios:) devrait être une table (un item par type d'élément).")
+      dbibs.is_a?(Hash) || raise(PrawnBuildingError.new("La recette bibliographie (:biblios:) devrait être une table (un item par type d'élément)."))
       # 
       # On doit charger les modules utiles aux bibliographies
       # 
       Bibliography.require_formaters(self)
-      module_formatage? || raise("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie.")
+      module_formatage? || raise(PrawnBuildingError.new("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie."))
       require_module_formatage
-      defined?(FormaterBibliographiesModule) || raise("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…")
+      defined?(FormaterBibliographiesModule) || raise(PrawnBuildingError.new("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…"))
       dbibs.each do |bib_id, dbib|
         bib = Bibliography.instanciate(self, dbib)
-        bib.tag   || raise("Il faut définir dans la recette le :tag des bibliographies")
-        bib.title || raise("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'.")
-        bib.data[:data] || raise("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…")
-        File.exist?(bib.data_path.to_s) || raise("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…")
-        Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…")
+        bib.tag   || raise(PrawnBuildingError.new("Il faut définir dans la recette le :tag des bibliographies"))
+        bib.title || raise(PrawnBuildingError.new("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'."))
+        bib.data[:data] || raise(PrawnBuildingError.new("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…"))
+        File.exist?(bib.data_path.to_s) || raise(PrawnBuildingError.new("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…"))
+        Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise(PrawnBuildingError.new("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…"))
       end
     end
+  rescue PrawnBuildingError => e
+    formated_error(e)
+    spy "👎 Le livre n'est pas conforme.".rouge
+    return false
   rescue Exception => e
-    puts formated_error(e)
+    formated_error(e)
+    spy "🤪 ERREUR SYSTÉMATIQUE.".rouge
     return false
   else
     spy "👍 Le livre est conforme".vert
     return true
   end
+
+  private
+
+    # @return [Boolean] true si le logo est défini pour le livre ou
+    # la collection
+    # 
+    # @api private
+    def logo_defined?
+      not(recipe.publishing[:logo_path].nil?)
+    end
+
+    def logo_exists?
+      File.exist?(File.join(folder,recipe.publishing[:logo_path]))
+    end
 
 end #/class PdfBook
 end #/module Prawn4book

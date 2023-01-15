@@ -20,8 +20,8 @@ class PageDeTitre
     },
     sizes: {
       title: {name:"Taille du titre", default: 18},
-      subtitle: {name:'Taille du sous-titre', default: 16},
-      author:   {name:'Taille de l’auteur', default: 12},
+      subtitle: {name:'Taille du sous-titre', default: 11},
+      author:   {name:'Taille de l’auteur', default: 15},
       publisher: {name:'Taille de l’édition', default: 12},
       collection_title: {name:'Taille du nom de collection', default: 12},
     },

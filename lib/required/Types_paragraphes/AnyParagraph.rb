@@ -13,93 +13,8 @@ class AnyParagraph
     @pdfbook = pdfbook
   end
 
-  # La méthode générale pour formater le texte +str+
-  # Note : on pourrait aussi prendre self.text, mais ça permettra
-  # d'envoyer un texte déjà travaillé
-  def formated_text(pdf, str = nil)
-    str ||= text
-    # 
-    # Traitement des codes ruby 
-    # 
-    str = str.gsub(/#\{(.+?)\}/) do
-      code = $1.freeze
-      methode = nil
-      if code.match?(REG_HELPER_METHOD)
-        # C'est peut-être une méthode d'helpers qui est appelée
-        methode = code.match(REG_HELPER_METHOD)[1].to_sym
-      end
-      if methode && pdfbook.pdfhelpers && pdfbook.pdfhelpers.respond_to?(methode)
-        # 
-        # Une méthode helper propre au livre ou à la collection
-        # 
-        pdfbook.pdfhelpers.instance_eval(code)
-      else
-        #
-        # Un code général
-        # 
-        eval(code)
-      end
-    end
-
-    # 
-    # Traitement des mots indexé
-    # 
-    if str.match?('index:') || str.match?('index\(')
-      str = str.gsub(/index:(.+?)(\b)/) do
-        dmot = {mot: $1.freeze, page: first_page, paragraph:numero}
-        pdfbook.page_index.add(dmot)
-        dmot[:mot] + $2
-      end
-      str = str.gsub(/index\((.+?)\)/) do
-        mot, canon = $1.freeze.split('|')
-        dmot = {mot: mot, canon: canon, page: first_page, paragraph: numero}
-        pdfbook.page_index.add(dmot)
-        dmot[:mot]
-      end
-    end
-
-    #
-    # Traitement des marques bibliograghiques (if any)
-    # 
-    if Bibliography.any?
-      str = str.gsub(Bibliography.reg_occurrences) do
-        bib_tag = $1.freeze
-        item_id, item_titre = $2.freeze.split('|')
-        item_id = item_id.to_sym
-        ibib = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
-        item_titre || ibib.items[item_id].title
-      end
-    end
-
-    #
-    # Traitement des références
-    # 
-    if str.match?('\(\( \(')
-      str = str.gsub(REG_REFERENCE) do
-        ref_id = $1.freeze
-        pdfbook.table_references.add(ref_id, {page:first_page, paragraph:numero})
-        ''
-      end
-    end
-    # Appels de référence
-    if str.match?('\(\( \->\(')
-      str = str.gsub(REG_APPEL_REFERENCE) do
-        pdfbook.table_references.get($1.freeze, self)
-      end
-    end
-
-    # S'il le faut (options), ajouter la position du curseur en
-    # début de paragraphe.
-    str = pdf.add_cursor_position(str) if add_cursor_position?
-
-    return str
-  end #/formated_text
-
   def titre?    ; false end
   def pfbcode?  ; false end
-  def add_cursor_position?
-    self.class.add_cursor_position?
-  end
 
   # Sera mis à true pour les paragraphes qui ne doivent pas être
   # imprimés, par exemple les paragraphes qui définissent des 
@@ -111,13 +26,6 @@ class AnyParagraph
   def pfbcode
     @pfbcode ||= data[:pfbcode]
   end
-  
-  class << self
-    def add_cursor_position?
-      :TRUE == @addcurspos ||= true_or_false(CLI.option(:cursor))
-    end
-  end
-
 
 REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 

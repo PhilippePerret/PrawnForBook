@@ -18,8 +18,6 @@ class SpecialPage
   end
 
   def self.first_police_name
-    spy "first_police_name = #{DEFAULT_FONTS_KEYS.first.inspect}".bleu
-    DEFAULT_FONTS_KEYS.first
     "Times-Roman"
   end
 

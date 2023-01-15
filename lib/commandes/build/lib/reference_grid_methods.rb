@@ -3,6 +3,27 @@ class PrawnView
 
 
   ##
+  # Méthode qui définit le leading par défaut en fonction de :
+  # - la police par défaut
+  # - la taille par défaut
+  # - le line_height du livre (~ grille de référence)
+  # @note
+  #   Idéalement, cette valeur ne doit pas être modifiée, elle doit
+  #   permettre d'obtenir une grille de référence qui va aligner 
+  #   tous les textes par défaut. 
+  #   Lorsqu'on a besoin de changer le leading dans un texte ponctuel
+  #   on doit le faire en réglant la valeur :leading des options de
+  #   la méthode utilisée ('text' par exemple).
+  # 
+  def define_default_leading(font = nil, size = nil, lheight = nil)
+    font    ||= default_font_name
+    size    ||= default_font_size
+    lheight ||= line_height
+    self.default_leading = font2leading(font, size, lheight)
+    spy "default_leading mis à #{self.default_leading.inspect} pour #{font}/#{size} (line_height: #{lheight})".bleu
+  end
+
+  ##
   # Quel que soit la position actuel du curseur, on le place sur la
   # prochaine ligne de référence (grille de référence pour aligner
   # toutes les lignes de texte)
@@ -50,7 +71,14 @@ class PrawnView
   # Méthode appelée quand on doit dessiner la grille de base
   # dans le document.
   def draw_reference_grids
-    define_default_leading # utile ?
+    # 
+    # Définit le leading à appliquer en fonction de la hauteur de
+    # ligne à obtenir, par rapport à la fonte courante.
+    # 
+    define_default_leading
+    # 
+    # Définition de la fonte à utiliser
+    # 
     font = font(default_font_name, size: default_font_size)
     # 
     # Aspect des lignes (bleues et fines)
@@ -109,74 +137,6 @@ class PrawnView
       }
       stroke_horizontal_line(0, bounds.width, at: h)
     end
-  end
-
-  # # Pour placer le curseur sur la ligne de référence la plus
-  # # proche de la hauteur +hauteur+
-  # # 
-  # def move_cursor_to_lineref(hauteur)
-  #   move_cursor_to(hauteur)
-  #   move_cursor_to(line_reference.dup)
-  # end
-
-  # # @return la hauteur de la ligne de référence au cursor
-  # def line_reference
-  #   lr_inf = (cursor.to_i / line_height) * line_height
-  #   lr_sup = lr_inf + line_height
-  #   lr = 
-  #     if lr_sup - cursor > cursor - lr_inf
-  #       lr_inf
-  #     else
-  #       lr_sup
-  #     end
-  #   lr += ecart_line_reference
-  #   # puts "Cursor: #{round(cursor)} => Line reference: #{lr}"
-  #   lr - line_height
-  # end
-
-  # # @prop Différence entre la ligne supérieure et la première
-  # # ligne de référence. Cette valeur permet de calculer la position
-  # # exacte de la ligne de référence par rapport à la page, entendu 
-  # # que cette ligne de référence est un multiple de la hauteur de
-  # # ligne (line_height) auquel on ajoute cet écart (cf. la méthode
-  # # @line_reference ci-dessus).
-  # def ecart_line_reference
-  #   @ecart_line_reference ||= begin
-  #     tp = bounds.top
-  #     lrabs = (tp.to_i / line_height) * line_height
-  #     tp - lrabs
-  #   end
-  # end
-
-  # # Avec l'option -g/--grid, on peut afficher une grille de référence
-  # # sur toutes les pages
-  # # TODO: Pouvoir ne la dessiner que sur certaines pages avec :
-  # #     --grid=4-12
-  # def print_reference_grid
-  #   while h > 0
-  #     float {
-  #       move_cursor_to(h + 4)
-  #       span(20, position: bounds.left - 20) do
-  #         font pdfbook.second_font, size:7
-  #         text round(h).to_s
-  #       end
-  #     }
-  #     stroke_horizontal_line(0, bounds.width, at: h)
-  #     h -= line_height
-  #   end
-  # end
-
-
-  ##
-  # Méthode qui définit le leading par défaut en fonction de :
-  # - la police par défaut
-  # - la taille par défaut
-  # - le line_height du livre (~ grille de référence)
-  # 
-  def define_default_leading
-    self.default_leading = font2leading(
-      default_font_name, default_font_size, line_height
-    )
   end
 
   ##

@@ -12,6 +12,8 @@
   précisément, sans avoir à utiliser de longs tests.
 
 =end
+class PrawnBuildingError < StandardError; end
+
 require 'test_helper'
 require_relative 'generated_book/required'
 class GeneratedBooPageTitreTestor < Minitest::Test
@@ -26,8 +28,8 @@ class GeneratedBooPageTitreTestor < Minitest::Test
   end
 
   def focus?
-    # return false
     true
+    # return false
   end
 
   def pdf
@@ -41,7 +43,7 @@ class GeneratedBooPageTitreTestor < Minitest::Test
 
 
   def test_page_titre_repartie
-    # return true if focus?
+    return true if focus?
     GeneratedBook::Book.erase_if_exist
     resume "
     Cas normal : un livre qui contient toutes les informations 
@@ -74,6 +76,7 @@ class GeneratedBooPageTitreTestor < Minitest::Test
     book.build
 
     # ===> Vérifications <===
+    puts "Il faut encore tester le positionnement exact des éléments".rouge
     pdf.page(3).has_text(db[:book_titre])#.at(720)
     pdf.page(3).has_text(db[:book_auteur])#.at(720)
     pdf.page(3).has_text(db[:publisher_name])#.at(720)
@@ -89,6 +92,47 @@ class GeneratedBooPageTitreTestor < Minitest::Test
     Un livre qui ne définit pas toutes les informations pour la
     page de titre ne peut pas la faire.
     "
+
+    db = {
+      book_titre:             nil,
+      book_sous_titre:        "Le sous-titre du grand\\nlivre pour voir",
+      book_auteur:            'Marion Michel',
+      publisher_name:         'Icare éditions',
+      logo:                   'logo.jpg',
+      book_height:            750,
+      margin_top:             20,
+      margin_bot:             20, # la définir permet d'avoir un compte rond
+      line_height:            30,
+      page_de_garde:          true,
+      page_de_titre:          true,
+      page_infos:             false,
+    }
+    
+    book.recipe.build_with(db)
+    manque = "le titre"
+    book.build_text("Ceci est un livre voulant définir sa page de titre mais sans donner suffisamment d'informations (manque #{manque}).")
+    # ===> TEST <===
+    err = assert_raises{ book.build(false) }
+    assert_match(/le titre du livre est requis/, err.message)
+
+    db.merge!(book_titre: "Le grand titre", book_auteur: nil)
+    book.recipe.build_with(db)
+    manque = "l'auteur du livre"
+    book.build_text("Ceci est un livre voulant définir sa page de titre mais sans donner suffisamment d'informations (manque #{manque}).")
+    # ===> TEST <===
+    err = assert_raises{ book.build(false) }
+    assert_match(/l'auteur du livre est requis/, err.message)
+
+    db.merge!(book_auteur: "Marion Michel")
+    book.recipe.build_with(db)
+    manque = "l'auteur du livre"
+    book.build_text("Ceci est un livre voulant définir sa page de titre mais sans donner suffisamment d'informations (manque #{manque}).")
+    logo_full_path = File.join(book.folder, db[:logo])
+    File.delete(logo_full_path) # il doit obligatoirement exister
+    # ===> TEST <===
+    err = assert_raises{ book.build(false) }
+    assert_match(/le logo est introuvable/, err.message)
+
   end
 
 end #/class GeneratedBookTestor

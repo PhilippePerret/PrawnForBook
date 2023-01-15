@@ -14,7 +14,6 @@ class PageDeTitre
     # Les données de fontes
     # 
     dtitre = book.recipe.page_de_titre
-    spy "dtitre = #{dtitre.inspect}".bleu
 
     pdf.update do
 
@@ -28,17 +27,16 @@ class PageDeTitre
       # la hauteur de page disponible
       # 
       height = bounds.top - bounds.bottom
-      spy "Hauteur efficiente : #{height.inspect}"
+      spy "Hauteur efficiente : #{height.inspect}".bleu
       un_tiers = (height / 3).round # pour le titre
 
       #
       # LA COLLECTION se place sur la deuxième ligne à partir du
       # haut.
       # 
-      spy "book.in_collection? est #{book.in_collection?.inspect}".jaune
       if book.in_collection?
-        spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}".jaune
-        spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}".jaune
+        # spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}".jaune
+        # spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}".jaune
         font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
         move_cursor_to(bounds.top - line_height)
         text( book.collection.name, **{align: :center})
@@ -57,13 +55,19 @@ class PageDeTitre
       # 
       if book.subtitle
         old_line_height = line_height.dup
-        line_height = 13
         font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
-        subtitle = book.subtitle.split('\\n')
+        subtitle = book.subtitle.split('\\n').compact
+        # 
+        # Ajout des parenthèses
+        # 
+        subtitle[0]   = "(#{subtitle[0]}"
+        subtitle[-1]  = "#{subtitle[-1]})"
+        # 
+        # Écriture du sous-titre
+        # 
         subtitle.each do |seg|
-          text(seg , **{align: :center})
+          text(seg , **{align: :center, leading: 0})
         end
-        line_height = old_line_height
       end
 
       #

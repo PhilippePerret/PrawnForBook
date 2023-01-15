@@ -70,3 +70,5 @@ DATA_STYLES_FONTS = [
   {name: 'Roman'          , value: :roman         , index:11},
 ]
 
+
+class PrawnBuildingError < StandardError; end

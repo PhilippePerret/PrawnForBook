@@ -51,6 +51,10 @@ class NTextParagraph < AnyParagraph
 
     # 
     # TEXTE FINAL du paragraphe
+    # @note
+    #   C'est dans cette méthode que sont traités les codes ruby, les
+    #   marques bibliographiques, les références (cibles et appeles)
+    #   etc.
     # 
     final_str = formated_text(pdf)
 

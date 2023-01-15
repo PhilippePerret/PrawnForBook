@@ -45,17 +45,23 @@ class Book
 
   ##
   # Méthode principale construisant le livre
-  def build
+  def build(check_if_book_has_been_built = true)
     ensure_book_valid
-    `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid`
+    res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid`
+    raise res if res.match?(/ERR/)
+
     # 
     # On attend que le livre soit construit
     # (au bout de 20 secondes, on produit une erreur)
     # 
-    Timeout.timeout(20) do 
-      until File.exist?(book_path)
-        sleep 0.2
+    if check_if_book_has_been_built
+      Timeout.timeout(20) do 
+        until File.exist?(book_path)
+          sleep 0.2
+        end
       end
+    else
+      sleep 1
     end
   end
 

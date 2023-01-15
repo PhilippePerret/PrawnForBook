@@ -1,1 +1,0 @@
-Ceci est un livre définissant sa page de titre.
