@@ -1,0 +1,22 @@
+---
+:book_data:
+  :title: Le Grand Livre
+  :subtitle: Le sous-titre du grand\nlivre pour voir
+  :auteurs: Marion Michel
+:publishing:
+  :name: Icare éditions
+  :logo_path: logo.jpg
+:book_format:
+  :book:
+    :height: 750
+  :page:
+    :margins:
+      :top: 20
+      :bot: 20
+  :text:
+    :line_height: 30
+:inserted_pages:
+  :page_de_garde: true
+  :page_de_titre: true
+  :page_infos: false
+:last_updated: 15/01/2023

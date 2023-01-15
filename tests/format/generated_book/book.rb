@@ -8,23 +8,41 @@ class Book
 
   def self.erase_if_exist
     FileUtils.rm_rf(folder) if File.exist?(folder)
+    cfolder = GeneratedBook::Collection.folder
+    FileUtils.rm_rf(cfolder) if File.exist?(cfolder)
   end
 
   # --- Chemins d'accès utiles ---
   #
   # @return [String] Chemin d'accès au livre. Ce sera toujours celui-là
-  def self.book_path
-    @book_path ||= File.join(folder, 'book.pdf')
-  end
-  def self.text_path
-    @text_path ||= File.join(folder, 'texte.pfb.md')
-  end
   def self.folder
-    mkdir(File.join(__dir__, 'book_generated'))
+    mkdir(File.join(__dir__, folder_name))
+  end
+  def self.folder_in_collection
+    mkdir(File.join(GeneratedBook::Collection.folder, folder_name))
+  end
+  def self.folder_name
+    @@folder_name ||= '_generated_book'
   end
 
 ###################       INSTANCE      ###################
   
+  def initialize
+    @isincollection = false # a priori
+  end
+
+  ##
+  # Méthode appelée au tout départ pour indiquer que le livre se
+  # trouve dans une collection
+  def in_collection(data_collection)
+    @isincollection = true
+    collection.recipe.build_with(data_collection)
+  end
+
+  def collection?
+    @isincollection == true
+  end
+
   ##
   # Méthode principale construisant le livre
   def build
@@ -91,12 +109,23 @@ class Book
     @recipe ||= Recipe.new(self)
   end
 
+  def collection
+    @collection ||= GeneratedBook::Collection.new
+  end
 
   # --- Path Data ---
 
-  def folder      ; @folder       ||= self.class.folder       end
-  def text_path   ; @text_path    ||= self.class.text_path    end
-  def book_path   ; @book_path    ||= self.class.book_path    end
+  def text_path ; @text_path ||= File.join(folder,'texte.pfb.md') end
+  def book_path ; @book_path ||= File.join(folder,'book.pdf')     end
+  def folder
+    @folder ||= begin
+      if collection?
+        self.class.folder_in_collection
+      else
+        self.class.folder
+      end
+    end
+  end
 
 end #/class Book
 end #/module GeneratedBook

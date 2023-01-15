@@ -1,8 +1,21 @@
 module GeneratedBook
-class Book
-class Recipe
+class AbstractRecipe
 
+  ##
+  # Table de correspondance, servant pour les livres et la collection,
+  # entre la clé de premier niveau utilisée par les tests et la clé
+  # hiérarchique dans le fichier recette de la collection ou du 
+  # livre. Par exemple, la clé :leading définie par les tests  conduira
+  # à la clé <recipe>[:book_format][:text][:leading] dans le fichier
+  # recette du livre ou de la collection
+  # @note
+  #   Bien noter que cette donnée sert autant pour la recette de la
+  #   collection que pour la recette du livre.
+  # 
   REAL_PATH_DATA = {
+    # -- Données de la collection --
+    collection_name:  [:collection_data, :name],
+
     # -- Données du livre --
     book_titre:       [:book_data, :title],
     book_sous_titre:  [:book_data, :subtitle],
@@ -10,7 +23,7 @@ class Recipe
     book_auteurs:     [:book_data, :auteurs],
     # -- Éditeur --
     publisher_name:   [:publishing, :name],
-    publisher_logo:   [:publishing, :logo_path],
+    logo:             [:publishing, :logo_path],
 
     # -- Imprimerie --
     imprimerie:       [:page_infos, :printing, :name],
@@ -43,13 +56,11 @@ class Recipe
     titre2_font_size:     [:titles, :level2, :size],
   }
 
-
-attr_reader :book
-def initialize(book)
-  @book = book
-  @data = get_recipe_data
+attr_reader :owner
+def initialize(owner)
+  @owner  = owner
+  @data   = get_recipe_data
 end
-
 
 ##
 # = main =
@@ -58,7 +69,7 @@ end
 # respectant les options +options+
 # 
 # @note
-#   [1] +prop+ peut être une tale de premier niveau seulement, pour
+#   [1] +prop+ est une table de premier niveau seulement, pour
 #       faciliter les modifications. Les propriétés seront ensuite
 #       bien rangées à leur place avant l'enregistrement. Par ex.,
 #       le leading peut être défini avec props = {leading: 4} mais
@@ -86,10 +97,26 @@ def build_with(props, **options)
     @data = props
   end
   save
+  #
+  # Si un logo est défini, il faut le mettre dans le dossier
+  # @note
+  #   Le fichier original se trouve toujours dans le dossier 'images'
+  #   du dossier
+  logo_path = props[:publishing] && props[:publishing][:logo_path]
+  if logo_path
+    src = File.join(__dir__, 'images', logo_path)
+    dst = File.join(book.folder, logo_path)
+    mkdir(File.dirname(src))
+    FileUtils.cp(src, dst)
+  end
+
+rescue Exception => e
+  puts "ERROR: #{e.message}".rouge
+  puts e.backtrace.join("\n").rouge
 end
 
 def path
-  @path ||= File.join(mkdir(book.folder),'recipe.yaml')
+  @path ||= File.join(mkdir(owner.folder), recipe_name)
 end
 
 private
@@ -102,6 +129,11 @@ private
     File.write(path, @data.to_yaml)
   end
 
+  # Transforme la table de propriété fournie, à un niveau, en table
+  # pour le fichier recette recipe.yaml
+  # 
+  # @return [Hash] la table pour les données de recette
+  # 
   # @api private
   def realize_properties(props)
     real_props = {}
@@ -138,6 +170,5 @@ private
     end
   end
 
-end #/class Recipe
-end #/class Book
+end #/class AbstractRecipe
 end #module GeneratedBook

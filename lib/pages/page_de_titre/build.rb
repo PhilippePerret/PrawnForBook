@@ -53,11 +53,14 @@ class PageDeTitre
       # S'il y a un SOUS-TITRE, on le place
       # 
       if book.subtitle
+        old_line_height = line_height.dup
+        line_height = 13
         font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
         subtitle = book.subtitle.split('\\n')
         subtitle.each do |seg|
           text(seg , **{align: :center})
         end
+        line_height = old_line_height
       end
 
       #
@@ -83,29 +86,19 @@ class PageDeTitre
       spy "publisher: #{publisher.inspect}"
       font(dtitre[:fonts][:publisher], size: dtitre[:sizes][:publisher])
       text publisher[:name], **{align: :center}
-    end
 
-    return
-
-    # 
-    # L'édition et le logo
-    # 
-    if publisher
-      redef_current_font(v('fonts-publisher'), pdf)
-      name_height = pdf.height_of(publisher.name)
-      hauteur_totale = name_height
-      hauteur_totale += v('logo-height').mm if logo?
-      pdf.move_cursor_to(hauteur_totale)
-      pdf.text(publisher.name, {align: :center, size:v('sizes-publisher')})
-      if logo?
-        pdf.image(publisher.logo, {height: v('logo-height').mm, position: :center})
+      if logo
+        logo_full_path = File.join(book.folder, logo)
+        spy "logo_full_path = #{logo_full_path.inspect}"
+        image(logo_full_path, {height: logo_height.mm, position: :center})
       end
-    end
 
-    # 
-    # Le recto
-    # 
-    pdf.start_new_page
+      # 
+      # Le recto
+      # 
+      start_new_page
+
+    end
 
     spy "<- Fin de la construction de la page de titre".jaune
   end

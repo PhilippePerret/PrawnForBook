@@ -50,12 +50,15 @@ class GeneratedBooPageTitreTestor < Minitest::Test
     aux attentes..
     "  
 
+    db_collection = {
+      collection_name: "La collection de livre",
+    }
     db = {
       book_titre:             "Le Grand Livre",
-      collection_name:        "La collection de livre",
       book_sous_titre:        "Le sous-titre du grand\\nlivre pour voir",
       book_auteur:            'Marion Michel',
       publisher_name:         'Icare éditions',
+      logo:                   'logo.jpg',
       book_height:            750,
       margin_top:             20,
       margin_bot:             20, # la définir permet d'avoir un compte rond
@@ -65,6 +68,7 @@ class GeneratedBooPageTitreTestor < Minitest::Test
       page_infos:             false,
     }
     
+    book.in_collection(db_collection)
     book.recipe.build_with(db)
     book.build_text("Ceci est un livre définissant sa page de titre.")
     book.build
