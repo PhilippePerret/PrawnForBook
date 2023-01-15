@@ -160,7 +160,7 @@ class Recipe
 
   # --- PRECIDATE METHODS ---
 
-  def collection?
+  def in_collection?
     :TRUE == @incollection ||= true_or_false(check_if_collection)
   end
   def numeroration?
@@ -415,7 +415,7 @@ class Recipe
   DEFAULT_DATA = {}
 
   def data_collection
-    @data_collection ||= collection? ? owner.collection.data : {}
+    @data_collection ||= in_collection? ? owner.collection.data : {}
   end
 
 

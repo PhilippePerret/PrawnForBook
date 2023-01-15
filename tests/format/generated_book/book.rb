@@ -39,7 +39,7 @@ class Book
     collection.recipe.build_with(data_collection)
   end
 
-  def collection?
+  def in_collection?
     @isincollection == true
   end
 
@@ -119,7 +119,7 @@ class Book
   def book_path ; @book_path ||= File.join(folder,'book.pdf')     end
   def folder
     @folder ||= begin
-      if collection?
+      if in_collection?
         self.class.folder_in_collection
       else
         self.class.folder

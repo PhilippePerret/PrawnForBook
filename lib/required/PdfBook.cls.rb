@@ -9,7 +9,7 @@ class << self
     File.exist?(File.join(cfolder,'recipe_collection.yaml'))
   end
 
-  def collection?
+  def in_collection?
     current? && File.exist?(File.join(cfolder,'recipe_collection.yaml'))
   end
 

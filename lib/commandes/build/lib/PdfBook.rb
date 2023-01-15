@@ -121,7 +121,7 @@ class PdfBook
     @module_formatage_path ||= get_module_formatage
   end
   def get_module_formatage
-    if collection?
+    if in_collection?
       pth = File.join(collection.folder, 'formater.rb')
       return pth if File.exist?(pth)
     end    
@@ -141,7 +141,7 @@ class PdfBook
     @module_parser_path ||= get_module_parser_path
   end
   def get_module_parser_path
-    if collection?
+    if in_collection?
       pth = File.join(collection.folder, 'parser.rb')
       return pth if File.exist?(pth)
     end    

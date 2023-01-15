@@ -179,7 +179,7 @@ class Bibliography
     @data_path ||= begin
       fp = data[:data] || data['data']
       unless File.exist?(fp) # chemin d'accès absolu
-        if pdfbook.collection?
+        if pdfbook.in_collection?
           fp = File.join(pdfbook.collection.folder, fp) # collection
         end
         unless File.exist?(fp)

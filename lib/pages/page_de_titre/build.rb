@@ -35,11 +35,13 @@ class PageDeTitre
       # LA COLLECTION se place sur la deuxième ligne à partir du
       # haut.
       # 
-      spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}"
-      spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}"
-      font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
-      move_cursor_to(bounds.top - line_height)
-      text( "La collection", **{align: :center})
+      if book.in_collection?
+        spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}"
+        spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}"
+        font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
+        move_cursor_to(bounds.top - line_height)
+        text( book.collection.name, **{align: :center})
+      end
 
       #
       # Le TITRE DU LIVRE
@@ -104,7 +106,7 @@ class PageDeTitre
   end
 
   # - Predicate methods -
-  def collection? ; :TRUE == @iscollection ||= true_or_false(book.collection?) end
+  def in_collection? ; :TRUE == @iscollection ||= true_or_false(book.in_collection?) end
   def logo?
     :TRUE == @withlogo ||= true_or_false(publisher.logo? && logo)
   end

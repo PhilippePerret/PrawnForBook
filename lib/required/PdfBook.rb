@@ -24,7 +24,7 @@ class PdfBook
   # #                 données à enregistrer.
   # # 
   # def update_recipe(new_data)
-  #   if collection?
+  #   if in_collection?
   #     recipe.update_collection(new_data)
   #   else
   #     recipe.update(new_data)
@@ -55,7 +55,7 @@ class PdfBook
   end
 
   def collection
-    @collection ||= collection? ? Collection.new(self) : nil
+    @collection ||= in_collection? ? Collection.new(self) : nil
   end
 
   # @prop L'instance du fichier texte qui contient le texte à
@@ -69,8 +69,8 @@ class PdfBook
   # --- Predicate Methods ---
   
   # @return true si le document appartient à une collection
-  def collection?
-    recette.collection?
+  def in_collection?
+    recette.in_collection?
   end
 
   def is_collection?

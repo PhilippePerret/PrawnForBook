@@ -276,7 +276,7 @@ class FontAssistant
     if File.exist?(dos_fonts) && Dir["#{dos_fonts}/*.ttf"].count > 0
       DATA_FONTS_FOLDERS.unshift({name:PROMPTS[:fonts][:book_fonts_folder], value: dos_fonts})
     end
-    if owner.collection?
+    if owner.in_collection?
       dos_fonts = owner.collection.folder_fonts
       if File.exist?(dos_fonts) && Dir["#{dos_fonts}/*.ttf"].count > 0
         DATA_FONTS_FOLDERS.unshift({name:PROMPTS[:fonts][:collection_fonts_folder], value: dos_fonts})
