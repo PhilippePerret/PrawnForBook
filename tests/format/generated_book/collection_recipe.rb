@@ -46,7 +46,7 @@ def initialize(collection)
   @collection = collection
 end
 
-def recipe_name; 'collection_recipe.yaml' end
+def recipe_name; 'recipe_collection.yaml' end
 
 
 end #/class Recipe
