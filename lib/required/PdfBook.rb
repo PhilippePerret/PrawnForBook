@@ -65,16 +65,11 @@ class PdfBook
     @inputfile = InputTextFile.new(self, recette[:text_path])
   end
 
-
   # --- Predicate Methods ---
   
   # @return true si le document appartient à une collection
   def in_collection?
-    recette.in_collection?
-  end
-
-  def is_collection?
-    false
+    :TRUE == @isincollection ||= true_or_false(check_if_collection)
   end
 
   def has_text?
@@ -101,8 +96,18 @@ class PdfBook
     @pdf_path ||= File.join(folder,'book.pdf')
   end
 
-  # @return [String] Nom du fichier recette
-  def recipe_name ; 'recipe.yaml' end
+
+  private
+
+    # @return [String] Nom du fichier recette
+    def recipe_name ; 'recipe.yaml' end
+
+    ##
+    # @return true si le livre appartient à une collection,
+    # en checkant que cette collection existe bel et bien.
+    def check_if_collection
+      return File.exist?(File.join(File.dirname(folder),'recipe_collection.yaml'))
+    end
 
 end #/class PdfBook
 end #/module Prawn4book

@@ -364,6 +364,7 @@ class PdfBook
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
   def check_if_conforme
+    spy "recipe.biblios_data = #{recipe.biblios_data.inspect}"
     unless recipe.biblios_data.empty?
       dbibs = recipe.biblios_data
       dbibs.is_a?(Hash) || raise("La recette bibliographie (:biblios:) devrait être une table (un item par type d'élément).")
@@ -383,11 +384,11 @@ class PdfBook
         Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…")
       end
     end
-
   rescue Exception => e
     puts formated_error(e)
     return false
   else
+    spy "👍 Le livre est conforme".vert
     return true
   end
 

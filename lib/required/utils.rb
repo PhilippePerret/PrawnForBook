@@ -35,6 +35,8 @@ def formated_error(err)
   else
     trace = '🧨 ' + err.backtrace.first.gsub(/#{APP_FOLDER}/,'')
   end
-  puts "#ERR: #{err.message}\n#{trace}".rouge
+  err_msg = "#ERR: #{err.message}\n#{trace}"
+  puts err_msg.rouge
+  spy "#{err_msg}\n#{err.backtrace.join("\n")}".rouge
 end
 

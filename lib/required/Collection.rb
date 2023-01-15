@@ -19,29 +19,10 @@ class Collection
     @folder = 
       case arg
       when Prawn4book::PdfBook
-        # 
-        # L'argument est l'instance du document PdfBook
-        # Attention : ne pas utiliser arg.collection qui retourne
-        # l'instance Prawn4book::Collection du livre (=> infinite loop)
-        # 
-        if arg.recette[:collection] === true
-          # 
-          # La donnée du PdfBook est TRUE, ce qui signifie que le
-          # livre se trouve dans le dossier de la collection, au même
-          # niveau que la recette de la collection.
-          # 
-          File.dirname(arg.folder)
-        else
-          # 
-          # La donnée :collection du PdfBook est le chemin d'accès au
-          # dossier de la collection
-          # 
-          arg.recette[:collection]
-        end
+        # L'argument de l'instanciation est un livre de la collection
+        File.dirname(arg.folder)
       else
-        # 
         # L'argument est le path au dossier de la collection
-        # 
         arg
       end
   end
@@ -56,10 +37,10 @@ class Collection
 
   # --- Data Methods ---
 
-  def name            ; data[:name]             end
+  def name ; data[:collection_data][:name] end
 
   def data
-    @data ||= YAML.load_file(recipe_path, aliases: true)
+    @data ||= YAML.load_file(recipe_path, **{aliases: true, symbolize_names:true})
   end
 
   # --- Path Methods ---

@@ -34,6 +34,14 @@ class Recipe
     real_data[:info][key]
   end
 
+  def data_collection
+    @data_collection ||= begin
+      if owner.in_collection?
+        owner.collection.data
+      else {} end
+    end
+  end
+
   ##
   # Actualisation des données en mergeant les nouvelles
   # @note
@@ -160,9 +168,6 @@ class Recipe
 
   # --- PRECIDATE METHODS ---
 
-  def in_collection?
-    :TRUE == @incollection ||= true_or_false(check_if_collection)
-  end
   def numeroration?
     :TRUE == @numeroter ||= true_or_false(book_format[:text][:numerotation] != 'none')
   end
@@ -414,11 +419,6 @@ class Recipe
 
   DEFAULT_DATA = {}
 
-  def data_collection
-    @data_collection ||= in_collection? ? owner.collection.data : {}
-  end
-
-
   private
 
   ##
@@ -472,22 +472,6 @@ class Recipe
   def path
     @path ||= owner.recipe_path
   end
-
-    ##
-    # @return true si le livre appartient vraiment à une collection,
-    # en checkant que cette collection existe bel et bien.
-    def check_if_collection
-      datacoll = data[:collection]
-      return false if datacoll.nil?
-      if datacoll === true
-        return File.exist?(File.join(File.dirname(owner.folder),'recipe_collection.yaml'))
-      else
-        # Si :collection n'est pas true, c'est le path du dossier
-        # de la collection, quand le livre ne se trouve pas dedans
-        # (ce qui est pourtant préférable)
-        return File.exist?(datacoll)
-      end
-    end
 
 end #/class Recipe
 end #/module Prawn4book

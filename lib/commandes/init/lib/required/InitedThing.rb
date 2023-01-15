@@ -76,7 +76,7 @@ class InitedBook < InitedThing
   def the_thing;"le livre" end
   def a_thing;"un livre" end
   def of_the_thing;"du livre" end
-  def in_collection?; false end
+  def collection?; false end
   def book?; true end
 
   # @return true si le livre est dans une collection
@@ -110,9 +110,9 @@ class InitedCollection < InitedThing
   def the_thing; "la collection" end
   def a_thing; "une collection" end
   def of_the_thing;"de la collection" end
-  def in_collection?; true end
-  def in_collection?; false end
+  def collection?; true end
   def book?; false end
+  def in_collection?; false end
   
   def recipe_name
     @recipe_name ||= 'recipe_collection.yaml' 
