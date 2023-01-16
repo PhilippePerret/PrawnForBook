@@ -12,8 +12,6 @@
   précisément, sans avoir à utiliser de longs tests.
 
 =end
-class PrawnBuildingError < StandardError; end
-
 require 'test_helper'
 require_relative 'generated_book/required'
 class GeneratedBooPageTitreTestor < Minitest::Test
@@ -38,13 +36,15 @@ class GeneratedBooPageTitreTestor < Minitest::Test
 
   # Instance GeneratedBook::Book (réinitialisée à chaque test)
   def book
-    @book ||= GeneratedBook::Book.new
+    @book ||= begin
+      GeneratedBook::Book.erase_if_exist
+      GeneratedBook::Book.new
+    end
   end
 
 
   def test_page_titre_repartie
     return true if focus?
-    GeneratedBook::Book.erase_if_exist
     resume "
     Cas normal : un livre qui contient toutes les informations 
     de titre (titre, sous-titre, collection, éditeur et logo) et 

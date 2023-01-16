@@ -1,1 +1,1 @@
-Ceci est un livre voulant définir sa page de titre mais sans donner suffisamment d'informations (manque l'auteur du livre).
+Un livre avec page d'infos, les informations sont rassemblées en bas de page.

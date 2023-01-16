@@ -3,9 +3,10 @@
   Module les données de la page
   
 =end
+require_folder(File.join(File.dirname(__dir__),'special_pages_abstract'))
 module Prawn4book
 class Pages
-class PageInfos
+class PageInfos < SpecialPage
 
   def self.depot_bnf_default
     year = Time.now.year
@@ -46,12 +47,15 @@ class PageInfos
     },
     aspect: {
       libelle: {
-        font: {name:'Police pour les libellés (p.e. "Mise en page")', default: :first_police_name},
-        size: {name:'Taille pour les libellés', default: 10},
+        font:   {name:'Police pour les libellés (p.e. "Mise en page")', default: :first_police_name},
+        style:  {name:'Style de la police pour les libellés', default: :regular, values: DATA_STYLES_FONTS},
+        size:   {name:'Taille pour les libellés', default: 10},
+        color:  {name:'Couleur des libellés', default: nil},
       },
       value: {
-        font: {name:'Police pour la valeur (p.e. le nom)', default: :first_police_name},
-        size: {name:'Taille pour la valeur', default: 11}
+        font:   {name:'Police pour la valeur (p.e. le nom)', default: :first_police_name},
+        style:  {name:'Style de la police pour les valeur', default: :regular, values: DATA_STYLES_FONTS},
+        size:   {name:'Taille pour la valeur', default: 11}
       },
       disposition: {name: 'Disposition', default: 'distribute', values: :dispositions}
     },

@@ -1,22 +1,53 @@
 ---
-:book_data:
-  :title: Le grand titre
-  :subtitle: Le sous-titre du grand\nlivre pour voir
-  :auteurs: Marion Michel
+:inserted_pages:
+  :page_infos: true
+  :page_de_titre: false
+  :page_de_garde: false
+  :faux_titre: false
+:page_infos:
+  :conception:
+    :patro: Phil Perret
+    :mail: phil@chez.lui
+  :mise_en_page:
+    :patro: Cédric de Montdénard
+    :mail: cedric@mondenard.com
+  :cover:
+    :patro: Agnès Brossard
+    :mail: agnes.brossard@chez.elle
+  :correction:
+    :patro: Marion Michel
+    :mail: marion.michel@gaim.com
+  :aspect:
+    :libelle:
+      :font: :Helvetica
+      :style: :regular
+      :size: 10
+      :color: '555555'
+    :value:
+      :font: :Times-Roman
+      :size: 11
+    :disposition: distribute
+  :depot_legal: 3e trimestre 2023
+  :printing:
+    :name: Les Impressions d'Augias
+    :lieu: Aubagne
 :publishing:
   :name: Icare éditions
-  :logo_path: logo.jpg
+  :contact: contact@icare-editions.fr
+  :mail: infos@icare-editions.fr
+  :siret: '0123456987'
+  :url: https://www.icare-edition.fr
+:book_data:
+  :title: Le Livre des infos
+  :auteurs: Marion Michel
+  :isbn: 215-8-52698-65-3
 :book_format:
   :book:
-    :height: 750
+    :height: 500
   :page:
     :margins:
       :top: 20
       :bot: 20
   :text:
-    :line_height: 30
-:inserted_pages:
-  :page_de_garde: true
-  :page_de_titre: true
-  :page_infos: false
-:last_updated: 15/01/2023
+    :line_height: 23
+:last_updated: 16/01/2023

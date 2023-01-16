@@ -17,17 +17,19 @@ class AbstractRecipe
     collection_name:  [:collection_data, :name],
 
     # -- Données du livre --
-    book_titre:       [:book_data, :title],
-    book_sous_titre:  [:book_data, :subtitle],
-    book_auteur:      [:book_data, :auteurs],
-    book_auteurs:     [:book_data, :auteurs],
+    book_titre:         [:book_data, :title],
+    book_sous_titre:    [:book_data, :subtitle],
+    book_auteur:        [:book_data, :auteurs],
+    book_auteurs:       [:book_data, :auteurs],
+    isbn:               [:book_data, :isbn],
     # -- Éditeur --
-    publisher_name:   [:publishing, :name],
-    logo:             [:publishing, :logo_path],
+    publisher_name:     [:publishing, :name],
+    publisher_contact:  [:publishing, :contact],
+    publisher_mail:     [:publishing, :mail],
+    publisher_siret:    [:publishing, :siret],
+    publisher_url:      [:publishing, :url],
+    logo:               [:publishing, :logo_path],
 
-    # -- Imprimerie --
-    imprimerie:       [:page_infos, :printing, :name],
-    imprimerie_ville: [:page_infos, :printing, :lieu],
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
     line_height:  [:book_format, :text, :line_height],
@@ -54,6 +56,29 @@ class AbstractRecipe
     titre2_lines_before:  [:titles, :level2, :lines_before],
     titre2_lines_after:   [:titles, :level2, :lines_after],
     titre2_font_size:     [:titles, :level2, :size],
+    # - les infos -
+    concepteur:           [:page_infos, :conception, :patro],
+    concepteur_name:      [:page_infos, :conception, :patro],
+    concepteur_mail:      [:page_infos, :conception, :mail],
+    metteur_en_page:      [:page_infos, :mise_en_page, :patro],
+    metteur_en_page_mail: [:page_infos, :mise_en_page, :mail],
+    cover:                [:page_infos, :cover, :patro],
+    couverture:           [:page_infos, :cover, :patro],
+    couverture_mail:      [:page_infos, :cover, :mail],
+    correcteur:           [:page_infos, :correction, :patro],
+    correctrice:          [:page_infos, :correction, :patro],
+    correcteur_mail:      [:page_infos, :correction, :mail],
+    correctrice_mail:     [:page_infos, :correction, :mail],
+    disposition_infos:    [:page_infos, :aspect, :disposition],
+    font_label_infos:     [:page_infos, :aspect, :libelle, :font],
+    style_label_infos:    [:page_infos, :aspect, :libelle, :style],
+    size_label_infos:     [:page_infos, :aspect, :libelle, :size],
+    color_label_infos:    [:page_infos, :aspect, :libelle, :color],
+    font_infos:           [:page_infos, :aspect, :value, :font],
+    size_infos:           [:page_infos, :aspect, :value, :size],
+    depot_legal:          [:page_infos, :depot_legal],
+    imprimerie:           [:page_infos, :printing, :name],
+    imprimerie_ville:     [:page_infos, :printing, :lieu],
   }
 
 attr_reader :owner

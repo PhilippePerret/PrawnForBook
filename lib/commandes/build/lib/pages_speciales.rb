@@ -53,8 +53,9 @@ class PrawnView
   end
 
   def build_page_infos
-    require_relative 'page_infos'
-    insert_page_infos
+    require 'lib/pages/page_infos'
+    page = Prawn4book::Pages::PageInfos.new(self)
+    page.build(self)
   end
 
 
