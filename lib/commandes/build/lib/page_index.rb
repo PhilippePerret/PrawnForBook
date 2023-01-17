@@ -16,6 +16,11 @@ class PageIndex
     @table_index = {}
   end
 
+  # - raccourci -
+  def recipe
+    @recipe ||= pdfbook.recipe
+  end
+
   ##
   # Construction de la page d'index, à l'endroit où on se trouve
   # du livre
@@ -40,12 +45,11 @@ class PageIndex
     # 
     # Police et taille
     # 
-    ft = pdf.font('Garamond', size: 11) # TODO Pouvoir définir
-    pdf.move_cursor_to (pdf.line_reference.dup + 4 * pdf.line_height)
-    pdf.move_up(ft.ascender)
+    ft = pdf.font(recipe.index_font_name, size: recipe.index_font_size, style: recipe.index_font_style)
     table_index.sort_by do |canon, dcanon|
       dcanon[:canon_for_sort]
     end.each do |canon, dcanon|
+      pdf.move_cursor_to_next_reference_line
       pdf.text "#{canon} : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}"
     end
 

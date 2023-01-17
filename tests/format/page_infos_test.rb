@@ -17,7 +17,7 @@ class PageInfosTest < Minitest::Test
   # travaille.
   def focus?
     true
-    false
+    false # pour jouer tous les tests
   end
 
   # Le livre généré (spécial pour les tests)

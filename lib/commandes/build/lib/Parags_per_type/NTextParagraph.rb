@@ -127,9 +127,9 @@ class NTextParagraph < AnyParagraph
           spy "Position cursor pour écriture du texte) : #{cursor.inspect}".bleu
 
           # --- Écriture ---
-          float do 
+          # float do 
             text(final_str, **options)
-          end
+          # end
         end
       end
     rescue Exception => e

@@ -33,6 +33,7 @@ class AbstractRecipe
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
     line_height:  [:book_format, :text, :line_height],
+    numerotation: [:book_format, :text, :numerotation],
     book_height:  [:book_format, :book, :height],
     page_height:  [:book_format, :book, :height],
     height:       [:book_format, :book, :height],

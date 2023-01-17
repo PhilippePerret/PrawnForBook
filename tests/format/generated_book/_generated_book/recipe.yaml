@@ -1,53 +1,10 @@
 ---
-:inserted_pages:
-  :page_infos: true
-  :page_de_titre: false
-  :page_de_garde: false
-  :faux_titre: false
-:page_infos:
-  :conception:
-    :patro: Phil Perret
-    :mail:
-  :mise_en_page:
-    :patro: Cédric de Montdénard
-    :mail:
-  :cover:
-    :patro: Agnès Brossard
-    :mail:
-  :correction:
-    :patro: Marion Michel
-    :mail: marion.michel@gaim.com
-  :aspect:
-    :libelle:
-      :font: :Helvetica
-      :style: :regular
-      :size: 10
-      :color: '555555'
-    :value:
-      :font: :Times-Roman
-      :size: 11
-    :disposition: distribute
-  :depot_legal:
-  :printing:
-    :name: Les Impressions d'Augias
-    :lieu:
-:publishing:
-  :name: Icare éditions
-  :contact:
-  :mail:
-  :siret:
-  :url: https://www.icare-edition.fr
 :book_data:
-  :title: Le Livre des infos
-  :auteurs: Marion Michel
-  :isbn:
+  :title: Livre avec index
+:titles:
+  :level1:
+    :lines_before: 0
 :book_format:
-  :book:
-    :height: 500
-  :page:
-    :margins:
-      :top: 20
-      :bot: 20
   :text:
-    :line_height: 23
+    :numerotation: parags
 :last_updated: 17/01/2023

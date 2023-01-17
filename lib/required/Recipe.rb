@@ -231,6 +231,17 @@ class Recipe
     end
   end
 
+  # --- Index ---
+
+  def index_font_name
+    @index_font_name ||= default_font_name # TODO
+  end
+  def index_font_style
+    @index_font_style ||= default_font_style # TODO
+  end
+  def index_font_size
+    @index_font_size ||= 9 # TODO 
+  end
 
   # --- Group Recipe Data ---
 
