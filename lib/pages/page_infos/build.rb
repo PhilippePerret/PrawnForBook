@@ -14,9 +14,15 @@ class PageInfos
     # 
     infos_valides_or_raises
     # 
+    # On définit le delimiteur linéaire en fonction de la disposition
+    # des informations (un retour chariot en mode distribué, une 
+    # espace dans les autres modes)
+    # 
+    define_linear_delimitor
+    # 
     # Liste des informations à imprimer
     # 
-    infos_to_print = get_infos_to_print
+    @infos_to_print = get_infos_to_print
     # 
     # On commence par se placer sur la bonne page
     # 
@@ -34,39 +40,102 @@ class PageInfos
     # 
     if mode_distributed?
       spy "Mode distribué".jaune
-      dispose_element_on_surface(pdf, infos_to_print)
+      dispose_element_on_surface(pdf)
       pdf.move_down(40)
     end
     # 
     # On peut construire la page en fonction des informations
     # 
-    pdf.update do
-      # 
-      # Boucle sur toutes les informations à imprimer
-      # 
-      infos_to_print.each do |dinfo|
-        case dinfo
-        when :delimitor
-          move_down(me.interstice_height)
-        else
-          if dinfo[:label]
-            me.render_as_label(pdf, dinfo[:label])
-          end
-          me.render_as_value(pdf, dinfo[:value])
-          move_down(me.interstice_height) unless dinfo[:no_space]
-        end
-      end
-
+    if mode_distributed?
+      print_distributed(pdf)
+    elsif mode_at_the_bottom?
+      print_at_the_bottom(pdf)
+    elsif mode_at_the_top?
+      print_at_the_top(pdf)
     end
 
     spy "<- /Construction de la page d'informations".bleu
+  end
+
+  def print_distributed(pdf)
+    # 
+    # Boucle sur toutes les informations à imprimer
+    # 
+    @infos_to_print.each do |dinfo|
+      case dinfo
+      when :delimitor
+        pdf.move_down(interstice_height)
+      else
+        if dinfo[:label]
+          render_as_label(pdf, dinfo[:label])
+        end
+        render_as_value(pdf, dinfo[:value])
+        pdf.move_down(interstice_height) unless dinfo[:no_space]
+      end
+    end    
+  end
+
+  def print_at_the_bottom(pdf)
+    # 
+    # Application de la font voulue
+    # 
+    # pdf.font(info_font, **{size: info_size, style: info_style})
+    pdf.font(info_font, **{size: 9, style: info_style, leading: 0})
+    #
+    # On doit se placer assez haut pour tout écrire
+    # 
+    nombre_lignes = @infos_to_print.count + 4
+    original_default_leading = pdf.default_leading
+    pdf.default_leading = 0
+    hauteur_ligne = pdf.height_of(@infos_to_print.first[:value])
+    pdf.default_leading = original_default_leading
+    top_cursor    = nombre_lignes * hauteur_ligne
+    spy "Calcul du positionnement du début des informations…".jaune
+    spy "(default_leading initial : #{original_default_leading})".gris
+    spy "Hauteur ligne d'information   : #{hauteur_ligne}".bleu
+    spy "Nombre de lignes (4 ajoutées) : #{nombre_lignes}".bleu
+    spy "Placement du curseur          : #{top_cursor}".bleu
+    pdf.move_cursor_to(top_cursor)
+    # 
+    # Boucle sur toutes les informations à imprimer, depuis l'endroit
+    # où on s'est placé
+    # 
+    @infos_to_print.each do |dinfo|
+      case dinfo
+      when :delimitor then next
+      else print_line(pdf, dinfo)
+      end
+    end
+  end
+
+  def print_at_the_top(pdf)
+    # 
+    # Application de la font voulue
+    # 
+    # pdf.font(info_font, **{size: info_size, style: info_style})
+    pdf.font(info_font, **{size: 9, style: info_style})
+    # 
+    # Boucle sur toutes les informations à imprimer
+    # 
+    @infos_to_print.each do |dinfo|
+      case dinfo
+      when :delimitor then next
+      else print_line(pdf, dinfo)
+      end
+    end
+  end
+
+  def print_line(pdf, dinfo)
+    line = dinfo[:value]
+    line = "#{dinfo[:label]} : #{line}" if dinfo[:label]
+    pdf.text(line, **{align: :left, leading:0})
   end
 
   def interstice_height
     @interstice_height
   end
 
-  def dispose_element_on_surface(pdf, infos_to_print)
+  def dispose_element_on_surface(pdf)
     #
     # Surface sur laquelle pourront se mettre les informations si
     # on doit les répartir.
@@ -87,7 +156,7 @@ class PageInfos
     # 
     texte_height = 0
     nombre_interstices = 0
-    infos_to_print.each do |dinfo|
+    @infos_to_print.each do |dinfo|
       if dinfo == :delimitor
         nombre_interstices += 1
       else
@@ -126,14 +195,13 @@ class PageInfos
     end
   end
 
-
   # @return [Array] La liste des informations à afficher
   def get_infos_to_print
     ary = []
     [:name, :url, :adresse, :mail].each do |prop|
       if publisher[prop]
         value = if prop == :adresse
-            publisher[prop].split("\\n").join("\n")
+            publisher[prop].split("\\n").join(LINEAR_DELIMITOR)
           else
             publisher[prop]
           end
@@ -156,7 +224,7 @@ class PageInfos
     end
     ary << {label: 'Couverture', value: cover_conception}
     if relectures_et_corrections
-      ary << {label: 'Relectures et corrections', value:relectures_et_corrections}
+      ary << {label: 'Correction & relecture', value:relectures_et_corrections}
     end
     ary << :delimitor
     ary << {label: 'Imprimé par', value: imprimerie}
@@ -254,6 +322,17 @@ class PageInfos
 
   private
 
+    # En mode distribué, les labels et informations sont les unes
+    # au-dessus des autres, les mails sont sous les noms, les 
+    # adresses sont en lignes. Dans les autres modes, tout est sur
+    # la même ligne. C'est la constante LINEAR_DELIMITOR, définie ici,
+    # qui détermine ce comportement
+    # 
+    def define_linear_delimitor
+      Object.const_set('LINEAR_DELIMITOR', mode_distributed? ? "\n" : " ")
+    end
+
+
   # Reçoit une donnée "people", avec un ou des patronymes (:patro) et
   # un ou des mails et compose la donnée en ajoutant les mails aux
   # noms
@@ -268,7 +347,7 @@ class PageInfos
     mails  = mails.to_s.match?(',') ?
                 mails.split(',').map{|n|n.strip} : [mails]
     people.map.with_index do |patro, idx|
-      patro = "#{patro}\n(#{mails[idx]})" unless mails[idx].nil?
+      patro = "#{patro}#{LINEAR_DELIMITOR}(#{mails[idx]})" unless mails[idx].nil?
       patro
     end.pretty_join    
   end
@@ -307,6 +386,14 @@ class PageInfos
 
   def mode_distributed?
     disposition == 'distribute'
+  end
+
+  def mode_at_the_bottom?
+    disposition == 'bottom'
+  end
+
+  def mode_at_the_top?
+    disposition == 'top'
   end
 
   def disposition

@@ -76,6 +76,7 @@ class AbstractRecipe
     color_label_infos:    [:page_infos, :aspect, :libelle, :color],
     font_infos:           [:page_infos, :aspect, :value, :font],
     size_infos:           [:page_infos, :aspect, :value, :size],
+    disposition:          [:page_infos, :aspect, :disposition],
     depot_legal:          [:page_infos, :depot_legal],
     imprimerie:           [:page_infos, :printing, :name],
     imprimerie_ville:     [:page_infos, :printing, :lieu],

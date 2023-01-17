@@ -7,13 +7,13 @@
 :page_infos:
   :conception:
     :patro: Phil Perret
-    :mail: phil@chez.lui
+    :mail:
   :mise_en_page:
     :patro: Cédric de Montdénard
-    :mail: cedric@mondenard.com
+    :mail:
   :cover:
     :patro: Agnès Brossard
-    :mail: agnes.brossard@chez.elle
+    :mail:
   :correction:
     :patro: Marion Michel
     :mail: marion.michel@gaim.com
@@ -27,20 +27,20 @@
       :font: :Times-Roman
       :size: 11
     :disposition: distribute
-  :depot_legal: 3e trimestre 2023
+  :depot_legal:
   :printing:
     :name: Les Impressions d'Augias
-    :lieu: Aubagne
+    :lieu:
 :publishing:
   :name: Icare éditions
-  :contact: contact@icare-editions.fr
-  :mail: infos@icare-editions.fr
-  :siret: '0123456987'
+  :contact:
+  :mail:
+  :siret:
   :url: https://www.icare-edition.fr
 :book_data:
   :title: Le Livre des infos
   :auteurs: Marion Michel
-  :isbn: 215-8-52698-65-3
+  :isbn:
 :book_format:
   :book:
     :height: 500
@@ -50,4 +50,4 @@
       :bot: 20
   :text:
     :line_height: 23
-:last_updated: 16/01/2023
+:last_updated: 17/01/2023

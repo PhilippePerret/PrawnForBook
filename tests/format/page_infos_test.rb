@@ -17,7 +17,7 @@ class PageInfosTest < Minitest::Test
   # travaille.
   def focus?
     true
-    return false
+    false
   end
 
   # Le livre généré (spécial pour les tests)
@@ -141,7 +141,7 @@ class PageInfosTest < Minitest::Test
     # ===> TEST <===
     dr = data_recipe.dup.merge(disposition: 'distribute')
     book.recipe.build_with(dr)
-    book.build_text("Un livre avec page d'infos, les informations sont rassemblées en bas de page.")
+    book.build_text("Un livre avec page d'infos, les informations sont distribuées dans la page.")
     book.build
 
     # --- Vérifications ---
@@ -154,6 +154,64 @@ class PageInfosTest < Minitest::Test
     ].each do |prop|
       page.has_text(data_recipe[prop])
     end
+  end
+
+  def test_page_produite_avec_bonnes_informations_at_bottom
+    return if focus?
+    resume "
+    Avec les bonnes informations, la page d'information est produite
+    avec succès avec une disposition en BAS DE PAGE.
+    "
+    # ===> TEST <===
+    dr = data_recipe.dup.merge(disposition: 'bottom')
+    book.recipe.build_with(dr)
+    book.build_text("Un livre avec page d'infos, les informations sont rassemblées en bas de page.")
+    book.build
+
+    # --- Vérifications ---
+    page = pdf.page(3)
+    [:isbn, :publisher_url, :publisher_siret, :publisher_mail,
+      :publisher_contact, :publisher_name, :imprimerie_ville, :imprimerie,
+      :depot_legal, :correctrice_mail, :correctrice, :couverture_mail,
+      :couverture, :metteur_en_page_mail, :metteur_en_page, 
+      :concepteur_mail, :concepteur
+    ].each do |prop|
+      page.has_text(data_recipe[prop])
+    end
+    page.has_text(dr[:publisher_name]).below(250)
+    page.has_text("Conception & rédaction : #{dr[:concepteur]}")
+    page.has_text("Mise en page : #{dr[:metteur_en_page]} (#{dr[:metteur_en_page_mail]})")
+    page.has_text("Correction & relecture : #{dr[:correctrice]} (#{dr[:correctrice_mail]})")
+    page.has_text("Imprimé par : #{dr[:imprimerie]} (#{dr[:imprimerie_ville]})")
+  end
+
+  def test_page_produite_avec_bonnes_informations_at_top
+    return if focus?
+    resume "
+    Avec les bonnes informations, la page d'information est produite
+    avec succès avec une disposition des informations en HAUT DE PAGE.
+    "
+    # ===> TEST <===
+    dr = data_recipe.dup.merge(disposition: 'top')
+    book.recipe.build_with(dr)
+    book.build_text("Un livre avec page d'infos, les informations sont rassemblées en bas de page.")
+    book.build
+
+    # --- Vérifications ---
+    page = pdf.page(3)
+    [:isbn, :publisher_url, :publisher_siret, :publisher_mail,
+      :publisher_contact, :publisher_name, :imprimerie_ville, :imprimerie,
+      :depot_legal, :correctrice_mail, :correctrice, :couverture_mail,
+      :couverture, :metteur_en_page_mail, :metteur_en_page, 
+      :concepteur_mail, :concepteur
+    ].each do |prop|
+      page.has_text(data_recipe[prop])
+    end
+    page.has_text(dr[:publisher_name]).above(250)
+    page.has_text("Conception & rédaction : #{dr[:concepteur]}")
+    page.has_text("Mise en page : #{dr[:metteur_en_page]} (#{dr[:metteur_en_page_mail]})")
+    page.has_text("Correction & relecture : #{dr[:correctrice]} (#{dr[:correctrice_mail]})")
+    page.has_text("Imprimé par : #{dr[:imprimerie]} (#{dr[:imprimerie_ville]})")
   end
 
   def test_page_produite_avec_bonnes_informations_minimales
