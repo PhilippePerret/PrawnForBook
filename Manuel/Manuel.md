@@ -279,6 +279,24 @@ La *page de titre* n'est pas à confondre avec la couverture (qui fait l'objet d
 
 Pour sa mise en page, voir la [recette concernant les pages spéciales](#all-types-pages).
 
+<a name="page-informations"></a>
+
+#### Page d’informations
+
+Nous appelons “page d’informations” la page de fin de livre où sont présentés toutes les informations sur la conception du livre, metteur en page, correcteurs, imprimeurs, isbn et autre date de dépôt légal.
+
+Pour définir les informations, ouvrir une fenêtre de Terminal au dossier du livre ou de la collection et utiliser l’assistant en jouant la commande <console>pfb assistant</console> et choisir “Assistant Page Infos”.
+
+Ces informations peuvent être réparties de 3 façons différentes :
+
+* distribuées sur la page (réparties de façon égale sur la surface d’une page entière)
+* en haut de page (toutes les informations sont rassemblées de façon compacte au-dessus d’une des dernières pages),
+* en bas de page (toutes les informations sont rassemblées de façon compacte en bas d’’une des dernières pages).
+
+---
+
+<a name="table-des-matieres"></a>
+
 #### Table des matières
 
 | <span style="width:200px;display:inline-block;"> </span> | Recette | propriété              | valeurs possibles    |
