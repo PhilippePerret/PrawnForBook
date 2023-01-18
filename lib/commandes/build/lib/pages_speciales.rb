@@ -36,8 +36,6 @@ class PrawnView
     dtoc.merge!(page_number: page_number)
   end
 
-  # --- CONSTRUCTION DES PAGES DE TITRES ---
-
   ##
   # Construction du faux titre
   #
@@ -55,6 +53,12 @@ class PrawnView
   def build_page_infos
     require 'lib/pages/page_infos'
     page = Prawn4book::Pages::PageInfos.new(self)
+    page.build(self)
+  end
+
+  def build_page_index
+    require 'lib/pages/page_index'
+    page = Prawn4book::Pages::PageIndex.new(self)
     page.build(self)
   end
 

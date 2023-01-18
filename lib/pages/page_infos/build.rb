@@ -315,10 +315,6 @@ class PageInfos
     @publisher ||= recipe.publishing
   end
 
-  def recipe
-    @recipe ||= owner.recipe
-  end
-
 
   private
 

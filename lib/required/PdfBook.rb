@@ -51,7 +51,10 @@ class PdfBook
   end
 
   def page_index
-    @page_index ||= PageIndex.new(self)
+    @page_index ||= begin
+      require 'lib/pages/page_index'
+      Prawn4book::Pages::PageIndex.new(self)
+    end
   end
 
   def collection

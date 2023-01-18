@@ -81,6 +81,13 @@ class AbstractRecipe
     depot_legal:          [:page_infos, :depot_legal],
     imprimerie:           [:page_infos, :printing, :name],
     imprimerie_ville:     [:page_infos, :printing, :lieu],
+    # - La page d'index -
+    index_canon_font_name:    [:page_index, :canon,   :name],
+    index_canon_font_size:    [:page_index, :canon,   :size],
+    index_canon_font_style:   [:page_index, :canon,   :style],
+    index_number_font_name:   [:page_index, :number,  :name],
+    index_number_font_size:   [:page_index, :number,  :size],
+    index_number_font_style:  [:page_index, :number,  :style],
   }
 
 attr_reader :owner

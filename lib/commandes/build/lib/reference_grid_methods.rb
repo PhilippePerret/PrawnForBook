@@ -47,8 +47,8 @@ class PrawnView
     absolute_line_ref = bounds.top - new_dist_from_top
     line_ref          = absolute_line_ref + font.ascender
 
+    spy "[calcul line ref]".bleu
     msg_spy = <<~TEXT
-    [calcul line ref]
       cursor départ : #{cursor.inspect}
       Distance depuis le haut efficace = #{cur_dist_from_top}
       Indice ligne référence courante = #{cur_num_ref_line}
@@ -57,13 +57,12 @@ class PrawnView
       Nouvelle distance depuis le haut efficace = #{new_dist_from_top}
       Absolute Line Ref (sans la fonte) = #{absolute_line_ref}
       line_ref = #{line_ref}
-
-      font : #{font.inspect}
+      Font courante : #{font.inspect}
       ascender : #{font.ascender}
       descender: #{font.descender}
-    [/calcul line ref]
     TEXT
-    spy msg_spy.bleu
+    spy msg_spy
+    spy "[/calcul line ref]".bleu
 
     return line_ref    
   end

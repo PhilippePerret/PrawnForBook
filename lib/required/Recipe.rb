@@ -234,13 +234,25 @@ class Recipe
   # --- Index ---
 
   def index_font_name
-    @index_font_name ||= default_font_name # TODO
-  end
-  def index_font_style
-    @index_font_style ||= default_font_style # TODO
+    @index_font_name ||= page_index[:canon][:name]
   end
   def index_font_size
-    @index_font_size ||= 9 # TODO 
+    @index_font_size ||= page_index[:canon][:size]
+  end
+  def index_font_style
+    @index_font_style ||= page_index[:canon][:style]
+  end
+  alias :index_canon_font_name :index_font_name
+  alias :index_canon_font_size :index_font_size
+  alias :index_canon_font_style :index_font_style
+  def index_number_font_name
+    @index_number_font_name ||= page_index[:number][:name]
+  end
+  def index_number_font_size
+    @index_number_font_size ||= page_index[:number][:size] || 9
+  end
+  def index_number_font_style
+    @index_number_font_style ||= page_index[:number][:style]
   end
 
   # --- Group Recipe Data ---
@@ -334,6 +346,13 @@ class Recipe
     @page_infos ||= begin
       require 'lib/pages/page_infos/data.rb'
       self.class.peuple_with_default_data(get(:page_infos, {}), Pages::PageInfos::PAGE_DATA)
+    end
+  end
+
+  def page_index
+    @page_index ||= begin
+      require 'lib/pages/page_index/data.rb'
+      self.class.peuple_with_default_data(get(:page_index, {}), Pages::PageIndex::PAGE_DATA)
     end
   end
 

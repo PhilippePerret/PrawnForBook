@@ -29,8 +29,14 @@ class SpecialPage
   # @param [String|Prawn4book::PrawnView] path Dossier courant (où a été lancé la commande) ou le PrawnView du document traité
   #      
   def initialize(path)
-    path = path.pdfbook.folder if path.instance_of?(Prawn4book::PrawnView)
-    @folder = path
+    real_path =
+      case path
+      when Prawn4book::PrawnView  then path.pdfbook.folder
+      when Prawn4book::PdfBook    then path.folder
+      when String                 then path
+      else raise "Je ne sais pas comment transformer #{path.inspect}::#{path.class} en path:String…"
+    end
+    @folder = real_path
     @thing  = thing  
   end
 
@@ -66,6 +72,9 @@ class SpecialPage
   end
   alias :owner :thing
 
+  def recipe
+    @recipe ||= owner.recipe # collection ou livre
+  end
 
 end #/class SpecialPage
 end #/module Prawn4book
