@@ -7,13 +7,6 @@
 :book_format:
   :text:
     :numerotation: parags
-:page_index:
-  :canon:
-    :name: Courier
-    :size: 16
-    :style: :italic
-  :number:
-    :name: Helvetica
-    :size: 8
-    :style: :regular
+:inserted_pages:
+  :page_de_garde: false
 :last_updated: 18/01/2023

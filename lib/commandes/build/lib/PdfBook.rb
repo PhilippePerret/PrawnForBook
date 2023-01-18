@@ -30,7 +30,6 @@ class PdfBook
     end
   end
 
-
   # --- Predicate Methods (shortcuts) ---
 
   def skip_page_creation?   ;recette.skip_page_creation?  end

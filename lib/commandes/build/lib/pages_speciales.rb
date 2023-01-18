@@ -6,34 +6,13 @@
 module Prawn4book
 class PrawnView
 
-  # --- CONSTRUCTION DE LA TABLE DES MATIÈRES ---
-
-  # Cette méthode ne sert qu'à construire les pages qui doivent
-  # servir pour la table des matières. La table des matières vérita-
-  # ble sera construite dans la méthode  :
-  #   Praw4book::PdfBook::Tdm#output
-  #   cf. le fichier PdfBook_TdM.rb
+  ##
+  # Construction de la table des matières
   # 
-  def init_table_of_contents
-    # 
-    # Toujours la mettre sur une nouvelle page, comme c'est l'usage
-    # 
-    start_new_page
-    # 
-    # On prend les données de la table des matières
-    dtoc = tdm.data
-    # 
-    # Instancier un titre pour la table des matières
-    # 
-    unless dtoc[:title] === false
-      titre = PdfBook::NTitre.new(pdfbook, text:dtoc[:title], level:dtoc[:title_level])
-      titre.print(self)
-      dtoc[:first_line] || dtoc.merge!(first_line: 5)
-    end
-    # 
-    # On mémorise le numéro de page de la table des matières
-    # 
-    dtoc.merge!(page_number: page_number)
+  def build_table_of_contents
+    require 'lib/pages/table_of_content'
+    page = Prawn4book::Pages::TableOfContent.new(self)
+    page.build(self) # mais seulement si elle est définie
   end
 
   ##
@@ -62,6 +41,33 @@ class PrawnView
     page.build(self)
   end
 
+
+
+  # --- CONSTRUCTION DE LA TABLE DES MATIÈRES ---
+
+  # Préparation de la page où sera écrite la table des matières
+  # 
+  def init_table_of_contents
+    # 
+    # Toujours la mettre sur une nouvelle page, comme c'est l'usage
+    # 
+    start_new_page
+    # 
+    # Recette pour la table des matières
+    # 
+    tdata = pdfbook.recipe.table_of_content
+    # 
+    # Instancier un titre pour la table des matières
+    # 
+    unless tdata[:no_title]
+      titre = PdfBook::NTitre.new(pdfbook, **{text:tdata[:title], level:tdata[:title_level]})
+      titre.print(self)
+    end
+    # 
+    # On mémorise le numéro de page de la table des matières
+    # 
+    tdm.page_number = page_number
+  end
 
 end #/PrawnView
 end #/Prawn4book

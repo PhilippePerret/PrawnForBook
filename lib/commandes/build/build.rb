@@ -161,7 +161,7 @@ class PdfBook
     # Initier la table des matières (je préfère faire mon 
     # instance plutôt que d'utiliser l'outline de Prawn)
     # 
-    tdm = PdfBook::Tdm.new(self, pdf)
+    tdm = Prawn4book::Tdm.new(self, pdf)
     pdf.tdm = tdm
 
     pdf.start_new_page      if page_de_garde?
@@ -206,7 +206,7 @@ class PdfBook
     # 
     # - TABLE DES MATIÈRES -
     # 
-    tdm.build if pdf.table_of_contents?
+    pdf.build_table_of_contents
 
     #
     # - ENTETE & PIED DE PAGE -

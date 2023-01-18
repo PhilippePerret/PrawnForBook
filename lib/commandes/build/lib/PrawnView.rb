@@ -114,10 +114,6 @@ class PrawnView
 
   # --- Predicate Methods ---
 
-  def table_of_contents?
-    :TRUE == @hastoc ||= true_or_false(not(tdm.data[:page_number].nil?))
-  end
-
   def paragraph_number?
     :TRUE == @hasparagnum ||= true_or_false(pdfbook.recette.paragraph_number?)
   end

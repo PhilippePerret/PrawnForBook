@@ -1,4 +1,9 @@
-Un texte avec un mot index:indexé.
-Un index(mot) peut être index(indexé).
-Il peut aussi être index(remplacé|mot) par un autre à l'affichage.
-(( index ))
+(( table_of_contents ))
+# Un grand titre
+Du texte pour voir.
+# Autre grand titre
+## Premier sous-titre
+Du texte dans le sous-titre
+## Deuxième sous-titre
+Du texte pour le deuxième sous-titre
+# Un dernier grand titre

@@ -25,7 +25,7 @@ class P4BCode < AnyParagraph
       spy "Parag_style = #{parag_style.inspect}"
     when 'new_page', 'nouvelle_page'
       pdf.start_new_page
-    when 'tdm', 'toc'
+    when 'tdm', 'toc', 'table_des_matieres','table_of_contents','table_of_content'
       pdf.init_table_of_contents
     when 'index'
       pdfbook.page_index.build(pdf)

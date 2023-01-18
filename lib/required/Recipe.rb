@@ -171,6 +171,9 @@ class Recipe
   def numeroration?
     :TRUE == @numeroter ||= true_or_false(book_format[:text][:numerotation] != 'none')
   end
+  def tdm_numerotation?
+    :TRUE == @numerotertdm ||= true_or_false(table_of_content[:numeroter])
+  end
   def paragraph_number?
     :TRUE == @numeroterpar ||= true_or_false(book_format[:text][:numerotation] == 'parags')
   end
