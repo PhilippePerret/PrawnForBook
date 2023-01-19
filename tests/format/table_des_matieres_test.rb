@@ -62,16 +62,19 @@ class TableDesMatieresTest < Minitest::Test
   def texte_avec_titres
     <<~TEXT
     # Un grand titre
-    Du texte pour voir.
+    #{text1}
     # Autre grand titre
     ## Premier sous-titre
-    Du texte dans le sous-titre
+    #{text2}
     ## Deuxième sous-titre
-    Du texte pour le deuxième sous-titre
+    #{text3}
     # Un dernier grand titre
     TEXT
   end
 
+  def text1; @text1 ||= "Du texte pour voir." end
+  def text2; @text2 ||= "Du texte dans le sous-titre" end
+  def text3; @text3 ||= "Du texte pour le deuxième sous-titre" end
 
   def test_table_des_matiers_sans_marque
     return if focus?
@@ -83,8 +86,12 @@ class TableDesMatieresTest < Minitest::Test
     book.build_text(texte_avec_titres)
     book.build
 
-    pdeux = pdf.page(2)
-    pdeux.not.has_text("Table des matières")
+    ptrois = pdf.page(3)
+    ptrois.not.has_text("Table des matières")
+    ["Un grand titre", "Autre grand titre", "Premier sous-titre","Deuxième sous-titre", "Un dernier grand titre"
+    ].each do |str|
+      ptrois.not.has_text(str)
+    end
   end
 
   def test_table_des_matieres_par_defaut
@@ -96,8 +103,15 @@ class TableDesMatieresTest < Minitest::Test
     book.build_text("(( table_of_contents ))\n#{texte_avec_titres}")
     book.build
 
-    pdeux = pdf.page(2)
-    pdeux.has_text("Table des matières")
+    ptrois = pdf.page(3)
+    ptrois.has_text("Table des matières")
+    ["Un grand titre", "Autre grand titre", "Premier sous-titre","Deuxième sous-titre", "Un dernier grand titre"
+    ].each do |str|
+      ptrois.has_text(str)
+    end
+    [text1,text2, text3].each do |str|
+      ptrois.not.has_text(str)
+    end
   end
 
 end #/IndexPageTest

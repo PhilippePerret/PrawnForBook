@@ -88,7 +88,6 @@ class TableOfContent
         separator     = cdata[:separator]
         titre_width   = cdata[:titre_width]
         numero_width  = cdata[:numero_width]
-        spy "numero_width = #{numero_width.inspect}".rouge
       end
       # 
       # Le contenu
@@ -97,12 +96,11 @@ class TableOfContent
         if me.numeroter?
           pdf.update do
             float {
-              span(numero_width, **{position: :right}) { text(titre.numero.to_s, **{size: cdata[:numero_size]})}
+              span(numero_width, **{position: :right}) { 
+                text(titre.numero.to_s, **{size: cdata[:numero_size]})
+              }
             }
           end
-          # pdf.float do
-          #   pdf.span(numero_width, **{position: :right}) { pdf.text titre.numero.to_s }
-          # end
           "#{titre.content} #{" #{separator}" * 100}"
         else
           titre.content
