@@ -237,25 +237,25 @@ class Recipe
   # --- Index ---
 
   def index_font_name
-    @index_font_name ||= page_index[:canon][:name]
+    @index_font_name ||= page_index[:aspect][:canon][:font]
   end
   def index_font_size
-    @index_font_size ||= page_index[:canon][:size]
+    @index_font_size ||= page_index[:aspect][:canon][:size]
   end
   def index_font_style
-    @index_font_style ||= page_index[:canon][:style]
+    @index_font_style ||= page_index[:aspect][:canon][:style]
   end
   alias :index_canon_font_name :index_font_name
   alias :index_canon_font_size :index_font_size
   alias :index_canon_font_style :index_font_style
   def index_number_font_name
-    @index_number_font_name ||= page_index[:number][:name]
+    @index_number_font_name ||= page_index[:aspect][:number][:font]
   end
   def index_number_font_size
-    @index_number_font_size ||= page_index[:number][:size] || 9
+    @index_number_font_size ||= page_index[:aspect][:number][:size]
   end
   def index_number_font_style
-    @index_number_font_style ||= page_index[:number][:style]
+    @index_number_font_style ||= page_index[:aspect][:number][:style]
   end
 
   # --- Group Recipe Data ---
@@ -293,6 +293,10 @@ class Recipe
 
   def line_height
     book_format[:text][:line_height]
+  end
+
+  def text_indent
+    book_format[:text][:indent]
   end
 
   # --- Blocs de données ---

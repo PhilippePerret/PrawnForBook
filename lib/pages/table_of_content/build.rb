@@ -156,7 +156,6 @@ class TableOfContent
   def data_font_for(dfont)
     datafont = {size: dfont[:size]}
     datafont.merge!(style: dfont[:style]) unless dfont[:style].nil?
-    spy "datafont = #{datafont.inspect}".orange
     return datafont
   end
 

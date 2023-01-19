@@ -69,6 +69,8 @@ class NTextParagraph < AnyParagraph
     fontFamily  = font_family(pdf)
     fontStyle   = font_style(pdf)
     fontSize    = font_size(pdf)
+    textIndent  = recipe.text_indent
+    spy "Indentation du texte : #{textIndent.inspect}"
 
     pdf.update do
       # 
@@ -82,6 +84,11 @@ class NTextParagraph < AnyParagraph
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
         raise
       end
+
+      #
+      # Faut-il passer sur la page suivante ?
+      # 
+      # if cursor > 
 
       # 
       # Le paragraphe va-t-il passer à la page suivante ?
@@ -106,6 +113,7 @@ class NTextParagraph < AnyParagraph
           font_style:     fontStyle,
           size:           fontSize
         }
+        options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
           #
           # Écriture du paragraphe dans une boite
@@ -124,17 +132,20 @@ class NTextParagraph < AnyParagraph
           # texte et déplacement du curseur
           # 
           move_cursor_to_next_reference_line
-          spy "Position cursor pour écriture du texte) : #{cursor.inspect}".bleu
+          if cursor < 0
+            spy "Nécessité de passer à la page suivante (curseur trop bas)".orange
+            start_new_page 
+            move_cursor_to_next_reference_line
+          end
+          spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
           # --- Écriture ---
-          # float do 
-            text(final_str, **options)
-          # end
+          text(final_str, **options)
         end
       end
     rescue Exception => e
       puts "Problème avec le paragraphe #{final_str.inspect}".rouge
-      puts "Erreur : #{e.message}"
+      puts "ERREUR : #{e.message}"
       exit
     end
 

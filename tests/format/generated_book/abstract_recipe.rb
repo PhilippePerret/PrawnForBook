@@ -14,10 +14,11 @@ class AbstractRecipe
   # 
   REAL_PATH_DATA = {
     # -- Données de la collection --
-    collection_name:  [:collection_data, :name],
+    collection_name:    [:collection_data, :name],
 
     # -- Données du livre --
     book_titre:         [:book_data, :title],
+    titre_livre:        [:book_data, :title],
     book_sous_titre:    [:book_data, :subtitle],
     book_auteur:        [:book_data, :auteurs],
     book_auteurs:       [:book_data, :auteurs],
@@ -29,6 +30,7 @@ class AbstractRecipe
     publisher_siret:    [:publishing, :siret],
     publisher_url:      [:publishing, :url],
     logo:               [:publishing, :logo_path],
+    logo_height:        [:page_de_titre, :logo, :height],
 
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
@@ -38,11 +40,15 @@ class AbstractRecipe
     page_height:  [:book_format, :book, :height],
     height:       [:book_format, :book, :height],
     margin_top:   [:book_format, :page, :margins, :top],
+    top_margin:   [:book_format, :page, :margins, :top],
     margin_left:  [:book_format, :page, :margins, :left],
+    left_margin:  [:book_format, :page, :margins, :left],
     margin_bot:   [:book_format, :page, :margins, :bot],
+    bot_margin:   [:book_format, :page, :margins, :bot],
     margin_bottom:[:book_format, :page, :margins, :bot],
     margin_right: [:book_format, :page, :margins, :right],
-    indent:       [:book_format, :text, :index],
+    right_margin: [:book_format, :page, :margins, :right],
+    indent:       [:book_format, :text, :indent],
     # - les pages à insérer -
     page_de_titre:  [:inserted_pages, :page_de_titre],
     page_de_garde:  [:inserted_pages, :page_de_garde],
@@ -82,13 +88,23 @@ class AbstractRecipe
     imprimerie:           [:page_infos, :printing, :name],
     imprimerie_ville:     [:page_infos, :printing, :lieu],
     # - La page d'index -
-    index_canon_font_name:    [:page_index, :canon,   :name],
-    index_canon_font_size:    [:page_index, :canon,   :size],
-    index_canon_font_style:   [:page_index, :canon,   :style],
-    index_number_font_name:   [:page_index, :number,  :name],
-    index_number_font_size:   [:page_index, :number,  :size],
-    index_number_font_style:  [:page_index, :number,  :style],
+    index_canon_font_name:    [:page_index, :aspect, :canon,   :name],
+    index_canon_font_size:    [:page_index, :aspect, :canon,   :size],
+    index_canon_font_style:   [:page_index, :aspect, :canon,   :style],
+    index_number_font_name:   [:page_index, :aspect, :number,  :name],
+    index_number_font_size:   [:page_index, :aspect, :number,  :size],
+    index_number_font_style:  [:page_index, :aspect, :number,  :style],
   }
+
+
+# Pour pouvoir être utilisé de l'extérieur avec 
+#   GeneratedBook::AbstractRecipe.copy_logo_to(logo_path)
+def self.copy_logo_to(dst, src_name = 'logo.jpg')
+  src = File.join(__dir__, 'images', src_name)
+  mkdir(File.dirname(src))
+  FileUtils.cp(src, dst)
+end
+
 
 attr_reader :owner
 def initialize(owner)
@@ -138,10 +154,7 @@ def build_with(props, **options)
   #   du dossier
   logo_path = props[:publishing] && props[:publishing][:logo_path]
   if logo_path
-    src = File.join(__dir__, 'images', logo_path)
-    dst = File.join(book.folder, logo_path)
-    mkdir(File.dirname(src))
-    FileUtils.cp(src, dst)
+    self.class.copy_logo_to(File.join(book.folder, logo_path))
   end
 
 rescue Exception => e
@@ -170,6 +183,9 @@ private
   # 
   # @api private
   def realize_properties(props)
+    self.class.realize_properties(props)
+  end
+  def self.realize_properties(props)
     real_props = {}
     props.each do |key, value|
       dpath = REAL_PATH_DATA[key] || []

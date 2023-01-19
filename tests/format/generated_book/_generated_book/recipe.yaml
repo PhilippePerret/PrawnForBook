@@ -1,12 +1,26 @@
 ---
 :book_data:
-  :title: Livre avec index
+  :title: Mon plus beau livre
+  :auteurs: Marion MICHEL
+  :isbn: 123-8-26598-2-36
+  :collection: false
+:book_format:
+  :page:
+    :height: 576
+    :margins:
+      :top: 10
+      :bot: 20
+      :ext: 25
+      :int: 35
+  :text:
+    :indent: 14.173228346456694
+    :numerotation: parags
 :titles:
   :level1:
-    :lines_before: 0
-:book_format:
-  :text:
-    :numerotation: parags
+    :next_page: true
+    :line_before: 0
 :inserted_pages:
-  :page_de_garde: false
-:last_updated: 19/01/2023
+  :page_de_garde: true
+  :page_de_titre: true
+:publishing:
+  :logo_path: logo.jpg

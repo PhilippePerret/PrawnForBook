@@ -4,6 +4,9 @@ class AnyParagraph
 
   attr_reader :pdf
 
+  def recipe
+    @recipe || pdfbook.recipe
+  end
 
   def margin_top
     @margin_top ||= (pfbcode && pfbcode[:margin_top]) || 0

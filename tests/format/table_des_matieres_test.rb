@@ -3,6 +3,11 @@
   Pour tester tout ce qui concerne la table des matières du 
   livre
 
+  TODO
+    * Faire des tests plus précis :
+      - pour voir les positionnements
+      - en modificants les valeurs par défaut
+        (cf. abstract_recipe pour ajouter les clés de correspondance)
 =end
 require 'test_helper'
 require_relative 'generated_book/required'

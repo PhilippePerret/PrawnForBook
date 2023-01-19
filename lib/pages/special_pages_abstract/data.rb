@@ -20,6 +20,12 @@ class SpecialPage
   def self.first_police_name
     "Times-Roman"
   end
+  def default_font_name
+    'Times-Roman'
+  end
+  def default_font_size
+    11    
+  end
 
   # Pour la :values d'une donnée de type select
   def police_names(default_name = nil)

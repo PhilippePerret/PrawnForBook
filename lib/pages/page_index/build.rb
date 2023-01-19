@@ -25,13 +25,13 @@ class PageIndex
     # Pour savoir si la police du canon est différente de celle des
     # nombres
     # 
-    diff_font_canon_and_number = (font_name != number_font_name) || (font_size != number_font_size) || (font_style != number_font_style)
-    spy "font_name/font_style de l'index : #{font_name.inspect}/#{font_style.inspect}".bleu
+    diff_font_canon_and_number = (canon_font_name != number_font_name) || (canon_font_size != number_font_size) || (canon_font_style != number_font_style)
     # 
     # Police et taille
     # 
     unless diff_font_canon_and_number
-      ft = pdf.font(font_name, size: font_size, style: font_style)
+      spy "Font/size appliqués : #{canon_font_name.inspect}/#{font_size.inspect}".bleu
+      pdf.font(canon_font_name, size: font_size, style: font_style)
     end
     # 
     # Boucle sur la table des index 
@@ -46,7 +46,7 @@ class PageIndex
           {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_font_name, size: number_font_size, styles: [number_font_style]}
         ]
       else
-        pdf.text "#{canon} : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}"
+        pdf.text("#{canon} : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}")
       end
     end
     spy "<- /construction de l'index".jaune

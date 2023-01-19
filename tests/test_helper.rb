@@ -12,6 +12,9 @@ require 'osascript'
 require 'osatest'
 
 
+require_folder(File.expand_path('./lib/required/utils'))
+
+
 # Pour charger plus facilement les modules de l'application
 $LOAD_PATH.unshift File.dirname(__dir__)
 
