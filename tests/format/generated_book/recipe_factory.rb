@@ -88,6 +88,24 @@ class Recipe
           size: 14,
         }
       },
+      headers_footers:{
+        dispositions: {
+          'dispo_with_numero' => {
+            name:       "Page normale",
+            footer_id:  'footer_with_numero',
+            first_page:  4,
+          },
+        },
+        headfooters: {
+          'footer_with_numero' => {
+            name: "Avec un numéro à gauche et à droite",
+            font: 'Helvetica',
+            size: 12,
+            pg_left: {content: :numero},
+            pd_right: {content: :numero}
+          },
+        }
+      },
     }
   end
 

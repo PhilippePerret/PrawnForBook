@@ -21,6 +21,22 @@
     :lines_before: 0
   :level2:
     :size: 14
+:headers_footers:
+  :dispositions:
+    with_numero:
+      :name: Page normale
+      :footer_id: footer_with_numero
+      :first_page: 4
+      :last_page: 1000
+  :headfooters:
+    footer_with_numero:
+      :name: Avec un numéro à gauche et à droite
+      :font: Helvetica
+      :size: 12
+      :pg_left:
+        :content: :numero
+      :pd_right:
+        :content: :numero
 :inserted_pages:
   :page_de_garde: true
   :page_de_titre: true

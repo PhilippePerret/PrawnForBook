@@ -28,10 +28,11 @@ class PrawnView
       # pieds de pages
       # 
       def build(pdfbook, pdf, data_pages)
-        return # pour le moment (il faut tout revoir)
         init(pdfbook, data_pages)
-        data.each { |ditem| new(ditem).build(pdf) }
-        # puts "Data page: #{data_pages.inspect}".bleu
+        return if data.nil? # pas de headers/footers définis
+        data[:dispositions].each do |dispo_id, data_dispo| 
+          new(data_dispo.merge(id: dispo_id)).build(pdf)
+        end
       end
       def init(pdfbook, data_pages)
         @pdfbook    = pdfbook
@@ -39,6 +40,10 @@ class PrawnView
       end
       def data
         @data ||= pdfbook.recipe.headers_footers
+      end
+      # @prop Les données des headfooters
+      def data_headfooters
+        @data_headfooters ||= data[:headfooters]
       end
     end #/ << self
 
@@ -49,12 +54,14 @@ class PrawnView
     attr_reader :data
     def initialize(data)
       @data = data
-      analyse_disposition
+      spy "Données pour initialisation d'une disposition : #{data.inspect}".jaune
     end
 
     # Raccourcis
     def pdfbook     ; self.class.pdfbook    end
     def data_pages  ; self.class.data_pages end
+
+###################       NEW METHODS      ###################
 
     # = MAIN BUILDER =
     # 
@@ -62,49 +69,82 @@ class PrawnView
     # de page
     # 
     def build(pdf)
-      @font_size = data[:size] || 9
-      @font_face = data[:font] || pdfbook.second_font
+      spy "-> Construction des entêtes et pieds de page".jaune
 
-      pdf.font(@font_face, size: @font_size)
-
-      proc_for_odd = hdft_procedure_for(pdf, :odd)
-      proc_for_even = hdft_procedure_for(pdf, :even)
+      # proc_for_odd  = hdft_procedure_for(pdf, :odd)
+      # proc_for_even = hdft_procedure_for(pdf, :even)
       
-      # 
-      # Séparation des pages impaires et paires
-      # 
-      odd_pages   = [] # impaires
-      even_pages  = [] # paires
-      pages.to_a.each do |ipage|
-        (ipage.odd? ? odd_pages : even_pages) << ipage
-      end
+      # # 
+      # # Séparation des pages impaires et paires
+      # # 
+      # odd_pages   = [] # impaires
+      # even_pages  = [] # paires
+      # pages.to_a.each do |ipage|
+      #   (ipage.odd? ? odd_pages : even_pages) << ipage
+      # end
 
       num_page = pdfbook.page_number?
 
       # 
       # INSCRIPTION DES HEADERS OU FOOTERS
       # 
+      #
+      # Inscription sur les pages paires
+      # 
       pdf.repeat even_pages, dynamic: true do
-        contents = {
-          left:   content_for(even_left_temp,   pdf.page_number), 
-          center: content_for(even_center_temp, pdf.page_number),
-          right:  content_for(even_right_temp,  pdf.page_number)
-        }
-        pdf.update do
-          proc_for_even.call(contents)
-        end
+        next  if pdf.page_number < first_page
+        break if pdf.page_number > last_page
+        spy "Inscription entête/pied de page sur page paire #{pdf.page_number}".jaune
+        # contents = {
+        #   left:   content_for(even_left_temp,   pdf.page_number), 
+        #   center: content_for(even_center_temp, pdf.page_number),
+        #   right:  content_for(even_right_temp,  pdf.page_number)
+        # }
+        # pdf.update do
+        #   proc_for_even.call(contents)
+        # end
       end
+      # 
+      # Inscription sur les pages impaires
+      # 
       pdf.repeat odd_pages, dynamic: true do
-        contents = {
-          left:   content_for(odd_left_temp,   pdf.page_number), 
-          center: content_for(odd_center_temp, pdf.page_number),
-          right:  content_for(odd_right_temp,  pdf.page_number)
-        }
-        pdf.update do
-          proc_for_odd.call(contents)
-        end
+        next  if pdf.page_number < first_page
+        break if pdf.page_number > last_page
+        spy "Inscription entête/pied de page sur page impaire #{pdf.page_number}".jaune
+        # contents = {
+        #   left:   content_for(odd_left_temp,   pdf.page_number), 
+        #   center: content_for(odd_center_temp, pdf.page_number),
+        #   right:  content_for(odd_right_temp,  pdf.page_number)
+        # }
+        # pdf.update do
+        #   proc_for_odd.call(contents)
+        # end
       end
+      spy "<- /fin construction des entêtes et pieds de page".jaune
     end
+
+    def footer_data
+      @footer_data ||= footer_id && self.class.data_headfooters[footer_id]
+    end
+    def header_data
+      @header_data ||= header_id && self.class.data_headfooters[header_id]
+    end
+    def footer_id
+      @footer_id ||= data[:footer_id]
+    end
+    def header_id
+      @header_id ||= data[:header_id]
+    end
+    def first_page
+      @first_page ||= data[:first_page] || 1
+    end
+    def last_page
+      @last_page ||= data[:last_page] || 10000
+    end
+
+###################       OLD METHODS      ###################
+  
+##
 
     def content_for(cas, numero_page)
       return nil if cas.nil? # case non définie
@@ -258,44 +298,12 @@ class PrawnView
 
     def hdispositions; @hdispositions end
 
-    def disposition
-      @disposition ||= data[:disposition] || erreur_fatale(ERRORS[things][:dispositions_required])
-    end
-
-    def analyse_disposition
-      odd_disp  = decompose_disp(disposition[:odd])
-      even_disp = decompose_disp(disposition[:even])
-      @hdispositions = {
-        odd:  {left: odd_disp[0], center:odd_disp[1], right:odd_disp[2]},
-        even: {left: even_disp[0], center:even_disp[1], right:even_disp[2]}
-      }
-    end
-
-    def decompose_disp(disp)
-      return disp if disp.is_a?(Hash)
-      disp.split('|').map do |s|
-        s = s.strip
-        s == '' ? nil : s
-      end
-    end
-
-    # Méthode qui retire les '-' au début ou à la fin des contenus
-    # des cases de headers et footers
-    # 
-    def retire_tirets_align_in(str)
-      return nil if str.nil?
-      str = str[1..-1] if str.start_with?('-')
-      str = str[0..-2] if str.end_with?('-')
-      return str
-    end
-
-
     # --- Dimensions Methods --- #
 
     def align_of(content, default)
       case content
       when /^\-.+\-$/ then :center
-      when /^\-/    then :right
+      when /^\-/      then :right
       else default
       end
     end

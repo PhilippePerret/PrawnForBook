@@ -11,7 +11,7 @@
     * on peut utiliser indifféremment un entête pour l'entête ou un
       pied de page et inversement.
 
-  Comme les entête et pieds de paes sont interchangeables, ici, on 
+  Comme les entête et pieds de pages sont interchangeables, ici, on 
   les appelle des HEADFOOTERS
 
 =end
