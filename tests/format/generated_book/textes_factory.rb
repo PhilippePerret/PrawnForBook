@@ -31,6 +31,7 @@ class << self
       ## #{title3}
       Non anim in nulla proident ut elit nostrud laborum amet sed officia irure ad cillum incididunt veniam voluptate enim eiusmod nostrud et elit cupidatat culpa et eiusmod nisi exercitation commodo sit officia dolore consequat occaecat amet enim voluptate sunt amet dolor elit esse reprehenderit occaecat dolor ut ut laborum pariatur consectetur ut duis sint et consequat sunt id quis qui aliqua tempor in fugiat nisi sunt aute quis cillum ullamco eiusmod excepteur fugiat ex laboris adipisicing in aliqua tempor nostrud in exercitation est consectetur fugiat amet eiusmod nostrud non reprehenderit sed culpa commodo pariatur et nisi do amet et aute minim elit nostrud id quis ex reprehenderit consectetur ut irure sed laboris elit sunt magna labore mollit laborum officia ea minim ullamco duis ut dolor cupidatat in dolor enim et ut eiusmod occaecat quis labore eu magna ut exercitation eu exercitation do quis ut irure sunt duis incididunt occaecat dolor labore amet deserunt elit sunt labore proident officia elit est et eu ex reprehenderit dolore officia duis cupidatat nisi dolore minim in aute consequat nostrud mollit amet sunt esse est exercitation mollit amet tempor dolor laboris velit ut enim laborum elit minim nostrud culpa sed sit non est irure esse excepteur ut dolor qui ut nulla labore laboris exercitation quis.
       Ça peut faire une belle index:introduction à la dramaturgie, de façon succinte et efficace.
+      (( nouvelle_page ))
       (( index ))
       TEXT
     end
