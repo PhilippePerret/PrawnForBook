@@ -82,7 +82,10 @@ class Recipe
       titles:{
         level1: {
           next_page:    true,
-          line_before:  0,
+          lines_before: 0,
+        },
+        level2: {
+          size: 14,
         }
       },
     }

@@ -86,7 +86,7 @@ class NTitre < AnyParagraph
       # marge haute, on le descend d'autant de lignes de référence
       # que nécessaire pour qu'il tienne dans la page.
       # 
-      text_height = height_of(ftext)
+      text_height = height_of(ftext.split(' ').first)
       while (cursor - 2 * line_height) + text_height > bounds.top
         move_down(line_height)
       end

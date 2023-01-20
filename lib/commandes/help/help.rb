@@ -4,11 +4,11 @@ class Command
   def proceed
     methode =
       case ini_name
-      when 'manuel', 'manual' then :open_user_manuel
+      when 'manuel', 'manual', 'aide' then :open_user_manuel
       else 
         # Note : les assistants passent aussi par ici
         # cf. ci-dessous
-        help? ? :display_help : :display_mini_help
+        help? ? :display_mini_help : :display_help
       end
     Prawn4book.send(methode)
   end
@@ -49,6 +49,10 @@ end #/Command
   end
 
   def self.traite_as_assistant_page_speciale(what)
+    File.exist?("lib/pages/#{what}") || File.exist?("lib/pages/#{what}.rb") || begin
+      puts "Impossible de trouver l'assistant de page #{what.inspect}".rouge
+      return
+    end
     require "lib/pages/#{what}"
     Prawn4book::Pages.run_assistant(what)
   end

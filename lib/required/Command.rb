@@ -10,10 +10,15 @@ class Command
 
   def run
     Object.const_set('COMMAND_FOLDER', folder)
-    self.load.proceed
+    self.load&.proceed
   end
 
   def load
+    File.exist?(script_path) || begin
+      puts "Je ne connais pas la commande #{ini_name.inspect}".rouge
+      puts "(jouer 'pfb -h' pour obtenir de l'aide)".bleu
+      return
+    end
     Dir["#{lib_folder}/**/*.rb"].each{|m|require(m)}
     require script_path
     return self

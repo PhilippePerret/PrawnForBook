@@ -14,11 +14,13 @@
       :int: 35
   :text:
     :indent: 14.173228346456694
-    :numerotation: parags
+    :numerotation: pages
 :titles:
   :level1:
     :next_page: true
-    :line_before: 0
+    :lines_before: 0
+  :level2:
+    :size: 14
 :inserted_pages:
   :page_de_garde: true
   :page_de_titre: true
