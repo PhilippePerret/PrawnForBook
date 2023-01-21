@@ -60,53 +60,102 @@ end #/ << self
   # Construction de l'headfooter sur les pages paires
   #
   def build_even_pages
-    spy "   * Construction pages paires…".jaune
-    pdf.repeat(:even, **{dynamic: true}) do
+    build_pages(:even)
+  end
+  ##
+  # Construction de l'headfooter sur les pages impaires
+  # 
+  def build_odd_pages
+    build_pages(:odd)
+  end
+
+  # @param [Symbol] side Soit :even soit :odd
+  def build_pages(side)
+    spy "   * Construction pages #{side.inspect}".jaune
+    pdf.repeat(side, **{dynamic: true}) do
       numero = pdf.page_number
       next unless page_in_range?(numero)
-      bpage = get_data_page(numero) # instance BookData
-      procedure_even_page.call(bpage) 
+      bpage = get_data_page(numero)  # instance BookData
+      procedure = self.send("procedure_#{side}_page".to_sym)
+      procedure.call(bpage)
       spy "Page #{numero} traitée".vert
     end
   end
+
   def procedure_even_page
-    @procedure_even_page ||= begin
-      # 
-      # Propriétés par défaut pour tous les text-box
-      # 
-      cusdata = {height: 20, width: tiers, size: font_size}
-      # 
-      # Procédure (vide) pour mettre les autres
-      # 
-      proce = Proc.new { |bpage| bpage }
-      # 
-      # On ajoute tous les tiers nécessaires
-      # 
-      if pd_left
-        procleft = Proc.new { |bpage|
-          props = cusdata.merge({at:[0, top], align: pd_left[:align]})
-          pdf.text_box(bpage.send(pd_left[:content]), **props)
-          bpage
-        }
-        proce = (proce << procleft)
-      end
-      if pd_center
-        proccenter = Proc.new { |bpage|
-          props = cusdata.merge({at:[tiers, top], align: pd_center[:align]})
-          pdf.text_box(bpage.send(pd_center[:content]), **props)
-          bpage
-        }
-        proce = (proce << proccenter)
-      end
-      if pd_right
-        procright = Proc.new { |bpage|
-          props = cusdata.merge({at:[2 * tiers, top], align: pd_right[:align]})
-          pdf.text_box(bpage.send(pd_right[:content]), **props)
-          bpage
-        }
-        proce = (proce << procright)
-      end
-      proce
+    @procedure_even_page ||= procedure_any_page(pg_left, pg_center, pg_right, :even)
+  end
+  def procedure_odd_page
+    @procedure_odd_page ||=  procedure_any_page(pd_left, pd_center, pd_right, :odd)
+  end
+
+  def procedure_any_page(dleft, dcenter, dright, side)
+    # 
+    # Procédure (vide) pour mettre les autres
+    # 
+    proce = Proc.new { |bpage| bpage }
+    # 
+    # On ajoute tous les tiers nécessaires
+    # 
+    if dleft
+      procleft = Proc.new { |bpage|
+        build_tiers(bpage, [0, top], dleft)
+      }
+      proce = (proce << procleft)
+    end
+    if dcenter
+      proccenter = Proc.new { |bpage|
+        build_tiers(bpage, [tiers, top], dcenter)
+      }
+      proce = (proce << proccenter)
+    end
+    if dright
+      procright = Proc.new { |bpage|
+        build_tiers(bpage, [2 * tiers, top], dright)
+      }
+      proce = (proce << procright)
+    end
+    proce
+  end
+
+  ##
+  # Méthode qui dessine véritablement le tiers du headfooter
+  # 
+  # @return [BookPage] La page (pour l'addition des procédures)
+  def build_tiers(bpage, at, dtiers)
+    props = common_tiers_props.merge({at:at, align: dtiers[:align]})
+    # 
+    # Le contenu textuel
+    # 
+    content = case dtiers[:content]
+    when String   then dtiers[:content] # contenu explicite
+    when Numeric  then dtiers[:content].to_s
+    when Symbol   then bpage.send(dtiers[:content])
+    when Proc     then dtiers[:content].call(bpage)
+    end.to_s # peut être vide
+    content = case dtiers[:casse]
+    when :all_caps then content.upcase 
+    when :all_min  then content.downcase
+    else content
+    end
+    # 
+    # La fonte à appliquer
+    # 
+    font_props = {size: font_size(dtiers)}
+    font_props.merge!(style: font_style(dtiers)) if font_style(dtiers)
+    pdf.font(font_name(dtiers), **font_props) do
+      pdf.text_box(content, **props)
+    end
+    # 
+    # On retourne la page pour l'addition des procédures
+    # 
+    return bpage
+  end
+
+  def common_tiers_props
+    @common_tiers_props ||= begin
+      spy "#{'Calcul de la hauteur'.jaune} : #{height.inspect}".bleu
+      {height: height, width: tiers, size: font_size}
     end
   end
 
@@ -116,22 +165,14 @@ end #/ << self
     @tiers ||= (pdf.bounds.width.to_f / 3).round(6)
   end
 
-  def font_size
-    @font_size ||= 16 # TODO À RÉGLER
+  def font_name(dtiers = {})
+    dtiers[:font] || @font_name ||= (font || 'Times-Roman')
   end
-
-  ##
-  # Construction de l'header sur les pages impaires
-  # 
-  def build_odd_pages
-    spy "   * Construction pages impaires".jaune
-    pdf.repeat(:odd, **{dynamic: true}) do
-      numero = pdf.page_number
-      next unless page_in_range?(numero)
-      bpage = get_data_page(numero)  # instance BookData
-
-      spy "Page #{numero} traitée".vert
-    end
+  def font_size(dtiers = {})
+    dtiers[:size] || @font_size ||= (size || 10)
+  end
+  def font_style(dtiers = {})
+    dtiers[:style] || @font_style ||= style # peut être nil
   end
 
 private
@@ -146,6 +187,32 @@ private
 
   # - Data Methods -
 
+  # @return [Integer] La hauteur du pied de page ou de l'entête en
+  # fonction du contenu des tiers. On prend le tiers le plus grand.
+  def height
+    @height ||= begin
+      max_height = 0
+      [ 
+        :pg_left, :pg_center, :pg_right, 
+        :pd_left, :pd_center, :pd_right
+      ].each do |tiers|
+        dtiers = self.send(tiers)
+        next if dtiers.nil?
+        tiers_height = get_height_of_tiers(dtiers)
+        max_height = tiers_height if tiers_height > max_height
+      end
+      max_height.ceil
+    end
+  end
+
+  def get_height_of_tiers(dtiers)
+    fprops = {size: font_size(dtiers)}
+    fprops.merge!(style: font_style(dtiers)) if font_style(dtiers)
+    pdf.font(font_name(dtiers)) do
+      return pdf.height_of("MAXq")
+    end
+  end
+
   # @return [Hash] La table des données de la page de numéro 
   # +page_num+
   # 
@@ -159,6 +226,7 @@ private
   def name          ; @name         ||= data[:name]       end
   def font          ; @font         ||= data[:font]       end
   def size          ; @size         ||= data[:size]       end
+  def style         ; @style        ||= data[:style]      end
   # - page gauche (pg_) -
   def pg_left       ; @pg_left      ||= data[:pg_left]    end
   def pg_right      ; @pg_right     ||= data[:pg_right]   end

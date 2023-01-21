@@ -47,7 +47,8 @@ class Book
   # Méthode principale construisant le livre
   def build(check_if_book_has_been_built = true)
     ensure_book_valid
-    res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid`
+    # res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid -display_margins`
+    res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY}`
     raise res if res.match?(/ERR/)
 
     # 

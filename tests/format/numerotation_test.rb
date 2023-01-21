@@ -53,10 +53,24 @@ class NumerotationTestor < Minitest::Test
   def tester_un_livre_avec(props)
     # - Préparation -
     props.merge!({
+      top_margin:           40,
       page_de_garde:        true,  # pour voir si pas de numérotation
       page_de_titre:        true,  # idem
       numeroter_titre:      true,  # TODO Rendre opérationnel
-      logo:                 'logo.jpg', 
+      logo:                 'logo.jpg',
+      dispositions: {
+        DP0001: {
+          name:"Dispo titres en haut", header_id: :HF001, 
+          id: :DP0001, first_page: 6, last_page: 11
+        }
+      },
+      headfooters: {
+        HF001: {
+          id: :HF001,
+          pg_left:  {content: :title1, casse: :all_caps, size: 16, align: :left},
+          pd_right: {content: :title2, align: :right},
+        },
+      },
     })
     resume "
     Test de la numérotation du livre
@@ -101,6 +115,13 @@ class NumerotationTestor < Minitest::Test
     page(5).has_text("5").below(100)
     page(5).has_text("5").below(100)
     page(5).has_text("5").below(100)
+    mini_success "Les numéros de page sont bons"
+    # - headers - 
+    page(8).has_text("GRAND TITRE 1").above(530)
+    page(9).has_text("Troisième sous-titre").above(530)
+    page(10).has_text("GRAND TITRE 2").above(530)
+    page(11).has_text("Troisième sous-titre").above(530)
+    mini_success "Les entêtes sont bons"
     # - l'index -
     page(12).has_text(/introduction.+8, 9, 10/)
     page(12).has_text(/mot.+8, 9/)    

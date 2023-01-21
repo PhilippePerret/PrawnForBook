@@ -13,7 +13,7 @@ class Footer < Headfooter
   # 
   # @api public
   def top
-    @top ||= (pdf.bounds.bottom - 20).round # TODO 20 est à régler
+    @top ||= (pdf.bounds.bottom - 6).round
   end
 
 end #/class Footer

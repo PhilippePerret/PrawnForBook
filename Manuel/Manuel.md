@@ -212,14 +212,16 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 * à l’aide des numéros de pages,
 * à l’aide des numéros de paragraphes.
 
-Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont **`num_page`** (numéros de page) et **`num_parag`** ([numérotation des paragraphes](#numerotation-paragraphes)).
+Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont `pages`  (numérotation des pages) ou `parags` ([numérotation des paragraphes](#numerotation-paragraphes)).
 
 Cette valeur influence de nombreux éléments du livre, dont :
 
-* les numéros en bas de page
+* les numéros en bas de page (si on les désire)
 * les [index](#page-index)
 * les [repères bibliographiques](#mise-en-forme-biblio)
 * les marques de [références](#references)
+
+Pour savoir comment placer et formater les numéros de pages, cf. [Headers et Footers](#headers-footers).
 
 ---
 
@@ -263,7 +265,37 @@ Pour forcer le passage à la page suivante, on utilise dans le texte, seul sur u
 (( nouvelle_page ))
 ~~~
 
+---
 
+<a name="headers-footers"></a>
+
+### Headers & Footers (entêtes et pieds de page)
+
+#### Principe
+
+Chaque pied de page et chaque entête est une partie contenant trois sections ou trois “tiers”, un à gauche, un à droite et un au milieu, où sont définis les éléments à afficher.
+
+#### Contenu
+
+Le contenu de chaque tiers, quelconque, peut être :
+
+* le numéro de la page
+* le nom du titre courant, de niveau 1, 2 ou 3
+* un contenu textuel explicite (et invariable — par exemple la date de fabrication du livre-esquisse)
+* un contenu numérique explicite (et invariable)
+* une procédure évaluée à la levée
+
+#### Définition
+
+Pour définir les entêtes et les pieds de page, le mieux est d’utiliser l’assistant, c’est le meilleur moyen de ne pas faire d’erreur pour cette donnée sensible et complexe.
+
+Pour lancer l’assistant, jouer <console>pfb assistant</console> et choisir “Assistant Header Footer”.
+
+#### Positionnement
+
+Pour bien régler la position des headers et footers, il faut comprendre qu’ils s’inscrivent toujours par rapport à la marge définie, dans cette marge (l’’idée est que la marge définit donc toujours la vraie surface contenu du texte, que rien ne vient la rogner — sauf les numéros de paragraphes lorsqu’’ils sont utilisés).
+
+Pour les entêtes, ils sont inscrits 5 PS-Points au-dessus de la marge haute. Il faut donc que cette marge haute fasse au moins `5 + <hauteur de ligne d'entête>` (rappel : Prawn laisse toujours 10 PS-Points de fond perdu autour des pages).
 
 ---
 

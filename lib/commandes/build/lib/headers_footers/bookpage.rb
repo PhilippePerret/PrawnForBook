@@ -50,6 +50,25 @@ class BookPage
     (self.class.numero_page? ? num_page : numero_paragraphs).to_s
   end
 
+  # @return [String] Les titres courants.
+  # 
+  # @ATTENTION
+  #   Il ne faut pas confondre cette propriété avec l'attribut :title1
+  #   des données, qui n'est défini que si un nouveau titre est 
+  #   présent sur la page. Ici, il s'agit du grand titre courant,
+  #   même s'il a été inauguré 10 pages plus tôt.
+  # 
+  # @api public
+  def title1
+    @title1 ||= data[:title1] || data[:current_title1]
+  end
+  def title2
+    @title2 ||= data[:title2] || data[:current_title2]
+  end
+  def title3
+    @title3 ||= data[:title3] || data[:current_title3]
+  end
+
   # - Volatile Data -
 
   def numero_paragraphs
@@ -61,12 +80,6 @@ class BookPage
   def num_page        ; @num_page       ||= data[:num_page]       end
   def first_par       ; @first_par      ||= data[:first_par]      end
   def last_par        ; @last_par       ||= data[:last_par]       end
-  def title1          ; @title1         ||= data[:title1]         end
-  def title2          ; @title2         ||= data[:title2]         end
-  def title3          ; @title3         ||= data[:title3]         end
-  def current_title1  ; @current_title1 ||= data[:current_title1] end
-  def current_title2  ; @current_title2 ||= data[:current_title2] end
-  def current_title3  ; @current_title3 ||= data[:current_title3] end
 
 
 end #/class BookPage

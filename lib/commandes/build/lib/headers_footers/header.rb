@@ -13,7 +13,8 @@ class Header < Headfooter
   # 
   # @api public
   def top
-    @top ||= (pdf.bounds.top + 20).round # TODO à régler
+    # @top ||= (pdf.bounds.top + height + 6).round
+    @top ||= (pdf.bounds.top + height).round
   end
 
 end #/class Header

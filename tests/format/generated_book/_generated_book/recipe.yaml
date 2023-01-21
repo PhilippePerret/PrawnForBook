@@ -8,7 +8,7 @@
   :page:
     :height: 576
     :margins:
-      :top: 10
+      :top: 40
       :bot: 20
       :ext: 25
       :int: 35
@@ -27,6 +27,12 @@
       :name: Page normale
       :footer_id: :footer_with_numero
       :first_page: 4
+    :DP0001:
+      :name: Dispo titres en haut
+      :header_id: :HF001
+      :id: :DP0001
+      :first_page: 6
+      :last_page: 11
   :headfooters:
     :footer_with_numero:
       :name: Avec un numéro à gauche et à droite
@@ -38,6 +44,16 @@
         :align: :left
       :pd_right:
         :content: :numero
+        :align: :right
+    :HF001:
+      :id: :HF001
+      :pg_left:
+        :content: :title1
+        :casse: :all_caps
+        :size: 16
+        :align: :left
+      :pd_right:
+        :content: :title2
         :align: :right
 :inserted_pages:
   :page_de_garde: true

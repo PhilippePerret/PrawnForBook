@@ -63,6 +63,9 @@ class AbstractRecipe
     titre2_lines_before:  [:titles, :level2, :lines_before],
     titre2_lines_after:   [:titles, :level2, :lines_after],
     titre2_font_size:     [:titles, :level2, :size],
+    # - Headers et Footers
+    dispositions:         [:headers_footers, :dispositions],
+    headfooters:          [:headers_footers, :headfooters], 
     # - les infos -
     concepteur:           [:page_infos, :conception, :patro],
     concepteur_name:      [:page_infos, :conception, :patro],
