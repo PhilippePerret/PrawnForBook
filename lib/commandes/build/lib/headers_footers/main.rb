@@ -63,6 +63,13 @@ class HeadersFooters
   # BookPage
   # 
   def prepare_data_pages
+    # 
+    # On indique le type de numérotation à la classe
+    # 
+    BookPage.set_numero_page(book.recipe.page_number?)
+    # 
+    # Pour consigner les titres courants au fil des pages
+    # 
     current_titles_per_level = {1 => nil, 2 => nil, 3 => nil}
     # 
     # Table qui contiendra toutes les données (-> @data_pages)
@@ -96,7 +103,7 @@ class HeadersFooters
       # 
       # Quelques données ajoutées 
       # 
-      dpage.merge!(numero: page_num)
+      dpage.merge!(num_page: page_num) # pas :numero (utilisé comme helper)
       #
       # Traitement du titre de niveau 1
       # 
@@ -125,8 +132,6 @@ class HeadersFooters
       else
         current_titles_per_level.merge!({3 => dpage[:title3]})
       end
-
-      spy "dpage #{page_num} à la fin : #{dpage.inspect}"
 
       tbl.merge!(page_num => BookPage.new(dpage))
     end

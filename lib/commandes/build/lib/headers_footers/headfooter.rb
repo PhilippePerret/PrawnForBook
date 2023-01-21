@@ -62,9 +62,63 @@ end #/ << self
   def build_even_pages
     spy "   * Construction pages paires…".jaune
     pdf.repeat(:even, **{dynamic: true}) do
-      bookpage = get_data_page(pdf.page_number) # instance BookData
+      numero = pdf.page_number
+      next unless page_in_range?(numero)
+      bpage = get_data_page(numero) # instance BookData
+      procedure_even_page.call(bpage) 
+      spy "Page #{numero} traitée".vert
     end
-  end 
+  end
+  def procedure_even_page
+    @procedure_even_page ||= begin
+      # 
+      # Propriétés par défaut pour tous les text-box
+      # 
+      cusdata = {height: 20, width: tiers, size: font_size}
+      # 
+      # Procédure (vide) pour mettre les autres
+      # 
+      proce = Proc.new { |bpage| bpage }
+      # 
+      # On ajoute tous les tiers nécessaires
+      # 
+      if pd_left
+        procleft = Proc.new { |bpage|
+          props = cusdata.merge({at:[0, top], align: pd_left[:align]})
+          pdf.text_box(bpage.send(pd_left[:content]), **props)
+          bpage
+        }
+        proce = (proce << procleft)
+      end
+      if pd_center
+        proccenter = Proc.new { |bpage|
+          props = cusdata.merge({at:[tiers, top], align: pd_center[:align]})
+          pdf.text_box(bpage.send(pd_center[:content]), **props)
+          bpage
+        }
+        proce = (proce << proccenter)
+      end
+      if pd_right
+        procright = Proc.new { |bpage|
+          props = cusdata.merge({at:[2 * tiers, top], align: pd_right[:align]})
+          pdf.text_box(bpage.send(pd_right[:content]), **props)
+          bpage
+        }
+        proce = (proce << procright)
+      end
+      proce
+    end
+  end
+
+  # @prop [Float] Retourne le nombre de points-post-script pour le
+  # document courant, pour un tiers de page.
+  def tiers
+    @tiers ||= (pdf.bounds.width.to_f / 3).round(6)
+  end
+
+  def font_size
+    @font_size ||= 16 # TODO À RÉGLER
+  end
 
   ##
   # Construction de l'header sur les pages impaires
@@ -72,9 +126,22 @@ end #/ << self
   def build_odd_pages
     spy "   * Construction pages impaires".jaune
     pdf.repeat(:odd, **{dynamic: true}) do
-      bookpage = get_data_page(pdf.page_number)  # instance BookData
+      numero = pdf.page_number
+      next unless page_in_range?(numero)
+      bpage = get_data_page(numero)  # instance BookData
 
+      spy "Page #{numero} traitée".vert
     end
+  end
+
+private
+
+  # @eturn [Boolean] true si la page de numéro +num+ est dans le
+  # rang des pages à prendre
+  # @note
+  #   Cela dépend de la disposition
+  def page_in_range?(num)
+    return num >= disposition.first_page && num <= disposition.last_page
   end
 
   # - Data Methods -
