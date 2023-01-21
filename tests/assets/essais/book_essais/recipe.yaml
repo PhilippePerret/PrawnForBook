@@ -79,7 +79,7 @@
 #<headers_footers>
 :headers_footers:
   :dispositions:
-    DP1674296989:
+    :DP1674296989:
       :name: Avec tous les éléments définis
       :first_page: 2
       :last_page: 8
@@ -87,7 +87,7 @@
       :footer_id: HF1674296984
       :id: DP1674296989
   :headfooters:
-    HF1674296895:
+    :HF1674296895:
       :id: HF1674296895
       :name: Pour l'entête avec titre
       :font: Symbol
@@ -101,15 +101,20 @@
         :align: :right
         :content: :titre2
         :size: 10
-    HF1674296984:
+      :content: La date fixe
+      :style: :default
+      :pg_center:
+    :HF1674296984:
       :id: HF1674296984
       :name: Pour le pied de page
       :font: Helvetica
       :size: 8
-      :pg_left: 
+      :pg_left:
         :align: :left
         :content: :numero
       :pd_right:
         :align: :right
         :content: :numero
+    :HF1674317039:
+      :id: HF1674317039
 #</headers_footers>

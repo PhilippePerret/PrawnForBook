@@ -39,7 +39,7 @@ ATTRIBUT SYMBOL OU PROCÉDURE
 ----------------------------
 Plusieurs attributs peuvent être définis par un [Symbol] ou par une
 [Proc]édure. Quand c'est un symbol, c'est le nom d'une méthode à
-appeler, avec en premier argument la valeur à traité (valeur de la
+appeler, avec en premier argument la valeur à traiter (valeur de la
 propriété éditée) et en second argument la donnée complète ([Hash]).
 Cette méthode peut être définie dans le facilitateur, dans l'instance
 qui utilise le module, ou dans la classe de cette instance.
@@ -253,7 +253,14 @@ class TTYDefiner
           when :bool
             Q.yes?(data_choix[:name].jaune)
           when :custom
-            klasse.send(data_choix[:meth], odata)
+            case klasse.method(data_choix[:meth]).arity
+            when 1
+              klasse.send(data_choix[:meth], odata)
+            when 2
+              klasse.send(data_choix[:meth], odata, prop)
+            else
+              raise "La méthode #{klasse}#{data_choix[:meth]} possède un mauvais nombre d'arguments (devrait en avoir 1 ou 2)."
+            end
           else
             Q.ask(question, {default: odata[prop], show_help:nil})
           end

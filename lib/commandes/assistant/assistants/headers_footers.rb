@@ -7,12 +7,10 @@
         l'enête et le pied de page qu'elles utilisent.
     * les entête et les pieds de page sont définis indépendamment,
       pour pouvoir utiliser n'importe lequel avec n'importe quelle
-      disposition et même plusieurs dispositions
+      disposition et même plusieurs dispositions. Ils s'appellent
+      des "HEADFOOTERS"
     * on peut utiliser indifféremment un entête pour l'entête ou un
       pied de page et inversement.
-
-  Comme les entête et pieds de pages sont interchangeables, ici, on 
-  les appelle des HEADFOOTERS
 
 =end
 require 'lib/modules/tty_facilitators'
@@ -22,7 +20,7 @@ class Assistant
   # --- Assistant pour les bibliographies ---
 
   def self.assistant_headers_footers(owner)
-    AssistantHeadersFooters::new(owner).define_headers_and_footers
+    AssistantHeadersFooters::new(owner).define_dispositions
   end
 
 
@@ -60,7 +58,7 @@ class AssistantHeadersFooters
   #   - on affiche d'abord la liste des dispositions déjà 
   #     enregistrées s'il y en a.
   # 
-  def define_headers_and_footers
+  def define_dispositions
     msg = nil
     while true
       clear unless debug?
@@ -124,6 +122,69 @@ class AssistantHeadersFooters
     end
   end
 
+#############       MÉTHODES POUR TTY-FACILITATOR      #############
+  
+  ##
+  # 2 méthode appelées lorsqu'on choisir "Entête" ou "Pied de page"
+  # pour la disposition choisie, afin, soit de choisir un header ou
+  # un footer (plus exactement : un headfooter pour le pied de page
+  # ou un headfooter pour l'entête), soit d'éditer l'header ou le
+  # footer déjà défini
+  # 
+  def choose_or_edit_header(dispo_data)
+    choose_or_edit_headfooter(:header_id, dispo_data)
+  end
+  def choose_or_edit_footer(dispo_data)
+    choose_or_edit_headfooter(:footer_id, dispo_data)
+  end
+
+  def choose_or_edit_headfooter(section_type, dispo_data)
+    thing = section_type == :footer_id ? 'le pied de page' : 'l’entête'
+    section_id = dispo_data[section_type]
+    if section_id
+      case Q.select("Que voulez-vous faire ?".jaune) do |q|
+          q.choice "Éditer #{thing} <<#{section_id}>>", :edit
+          q.choice "Choisir un autre headfooter", :choose
+          q.choice "Ne rien changer", :noop
+        end
+      when :noop    then section_id
+      when :choose  then choose_headfoot_id(dispo_data) || section_id
+      when :edit
+        data_headfooter = data_headfooters[section_id.to_s]||data_headfooters[section_id.to_sym]
+        data_headfooter || raise("Désolé, mais il est impossible de trouver les données du headfooter #{section_id.inspect}…")
+        edit_headfoot(data_headfooter)
+      end
+    else
+      choose_headfoot_id(dispo_data)
+    end
+  end
+
+  ##
+  # Méthode pour pouvoir choisir ou définir un headfoot
+  # 
+  # @param [Hash] dispo_data Les données de la disposition qui veut
+  #     se choisir un headfoot (donc pour son header ou son footer)
+  # 
+  # @return [String] Identifiant du headfoot choisi
+  # 
+  def choose_headfoot_id(dispo_data)
+    # 
+    # Liste des headfoots + bouton pour en créer un nouveau
+    # 
+    choices = data_headfooters.map do |hf_id, hf_data|
+      {name: hf_data[:name], value: hf_id}
+    end + [
+      CHOIX_NEW, CHOIX_CANCEL.merge(value: nil)
+    ]
+    # 
+    # Permettre à l'utilisateur d'en choisir un
+    # 
+    case (choix = Q.select(PROMPTS[:headfoot][:headfoot_to_choose].jaune, choices, {per_page:choices.count, show_help:false, echo:false}))
+    when :new   then edit_headfoot(nil)
+    else return choix # identifiant du headfoot ou nil
+    end
+  end
+
   ##
   # Pour éditer un head-foot
   # 
@@ -153,42 +214,30 @@ class AssistantHeadersFooters
     return hf_data[:id]
   end
 
-#############       MÉTHODES POUR TTY-FACILITATOR      #############
-  
-
-  ##
-  # Méthode pour pouvoir choisir ou définir un headfoot
-  # 
-  # @param [Hash] dispo_data Les données de la disposition qui veut
-  #     se choisir un headfoot (donc pour son header ou son footer)
-  # 
-  # @return [String] Identifiant du headfoot choisi
-  def choose_headfoot_id(dispo_data)
-    # 
-    # Liste des headfoots + bouton pour en créer un nouveau
-    # 
-    choices = data_headfooters.map do |hf_id, hf_data|
-      {name: hf_data[:name], value: hf_id}
-    end + [
-      CHOIX_NEW
-    ]
-    # 
-    # Permettre à l'utilisateur d'en choisir un
-    # 
-    case (choix = Q.select(PROMPTS[:headfoot][:headfoot_to_choose].jaune, choices, {per_page:choices.count, show_help:false, echo:false}))
-    when :new   then edit_headfoot(nil)
-    else return choix # identifiant du headfoot
-    end
-  end
 
   ##
   # Pour choisir l'élément à placer dans l'head-foot, le numéro de
   # page ou le titre, la casse, 
   # Optionnellement : la police, la taille, le style, 
-  def define_headfoot_element(hf_data)
-    puts "Données reçues : #{hf_data.inspect}".jaune
-    sleep 1
-    tty_define_object_with_data(DATA_HEADFOOT_ELEMENT, hf_data)    
+  # 
+  # @note
+  #   On n'utilise pas le facilitateur car la donnée est complexe
+  #   et multiple.
+  # 
+  # @param [Hash] hf_data Les données complète du headfooter
+  # @param [Symbol] page_tiers Le "page-tiers", par exemple :pg_left pour
+  #     le tiers gauche de la page gauche (paire)
+  # 
+  def define_tiers_of_headfoot(hf_data, page_tiers)
+
+
+    # ======> ICI <=======
+
+    # TODO IMPLÉMENTER L'ÉDITION D'UN TIERS DE HEADFOOTER
+
+
+
+    hf_data[page_tiers] = data_tiers
   end
 
   ##
@@ -222,8 +271,8 @@ DATA_DISPOSITION = [
   {name: 'Titre pour mémoire', value: :name, required: true},
   {name: 'De la page' , value: :first_page, type: :int},
   {name: 'À la page'  , value: :last_page, type: :int},
-  {name: 'Entête'     , value: :header_id, type: :custom, meth: :choose_headfoot_id},
-  {name: 'Footer'     , value: :footer_id, type: :custom, meth: :choose_headfoot_id}
+  {name: 'Entête'     , value: :header_id, type: :custom, meth: :choose_or_edit_header},
+  {name: 'Footer'     , value: :footer_id, type: :custom, meth: :choose_or_edit_footer}
 ]
 
 
@@ -244,25 +293,26 @@ VALUES_NIVEAU_TITRE_OU_NUM_PAGE = [
   {name:"Aucun"         , value: :none},
   {name:"Numérotation"  , value: :numero},
 ]
-(1..7).each do |n|
+(1..3).each do |n|
   VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:"Titre de niveau #{n}", value: "titre#{n}".to_sym}
 end
+VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:'Texte fixe', value: :texte_fixe}
 
 DATA_HEADFOOT = [
   {name: 'Nom du "headfoot"'    , value: :name, required: true},
   {name: 'Police'               , value: :font        , values: :police_names},
   {name: 'Taille'               , value: :size        , type: :int, default: 11, values: (7..30)},
   {name: 'Style'                , value: :style       , type: :sym, values: DATA_STYLES_FONTS, default: 2},
-  {name: 'Page G | x |   |   |' , value: :pg_left     , type: :custom, meth: :define_headfoot_element},
-  {name: '       |   | x |   |' , value: :pg_center   , type: :custom, meth: :define_headfoot_element },
-  {name: '       |   |   | x |' , value: :pg_right    , type: :custom, meth: :define_headfoot_element },
-  {name: 'Page D | x |   |   |' , value: :pd_left     , type: :custom, meth: :define_headfoot_element },
-  {name: '       |   | x |   |' , value: :pd_center   , type: :custom, meth: :define_headfoot_element },
-  {name: '       |   |   | x |' , value: :pd_right    , type: :custom, meth: :define_headfoot_element },
+  {name: 'Page G | x |   |   |' , value: :pg_left     , type: :custom, meth: :define_tiers_of_headfoot },
+  {name: '       |   | x |   |' , value: :pg_center   , type: :custom, meth: :define_tiers_of_headfoot },
+  {name: '       |   |   | x |' , value: :pg_right    , type: :custom, meth: :define_tiers_of_headfoot },
+  {name: 'Page D | x |   |   |' , value: :pd_left     , type: :custom, meth: :define_tiers_of_headfoot },
+  {name: '       |   | x |   |' , value: :pd_center   , type: :custom, meth: :define_tiers_of_headfoot },
+  {name: '       |   |   | x |' , value: :pd_right    , type: :custom, meth: :define_tiers_of_headfoot },
 ]
 
-DATA_HEADFOOT_ELEMENT = [
-  {name: 'Contenu'    , value: :content , values: VALUES_NIVEAU_TITRE_OU_NUM_PAGE, default: 1},
+DATA_HEADFOOT_TIERS = [
+  {name: 'Contenu'    , value: :content , values: :choose_type_contenu_for_tiers},
   {name: 'Alignement' , value: :align   , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
   {name: 'Casse'      , value: :casse   , values: CHOIX_CASSE_TITRE, default: 1},
   {name: 'Police'     , value: :font    , default: nil, values: :police_names_or_default},
