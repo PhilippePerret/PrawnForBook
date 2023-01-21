@@ -90,19 +90,20 @@ class Recipe
       },
       headers_footers:{
         dispositions: {
-          'dispo_with_numero' => {
+           :dispo_with_numero => {
             name:       "Page normale",
-            footer_id:  'footer_with_numero',
+            footer_id:  :footer_with_numero,
             first_page:  4,
           },
         },
         headfooters: {
-          'footer_with_numero' => {
+          :footer_with_numero => {
             name: "Avec un numéro à gauche et à droite",
+            id: 'footer_with_numero',
             font: 'Helvetica',
             size: 12,
-            pg_left: {content: :numero},
-            pd_right: {content: :numero}
+            pg_left:  {content: :numero, align: :left},
+            pd_right: {content: :numero, align: :right}
           },
         }
       },

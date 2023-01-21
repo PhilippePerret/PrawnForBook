@@ -214,7 +214,7 @@ class PdfBook
     # Écriture des numéros de page ou numéros de paragraphes
     # En bas de toutes les pages qui le nécessitent.
     # 
-    pdf.build_headers_and_footers(self, pdf, @pages)
+    pdf.build_headers_and_footers(self, pdf)
 
 
     if module_parser? && ParserParagraphModule.respond_to?(:report)

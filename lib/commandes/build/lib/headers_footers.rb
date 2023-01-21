@@ -1,15 +1,6 @@
 module Prawn4book
 class PrawnView
 
-  ##
-  # = main =
-  # 
-  # Méthode principale qui construit les entêtes et pieds de page
-  # sur tout le livre.
-  def build_headers_and_footers(pdfbook, pdf, data_pages)
-    Header.build(pdfbook, pdf, data_pages)
-    Footer.build(pdfbook, pdf, data_pages)
-  end
 
   ##########################################################
   #
@@ -19,47 +10,6 @@ class PrawnView
   #
   ##########################################################
   class AbstractHeadFoot
-    class << self
-      attr_reader :pdfbook
-      attr_reader :data_pages
-      # = main =
-      # 
-      # Méthode principale pour construire les entêtes et les
-      # pieds de pages
-      # 
-      def build(pdfbook, pdf, data_pages)
-        init(pdfbook, data_pages)
-        return if data.nil? # pas de headers/footers définis
-        data[:dispositions].each do |dispo_id, data_dispo| 
-          new(data_dispo.merge(id: dispo_id)).build(pdf)
-        end
-      end
-      def init(pdfbook, data_pages)
-        @pdfbook    = pdfbook
-        @data_pages = data_pages
-      end
-      def data
-        @data ||= pdfbook.recipe.headers_footers
-      end
-      # @prop Les données des headfooters
-      def data_headfooters
-        @data_headfooters ||= data[:headfooters]
-      end
-    end #/ << self
-
-
-    # --- INSTANCE (headers and footers) ---
-
-    
-    attr_reader :data
-    def initialize(data)
-      @data = data
-      spy "Données pour initialisation d'une disposition : #{data.inspect}".jaune
-    end
-
-    # Raccourcis
-    def pdfbook     ; self.class.pdfbook    end
-    def data_pages  ; self.class.data_pages end
 
 ###################       NEW METHODS      ###################
 
@@ -123,43 +73,8 @@ class PrawnView
       spy "<- /fin construction des entêtes et pieds de page".jaune
     end
 
-    def footer_data
-      @footer_data ||= footer_id && self.class.data_headfooters[footer_id]
-    end
-    def header_data
-      @header_data ||= header_id && self.class.data_headfooters[header_id]
-    end
-    def footer_id
-      @footer_id ||= data[:footer_id]
-    end
-    def header_id
-      @header_id ||= data[:header_id]
-    end
-    def first_page
-      @first_page ||= data[:first_page] || 1
-    end
-    def last_page
-      @last_page ||= data[:last_page] || 10000
-    end
-
 ###################       OLD METHODS      ###################
   
-##
-
-    def content_for(cas, numero_page)
-      return nil if cas.nil? # case non définie
-      return '' if data_pages[numero_page].nil?
-      dtemp = {}.merge(data_pages[numero_page])
-      # puts "dtemp = #{dtemp.inspect}"
-      if cas.match?(/%{numero}/)
-        pagine = pdfbook.page_number? ? numero_page : paragraphs_for(numero_page)
-        pagine ||= numero_page # le cas échéant (pas de paragraphe)
-        dtemp.merge!(numero: pagine.to_s)
-      end
-      cas % dtemp
-    end
-
-    ##
     # Retourne la pagination pour les paragraphes de la page
     # +numpage+
     # 

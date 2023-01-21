@@ -50,7 +50,7 @@ class AssistantHeadersFooters
     @data_headfooters ||= hfs_data[:headfooters]||{}
   end
   def hfs_data
-    @hfs_data ||= owner.recipe.headers_footers_data
+    @hfs_data ||= owner.recipe.headers_footers || {}
   end
 
   ##
@@ -228,9 +228,9 @@ DATA_DISPOSITION = [
 
 
 CHOIX_ALIGN_CONTENU_HEADFOOT = [
-  {name: 'Centré dans la page' , value: :center},
-  {name: 'À gauche de la page' , value: :left},
-  {name: 'À droite de la page' , value: :right},
+  {name: 'Aligné à gauche' , value: :left},
+  {name: 'Aligné à droite' , value: :right},
+  {name: 'Centré' , value: :center},
 ]
 
 CHOIX_CASSE_TITRE = [
@@ -262,11 +262,12 @@ DATA_HEADFOOT = [
 ]
 
 DATA_HEADFOOT_ELEMENT = [
-  {name: 'Contenu'  , value: :content , values: VALUES_NIVEAU_TITRE_OU_NUM_PAGE, default: 1},
-  {name: 'Casse'    , value: :casse   , values: CHOIX_CASSE_TITRE, default: 1},
-  {name: 'Police'   , value: :font    , default: nil, values: :police_names_or_default},
-  {name: 'Taille'   , value: :size    , default: nil, values: :font_sizes_or_default},
-  {name: 'Style'    , value: :style   , default: nil, values: :font_styles_or_default},
+  {name: 'Contenu'    , value: :content , values: VALUES_NIVEAU_TITRE_OU_NUM_PAGE, default: 1},
+  {name: 'Alignement' , value: :align   , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
+  {name: 'Casse'      , value: :casse   , values: CHOIX_CASSE_TITRE, default: 1},
+  {name: 'Police'     , value: :font    , default: nil, values: :police_names_or_default},
+  {name: 'Taille'     , value: :size    , default: nil, values: :font_sizes_or_default},
+  {name: 'Style'      , value: :style   , default: nil, values: :font_styles_or_default},
 ]
 end #/class AssistantHeadersFooters
 end #/class Assistant
