@@ -273,16 +273,30 @@ Pour forcer le passage à la page suivante, on utilise dans le texte, seul sur u
 
 #### Principe
 
-Chaque pied de page et chaque entête est une partie contenant trois sections ou trois “tiers”, un à gauche, un à droite et un au milieu, où sont définis les éléments à afficher.
+Chaque **pied de page** (*footer*) et chaque **entête** (*header*) est une partie contenant trois sections appelées des “**TIERS**”, un à gauche, un à droite et un au milieu de chaque page gauche et droite, où sont définis les éléments à afficher.
+
+Pour gérer les entêtes et pieds de page, on crée des DISPOSITIONS qui comprennent les données suivantes :
+
+* un nom humain pour mémoire,
+* un rang de pages sur lequel appliquer la disposition,
+* un *headfooter* pour l’entête des pages gauche et droite (cf. ci-dessous),
+* un *headfooter* pour le pied des pages gauche et droite,
+* une valeur d’ajustement vertical du pied de page et de l’entête,
+* un identifiant.
+
+On crée autant de dispositions que nécessaire.
+
+#### Rangs de pages
+
+Une disposition est définie pour un rang de pages qui peut être défini explicitement grâce aux paramètres `:first_page` et `:last_page`.
 
 #### Contenu
 
-Le contenu de chaque tiers, quelconque, peut être :
+Le contenu de chaque *TIERS*, quelconque, peut être :
 
-* le numéro de la page
+* le numéro de la page,
 * le nom du titre courant, de niveau 1, 2 ou 3
-* un contenu textuel explicite (et invariable — par exemple la date de fabrication du livre-esquisse)
-* un contenu numérique explicite (et invariable)
+* un contenu textuel explicite (et invariable de page en page — par exemple la date de fabrication du livre-esquisse) — note : il peut contenir des variables ou du code à évaluer,
 * une procédure évaluée à la levée
 
 #### Définition
@@ -296,6 +310,62 @@ Pour lancer l’assistant, jouer <console>pfb assistant</console> et choisir “
 Pour bien régler la position des headers et footers, il faut comprendre qu’ils s’inscrivent toujours par rapport à la marge définie, dans cette marge (l’’idée est que la marge définit donc toujours la vraie surface contenu du texte, que rien ne vient la rogner — sauf les numéros de paragraphes lorsqu’’ils sont utilisés).
 
 Pour les entêtes, ils sont inscrits 5 PS-Points au-dessus de la marge haute. Il faut donc que cette marge haute fasse au moins `5 + <hauteur de ligne d'entête>` (rappel : Prawn laisse toujours 10 PS-Points de fond perdu autour des pages).
+
+**Affiner le positionnement** on joue sur la propriété `header_vadjust` et la propriété `footer_vadjust`de la disposition (qui se règle en ps-point). De cette manière, en jouant sur les marges hautes et basses et sur cette valeur, on peut avoir le positionnement exact désiré.
+
+> Note : la valeur, avec l’assistant, peut aller de -20 à 20. Si on doit utiliser une autre valeur (ce qui n’est pas conseillé…) éditer la recette à la main.
+
+#### Tiers et contenus
+
+Comme nous l’’avons dit, on considère qu’un entête et un pied de page est divisé en deux fois trois “TIERS” occupant chacun un tiers de la largeur de la page, d’où leur nom. Pour définir un “headfooter”, ces trois cases n’ont pas à être définis.
+
+Ces tiers sont repérés par des clés qui portent en préfix l’indication de la page `pg_` pour “page gauche” et `pd_` pour “page droite” et en suffixe la position du tiers dans la page : `_left` pour le tiers à gauche, `_center` pour le tiers au center et `_right` pour le tiers à droite. On a donc :
+
+~~~yaml
+---
+:headers_footers:
+	:headfooters:
+		:HF0001:
+			:id: :HF0001
+			:name: Le headfooter en démo
+			:font: Times-Roman
+			:size: 12
+			:style: null
+			:pg_left:
+				# ... définition... (il ne faut définir que les tiers utiles)
+			:pg_center:
+				# ... définition...
+			:pg_right:
+				:content: :titre1 # requise
+				:align: :right
+				:size: 40
+				:font: Geneva
+				:casse: :min # ou :all_caps, :keep, :title
+			:pd_left:
+				# ... définition...
+			:pd_center:
+				# ... définition...
+			:pd_right:
+				# ... définition...
+	
+~~~
+
+#### Dans la recette
+
+~~~yaml
+---
+# ...
+#<headers_footers>
+:headers_footers:
+	:dispositions:
+		# ... définition des dispositions (table)
+	:headfooters:
+		# ... défintion des headfooters (table
+~~~
+
+#### Variables
+
+On peut utiliser des variables à l’aide de `#{nom_de_la_variable}` dans un texte personnalisé (`:custom_text`).
 
 ---
 
@@ -1444,140 +1514,6 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 ~~~
 
 > L’ordre des fonts ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
-
-
-
----
-
-<a name="recette-header-footer"></a>
-
-#### Entête et pied de page
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                       | valeurs possibles |
-| -------------------------------------------------------- | ------- | ------------------------------- | ----------------- |
-|                                                          |         | **:headers:**<br />**:footers** | Liste de données  |
-
-> Noter qu’ils sont au pluriel car le principe est que pour chaque rang de page on peut définir un pied de page et une entête différents.
-
-##### Cases et contenus
-
-On considère qu’un entête et un pied de page est divisé en trois “cases” occupant chacune un tiers de la largeur de la page. Bien entendu, pour définir les entêtes et les pieds de page du livre, ces trois cases n’ont pas à être définis.
-
-On définit le contenu de ces trois cases en l’indiquant par une marque entre des “|” qui divisent les cases :
-
-~~~ruby
-"<case gauche> | <case centrale> | <case droite>"
-~~~
-
-Pour le moment, les contenus peuvent être :
-
-* un contenu fixe, qui ne change pas dans le rang de pages défini,
-* le numéro de page ou de paragraphes suivant le type de pagination,
-* le titre courant, normal ou en capitales, par niveau.
-
-Ces données s’indiquent de cette manière :
-
-~~~ruby
-"CONTENU FIXE | %{numero} | %{title4}"
-# "CONTENU FIXE" sera affiché à gauche sur toutes les pages
-# Au centre, le numéro de la page
-# À gauche, le titre de quatrième degré courant
-
-"%{TITLE1} | | %{TITLE2}"
-# => Le titre de niveau 1 courant sera affiché en capitales
-# sur la moitié gauche de la page
-# => Le titre de niveau 2 courant sera affiché en capitales
-# sur la moitié droite de la page.
-# Notez qu'on indique clairement que c'est la moitié qui est
-# vide
-~~~
-
-> Noter, dans le dernier exemple, qu’on indique clairement que c’est la partie centrale qui est vide, ce que n’indiquerait pas la marque `%{TITLE1} | %{TITLE2}` où il serait considéré que c’est la partie gauche et la partie centrale qui sont occupées.
-
-##### Alignements du contenu
-
-On peut ensuite indiquer l’alignement de chaque contenu dans la case correspondante à l’aide d’un simple tiret.
-
-* `contenu-` indique un alignement à gauche,
-* `-contenu` indique un alignement à droite,
-* `-contenu-` indique un alignement au centre.
-
-Par défaut, la case à gauche s’aligne à gauche, la case à droite s‘aligne à droite, la case centrale s’aligne au centre.
-
-Par exemple :
-
-~~~ruby
-" %{title1} | -%{numero} | -ŒIL-"
-# => Le titre de niveau 1 courant sera affiché à gauche avec
-# un alignement à gauche (par défaut)
-# => Le numéro de page sera placé au centre, aligné à droite
-# => Le texte fixe "ŒIL" sera placé à droite, au centre de la
-# case.
-~~~
-
-##### Rangs de pages
-
-On peut définir autant d’entête et de pieds de page différents que l’on veut. Chacun doit simplement définir son *rang de pages* à l’aide de la propriété `:pages` et un rang indiqué par `(premiere_page..derniere_page)`. Par exemple : `(4..6)` pour définir la page 4 à la page 6.
-
-##### Dans la recette du livre ou de la collection
-
-On peut donc définir chaque rang d’entête (`header`) ou de pied de page (`footer`) de cette manière :
-
-> Noter que le nom (`name`) est purement informatif, il ne sert à rien dans la mise en page.
-
-~~~yaml
-:default: &styleheader 
-	:font: NomDeLaFont
-	:size: 13.5
-:headers:
-	# Nom de l'entête, juste pour info, pour savoir ici ce que c'est
-	- :name:  	"Nom de ce premier rang"
-		# Définition des pages qui utiliseront cet entête. Un rang de la
-		# première page à la dernière.
-		:pages: "(12..15)"
-		# Disposition de l'entête. Il est toujours constitué de 3 sections,
-		# le milieu, le côté gauche et le côté droit. Ils sont délimités
-		# par des "|". Le tiret '-' permet de définir l'alignement dans cette
-		# section :
-		# 	-mot 		=> alignement à droite
-		#   mot- 		=> alignement à gauche
-		#   -mot-   => alignement au centre
-		:disposition:   '%titre1- | | -%titre2'
-		# La police à utiliser. Elle doit impérativement être défini dans
-		# les :fonts:
-		:font: 	Arial
-		# Taille de la police (en points, je crois)
-		:size:  11
-	# Un autre rang
-	- :name:    'Nom de ce second rang' # juste pour information
-		:pages: ...
-		:disposition: ...
-		# etc.
-#
-# --- PIEDS DE PAGE ---
-#
-# Les définitions sont les mêmes que pour les entêtes.
-:footers:
-	- :name: "Pied de page pour l'introduction"
-		:pages: '(1..5)'
-		:disposition:    ' | -%num- | '
-		:font: Arial
-		:size: 9
-~~~
-
-##### Disposition
-
-Le pied de page et l’entête sont divisés en trois parties de taille variable en fonction du contenu. Dans le format (`:disposition`), ces trois parties sont définies par des `|`. 
-
-L’**alignement** s’indique par des tirets avant, après ou de chaque côté du contenu. Quand le tiret est à droite (`mot-`), le mot est aligné à gauche, quand le tiret est à gauche (`-mot`) le contenu est aligné à droite, quand les tirets encadrent le contenu (`-mot- `) — ou quand il n’y en a pas — le contenu est centré.
-
-##### Variables
-
-Les variables utilisables dans les entêtes et pieds de page sont toujours des mots simples commençant par `%`. 
-
-Pour les **niveaux de titre**, on utilise **`%titre<NIVEAU>`** par exemple `%titre4` pour les titres de niveau 4.
-
-Pour les **numérotations**, on utilise **`%num`**. Noter que le contenu dépendra de la donnée `:num_page_style` de la recette du livre ou de la collection qui définit avec quoi il faut numéroter. TODO: à l’avenir on pourra imaginer avoir des numéros différents suivant les parties.
 
 ---
 

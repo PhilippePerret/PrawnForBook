@@ -89,6 +89,9 @@ MINI_AIDE = <<-TEXT
 #{'pfb manuel'.jaune}
     Manuel PDF
 
+#{'pfb lexique "<mot>"'.jaune}
+    Aide lexicale sur le mot <mot>.
+
 #{'pfb init'.jaune}
     Initier un nouveau livre dans le dossier
     courant.

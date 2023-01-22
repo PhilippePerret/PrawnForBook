@@ -197,23 +197,23 @@ class AssistantHeadersFooters
     # 
     # On utilise le facilitateur
     # 
-    tty_define_object_with_data(DATA_HEADFOOT, hf_data)
-    # 
-    # ID si nouveau
-    # 
-    if is_new
-      hf_data.merge!(id: "HF#{Time.now.to_i}")
-      @data_headfooters.merge!(hf_data[:id] => hf_data)
+    if tty_define_object_with_data(DATA_HEADFOOT, hf_data)
+      # 
+      # ID si nouveau
+      # 
+      if is_new
+        hf_data.merge!(id: "HF#{Time.now.to_i}")
+        @data_headfooters.merge!(hf_data[:id] => hf_data)
+      end
+      # 
+      # Enregistrer la nouvelle donnée
+      # 
+      save
+      return hf_data[:id]
+    else
+      return nil
     end
-
-    # 
-    # Enregistrer la nouvelle donnée
-    # 
-    save
-
-    return hf_data[:id]
   end
-
 
   ##
   # Pour choisir l'élément à placer dans l'head-foot, le numéro de
@@ -229,15 +229,29 @@ class AssistantHeadersFooters
   #     le tiers gauche de la page gauche (paire)
   # 
   def define_tiers_of_headfoot(hf_data, page_tiers)
+    data_tiers = hf_data[page_tiers] || {}
+    if tty_define_object_with_data(DATA_HEADFOOT_TIERS, data_tiers)
+      hf_data.merge!(page_tiers => data_tiers)
+      save
+      return data_tiers
+    else
+      return nil
+    end
+  end
 
-
-    # ======> ICI <=======
-
-    # TODO IMPLÉMENTER L'ÉDITION D'UN TIERS DE HEADFOOTER
-
-
-
-    hf_data[page_tiers] = data_tiers
+  ##
+  # Pour choisir le contenu d'un tiers
+  # 
+  def choose_contenu_for_tiers(dd)
+    while true
+      cont = Q.select("Type de contenu : ".jaune, VALUES_NIVEAU_TITRE_OU_NUM_PAGE, **{per_page: VALUES_NIVEAU_TITRE_OU_NUM_PAGE.count, show_help: false})
+      case cont
+      when :texte_fixe
+        return Q.ask("Contenu textuel fixe à écrire : ".jaune)
+      else
+        return cont
+      end
+    end  
   end
 
   ##
@@ -271,8 +285,10 @@ DATA_DISPOSITION = [
   {name: 'Titre pour mémoire', value: :name, required: true},
   {name: 'De la page' , value: :first_page, type: :int},
   {name: 'À la page'  , value: :last_page, type: :int},
-  {name: 'Entête'     , value: :header_id, type: :custom, meth: :choose_or_edit_header},
-  {name: 'Footer'     , value: :footer_id, type: :custom, meth: :choose_or_edit_footer}
+  {name: 'Header'     , value: :header_id, type: :custom, meth: :choose_or_edit_header},
+  {name: 'Footer'     , value: :footer_id, type: :custom, meth: :choose_or_edit_footer},
+  {name: 'Header V-Ajustement', value: :header_vadjust, type: :int, default: 0, values:(-20..20)},
+  {name: 'Footer V-Ajustement', value: :footer_vadjust, type: :int, default: 0, values:(-20..20)},
 ]
 
 
@@ -296,7 +312,8 @@ VALUES_NIVEAU_TITRE_OU_NUM_PAGE = [
 (1..3).each do |n|
   VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:"Titre de niveau #{n}", value: "titre#{n}".to_sym}
 end
-VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:'Texte fixe', value: :texte_fixe}
+VALUES_NIVEAU_TITRE_OU_NUM_PAGE << {name:'Texte fixe', value: :custom_text}
+
 
 DATA_HEADFOOT = [
   {name: 'Nom du "headfoot"'    , value: :name, required: true},
@@ -312,7 +329,7 @@ DATA_HEADFOOT = [
 ]
 
 DATA_HEADFOOT_TIERS = [
-  {name: 'Contenu'    , value: :content , values: :choose_type_contenu_for_tiers},
+  {name: 'Contenu'    , value: :content , type: :custom, meth: :choose_contenu_for_tiers},
   {name: 'Alignement' , value: :align   , values: CHOIX_ALIGN_CONTENU_HEADFOOT},
   {name: 'Casse'      , value: :casse   , values: CHOIX_CASSE_TITRE, default: 1},
   {name: 'Police'     , value: :font    , default: nil, values: :police_names_or_default},

@@ -57,12 +57,14 @@ class Disposition
   # - Data -
   # (cf. initialize)
 
-  def id          ; @id           ||= data[:id]                 end
-  def name        ; @name         ||= data[:name]               end
-  def footer_id   ; @footer_id    ||= data[:footer_id]          end
-  def header_id   ; @header_id    ||= data[:header_id]          end
-  def first_page  ; @first_page   ||= data[:first_page]||1      end
-  def last_page   ; @last_page    ||= data[:last_page]||100000  end
+  def id              ; @id               ||= data[:id]                 end
+  def name            ; @name             ||= data[:name]               end
+  def footer_id       ; @footer_id        ||= data[:footer_id]          end
+  def footer_vadjust  ; @footer_vadjust   ||= data[:footer_vadjust]||0  end
+  def header_vadjust  ; @header_vadjust   ||= data[:header_vadjust]||0  end
+  def header_id       ; @header_id        ||= data[:header_id]          end
+  def first_page      ; @first_page       ||= data[:first_page]||1      end
+  def last_page       ; @last_page        ||= data[:last_page]||100000  end
 
 end #/class Disposition
 end #/class HeadersFooters

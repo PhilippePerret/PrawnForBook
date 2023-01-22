@@ -128,7 +128,7 @@ end #/ << self
     # Le contenu textuel
     # 
     content = case dtiers[:content]
-    when String   then dtiers[:content] # contenu explicite
+    when String   then get_content_as_custom_text(dtiers[:content])
     when Numeric  then dtiers[:content].to_s
     when Symbol   then bpage.send(dtiers[:content])
     when Proc     then dtiers[:content].call(bpage)
@@ -150,6 +150,21 @@ end #/ << self
     # On retourne la page pour l'addition des procédures
     # 
     return bpage
+  end
+
+  ## 
+  # Si le texte personnalisé contient du code ou des variables, il
+  # faut l'estimer.
+  # 
+  # @return [String] Le texte à écrire dans le headfooter
+  # 
+  # @param [String] str Le texte original tel que défini dans la recette
+  def get_content_as_custom_text(str)
+    if str.match?(/#\{/)
+      return eval('"' + str + '"')
+    else
+      str
+    end
   end
 
   def common_tiers_props

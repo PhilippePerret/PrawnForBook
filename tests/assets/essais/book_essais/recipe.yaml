@@ -101,9 +101,13 @@
         :align: :right
         :content: :titre2
         :size: 10
-      :content: La date fixe
-      :style: :default
       :pg_center:
+        :content: La Date fixe d'impression
+        :align: :right
+        :casse: :min
+      :pd_left:
+        :content: :titre3
+        :align: :center
     :HF1674296984:
       :id: HF1674296984
       :name: Pour le pied de page

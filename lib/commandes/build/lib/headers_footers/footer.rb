@@ -13,7 +13,7 @@ class Footer < Headfooter
   # 
   # @api public
   def top
-    @top ||= (pdf.bounds.bottom - 6).round
+    @top ||= (pdf.bounds.bottom - (6 + disposition.footer_vadjust)).round
   end
 
 end #/class Footer
