@@ -1,0 +1,20 @@
+Disposition
+  Terme propre aux entêtes et pieds de page.
+  Ensemble de paramètres définissant la disposition des enêtes et 
+  pieds de page sur plusieurs pages.
+  Dans la recette : 
+    :headers_footers:
+      :dispositions:
+        ...
+Header V-Ajustement
+  Terme propre aux entêtes et pieds de page.
+  Valeur qui permet de régler le positionnement exact de l'entête dans
+  la marge haute, verticalement. Une valeur positive rapproche l'en-
+  tête du texte tandis qu'une valeur négative l'éloigne.
+  Dans la recette : :header_vadjust (définition d'une disposition)
+Footer V-Ajustement
+  Terme propre aux entêtes et pieds de page.
+  Valeur qui permet de régler le positionnement exact du pied de page
+  dans la marge basse, verticalement. Une valeur positive rapproche
+  le pied de page du texte tandis qu'une valeur négative l'en éloigne.
+  Dans la recette : :footer_vadjust (définition d'une disposition)
