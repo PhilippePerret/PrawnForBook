@@ -12,8 +12,13 @@
       :bot: 20
       :ext: 25
       :int: 35
+    :format_numero: first-last
+    :no_num_empty: true
+    :num_only_if_num: true
+    :num_page_if_no_num_parag: true
+    :numerotation: parags
   :text:
-    :indent: 14.173228346456694
+    :indent: 0
     :numerotation: pages
 :titles:
   :level1:

@@ -42,7 +42,7 @@ class NumerotationTestor < Minitest::Test
   # Instance GeneratedBook::Book (réinitialisée à chaque test)
   def book
     @book ||= begin
-      puts "J'instancie @book".orange
+      # puts "J'instancie @book".orange
       GeneratedBook::Book.erase_if_exist
       GeneratedBook::Book.new
     end
@@ -58,6 +58,7 @@ class NumerotationTestor < Minitest::Test
       page_de_titre:        true,  # idem
       numeroter_titre:      true,  # TODO Rendre opérationnel
       logo:                 'logo.jpg',
+      indent:               0,
       dispositions: {
         DP0001: {
           name:"Dispo titres en haut", header_id: :HF001, 
@@ -95,18 +96,43 @@ class NumerotationTestor < Minitest::Test
 
 ###################       LES TESTS      ###################
   
+  def test_adjustement_positions
+    return if focus?
+    
+  end
 
-  def test_simple_valeurs_par_defaut_num_paragraphs
+  def test_numerotation_paragraphes
     return if focus?
     tester_numerotation_par_paragraphes_avec({})
+    page(4).has_text("-/-").below(100)
+    page(5).has_text("-/-").below(100)
+    page(6).has_text("-/-").below(100)
+    page(8).has_text("1/2").below(100)
+    page(9).has_text("3/5").below(100)
+    # - index -
     page(12).has_text(/introduction.+1, 3, 7/)
     page(12).has_text(/mot.+2, 3/)    
     mini_success "Les numéros d'index par paragragrahes sont valides."
   end
 
+  def test_numerotation_paragraphes_autre_format
+    # return if focus?
+    tester_numerotation_par_paragraphes_avec({
+      format_numero: 'first-last', 
+      no_num_empty: true, num_only_if_num: true,
+      numpag_ifno_numpar: true
+    })
+    page(4).not.has_text("-/-").below(100)
+    page(5).not.has_text("-/-").below(100)
+    page(8).has_text("1-2").below(100)
+    page(9).has_text("3-5").below(100)
+    page(7).has_text("7").below(100) # numéro de page
+    page(12).has_text("12").below(100) # numéro de page
+  end
+
 
   def test_simple_valeurs_par_defaut_num_page
-    # return if focus?
+    return if focus?
     tester_numerotation_par_page_avec({})
     # - les numéros de page -
     page(3).not.has_text("3").below(100)
@@ -143,6 +169,8 @@ class NumerotationTestor < Minitest::Test
     page(12).has_text(['Index', 'introduction', 'mot'])
     mini_success "Le livre contient la base de texte sur les différentes pages"
   end
+
+
 
 private
 

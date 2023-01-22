@@ -27,6 +27,10 @@ class AnyParagraph
     @pfbcode ||= data[:pfbcode]
   end
 
+  def length
+    @length ||= text.length
+  end
+
 REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 
 REG_REFERENCE       = /\(\( \((.+?)\) \)\)/

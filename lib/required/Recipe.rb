@@ -169,17 +169,27 @@ class Recipe
   # --- PRECIDATE METHODS ---
 
   def numeroration?
-    :TRUE == @numeroter ||= true_or_false(book_format[:text][:numerotation] != 'none')
+    :TRUE == @numeroter ||= true_or_false(book_format[:page][:numerotation] != 'none')
   end
   def tdm_numerotation?
     :TRUE == @numerotertdm ||= true_or_false(table_of_content[:numeroter])
   end
   def paragraph_number?
-    :TRUE == @numeroterpar ||= true_or_false(book_format[:text][:numerotation] == 'parags')
+    :TRUE == @numeroterpar ||= true_or_false(book_format[:page][:numerotation] == 'parags')
   end
   def page_number?
-    :TRUE == @numeroterpage ||= true_or_false(book_format[:text][:numerotation] == 'pages')
+    :TRUE == @numeroterpage ||= true_or_false(book_format[:page][:numerotation] == 'pages')
   end
+  def no_numero_on_empty_page?
+    :TRUE == @nonumontempty ||= true_or_false(book_format[:page][:no_num_empty])
+  end
+  def numero_paragraph_only_if_paragraph?
+    :TRUE == @numonlyifparag ||= true_or_false(book_format[:page][:num_only_if_num])
+  end
+  def numero_page_if_no_numero_paragraph?
+    :TRUE == @numpagifnonumpar ||= true_or_false(book_format[:page][:num_page_if_no_num_parag])
+  end
+
 
   def skip_page_creation?
     :TRUE == @skipfirst ||= true_or_false(book_format[:page][:skip_page_creation])
@@ -209,6 +219,30 @@ class Recipe
 
 
   # --- Volatile Data ---
+
+  def parag_num_font_name
+    @parag_num_font_name ||= "Helvetica"
+  end
+  def parag_num_font_size
+    @parag_num_font_size ||= 8
+  end
+  def parag_num_font_style
+    nil
+  end
+
+  # @return [Integer] Distance entre le texte et le numéro de paragraphe
+  # si les paragraphes sont numérotés.
+  def parag_num_distance_from_text
+    @parag_num_distance_from_text ||= book_format[:text][:parag_num_dist_from_text] || 5
+  end
+
+  def parag_numero_vadjust
+    @parag_numero_vadjust ||= book_format[:text][:parag_numero_vadjust] || 1
+  end
+
+  def format_numero
+    @format_numero ||= book_format[:page][:format_numero]
+  end
 
   def dimensions
     @dimensions ||= [book_format[:book][:width], book_format[:book][:height]]

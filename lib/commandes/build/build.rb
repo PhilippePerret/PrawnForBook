@@ -14,7 +14,7 @@ end #/Command
 class PdfBook
 
   # Pour exposer les données des pages (à commencer par les
-  # paragraphes)
+  # paragraphes et les longueurs de texte)
   attr_reader :pages
 
   # Pour exposer les titres courants par niveau en cours
@@ -262,9 +262,8 @@ class PdfBook
   # 
   DEFAULT_DATA_PAGE = {
     first_par:nil, last_par: nil,
-    title1: '', title2:'', title3:'', title4:'', title5:'', title6:'',
-    TITLE1: '', TITLE2:'', TITLE3:'', TITLE4:'', TITLE5:'', TITLE6:''
-  }
+    content_length: 0,
+    title1: '', title2:'', title3:'', title4:'', title5:'', title6:''}
 
   def add_page(num_page)
     #
@@ -282,8 +281,8 @@ class PdfBook
     end
   end
 
-  # Lorsqu'un paragraphe (NTextParagraph) est créé, on renseigne
-  # la ou les pages sur lesquels il se trouve
+  # Lorsqu'un paragraphe (NTextParagraph|NTitre) est créé, on 
+  # renseigne la ou les pages sur lesquels il se trouve.
   # 
   # @param parag {NTextParagraph} L'instance du paragraphe qui
   #               vient d'être imprimé
@@ -314,6 +313,23 @@ class PdfBook
     # On prend la page de fin du paragraphe
     # 
     page_fin_parag = pages[parag.last_page]
+
+    # 
+    # On ajoute cette longueur de contenu à la page
+    # (pour savoir qu'elle n'est pas vide)
+    #
+    moitie = parag.length / 2
+    page_debut_parag[:content_length] += moitie
+    # 
+    # Si c'est une autre page, on ajoute aussi le contenu de
+    # ce paragraphe (on divise arbitrairement par deux, car pour le
+    # moment le compte exact importe peu)
+    # 
+    if parag.last_page != parag.first_page
+      page_fin_parag[:content_length] += moitie
+    else 
+      page_debut_parag[:content_length] += moitie
+    end
     # 
     # Si le premier paragraphe de la page de fin n'est
     # pas défini, on le met à ce paragraphe

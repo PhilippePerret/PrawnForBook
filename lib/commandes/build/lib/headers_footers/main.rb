@@ -92,10 +92,8 @@ class HeadersFooters
       # spy "dpage = #{dpage.inspect}".gris
       (4..7).each do |niv|
         dpage.delete(:"title#{niv}") if dpage.key?(:"title#{niv}")
-        dpage.delete(:"TITLE#{niv}") if dpage.key?(:"TITLE#{niv}")
       end
       (1..3).each do |niv|
-        dpage.delete(:"TITLE#{niv}") if dpage.key?(:"TITLE#{niv}")
         kniv = :"title#{niv}"
         dpage[kniv] = nil if dpage[kniv] == ''
       end
@@ -133,7 +131,7 @@ class HeadersFooters
         current_titles_per_level.merge!({3 => dpage[:title3]})
       end
 
-      tbl.merge!(page_num => BookPage.new(dpage))
+      tbl.merge!(page_num => BookPage.new(book, pdf, dpage))
     end
 
     @data_pages = tbl

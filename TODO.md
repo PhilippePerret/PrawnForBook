@@ -1,42 +1,24 @@
 # Todo courant
 
-* J'en suis à essayer de faire passer la nouvelle construction d'un
-  livre à partir des nouvelles propriétés d'une recette.
-  Quand j'y arriverai, il sera temps de tester un livre avec 
-  PDF::Checker
-  Pour le moment, le PDF est produit, mais c'est juste une horreur
-  - le texte n'est pas affiché
-  - la page d'infos est complètement tronquée
+* Le dernier numéro de paragraphe n'est pas le bon pour la page 9 (devrait être 6)
 
-* Il faut repenser encore le fonctionnement des headers/footers
-  Une disposition doit contenir ce qu'il contient :
-    - un nom
-    - un début et fin de page
-    - un header
-    - un footer
-  C'est au-niveau des headers/footers que ça doit changer : on 
-  doit, pour chacun d'eux, définir le contenu des au moins 6 parties :
-    - droite de page gauche, droite de page droite
-    - centre de page gauche, centre de page droite
-    - gauche de page gauche, gauche de page droite
-  * Il faut pouvoir mettre : un titre ou un numéro de page
-  * On doit pouvoir définir au centre pour les deux (donc ne définir
-    qu'un seul centre ou définir un centre différent pour chaque page)
-  * Il faut définir un header par défaut (sans rien) et un footer
-    par défaut (avec numéro de page sur gauche de gauche et droite de
-    droite)
-  => Ré-écrire le mode d'emploi (peut-être, dans le mode d'emploi, conseiller d'utiliser l'assistant et voir ensuite les données inscrites pour s'en inspirer)
+* Ajouter la définition de 
+  :parag_num_dist_from_text qui définit la distance entre le paragraphe et son numéro (en ps-point) (5 par défaut)
+  et 
+  :parag_numero_vadjust qui définit l'ajustement vertical du numéro (1 par défaut)
+  => book_format[:text][:parag_numero_vadjust]
+  => book_format[:text][:parag_num_dist_from_text]
+  (note : déjà implémenté pour être traité)
 
+* header footer
+  - Ajouter les nouveaux paramètres :
+    - format de numérotation (liste fermée, dont 'first-last', 'first/last', 'first à last', '<page>', 'Page <page>')
+    - options (numéro de page quand pas de paragraphe, pas de numéro sur page vide, ne numéroter avec les paragraphes que s'il y en a)
+  -
 
 * Corrections/affinements par rapport au premier livre Narration
   -> cf. le fichier TODO de la collection
 
-* Rationnaliser l'utilisation des formater.rb, helpers.rb et parser.rb
-  - déjà, il y a du formater dans parser.rb
-  - ensuite, il faut trouver les moyens de conserver les données
-* Traitement des données ajoutées avant un paragraphe
-* Mettre en place les mises en forme propres à un livre (sur la base de la collection Narration)
-  - mise en forme des mots spéciaux (à définir) (une balise doit renvoyer à une méthode d'helper)
 
 # Todo
 

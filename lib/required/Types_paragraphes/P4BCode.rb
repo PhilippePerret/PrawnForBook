@@ -29,6 +29,7 @@ class P4BCode < AnyParagraph
       pdf.init_table_of_contents
     when 'index'
       pdfbook.page_index.build(pdf)
+      pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_biblio(pdf)
     else

@@ -35,7 +35,7 @@ class AbstractRecipe
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
     line_height:  [:book_format, :text, :line_height],
-    numerotation: [:book_format, :text, :numerotation],
+    indent:       [:book_format, :text, :indent],
     book_height:  [:book_format, :book, :height],
     page_height:  [:book_format, :book, :height],
     height:       [:book_format, :book, :height],
@@ -48,7 +48,11 @@ class AbstractRecipe
     margin_bottom:[:book_format, :page, :margins, :bot],
     margin_right: [:book_format, :page, :margins, :right],
     right_margin: [:book_format, :page, :margins, :right],
-    indent:       [:book_format, :text, :indent],
+    numerotation: [:book_format, :page, :numerotation],
+    format_numero:[:book_format, :page, :format_numero],
+    no_num_empty: [:book_format, :page, :no_num_empty],
+    num_only_if_num: [:book_format, :page, :num_only_if_num],
+    numpag_ifno_numpar: [:book_format, :page, :num_page_if_no_num_parag],
     # - les pages à insérer -
     page_de_titre:  [:inserted_pages, :page_de_titre],
     page_de_garde:  [:inserted_pages, :page_de_garde],

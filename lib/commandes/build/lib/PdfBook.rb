@@ -14,20 +14,11 @@ class PdfBook
   # --- Numérotation Paragraphes ---
 
   def num_parag_font
-    @num_parag_font ||= num_parag_data[:font]
+    @num_parag_font ||= recipe.parag_num_font_name
   end
 
   def num_parag_font_size
-    @num_parag_font_size ||= num_parag_data[:font_size]
-  end
-
-  def num_parag_data
-    @num_parag_data ||= begin
-      tbl = recipe.get(:num_parag, {})
-      tbl.key?(:font) || tbl.merge!(font: font_or_default("Bangla"))
-      tbl.key?(:font_size) || tbl.merge!(font_size: 7)
-      tbl
-    end
+    @num_parag_font_size ||= recipe.parag_num_font_size
   end
 
   # --- Predicate Methods (shortcuts) ---

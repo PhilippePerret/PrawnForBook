@@ -2,6 +2,7 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
+  alias :book :pdfbook
 
   # --- Helper Methods ---
 
@@ -35,19 +36,18 @@ class NTextParagraph < AnyParagraph
       mg_left += pfbcode[:margin_left]
     end
     mg_right  = self.margin_right
-    indent    = self.indent
-
+    theindent = self.indent
 
     # 
     # Indication de la première page du paragraphe
     # 
     self.first_page = pdf.page_number
 
-    # # 
-    # # S'il faut NUMÉROTER LES PARAGRAPHES, on place un numéro
-    # # en regard du paragraphe.
-    # # 
-    # parag.print_paragraph_number(self) if paragraph_number? 
+    # 
+    # S'il faut NUMÉROTER LES PARAGRAPHES, on place un numéro
+    # en regard du paragraphe.
+    # 
+    # parag.print_paragraph_number(pdf) if book.recipe.paragraph_number?
 
     # 
     # TEXTE FINAL du paragraphe
@@ -78,7 +78,7 @@ class NTextParagraph < AnyParagraph
       # 
       begin
         spy "Application de la fonte : #{fontFamily}"
-        ft = font fontFamily, size: fontSize, font_style: fontStyle
+        ft = font(fontFamily, size: fontSize, font_style: fontStyle)
       rescue Prawn::Errors::UnknownFont => e
         spy "--- fonte inconnue ---"
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
@@ -139,6 +139,9 @@ class NTextParagraph < AnyParagraph
           end
           spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
+
+          parag.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
+
           # --- Écriture ---
           text(final_str, **options)
         end
@@ -162,29 +165,40 @@ class NTextParagraph < AnyParagraph
   # 
   def print_paragraph_number(pdf)
     numero = number.to_s
+    
+    #
+    # Pour l'intérieur de pdf.update
+    # 
+    me = self
 
     pdf.update do
+
       # 
       # Fonte spécifique pour cette numérotation
       # 
-      font(pdfbook.num_parag_font, size: pdfbook.num_parag_font_size) do
+      font(me.book.num_parag_font, size: me.book.num_parag_font_size) do
       
         # 
         # Calcul de la position du numéro de paragraphe en fonction du
         # fait qu'on se trouve sur une page gauche ou une page droite
         # 
+        parag_number_width = width_of(numero)
+        
         span_pos_num = 
           if belle_page?
-            wspan = width_of(numero)
-            bounds.right + (parag_number_width - wspan)
+            bounds.right + me.distance_from_text
           else
-            - parag_number_width
+            - (parag_number_width + me.distance_from_text)
           end
 
         @span_number_width ||= 1.cm
 
+        spy "Numéro #{numero} appliqué au paragraphe".orange
+        spy "    @span_number_width = #{@span_number_width.inspect}".orange
+        spy "    position: #{span_pos_num.inspect}".orange
+
         float {
-          move_down(7 + pdfbook.recipe.get(:num_parag, {})[:top_adjustment].to_i)
+          move_down(me.class.diff_height_num_parag_and_parag(pdf))
           span(@span_number_width, position: span_pos_num) do
             text "#{numero}", color: '777777'
           end
@@ -195,6 +209,34 @@ class NTextParagraph < AnyParagraph
 
   # --- Print Data Methods --- #
 
+  def self.diff_height_num_parag_and_parag(pdf)
+    @@diff_height_num_parag_and_parag ||= begin
+      recipe = pdf.pdfbook.recipe
+      parag_height = nil
+      numer_height = nil
+      pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
+        parag_height = pdf.height_of("Mot")
+      end
+      pdf.font(recipe.parag_num_font_name, **{size:recipe.parag_num_font_size}) do
+        numer_height = pdf.height_of("194")
+      end
+      diff = (parag_height - numer_height).round(3)
+      spy "Calcul de la différence entre fonte normale et numéro de paragraphe\n".jaune +
+        "    parag_height = #{parag_height.inspect}\n".bleu +
+        "    numer_height = #{numer_height.inspect}\n".bleu +
+        "    diff         = #{diff.inspect}"
+        "    Rectifié à   = #{diff - 1}"
+      diff - recipe.parag_numero_vadjust
+    end
+  end
+
+  def indent
+    @indent ||= book.recipe.text_indent
+  end
+
+  def distance_from_text 
+    @distance_from_text ||= book.recipe.parag_num_distance_from_text
+  end
   def margin_bottom
     @margin_bottom || 0  
   end
@@ -244,6 +286,8 @@ class NTextParagraph < AnyParagraph
         puts "instances_varialbes : #{self.instance_variables.inspect}"
         raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
       end
+    else
+      raise NoMethodError.new("La méthode #{method_name.inspect} est inconnue de nos services.")
     end
   end
 
