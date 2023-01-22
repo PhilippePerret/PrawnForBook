@@ -53,7 +53,8 @@ class NumerotationTestor < Minitest::Test
   def tester_un_livre_avec(props)
     # - Préparation -
     props.merge!({
-      top_margin:           40,
+      # top_margin:           40,
+      top_margin:           30,
       page_de_garde:        true,  # pour voir si pas de numérotation
       page_de_titre:        true,  # idem
       numeroter_titre:      true,  # TODO Rendre opérationnel

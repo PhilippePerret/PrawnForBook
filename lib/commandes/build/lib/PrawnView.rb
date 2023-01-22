@@ -35,6 +35,10 @@ class PrawnView
     end
   end
 
+  # def on_page_create
+  #   spy "NOUVELLE PAGE CRÉÉE (#{page_number})".rouge
+  # end
+
   # --- Margins Methods ---
 
   def odd_margins

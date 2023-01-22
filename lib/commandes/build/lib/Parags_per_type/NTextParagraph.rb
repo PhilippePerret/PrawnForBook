@@ -73,6 +73,7 @@ class NTextParagraph < AnyParagraph
     spy "Indentation du texte : #{textIndent.inspect}"
 
     pdf.update do
+
       # 
       # FONTE (name, taille et style)
       # 
@@ -139,10 +140,37 @@ class NTextParagraph < AnyParagraph
           end
           spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
-
+          #
+          # Écriture du numéro du paragraphe
+          # 
           parag.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
 
+          # 
+          # Hauteur que prendra le texte
+          # 
+          final_height = height_of(final_str)
+
           # --- Écriture ---
+          if (cursor - final_height) < 0
+            height_diff = final_height - cursor
+            spy "Texte trop long (de #{height_diff}) : <<< #{final_str} >>>".rouge
+            spy "margin bottom: #{parag.margin_bottom}"
+            box_height = cursor + line_height
+            spy "Taille box = #{box_height}".rouge
+            other_options = {
+              width:  bounds.width,
+              # height: ,
+              height: box_height,
+              at:     [0, cursor],
+              overflow: :truncate
+            }.merge(options)
+            spy "other_options = #{other_options.inspect}".rouge
+            excedant = text_box(final_str, **other_options)
+            spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
+            start_new_page
+            move_cursor_to_next_reference_line
+            final_str = excedant.map {|h| h[:text] }.join('')
+          end
           text(final_str, **options)
         end
       end
@@ -238,7 +266,7 @@ class NTextParagraph < AnyParagraph
     @distance_from_text ||= book.recipe.parag_num_distance_from_text
   end
   def margin_bottom
-    @margin_bottom || 0  
+    @margin_bottom || book.recipe.book_format[:page][:margins][:bot]
   end
   def margin_top
     @margin_top || 0
