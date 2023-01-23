@@ -13,7 +13,7 @@ class SpecialPage
 
   # = main =
   #
-  # Méthode principale permettant de définir la page
+  # Méthode principale permettant de définir les données
   # 
   # @param [Hash] options Options de définition
   # @option options [Boolean] :return_data If true, the method returns data rather that recording it in the recipe file.
@@ -62,22 +62,40 @@ class SpecialPage
       if data_choix.key?(:values)
         choices = case data_choix[:values]
         when Symbol
-          send(data_choix[:values])
+          case method(data_choix[:values]).arity
+          when 0
+            send(data_choix[:values])
+          when 1
+            send(data_choix[:values], data_choix)
+          end
         when Proc
           data_choix[:values].call(recipe_data)
-        when Array
+        when Array, Range
           data_choix[:values]
         else
           fatal_error("Mauvaise définition de :values dans : #{data_choix.inspect} (devrait être Array, Symbol ou Proc)")
         end
         Q.select("Choisir : ".jaune, choices, {per_page:choices.count})
       else
-        # 
-        # Valeur à rentrer explicitement
-        # 
-        defvalue = data_choix[:default]
-        defvalue = defvalue.call if defvalue.is_a?(Proc)
-        Q.ask("#{data_choix[:name].jaune} : ".jaune, {default: data_choix[:value]||defvalue})
+        question      = "#{data_choix[:name].jaune} : ".jaune
+        if data_choix[:value].nil?
+          choix_defaut = data_choix[:default]
+          choix_defaut = defvalue.call if defvalue.is_a?(Proc)
+        else
+          choix_defaut = data_choix[:value]
+        end
+        case data_choix[:type]
+        when :bool
+          # 
+          # Si valeur booléenne attendue
+          # 
+          Q.select(question, [true, false], **{default:choix_defaut ? 1 : 2, show_help:false})
+        else
+          # 
+          # Si valeur à rentrer explicitement attendue
+          # 
+          Q.ask(question, **{default: choix_defaut})
+        end
       end
     #
     # Transformation automatique du type en fonction du type de la
@@ -87,6 +105,7 @@ class SpecialPage
     when Integer  then value.to_i
     when Float    then value.gsub(/,/,'.').to_f
     when String   then value.to_s
+    when TrueClass, FalseClass then !!value
     else value
     end
   end
@@ -105,13 +124,13 @@ class SpecialPage
           # Un élément à prendre
           add_choice(choices, dmainkey, "#{main_key}")
         else
-          # C'est un élément à parcourir
+          # C'est un élément à parcourir (i.e. un groupe de choix)
           dmainkey.each do |key, dkey|
             if dkey.key?(:name) && dkey.key?(:default)
               # Un élément à prendre
                 add_choice(choices, dkey, "#{main_key}-#{key}")
             else
-              # Un élément à parcourir
+              # Un élément à parcourir (i.e. un groupe de choix)
               dkey.each do |subkey, dsubkey|
                 add_choice(choices, dsubkey, "#{main_key}-#{key}-#{subkey}")
               end
@@ -155,12 +174,28 @@ class SpecialPage
   end
 
   def add_choice(choices, dchoice, simple_key)
+    return if dchoice[:if] && condition_choice_false?(choices, dchoice)
     @choice_index ||= 1 # le premier est "Enregistrer"
     @choice_index += 1 
     val = get_value(simple_key)
     defvalue = dchoice[:default]
     defvalue = defvalue.call if defvalue.is_a?(Proc)
     choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: defvalue}
+  end
+
+  ##
+  # La méthode est appelée lorsque le choice contient un :if, une
+  # condition pour l'afficher.
+  # @return [true|false] True si on ne doit pas prendre le choice
+  def condition_choice_false?(choices, dchoice)
+    case dchoice[:if]
+    when Symbol
+      self.send(dchoice[:if]) == false
+    when Proc
+      dchoice[:if].call == false
+    else 
+      dchoice[:if] == false
+    end
   end
 
 end #/class SpecialPage

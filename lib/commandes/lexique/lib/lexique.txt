@@ -6,15 +6,26 @@ Disposition
     :headers_footers:
       :dispositions:
         ...
-Header V-Ajustement
-  Terme propre aux entêtes et pieds de page.
-  Valeur qui permet de régler le positionnement exact de l'entête dans
-  la marge haute, verticalement. Une valeur positive rapproche l'en-
-  tête du texte tandis qu'une valeur négative l'éloigne.
-  Dans la recette : :header_vadjust (définition d'une disposition)
 Footer V-Ajustement
   Terme propre aux entêtes et pieds de page.
   Valeur qui permet de régler le positionnement exact du pied de page
   dans la marge basse, verticalement. Une valeur positive rapproche
   le pied de page du texte tandis qu'une valeur négative l'en éloigne.
   Dans la recette : :footer_vadjust (définition d'une disposition)
+Header V-Ajustement
+  Terme propre aux entêtes et pieds de page.
+  Valeur qui permet de régler le positionnement exact de l'entête dans
+  la marge haute, verticalement. Une valeur positive rapproche l'en-
+  tête du texte tandis qu'une valeur négative l'éloigne.
+  Dans la recette : :header_vadjust (définition d'une disposition)
+Numéro de paragraphe
+  Le numéro de paragraphe peut être écrit à gauche ou à droite du
+  paragraphe. Cette numéro apparait lorsque la numérotation des
+  pages (book_format:page:numerotation:) est réglée à 'parags'.
+
+  Dans l'assistant pour le format du livre, on peut alors régler
+  l'alignement vertical du numéro, qui permet de le caler juste
+  à la même hauteur que la première ligne, ainsi que l'éloignement
+  par rapport au texte (appelé "Ajustement horizontal").
+  Bien sûr, régler les marges intérieures et extérieures pour que
+  le numéro puisse apparaitre même avec les livres longs.

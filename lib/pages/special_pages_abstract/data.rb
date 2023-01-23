@@ -51,7 +51,9 @@ class SpecialPage
   #   alors la clé simple sera "sub_title-size"
   # 
   def get_value(simple_key)
-    get_current_value_for(simple_key) || default_value_for(simple_key)
+    curval = get_current_value_for(simple_key) 
+    curval = default_value_for(simple_key) if curval === nil
+    return curval
   end
   alias :v :get_value
 
@@ -66,7 +68,8 @@ class SpecialPage
     dkey = simple_key.split('-').map {|n| n.to_sym}
     cval = recipe_data
     while key = dkey.shift
-      cval = cval[key] || return # non définie
+      cval = cval[key] 
+      return nil if cval === nil # non définie
     end
     return cval
   end
@@ -97,6 +100,10 @@ class SpecialPage
     when Proc   then cval[:default].call
     else cval[:default]
     end
+  rescue Exception => e
+    puts "Problème avec la clé #{simple_key.inspect} : #{e.message}".rouge
+    puts "(#{File.basename(__FILE__)}:#{__LINE__})".rouge
+    exit
   end
 
   def set_current_value_for(simple_key, value)
@@ -110,7 +117,6 @@ class SpecialPage
         cprop = cprop[key]
       end
     end
-    # puts "Nouvelle recette : #{recipe_data.inspect}"
   end
 
   # En fin de définition, on peut sauver la recette

@@ -1,21 +1,5 @@
 # Todo courant
 
-* Le dernier numéro de paragraphe n'est pas le bon pour la page 9 (devrait être 6)
-
-* Ajouter la définition de 
-  :parag_num_dist_from_text qui définit la distance entre le paragraphe et son numéro (en ps-point) (5 par défaut)
-  et 
-  :parag_numero_vadjust qui définit l'ajustement vertical du numéro (1 par défaut)
-  => book_format[:text][:parag_numero_vadjust]
-  => book_format[:text][:parag_num_dist_from_text]
-  (note : déjà implémenté pour être traité)
-
-* header footer
-  - Ajouter les nouveaux paramètres :
-    - format de numérotation (liste fermée, dont 'first-last', 'first/last', 'first à last', '<page>', 'Page <page>')
-    - options (numéro de page quand pas de paragraphe, pas de numéro sur page vide, ne numéroter avec les paragraphes que s'il y en a)
-  -
-
 * Corrections/affinements par rapport au premier livre Narration
   -> cf. le fichier TODO de la collection
 
