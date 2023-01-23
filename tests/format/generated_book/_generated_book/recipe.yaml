@@ -12,14 +12,9 @@
       :bot: 20
       :ext: 25
       :int: 35
-    :format_numero: first-last
-    :no_num_empty: true
-    :num_only_if_num: true
-    :num_page_if_no_num_parag: true
     :numerotation: parags
   :text:
     :indent: 0
-    :numerotation: pages
 :titles:
   :level1:
     :next_page: true
@@ -32,12 +27,6 @@
       :name: Page normale
       :footer_id: :footer_with_numero
       :first_page: 4
-    :DP0001:
-      :name: Dispo titres en haut
-      :header_id: :HF001
-      :id: :DP0001
-      :first_page: 6
-      :last_page: 11
   :headfooters:
     :footer_with_numero:
       :name: Avec un numéro à gauche et à droite
@@ -50,18 +39,8 @@
       :pd_right:
         :content: :numero
         :align: :right
-    :HF001:
-      :id: :HF001
-      :pg_left:
-        :content: :title1
-        :casse: :all_caps
-        :size: 16
-        :align: :left
-      :pd_right:
-        :content: :title2
-        :align: :right
 :inserted_pages:
-  :page_de_garde: true
-  :page_de_titre: true
+  :page_de_garde: false
+  :page_de_titre: false
 :publishing:
   :logo_path: logo.jpg

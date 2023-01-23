@@ -72,15 +72,18 @@ private
   def __traite_references_in(str)    
     if str.match?('\(\( \(')
       str = str.gsub(REG_REFERENCE) do
-        ref_id = $1.freeze
-        pdfbook.table_references.add(ref_id, {page:first_page, paragraph:numero})
+        cible = $1.freeze
+        spy "Consignation de la référence #{cible.inspect}".rouge
+        pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
         ''
       end
     end
     # Appels de référence
     if str.match?('\(\( \->\(')
       str = str.gsub(REG_APPEL_REFERENCE) do
-        pdfbook.table_references.get($1.freeze, self)
+        appel = $1.freeze
+        spy "Consignation de l'appel à la référence #{appel.inspect}".rouge
+        pdfbook.table_references.get(appel, self)
       end
     end
     return str

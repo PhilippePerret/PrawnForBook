@@ -34,7 +34,7 @@ class AnyParagraph
 REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 
 REG_REFERENCE       = /\(\( \((.+?)\) \)\)/
-REG_APPEL_REFERENCE = /\(\( +\->\((.+?)\) +\)\)/
+REG_APPEL_REFERENCE = /\(\( \->\((.+?)\) +\)\)/
 
 end #/class AnyParagraph
 end #/class PdfBook

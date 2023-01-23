@@ -76,9 +76,13 @@ end #/ << self
       numero = pdf.page_number
       next unless page_in_range?(numero)
       bpage = get_data_page(numero)  # instance BookData
-      procedure = self.send("procedure_#{side}_page".to_sym)
-      procedure.call(bpage)
-      spy "Page #{numero} traitée".vert
+      if bpage 
+        procedure = self.send("procedure_#{side}_page".to_sym)
+        procedure.call(bpage)
+        spy "Page #{numero} traitée".vert
+      else
+        spy "Minor error : impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.".orange
+      end
     end
   end
 

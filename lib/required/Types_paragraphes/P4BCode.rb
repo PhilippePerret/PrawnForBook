@@ -15,6 +15,7 @@ class P4BCode < AnyParagraph
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
     treat_as_next_parag_code if @raw_code.match?(/^\{.+?\}$/)
+    @parag_style = {}
   end
 
   def print(pdf)
@@ -23,7 +24,7 @@ class P4BCode < AnyParagraph
       # Rien à faire de ce paragraphe puisque c'est une définition
       # du style, position, etc. du paragraphe suivant.
       spy "Parag_style = #{parag_style.inspect}"
-    when 'new_page', 'nouvelle_page'
+    when 'new_page', 'nouvelle_page', 'saut_de_page'
       pdf.start_new_page
     when 'tdm', 'toc', 'table_des_matieres','table_of_contents','table_of_content'
       pdf.init_table_of_contents
@@ -33,7 +34,8 @@ class P4BCode < AnyParagraph
     when /^biblio/
       treate_as_biblio(pdf)
     else
-      puts "Je ne sais pas traiter #{raw_code.inspect}"
+      puts "Erreur fatale : Je ne sais pas traiter la balise #{raw_code.inspect}".rouge
+      exit
     end
 
   end

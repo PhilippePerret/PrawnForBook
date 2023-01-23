@@ -72,11 +72,11 @@ class Recipe
       book_format: {
         page: {
           height:  576,
-          margins: {top:10, bot:20, ext:25, int:35}
+          margins: {top:10, bot:20, ext:25, int:35},
+          numerotation: 'pages',
         },
         text: {
           indent: 5.mm,
-          numerotation: 'pages',
         },
       },
       titles:{

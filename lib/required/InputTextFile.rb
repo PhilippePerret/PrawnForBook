@@ -66,7 +66,7 @@ class InputTextFile
   def parse
     # 
     # @bypass_it Pour sauter les commentaires ou les textes "ex-commen-
-    # tés"
+    # tés" quand ils tiennent sur plusieurs lignes.
     bypass_it = false
     # 
     # 
@@ -75,7 +75,7 @@ class InputTextFile
     File.read(path).split("\n").map do |par|
       par.strip
     end.reject do |par|
-      par.empty?
+      par.empty? || par.start_with?('# ')
     end.reject do |par|
       if par.start_with?('<!--')
         bypass_it = true

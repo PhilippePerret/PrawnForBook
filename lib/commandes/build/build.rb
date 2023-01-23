@@ -139,6 +139,12 @@ class PdfBook
     # 
     @pages = {}
 
+    me = self
+    pdf.on_page_create do
+      spy "NOUVELLE PAGE (#{pdf.page_number}) CRÉÉE => dans @pages".rouge
+      self.add_page(pdf.page_number)
+    end
+
     # 
     # FONTS
     # 
