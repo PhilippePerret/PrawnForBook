@@ -31,8 +31,8 @@ class NumerotationTestor < Minitest::Test
   end
 
   def focus?
-    true # pour jouer seulement celui qui commente sa 1re ligne
-    # false # pour les jouer tous
+    # true # pour jouer seulement celui qui commente sa 1re ligne
+    false # pour les jouer tous
   end
 
   def pdf
@@ -109,7 +109,8 @@ class NumerotationTestor < Minitest::Test
     page(5).has_text("-/-").below(100)
     page(6).has_text("-/-").below(100)
     page(8).has_text("1/2").below(100)
-    page(9).has_text("3/5").below(100)
+    page(9).has_text("3/6").below(100)
+    page(10).has_text("6/7").below(100)
     # - index -
     page(12).has_text(/introduction.+1, 3, 7/)
     page(12).has_text(/mot.+2, 3/)    
@@ -117,7 +118,7 @@ class NumerotationTestor < Minitest::Test
   end
 
   def test_numerotation_paragraphes_autre_format
-    # return if focus?
+    return if focus?
     tester_numerotation_par_paragraphes_avec({
       format_numero: 'first-last', 
       no_num_empty: true, num_only_if_num: true,
@@ -125,9 +126,10 @@ class NumerotationTestor < Minitest::Test
     })
     page(4).not.has_text("-/-").below(100)
     page(5).not.has_text("-/-").below(100)
-    page(8).has_text("1-2").below(100)
-    page(9).has_text("3-5").below(100)
     page(7).has_text("7").below(100) # numéro de page
+    page(8).has_text("1-2").below(100)
+    page(9).has_text("3-6").below(100)
+    page(10).has_text("6-7").below(100)
     page(12).has_text("12").below(100) # numéro de page
   end
 

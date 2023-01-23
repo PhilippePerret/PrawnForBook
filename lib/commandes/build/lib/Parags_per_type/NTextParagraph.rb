@@ -44,16 +44,10 @@ class NTextParagraph < AnyParagraph
     self.first_page = pdf.page_number
 
     # 
-    # S'il faut NUMÉROTER LES PARAGRAPHES, on place un numéro
-    # en regard du paragraphe.
-    # 
-    # parag.print_paragraph_number(pdf) if book.recipe.paragraph_number?
-
-    # 
     # TEXTE FINAL du paragraphe
     # @note
     #   C'est dans cette méthode que sont traités les codes ruby, les
-    #   marques bibliographiques, les références (cibles et appeles)
+    #   marques bibliographiques, les références (cibles et appels)
     #   etc.
     # 
     final_str = formated_text(pdf)
@@ -70,7 +64,7 @@ class NTextParagraph < AnyParagraph
     fontStyle   = font_style(pdf)
     fontSize    = font_size(pdf)
     textIndent  = recipe.text_indent
-    spy "Indentation du texte : #{textIndent.inspect}"
+    # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
 
     pdf.update do
 
@@ -85,20 +79,6 @@ class NTextParagraph < AnyParagraph
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
         raise
       end
-
-      #
-      # Faut-il passer sur la page suivante ?
-      # 
-      # if cursor > 
-
-      # 
-      # Le paragraphe va-t-il passer à la page suivante ?
-      # (pour pouvoir calculer son numéro de dernière page)
-      # 
-      final_str_height = height_of(final_str)
-      chevauchement = cursor - final_str_height < 0
-      # spy "final_str_height : #{final_str_height.inspect}"
-      # spy "chevauchement : #{chevauchement.inspect}"
 
     end
 
@@ -138,7 +118,7 @@ class NTextParagraph < AnyParagraph
             start_new_page 
             move_cursor_to_next_reference_line
           end
-          spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
+          # spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
           #
           # Écriture du numéro du paragraphe
@@ -149,24 +129,36 @@ class NTextParagraph < AnyParagraph
           # Hauteur que prendra le texte
           # 
           final_height = height_of(final_str)
+          # 
+          # Le paragraphe tient-il sur deux pages ?
+          # 
+          chevauchement = (cursor - final_height) < 0
 
           # --- Écriture ---
-          if (cursor - final_height) < 0
+
+          if chevauchement
+            # 
+            # On passe ici quand le texte est trop et qu'il va
+            # passer sur la page suivante. Malheureusement, en utilisant
+            # le comportement par défaut, le texte sur la page suivante
+            # n'est pas posé sur les lignes de référence. Il faut donc
+            # que je place un bounding_box pour placer la part de
+            # texte possible, puis on passe à la page suivante et on
+            # se place sur la place suivante.
+            # 
             height_diff = final_height - cursor
-            spy "Texte trop long (de #{height_diff}) : <<< #{final_str} >>>".rouge
-            spy "margin bottom: #{parag.margin_bottom}"
+            # spy "Texte trop long (de #{height_diff}) : <<< #{final_str} >>>".rouge
+            # spy "margin bottom: #{parag.margin_bottom}"
             box_height = cursor + line_height
-            spy "Taille box = #{box_height}".rouge
+            # spy "Taille box = #{box_height}".rouge
             other_options = {
               width:  bounds.width,
-              # height: ,
               height: box_height,
               at:     [0, cursor],
               overflow: :truncate
             }.merge(options)
-            spy "other_options = #{other_options.inspect}".rouge
             excedant = text_box(final_str, **other_options)
-            spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
+            # spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
             start_new_page
             move_cursor_to_next_reference_line
             final_str = excedant.map {|h| h[:text] }.join('')

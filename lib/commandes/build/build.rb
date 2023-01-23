@@ -287,61 +287,58 @@ class PdfBook
   # @param parag {NTextParagraph} L'instance du paragraphe qui
   #               vient d'être imprimé
   def set_paragraphs_in_pages(parag)
-    # 
-    # Numéro de ce paragraphe
-    # 
-    parag_numero = parag.numero
-    # 
-    # Faut-il créer la page de départ du paragraphe ?
-    # 
-    pages[parag.first_page] || add_page(parag.first_page)
-    # 
-    # On prend la page de départ du paragraphe
-    # 
-    page_debut_parag = pages[parag.first_page]
-    # 
-    # Si le premier paragraphe de la page de départ du 
-    # paragraphe n'est pas défini, c'est le paragraphe
-    if page_debut_parag[:first_par].nil?
-      page_debut_parag.merge!(first_par: parag_numero)
-    end
-    # 
-    # Faut-il créer la page de fin du paragraphe ?
-    # 
-    pages[parag.last_page] || add_page(parag.last_page)
-    # 
-    # On prend la page de fin du paragraphe
-    # 
-    page_fin_parag = pages[parag.last_page]
+
+    # - raccourcis -
+    pfirst_num  = parag.first_page
+    plast_num   = parag.last_page
+    parag_num   = parag.numero
 
     # 
-    # On ajoute cette longueur de contenu à la page
-    # (pour savoir qu'elle n'est pas vide)
-    #
-    moitie = parag.length / 2
-    page_debut_parag[:content_length] += moitie
+    # Faut-il créer la page de départ ou la page de fin du 
+    # paragraphe ?
+    # Note : le plus souvent, c'est la même page
     # 
-    # Si c'est une autre page, on ajoute aussi le contenu de
-    # ce paragraphe (on divise arbitrairement par deux, car pour le
-    # moment le compte exact importe peu)
+    pages[pfirst_num] || add_page(pfirst_num)
+    pages[plast_num]  || add_page(plast_num)
+
+    pag_first = pages[pfirst_num]
+    pag_last  = pages[plast_num]
+
     # 
-    if parag.last_page != parag.first_page
-      page_fin_parag[:content_length] += moitie
-    else 
-      page_debut_parag[:content_length] += moitie
-    end
+    # Si le premier paragraphe de la page de départ du 
+    # paragraphe n'est pas défini, c'est ce paragraphe
+    # 
+    pag_first.merge!(first_par: parag_num) if pag_first[:first_par].nil?
     # 
     # Si le premier paragraphe de la page de fin n'est
     # pas défini, on le met à ce paragraphe
     # 
-    if page_fin_parag[:first_par].nil?
-      page_fin_parag.merge!(first_par: parag_numero)
-    end
+    pag_last.merge!(first_par: parag_num) if pag_last[:first_par].nil?
     # 
     # Dans tous les cas on met le dernier paragraphe de
-    # la page à ce paragraphe
+    # la première et de la dernière page à ce paragraphe
     # 
-    page_fin_parag.merge!(last_par: parag_numero)
+    pag_first.merge!(last_par: parag_num)
+    pag_last.merge!(last_par: parag_num)
+
+    # 
+    # --- INDICATION DE LA LONGUEUR ---
+    # 
+    # On ajoute la longueur de contenu à la page
+    # (pour le moment, juste pour savoir qu'elle n'est pas vide)
+    #
+    moitie = parag.length / 2
+    pag_first[:content_length] += moitie
+    # 
+    # Si le paragraphe se trouve sur deux pages, on divise arbitrai-
+    # rement par deux, car pour le moment le compte exact importe 
+    # peu)
+    # 
+    if plast_num != pfirst_num
+      pag_last[:content_length] += moitie
+    else 
+      pag_first[:content_length] += moitie
+    end
   end
 
   # Pour mettre le paragraphe +parag+ en titre courant de son niveau
