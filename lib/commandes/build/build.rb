@@ -31,12 +31,6 @@ class PdfBook
 
   def generate_pdf_book
     spy "Génération du livre #{ensured_title.inspect}".bleu
-
-    #
-    # Le livre doit être conforme, c'est-à-dire posséder les 
-    # éléments requis
-    # 
-    check_if_conforme || return
     # 
     # Initialiser le suivi des titres par niveau
     # 
@@ -54,6 +48,16 @@ class PdfBook
     # 
     PdfBook::NTextParagraph.init_first_turn
     table_references.init
+    #
+    # On doit parser le texte avant de voir si le livre est
+    # conforme
+    # 
+    inputfile.parse
+    #
+    # Le livre doit être conforme, c'est-à-dire posséder les 
+    # éléments requis
+    # 
+    check_if_conforme || return
     # 
     # Première passe, pour récupérer les références (if any)
     # 
@@ -394,6 +398,20 @@ class PdfBook
       (logo_defined? && logo_exists?) ||raise(PrawnBuildingError.new("Impossible de faire la page de titre, le logo est introuvable."))
     else
       spy "La page de titre N'EST PAS démandée".jaune
+    end
+
+    # 
+    # Si le texte complet contient un appel de référence croisé,
+    # il faut s'assurer qu'ils sont tous bien définis.
+    # 
+    if inputfile.has_cross_references?
+      require 'lib/pages/bibliographies'
+      Bibliography.init_livres(self)
+      inputfile.cross_references.each do |book_id, cibles|
+        Bibliography::Livres.exist?(book_id) || begin
+          raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
+        end
+      end
     end
 
     # 

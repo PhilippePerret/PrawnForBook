@@ -73,7 +73,7 @@ private
     if str.match?('\( <\-')
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
-        spy "Consignation de la référence #{cible.inspect}".rouge
+        spy "[REFERENCES] Consignation de la référence #{cible.inspect}".bleu
         pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
         ''
       end
@@ -86,7 +86,7 @@ private
     if str.match?('\( \->')
       str = str.gsub(REG_APPEL_REFERENCE) do
         appel = $1.freeze
-        spy "Consignation de l'appel à la référence #{appel.inspect}".rouge
+        spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
         pdfbook.table_references.get(appel, self)
       end
     end

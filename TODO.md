@@ -1,5 +1,7 @@
 # Todo courant
 
+* Avant le build du livre, regarder si le texte contient des balises pour des références croisées, voir si toutes les données utiles existent ou générer une erreur tout de suite en expliquant quoi faire.
+
 * Corrections/affinements par rapport au premier livre Narration
   -> cf. le fichier TODO de la collection
 

@@ -51,6 +51,7 @@ class NTitre < AnyParagraph
   end
 
   def paragraph?; false end
+  def sometext? ; true  end
   def titre?    ; true  end
 
   # --- Data Methods ---

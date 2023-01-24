@@ -65,7 +65,7 @@ class PdfBook
   # traiter.
   # 
   def inputfile
-    @inputfile = InputTextFile.new(self, recette[:text_path])
+    @inputfile ||= InputTextFile.new(self, recette[:text_path])
   end
 
   # --- Predicate Methods ---

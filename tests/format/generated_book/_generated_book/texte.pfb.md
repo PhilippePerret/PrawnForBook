@@ -10,3 +10,5 @@ Le deuxième paragraphe est ici.
 Et le troisième est là.
 (( new_page ))
 Le texte avant ((( ->(avant) ))) doit être placé ici.
+Un paragraphe pour rien, sur la page 5 (pour connaitre la page).
+Ce paragraphe contient une référence croisée vers la (( ->(livre1:cross_reference) )).

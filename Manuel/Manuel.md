@@ -521,9 +521,9 @@ Une bibliographie nécessite :
 ##### La balise de la bibliographie
 
 
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété    | valeurs possibles |
-| -------------------------------------------------------- | ------- | ------------ | ----------------- |
-|                                                          |         | **:biblio:** | null/table        |
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété            | valeurs possibles |
+| -------------------------------------------------------- | ------- | -------------------- | ----------------- |
+|                                                          |         | **:bibliographies:** | null/table        |
 
 
 
@@ -538,9 +538,11 @@ Elle est définit dans la propriété `:tag` dans le livre de recette du livre o
 ~~~yaml
 # in recipe.yaml
 # ...
-:biblio:
-	- :tag: film
-		# ...
+:bibliographies:
+	:book_identifiant: 'livre'
+	:biblios:
+		- :tag: film
+			# ...
 ~~~
 
 Dans le texte, elle doit définir en premier argument l’identifiant de l’élément concerné dans [les données](#biblio-data).
@@ -564,9 +566,10 @@ Il est défini par la propriété `:title` dans la recette du livre ou de la col
 ~~~yaml
 # in recipe.yaml
 # ...
-:biblio:
-	- :tag: film
-		:title: Liste des films cités
+:bibliographies:
+	:biblios:
+    - :tag: film
+      :title: Liste des films cités
 ~~~
 
 Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand titre. Mais on peut définir son niveau propre à l’aide de `:title_level: `:
@@ -574,10 +577,11 @@ Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand 
 ~~~yaml
 # in recipe.yaml
 # ...
-:biblio:
-	- :tag: film
-		:title: Liste des films cités
-		:title_level: 3
+:bibliographies:
+	:biblios:
+    - :tag: film
+      :title: Liste des films cités
+      :title_level: 3
 ~~~
 
 <a name="page-biblio"></a>
@@ -597,11 +601,12 @@ Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si �
 ~~~yaml
 # in recipe.yaml
 # ...
-:biblio:
-	- :tag: film
-		:title: Liste des films
-		:title_level: 2
-		:new_page: true # => sur une nouvelle page
+:bibliographies:
+	:biblios:
+    - :tag: film
+      :title: Liste des films
+      :title_level: 2
+      :new_page: true # => sur une nouvelle page
 ~~~
 
 > Noter que si le niveau de titre est 1 (ou non défini), et que les propriétés des titres de la recette définissent qu’il faut passer à une nouvelle page pour un grand titre, la bibliographie commencera alors automatiquement sur une nouvelle page.
@@ -620,11 +625,12 @@ La source des données est indiquée dans le fichier recette du livre ou de la c
 ~~~yaml
 # in recipe.yaml
 # ...
-:biblio:
-	- :tag: film
-		:title: Liste des films
-		:title_level: 2
-    :data:  data/films.yaml
+:bibliographies:
+	:biblios:
+    - :tag: film
+      :title: Liste des films
+      :title_level: 2
+      :data:  data/films.yaml
 ~~~
 
 Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
@@ -1020,12 +1026,12 @@ Noter qu’on peut également demander à ce que [la numérotation des pages](#p
 On peut faire très simplement des références dans le livre (références à d'autres pages ou d'autres paragraphes, du livre ou d'autres livres) à l'aide des balises :
 
 ~~~text
-(( (id_reference_unique) ))  <- référence
+(( <-(id_reference_unique) )) # référence (cible)
 
-(( ->(id_reference_unique) )) <- appel de référence
+(( ->(id_reference_unique) )) # appel de référence
 ~~~
 
-La référence sera tout simplement supprimée du texte (attention de ne pas laisser d’espaces). Pour l’appel de référence il sera toujours remplacé par *“la page xxx”* ou *“le paragraphe xxx”* en fonction de [la pagination souhaitée](#pagination).
+La référence sera tout simplement supprimée du texte (attention de ne pas laisser d’espaces — même si, normalement, ils sont supprimés). Pour l’appel de référence il sera toujours remplacé par *“la page xxx”* ou *“le paragraphe xxx”* en fonction de [la pagination souhaitée](#pagination) et du préfix de référence choisi (TODO).
 
 #### Références croisées
 
@@ -1035,9 +1041,15 @@ Pour une *référence croisée*, c’est-à-dire la référence à un autre livr
 Pour trouver la référence croisée, rendez-vous sur la (( ->(IDLIVRE:id_reference_unique) )).
 ~~~
 
-**ATTENTION**
+Pour traiter une référence croisée, on a besoin de plusieurs choses :
 
-Mais avant tout, il faut comprendre que **ce livre doit absolument être répertorié dans la bibliographie `livre` du livre courant et l’identifiant du livre doit être le même que dans cette bibliographie**. Par exemple, si l’appel à la référence croisée est `idmybook`, alors :
+* connaitre le livre en tant qu’entité bibliographique qui contiendra notamment les données qui seront ajoutées à la bibliographie (titre, auteurs, année, ISBN, etc.)
+* connaitre le livre en tant que livre “Prawn-for-book”, qui définira, dans son dossier, un fichier `references.yaml` contenant les références relevées lors de la dernière compilation du livre.
+* connaitre la relation entre ces deux éléments (l’entité bibliographique et le livre pfb). Question : cette relation ne pourrait-elle pas être définie dans l’entité bibliographique ? ce qui permettrait de n’avoir qu’à définir cet entité, sans avoir à définir les deux derniers éléments.
+
+[... CONTINUER… RATIONNALISER… ]
+
+Par exemple, si l’appel à la référence croisée est `idmybook`, alors :
 
 * la propriété `:biblio` de la recette du livre courant doit définir le tag ‘livre’ (=> bibliographie concernant des livres),
 * les [données bibliographiques](#biblio-data) de cette bibliographie (en fichier `yaml` unique ou en fiches dans un dossier) doivent obligatoirement définir l’élément d’identifiant `idmybook`,

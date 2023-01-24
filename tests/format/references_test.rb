@@ -91,8 +91,8 @@ class ReferencesTestor < Minitest::Test
   end
   def suite_texte_with_cross_ref_for_pages
     <<~TEXT
-    Un paragraphe pour rien.
-    Ce paragraphe contient une référence croisée vers le (( ->(livre1:cross_reference) ))
+    Un paragraphe pour rien, sur la page 5 (pour connaitre la page).
+    Ce paragraphe contient une référence croisée vers la (( ->(livre1:cross_reference) )).
     TEXT
   end
 
@@ -140,7 +140,9 @@ class ReferencesTestor < Minitest::Test
     Des cibles qui précèdent l'appel sont bien traitées
     "
     # ===> TEST <===
-    texte = texte_with_ref_for_pages + suite_texte_with_ref_for_pages
+    texte = texte_with_ref_for_pages + 
+      suite_texte_with_ref_for_pages +
+      suite_texte_with_cross_ref_for_pages
     tester_un_livre_avec({numerotation: 'pages'}, texte)
     page(1).has_text('Un paragraphe qui contient une cible.')
     page(1).has_text("Et puis une autre dans le même paragraphe.")
@@ -152,6 +154,7 @@ class ReferencesTestor < Minitest::Test
     page(5).has_text("Le texte avant (page 3) doit être placé ici.")
     mini_success "Les références avec cibles placée après appels sont bien traitée."
 
+    page(5).has_text("Ce paragraphe contient une référence croisée vers la page 2 du Livre Croisé.")
     mini_success "Les références avec cibles croisées sont bien, traitées."
 
     mini_success "Les références avant cibles croisées manquantes sont bien traitées."

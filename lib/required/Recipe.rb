@@ -268,6 +268,12 @@ class Recipe
     end
   end
 
+  # --- Bibliographies ---
+
+  def biblio_book_identifiant
+    @biblio_book_identifiant ||= bibliographies[:book_identifiant] || 'livre'
+  end
+
   # --- Index ---
 
   def index_font_name
@@ -428,6 +434,10 @@ class Recipe
   #   get_all_titles_data
   def titles_data
     @book_titles ||= get_all_titles_data
+  end
+
+  def bibliographies
+    @bibliographies ||= get(:bibliographies, {})
   end
 
   def biblios_data

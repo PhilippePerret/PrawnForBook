@@ -1,5 +1,5 @@
 module Prawn4book
-class Bibliography
+class OldBibliography
 
   # --- CLASSE ---
 
@@ -257,6 +257,6 @@ class Bibliography
 
 end #/class Bibliography
 
-Bibliography.init
+
 
 end #/module Prawn4book

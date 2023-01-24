@@ -15,6 +15,7 @@ def erreur_fatale(msg, err_num = 1)
   puts msg.rouge
   puts "This issue must be fixed, sorry.".rouge
   puts "\n"
+  spy "JE DOIS M'ARRÊTER LÀ.".rouge
   exit err_num
 end
 alias :fatal_error :erreur_fatale

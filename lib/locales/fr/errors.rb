@@ -14,6 +14,10 @@ ERRORS = {
   
   invalid_data: "La donnée %s de value %s est invalide.", 
 
+  # --- Texte du livre ---
+  
+  unfound_text_file: "Le fichier texte %s est introuvable…",
+
   # --- Recette en général --- #
 
   recipe: {
@@ -43,9 +47,7 @@ ERRORS = {
 
   # --- Références --- #
   references: {
-    data_undefined: "Données références (:references) non définies dans le fichier recette…",
-    cross_data_undefined: "Aucune donnée livre n'est définie pour les références croisées",
-    cross_book_undefined: "Le livre '%s' n'est pas défini pour les références croisées…",
+    cross_book_undefined: "Le livre d'identifiant '%s' n'est pas défini pour les références croisées…",
     cross_path_undefined: "Aucune path n'est définie pour le livre '%s'…",
     cross_book_unfound: "Le livre d'identifiant '%s' est introuvable au path '%s'…",
     cross_book_data_unfound: "Le livre '%s' (%s) ne possède pas de fichier 'references.yaml' définissant ses références…",

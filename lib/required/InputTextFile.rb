@@ -30,14 +30,14 @@ class InputTextFile
       return txt_path if File.exist?(txt_path)
       md_path  = File.join(pdfbook.folder,'texte.pfb.md')
       return md_path if File.exist?(md_path)
-      puts "Le fichier texte est introuvable…".rouge
-      puts "(recherché dans '#{txt_path}' et\n'#{md_path}')".gris
+      puts (ERRORS[:unfound_text_file] % patharg.inspect).rouge
+      puts "(in '#{txt_path}',\n'#{md_path}')".gris
       raise '- Abandon -'
     else
       if File.exist?(patharg)
         return patharg
       else
-        raise "Le fichier texte '#{patharg}' est introuvable…"
+        raise ERRORS[:unfound_text_file] % patharg.inspect 
       end
     end
   end
@@ -49,11 +49,17 @@ class InputTextFile
   # soit il faut parser le texte original pour produire ces 
   # paragraphes.
   # 
-  # Rappel : le fait de placer les paragraphes dans un fichier YAML
-  # permet de définir très précisément comment il faut traiter les
-  # choses (kerning, passage à la page suivante, etc.).
   def paragraphes
     @paragraphes ||= parse
+  end
+
+  # @return [Array<String>] La liste des références croisées qu'on
+  # peut trouver dans le texte (pour vérification des informations
+  # au lancement de la construction du livre)
+  def cross_references ; @cross_references end
+
+  def has_cross_references?
+    !cross_references.empty?
   end
 
   ##
@@ -64,10 +70,16 @@ class InputTextFile
   # titre, bloc formaté, etc. pour produire la propriété @paragraphes
   # de l'input-file
   def parse
+    spy "-> PARSE DU TEXTE".jaune
     # 
     # @bypass_it Pour sauter les commentaires ou les textes "ex-commen-
     # tés" quand ils tiennent sur plusieurs lignes.
     bypass_it = false
+
+    # 
+    # Pour consigner les cross-références (pour contrôle)
+    # 
+    @cross_references = {}
     # 
     # 
     # Boucle sur tous les paragraphes du texte
@@ -75,7 +87,7 @@ class InputTextFile
     File.read(path).split("\n").map do |par|
       par.strip
     end.reject do |par|
-      par.empty? || par.start_with?('# ')
+      par.empty? # SURTOUT PAS : LES TITRES || par.start_with?('# ')
     end.reject do |par|
       if par.start_with?('<!--')
         bypass_it = true
@@ -89,9 +101,14 @@ class InputTextFile
       #
       # Analyse du paragraphe pour savoir ce que c'est
       # 
-      Paragraphe.new(pdfbook, par).parse
+      parag = Paragraphe.new(pdfbook, par).parse
       # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
+      if parag.sometext? && parag.match_cross_reference?
+        @cross_references.deep_merge!(parag.cross_references)
+      end
+      parag # map
     end
+    spy "<- /Fin PARSING DU TEXTE".jaune
   end
 
   ##
