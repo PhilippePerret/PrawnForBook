@@ -141,7 +141,7 @@ class PdfBook
 
     me = self
     pdf.on_page_create do
-      spy "NOUVELLE PAGE (#{pdf.page_number}) CRÉÉE => dans @pages".rouge
+      spy "NOUVELLE PAGE (#{pdf.page_number}) CRÉÉE => dans @pages".jaune
       self.add_page(pdf.page_number)
     end
 

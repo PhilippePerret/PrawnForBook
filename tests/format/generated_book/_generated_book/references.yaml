@@ -1,7 +1,10 @@
 ---
 :cible:
   :page: 1
-  :paragraph: 1
-:post_cible:
-  :page: 2
-  :paragraph: 5
+  :paragraph: 2
+:autre_cible:
+  :page: 1
+  :paragraph: 2
+:avant:
+  :page: 3
+  :paragraph: 4

@@ -71,30 +71,39 @@ class ReferencesTestor < Minitest::Test
 
   def texte_with_ref_for_pages
     <<~TEXT
-
+    Un premier paragraphe pour passer le premier (ne pas avoir 1).
+    Un paragraphe qui contient une cible(( <-(cible) )). Et puis une autre (( <-(autre_cible) )) dans le même paragraphe.
+    (( new_page ))
+    Un autre paragraphe qui contient la référence ((( ->(cible) ))) à cette cible. Et la référence à cette (( ->(autre_cible) )).
+    TEXT
+  end
+  def suite_texte_with_ref_for_pages
+    <<~TEXT
+    (( saut_de_page ))
+    Cette page présente la référence(( <-(avant) )) avant.
+    (( new_page ))
+    Une paragraphe sur une page sans rien, juste pour passer des pages.
+    Le deuxième paragraphe est ici.
+    Et le troisième est là.
+    (( new_page ))
+    Le texte avant ((( ->(avant) ))) doit être placé ici.
+    TEXT
+  end
+  def suite_texte_with_cross_ref_for_pages
+    <<~TEXT
+    Un paragraphe pour rien.
+    Ce paragraphe contient une référence croisée vers le (( ->(livre1:cross_reference) ))
     TEXT
   end
 
   def texte_with_ref_for_parags
     <<~TEXT
-    Un premier paragraphe qui contient une cible(( (cible) )).
+    Un premier paragraphe qui contient une cible(( <-(cible) )).
     Un autre paragraphe qui contient la référence ((( ->(cible) ))) à cette cible.
     (( saut_de_page ))
     Je fais référence à ça ((( ->(post_cible) ))).
     Un paragraphe sans rien.
-    Le paragraphe qui mentionne la post-cible(( (post_cible) )).
-    (( saut_de_page ))
-    Une autre référence ((( ->(cible) ))) à la cible ((( ->(cible) ))).
-    TEXT
-  end
-  def retired
-    <<~TEXT
-    Un premier paragraphe qui contient une cible(( (cible) )).
-    Un autre paragraphe qui contient la référence ((( ->(cible) ))) à cette cible.
-    (( saut_de_page ))
-    Je fais référence à ça (( ->(post_cible) )).
-    Un paragraphe sans rien.
-    Le paragraphe qui mentionne la post-cible(( (post_cible) )).
+    Le paragraphe qui mentionne la post-cible(( <-(post_cible) )).
     (( saut_de_page ))
     Une autre référence ((( ->(cible) ))) à la cible ((( ->(cible) ))).
     TEXT
@@ -104,7 +113,7 @@ class ReferencesTestor < Minitest::Test
   
 
   def test_references_precedentes_mode_parags
-    # return if focus?
+    return if focus?
     resume "
     Test des références
     (mode paragraphes)
@@ -124,20 +133,28 @@ class ReferencesTestor < Minitest::Test
   end
 
   def test_references_precedentes_mode_page
-    return if focus?
+    # return if focus?
     resume "
     Test des références
     (mode page)
     Des cibles qui précèdent l'appel sont bien traitées
     "
-
-    texte = "Un premier paragraphe pour passer le premier (ne pas avoir 1).\nUn paragraphe qui contient une cible(( (cible) )).\n(( new_page ))\nUn autre paragraphe qui contient la référence ((( ->(cible) ))) à cette cible."
     # ===> TEST <===
+    texte = texte_with_ref_for_pages + suite_texte_with_ref_for_pages
     tester_un_livre_avec({numerotation: 'pages'}, texte)
-    page(1).has_text('Un paragraphe qui contient une cible.', "La cible a bien été traitée.")
+    page(1).has_text('Un paragraphe qui contient une cible.')
+    page(1).has_text("Et puis une autre dans le même paragraphe.")
     page(2).has_text("Un autre paragraphe qui contient la référence (page 1) à cette cible.")
-    mini_success "Les références avec cible avant sont bien traitées"
+    page(2).has_text("Et la référence à cette page 1.")
+    mini_success "Les références avec cibles placées avant les apples sont bien traitées"
 
+    page(3).has_text("Cette page présente la référence avant.")
+    page(5).has_text("Le texte avant (page 3) doit être placé ici.")
+    mini_success "Les références avec cibles placée après appels sont bien traitée."
+
+    mini_success "Les références avec cibles croisées sont bien, traitées."
+
+    mini_success "Les références avant cibles croisées manquantes sont bien traitées."
   end
 
   def test_custom_prefix

@@ -70,16 +70,20 @@ private
 
   # @return [String] Le texte formaté
   def __traite_references_in(str)    
-    if str.match?('\(\( \(')
-      str = str.gsub(REG_REFERENCE) do
+    if str.match?('\( <\-')
+      str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
         spy "Consignation de la référence #{cible.inspect}".rouge
         pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
         ''
       end
+      # 
+      # On corrige les éventuels retours chariot intempestifs
+      # 
+      str = str.gsub(/  +/, ' ')
     end
     # Appels de référence
-    if str.match?('\(\( \->\(')
+    if str.match?('\( \->')
       str = str.gsub(REG_APPEL_REFERENCE) do
         appel = $1.freeze
         spy "Consignation de l'appel à la référence #{appel.inspect}".rouge
