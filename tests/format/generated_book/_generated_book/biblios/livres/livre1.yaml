@@ -1,3 +1,4 @@
 ---
 :id: livre1
 :title: Le premier livre
+:refs_path: livres/livre1/references.yaml

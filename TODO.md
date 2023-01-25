@@ -1,5 +1,9 @@
 # Todo courant
 
+* Référence croisée :
+  - quand un numéro de paragraphe n'existe pas (livre imprimé non prawn) utiliser le numéro de page
+    => faire un test pour ça.
+    
 * Avant le build du livre, regarder si le texte contient des balises pour des références croisées, voir si toutes les données utiles existent ou générer une erreur tout de suite en expliquant quoi faire.
 
 * Corrections/affinements par rapport au premier livre Narration

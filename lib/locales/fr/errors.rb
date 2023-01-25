@@ -46,6 +46,7 @@ ERRORS = {
       path_undefined: "Le chemin d'accès au dossier des items doit être défini (:path) et non nil.",
       path_unfound: "Le dossier des fiches bibliographiques est introuvable… ('%s' cherché en tant que chemin absolu ou relatif dans le dossier du livre ou de la collection)",
     },
+    bad_format_bibitem: "Le format '%s' est un format de données bibliographique invalide.",
     biblio_method_required: "Le module FormaterBibliographiesModule dans formater.rb doit définir la méthode 'biblio_%s'…",
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette…",
     biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
@@ -55,7 +56,12 @@ ERRORS = {
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',
     not_an_existing_file: "Le path fourni ne renvoie ni à un fichier ni à un dossier (en valeur absolue ou relative).",
     warn_end_with_s: "Ce tag finit par 's'. En général, les tags sont au singulier.\nMais si vous êtes sûr de vous, pas de problème.",
-
+    # - cross-referenre -
+    uncrossable: "Le livre %s n'est pas “croisable”. ",
+    crossable_requires_refs_path: "Un livre “croisable” nécessite de définir le chemin d'accès à son dossier ou son fichier de références (:refs_path dans sa fiche).",
+    book_requireds_building_for_refs:"Il faut construire le livre pour obtenir ses références",
+    crossable_refs_path_unfound: "Le chemin d'accès au fichier de référence du livre est introuvable (in %s)",
+    crossable_requires_recipe_or_refsfile: "Un livre ”croisable” nécessite un fichier recette (quand c'est un prawn-book) ou un fichier références 'references.yaml' (quand c'est un livre quelconque).",
   }, #/biblio
 
   # --- Références --- #
@@ -64,7 +70,7 @@ ERRORS = {
     cross_path_undefined: "Aucune path n'est définie pour le livre '%s'…",
     cross_book_unfound: "Le livre d'identifiant '%s' est introuvable au path '%s'…",
     cross_book_data_unfound: "Le livre '%s' (%s) ne possède pas de fichier 'references.yaml' définissant ses références…",
-    cross_ref_undefined: "La référence '%s' dans le livre identifié '%s' est introuvable.",
+    cross_ref_unfound: "La référence '%s' dans le livre identifié '%s' est introuvable.",
     bib_livre_not_defined: "La bibliographie 'livre' n'est pas définie. Consultez le manuel pour plus d'information.",
     book_undefined_in_bib_livre: "Le livre d'identifiant '%s' n'est pas défini dans la bibliographie 'livre'.",
   }, #/:references

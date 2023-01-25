@@ -541,7 +541,7 @@ Elle est définit dans la propriété `:tag` dans le livre de recette du livre o
 :bibliographies:
 	:book_identifiant: 'livre'
 	:biblios:
-		- :tag: film
+		film:
 			# ...
 ~~~
 
@@ -568,7 +568,7 @@ Il est défini par la propriété `:title` dans la recette du livre ou de la col
 # ...
 :bibliographies:
 	:biblios:
-    - :tag: film
+    film:
       :title: Liste des films cités
 ~~~
 
@@ -1048,40 +1048,36 @@ Pour traiter une référence croisée, on a besoin de plusieurs choses :
 * connaitre le livre en tant que livre “Prawn-for-book”, qui définira, dans son dossier, un fichier `references.yaml` contenant les références relevées lors de la dernière compilation du livre.
 * connaitre la relation entre ces deux éléments (l’entité bibliographique et le livre pfb). Question : cette relation ne pourrait-elle pas être définie dans l’entité bibliographique ? ce qui permettrait de n’avoir qu’à définir cet entité, sans avoir à définir les deux derniers éléments.
 
-[... CONTINUER… RATIONNALISER… ]
+Ces deux choses sont définies à un seul endroit : la fiche bibliographique du film ciblé. Cette fiche, en plus de `:title`, doit définir `refs_path` qui contient soit le chemin complet au [fichier `references.yaml`](#references-file) des références, soit au dossier du livre, qui contiendra ce fichier lorsque le livre aura été construit.
 
-Par exemple, si l’appel à la référence croisée est `idmybook`, alors :
+##### Référence croisée vers un livre non prawn
 
-* la propriété `:biblio` de la recette du livre courant doit définir le tag ‘livre’ (=> bibliographie concernant des livres),
-* les [données bibliographiques](#biblio-data) de cette bibliographie (en fichier `yaml` unique ou en fiches dans un dossier) doivent obligatoirement définir l’élément d’identifiant `idmybook`,
-* comme requis par les données bibliographiques, cet élément doit définir la propriété `:title` (c’est elle qui sera utilisé pour l’appel de référence croisée).
+On peut tout à fait faire référence à un endroit précis d’un livre quelconque non fabriqué par Prawn. Pour cela, il suffit de définir son [fichier de référence](#references-file) “à la main”, conformément à son format ci-dessous.
 
-**/ATTENTION**
+> Noter qu’il peut être difficile de connaitre le numéro de paragraphe dans un livre imprimé. Dans ce cas, laisser la donnée vide et, si les références se font par paragraphe, c’est exceptionnellement la donnée page qui sera utilisée).
 
-Le chemin absolu ou relatif du livre doit être définit dans la [recette du livre ou de la collection][] dans une rubrique **`references`** et une sous-rubrique **`cross_references`** de cette façon :
+Ce fichier peut être placé dans le dossier du livre lui-même, dans un dossier “livres_imprimes_pour_references”, par exemple, et créer dedans des dossiers, au titre des livres, et dans ces dossiers, le fichier `references.yaml`.
 
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété        | valeurs possibles     |
-| -------------------------------------------------------- | ------- | ---------------- | --------------------- |
-|                                                          |         | **:references:** | null/table de données |
-
-
-
-~~~yaml
-# in recipe.yaml ou recipe_collection.yaml
-# ...
-:references:
-	:cross_references:
-		:IDLIVRE: "/path/rel/or/abs/to/book/folder"
-		:IDAUTRELIVRE: "/path/to/book"
-		etc.
-~~~
-
-Grâce au chemin d’accès, on peut atteindre le fichier `references.yaml` qui contient les références relevées dans le livre. Grâce à l’identifiant on trouve le titre du livre dans les [données bibliographiques](#biblio-data) du livre courant.
+<a name="references-file"></a>
 
 #### Fichier de références
 
 Les références du livre sont enregistrées dans un fichier `references.yaml` qui permettra à d’autres livres d’y faire… référence.
+
+Il est constitué de cette manière :
+
+~~~YAML
+---
+<cible_id>:
+	page: <num page>
+	paragraph: <num paragraph>
+<cible_id>:
+	page: <num page>
+	paragraph: <num paragraph>
+# etc.
+~~~
+
+
 
 ---
 

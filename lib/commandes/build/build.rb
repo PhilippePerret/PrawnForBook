@@ -427,6 +427,12 @@ class PdfBook
         Bibliography::Livres.exist?(book_id) || begin
           raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
         end
+        extbook = Bibliography::Livres.get(book_id)
+        cibles.each do |cible_id|
+          extbook.has_reference?(cible_id) || begin
+            PrawnBuildingError.new(ERRORS[:references][:cross_ref_unfound] % [cible_id, book_id])
+          end
+        end
       end
     end
 

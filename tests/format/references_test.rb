@@ -64,8 +64,20 @@ class ReferencesTestor < Minitest::Test
         },
       },
     }.merge(props)
+    # 
+    # On doit fabriquer les éléments pour que la références
+    # croisée fonctionne
+    # 
     biblio = Factory::Bibliography.new(book, 'livre', 'biblios/livres')
-    biblio.add_item({id: 'livre1', title: "Le premier livre"})
+    biblio.add_item({
+      id: 'livre1', 
+      title: "Le premier livre", 
+      refs_path: 'livres/livre1/references.yaml',
+    })
+    # - On fait le fichier de références livres 1 -
+    pth_refs = File.join(book.folder,'livres','livre1','references.yaml')
+    mkdir(File.dirname(pth_refs))
+    File.write(pth_refs, {cross_reference: {page:4, paragraph:12}}.to_yaml)
     # ===> TEST <===
     recipe = Factory::Recipe.new(book.folder)
     recipe.build_with(**props)
