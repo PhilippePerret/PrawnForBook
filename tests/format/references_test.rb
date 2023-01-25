@@ -54,7 +54,18 @@ class ReferencesTestor < Minitest::Test
       numerotation:         'parags',
       logo:                 'logo.jpg',
       indent:               0,
+      bibliographies: {
+        biblios: {
+          'livre' => {
+          title: "Liste des livres", 
+          new_page: true,
+          path: 'biblios/livres'
+          },
+        },
+      },
     }.merge(props)
+    biblio = Factory::Bibliography.new(book, 'livre', 'biblios/livres')
+    biblio.add_item({id: 'livre1', title: "Le premier livre"})
     # ===> TEST <===
     recipe = Factory::Recipe.new(book.folder)
     recipe.build_with(**props)

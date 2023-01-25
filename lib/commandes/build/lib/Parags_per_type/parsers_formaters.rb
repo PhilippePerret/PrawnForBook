@@ -95,7 +95,7 @@ private
 
   # @return [String] Le texte formaté
   def __traite_termes_bibliographiques_in(str)
-    str.gsub(Bibliography.reg_occurrences) do
+    str.gsub(Bibliography::REG_OCCURRENCES) do
       bib_tag = $1.freeze
       item_id, item_titre = $2.freeze.split('|')
       item_id = item_id.to_sym

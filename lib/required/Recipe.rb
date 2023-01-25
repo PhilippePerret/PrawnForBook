@@ -268,11 +268,6 @@ class Recipe
     end
   end
 
-  # --- Bibliographies ---
-
-  def biblio_book_identifiant
-    @biblio_book_identifiant ||= bibliographies[:book_identifiant] || 'livre'
-  end
 
   # --- Index ---
 
@@ -421,6 +416,16 @@ class Recipe
     @publishing ||= get(:publishing, {})
   end
 
+  # --- Bibliographies ---
+
+  def biblio_book_identifiant
+    @biblio_book_identifiant ||= bibliographies[:book_identifiant] || :livre
+  end
+
+  def bibliographies
+    @bibliographies ||= get(:bibliographies, {})
+  end
+
   def fonts_data
     @fonts_data ||= get(:fonts, {})
   end
@@ -435,15 +440,6 @@ class Recipe
   def titles_data
     @book_titles ||= get_all_titles_data
   end
-
-  def bibliographies
-    @bibliographies ||= get(:bibliographies, {})
-  end
-
-  def biblios_data
-    @biblios_data ||= get(:biblios, {})
-  end
-
   def inserted_pages
     @inserted_pages ||= get(:inserted_pages, {})
   end

@@ -108,7 +108,7 @@ class InputTextFile
       end
       parag # map
     end
-    spy "<- /Fin PARSING DU TEXTE".jaune
+    # NE RIEN METTRE (MAP RETOURNÉ)
   end
 
   ##

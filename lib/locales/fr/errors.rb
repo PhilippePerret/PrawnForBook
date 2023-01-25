@@ -35,7 +35,20 @@ ERRORS = {
   # --- Bibliographie --- #
 
   biblio: {
-    biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
+    instanciation_requires_book: "Une livre est requis, pour l'instanciation d'une bibliographie.",
+    data_undefined: "La recette du livre ou de la collection ne définit aucun donnée bibliographique (consulter le mode d'emploi pour remédier au problème ou lancer l'assistant bibliographies).",
+    biblios_malformed: "La recette bibliographie (:biblios) devrait être une table (un item par type d'élément).",
+    formater_required: "Un fichier 'formater.rb' devrait exister dans '%s' pour définir la mise en forme à adopter pour la bibliographie.",
+    formater_malformed: "Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…",
+    biblio_malformed: "La donnée recette de la bibliographie '%s' est malformée : ",
+    malformation: {
+      title_undefined: "Le titre (:title) doit être défini",
+      path_undefined: "Le chemin d'accès au dossier des items doit être défini (:path) et non nil.",
+      path_unfound: "Le dossier des fiches bibliographiques est introuvable… ('%s' cherché en tant que chemin absolu ou relatif dans le dossier du livre ou de la collection)",
+    },
+    biblio_method_required: "Le module FormaterBibliographiesModule dans formater.rb doit définir la méthode 'biblio_%s'…",
+    biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette…",
+    biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
     title_already_exists: "Ce titre existe déjà.",
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",

@@ -15,7 +15,6 @@ class AbstractRecipe
   REAL_PATH_DATA = {
     # -- Données de la collection --
     collection_name:    [:collection_data, :name],
-
     # -- Données du livre --
     book_titre:         [:book_data, :title],
     titre_livre:        [:book_data, :title],
@@ -31,7 +30,6 @@ class AbstractRecipe
     publisher_url:      [:publishing, :url],
     logo:               [:publishing, :logo_path],
     logo_height:        [:page_de_titre, :logo, :height],
-
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
     line_height:  [:book_format, :text, :line_height],
@@ -101,6 +99,9 @@ class AbstractRecipe
     index_number_font_name:   [:page_index, :aspect, :number,  :name],
     index_number_font_size:   [:page_index, :aspect, :number,  :size],
     index_number_font_style:  [:page_index, :aspect, :number,  :style],
+    # - Bibliographies -
+    # (telles quelles)
+    bibliographies:       [:bibliographies],
   }
 
 

@@ -5,28 +5,6 @@ class OldBibliography
 
   class << self
 
-    # @prop Table des bibliographies
-    attr_reader :items
-
-    # @prop {Symbol} :page ou :paragraph en fonction du type de
-    # pagination du livre.
-    attr_accessor :page_or_paragraph_key
-
-    def init
-      @items = {}
-    end
-
-    def require_formaters(pdfbook)
-      require pdfbook.module_formatage_path
-      Bibliography.extend FormaterBibliographiesModule
-    end
-
-    # @return true s'il y a des marques bibliographiques (donc des
-    # bibliographie)
-    def any?
-      not(items.empty?)
-    end
-
     # Au cours du parsing des paragraphes, on utilise cette méthode
     # pour ajouter une occurrence à une des bibliographies
     # 
@@ -58,23 +36,15 @@ class OldBibliography
       items[bib_tag]
     end
 
-    # @return {Regexp} L'expression régulière pour capter toutes
-    # les marques de bibliographies.
-    def reg_occurrences
-      @reg_occurrences ||= begin
-        /(#{items.keys.join('|')})\((.+?)\)/
-      end
-    end
-
-    ##
-    # Instancie la nouvelle bibliographie avec les données +data+
-    # et l'enregistre dans les items de bibliographie.
-    # 
-    def instanciate(pdfbook, data)
-      bib = Bibliography.new(pdfbook, data)
-      items.merge!(bib.tag => bib)
-      return bib
-    end
+    # ##
+    # # Instancie la nouvelle bibliographie avec les données +data+
+    # # et l'enregistre dans les items de bibliographie.
+    # # 
+    # def instanciate(pdfbook, data)
+    #   bib = Bibliography.new(pdfbook, data)
+    #   items.merge!(bib.tag => bib)
+    #   return bib
+    # end
 
   end #/<< self
 

@@ -401,11 +401,27 @@ class PdfBook
     end
 
     # 
+    # Les bibliographies doivent être bien définies
+    # 
+    dbibs = recipe.bibliographies[:biblios]
+    unless dbibs.nil?
+      dbibs.is_a?(Hash) || raise(PrawnBuildingError.new(ERRORS[:biblio][:biblios_malformed]))
+      require 'lib/pages/bibliographies'
+      Bibliography.require_formaters(self)
+      module_formatage? || raise(PrawnBuildingError.new(ERRORS[:biblio][:formater_required] % folder))
+      require_module_formatage
+      defined?(FormaterBibliographiesModule) || raise(PrawnBuildingError.new(ERRORS[:biblio][:formater_malformed]))
+      # - Toutes les bibliographies doivent être bien définies -
+      dbibs.map { |tag, dbib|Bibliography.get(tag, self)}.each(&:well_defined?)
+      # - On finit la préparation des bibliographies -
+      Bibliography.prepare
+    end
+
+    # 
     # Si le texte complet contient un appel de référence croisé,
     # il faut s'assurer qu'ils sont tous bien définis.
     # 
     if inputfile.has_cross_references?
-      require 'lib/pages/bibliographies'
       Bibliography.init_livres(self)
       inputfile.cross_references.each do |book_id, cibles|
         Bibliography::Livres.exist?(book_id) || begin
@@ -414,28 +430,6 @@ class PdfBook
       end
     end
 
-    # 
-    # Les bibliographies doivent être bien définies
-    # 
-    unless recipe.biblios_data.empty?
-      dbibs = recipe.biblios_data
-      dbibs.is_a?(Hash) || raise(PrawnBuildingError.new("La recette bibliographie (:biblios:) devrait être une table (un item par type d'élément)."))
-      # 
-      # On doit charger les modules utiles aux bibliographies
-      # 
-      Bibliography.require_formaters(self)
-      module_formatage? || raise(PrawnBuildingError.new("Un fichier 'formater.rb' devrait exister pour définir la mise en forme à adopter pour la bibliographie."))
-      require_module_formatage
-      defined?(FormaterBibliographiesModule) || raise(PrawnBuildingError.new("Le fichier formater.rb devrait définir le module 'FormaterBibliographiesModule'\n(bien vérifier le nom, avec un pluriel)…"))
-      dbibs.each do |bib_id, dbib|
-        bib = Bibliography.instanciate(self, dbib)
-        bib.tag   || raise(PrawnBuildingError.new("Il faut définir dans la recette le :tag des bibliographies"))
-        bib.title || raise(PrawnBuildingError.new("Il faut définir dans la recette le titre (:title:) de la bibliographie '#{bib.tag}'."))
-        bib.data[:data] || raise(PrawnBuildingError.new("Il faut définir dans la recette le chemin d'accès aux données de la bibliographie '#{bib.tag}' (:data:)…"))
-        File.exist?(bib.data_path.to_s) || raise(PrawnBuildingError.new("Les données pour la bibliographie '#{bib.tag}' sont introuvables\n(avec la donnée '#{bib.data[:data]}')…"))
-        Bibliography.respond_to?("biblio_#{bib.tag}".to_sym) || raise(PrawnBuildingError.new("Le module FormaterBibliographiesModule de formater.rb doit définir la méthode 'biblio_#{bib.tag}'…"))
-      end
-    end
   rescue PrawnBuildingError => e
     formated_error(e)
     spy "👎 Le livre n'est pas conforme.".rouge

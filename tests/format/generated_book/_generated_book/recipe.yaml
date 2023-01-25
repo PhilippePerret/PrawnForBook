@@ -44,3 +44,9 @@
   :page_de_titre: false
 :publishing:
   :logo_path: logo.jpg
+:bibliographies:
+  :biblios:
+    livre:
+      :title: Liste des livres
+      :new_page: true
+      :path: biblios/livres

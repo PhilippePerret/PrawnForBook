@@ -579,7 +579,7 @@ Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand 
 # ...
 :bibliographies:
 	:biblios:
-    - :tag: film
+    film:
       :title: Liste des films cités
       :title_level: 3
 ~~~
@@ -603,7 +603,7 @@ Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si �
 # ...
 :bibliographies:
 	:biblios:
-    - :tag: film
+    film:
       :title: Liste des films
       :title_level: 2
       :new_page: true # => sur une nouvelle page
@@ -615,40 +615,41 @@ Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si �
 
 ##### Les données de la bibliographie
 
-Il y existe deux moyens de définir les données d’une bibliographie :
+Les données bibliographiques sont contenus dans un dossier, par fiche (une fiche par item bibliographique) au format `yaml` ou `json`.
 
-* par fichier unique (l’extension indique comme les lire)
-* par fiches séparées (dans un dossier)
-
-La source des données est indiquée dans le fichier recette du livre ou de la collection par la propriété `:data` :
+La source des données (le dossier) est indiquée dans le fichier recette du livre ou de la collection par la propriété `:path` :
 
 ~~~yaml
 # in recipe.yaml
 # ...
 :bibliographies:
 	:biblios:
-    - :tag: film
+		film: # le tag singulier
       :title: Liste des films
       :title_level: 2
-      :data:  data/films.yaml
+      :path:  data/films
+      :item_format: :yaml
 ~~~
 
 Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
 
-Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML`.  Ces données doivent produire une table où l’on trouvera en clé l’identifiant de l’élément et en valeur ses propriétés, qui seront utilisées pour la bibliographie. Par exemple, pour un fichier `films.yaml` qui contiendrait les données des films :
+Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML` et `JSON`.  Ces données doivent produire une table où l’on trouvera en clé l’identifiant de l’élément et en valeur ses propriétés, qui seront utilisées pour la bibliographie. Par exemple, pour un fichier `films.yaml` qui contiendrait les données des films :
 
 ~~~yaml
-# in data/films.yaml
+# in data/films/titanic.yaml
 ---
 titanic:
 	title: The Titanic
 	title_fr: Le Titanic
 	annee: 1999
 	realisateur: James Cameron
+	
+# in data/films/ditd.yaml
 ditd:
 	title: Dancer in The Dark
 	annee: 2000
 	realisateur: Lars Von Trier
+
 # etc.
 ~~~
 
