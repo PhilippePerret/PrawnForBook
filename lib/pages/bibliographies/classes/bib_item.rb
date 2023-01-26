@@ -19,8 +19,45 @@ class BibItem
   # @param [String] bibitem_id
   # 
   def initialize(biblio, bibitem_id)
-    @biblio = biblio
-    @id     = bibitem_id
+    @biblio       = biblio
+    @id           = bibitem_id
+    @occurrences  = []
+  end
+
+  # --- Public Methods ---
+
+  ##
+  # Pour ajouter une occurrence à l'item
+  # 
+  # @param [Hash] doccurrence Table contenant :page et :paragraph
+  # 
+  # @api public
+  def add_occurrence(doccurrence)
+    spy "-> add_occurrence de :\n\tbibitem = #{title}\n\tdoccurrence : #{doccurrence.inspect}".jaune
+    # 
+    # Si c'est la toute première occurrence, il faut ajouter cet
+    # item à la liste des items de sa bibliographie (pour qu'elle 
+    # soit prise en compte)
+    # 
+    if @occurrences.empty?
+      spy "   (ajouté à sa bibliographie)".gris
+      biblio.add_item(self)
+    end
+    # 
+    # Ajouter cette occurrence
+    # 
+    @occurrences << doccurrence
+  end
+
+  # @return [String] Une liste pour le livre des occurrences de l'item
+  # bibliographique courant.
+  #
+  # @api public
+  # 
+  def occurrences_as_displayed_list
+    unite = TERMS[key_numerotation]
+    unite = "#{unite}s" if @occurrences.count > 1
+    "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
   end
 
   # --- Predicate Methods ---
@@ -28,9 +65,7 @@ class BibItem
   ##
   # @return [Boolean] true si l'item est bien défini
   def defined?
-    exist? && begin
-
-    end
+    exist?
   end
 
   ##
@@ -52,6 +87,20 @@ class BibItem
   # référence du livre
   def has_reference?(cible_id)
     data_refs.key?(cible_id.to_sym)
+  end
+
+  # @return [String] La référence à copier dans le texte
+  def reference_to(cible_id, book)
+    ref = ref_to(cible_id)
+    str = book.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
+    str = "#{str} de <i>#{title}</i>"
+  end
+
+  # @return [Hash] table de la référence +cible_id+, contenant 
+  # simplement {:page, :paragraph}, le numéro de page et de paragraph
+  # pour la cible donnée dans cet item bibliographique.
+  def ref_to(cible_id)
+    data_refs[cible_id.to_sym]
   end
 
   # @return [Boolean] true si l'item (qui est un livre) peut être 
@@ -110,6 +159,16 @@ class BibItem
     end
   end
 
+  def title
+    @title ||= data[:title] || raise(ERRORS[:biblio][:bibitem_requires_title])
+  end
+
+  # @return [String] Le titre, mais normalisé pour pouvoir servir de
+  # clé de classement.
+  def keysort
+    @keysort ||= title.normalized.downcase
+  end
+
   # @return [Hash] Table de données de l'item bibliographique
   def data
     @data ||= begin
@@ -126,6 +185,14 @@ class BibItem
   def path
     @path ||= File.join(biblio.folder, "#{id}.#{biblio.item_data_format}")
   end
+
+  private
+
+    # @return [Symbol] :page ou :paragraph en fonction du type de
+    # numérotation.
+    def key_numerotation
+      @key_numerotation ||= biblio.book.recipe.page_number? ? :page : :paragraph
+    end
 
 end #/class BibItem
 end #/class Bibliography

@@ -40,7 +40,22 @@ class << self
   end
 
   def get(biblio_tag, book = nil)
-    @biblios[biblio_tag] || new(book, biblio_tag)
+    @biblios[biblio_tag.to_sym] || new(book, biblio_tag)
+  end
+
+  ##
+  # Méthode appelée pour imprimer une bibliographie dans le
+  # livre sur la page courante.
+  # 
+  def print(biblio_tag, book, pdf)
+    biblio = @biblios[biblio_tag.to_sym] || begin
+      err_msg = ERRORS[:biblio][:biblio_undefined] % biblio_tag
+      spy err_msg.rouge
+      fatal_error err_msg
+    end
+    require 'lib/pages/bibliographies'
+    page = Prawn4book::Pages::Bibliography.new(book, biblio)
+    page.build(pdf)
   end
 
   ##
@@ -49,7 +64,7 @@ class << self
   # @param [Prawn4book::Bibliography] biblio La bibliographie à ajouter
   # 
   def add_biblio(biblio)
-    @biblios.merge!(biblio.id => biblio)
+    @biblios.merge!(biblio.id.to_sym => biblio)
   end
 
   ##
@@ -58,8 +73,36 @@ class << self
   # @param [Prawn4book::PdfBook] book L'instance du livre
   # 
   def require_formaters(book)
-    require book.module_formatage_path
-    Bibliography.extend FormaterBibliographiesModule
+    book.require_module_formatage
+    if defined?(FormaterBibliographiesModule)
+      Bibliography.extend FormaterBibliographiesModule
+    end
+  end
+
+  # Au cours du parsing des paragraphes, on utilise cette méthode
+  # pour ajouter une occurrence à une des bibliographies
+  # 
+  # @param [String] bib_tag Tag de la bibliographie
+  # @param [Bibliography::BibItem] bibitem L'item de bibliographie (par exemple un livre ou un film)
+  # @param doccurrence {Hash} Données de l'occurrence
+  # 
+  # @return L'instance Bibliography concernée
+  # 
+  def add_occurrence_to(bib_tag, bibitem, doccurrence)
+    biblio = get(bib_tag) || erreur_fatale(ERRORS[:biblio][:biblio_undefined] % [bib_tag, bibitem.id])
+    if bibitem.is_a?(Symbol) || bibitem.is_a?(String)
+      bibitem = biblio.get(bibitem.to_sym)
+    end
+    bibitem.add_occurrence(doccurrence)
+    return bibitem
+  end
+
+  # Ajoute une occurrence pour un livre
+  # La méthode est utilisée pour le moment pour les références
+  # croisée
+  # 
+  def add_occurrence_book(book, paragraph)
+    add_occurrence_to('livre', book, {page: paragraph.first_page, paragraph: paragraph.numero})
   end
 
   ##
@@ -77,12 +120,15 @@ class << self
   end
 
 end #/<< self Bibliography
+
+
 ###################       INSTANCE      ###################
 
 
   attr_reader :pdfbook 
   alias :book :pdfbook
   attr_reader :id
+  attr_reader :items
 
   ##
   # Instanciation d'une bibliographie
@@ -95,6 +141,14 @@ end #/<< self Bibliography
     @id       = biblio_id.to_sym
     @items    = {}
     self.class.add_biblio(self)
+  end
+
+  ##
+  # Pour ajouter un item bibliographique
+  # 
+  # @api public
+  def add_item(bibitem)
+    @items.merge!(bibitem.id => bibitem)
   end
 
   ##
@@ -162,12 +216,13 @@ end #/<< self Bibliography
     data.key?(:title)   || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:title_undefined]))
     data.key?(:path)    || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:path_undefined]))
     File.exist?(folder) || raise(PrawnBuildingError.new(prefix_err + (ERRORS[:biblio][:malformation][:path_unfound] % data[:path])))
-    Bibliography.respond_to?(:"biblio_#{id}") || raise(PrawnBuildingError.new(ERRORS[:biblio][:biblio_method_required] % tag))
   end
 
   # - Data Methods -
 
-  def tag ; id.to_s end
+  def tag         ; id.to_s end
+  def title       ; @title        ||= data[:title]          end
+  def title_level ; @title_level  ||= data[:title_level]||1 end
 
   private
 

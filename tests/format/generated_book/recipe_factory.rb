@@ -16,7 +16,7 @@ class Recipe
     # table en perspective correspondant aux données recette d'un
     # livre ou d'une collection
     # 
-    real_props = GeneratedBook::AbstractRecipe.realize_properties(**props)
+    real_props = GeneratedBook::AbstractRecipe.realize_properties(props)
     @data.deep_merge!(real_props)
     save
     # 

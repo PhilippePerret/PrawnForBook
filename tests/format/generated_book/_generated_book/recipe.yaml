@@ -8,13 +8,13 @@
   :page:
     :height: 576
     :margins:
-      :top: 30
+      :top: 10
       :bot: 20
       :ext: 25
       :int: 35
     :numerotation: pages
   :text:
-    :indent: 0
+    :indent: 14.173228346456694
 :titles:
   :level1:
     :next_page: true
@@ -39,14 +39,8 @@
       :pd_right:
         :content: :numero
         :align: :right
-:inserted_pages:
-  :page_de_garde: false
-  :page_de_titre: false
-:publishing:
-  :logo_path: logo.jpg
 :bibliographies:
   :biblios:
-    livre:
-      :title: Liste des livres
-      :new_page: true
-      :path: biblios/livres
+    :unknown:
+      :title: Les Grands Inconnus
+      :path: biblios/unknown

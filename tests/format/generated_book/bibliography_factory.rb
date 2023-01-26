@@ -3,21 +3,22 @@ class Bibliography
 
   attr_reader :path, :id, :book
 
-  # @param [String] path Dossier du livre
+  # @param [String] relpath Dossier du livre
   def initialize(book, biblio_id, relpath)
     @book = book
     @id   = @tag = biblio_id
     @path = mkdir(File.join(book.folder, relpath))
-    build_formater_rb
   end
 
-  ##
-  # Pour construire le fichier requis formater.rb dans le
-  # dossier du livre
-  # TODO Gérer aussi pour la collection
-  def build_formater_rb
-    formater_path = File.join(book.folder, 'formater.rb')
-    File.write(formater_path, DEFAULT_FORMATER_CODE % {tag: id})
+  def make_items_with_props(props, nombre = 5)
+    nombre.times.map do |indice|
+      item_id = "item#{indice}"
+      data = {id: item_id}
+      props.each {|prop| data.merge!(prop => random_mot)}
+      item_path = File.join(path, "#{item_id}.yaml")
+      File.write(item_path, data.to_yaml)
+      data # => map
+    end
   end
 
   def add_item(item_data)
@@ -26,13 +27,23 @@ class Bibliography
   end
 
 
-DEFAULT_FORMATER_CODE = <<-RUBY
-module FormaterBibliographiesModule
-  def biblio_%{tag}(item)
-    # Ici pour la mise en forme de l'+item+
-  end
-end
-RUBY
+  private
+
+    def random_mot
+      len = 5 + rand(10)
+      mot = ""
+      while mot.length < len
+        if rand(10).odd?
+          chr = (65 + rand(26)).chr
+        else
+          chr = (97 + rand(26)).chr
+        end
+        mot = "#{mot}#{chr}"
+      end
+      # puts "Mot généré : #{mot.inspect}"
+      return mot
+    end
+
 
 end #/class Bibliography
 end #/module Factory

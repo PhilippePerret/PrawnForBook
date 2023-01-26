@@ -1,14 +1,10 @@
-Un premier paragraphe pour passer le premier (ne pas avoir 1).
-Un paragraphe qui contient une cible(( <-(cible) )). Et puis une autre (( <-(autre_cible) )) dans le même paragraphe.
+C'est le premier paragraphe d'un livre qui doit tester le fait qu'une bibliographie bien définie dans la recette, qui ne contient des items, est affichée.
+On trouve ça dans unknown(item4).
 (( new_page ))
-Un autre paragraphe qui contient la référence ((( ->(cible) ))) à cette cible. Et la référence à cette (( ->(autre_cible) )).
-(( saut_de_page ))
-Cette page présente la référence(( <-(avant) )) avant.
+Un premier paragraphe de la page 2. On y fait référence à unknown(item0|Ma Première fiche) et également à unknown(item2).
 (( new_page ))
-Une paragraphe sur une page sans rien, juste pour passer des pages.
-Le deuxième paragraphe est ici.
-Et le troisième est là.
+Ce paragraphe de la page 3 contient une deuxième référence à la fiche 2 (unknown(item2))
+
 (( new_page ))
-Le texte avant ((( ->(avant) ))) doit être placé ici.
-Un paragraphe pour rien, sur la page 5 (pour connaitre la page).
-Ce paragraphe contient une référence croisée vers la (( ->(livre1:cross_reference) )).
+
+(( biblio(unknown) ))

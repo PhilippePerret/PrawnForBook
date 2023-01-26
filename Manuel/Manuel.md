@@ -511,7 +511,8 @@ Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recet
 Une bibliographie nécessite :
 
 * de [définir **la balise**](#biblio-tag) qui va repérer les éléments dans le texte (par exemple `film` ou `livre`)
-* de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre,
+* de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre (`:title`),
+* de [définir le **chemin d’accès**](#biblio-path)  à ses données (`:path`),
 * de [définir **la page**](#page-biblio) sur laquelle sera écrite la bibliographie,
 * de [définir **les données**](#biblio-data) utilisées par la bibliographie et qu’elles soient valides,
 * de [définir **la mise en forme**](#mise-en-forme-biblio) utilisée pour le livre pour présenter les informations sur les éléments.
@@ -550,7 +551,16 @@ Dans le texte, elle doit définir en premier argument l’identifiant de l’él
 Cette balise permettra aussi de définir la bibliographie à inscrire dans le livre, sur la page voulue, avec la marque :
 
 ~~~text
+(( bibliographie(film) ))
+
+ou 
+
+(( bibliography(film) ))
+
+ou
+
 (( biblio(film) ))
+
 ~~~
 
 Pour plus de détail, cf. [la page de la bibliographie](#page-biblio)
@@ -584,6 +594,24 @@ Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand 
       :title_level: 3
 ~~~
 
+<a name="biblio-path"></a>
+
+##### Chemin d’accès aux données de la bibliographie
+
+L’autre donnée absolument requise pour qu’une bibiographie soit opérationnelle concerne son `:path`, c’est-à-dire le chemin d’’accès à ses données, donc le dossier contenant les fiches de ses items.
+
+~~~yaml
+# in recipe.yaml
+# ...
+:bibliographies:
+	:biblio:
+		mabib:
+			:title: Le Titre de MaBib
+			:path: ./path/to/cards/folder
+~~~
+
+Comme on peut le voir, ce chemin peut être défini de façon relative (par rapport au dossier du livre, ou de façon absolue (ce qui n’est pas recommandé, si le dossier change de place plus tard ou si le dossier du livre est transmis..
+
 <a name="page-biblio"></a>
 
 ##### La page de la bibliographie
@@ -592,11 +620,15 @@ On utilisera simplement la marque suivante pour inscrire une bibliographie sur l
 
 ~~~text
 (( biblio(<tag>) ))
+
+ou (( bibliographie(<tag>) ))
+
+ou (( bibliography(<tag>) ))
 ~~~
 
 … où `<tag>` est la balise définie dans la recette du livre (propriété `:tag`. 
 
-Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si ça doit être le cas, il faut l’indiquer explicitement avec le réglage `new_page: true` dans la recette.
+Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si ça doit être le cas, il faut placer le code `(( new_page ))` avant.
 
 ~~~yaml
 # in recipe.yaml
@@ -606,7 +638,6 @@ Une bibliographie ne s’inscrit pas nécessairement sur une nouvelle page. Si �
     film:
       :title: Liste des films
       :title_level: 2
-      :new_page: true # => sur une nouvelle page
 ~~~
 
 > Noter que si le niveau de titre est 1 (ou non défini), et que les propriétés des titres de la recette définissent qu’il faut passer à une nouvelle page pour un grand titre, la bibliographie commencera alors automatiquement sur une nouvelle page.
@@ -629,6 +660,9 @@ La source des données (le dossier) est indiquée dans le fichier recette du liv
       :title_level: 2
       :path:  data/films
       :item_format: :yaml
+      :font: Fonte 	# la fonte à utiliser
+      :size: 10 		# la taille de fonte (10 par défaut)
+      :style: null  # éventuellement le style de la fonte
 ~~~
 
 Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
@@ -642,13 +676,14 @@ titanic:
 	title: The Titanic
 	title_fr: Le Titanic
 	annee: 1999
-	realisateur: James Cameron
+	realisateur: James CAMERON
 	
 # in data/films/ditd.yaml
+---
 ditd:
 	title: Dancer in The Dark
 	annee: 2000
-	realisateur: Lars Von Trier
+	realisateur: Lars VON TRIER
 
 # etc.
 ~~~

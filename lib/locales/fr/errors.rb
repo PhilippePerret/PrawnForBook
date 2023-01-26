@@ -17,6 +17,7 @@ ERRORS = {
   # --- Texte du livre ---
   
   unfound_text_file: "Le fichier texte %s est introuvable…",
+  unknown_pfbcode:   "Je ne sais pas traiter la balise '%s'…",
 
   # --- Recette en général --- #
 
@@ -51,6 +52,7 @@ ERRORS = {
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette…",
     biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
+    bibitem_requires_title: "Un élément bibliographique requiert toujours, au moins, un titre (dans :title)",
     title_already_exists: "Ce titre existe déjà.",
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',

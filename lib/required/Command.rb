@@ -11,6 +11,9 @@ class Command
   def run
     Object.const_set('COMMAND_FOLDER', folder)
     self.load&.proceed
+  rescue FatalError => e
+    puts e.message.rouge
+    exit
   end
 
   def load

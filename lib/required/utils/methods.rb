@@ -1,3 +1,5 @@
+class FatalError < StandardError; end
+
 module UtilsMethods
 
 ##
@@ -12,10 +14,10 @@ end #/module UtilsMethods
 
 def erreur_fatale(msg, err_num = 1)
   puts "\n\n"
-  puts msg.rouge
-  puts "This issue must be fixed, sorry.".rouge
+  puts "FATAL ERROR: #{msg.rouge}"
   puts "\n"
-  spy "JE DOIS M'ARRÊTER LÀ.".rouge
+  spy "ERREUR FATALE".rouge
+  raise FatalError.new
   exit err_num
 end
 alias :fatal_error :erreur_fatale

@@ -46,7 +46,11 @@ class PdfBook
     # 
     # INITIALISATIONS
     # 
+    # - Chargement de la classe Bibliography -
+    require 'lib/pages/bibliographies'
+    # - Initialisation des paragraphes texte -
     PdfBook::NTextParagraph.init_first_turn
+    # - Initialisation de la table de références -
     table_references.init
     #
     # On doit parser le texte avant de voir si le livre est
@@ -406,11 +410,7 @@ class PdfBook
     dbibs = recipe.bibliographies[:biblios]
     unless dbibs.nil?
       dbibs.is_a?(Hash) || raise(PrawnBuildingError.new(ERRORS[:biblio][:biblios_malformed]))
-      require 'lib/pages/bibliographies'
       Bibliography.require_formaters(self)
-      module_formatage? || raise(PrawnBuildingError.new(ERRORS[:biblio][:formater_required] % folder))
-      require_module_formatage
-      defined?(FormaterBibliographiesModule) || raise(PrawnBuildingError.new(ERRORS[:biblio][:formater_malformed]))
       # - Toutes les bibliographies doivent être bien définies -
       dbibs.map { |tag, dbib|Bibliography.get(tag, self)}.each(&:well_defined?)
       # - On finit la préparation des bibliographies -

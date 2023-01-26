@@ -32,12 +32,10 @@ class P4BCode < AnyParagraph
       pdfbook.page_index.build(pdf)
       pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
-      treate_as_biblio(pdf)
+      treate_as_bibliography(pdf)
     else
-      puts "Erreur fatale : Je ne sais pas traiter la balise #{raw_code.inspect}".rouge
-      exit
+      erreur_fatale(ERRORS[:unknown_pfbcode] % raw_code.inspect)
     end
-
   end
 
   ##
@@ -59,13 +57,8 @@ class P4BCode < AnyParagraph
   #   - extraire le tag de la bibliographie
   #   - prendre la bibliographie instanciée
   #   - l'imprimer dans le livre
-  def treate_as_biblio(pdf)
-    bib_tag = raw_code.match(/^biblio\((.+)\)$/)[1]
-    bib = Bibliography.get(bib_tag) || begin
-      puts "Impossible de trouver la bibliographie '#{bib_tag}'…".rouge
-      return
-    end
-    bib.print(pdf)
+  def treate_as_bibliography(pdf)
+    Bibliography.print(raw_code.match(/^biblio.*?\((.+?)\)$/)[1], pdfbook, pdf)
   end
 
   # Pour pouvoir obtenir une valeur de style "inline" en faisant

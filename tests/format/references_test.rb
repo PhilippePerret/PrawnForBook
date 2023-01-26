@@ -71,13 +71,15 @@ class ReferencesTestor < Minitest::Test
     biblio = Factory::Bibliography.new(book, 'livre', 'biblios/livres')
     biblio.add_item({
       id: 'livre1', 
-      title: "Le premier livre", 
+      title: "Le Livre croisé", 
       refs_path: 'livres/livre1/references.yaml',
+      auteur: "John DOE",
+      isbn: "125-45698-5-65",
     })
     # - On fait le fichier de références livres 1 -
     pth_refs = File.join(book.folder,'livres','livre1','references.yaml')
     mkdir(File.dirname(pth_refs))
-    File.write(pth_refs, {cross_reference: {page:4, paragraph:12}}.to_yaml)
+    File.write(pth_refs, {cross_reference: {page:2, paragraph:12}}.to_yaml)
     # ===> TEST <===
     recipe = Factory::Recipe.new(book.folder)
     recipe.build_with(**props)
@@ -112,10 +114,12 @@ class ReferencesTestor < Minitest::Test
     Le texte avant ((( ->(avant) ))) doit être placé ici.
     TEXT
   end
-  def suite_texte_with_cross_ref_for_pages
+  def suite_et_fin_texte_with_cross_ref_for_pages
     <<~TEXT
     Un paragraphe pour rien, sur la page 5 (pour connaitre la page).
     Ce paragraphe contient une référence croisée vers la (( ->(livre1:cross_reference) )).
+    (( new_page ))
+    (( bibliography(livre) ))
     TEXT
   end
 
@@ -165,7 +169,7 @@ class ReferencesTestor < Minitest::Test
     # ===> TEST <===
     texte = texte_with_ref_for_pages + 
       suite_texte_with_ref_for_pages +
-      suite_texte_with_cross_ref_for_pages
+      suite_et_fin_texte_with_cross_ref_for_pages
     tester_un_livre_avec({numerotation: 'pages'}, texte)
     page(1).has_text('Un paragraphe qui contient une cible.')
     page(1).has_text("Et puis une autre dans le même paragraphe.")
@@ -177,10 +181,20 @@ class ReferencesTestor < Minitest::Test
     page(5).has_text("Le texte avant (page 3) doit être placé ici.")
     mini_success "Les références avec cibles placée après appels sont bien traitée."
 
-    page(5).has_text("Ce paragraphe contient une référence croisée vers la page 2 du Livre Croisé.")
+    # page(5).has_text(["Ce paragraphe contient une référence croisée vers la page 2 de","Le Livre croisé."])
+    [
+      "Ce paragraphe contient une référence croisée vers la page 2 de", 
+      "Le Livre croisé",
+      "Ce paragraphe contient une référence croisée vers la page 2 de Le Livre croisé."
+    ].each do |segment|
+      assert_match(segment, page(5).text)
+      # BIZARREMENT, ne fonctionne pas avec has_text même en
+      # donnant les deux textes séparés (le titre séparé de la phrase)
+    end
     mini_success "Les références avec cibles croisées sont bien, traitées."
 
-    mini_success "Les références avant cibles croisées manquantes sont bien traitées."
+    # TODO
+    # mini_success "Les références avant cibles croisées manquantes sont bien traitées."
   end
 
   def test_custom_prefix
@@ -200,15 +214,19 @@ class ReferencesTestor < Minitest::Test
     "
   end
 
-
-  def test_references_croisees
-    return if focus?
-    resume "
-    Test des références
-    Des cibles dans d'autres livres sont bien traitées.
-    "
+  def test_affichage_bibliographie
+    skip "Test de l'affichage des bibliographies"
+    # TODO : penser à mettre des pages dans le désordre, par 
+    # exemple pour les références croisées (je pense que ça n'est
+    # possible que dans ce cas). C'est-à-dire que la liste des
+    # pages/paragraphes seraient dans le désordre (p.e. 1,12,3,2)
+    # et il faudrait faire attention à ce qu'elle soit toujours
+    # classée
+    # TODO : s'assurer qu'on a bien : les informations sur 
+    # l'élément bibliographique et ses références dans le texte,
+    # ses pages ou ses paragraphes (les pages ou les paragraphes
+    # où on en parle)
   end
-
 
 private
 

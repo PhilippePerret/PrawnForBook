@@ -98,9 +98,10 @@ private
     str.gsub(Bibliography::REG_OCCURRENCES) do
       bib_tag = $1.freeze
       item_id, item_titre = $2.freeze.split('|')
+      spy "item_titre = #{item_titre.inspect}".rouge
       item_id = item_id.to_sym
-      ibib = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
-      item_titre || ibib.items[item_id].title
+      bibitem = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
+      item_titre || bibitem.title
     end
   end
 
