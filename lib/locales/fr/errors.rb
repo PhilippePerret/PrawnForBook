@@ -14,6 +14,12 @@ ERRORS = {
   
   invalid_data: "La donnée %s de value %s est invalide.", 
 
+  # --- Aide ---
+
+  help: {
+    unknown_assistant: 'Impossible de trouver un assistant ou une aide pour %s…',
+  },
+
   # --- Texte du livre ---
   
   unfound_text_file: "Le fichier texte %s est introuvable…",

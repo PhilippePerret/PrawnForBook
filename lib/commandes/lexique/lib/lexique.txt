@@ -1,3 +1,17 @@
+Assistants
+  Les assistants permettent de construire le fichier ->recette d'un
+  livre ou d'une ->collection en tout confiance.
+  Pour appeler un assistant, on peut utiliser la commande :
+    pfb aide <identifiant>
+  Par exemple :
+    pfb aide "table des matières"
+  De nombreux assistants requièrent de se trouver dans le dossier 
+  d'un livre (tout simplement parce que c'est dans ce livre que doit
+  être placée la recette).
+
+Collection
+  Ensemble de livres conçus selon la même recette.
+
 Disposition
   Terme propre aux entêtes et pieds de page.
   Ensemble de paramètres définissant la disposition des enêtes et 
@@ -6,18 +20,21 @@ Disposition
     :headers_footers:
       :dispositions:
         ...
+
 Footer V-Ajustement
   Terme propre aux entêtes et pieds de page.
   Valeur qui permet de régler le positionnement exact du pied de page
   dans la marge basse, verticalement. Une valeur positive rapproche
   le pied de page du texte tandis qu'une valeur négative l'en éloigne.
   Dans la recette : :footer_vadjust (définition d'une disposition)
+
 Header V-Ajustement
   Terme propre aux entêtes et pieds de page.
   Valeur qui permet de régler le positionnement exact de l'entête dans
   la marge haute, verticalement. Une valeur positive rapproche l'en-
   tête du texte tandis qu'une valeur négative l'éloigne.
   Dans la recette : :header_vadjust (définition d'une disposition)
+
 Numéro de paragraphe
   Le numéro de paragraphe peut être écrit à gauche ou à droite du
   paragraphe. Cette numéro apparait lorsque la numérotation des
@@ -29,3 +46,11 @@ Numéro de paragraphe
   par rapport au texte (appelé "Ajustement horizontal").
   Bien sûr, régler les marges intérieures et extérieures pour que
   le numéro puisse apparaitre même avec les livres longs.
+
+Recette
+  Dans Prawn-for-book, la *recette* permet de déterminer tous les 
+  aspect et les informations concernant le livre. C'est un fichier
+  recipe.yaml qui se trouve à la racine du dossier du livre (ou de la
+  collection).
+  Dans Prawn-for-book, de nombreux ->assistants permettent d'établir
+  cette recette de façon… assistée.

@@ -125,3 +125,13 @@
     :HF1674317039:
       :id: HF1674317039
 #</headers_footers>
+#<bibliographies>
+:bibliographies:
+  :biblios:
+    :film: &1
+      :tag: :film
+      :title: Liste des films
+      :path: biblios/films
+      :is_new: false
+    ! '': *1
+#</bibliographies>

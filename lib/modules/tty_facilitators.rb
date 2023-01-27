@@ -5,7 +5,9 @@ Module contenant des méthodes mixin pour simplifier le travail et
 
 :name       Attribut traditionnel de tty-prompt, ce qui est affiché
 :value      Attribut traditionnel de tty-prompt, la valeur qui sera
-            retournée suivant le choix
+            retournée suivant le choix. En général, c'est le nom de
+            la propriété.
+
 - Tous les autres attributs sont optionnels -
 :required   Si true, la donnée est absolument requise
 :type       Type de la donnée, qui permet de la modifier en sortie Les
@@ -16,6 +18,13 @@ Module contenant des méthodes mixin pour simplifier le travail et
             est alors un Symbol) ou comme procédure (:values est alors
             une [Proc]). Pour la valeur exact de cet attribut, cf.
             ATTRIBUT SYMBOL OU PROCÉDURE.
+:value_method 
+            [Symbol|Proc] La méthode ou la procédure à utiliser quand
+            la valeur affichée ne doit pas être celle consignée. Peut
+            servir par exemple pour remplacer 'true' par "oui" ou "vrai"
+            La méthode peut recevoir 0, 1 ou 2 arguments. Le premier
+            sera la valeur brut dans la donnée, le second sera la table
+            complète des données.
 :meth       [Symbol] La méthode à utiliser quand le type de donnée est
             :custom. Permet d'obtenir une donnée quelconque. Par défaut
             elle peut recevoir 1 ou 2 arguments. La donnée complète
@@ -228,12 +237,13 @@ class TTYDefiner
     end
     selected = nil
     cs = @abs_data_preparees.map do |dchoix|
-      prop      = dchoix[:value]
-      value     = odata[prop]
-      thename   =
+      prop    = dchoix[:value]
+      value   = real_value_for(prop, dchoix, odata)
+      def_value   = default_value_for(dchoix, odata)
+      thename =
         if value.nil?
           selected  = dchoix[:index] if selected.nil?
-          "#{dchoix[:raw_name]} : ---"
+          "#{dchoix[:raw_name]} : #{def_value || '---'}"
         else
           "#{dchoix[:raw_name]} : #{value}".vert
         end
@@ -242,6 +252,55 @@ class TTYDefiner
     cs.unshift(CHOIX_FINIR)
     cs.push(CHOIX_CANCEL)
     return [ cs, selected ]
+  end
+
+  def real_value_for(prop, dchoix, odata)
+    value = odata[prop]
+    if dchoix[:value_method]
+      case dchoix[:value_method]
+      when Proc
+        proced = dchoix[:value_method]
+        case proced.arity
+        when 0 then proced.call
+        when 1 then proced.call(value)
+        when 2 then proced.call(value, odata)
+        end
+      when Symbol
+        meth = dchoix[:value_method]
+        case klasse.method(meth).arity
+        when 0 then klasse.send(meth)
+        when 1 then klasse.send(meth, value)
+        when 2 then klasse.send(meth, value, odata)
+        end
+      end
+    else
+      value
+    end
+  end
+
+  def default_value_for(dchoix, odata)
+    prop = dchoix[:value]
+    cval = odata[prop]
+    return nil unless cval.nil?
+    def_value = dchoix[:default]
+    case def_value
+    when Proc
+      if def_value.arity == 0
+        def_value = def_value.call
+      elsif def_value.arity == 1
+        def_value = def_value.call(odata)
+      end
+    when Symbol
+      if klasse.respond_to?(def_value)
+        def_value =
+          case klasse.method(def_value).arity
+          when 0 then klasse.send(def_value) 
+          when 1 then klasse.send(def_value, odata) 
+          when 2 then klasse.send(def_value, odata, dchoix)
+          end
+      end
+    end
+    return def_value
   end
 
   ##
@@ -263,8 +322,7 @@ class TTYDefiner
 
   def define_object_property(prop, odata)
     data_choix  = table_prop_to_dchoix[prop]
-    def_value   = data_choix[:default]
-    def_value   = def_value.call if def_value.is_a?(Proc)
+    def_value   = default_value_for(data_choix, odata)
     cur_value   = odata[prop]
     # --- Valeur choisie ---
     question = "  #{data_choix[:name]} : ".jaune
@@ -325,7 +383,7 @@ class TTYDefiner
             # 
             # Le cas commun
             # 
-            Q.ask(question, {default: odata[prop], show_help:nil})
+            Q.ask(question, {default: odata[prop]||def_value, show_help:nil})
           end
         end
       # Pour éviter les erreurs

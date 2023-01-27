@@ -8,7 +8,7 @@ class Command
       else 
         # Note : les assistants passent aussi par ici
         # cf. ci-dessous
-        help? ? :display_mini_help : :display_help
+        (help? && CLI.components[0].nil?) ? :display_mini_help : :display_help
       end
     Prawn4book.send(methode)
   end
@@ -21,40 +21,44 @@ end #/Command
     # L'élément après le "help/aide"
     # 
     chose = CLI.components[0].to_s
-    whats = case chose
+    # 
+    # On détermine précisément la chose pour laquelle il faut de
+    # l'aide.
+    # 
+    case chose.downcase
     when 'fontes','fonts','police','polices'
-      'fontes'
-    when 'biblio','bibliography','bibliographies'
-      'biblios'
-    when 'entete','header','headers','footer','footers','pied-de-page'
-      'headers_footers'
+      traite_with_assistant('fontes')
+    when 'tdm', 'table des matières', 'table of content'
+      traite_as_page_speciale('table_of_content')
+    when 'bib', 'biblio','bibliography','bibliographies'
+      traite_with_assistant('bibliographies')
+    when 'head', 'entête', 'entete','header','headers','footer','footers','pied-de-page'
+      traite_with_assistant('headers_footers')
+    when 'pub', 'me', 'publishing', 'publisher', 'éditeur', 'édition'
+      traite_with_assistant('publishing')
+    when 'data', 'données'
+      traite_as_page_speciale('book_data')
+    when 'format', 'formatage', 'aspect'
+      traite_as_page_speciale('book_format')
+    when 'page titre', 'page de titre', 'title page'
+      traite_as_page_speciale('page_de_titre')
+    when 'index', 'page index', 'index page'
+      traite_as_page_speciale('page_index')
+    when 'infos', 'page infos', 'infos page'
+      traite_as_page_speciale('page_infos')
     else
-      # 
-      # C'est le nouvel assistant de page spéciale
-      # 
-      chose = chose.gsub(/\-/, '_').downcase
-      if File.exist?(File.join(APP_FOLDER,'lib','pages',chose))
-        traite_as_assistant_page_speciale(chose)
-        return
-      end
-      puts "Je ne sais pas comment traiter l'aide pour #{chose.inspect}.".rouge
-      return
-    end
-    cmd = Command.new('assistant').load
-    if whats
-      cmd.proceed_assistant_for(whats)
-    else
-      less(INLINE_AIDE)
+      puts (ERRORS[:help][:unknown_assistant] % chose.inspect).rouge
     end
   end
 
-  def self.traite_as_assistant_page_speciale(what)
-    File.exist?("lib/pages/#{what}") || File.exist?("lib/pages/#{what}.rb") || begin
-      puts "Impossible de trouver l'assistant de page #{what.inspect}".rouge
-      return
-    end
-    require "lib/pages/#{what}"
-    Prawn4book::Pages.run_assistant(what)
+  def self.traite_with_assistant(thing)
+    cmd = Command.new('assistant').load
+    cmd.proceed_assistant_for(thing)
+  end
+
+  def self.traite_as_page_speciale(thing)
+    require "lib/pages/#{thing}"
+    Prawn4book::Pages.run_assistant(thing)    
   end
 
   def self.display_mini_help

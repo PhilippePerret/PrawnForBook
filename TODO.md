@@ -1,13 +1,17 @@
 # Todo courant
 
-* Tests de formatage :
-  - conserver une version de chaque livre produit
-  
-* Référence croisée :
-  - quand un numéro de paragraphe n'existe pas (livre imprimé non prawn) utiliser le numéro de page
-    => faire un test pour ça.
-    
-* Avant le build du livre, regarder si le texte contient des balises pour des références croisées, voir si toutes les données utiles existent ou générer une erreur tout de suite en expliquant quoi faire.
+* Refactoriser l'assistant pour les bibliographies
+  - Utiliser le livre assets/essais/book_essais/
+  * [BUG] Voir pourquoi la liste des films apparait deux fois en bibliographie
+  - POURSUIVRE L'IMPLÉMENTATION DE LA DÉFINITION DU FORMAT DES DONNÉES
+    * en faire le tour
+    * faire l'assistant qui va permettre de créer de nouveaux itemps
+      (penser à une api pour pouvoir peupler à partir de données 'externes')
+      - faire l'essai avec les films du filmodico
+
+* Pour la collection Narration
+  - faire une bibliographie 'film' et une bibliographie 'term'
+
 
 * Corrections/affinements par rapport au premier livre Narration
   -> cf. le fichier TODO de la collection

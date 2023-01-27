@@ -27,6 +27,20 @@ Ou en version longue (*) :
 >
 > TODO ?
 
+---
+
+<a name="getting-help"></a>
+
+## Obtenir de l’aide
+
+L’application étant complexe (dans son utilisation profonde), on peut obtenir de l’aide de différents moyens :
+
+* <console>pfb aide</console> ouvrir une aide générale en présentant les commandes principales.
+* <console>pfb aide `<identifiant>`</console> offrira de l’aide sur l’`<identifiant>`. On peut obtenir grâce à cette commande les assistants de création qui permettent de définir très précisément la recette d’un livre ou d’une collection.
+* <console>pfb lexique “groupe de mots”</console> offrira de l’aide sur un mot particulier ou un groupe de mots en en donnant la définition ou le sens dans *Prawn-for-book*. Note : les guillemets ne sont nécessaires que s’il y a plusieurs mots.
+
+---
+
 
 
 <a name="init-book-pdf"></a>
@@ -659,7 +673,6 @@ La source des données (le dossier) est indiquée dans le fichier recette du liv
       :title: Liste des films
       :title_level: 2
       :path:  data/films
-      :item_format: :yaml
       :font: Fonte 	# la fonte à utiliser
       :size: 10 		# la taille de fonte (10 par défaut)
       :style: null  # éventuellement le style de la fonte

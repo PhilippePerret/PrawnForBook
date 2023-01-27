@@ -35,7 +35,7 @@ PROMPTS = {
   finir: 'Finir',
   Folder: 'Dossier : ',
   New: 'Nouveau',
-  save: 'Enregistrer',
+  save: 'Enregistrer ',
 
   by_default: "par défaut",
   By_default: "Par défaut",
@@ -76,7 +76,11 @@ PROMPTS = {
 
   # --- Bibliographie ---
   biblio: {
+    ask_create_data_format_file: 'Voulez-vous définir le format des données ?',
+    ask_create_folder_cards: 'Dois-je créer le dossier qui contiendra les fiches ? (au path %s)',
     new_one: "Nouvelle bibliographie",
+    new_property: 'Nouvelle propriété',
+    format_for_fiches_of: "Format des fiches de la bibliographie “%s”",
     title_of_new_biblio: "Titre de la nouvelle bibliographie : ",
     tag_uniq_and_simple_minuscules: "Identifiant singulier, unique et simple (minuscules) : ",
     title_level: "Niveau de titre",
