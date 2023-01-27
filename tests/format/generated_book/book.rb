@@ -18,6 +18,9 @@ class Book
   def self.folder
     mkdir(File.join(__dir__, folder_name))
   end
+  def self.folder_books
+    mkdir(File.join(__dir__, '_generated_books_'))
+  end
   def self.folder_in_collection
     mkdir(File.join(GeneratedBook::Collection.folder, folder_name))
   end
@@ -27,8 +30,9 @@ class Book
 
 ###################       INSTANCE      ###################
   
-  def initialize
+  def initialize(test_method_name)
     @isincollection = false # a priori
+    @test_method_name = test_method_name
   end
 
   ##
@@ -44,7 +48,15 @@ class Book
   end
 
   ##
-  # Méthode principale construisant le livre
+  # = main =
+  # 
+  # FABRICATION DU LIVRE
+  # 
+  # @note
+  #   Le nom de la méthode de test est importante, car il déterminera
+  #   le nom du fichier final qui sera mis dans _generated_books_ 
+  #   pour toujours conserver une version d'un livre construit.
+  # 
   def build(check_if_book_has_been_built = true)
     ensure_book_valid
     res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid -display_margins 2>&1`
@@ -58,14 +70,17 @@ class Book
     #  devrait avoir été construit)
     # 
     if check_if_book_has_been_built
-      Timeout.timeout(5) do 
-        until File.exist?(book_path)
-          sleep 0.2
-        end
-      end
+      Timeout.timeout(5) { sleep 0.2 until File.exist?(book_path) }
     else
       sleep 1
     end
+    # 
+    # On fait une copie du livre
+    # 
+    book_name = "#{@test_method_name[5..-1]}.pdf"
+    src = book_path
+    dst = File.join(self.class.folder_books, book_name)
+    FileUtils.cp(src, dst)
   end
 
   # --- Utils Methods ---

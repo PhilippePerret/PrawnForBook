@@ -39,8 +39,3 @@
       :pd_right:
         :content: :numero
         :align: :right
-:bibliographies:
-  :biblios:
-    :unknown:
-      :title: Les Grands Inconnus
-      :path: biblios/unknown

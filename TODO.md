@@ -1,5 +1,8 @@
 # Todo courant
 
+* Tests de formatage :
+  - conserver une version de chaque livre produit
+  
 * Référence croisée :
   - quand un numéro de paragraphe n'existe pas (livre imprimé non prawn) utiliser le numéro de page
     => faire un test pour ça.

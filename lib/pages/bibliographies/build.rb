@@ -34,7 +34,12 @@ class Bibliography
       # - Classement des items -
       bibitem.keysort
     end.each do |bibitem|
-      # - Écriture des items -
+      ##############################
+      ###                        ###
+      ### - Écriture des items - ###
+      ###                        ###
+      ##############################
+      pdf.move_cursor_to_next_reference_line
       str = Prawn4book::Bibliography.send(formate_method, bibitem)
       pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", inline_format: true
     end

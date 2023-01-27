@@ -12,6 +12,8 @@ class GeneratedBookTestor < Minitest::Test
   def setup
     super
     @book = nil
+    # @test_method_name = self.name
+    # puts "Méthode courante : #{@test_method_name.inspect}"
   end
 
   def teardown
@@ -19,8 +21,8 @@ class GeneratedBookTestor < Minitest::Test
   end
 
   def focus?
-    true # pour jouer seulement celui qui commente sa 1re ligne
-    # false # pour les jouer tous
+    # true # pour jouer seulement celui qui commente sa 1re ligne
+    false # pour les jouer tous
   end
 
   def pdf
@@ -31,7 +33,7 @@ class GeneratedBookTestor < Minitest::Test
   def book
     @book ||= begin
       GeneratedBook::Book.erase_if_exist
-      GeneratedBook::Book.new
+      GeneratedBook::Book.new(self.name)
     end
   end
 
@@ -69,10 +71,8 @@ class GeneratedBookTestor < Minitest::Test
     refute_match(unknown_title, page(2).text)
   end
 
-
-
   def test_biblio_with_items
-    # return if focus?
+    return if focus?
     resume "
     Une bibliographie avec des items s'inscrit à l'endroit voulu.
     "
@@ -115,7 +115,13 @@ class GeneratedBookTestor < Minitest::Test
     page(2).not.has_text(fiches[0][:title])
     mini_success "Le texte de substitution a bien été utilisé à la place du title."
 
-    skip "Vérifier l'alignement"
+    [
+      fiches[4][:title], fiches[0][:title], fiches[2][:title]
+    ].sort do |t1, t2|
+      t1.normalized.downcase <=> t2.normalized.downcase
+    end.each_with_index do |title, idx|
+      page(5).has_text(title).at(482 - idx * 14)
+    end
     mini_success "Les écritures des items sont alignés à la grille de référence."
   end
 

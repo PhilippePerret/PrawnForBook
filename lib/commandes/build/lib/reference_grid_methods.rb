@@ -32,6 +32,11 @@ class PrawnView
     line_ref = calc_ref_line
     spy "line_ref pour prochaine écriture du curseur : #{line_ref.inspect}".bleu
     move_cursor_to(line_ref)
+    if cursor < 0
+      spy "Nécessité de passer à la page suivante (curseur trop bas)".orange
+      start_new_page 
+      move_cursor_to_next_reference_line
+    end
   end
 
   ##

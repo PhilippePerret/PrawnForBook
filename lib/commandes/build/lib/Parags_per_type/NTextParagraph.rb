@@ -113,11 +113,6 @@ class NTextParagraph < AnyParagraph
           # texte et déplacement du curseur
           # 
           move_cursor_to_next_reference_line
-          if cursor < 0
-            spy "Nécessité de passer à la page suivante (curseur trop bas)".orange
-            start_new_page 
-            move_cursor_to_next_reference_line
-          end
           # spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
           #
