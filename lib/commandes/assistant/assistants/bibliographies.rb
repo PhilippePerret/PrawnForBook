@@ -52,7 +52,8 @@ class AssistantBiblio
   # 
   def define_types_bibliographies(data_bib, arg2)
     dbiblios = data_bib[:biblios] || {}
-    precfile = File.join(__dir__,'tmp')
+    precfile = mkdir(File.join(__dir__,'tmp'))
+    precfile = File.join(precfile,'biblios')
     choix = precedencize(choices_biblios, precfile) do |q|
       q.question "Bibliographie à créer/modifier"
       q.precedences_per_index
@@ -120,7 +121,10 @@ class AssistantBiblio
   def build_data_format_file(dbiblio)
     return unless Q.yes?((PROMPTS[:biblio][:ask_create_data_format_file]).jaune)
     data_format_file = File.expand_path(File.join(dbiblio[:path], 'DATA_FORMAT'))
-    dformat = File.exist?(data_format_file) ? YAML.load_file(data_format_file) : [{name: "Titre obligatoire", value: :title, type: :string, required:true}]
+    dformat = File.exist?(data_format_file) ? YAML.load_file(data_format_file) : [
+        {name: "Titre obligatoire", value: :title, type: :string, required:true},
+        {name: "Identifiant", value: :id, type: :dim, required: true}
+      ]
     while true # tant qu'on veut ajouter des données
       clear
       puts (PROMPTS[:biblio][:format_for_fiches_of] % dbiblio[:tag]).bleu
@@ -160,11 +164,12 @@ class AssistantBiblio
   end
 
   TYPES_PROPS = [
-    {name:'String', value: :string},
-    {name:'People(s)', value: :people},
-    {name:'Entier', value: :int},
-    {name:'Date (JJ/MM/AAAA)', value: :date},
-    {name:'Personnalisé', value: :custom},
+    {name:'String'            , value: :string},
+    {name:'People(s)'         , value: :people},
+    {name:'Entier'            , value: :int},
+    {name:'Date (JJ/MM/AAAA)' , value: :date},
+    {name:'Année'             , value: :annee},
+    {name:'Personnalisé'      , value: :custom},
   ]
 
   # Test la validité du tag fourni.

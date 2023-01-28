@@ -42,17 +42,22 @@ class Command
 # Les commandes peuvent être données avec différents noms
 # 
 COMMAND_NAMES_TO_COMMAND_REAL_NAME = {
-  nil         => 'help',
-  'aide'      => 'help',
   'create'    => 'init',
   'essai'     => 'sandbox',
   'essais'    => 'sandbox',
   'generate'  => 'build',
-  'manual'    => 'help',
-  'manuel'    => 'help',
   'outils'    => 'tools',
   'ouvre'     => 'open',
 }
+def self.add_commands_substitutes(real_command, substitutes)
+  substitutes.each do |cmd|
+    COMMAND_NAMES_TO_COMMAND_REAL_NAME.merge!(cmd => real_command)
+  end
+end
+# - Substituts à la commande 'help' -
+add_commands_substitutes('help', [nil, 'aide', 'manual', 'manuel'])
+# - Substituts à la commande 'biblio' -
+add_commands_substitutes('biblio', ['bib','bibliography','bibliographies'])
 
 end #/class Command
 end #/module Prawn4book

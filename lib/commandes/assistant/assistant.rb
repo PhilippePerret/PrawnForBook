@@ -7,7 +7,6 @@ module Prawn4book
         check_if_current_book_or_return || return
         clear unless debug?
         puts "LISTE DES ASSISTANTS\n".bleu
-
         dass = precedencize(choices_assistants,__dir__) do |q|
           q.question "Quel assistant lancer ?"
           q.precedences_per_index
