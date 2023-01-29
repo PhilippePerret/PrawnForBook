@@ -37,3 +37,6 @@
   :level3:
     :separator: none
 #</table_of_content>
+#<bibliographies>
+:bibliographies: {}
+#</bibliographies>

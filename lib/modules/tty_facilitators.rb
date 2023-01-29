@@ -123,8 +123,10 @@ module TTYFacilitators
   #     Chaque élément doit donc contenir les données de base que 
   #     sont :name et :value. Cf. le détail ci-dessus
   # @param [Hash] odata Table des données de la donnée à éditer.
+  # @param [Hash] options Table d'options
+  # @option options [String] :title Le titre à donner
   # 
-  def tty_define_object_with_data(abs_data, odata)
+  def tty_define_object_with_data(abs_data, odata, **options)
     # 
     # On consigne les valeurs d'origine pour les remettre en cas
     # d'abandon
@@ -133,7 +135,7 @@ module TTYFacilitators
     # 
     # On procède à l'édition de la donnée
     # 
-    ok = TTYDefiner.new(self, abs_data, odata).defining
+    ok = TTYDefiner.new(self, abs_data, odata, options).defining
     # 
     # En cas d'abandon, on remet les valeurs d'origine
     # 
@@ -159,10 +161,11 @@ class TTYDefiner
   attr_reader :abs_data
   attr_reader :odata
 
-  def initialize(klasse, abs_data, odata)
+  def initialize(klasse, abs_data, odata, **options)
     @klasse   = klasse
     @abs_data = abs_data
     @odata    = odata
+    @options  = options
   end
 
   # @return [Boolean] true en cas de données ok, false en cas
@@ -192,7 +195,7 @@ class TTYDefiner
       # Pour sélectionner la valeur à définir
       # 
       begin
-        case (prop = Q.select(PROMPTS[:Define].jaune, choices, {per_page:choices.count, default: selected, show_help:false, echo:false}))
+        case (prop = Q.select(title.jaune, choices, {per_page:choices.count, default: selected, show_help:false, echo:false}))
         when :finir
           return true unless (msg = object_data_valid?)
         when :cancel
@@ -479,6 +482,12 @@ class TTYDefiner
       tbl.merge!(dchoix[:value] => dchoix)
     end
     @table_prop_to_dchoix = tbl
+  end
+
+  # - Options Methods -
+
+  def title
+    @title ||= @options[:title] || PROMPTS[:Define]
   end
 
 end #/class TTYDefiner

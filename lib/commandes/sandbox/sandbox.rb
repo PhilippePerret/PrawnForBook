@@ -17,10 +17,7 @@ module Prawn4book
 
   def self.play_sandbox
     clear
-    
-    operation = "Récupération du texte du GAT en français"
 
-    puts "Programmation du bac à sable pour #{operation}.".jaune
 
     # if test?
     #   puts "TEST MODE".bleu

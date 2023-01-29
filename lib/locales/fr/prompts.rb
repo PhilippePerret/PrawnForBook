@@ -1,6 +1,8 @@
 module Prawn4book
 
 TERMS = {
+  bibliography: 'bibliographie',
+  biblio_item: 'item de bibliographie',
   book_format: 'format (taille livre, marges, etc.)',
   biblios: 'bibliographies',
   book_data: 'du livre',
@@ -28,8 +30,18 @@ PROMPTS = {
   # --- Généralités ---
   Abandon: 'Abandonner', # plus fort que "Renoncer"
   cancel: 'Renoncer',
+  choose_un: 'Choisir un %s',
+  choose_le: 'Choisir le %s',
+  choose_une: 'Choisir une %s',
+  choose_la: 'Choisir la %s',
+  creer_une: 'Créer une %s',
+  creer_un: 'Créer un %s',
   Define: 'Définir',
-  Edit: 'Éditer', 
+  data_de_la: 'Données de la %s',
+  data_du: 'Données du %s',
+  Edit: 'Éditer',
+  edit_un: 'Éditer un %s',
+  edit_une: 'Éditer une %s',
   end_without_save: 'Finir sans enregistrer',
   Finir: 'Finir',
   finir: 'Finir',
@@ -76,11 +88,13 @@ PROMPTS = {
 
   # --- Bibliographie ---
   biblio: {
+    biblio_name: "Bibliographie « %s »", # "%s Bibliography" en anglais
     ask_create_data_format_file: 'Voulez-vous définir le format des données ?',
     ask_create_folder_cards: 'Dois-je créer le dossier qui contiendra les fiches ? (au path %s)',
     new_one: "Nouvelle bibliographie",
     new_property: 'Nouvelle propriété',
     format_for_fiches_of: "Format des fiches de la bibliographie “%s”",
+    help_data_format: "(ci-dessous la liste des propriétés d'une fiche “%s”)",
     title_of_new_biblio: "Titre de la nouvelle bibliographie : ",
     tag_uniq_and_simple_minuscules: "Identifiant singulier, unique et simple (minuscules) : ",
     title_level: "Niveau de titre",

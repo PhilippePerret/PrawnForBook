@@ -93,7 +93,8 @@ class AssistantBiblio
     # 
     # On utilise le facilitateur
     # 
-    ok = tty_define_object_with_data(DATA_BIBLIO, data_biblio) # => true/false
+    options = {title: PROMPTS[:data_de_la] % TERMS[:bibliography]}
+    ok = tty_define_object_with_data(DATA_BIBLIO, data_biblio, **options) # => true/false
   
     # 
     # Chaque fois qu'on édite une bibliographie, on regarde si le
@@ -122,12 +123,13 @@ class AssistantBiblio
     return unless Q.yes?((PROMPTS[:biblio][:ask_create_data_format_file]).jaune)
     data_format_file = File.expand_path(File.join(dbiblio[:path], 'DATA_FORMAT'))
     dformat = File.exist?(data_format_file) ? YAML.load_file(data_format_file) : [
-        {name: "Titre obligatoire", value: :title, type: :string, required:true},
-        {name: "Identifiant", value: :id, type: :dim, required: true}
+        {name: "Titre (toujours requis)", value: :title, type: :string, required:true},
+        {name: "Identifiant (toujours requis)", value: :id, type: :dim, required: true}
       ]
     while true # tant qu'on veut ajouter des données
       clear
       puts (PROMPTS[:biblio][:format_for_fiches_of] % dbiblio[:tag]).bleu
+      puts (PROMPTS[:biblio][:help_data_format] % dbiblio[:tag]).gris
       choices = dformat.map do |dprop|
         {name: dprop[:name], value: dprop}
       end + [

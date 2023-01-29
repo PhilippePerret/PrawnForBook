@@ -2,6 +2,18 @@ module Prawn4book
 class PdfBook
 class << self
 
+  # S'assure que la commande a été jouée depuis un livre ou une
+  # collection et retourne l'instance, ou lève une exception.
+  # 
+  # @return [Prawn4book::PdfBook]
+  # 
+  # @api public
+  def ensure_current
+    return current if current?
+    puts ERRORS[:require_a_book_or_collection].rouge
+    return false
+  end
+
   # @return true si on se trouve dans un dossier de livre
   # ou de collection
   def current?
