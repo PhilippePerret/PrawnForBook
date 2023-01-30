@@ -65,6 +65,7 @@ MESSAGES = {
     has_already_biblio: "Ce livre définit déjà les bibliographies %s.",
     bibs_created_with_success: "Les bibliographies ont été créées avec succès.",
     consigned: "Bibliographie consignée.",
+    data_format_saved: "Format des données de la bibliographie '%s' enregistrées avec succès.",
 
   }, #/ :biblio
 

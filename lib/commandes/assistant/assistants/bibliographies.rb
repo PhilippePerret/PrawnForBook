@@ -38,8 +38,16 @@ class AssistantBiblio
     puts MESSAGES[:biblio][:intro_assistant].bleu
 
     if tty_define_object_with_data(MAIN_DATA_BIBLIOGRAPHIES, main_data_biblio)
-      owner.recipe.insert_bloc_data('bibliographies', main_data_biblio)
+      save_data_bibliographies(main_data_biblio)      
     end
+  end
+
+  ##
+  # Enregistrement des données (toutes) bibliographies dans la
+  # recette du livre ou de la collection
+  # 
+  def save_data_bibliographies(bibsdata)
+    owner.recipe.insert_bloc_data('bibliographies', bibsdata)
   end
 
   ##
@@ -51,6 +59,8 @@ class AssistantBiblio
   # et permet de les modifier ou d'en définir une nouvelle.
   # 
   def define_types_bibliographies(data_bib, arg2)
+    puts "Je passe par ici (arg2 = #{arg2.inspect}".jaune
+    sleep 4
     dbiblios = data_bib[:biblios] || {}
     precfile = mkdir(File.join(__dir__,'tmp'))
     precfile = File.join(precfile,'biblios')
@@ -80,18 +90,24 @@ class AssistantBiblio
   ##
   # Méthode principale pour éditer une bibliographie, ou la
   # créer si c'est nécessaire.
+  #
+  # @note
+  #   Elle peut être appelée par l'assistant général (qui enregistre
+  #   les données bibliographies dans la recette) ou par n'importe
+  #   quelle autre méthode qui doit alors se charcher d'enregistrer
+  #   ces données.
   # 
   # @return [Boolean] true si tout s'est bien passé
   # 
   def edit_biblio(data_biblio)
     # 
-    # Pour savoir s'il s'agit d'une nouvelle disposition
+    # Pour savoir s'il s'agit d'une nouvelle bibliographie
     # 
     is_new_biblio = data_biblio.nil?
     data_biblio = {} if is_new_biblio
     data_biblio.merge!(is_new: is_new_biblio)
     # 
-    # On utilise le facilitateur
+    # Édition de la bibliographie
     # 
     options = {title: PROMPTS[:data_de_la] % TERMS[:bibliography]}
     ok = tty_define_object_with_data(DATA_BIBLIO, data_biblio, **options) # => true/false
@@ -121,58 +137,11 @@ class AssistantBiblio
   # 
   def build_data_format_file(dbiblio)
     return unless Q.yes?((PROMPTS[:biblio][:ask_create_data_format_file]).jaune)
-    data_format_file = File.expand_path(File.join(dbiblio[:path], 'DATA_FORMAT'))
-    dformat = File.exist?(data_format_file) ? YAML.load_file(data_format_file) : [
-        {name: "Titre (toujours requis)", value: :title, type: :string, required:true},
-        {name: "Identifiant (toujours requis)", value: :id, type: :dim, required: true}
-      ]
-    while true # tant qu'on veut ajouter des données
-      clear
-      puts (PROMPTS[:biblio][:format_for_fiches_of] % dbiblio[:tag]).bleu
-      puts (PROMPTS[:biblio][:help_data_format] % dbiblio[:tag]).gris
-      choices = dformat.map do |dprop|
-        {name: dprop[:name], value: dprop}
-      end + [
-        {name:PROMPTS[:biblio][:new_property].bleu, value: :new_prop},
-        {name:PROMPTS[:Finir].bleu, value: :end},
-      ]
-      choix = Q.select(nil, choices, **{per_page: choices.count, show_help:false})
-      case choix
-      when :end
-        puts "Données format à sauver : #{dformat.pretty_inspect}"
-        if Q.yes?("#{PROMPTS[:save]}?".jaune)
-          File.write(data_format_file, dformat)
-        end
-        break
-      when :new_prop
-        dprop = edit_format_prop({})
-        dformat << dprop # on l'ajoute
-      else
-        dprop = edit_format_prop(choix)
-      end
-    end
+    require 'lib/pages/bibliographies'
+    Bibliography::BibItem.assiste_creation_data_format(dbiblio)
   end
 
-  def edit_format_prop(dprop)
-    prop_name = Q.ask("Nom de la nouvelle propriété :".jaune, **{default: dprop[:name]})
-    dprop.merge!(name: prop_name)
-    prop_type = Q.select("Type de la nouvelle propriété".jaune, TYPES_PROPS, **{per_page: TYPES_PROPS.count, show_help:false})
-    dprop.merge!(type: prop_type)
-    prop_default = Q.ask("Valeur par défaut".jaune, **{default: dprop[:default]})
-    dprop.merge!(default: prop_default)
-    prop_validif = Q.ask("Méthode de validation (nom)".jaune, **{default: dprop[:validif]})
-    dprop.merge!(validif: prop_validif ? prop_validif.to_sym : nil)
-    return dprop
-  end
 
-  TYPES_PROPS = [
-    {name:'String'            , value: :string},
-    {name:'People(s)'         , value: :people},
-    {name:'Entier'            , value: :int},
-    {name:'Date (JJ/MM/AAAA)' , value: :date},
-    {name:'Année'             , value: :annee},
-    {name:'Personnalisé'      , value: :custom},
-  ]
 
   # Test la validité du tag fourni.
   # 

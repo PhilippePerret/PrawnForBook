@@ -1,2 +1,12 @@
 ---
 # Recette du livre hello_book
+
+#<bibliographies>
+:bibliographies:
+  :biblios:
+    :essai:
+      :is_new: false
+      :tag: :essai
+      :title: Liste des essais
+      :path: biblios/essais
+#</bibliographies>

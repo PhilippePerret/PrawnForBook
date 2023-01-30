@@ -19,7 +19,7 @@ class Command
     # 
     # Choisir l'action à accomplir
     action = precedencize(choices_actions, __dir__) do |q|
-      q.question "Action à accomplir"
+      q.question PROMPTS[:Action_to_run]
       q.add_choice_cancel
     end
     action || return
@@ -42,6 +42,17 @@ class Command
     # 
     # [Prawn4book::Bibliography]
     biblio ||= Bibliography.choose_or_create(book) || return
+
+    case action
+    when 'create_bibitem'
+      Bibliography::BibItem.assiste_creation(book, biblio)
+    when 'edit_biblio'
+      puts "Je dois apprendre à éditer une bibliographie".jaune
+    when 'edit_bibitem'
+      puts "Je dois apprendre à éditer un item de bibliographie".jaune
+    when 'choose_bibitem'
+      puts "Je dois apprendre à proposer de choisir un item de bibliographie".jaune
+    end
 
   end
   # /proceed

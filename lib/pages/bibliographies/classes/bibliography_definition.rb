@@ -32,6 +32,10 @@ class << self
     main_data.merge!(biblios: {}) unless main_data.key?(:biblios)
     main_data[:biblios].merge!(dbiblio[:tag] => dbiblio)
     # 
+    # On enregistre les nouvelles données bibliographies
+    # 
+    assistant.save_data_bibliographies(main_data)
+    # 
     # On retourne l'instance Prawn4Book::Bibliography de la nouvelle
     # bibliography créée.
     # 
@@ -42,14 +46,6 @@ end #/<< self Bibliography
 
 
 ###################       INSTANCE      ###################
-
-  ##
-  # Méthode principale d'assistance pour la définition du format
-  # des données de la bibliographie.
-  # 
-  def assiste_data_format
-    puts "Je dois apprendre à assister pour la création du fichier DATA_FORMAT".jaune
-  end
 
 
   # @return [Boolean] true if data format file exists, false

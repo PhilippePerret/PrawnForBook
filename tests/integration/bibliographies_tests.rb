@@ -80,8 +80,6 @@ class BibliographiesTests < Minitest::Test
     tosa.has_in_last_lines("Choisir la bibliographie")
     mini_success "L'application m'invite à choisir la bibliographie"
     # - Création nouvelle bibliographie -
-    # (on doit créer le dossier pour ses items)
-    mkdir(File.join(book_biblios_folder,'mabibs'))
     dbiblio = {
       tag: 'mabib', title: 'Liste des mabibs étoilés',
       path: 'biblios/mabibs'
@@ -93,7 +91,9 @@ class BibliographiesTests < Minitest::Test
     tosa << [:RET, dbiblio[:title], :RET]
     tosa << [2.downs, :RET, dbiblio[:path]]
     sleep 1 # le temps de la vérification
-    tosa << :RET
+    tosa << :RET # confirmer de créer le dossier des fiches
+    sleep 1 # le temps de la création du dossier
+    tosa << :RET # 
     tosa.fast [10.ups, :RET] # enregistrement
     # - le programme demande si l'on veut définir le format des data -
     action "Je confirme que je veux définir le format des données"

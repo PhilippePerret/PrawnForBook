@@ -28,11 +28,19 @@ class Bibliography
   end
 
   ##
-  # Format des données bibliographiques (soit JSON soit YAML)
+  # Format (extension) des fichiers des  données bibliographiques (soit JSON soit YAML)
   # 
   def item_data_format
     (data[:item_format] || 'yaml').to_s
   end
+
+  ##
+  # Format des données bibliographiques
+  # 
+  def data_format
+    @data_format ||= File.exist?(data_format_file) && YAML.load_file(data_format_file)
+  end
+
 
   ##
   # @return [Prawn4book::Bibliography::BibItem|NilClass] l'item bibliographique
