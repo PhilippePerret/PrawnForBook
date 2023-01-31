@@ -1,7 +1,7 @@
 module Prawn4book
 class InitedThing
 
-  require 'lib/required/utils'
+  require 'lib/required/utils/methods'
   include UtilsMethods
 
   # = main =

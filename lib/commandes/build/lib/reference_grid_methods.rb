@@ -18,8 +18,9 @@ class PrawnView
   def define_default_leading(font = nil, size = nil, lheight = nil)
     font    ||= default_font_name
     size    ||= default_font_size
+    style   ||= default_font_style
     lheight ||= line_height
-    self.default_leading = font2leading(font, size, lheight)
+    self.default_leading = font2leading(font, size, style, lheight)
     spy "default_leading mis à #{self.default_leading.inspect} pour #{font}/#{size} (line_height: #{lheight})".bleu
   end
 
@@ -151,9 +152,9 @@ class PrawnView
   # Note : ne pas oublier d'indiquer la fonte en sortant de cette
   # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
   # prenant à l'entrée dans la méthode
-  def font2leading(fonte, size, hline, options = {})
+  def font2leading(fonte, size, style, hline, options = {})
     # spy "Leading = #{leading.inspect}".bleu
-    font fonte, size:size
+    font fonte, **{style: style, size:size}
     h = height_of("A", leading:leading, size: size)
     if (h - hline).abs > (h - 2*hline).abs
       options.merge!(:greater => true) unless options.key?(:greater)

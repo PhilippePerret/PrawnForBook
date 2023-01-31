@@ -1,4 +1,4 @@
-require_relative '../required/utils'
+require_relative 'utils'
 require 'delegate'
 
 module Prawn4book

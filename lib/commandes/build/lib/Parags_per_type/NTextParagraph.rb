@@ -73,13 +73,12 @@ class NTextParagraph < AnyParagraph
       # 
       begin
         spy "Application de la fonte : #{fontFamily}"
-        ft = font(fontFamily, size: fontSize, font_style: fontStyle)
+        ft = font(fontFamily, **{size: fontSize, style: fontStyle})
       rescue Prawn::Errors::UnknownFont => e
         spy "--- fonte inconnue ---"
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
         raise
       end
-
     end
 
 
@@ -91,10 +90,10 @@ class NTextParagraph < AnyParagraph
         options = {
           inline_format:  true,
           align:          :justify,
-          font_style:     fontStyle,
+          # font_style:     fontStyle,
           size:           fontSize
         }
-        options.merge!(indent_paragraphs: textIndent) if textIndent
+        # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
           #
           # Écriture du paragraphe dans une boite
@@ -158,11 +157,14 @@ class NTextParagraph < AnyParagraph
             move_cursor_to_next_reference_line
             final_str = excedant.map {|h| h[:text] }.join('')
           end
+          spy "final_str = #{final_str.inspect}"
+          spy "options = #{options.inspect}"
           text(final_str, **options)
         end
       end
     rescue Exception => e
       puts "Problème avec le paragraphe #{final_str.inspect}".rouge
+      puts e.backtrace.join("\n").rouge if debug?
       puts "ERREUR : #{e.message}"
       exit
     end

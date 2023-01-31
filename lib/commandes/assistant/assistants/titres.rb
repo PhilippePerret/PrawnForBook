@@ -63,7 +63,7 @@ class AssistantTitres
       niveau = dchoix[:value]
       dtitre = @data_titres[:"level#{niveau}"]
       if dtitre
-        curdata << "#{dtitre[:font]||'-'}/#{dtitre[:size]||'-'}"
+        curdata << "#{dtitre[:font]||'-'}/#{dtitre[:style]||'-'}/#{dtitre[:size]||'-'}"
         curdata << "#{dtitre[:lines_before]||'-'}/#{dtitre[:lines_after]||'-'}"
         curdata << "#{dtitre[:leading]||'-'}"
       end
@@ -80,6 +80,10 @@ class AssistantTitres
     # Les données actuelles du titre
     # 
     dtitre = @data_titres[key_niveau]
+    # 
+    # On aura besoin du niveau de titre pour déterminer ses données
+    # 
+    dtitre.merge!(level: niveau)
     # 
     # On utilise le facilitateur pour éditer le titre
     # 
@@ -108,12 +112,13 @@ end
 
 TITRES_PROPERTIES = [
   {name: "Fonte"                                        , value: :font, type: :string, values: :choices_fonts},
+  {name: "Style de police"                              , value: :style, type: :string},
   {name: "Taille police"                                , value: :size, type: :float},
   {name: "Nombre de lignes passées avant"               , value: :lines_before, type: :int},
   {name: 'Nombre de lignes passées après'               , value: :lines_after, type: :int},
   {name: 'Interlignage'                                 , value: :leading, type: :float},
-  {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){dd[:level] < 2}, default: true },
-  {name: 'Placer toujours ce titre sur une belle page'  , value: :belle_page   , type: :bool, if: ->(dd){dd[:level] < 2} },
+  {name: 'Placer ce titre sur une nouvelle page'        , value: :new_page     , type: :bool, if: ->(dd){ puts "dd = #{dd.inspect}"; dd[:level] < 2 }, default: true },
+  {name: 'Placer toujours ce titre sur une belle page'  , value: :belle_page   , type: :bool, if: ->(dd){ dd[:level] < 2 } },
 ]
 MAIN_TITRES_PROPERTIES = TITRES_PROPERTIES + []
 

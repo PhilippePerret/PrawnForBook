@@ -80,7 +80,7 @@ class SpecialPage
         question      = "#{data_choix[:name].jaune} : ".jaune
         if data_choix[:value].nil?
           choix_defaut = data_choix[:default]
-          choix_defaut = defvalue.call if defvalue.is_a?(Proc)
+          choix_defaut = choix_defaut.call if choix_defaut.is_a?(Proc)
         else
           choix_defaut = data_choix[:value]
         end
