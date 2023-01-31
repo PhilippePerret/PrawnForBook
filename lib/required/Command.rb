@@ -5,12 +5,21 @@ class Command
 
   def initialize(ini_name)
     @ini_name = ini_name
-    @name = COMMAND_NAMES_TO_COMMAND_REAL_NAME[ini_name]||ini_name
+    @name = COMMAND_NAMES_TO_COMMAND_REAL_NAME[ini_name.downcase]||ini_name
   end
 
   def run
     Object.const_set('COMMAND_FOLDER', folder)
     self.load&.proceed
+  rescue PrawnFatalError => e
+    puts "\n#{e.message}".rouge
+    if debug?
+      puts e.backtrace.join("\n").rouge 
+    else
+      puts "(ajouter --debug pour voir le détail)".gris
+    end
+    puts "\n\n"
+    exit 1
   rescue FatalError => e
     puts e.message.rouge
     exit
@@ -55,7 +64,7 @@ def self.add_commands_substitutes(real_command, substitutes)
   end
 end
 # - Substituts à la commande 'help' -
-add_commands_substitutes('help', [nil, 'aide', 'manual', 'manuel'])
+add_commands_substitutes('help', [nil, 'aide', 'manual', 'manuel', 'prawn-manual', 'prawn-manuel','manuel-prawn'])
 # - Substituts à la commande 'biblio' -
 add_commands_substitutes('biblio', ['bib','bibliography','bibliographies'])
 

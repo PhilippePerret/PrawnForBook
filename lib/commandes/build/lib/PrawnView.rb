@@ -5,6 +5,17 @@ module Prawn4book
 class PrawnView
   include Prawn::View
 
+  @@table_errors_properties = {}
+  def self.add_error_on_property(prop_name)
+    unless @@table_errors_properties.key?(prop_name)
+      @@table_errors_properties.merge!(prop_name => 0)
+    end
+    @@table_errors_properties[prop_name] += 1
+    if @@table_errors_properties[prop_name] > 5
+      raise PrawnFatalError.new(ERRORS[:building][:too_much_errors_on_properties] % prop_name)      
+    end
+  end
+
   def self.add_cursor_position?
     :TRUE == @@addcurpos ||= true_or_false(CLI.option(:cursor))
   end

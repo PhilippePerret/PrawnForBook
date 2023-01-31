@@ -2,6 +2,10 @@ module Prawn4book
 class PdfBook
 class NTitre < AnyParagraph
 
+  def inspect
+    "TITRE niveau #{level} “#{text}”"
+  end
+
 
   # --- Helpers Methods ---
 
@@ -10,6 +14,8 @@ class NTitre < AnyParagraph
   # 
   def print(pdf)
     titre = self
+
+    spy "Traitement du titre #{self.inspect}…".bleu
 
     # 
     # Faut-il passer à la page suivante ?
@@ -27,7 +33,7 @@ class NTitre < AnyParagraph
     # suivante.
     # 
     if belle_page? && pdf.page_number.even?
-      psy "Nouvelle page pour se trouver sur une belle page".bleu
+      spy "Nouvelle page pour se trouver sur une belle page".bleu
       pdf.start_new_page
     end
 

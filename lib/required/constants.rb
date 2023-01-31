@@ -16,6 +16,7 @@ COMMAND_NAME = 'pfb'
 # Chemins d'accès au manuel utilisateur
 USER_MANUAL_PATH = File.join(APP_FOLDER,'Manuel','Manuel.pdf')
 USER_MANUAL_MD_PATH = File.join(APP_FOLDER,'Manuel','Manuel.md')
+PRAWN_MANUEL_PATH = "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/_AIDES_/Prawn/Official_manual.pdf"
 
 # --- Chargement de toutes les locales ---
 LANG = CLI.params[:lang] || 'fr'
@@ -72,3 +73,4 @@ DATA_STYLES_FONTS = [
 
 
 class PrawnBuildingError < StandardError; end
+class PrawnFatalError < StandardError; end

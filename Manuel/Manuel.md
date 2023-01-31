@@ -101,7 +101,7 @@ Pour lancer la fabrication du PDF qui servira à l'impression du livre, jouer la
 
 Certaines options permettent de travailler le livre avant sa fabrication définitive :
 
-Pour s'arrêter à une page préciser, par exemple la 24e si on veut faire des essais minimum avec KDP :
+Pour s'arrêter à une page préciser, par exemple la 24<sup>e</sup> si on veut faire des essais minimum avec KDP :
 
 <console>pfb build -last=24</console>
 

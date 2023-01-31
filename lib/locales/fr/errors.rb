@@ -6,6 +6,7 @@ ERRORS = {
 
   require_a_book_or_collection: "Il faut se trouver dans un dossier de livre ou de collection.",
   unfound_folder: "Le dossier '%s' est introuvable…",
+  prawn_manual_unfound: "Le manuel de Prawn est introuvable. Il vous faut définir son chemin d'accès dans le fichier ./lib/constants.rb dans la constante PRAWN_MANUEL_PATH.",
 
   # --- Général --- #
 
@@ -14,6 +15,12 @@ ERRORS = {
   
   invalid_data: "La donnée %s de value %s est invalide.", 
 
+  # --- FABRICATION DU LIVRE ---
+
+  building: {
+    too_much_errors_on_properties: "Trop d'erreurs rencontrées sur la propriété '%s'. Réglez le problème avant de reprendre la fabrication du livre.",
+  },
+  
   # --- Aide ---
 
   help: {

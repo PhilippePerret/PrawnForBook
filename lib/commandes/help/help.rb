@@ -5,6 +5,8 @@ class Command
     methode =
       case ini_name
       when 'manuel', 'manual', 'aide' then :open_user_manuel
+      when 'manuel-prawn', 'prawn-manual', 'prawn-manuel'
+        :open_prawn_manual
       else 
         # Note : les assistants passent aussi par ici
         # cf. ci-dessous
@@ -71,6 +73,15 @@ end #/Command
       `open -a Typora "#{USER_MANUAL_MD_PATH}"`
     else
       `open -a Preview "#{USER_MANUAL_PATH}"`
+    end
+  end
+
+
+  def self.open_prawn_manual
+    if File.exist?(PRAWN_MANUEL_PATH)
+      `open "#{PRAWN_MANUEL_PATH}"` 
+    else
+      puts ERRORS[:prawn_manual_unfound].rouge
     end
   end
 

@@ -71,7 +71,7 @@ class NTitre < AnyParagraph
   end
 
   def self.style(level)
-    get_data(:style, level)
+    get_data(:style, level).to_sym
   end
 
   def self.lines_after(level)

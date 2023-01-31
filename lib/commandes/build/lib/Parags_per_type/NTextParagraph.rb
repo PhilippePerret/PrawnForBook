@@ -23,19 +23,18 @@ class NTextParagraph < AnyParagraph
     end
     #
     # Si le paragraphe possède un formateur, on s'en sert pour 
-    # formater le paragraphe et on poursuit.
+    # formater le paragraphe et on poursuit (contrairement au
+    # "constructeur" ci-dessus)
     # 
-    if own_formaters?
-      own_formaters # on poursuit
-    end
+    own_formaters if own_formaters?
 
-    parag = self
 
     mg_left   = self.margin_left
     if pfbcode && pfbcode[:margin_left]
       mg_left += pfbcode[:margin_left]
     end
     mg_right  = self.margin_right
+    mg_top    = self.margin_top
     theindent = self.indent
 
     # 
@@ -64,7 +63,13 @@ class NTextParagraph < AnyParagraph
     fontStyle   = font_style(pdf)
     fontSize    = font_size(pdf)
     textIndent  = recipe.text_indent
+    textAlign   = self.text_align
     # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
+
+    #
+    # Pour invoquer cette instance
+    # 
+    parag = self
 
     pdf.update do
 
@@ -89,29 +94,36 @@ class NTextParagraph < AnyParagraph
       pdf.update do
         options = {
           inline_format:  true,
-          align:          :justify,
+          align:          textAlign,
           # font_style:     fontStyle,
           size:           fontSize
         }
+
+        if mg_top && mg_top > 0
+          move_down(mg_top)
+        end
+
+        # 
+        # Placement sur la première ligne de référence suivante
+        # 
+        move_cursor_to_next_reference_line
+
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
           #
           # Écriture du paragraphe dans une boite
           # 
           wbox = bounds.width - (mg_left + mg_right)
-          options.merge!(at: [mg_left, cursor])
+          span_options = {position: mg_left}
           # - dans un text box -
-          text_box(final_str, **options)
+          span(wbox, **span_options) do
+            text(final_str, **options)
+          end
         else
           # 
           # Écriture du paragraphe dans le flux (texte normal)
           # 
 
-          # 
-          # Calcul de la ligne de référence sur laquelle poser le
-          # texte et déplacement du curseur
-          # 
-          move_cursor_to_next_reference_line
           # spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
           #
@@ -162,6 +174,8 @@ class NTextParagraph < AnyParagraph
           text(final_str, **options)
         end
       end
+    rescue PrawnFatalError => e
+      raise e
     rescue Exception => e
       puts "Problème avec le paragraphe #{final_str.inspect}".rouge
       puts e.backtrace.join("\n").rouge if debug?
@@ -300,7 +314,8 @@ class NTextParagraph < AnyParagraph
       if self.instance_variables.include?(prop_name)
         self.instance_variable_set(prop_name, args)
       else
-        puts "instances_varialbes : #{self.instance_variables.inspect}"
+        puts "instances_variables : #{self.instance_variables.inspect}"
+        PrawnView.add_error_on_property(prop_name)
         raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
       end
     else
@@ -331,6 +346,10 @@ class NTextParagraph < AnyParagraph
     send(@own_builder_method, self, pdf)
   end
 
+  #
+  # @note
+  #  'styled_tags' contient les tags en début de paragraphe, avant
+  #   des '::', qui définissent la "class" du paragraphe.
   def own_formaters?
     return false if styled_tags.nil?
     @own_formaters_methods = []
@@ -338,6 +357,8 @@ class NTextParagraph < AnyParagraph
       if self.respond_to?("formate_#{tag}".to_sym)
         @own_formaters_methods << "formate_#{tag}".to_sym
         # Il faut toutes les récupérerer
+      elsif self.respond_to?("#{tag}_formater".to_sym)
+        @own_formaters_methods << "#{tag}_formater".to_sym
       end
     end
     return @own_formaters_methods.any?
@@ -345,7 +366,13 @@ class NTextParagraph < AnyParagraph
 
   def own_formaters
     @own_formaters_methods.each do |formater|
-      send(formater, self)
+      begin
+        self.send(formater, self)
+      rescue PrawnFatalError => e
+        raise e
+      rescue Exception => e
+        puts "FORMATER ERROR: #{e.message}".rouge
+      end
     end
   end
 

@@ -8,8 +8,20 @@ class AnyParagraph
     @recipe || pdfbook.recipe
   end
 
+  def text_align
+    @text_align || :justify
+  end
+  def text_align=(value)
+    @text_align = value
+  end
+  alias :alignment :text_align
+  alias :align :text_align
+
   def margin_top
     @margin_top ||= (pfbcode && pfbcode[:margin_top]) || 0
+  end
+  def margin_top=(value)
+    @margin_top = value
   end
   def margin_bottom 
     @margin_bottom ||= (pfbcode && pfbcode[:margin_bottom]) || 0
@@ -38,6 +50,12 @@ class AnyParagraph
       ml || 0
     end
   end
+  def margin_left=(ml)
+    if ml.is_a?(String) && ml.end_with?('%')
+      ml = pourcentage_to_pdfpoints(ml, pdf.bounds.width)
+    end
+    @margin_left = ml
+  end
 
   def margin_left_raw
     @margin_left_raw ||= pfbcode && pfbcode[:margin_left]
@@ -45,6 +63,12 @@ class AnyParagraph
 
   def margin_right
     @margin_right ||= 0
+  end
+  def margin_right=(mg)
+    if mg.is_a?(String) && mg.end_with?('%')
+      mg = pourcentage_to_pdfpoints(mg, pdf.bounds.width)
+    end
+   @margin_right = mg
   end
 
   # --- Calcul Methods --- #
