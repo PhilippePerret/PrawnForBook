@@ -5,6 +5,7 @@ class InputTextFile
   # @prop {PdfBook} La classe principale de l'instance à laquelle
   # appartient ce fichier texte
   attr_reader :pdfbook
+  alias :book :pdfbook
 
   # @prop {String} Chemin d'accès au fichier
   attr_reader :path
@@ -20,7 +21,7 @@ class InputTextFile
   #
   def initialize(pdfbook, patharg)
     @pdfbook  = pdfbook
-    @path = define_path_from_arg(patharg)
+    @path     = define_path_from_arg(patharg)
   end
 
   def define_path_from_arg(patharg)
@@ -71,10 +72,6 @@ class InputTextFile
   # de l'input-file
   def parse
     spy "-> PARSE DU TEXTE".jaune
-    # 
-    # @bypass_it Pour sauter les commentaires ou les textes "ex-commen-
-    # tés" quand ils tiennent sur plusieurs lignes.
-    bypass_it = false
 
     # 
     # Pour consigner les cross-références (pour contrôle)
@@ -84,10 +81,44 @@ class InputTextFile
     # 
     # Boucle sur tous les paragraphes du texte
     # 
-    File.read(path).split("\n").map do |par|
+    good_paragraphes_in(path).map do |par|
+      if par.start_with?('(( include') && par.end_with?(' ))')
+        paragraphes_of_included_file(par[11..-4])
+      else par end
+    end.flatten.map do |par|
+      #
+      # Analyse du paragraphe pour savoir ce que c'est
+      # 
+      spy "PARAGRAPHE : #{par.inspect}"
+      parag = Paragraphe.new(pdfbook, par).parse
+      # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
+      if parag.sometext? && parag.match_cross_reference?
+        @cross_references.deep_merge!(parag.cross_references)
+      end
+      parag # map
+    end
+    # NE RIEN METTRE (MAP RETOURNÉ)
+  end
+
+  ##
+  # @return [Array<String>] La liste des "bons" paragraphes du 
+  # fichier de chemin +pth+
+  # 
+  # @note
+  #   Cette méthode est utilisée aussi bien pour le fichier de texte
+  #   principal que pour les fichiers inclus.
+  # 
+  # @param [String] filepath Chemin d'accès vérifié au fichier
+  # 
+  def good_paragraphes_in(filepath)
+    # 
+    # @bypass_it Pour sauter les commentaires ou les textes "ex-commen-
+    # tés" quand ils tiennent sur plusieurs lignes.
+    bypass_it = false
+    File.read(filepath).split("\n").map do |par|
       par.strip
     end.reject do |par|
-      par.empty? # SURTOUT PAS : LES TITRES || par.start_with?('# ')
+      par.empty? # SURTOUT PAS : LES TITRES par.start_with?('# ')
     end.reject do |par|
       if par.start_with?('<!--')
         bypass_it = true
@@ -97,18 +128,36 @@ class InputTextFile
       else
         bypass_it
       end
-    end.map do |par|
-      #
-      # Analyse du paragraphe pour savoir ce que c'est
-      # 
-      parag = Paragraphe.new(pdfbook, par).parse
-      # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
-      if parag.sometext? && parag.match_cross_reference?
-        @cross_references.deep_merge!(parag.cross_references)
-      end
-      parag # map
+    end    
+  end
+
+  ##
+  # @return [Array<String>] Liste des paragraphes du texte inclus
+  # défini par le chemin absolu ou relatif +fpath+
+  # 
+  def paragraphes_of_included_file(fpath)
+    fpath = search_included_file_from(fpath)
+    return good_paragraphes_in(fpath)
+  end
+
+  def search_included_file_from(fpath)
+    return fpath if File.exist?(fpath)
+    fpath_ini = fpath.freeze
+    fpath = search_included_file_in_folder(fpath_ini, self.folder)
+    return fpath if fpath
+    if pdfbook.in_collection?
+      fpath = search_included_file_in_folder(fpath_ini, book.collection.folder)
+      return fpath if fpath
     end
-    # NE RIEN METTRE (MAP RETOURNÉ)
+    raise PrawnFatalError.new(ERRORS[:building][:unfound_included_file] * fpath_ini)
+  end
+  def search_included_file_in_folder(fpath, dossier)
+    fpath_ini = fpath.freeze
+    ['', '.md','.text','.txt','.pfb.md','.pfb.txt'].each do |ext|
+      fpath = File.join(folder, "#{fpath_ini}#{ext}")
+      return fpath if File.exist?(fpath)
+    end
+    return nil # échec
   end
 
   ##

@@ -26,6 +26,16 @@ class P4BCode < AnyParagraph
       spy "Parag_style = #{parag_style.inspect}"
     when 'new_page', 'nouvelle_page', 'saut_de_page'
       pdf.start_new_page
+    when 'new_even_page', 'nouvelle_page_paire'
+      pdf.update do
+        start_new_page
+        start_new_page if page_number.odd?
+      end
+    when 'new_odd_page', 'new_belle_page', 'nouvelle_page_impaire'
+      pdf.update do
+        start_new_page
+        start_new_page if page_number.even?
+      end
     when 'tdm', 'toc', 'table_des_matieres','table_of_contents','table_of_content'
       pdf.init_table_of_contents
     when 'index'

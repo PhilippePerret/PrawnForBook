@@ -3,6 +3,8 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
+  @@last_numero = 0
+
   def self.init_first_turn
     @@last_numero = 0
   end

@@ -19,6 +19,7 @@ ERRORS = {
 
   building: {
     too_much_errors_on_properties: "Trop d'erreurs rencontrées sur la propriété '%s'. Réglez le problème avant de reprendre la fabrication du livre.",
+    unfound_included_file: "Le fichier à inclure '%s' est introuvable (même dans le dossier du livre ou de la collection).",
   },
   
   # --- Aide ---

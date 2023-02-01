@@ -1,7 +1,7 @@
 require 'test_helper'
 class DefaultDataTest < Minitest::Test
 
-  require 'lib/required/Recipe.rb'
+  require 'lib/required/RECIPE.rb'
   require 'lib/pages/book_format/data.rb' # => PAGE_DATA
   PAGE_DATA = page_data = Prawn4book::Pages::BookFormat::PAGE_DATA
 

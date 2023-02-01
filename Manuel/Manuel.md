@@ -749,6 +749,59 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 
 
 
+---
+
+## Contenu du livre (les pages)
+
+### Passer à la page suivante
+
+Utiliser la marque suivante pour passer à la page suivante
+
+```
+(( new_page ))
+```
+
+Si l'on veut se retrouver sur une page paire, utiliser l’une de ces marques :
+
+```
+(( new_even_page ))
+
+ou 
+
+(( nouvelle_page_paire ))
+
+```
+
+Si l'on veut se retrouver sur une page impaire, utiliser l'une de ces marques :
+
+```
+(( new_odd_page ))
+
+ou
+
+(( nouvelle_page_impaire ))
+
+ou
+
+(( new_belle_page ))
+
+```
+
+
+
+### Insérer un autre texte
+
+On peut insérer un autre fichier `pfb.md` (ou autre…) dans le texte `texte.pfb.md` d’un livre Prawn. Pour ce faire, il suffit d’utiliser la commande **`include:`** suivie du chemin relatif ou absolu du fichier.
+
+Par exemple, si le dossier du livre contient un dossier `textes` et un fichier texte `introduction.pfb.md` contenant le texte de l’introduction, on peut l’insérer dans le livre à l’endroit voulu à l’aide de :
+
+```
+(( include: textes/introduction ))
+```
+
+Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n’est utile que s’il existe plusieurs fichiers de même affixe (nom sans l’extension) dans le dossier. Dans le cas contraire, **Prawn-for-book** recherche le fichier dont il est question.
+
+
 
 ---
 
@@ -1033,26 +1086,24 @@ Etc.
 ### Numérotation des paragraphes
 
 
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété           | valeurs possibles |
-| -------------------------------------------------------- | ------- | ------------------- | ----------------- |
-|                                                          |         | **:opt_num_parag:** | true/false        |
-|                                                          |         | **:num_parag:**     | Table de valeurs  |
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété          | valeurs possibles          |
+| -------------------------------------------------------- | ------- | ------------------ | -------------------------- |
+|                                                          |         | **:numerotation:** | `pages` (défaut), `parags` |
+|                                                          |         | **:num_parag:**    | Table de valeurs           |
 
 
 
-Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:opt_num_parag` de la [recette du livre ou de la collection][] à `true`.
+Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:parags` de la [recette du livre ou de la collection][] à `true`.
 
 ~~~yaml
-:opt_num_parag: true
+book_format:
+	text:
+		numerotation: pages # ou parags
 ~~~
 
 L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
 
-~~~yaml
-:num_parag:
-	:font: NomDeFonte # clé de :fonts
-	:size: 7
-~~~
+{À refaire}
 
 Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:top_adjustment` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
 
@@ -1505,6 +1556,12 @@ La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘
 | -------------------------------------------------------- | ------- | --------------- | ----------------- |
 |                                                          |         | **:publisher:** | Table de données  |
 
+
+
+> Utiliser plutôt l’assistant : <console>pfb assistant</console> et choisir “publisher” ou “maison d’édition”.
+
+
+
 ~~~yaml
 :publisher:
 	:name: 	"Nom édition" # p.e. "Icare Éditions"
@@ -1530,7 +1587,7 @@ La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘
 On peut être assister pour la création de la donnée des fontes (qui nécessite de connaitre les chemins d’accès à toutes les fontes possibles) de cette manière :
 
 * ouvrir un Terminal au dossier du livre ou de la collection
-* jouer la commande <console>prawn-for-book aide fontes</console>.
+* jouer la commande <console>pfb aide fontes</console> ou <console>pfb assistant</console> et choisir “Fontes”.
 
 ~~~yaml
 
@@ -1553,6 +1610,7 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 # Définition des fontes (note : ce sont celles par défaut quand on
 # utilise les templates)
+#<fontes>
 :fonts:
   Garamond:
     :normal: "*dosfonts/ITC - ITC Garamond Std Light Condensed.ttf"
@@ -1567,7 +1625,7 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
   Nunito:
     :normal: "*pfbfonts/Nunito_Sans/NunitoSans-Regular.ttf"
     :bold:   "*pfbfonts/Nunito_Sans/NunitoSans-Bold.ttf"
-
+#</fontes>
 ~~~
 
 > L’ordre des fonts ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
@@ -1583,6 +1641,8 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 #### Tous les types de page
 
 (c’est-à-dire la page à la fin du livre présentant les différentes informations sur ce livre)
+
+{TODO À reprendre en totalité}
 
 ~~~yaml
 :skip_page_creation:  true 	# à true, la première page automatique

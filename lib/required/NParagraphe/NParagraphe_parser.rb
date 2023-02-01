@@ -5,6 +5,8 @@ class Paragraphe
 
   REG_IMAGE = /^IMAGE\[(.+?)\]$/
 
+  @codenextparag = nil
+
   class << self
     #
     # La méthode précédente (parse) s'occupe d'un texte pas encore
