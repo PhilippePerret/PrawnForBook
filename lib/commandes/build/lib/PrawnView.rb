@@ -118,7 +118,35 @@ class PrawnView
   end
 
 
+  # Surclassement de la méthode Prawn::Document#font permettant de
+  # définir la fonte courante.
+  # Il existe maintenant 3 façons diffrentes de définir la fonte :
+  # 
+  # - normalement, c'est-à-dire avec le nom [String] en premier 
+  #   argument et les autres paramètres en second argument.
+  # - Avec un Hash qui contient les paramètres et en plus la propriété
+  #   :name (ou :font) définissant le nom de la fonte
+  # - Avec une instance Prawn4book::Fonte (utilisation privilégiée
+  #   dans l'application)
+  # 
+  def font(fonte, params = nil)
+    exit
+    case fonte
+    when String 
+      super
+    when Hash
+      super(fonte.delete(:name)||fonte.delete(:font), **fonte)
+    when Prawn4book::Fonte
+      super(fonte.name, font.params)
+    when NilClass
+      raise ERRORS[:fontes][:font_argument_nil]
+    else
+      raise ERRORS[:fontes][:invalid_font_params]
+    end
+  end
 
+
+  # @helper
   def add_cursor_position(str)
     "<font size=\"8\" name=\"#{pdfbook.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
   end

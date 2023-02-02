@@ -42,8 +42,8 @@ DEFAULT_FONTS_KEYS = Prawn::Fonts::AFM::BUILT_INS.map do |font_def|
   font_style = case font_style
       when NilClass       then :regular
       when 'Bold'         then :bold
-      when 'BoldOblique'  then :bold_oblique
-      when 'Oblique'      then :oblique
+      when 'BoldOblique'  then :bold_italic
+      when 'Oblique'      then :italic
       when 'BoldItalic'   then :bold_italic
       when 'Italic'       then :italic
       when 'Roman'        then :roman

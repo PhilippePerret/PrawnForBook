@@ -40,6 +40,13 @@ ERRORS = {
 
   }, #/ :recipe
 
+  # --- Fontes ---
+  fontes: {
+    font_argument_nil: "Les paramètres de #font doivent être définis (font-name et font-properties, Hash ou Prawn4book::Fonte)",
+    invalid_font_params: "Les paramètres pour #font sont invalides (soit les paramètres traditionnels — font-name, {font-params} — soit un Hash contenant {:name, :size, :style}, soit une instance Prawn4book::Fonte).",
+
+  },
+
   # --- Maison d'éditions ---
 
     publishing: {

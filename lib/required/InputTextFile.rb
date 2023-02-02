@@ -120,7 +120,9 @@ class InputTextFile
     end.reject do |par|
       par.empty? # SURTOUT PAS : LES TITRES par.start_with?('# ')
     end.reject do |par|
-      if par.start_with?('<!--')
+      if par.match?(/^<\!\-\-.+\-\->$/)
+        true
+      elsif par.start_with?('<!--')
         bypass_it = true
       elsif par.end_with?('-->')
         bypass_it = false
@@ -149,7 +151,7 @@ class InputTextFile
       fpath = search_included_file_in_folder(fpath_ini, book.collection.folder)
       return fpath if fpath
     end
-    raise PrawnFatalError.new(ERRORS[:building][:unfound_included_file] * fpath_ini)
+    raise PrawnFatalError.new(ERRORS[:building][:unfound_included_file] % fpath_ini)
   end
   def search_included_file_in_folder(fpath, dossier)
     fpath_ini = fpath.freeze

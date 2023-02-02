@@ -33,11 +33,11 @@ class TableOfContent
     pdf.go_to_page(tdm.page_number)
     pdf.move_cursor_to_top_of_the_page
     spy "On rejoint la page #{tdm.page_number} pour écrire la TdM".jaune
+    pdf.move_down(recipe_tdm[:lines_before] * tdm_line_height)
     #
     # Il faudrait calculer la hauteur totale de la table des 
     # matières pour bien la placer sur un certain nombre de pages
     # 
-    pdf.move_down(recipe_tdm[:lines_before] * tdm_line_height)
 
     # 
     # Si on doit numéroter, on doit calculer la taille de la boite
@@ -110,6 +110,12 @@ class TableOfContent
       pdf.text_box(content, **{at:[indent, pdf.cursor], width: titre_width, height: (tdm_line_height), overflow: :truncate})
       # pdf.text content
       pdf.move_down(tdm_line_height)
+      # 
+      # Faut-il passer sur une autre page ?
+      # 
+      if pdf.cursor < 20
+        pdf.start_new_page
+      end
     end
 
   end

@@ -48,6 +48,22 @@ class InputTextFileTest < Minitest::Test
     end
   end
 
+  def test_les_commentaires_sont_passes
+    resume "
+    Le parser de texte ne prend pas les commentaires.
+    "
+
+    parags = [
+      "Premier paragraphe.", "<!-- Commentaire à passer -->",
+      "Autre paragraphe."
+    ]
+    build_main_text_with(parags.join("\n\n"))
+    actual    = inputfile.paragraphes.count
+    expected  = 2
+    assert_equal(expected, actual, "Le texte ne devrait contenir que #{expected} paragraphes. Il en contient #{actual}.")
+
+  end
+
   def test_include_text
     build_main_text_with("Un paragraphe normal\n(( include intro.pfb ))\nDernier paragraphe.")
     intro_file_path = File.join(folder, 'intro.pfb.md')
