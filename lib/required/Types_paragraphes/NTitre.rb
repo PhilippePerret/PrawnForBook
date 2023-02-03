@@ -17,17 +17,10 @@ class NTitre < AnyParagraph
     @leading ||= self.class.leading(level)
   end
 
-  def font
-    @font ||= self.class.font(level)
-  end
-  # @prop La taille de la police en fonction du niveau de titre
-  # 
-  def size
-    @size ||= self.class.size(level)
-  end
-
-  def style
-    @style ||= self.class.style(level)
+  # @return [Prawn4book::Fonte] Instance Fonte pour ce niveau de
+  # titre
+  def fonte
+    @fonte ||= Prawn4book::Fonte.title(level)
   end
 
   # @prop {Integer} Espace avec le texte suivant
@@ -62,18 +55,6 @@ class NTitre < AnyParagraph
 
   # --- MÉTHODES DE CLASSES ---
 
-  def self.font(level)
-    get_data(:font, level)
-  end
-
-  def self.size(level)
-    get_data(:size, level)
-  end
-
-  def self.style(level)
-    get_data(:style, level).to_sym
-  end
-
   def self.lines_after(level)
     laft = get_data(:lines_after, level)
     # laft = 1 if laft === 0
@@ -101,6 +82,11 @@ class NTitre < AnyParagraph
   ##
   # @return [Any] La valeur +property+ pour le niveau de titre
   # +level+
+  # @note
+  #   On n'utilise plus cette méthode pour le :name, :size et :style
+  #   de la police, puisqu'elle est gérée par Prawn4book::Fonte. On
+  #   ne s'en sert plus que pour les lignes avant/après, etc.
+  # 
   def self.get_data(property, niveau)
     key_niveau = :"level#{niveau}"
     unless data_titles[key_niveau].key?(property)
