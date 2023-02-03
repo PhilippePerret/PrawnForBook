@@ -11,6 +11,12 @@ class Recipe
   end
 
   def build_with(**props)
+    # 
+    # Pour ne mettre aucune valeur par défaut
+    # 
+    if props.delete(:no_default) || props.delete(:empty)
+      @data = {}
+    end
     #
     # Prends la table +props+ de premier niveau et en fait une
     # table en perspective correspondant aux données recette d'un
@@ -111,7 +117,7 @@ class Recipe
   end
 
   def save
-    # puts "Données recette sauvées : #{data.inspect}".jaune
+    # puts "Données recette sauvées dans #{path.inspect} : #{data.inspect}".jaune
     File.write(path, data.to_yaml)
   end
 

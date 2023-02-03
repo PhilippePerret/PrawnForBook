@@ -33,6 +33,7 @@ class AbstractRecipe
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
     line_height:  [:book_format, :text, :line_height],
+    font_size:    [:book_format, :text, :default_size],
     indent:       [:book_format, :text, :indent],
     book_height:  [:book_format, :book, :height],
     page_height:  [:book_format, :book, :height],
@@ -195,6 +196,22 @@ private
   end
   def self.realize_properties(props)
     real_props = {}
+    # 
+    # Si les fonts ont été fournies "normalement", donc pas en tant
+    # que premier niveau de table.
+    # 
+    if props.key?(:fonts) && props[:fonts].is_a?(Hash)
+      real_props.merge!(fonts: props.delete(:fonts))
+    end
+    # 
+    # Si les données des titres ont été fournies régulièrement (en
+    # profondeur) on les prend en tant que telles
+    # 
+    if props.key?(:titles) && props[:titles].is_a?(Hash)
+      real_props.merge!(titles: props.delete(:titles))
+    end
+    
+    # - Ajouter les données uni-dimension -
     props.each do |key, value|
       dpath = REAL_PATH_DATA[key] || []
       la = real_props

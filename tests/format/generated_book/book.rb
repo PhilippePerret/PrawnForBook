@@ -31,6 +31,7 @@ class Book
 ###################       INSTANCE      ###################
   
   def initialize(test_method_name)
+    Prawn4book::PdfBook.reset if defined?(Prawn4book::PdfBook)
     @isincollection = false # a priori
     @test_method_name = test_method_name
   end

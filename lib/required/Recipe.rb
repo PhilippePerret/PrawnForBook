@@ -249,23 +249,34 @@ class Recipe
   end
 
   # Font par défaut (la première définie ou par défaut)
+  # 
+  # @note
+  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font
     @default_font ||= fonts_data.values.first
   end
+  
+  # 
+  # @note
+  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_name
-    @default_font_name ||= begin
-      (default_font ? fonts_data.keys : ["Times-Roman"]).first
-    end
+    @default_font_name ||= book_format[:text][:default_font]
   end
+
+  # 
+  # @note
+  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_style
     @default_font_style ||= begin
       if default_font then default_font[:style] end || :regular
     end
   end
+
+  # 
+  # @note
+  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_size
-    @default_font_size ||= begin
-      if default_font then default_font[:size] end || 10
-    end
+    @default_font_size ||= book_format[:text][:default_size]
   end
 
 
@@ -434,9 +445,11 @@ class Recipe
   # @return [Hash<Hash>] Les données pour les six niveaux de
   # titre.
   # @note
-  #   Que ces données soient définies ou non, elles ont toujours
-  #   une valeur. Les valeurs par défaut sont fixées par la méthode
-  #   get_all_titles_data
+  #   - Que ces données soient définies ou non, elles ont toujours
+  #     une valeur. Les valeurs par défaut sont fixées par la méthode
+  #     get_all_titles_data
+  #   - Ne pas utiliser directement. Passer par Prawn4book::Fonte.title1… instead.
+  # 
   def titles_data
     @book_titles ||= get_all_titles_data
   end
@@ -508,8 +521,8 @@ class Recipe
   def title_default_value_prop(prop, niveau)
     case prop
     when :font          then "Helvetica"
-    when :size          then 28 - (niveau * 2)
-    when :style         then :regular
+    when :size          then nil
+    when :style         then nil
     when :leading       then 0.0
     when :lines_before  then 7 - niveau
     when :lines_after   then niveau > 3 ? 0 : (4 - niveau)

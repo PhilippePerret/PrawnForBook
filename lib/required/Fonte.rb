@@ -1,0 +1,145 @@
+=begin
+
+  Class Prawn4book::Fonte
+  -----------------------
+  Pour la gestion facile des fontes dans l'application.
+
+  Permet de centraliser tout ce qui concerne les fontes.
+
+  Avoir des instances permet de faire 'fonte.font', 'fonte.size', 
+  etc.
+
+=end
+module Prawn4book
+class Fonte
+####################       CLASSE      ###################
+class << self
+
+  # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
+  # de titre +level+
+  def title(level)
+    self.send("title#{level}".to_sym)
+  end
+  alias :titre :title
+
+  # @return [Prawn4book::Fonte] Les instances fonte pour les titres
+  # des différents niveau, soit définis dans la recette du livre
+  # courant (livre ou collection) soit par défaut.
+  # 
+  # @api public
+  def title1 ; @title1 ||= titre_default(1, 24.5) end
+  alias :titre1 :title1
+  def title2 ; @title2 ||= titre_default(2, 22.5) end
+  alias :titre2 :title2
+  def title3 ; @title3 ||= titre_default(3, 20.5) end
+  alias :titre3 :title3
+  def title4 ; @title4 ||= titre_default(4, 18.5) end
+  alias :titre4 :title4
+  def title5 ; @title5 ||= titre_default(5, 16.5) end
+  alias :titre5 :title5
+  def title6 ; @title6 ||= titre_default(6, 14.5) end
+  alias :titre6 :title6
+  def title7 ; @title7 ||= titre_default(7, 12.5) end
+  alias :titre7 :title7
+
+  # @return [Prawn4book::Fonte] l'instance fonte par défaut ultime,
+  # c'est-à-dire qu'elle existe toujours. 
+  # 
+  # @note
+  #   Soit elle retourne la première fonte définie dans la recette
+  #   Soit elle retourne la première fonte par défaut de Prawn
+  # 
+  # @api public
+  def default_fonte
+    @default_fonte ||= begin
+      if book && recipe.default_font_name
+        new(recipe.default_font_name, **{style: recipe.default_font_style, size:default_size})
+      elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
+        datafirst = recipe.fonts_data.values.first
+          new(recipe.fonts_data.keys.first.to_s, **{style: datafirst.keys.first, size: default_size})
+      else
+        default_fonte_times
+      end
+    end
+  end
+
+  def default_size
+    @default_size ||= begin
+      if book && recipe.default_font_size
+        recipe.default_font_size
+      else
+        11
+      end
+    end
+  end
+
+  def default_fonte_times
+    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :roman})
+  end
+
+  # @prop [Prawn4book::PdfBook] Instance du livre courant
+  # 
+  # @api private
+  def book
+    @book ||= begin
+      Prawn4book::PdfBook.current? && Prawn4book::PdfBook.ensure_current
+    end
+  end
+
+  # --- Private Methods ---
+
+  # - raccourci -
+  def recipe
+    @recipe ||= book.recipe
+  end
+
+
+  # @return [Prawn4book::Fonte] Instance pour un titre de niveau
+  # +level+ dont la taille sera mise à +size+ si le titre n'est pas
+  # défini dans la recette du livre ou de la collection.
+  # 
+  # @api private
+  def titre_default(level, size)
+    key_level = "level#{level}".to_sym
+    font_name, font_style, font_size =
+      if book && recipe.titles_data && (df = recipe.titles_data[key_level])
+        [df[:font], (df[:style]||:bold), (df[:size]||size)]
+      else
+        ["Helvetica", :bold, size]
+      end
+    new(font_name, **{style:font_style, size:font_size})
+  end
+
+  # Pour les tests
+  def reset
+    (1..7).each do |niveau|
+      self.instance_variable_set("@title#{niveau}", nil)
+    end
+    @book   = nil
+    @recipe = nil
+    @default_fonte_times = nil
+    @default_fonte = nil
+    @default_size  = nil
+  end
+
+end #/<< self Fonte
+###################       INSTANCE      ###################
+
+attr_reader :name, :style, :size
+attr_reader :hname
+
+def initialize(font_name, data)
+  @data   = data
+  @name   = font_name
+  @style  = data[:style]
+  @size   = data[:size]
+  @hname  = data[:hname] # a human name
+end
+
+# @return [Hash] la table des valeurs pour le second argument de
+# Prawn::Document#font
+def params
+  @params ||= {style: style, size: size}
+end
+end #/class Fonte
+end #/module Prawn4book

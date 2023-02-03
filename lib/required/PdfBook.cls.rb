@@ -36,6 +36,11 @@ class << self
     end
   end
 
+  # Pour les tests
+  def reset
+    @cfolder = nil
+  end
+
   # @return une instance du book courant
   #
   # Soit ce livre est défini par le dossier courant (s'il contient

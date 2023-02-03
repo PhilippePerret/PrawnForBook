@@ -1,41 +1,8 @@
 ---
-:book_data:
-  :title: Mon plus beau livre
-  :auteurs: Marion MICHEL
-  :isbn: 123-8-26598-2-36
-  :collection: false
+:fonts:
+  :Avenir:
+    :normal: "/System/Library/Fonts/Avenir Next.ttc"
+    :condensed: "/System/Library/Fonts/Avenir Next Condensed.ttc"
 :book_format:
-  :page:
-    :height: 576
-    :margins:
-      :top: 10
-      :bot: 20
-      :ext: 25
-      :int: 35
-    :numerotation: pages
   :text:
-    :indent: 14.173228346456694
-:titles:
-  :level1:
-    :next_page: true
-    :lines_before: 0
-  :level2:
-    :size: 14
-:headers_footers:
-  :dispositions:
-    :dispo_with_numero:
-      :name: Page normale
-      :footer_id: :footer_with_numero
-      :first_page: 4
-  :headfooters:
-    :footer_with_numero:
-      :name: Avec un numéro à gauche et à droite
-      :id: footer_with_numero
-      :font: Helvetica
-      :size: 12
-      :pg_left:
-        :content: :numero
-        :align: :left
-      :pd_right:
-        :content: :numero
-        :align: :right
+    :default_size: 15
