@@ -1,0 +1,4 @@
+---
+runner: console
+console_options:
+  arguments: "--order=defined"

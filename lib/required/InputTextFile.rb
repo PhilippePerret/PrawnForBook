@@ -71,8 +71,6 @@ class InputTextFile
   # titre, bloc formaté, etc. pour produire la propriété @paragraphes
   # de l'input-file
   def parse
-    spy "-> PARSE DU TEXTE".jaune
-
     # 
     # Pour consigner les cross-références (pour contrôle)
     # 
@@ -89,7 +87,7 @@ class InputTextFile
       #
       # Analyse du paragraphe pour savoir ce que c'est
       # 
-      spy "PARAGRAPHE : #{par.inspect}"
+      # spy "PARAGRAPHE : #{par.inspect}"
       parag = Paragraphe.new(pdfbook, par).parse
       # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
       if parag.sometext? && parag.match_cross_reference?

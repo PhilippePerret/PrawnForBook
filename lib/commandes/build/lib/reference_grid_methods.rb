@@ -16,12 +16,11 @@ class PrawnView
   #   la méthode utilisée ('text' par exemple).
   # 
   def define_default_leading(font = nil, size = nil, lheight = nil)
-    font    ||= default_font_name
-    size    ||= default_font_size
-    style   ||= default_font_style
+    fonte   = Fonte.default_fonte
+    size    ||= Fonte.default_size
     lheight ||= line_height
-    self.default_leading = font2leading(font, size, style, lheight)
-    spy "default_leading mis à #{self.default_leading.inspect} pour #{font}/#{size} (line_height: #{lheight})".bleu
+    self.default_leading = font2leading(fonte, size, lheight)
+    spy "default_leading mis à #{self.default_leading.inspect}".bleu
   end
 
   ##
@@ -84,7 +83,7 @@ class PrawnView
     # 
     # Définition de la fonte à utiliser
     # 
-    font = font(default_font_name, size: default_font_size)
+    fonte = font(default_font_name, size: default_font_size)
     # 
     # Aspect des lignes (bleues et fines)
     # 
@@ -152,21 +151,32 @@ class PrawnView
   # Note : ne pas oublier d'indiquer la fonte en sortant de cette
   # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
   # prenant à l'entrée dans la méthode
-  def font2leading(fonte, size, style, hline, options = {})
-    # spy "Leading = #{leading.inspect}".bleu
-    font fonte, **{style: style, size:size}
-    h = height_of("A", leading:leading, size: size)
-    if (h - hline).abs > (h - 2*hline).abs
-      options.merge!(:greater => true) unless options.key?(:greater)
+  def font2leading(fonte, size, hline, **options)
+    if debug?
+      spy "Fonte   = #{fonte.inspect} (#{fonte.name.inspect}/#{fonte.style.inspect})"
+      spy "Size    = #{size.inspect}"
+      spy "hline   = #{hline.inspect}"
+      spy "options = #{options.inspect}"
+      spy "Leading = #{leading.inspect}"
     end
-    incleading = leading.dup
-    if h > hline && not(options[:greater] == true)
-      while h > hline
-        h = height_of("A", leading: incleading -= 0.01, size: size)
+    incleading = nil
+    font(fonte.name, **{size: size, style:fonte.style})
+    font(fonte) do
+    # font(fonte.name, **{size: size, style:fonte.style}) do
+      h = height_of("A", leading:leading, size: size)
+      spy "h = #{h.inspect}"
+      if (h - hline).abs > (h - 2*hline).abs
+        options.merge!(:greater => true) unless options.key?(:greater)
       end
-    else
-      while h % hline > 0.01
-        h = height_of("A", leading: incleading += 0.01, size: size)
+      incleading = leading.dup
+      if h > hline && not(options[:greater] == true)
+        while h > hline
+          h = height_of("A", leading: incleading -= 0.01, size: size)
+        end
+      else
+        while h % hline > 0.01
+          h = height_of("A", leading: incleading += 0.01, size: size)
+        end
       end
     end
     return incleading

@@ -56,7 +56,9 @@ class PdfBook
     # On doit parser le texte avant de voir si le livre est
     # conforme
     # 
+    spy "-> PARSE DU TEXTE".jaune
     inputfile.parse
+    spy "<- /PARSE DU TEXTE".jaune
     #
     # Le livre doit être conforme, c'est-à-dire posséder les 
     # éléments requis
@@ -65,7 +67,9 @@ class PdfBook
     # 
     # Première passe, pour récupérer les références (if any)
     # 
+    spy "-> Première passe de construction".bleu
     ok_book = build_pdf_book
+    spy "<- Retour de première passe (ok_book = #{ok_book.inspect})".send(ok_book ? :vert : :rouge)
     # 
     # Si des références ont été trouvées, on actualise le fichier
     # des références du livre.
@@ -78,7 +82,9 @@ class PdfBook
     if table_references.has_one_appel_sans_reference?
       table_references.second_turn = true
       PdfBook::NTextParagraph.init_second_turn
+      spy "-> Deuxième passe de construction".bleu
       ok_book = build_pdf_book
+      spy "<- Retour de deuxième passe (ok_book = #{ok_book.inspect}".send(ok_book ? :vert : :rouge)
     end
 
     if ok_book
@@ -148,15 +154,14 @@ class PdfBook
     @pages = {}
 
     me = self
-    pdf.on_page_create do
-      spy "NOUVELLE PAGE (#{pdf.page_number}) CRÉÉE => dans @pages".jaune
-      self.add_page(pdf.page_number)
-    end
-
+    
     # 
     # FONTS
+    # (les empaqueter dans le fichier PDF)
     # 
+    spy "-> Empaquetage des fontes…".bleu
     pdf.define_required_fonts(book_fonts)
+    spy "<- Fontes empaquetées.".vert
 
     #
     # Y a-t-il une DERNIÈRE PAGE définie en options de commande
@@ -175,19 +180,17 @@ class PdfBook
     # Initier la table des matières (je préfère faire mon 
     # instance plutôt que d'utiliser l'outline de Prawn)
     # 
+    spy "Instanciation de la table des matières".gris
     tdm = Prawn4book::Tdm.new(self, pdf)
     pdf.tdm = tdm
 
+    spy "-> Écriture des pages initiales".bleu
     pdf.start_new_page      if page_de_garde?
-
     pdf.build_faux_titre    if page_faux_titre?
-      
     pdf.build_page_de_titre if page_de_titre?
-
-    # 
-    # Commencer toujours sur la BELLE PAGE
-    # 
+    # Toujours commencer sur la BELLE PAGE
     pdf.start_new_page if pdf.page_number.even?
+    spy "<- fin de l'écriture des pages initiales".vert
 
     # 
     # ========================
@@ -196,7 +199,9 @@ class PdfBook
     # 
     # cf. modules/pdfbook/generate_builder/paragraphes.rb
     # 
+    spy "-> Écriture des paragraphes…".bleu
     pdf.print_paragraphs(inputfile.paragraphes)
+    spy "<- Fin de l'écriture des paragraphes".vert
 
     #
     # - PAGES SUPPLÉMENTAIRES -

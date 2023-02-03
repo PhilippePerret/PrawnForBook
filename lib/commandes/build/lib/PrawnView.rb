@@ -69,22 +69,28 @@ class PrawnView
   # volontaire ou naturelle.
   # 
   def start_new_page(options = {})
+    spy "-> Départ de nouvelle page…".bleu
     # 
     # Réglage des marges de la prochaine page
     # 
     super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
     @table_reference_grid || begin
+      spy "Définition du leading par défaut"
       define_default_leading
+      spy "=> leading = #{default_leading}".bleu
     end
     #
     # Ajouter une page dans la donnée @pages du book
     # 
     pdfbook.add_page(page_number)
-    
+    spy "Nouvelle page créée (page #{page_number} ajoutée à @pages)".jaune
     # 
     # On replace toujours le curseur en haut de la page
     # 
+    spy "-> déplacement du curseur en haut de la page…".bleu
     move_cursor_to_top_of_the_page
+
+    spy "<- Nouvelle page initiée avec succès".vert
   end
 
   def move_cursor_to_top_of_the_page
@@ -129,17 +135,16 @@ class PrawnView
   # - Avec une instance Prawn4book::Fonte (utilisation privilégiée
   #   dans l'application)
   # 
-  def font(fonte, params = nil)
-    exit
+  def font(fonte = nil, params = nil)
     case fonte
+    when NilClass
+      super
     when String 
       super
     when Hash
       super(fonte.delete(:name)||fonte.delete(:font), **fonte)
     when Prawn4book::Fonte
-      super(fonte.name, font.params)
-    when NilClass
-      raise ERRORS[:fontes][:font_argument_nil]
+      super(fonte.name, **fonte.params)
     else
       raise ERRORS[:fontes][:invalid_font_params]
     end

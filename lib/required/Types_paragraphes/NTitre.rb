@@ -22,6 +22,9 @@ class NTitre < AnyParagraph
   def fonte
     @fonte ||= Prawn4book::Fonte.title(level)
   end
+  def size
+    @size ||= fonte.size
+  end
 
   # @prop {Integer} Espace avec le texte suivant
   def lines_after
