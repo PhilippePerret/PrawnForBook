@@ -35,7 +35,7 @@ class SpecialPage
       when Prawn4book::PdfBook    then path.folder
       when String                 then path
       else raise "Je ne sais pas comment transformer #{path.inspect}::#{path.class} en path:String…"
-    end
+      end
     @folder = real_path
     @thing  = thing  
   end

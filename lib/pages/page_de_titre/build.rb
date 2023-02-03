@@ -28,7 +28,7 @@ class PageDeTitre
       # 
       height = bounds.top - bounds.bottom
       spy "Hauteur efficiente : #{height.inspect}".bleu
-      un_tiers = (height / 3).round # pour le titre
+      # un_tiers = (height / 3).round # pour le titre
 
       #
       # LA COLLECTION se place sur la deuxième ligne à partir du
@@ -54,7 +54,7 @@ class PageDeTitre
       # S'il y a un SOUS-TITRE, on le place
       # 
       if book.subtitle
-        old_line_height = line_height.dup
+        # old_line_height = line_height.dup
         font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
         subtitle = book.subtitle.split('\\n').compact
         # 

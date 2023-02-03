@@ -7,7 +7,7 @@
 =end
 require 'test_helper'
 require_relative 'generated_book/required'
-class GeneratedBookTestor < Minitest::Test
+class GeneratedBookTitleTestor < Minitest::Test
 
   def setup
     super
@@ -19,7 +19,7 @@ class GeneratedBookTestor < Minitest::Test
   end
 
   def focus?
-    true
+    # true
     false
   end
 

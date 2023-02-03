@@ -90,7 +90,7 @@ class ReferencesTestor < Minitest::Test
   end
 
   def la_base_du_livre_est_contenue
-    ftext = Factory::Text
+    # ftext = Factory::Text
 
   end
 

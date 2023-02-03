@@ -7,7 +7,7 @@
 =end
 require 'test_helper'
 require_relative 'generated_book/required'
-class GeneratedBookTestor < Minitest::Test
+class GeneratedBookBibliosTestor < Minitest::Test
 
   def setup
     super

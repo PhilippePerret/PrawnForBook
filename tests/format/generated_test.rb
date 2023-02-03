@@ -31,7 +31,7 @@ class GeneratedBookTestor < Minitest::Test
   def book
     @book ||= begin
       GeneratedBook::Book.erase_if_exist
-      GeneratedBook::Book.new
+      GeneratedBook::Book.new(self.name)
     end
   end
 

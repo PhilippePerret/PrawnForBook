@@ -5,8 +5,8 @@ nouveau livre from scratch
 
 =end
 require 'test_helper'
-require_relative 'lib/required'
-require_relative 'lib/recipe_helpers'
+require_relative '../lib/required'
+require_relative '../lib/recipe_helpers'
 
 class InitBookTestor < Minitest::Test
 

@@ -16,7 +16,7 @@ class PageInfosTest < Minitest::Test
   # Utiliser 'return if focus?' en début des tests sauf celui qu'on
   # travaille.
   def focus?
-    true
+    # true
     false # pour jouer tous les tests
   end
 

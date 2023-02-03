@@ -1,4 +1,5 @@
 require 'test_helper'
+
 require 'lib/required'
 
 class InputTextFileTest < Minitest::Test

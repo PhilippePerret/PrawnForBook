@@ -5,7 +5,7 @@ require 'test_helper'
 
 =end
 
-require_relative '../lib/required'
+require 'lib/required'
 
 class InitPdfBookTest < Minitest::Test
 
@@ -24,8 +24,6 @@ class InitPdfBookTest < Minitest::Test
   end
 
   def test_create_recipe_with_data
-    return
-    skip "Concentration"
     Prawn4book.require_module('pdfbook/recipe')
     assert_respond_to pdfbook, :create_recipe
     books_folder = mkdir(File.join(TEST_FOLDER,'assets','essais','books'))
@@ -57,8 +55,6 @@ class InitPdfBookTest < Minitest::Test
   end
 
   def test_create_with_bad_data
-    return
-    skip "Concentration"
     Prawn4book.require_module('recipe')
     books_folder = mkdir(File.join(TEST_FOLDER,'assets','essais','books'))
     cdata = {

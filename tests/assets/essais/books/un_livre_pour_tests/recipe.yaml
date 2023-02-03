@@ -1,22 +1,10 @@
 ---
-#<book_data>
-:book_data:
-  :book_title: Un livre pour essais
-  :book_subtitle: Pour pouvoir faire des essais\nEt notamment des essais de taille\net
-    d'emplacements.
-  :book_id: livre_essais
-  :auteurs: Philippe PERRET
-  :publisher:
-    :name: Icare Éditions
-    :logo: images/logo.jpg
-    :mail: editions@icare-editions.fr
-    :contact: contact@icare-editions.fr
-#</book_data>
+
 #<page_de_titre>
 :page_de_titre:
   :sizes:
     :title: 12
-    :subtitle: 18
+    :subtitle: 11
     :author: 10
     :publisher: 9
     :collection_title: 8
@@ -26,17 +14,4 @@
     :author: 2
   :logo:
     :height: 20
-  :fonts:
-    :title: Helvetica
-    :subtitle: Courier
 #</page_de_titre>
-#<table_of_content>
-:table_of_content:
-  :level2:
-    :separator: none
-  :level3:
-    :separator: none
-#</table_of_content>
-#<bibliographies>
-:bibliographies: {}
-#</bibliographies>
