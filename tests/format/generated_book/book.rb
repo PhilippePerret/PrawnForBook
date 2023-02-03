@@ -28,12 +28,18 @@ class Book
     @@folder_name ||= '_generated_book'
   end
 
+  def self.unnamed_test
+    @@iunnamed_test ||= 0
+    @@iunnamed_test += 1
+    "test-sans-nom-#{@@iunnamed_test}"
+  end
+
 ###################       INSTANCE      ###################
   
-  def initialize(test_method_name)
+  def initialize(test_method_name = nil)
     Prawn4book::PdfBook.reset if defined?(Prawn4book::PdfBook)
     @isincollection = false # a priori
-    @test_method_name = test_method_name
+    @test_method_name = test_method_name || self.class.unnamed_test
   end
 
   ##
