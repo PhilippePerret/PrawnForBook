@@ -119,7 +119,7 @@ class NTitre < AnyParagraph
     # Ajout du titre à la table des matières
     # 
     num = pdf.previous_text_paragraph ? pdf.previous_text_paragraph.numero : 0
-    pdf.tdm.add_title(self, pdf.page_number, num + 1)
+    in_tdm? && pdf.tdm.add_title(self, pdf.page_number, num + 1)
   end
 
   def formated_text(pdf)

@@ -263,6 +263,22 @@ Pour qu'un grand titre se retrouve toujours sur une belle page (ie la page impai
 
 Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
 
+<a name="exclude-titre-tdm"></a>
+
+#### Exclure un titre de la table des matières
+
+Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il soit inscrit en tan que titre dans le texte mais qu’il n’apparaissent pas dans la table des matières, il suffit de mettre `{no-tdm}` dans ce titre, n’importe où sauf avant les dièses. Par exemple :
+
+```
+# {no-tdm} Titre exclus de la tdm
+
+# Titre dans la tdm
+
+## Autre titre exclus {no-tdm}
+```
+
+
+
 ---
 
 <a name="mark-new-pages"></a>
@@ -433,9 +449,15 @@ Elle s’inscrit dans le livre à l’endroit où est placé dans le texte un :
 
 > “toc” signifie “Table of Contents” ou “Table des matières” en anglais.
 
-**ATTENTION** : La construction de la table des matières n’ajoute pas automatiquement de nouvelles pages si la table déborde de la page qui lui est réservée  (tout simplement parce qu’’alors tous les numéros de pages seraient obsolètes…). Si la table des matières tient sur plusieurs page, il faut donc ajouter autant de [marques de nouvelles pages](#mark-new-pages) que voulus.
+**ATTENTION** : La construction de la table des matières n’ajoute pas automatiquement de nouvelles pages si la table déborde de la page qui lui est réservée (**FAUX***)  (tout simplement parce qu’’alors tous les numéros de pages seraient obsolètes…). Si la table des matières tient sur plusieurs pages, il faut donc ajouter autant de [marques de nouvelles pages](#mark-new-pages) que voulus.
+
+> *En fait, elle le fait maintenant, mais si la pagination après, ça n’est pas trop grave ? Non, en fait, il faudrait que soit calculé dans le premier tour le nombre de page pour la table des matières et qu’elle soit inscrite ensuite. Noter que si la tdm est inscrite à la fin du livre, il n’y a plus de problème.
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
+
+Voir ici pour [exclure un titre de la table des matières](#exclude-titre-tdm).
+
+---
 
 <a name="page-index"></a>
 

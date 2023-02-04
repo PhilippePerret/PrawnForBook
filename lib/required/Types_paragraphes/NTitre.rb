@@ -11,6 +11,7 @@ class NTitre < AnyParagraph
   def initialize(pdfbook, data)
     super(pdfbook)
     @data = data.merge!(type: 'titre')
+    check_inscription_in_tdm
   end
 
   def leading
@@ -38,6 +39,12 @@ class NTitre < AnyParagraph
 
   # --- Predicate Methods ---
 
+  # @return true si on doit inscrire le titre dans la table des
+  # matières (true par défaut)
+  def in_tdm?
+    @writeit_in_tdm
+  end
+
   def next_page?
     :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
   end
@@ -55,6 +62,19 @@ class NTitre < AnyParagraph
   def level ; @level  ||= data[:level]  end
   def text  ; @text   ||= data[:text]   end
 
+
+  private
+
+    # Pour définir si on doit inscrire le titre dans la table
+    # des matières
+    def check_inscription_in_tdm
+      txt = data[:text]
+      @writeit_in_tdm = not(txt.match?(/\{no[_\-]tdm\}/i))
+      txt = txt.gsub(/\{no[_-]tdm\}/,'').strip unless @writeit_in_tdm
+      @text = txt
+    end
+
+  public
 
   # --- MÉTHODES DE CLASSES ---
 
