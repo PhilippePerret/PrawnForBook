@@ -50,6 +50,7 @@ DEFAULT_FONTS_KEYS = Prawn::Fonts::AFM::BUILT_INS.map do |font_def|
       else
         raise "Erreur systémique : Le style de fonte #{font_style.inspect} est inconnu (pour la font #{font_def.inspect})."
       end
+  font_name = "Times-Roman" if font_name == 'Times'
   DEFAUT_FONTS.merge!(font_name => {}) unless DEFAUT_FONTS.key?(font_name)
   DEFAUT_FONTS[font_name].merge!(font_style => true)
   font_name # => map

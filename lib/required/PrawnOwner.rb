@@ -22,18 +22,14 @@ class PrawnOwner
   # texte majeurs)
   # 
   def first_font
-    @first_font ||= fontes.keys[0]
+    @first_font ||= Fonte.default_fonte
   end
   alias :default_font :first_font
 
   # @prop Seconde fonte définie (ou première si une seule) pour 
   # valeur par défaut de certains texte mineurs.
   def second_font
-    @second_font ||= fontes.keys[1] || first_font
-  end
-
-  def fontes
-    @fontes ||= recipe.fonts
+    @second_font ||= Fonte.fontes[1] || first_font
   end
 
   # @prop Instance {PdfBook::Recipe} de la recette du livre

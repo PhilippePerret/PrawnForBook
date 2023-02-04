@@ -256,11 +256,18 @@ class Recipe
     @default_font ||= fonts_data.values.first
   end
   
+  def default_font_and_style
+    @default_font_and_style ||= book_format[:text][:default_font_and_style]
+  end
+  
   # 
   # @note
   #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_name
-    @default_font_name ||= book_format[:text][:default_font]
+    @default_font_name ||= begin
+      warn "@deprecated Utiliser default_font_and_style"
+      default_font_and_style.split('/').first.to_sym
+    end
   end
 
   # 
@@ -268,7 +275,12 @@ class Recipe
   #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_style
     @default_font_style ||= begin
-      if default_font then default_font[:style] end || :regular
+      warn "@deprecated Utiliser default_font_and_style"
+      if default_font_and_style
+        default_font_and_style.split('/').last.to_sym
+      else
+        :normal
+      end
     end
   end
 

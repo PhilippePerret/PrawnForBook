@@ -15,6 +15,8 @@ class Fonte
 ####################       CLASSE      ###################
 class << self
 
+  public
+
   # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
   # de titre +level+
   def title(level)
@@ -52,7 +54,11 @@ class << self
   # @api public
   def default_fonte
     @default_fonte ||= begin
-      if book && recipe.default_font_name
+      if book && recipe.default_font_and_style
+        font_name, font_style = recipe.default_font_and_style.split('/')
+        font_style = font_style.to_sym
+        new(font_name, **{style: font_style, size:default_size})
+      elsif book && recipe.default_font_name
         new(recipe.default_font_name, **{style: recipe.default_font_style, size:default_size})
       elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
         datafirst = recipe.fonts_data.values.first
@@ -77,6 +83,41 @@ class << self
     @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :roman})
   end
 
+  # @return [Array<Hash>] La liste des Q-choices pour pouvoir choisir
+  # une police (ou une police associée à un style) dans la liste des 
+  # polices accessibles (polices définies par la recette et polices
+  # par défaut.
+  # 
+  # @param [Hash] data_choix Les données du choix telles que définies dans les data absolues
+  # 
+  def as_choices(data_choix)
+    prop =  if data_choix.key?(:prop)
+              data_choix[:prop]
+            elsif data_choix.key?(:simple_key)
+              data_choix[:simple_key].split('-').last
+            else
+              nil
+            end
+    if prop.to_s.match?(/font_and_style/)
+      # 
+      # On doit retourner les paires font/style existant
+      # 
+      (recipe.fonts_data.merge(DEFAUT_FONTS)).map do |font_name, data_font|
+        data_font.map do |style, stylepath|
+          {name: "#{font_name}/#{style}", value: "#{font_name}/#{style}"}
+        end
+      end.flatten
+    else
+      # 
+      # On ne doit retourner que la liste des fontes
+      #
+      (recipe.fonts_data.merge(DEFAUT_FONTS)).map do |font_name, data_font|
+        {name:font_name, value: font_name}
+      end
+    end
+  end
+
+
   # @prop [Prawn4book::PdfBook] Instance du livre courant
   # 
   # @api private
@@ -87,6 +128,8 @@ class << self
   end
 
   # --- Private Methods ---
+
+  private
 
   # - raccourci -
   def recipe
@@ -103,7 +146,15 @@ class << self
     key_level = "level#{level}".to_sym
     font_name, font_style, font_size =
       if book && recipe.titles_data && (df = recipe.titles_data[key_level])
-        [df[:font], (df[:style]||:bold), (df[:size]||size)]
+        # spy "df (data titre level #{level}) : #{df.inspect}".orange
+        # 
+        # Si le style n'est pas défini, on prend le premier existant
+        # 
+        df[:style] || get_style_default_for_font(df[:font])
+        # 
+        # Array des données retourné
+        # 
+        [df[:font], df[:style], (df[:size]||size)]
       else
         ["Helvetica", :bold, size]
       end
@@ -122,18 +173,41 @@ class << self
     @default_size  = nil
   end
 
+  def get_style_default_for_font(font_name)
+    if book && recipe.fonts_data && recipe.fonts_data.key?(font_name.to_sym)
+      recipe.fonts_data[font_name.to_sym].keys.first
+    elsif DEFAUT_FONTS.key?(font_name.to_s)
+      DEFAUT_FONTS[font_name.to_s].keys.first
+    else
+      raise "Je ne connais la font #{font_name.inspect} ni dans le livre ni dans #{DEFAUT_FONTS.inspect}"
+    end || :normal
+
+  end
+
 end #/<< self Fonte
 ###################       INSTANCE      ###################
 
 attr_reader :name, :style, :size
 attr_reader :hname
 
+public
+
 def initialize(font_name, data)
   @data   = data
   @name   = font_name
   @style  = data[:style]
+  @style = @style.to_sym unless @style.nil?
   @size   = data[:size]
   @hname  = data[:hname] # a human name
+end
+
+def inspect
+  @inspect ||= begin
+    d = [name]
+    d << style if style
+    d << "#{size}pt"  if size
+    d.join('/')
+  end
 end
 
 # @return [Hash] la table des valeurs pour le second argument de

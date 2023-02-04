@@ -77,8 +77,8 @@ class NTextParagraph < AnyParagraph
       # FONTE (name, taille et style)
       # 
       begin
-        spy "Application de la fonte : #{fontFamily}"
-        ft = font(fontFamily, **{size: fontSize, style: fontStyle})
+        spy "Application de la fonte : #{Fonte.default_fonte.inspect}"
+        ft = font(Fonte.default_fonte)
       rescue Prawn::Errors::UnknownFont => e
         spy "--- fonte inconnue ---"
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"

@@ -61,12 +61,19 @@ class SpecialPage
     value = 
       if data_choix.key?(:values)
         choices = case data_choix[:values]
-        when Symbol
-          case method(data_choix[:values]).arity
+        when Method, Symbol
+          methode = data_choix[:values]
+          methode = method(data_choix[:values]) if methode.is_a?(Symbol)
+          puts "methode arity = #{methode.arity.inspect}".orange
+          case methode.arity
           when 0
-            send(data_choix[:values])
+            methode.call
           when 1
-            send(data_choix[:values], data_choix)
+            methode.call(data_choix)
+          when 2
+            methode.call(data_choix, self)
+          else
+            raise "Je ne sais pas comment donner plus de 2 arguments…"
           end
         when Proc
           data_choix[:values].call(recipe_data)
@@ -122,17 +129,17 @@ class SpecialPage
       klasse::PAGE_DATA.each do |main_key, dmainkey|
         if dmainkey.key?(:name) && dmainkey.key?(:default)
           # Un élément à prendre
-          add_choice(choices, dmainkey, "#{main_key}")
+          add_choice(choices, main_key, dmainkey, "#{main_key}")
         else
           # C'est un élément à parcourir (i.e. un groupe de choix)
           dmainkey.each do |key, dkey|
             if dkey.key?(:name) && dkey.key?(:default)
               # Un élément à prendre
-                add_choice(choices, dkey, "#{main_key}-#{key}")
+                add_choice(choices, key, dkey, "#{main_key}-#{key}")
             else
               # Un élément à parcourir (i.e. un groupe de choix)
               dkey.each do |subkey, dsubkey|
-                add_choice(choices, dsubkey, "#{main_key}-#{key}-#{subkey}")
+                add_choice(choices, subkey, dsubkey, "#{main_key}-#{key}-#{subkey}")
               end
             end
           end
@@ -164,7 +171,8 @@ class SpecialPage
       unless dchoix[:raw_name]
         dchoix.merge!(raw_name: dchoix[:name].freeze)
       end
-      value = dvalue_choix[:value]
+      # value = dvalue_choix[:value] # initialement
+      value = dvalue_choix[:value].inspect
       selected = dvalue_choix[:index] if selected.nil? && value.nil?
       dchoix[:name] = "#{dchoix[:raw_name].ljust(max_len)} : #{value}"
       dchoix[:name] = dchoix[:name].vert unless value.nil?
@@ -173,14 +181,14 @@ class SpecialPage
     return [choices, selected]
   end
 
-  def add_choice(choices, dchoice, simple_key)
+  def add_choice(choices, termkey, dchoice, simple_key)
     return if dchoice[:if] && condition_choice_false?(choices, dchoice)
     @choice_index ||= 1 # le premier est "Enregistrer"
     @choice_index += 1 
     val = get_value(simple_key)
     defvalue = dchoice[:default]
     defvalue = defvalue.call if defvalue.is_a?(Proc)
-    choices << {name: dchoice[:name], value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: defvalue}
+    choices << {name: dchoice[:name], prop: termkey, value: dchoice.merge({value: val, index: @choice_index, simple_key: simple_key}), default: defvalue}
   end
 
   ##

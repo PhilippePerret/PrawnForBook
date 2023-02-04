@@ -139,13 +139,15 @@ class PrawnView
     case fonte
     when NilClass
       super
-    when String 
+    when String, Symbol
       super
     when Hash
       super(fonte.delete(:name)||fonte.delete(:font), **fonte)
     when Prawn4book::Fonte
       super(fonte.name, **fonte.params)
     else
+      puts "fonte = #{fonte}".rouge
+      puts "params = #{params.inspect}".rouge
       raise ERRORS[:fontes][:invalid_font_params]
     end
   end
