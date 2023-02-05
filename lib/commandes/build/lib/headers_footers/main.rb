@@ -27,6 +27,14 @@ class HeadersFooters
   # Construction de toutes les dispositions
   # 
   def build
+    #
+    # On ne fait rien s'il ne faut pas placer de header/footer.
+    # @note
+    #   Par défaut, il y a toujours au moins un pied de page avec le
+    #   numéro du paragraphe ou de la page. Pour qu'il n'y ait pas
+    #   de données, il faut que l'utilisateur l'ait explicitement
+    #   stipulé.
+    # 
     data? || return
     # 
     # On donne les données Headfooters à la class Headfooter
@@ -140,14 +148,39 @@ class HeadersFooters
   # - Data -
 
   def dispositions
-    @dispositions ||= data[:dispositions] || {}
+    @dispositions ||= data[:dispositions] || dispositions_default
   end
   def headfooters
-    @headfooters ||= data[:headfooters]
+    @headfooters ||= data[:headfooters] || headfooters_default
   end
   def data
-    @data ||= book.recipe.headers_footers
+    @data ||= book.recipe.headers_footers || data_default
   end
 
+  private
+
+    # - Données par défaut -
+
+    def data_default
+      return nil if book.recipe.no_headers_footers?
+      {
+        dispositions: {
+          numerotation_pages: {
+            name: "Pages numéro",
+            footer_id: :numeropage,
+            header_id: nil
+          }
+        },
+        headfooters: {
+          numeropage: {
+            name: "Numéro de page au centre des pages",
+            font_n_style: 'Helvetica/regular',
+            size: 10,
+            pg_left: {align: :left, content: :numero},
+            pd_right: {align: :right, content: :numero},
+          }
+        }
+      }      
+    end
 end #/class HeadersFooters
 end #/module Prawn4book

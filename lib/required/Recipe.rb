@@ -190,6 +190,9 @@ class Recipe
     :TRUE == @numpagifnonumpar ||= true_or_false(book_format[:page][:num_page_if_no_num_parag])
   end
 
+  def no_headers_footers?
+    book_format[:page][:no_headers_footers] == true
+  end
 
   def skip_page_creation?
     :TRUE == @skipfirst ||= true_or_false(book_format[:page][:skip_page_creation])
@@ -353,6 +356,7 @@ class Recipe
     book_format[:text][:indent]
   end
 
+
   # --- Blocs de données ---
 
   ##
@@ -467,28 +471,72 @@ class Recipe
 
   # --- Private Fonctional Methods ---
 
+  private
+
+  # @return [Any] La donnée de clé +key+ prise soit dans le fichier
+  # recette du livre soit dans le fichier recette de la collection
+  # si collection il y a.
+  # 
+  # @param [String|Symbol] key La clé de la donnée.
+  # 
   def get_data(key)
-    donnee = data[key.to_s] || data[key.to_sym]
-    if donnee.nil? || donnee == :collection
-      data_collection[key.to_sym]
-    else
-      donnee
-    end
+    data[key.to_s] || data[key.to_sym]
   end
 
+  ##
+  # Les données du ou des fichiers recette
+  # 
+  # @note
+  #   On "compile" les données recette du livre avec la recette
+  #   de la collection s'il y a collection.
+  # 
   def data
     @data ||= begin
       dt = {}
-      if File.exist?(path)
-        dt = YAML.load_file(path, aliases: true, symbolize_names: true) || {}
+      cfolder = File.expand_path('.').freeze
+      # 
+      # On remonte 3 dossiers pour voir s'il y a la recette d'une
+      # collection.
+      # Mais on doit procéder du dossier le plus lointain, car c'est
+      # toujours la recette la plus proche qui contient les informa-
+      # à prendre en compte.
+      # Donc on commence par récolter les dossiers de la hiérarchie
+      # et on cherche dedans.
+      # 
+      cfolder_in_hier = cfolder.dup
+      cfolders_in_hierar = [cfolder]
+      4.times do
+        cfolder_in_hier = File.dirname(cfolder_in_hier) || break
+        cfolders_in_hierar << cfolder_in_hier
       end
-      DEFAULT_DATA.merge!(dt)
+      cfolders_in_hierar.reverse!
+      # 
+      # On relève vraiment les données dans les fichiers recette
+      # trouvés
+      # 
+      cfolders_in_hierar.each do |cfolder_in_hier|
+        colrecipe_path = File.join(cfolder_in_hier, 'recipe_collection.yaml')
+        if File.exist?(colrecipe_path)
+          dt = YAML.load_file(colrecipe_path, aliases: true, symbolize_names: true) || {}
+          DEFAULT_DATA.deep_merge!(dt)
+        end
+      end
+      # 
+      # On prend le fichier recette de ce dossier s'il 
+      # existe, donc si c'est un dossier de livre.
+      # 
+      recipe_path = File.join(cfolder, 'recipe.yaml')
+      if File.exist?(recipe_path)
+        dt = YAML.load_file(recipe_path, aliases: true, symbolize_names: true) || {}
+        DEFAULT_DATA.deep_merge!(dt)
+      end
+      spy "DEFAULT_DATA = #{DEFAULT_DATA.pretty_inspect}"
+      DEFAULT_DATA
     end
   end
 
   DEFAULT_DATA = {}
 
-  private
 
   ##
   # @return [Hash] Une table contenant toutes les données pour les

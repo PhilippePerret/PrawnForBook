@@ -145,9 +145,7 @@ end #/ << self
     # 
     # La fonte à appliquer
     # 
-    font_props = {size: font_size(dtiers)}
-    font_props.merge!(style: font_style(dtiers)) if font_style(dtiers)
-    pdf.font(font_name(dtiers), **font_props) do
+    pdf.font(fonte(dtiers)) do
       pdf.text_box(content, **props)
     end
     # 
@@ -184,14 +182,14 @@ end #/ << self
     @tiers ||= (pdf.bounds.width.to_f / 3).round(6)
   end
 
-  def font_name(dtiers = {})
-    dtiers[:font] || @font_name ||= (font || 'Times-Roman')
+  def fonte(dtiers = {})
+    fontnstyle = dtiers[:font_n_style] || 'Helvetica/italic'
+    fname, fstyle = fontnstyle.split('/')
+    fstyle = fstyle.to_sym
+    Fonte.new(fname, **{style:fstyle, size: font_size})
   end
   def font_size(dtiers = {})
     dtiers[:size] || @font_size ||= (size || 10)
-  end
-  def font_style(dtiers = {})
-    dtiers[:style] || @font_style ||= style # peut être nil
   end
 
 private
@@ -225,9 +223,7 @@ private
   end
 
   def get_height_of_tiers(dtiers)
-    fprops = {size: font_size(dtiers)}
-    fprops.merge!(style: font_style(dtiers)) if font_style(dtiers)
-    pdf.font(font_name(dtiers)) do
+    pdf.font(fonte(dtiers)) do
       return pdf.height_of("MAXq")
     end
   end
@@ -241,19 +237,19 @@ private
 
   # - Data -
 
-  def id            ; @id           ||= data[:id]         end
-  def name          ; @name         ||= data[:name]       end
-  def font          ; @font         ||= data[:font]       end
-  def size          ; @size         ||= data[:size]       end
-  def style         ; @style        ||= data[:style]      end
+  def id            ; @id           ||= data[:id]           end
+  def name          ; @name         ||= data[:name]         end
+  def font_n_style  ; @font_n_style ||= data[:font_n_style] end
+  def font          ; @font         ||= data[:font]         end
+  def size          ; @size         ||= data[:size]         end
   # - page gauche (pg_) -
-  def pg_left       ; @pg_left      ||= data[:pg_left]    end
-  def pg_right      ; @pg_right     ||= data[:pg_right]   end
-  def pg_center     ; @pg_center    ||= data[:pg_center]  end
+  def pg_left       ; @pg_left      ||= data[:pg_left]      end
+  def pg_right      ; @pg_right     ||= data[:pg_right]     end
+  def pg_center     ; @pg_center    ||= data[:pg_center]    end
   # - page droite (pd_) -
-  def pd_left       ; @pd_left      ||= data[:pd_left]    end
-  def pd_right      ; @pd_right     ||= data[:pd_right]   end
-  def pd_center     ; @pd_center    ||= data[:pd_center]  end
+  def pd_left       ; @pd_left      ||= data[:pd_left]      end
+  def pd_right      ; @pd_right     ||= data[:pd_right]     end
+  def pd_center     ; @pd_center    ||= data[:pd_center]    end
 
 end #/class Headfooter
 end #/class HeadersFooters

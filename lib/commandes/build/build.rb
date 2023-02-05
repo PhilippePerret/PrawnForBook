@@ -170,7 +170,7 @@ class PdfBook
     pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]
 
     # 
-    # Initier une première page, si on a demandé de la sauter
+    # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
     # au départ (on le demande pour qu'elle prenne en compte les
     # définitions de marge, etc.)
     # 

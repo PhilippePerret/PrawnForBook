@@ -29,6 +29,7 @@ class BookFormat
       no_num_empty:             {name:'Pas de numéro sur pages vides'     , default: true   , type: :bool},
       num_only_if_num:          {name: 'Numéroter page seulement si parag.', if: :numerotation_parag?, default: true, type: :bool},
       num_page_if_no_num_parag: {name: 'Numéro de la page si aucun parag.' , if: :numerotation_parag?, default: true, type: :bool},
+      no_headers_footers:       {name: 'AUCUN pied de page ou entête'     , default: false, type: :bool},
       skip_page_creation:       {name:'Passer la page de création'      , default: true, type: :bool},
     },
     text: {

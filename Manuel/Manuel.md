@@ -7,7 +7,26 @@
 
 [TOC]
 
-**Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un texte simple en véritable PDF prêt pour l’impression, grâce au (lovely) gem **`Prawn`** (d’où le nom de l’application.
+## Introduction
+
+### Présentation
+
+**Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un simple texte en véritable PDF prêt pour l’impression, grâce au (lovely) gem **`Prawn`** (d’où le nom de l’application.
+
+L’application met en forme le texte, dans ses moindres détails et ses moindres aspects, empaquette les polices nécessaires, gère les références — même les références croisées —, gère les index et les bibliographies — autant que l’on veut — et produit un PDF conforme en tout points à ses désirs.
+
+### Les grandes forces de Prawn-for-book
+
+Les grandes forces de ***PRAWN-FOR-BOOK*** sont donc :
+
+* mise en forme du texte dans ses moindre détails (feuilles de style, modules complexes — experts — de formatage),
+* gestion des références internes (renvois, références à une page ou un paragraphes, etc.),
+* gestion des références croisées (références à la page d’un autre livre)
+* gestion d’un index, 
+* gestion d’autant de bibliographies que l’on veut,
+* gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…)
+
+### Commande(s)
 
 Sa commande simple est (*) : 
 
@@ -33,7 +52,7 @@ Ou en version longue (*) :
 
 ## Obtenir de l’aide
 
-L’application étant complexe (dans son utilisation profonde), on peut obtenir de l’aide de différents moyens :
+On peut obtenir de l’aide de différents moyens :
 
 * <console>pfb aide</console> ouvrir une aide générale en présentant les commandes principales.
 * <console>pfb aide `<identifiant>`</console> offrira de l’aide sur l’`<identifiant>`. On peut obtenir grâce à cette commande les assistants de création qui permettent de définir très précisément la recette d’un livre ou d’une collection.
@@ -45,27 +64,25 @@ L’application étant complexe (dans son utilisation profonde), on peut obtenir
 
 <a name="init-book-pdf"></a>
 
-## Initiation d’un livre
+## Création d’un livre
 
-* Créer un dossier dans lequel seront mis tous les éléments du livre,
+* Choisir le dossier dans lequel doit être créé le livre,
 * ouvrir une fenêtre Terminal dans ce dossier,
 * jouer la commande <console>pfb init</console>,
 * choisir de construire un nouveau livre,
-* suivre le processus proposé et choisi.
+* suivre l’assistant pour définir les données du livre (ou n’en définissez aucune, vous aurez toujours le loisir de le faire plus tard).
 
+<a name="init-collection"></a>
 
+## Création d’une collection
 
----
+Avec **Prawn-for-book**, on peut aussi créer des collections, c’est-à-dire un ensemble de livres qui partageront les mêmes éléments, à commencer par la charte graphique. Plutôt que d’avoir à la copier-coller de livre en livre, entrainant des opérations lourdes à chaque changement, on crée une collection qui définira les éléments communs et on met les livres dedans.
 
-<a name="upgrade-book"></a>
-
-### Mettre un livre à niveau (upgrade)
-
-* Ouvrir un Terminal dans le dossier du livre ou de la collection
-* jouer la commande <console>pfb upgrade</console>
-* suivre le processus en répondant aux questions.
-
-Les nouveaux éléments sont automatiquement créés ou actualisés.
+* Choisir le dossier dans lequel doit être créée la collection,
+* ouvrir une fenêtre Terminal à ce dossier,
+* jouer la commande <console>pfb init</console>,
+* choisir de construire une collection,
+* suivre l’assistant de création.
 
 ---
 
@@ -77,17 +94,6 @@ Suivre la [procédure d’initiation d’un nouveau livre](#init-book-pdf) mais 
 
 ---
 
-<a name="init-collection"></a>
-
-## Initiation d’une nouvelle collection
-
-* Créer le dossier dans lequel doit être placée la collection,
-* ouvrir une fenêtre Terminal à ce dossier,
-* jouer la commande <console>prawn-for-book init</console>,
-* choisir de construire une collection.
-
----
-
 <a name="build-book-pdf"></a>
 
 ## Construction du PDF du livre
@@ -96,23 +102,68 @@ Pour lancer la fabrication du PDF qui servira à l'impression du livre, jouer la
 
 ~~~bash
 > cd path/to/book/folder
-> prawn-for-book build
+> pfb build
 ~~~
 
-Certaines options permettent de travailler le livre avant sa fabrication définitive :
-
-Pour s'arrêter à une page préciser, par exemple la 24<sup>e</sup> si on veut faire des essais minimum avec KDP :
-
-<console>pfb build -last=24</console>
+**À bien noter : cette commande fabrique vraiment le PDF qu’il suffira d’envoyer à l’imprimeur pour tirer le livre.**
 
 ### Ouvrir le fichier PDF produit
 
 Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `--open`.
 <console>prawn-for-book build --open</console>
 
-### Position curseur des paragraphes
+### Options de fabrication (pour le travail)
+
+Certaines options permettent de travailler le livre avant sa fabrication définitive. On peut par exemple :
+
+* demander l’affichage des marges,
+* demander l’affichage de la grilles de référence (la grille sur laquelle se calent les lignes pour être bien alignées),
+* demander la fabrication de seulement quelques pages, voire une seule,
+* l’affichage de la hauteur du curseur.
+
+#### Affichage des marges
+
+On peut par exemple demander l’affichage des marges à l’aide de l’option **`--display_margins`**  au moment de la fabrication du livre :
+
+<console>pfb build -display_margins</console>
+
+Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les marges (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
+
+<console>pfb build -display_margins grid=4-12</console>
+
+… pour n’afficher les marges que sur les pages de 4 à 12.
+
+#### Affichage de la grille de référence
+
+On peut afficher les lignes de la grille de référence (pour voir comment seront alignées les lignes du texte) à l’aide de l’option **`--display_grid`**  au moment de la fabrication du livre :
+
+<console>pfb build -display_grid</console> ou <console>pfb build -g</console>
+
+Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les lignes de références (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
+
+<console>pfb build -display_grid grid=4-12</console>
+
+… pour n’afficher la grille de référence que sur les pages de 4 à 12.
+
+#### Affichage d’un rang précis de pages
+
+Pour commencer à une page précise, utiliser l’option simple `-first` avec le numéro de la page :
+
+<console>pfb build -first=12</console>
+
+Pour s'arrêter à une page précise, par exemple la 4<sup>e</sup>, utiliser l’option simple `-last` avec le numéro de page :
+
+<console>pfb build -last=4</console>
+
+Un usage très utile, par exemple, si l’on est limité à un nombre minimal de pages comme sur KDP (24) mais qu’on ne veut pas imprimer tout le livre (s’il est gros) consiste à sortir le PDF avec seulement les 24 premières pages et d’envoyer le PDF pour impression.
+
+<console>pfb build -last=24</console>
+
+#### Affichage du curseur
 
 Avec l'option `-c/--cursor` on peut demander à ce que les positions curseur soient ajoutées au livre.
+
+
 
 ---
 
@@ -138,7 +189,7 @@ Ce package est défini dans le dossier package `Prawn4Book` de Sublime Text. On 
 
 <console>prawn-for-book open package-st</console>
 
-### Modifier l’aspect visuel du texte dans Sublime Text
+### Modifier l’aspect du texte dans Sublime Text (son affichage dans l’application)
 
 Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text* (<console>prawn-for-book open package-st</console>) et modifier le code dans le fichier `Prawn4Book.sublime-settings` (pour la police, la taille de police, etc.) ou le fichier `Prawn4Book.sublime-color-scheme` (pour modifier la colorisation syntaxique ou les scopes).
 
@@ -146,41 +197,11 @@ Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text*
 
 <a name="aspect-livre"></a>
 
-## Aspect du livre (réglages)
-
-Pour gérer l’aspect général du livre, plusieurs options sont utiles.
-
-#### Affichage des marges
-
-On peut par exemple demander l’affichage des marges à l’aide de l’option **`--display_margins`**  au moment de la fabrication du livre :
-
-<console>pfb build -display_margins</console>
-
-Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les marges (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
-
-<console>pfb build -display_margins grid=4-12</console>
-
-… pour n’afficher les marges que sur les pages de 4 à 12.	
-
-#### Affichage de la grille de référence
-
-On peut afficher les lignes de la grille de référence (pour voir comment seront alignées les lignes du texte) à l’aide de l’option **`--display_grid`**  au moment de la fabrication du livre :
-
-<console>pfb build -display_grid</console> ou <console>pfb build -g</console>
-
-Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les lignes de références (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
-
-<console>pfb build -display_grid grid=4-12</console>
-
-… pour n’afficher la grille de référence que sur les pages de 4 à 12.	
-
-#### 
-
----
-
 <a name="book-pages"></a>
 
-## Pages du livre
+## Le livre pour l’impression
+
+<a name="marges"></a>
 
 ### Les marges
 
@@ -189,7 +210,8 @@ Les marges sont définies de façon très strictes et concernent vraiment la par
 ~~~
 				
 					v------ marge gauche (ou intérieure)
-					___________________________
+  			|_fond perdu (10) _________________
+				|	_________________________________
 				|		|			
 Mtop 	 -|   |
 				|	__|________________________
@@ -206,10 +228,13 @@ Footer  -|  | p. 42
 				 |
 Mg Bot  -|
 				 |________________________________________________
+				 |_fond perdu (10)________________________________
 				 
 ~~~
 
 Ce qui signifie que le haut et le bas du texte sont calculés en fonction des marges et des header et footer.
+
+> Noter qu’il y a toujours un fond perdu de 10 post-script points autour de la page.
 
 ---
 
@@ -217,16 +242,20 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 
 ### Pagination
 
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété           | valeurs possibles  |
-| -------------------------------------------------------- | ------- | ------------------- | ------------------ |
-|                                                          |         | **:num_page_style** | num_page/num_parag |
+| <span style="width:200px;display:inline-block;"> </span> | Recette                 | propriété         | valeurs possibles |
+| -------------------------------------------------------- | ----------------------- | ----------------- | ----------------- |
+|                                                          | **`book_format:page:`** | **:numerotation** | pages/parags      |
 
-*Prawn-for-book* permet de paginer de deux manières : 
+Une des grandes fonctionnalités de *Prawn-for-book* est de permettre de paginer de deux manières : 
 
-* à l’aide des numéros de pages,
-* à l’aide des numéros de paragraphes.
+* à l’aide des numéros de pages (pagination traditionnelle),
+* à l’aide des numéros de paragraphes (pagination “technique” permettant de faire référence à un paragraphe précis, par son numéro/indice).
 
-Pour se faire, on règle la valeur de la propriété **`:num_page_style`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont `pages`  (numérotation des pages) ou `parags` ([numérotation des paragraphes](#numerotation-paragraphes)).
+  > La numérotation des paragraphes peut être très pratique aussi quand on veut recevoir des commentaires précis — et localisés — sur son roman ou tout autre livre. Vous pouvez l’utiliser pour le PDF que vous remettez à vos lecteurs et lectrices.
+
+Pour se faire, on règle la valeur de la propriété **`book_format:page:numerotation`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont `pages`  (numérotation des pages) ou `parags` ([numérotation des paragraphes](#numerotation-paragraphes)).
+
+> Modifier la valeur directement dans le fichier recette du livre ou de la collection nécessite une certaine habitude. Il est préférable, pour tous les réglages, de passer par les assistants. Ici, il suffit de jouer <console>pfb assistant</console> et de choisir “Assistant format du livre”, puis de renseigner la propriété “Numérotation”.
 
 Cette valeur influence de nombreux éléments du livre, dont :
 
@@ -255,7 +284,7 @@ La base du texte étant du markdown, les titres s’‘indiquent avec des dièse
 etc. si nécessaire.
 ~~~
 
-Pour la mise en forme des titres dans le livre, voir [les titres dans la recette du livre](#data-titles).
+Pour la mise en forme des titres dans le livre, voir [la définition des titres dans la recette du livre](#data-titles).
 
 #### Grand titre sur une belle page
 
@@ -267,7 +296,7 @@ Pour la mise en forme des titres dans le livre, voir [les titres dans la recette
 
 #### Exclure un titre de la table des matières
 
-Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il soit inscrit en tan que titre dans le texte mais qu’il n’apparaissent pas dans la table des matières, il suffit de mettre `{no-tdm}` dans ce titre, n’importe où sauf avant les dièses. Par exemple :
+Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il soit inscrit en tant que titre dans le texte mais qu’il n’apparaissent pas dans la table des matières, il suffit de mettre `{no-tdm}` dans ce titre, n’importe où sauf avant les dièses. Par exemple :
 
 ```
 # {no-tdm} Titre exclus de la tdm
@@ -277,15 +306,364 @@ Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il so
 ## Autre titre exclus {no-tdm}
 ```
 
+---
+
+<a name="paragraphes"></a>
+
+### Les paragraphes
+
+<a name="definition-paragraphe"></a>
+
+#### Définition
+
+L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atome puisqu'on peut introduire des éléments sémantiques dans le paragraphe lui-même, qui seront évalués "en ligne").
+
+<a name="types-paragraphes"></a>
+
+#### Les différents types de paragraphe
+
+* les [Paragraphes de texte](#paragraph-text),
+* les [Titres](#paragraph-titre),
+* les [Images](#paragraph-image),
+* les [Pfb-codes](#paragraph-code).
+
+<a name="paragraph-text"></a>
+
+#### Paragraphes de texte
+
+Le paragraphe de texte se définit simplement en l'écrivant dans le fichier `.pfb.md`.
+~~~
+Définit dans le texte par un texte ne répondant pas aux critères suivants. Un paragraphe peut commencer par autant de balises que nécessaire pour spécifier les choses. Par exemple :
+citation::bold::center:: Une citation qui doit être centrée.
+~~~
+
+Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
+
+* [stylisation par défaut](style-parag-par-defaut),
+* [stylisation en ligne de portion de textes dans le paragraphe](#style-parag-dans-texte),
+* [stylisation *inline* (en ligne)](#style-parag-inline),
+* [stylisation par balise initiale](#style-parag-balise).
+
+<a name="style-parag-par-defaut"></a>
+
+**STYLE PAR DÉFAUT DU PARAGRAPHE**
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                  | valeurs possibles                                 |                   |
+| -------------------------------------------------------- | ------- | -------------------------- | ------------------------------------------------- | ----------------- |
+|                                                          |         | **:default_font_n_style:** | Nom de fonte (police) chargée et le style utilisé | “Garamond/italic” |
+|                                                          |         | **:default_font_size:**    | Nombre entier ou flottant                         | 12.4              |
+|                                                          |         | **:default_font_style**    | [OBSOLÈTE] Un des styles défini pour la fonte     |                   |
+
+On définit le style du paragraphe par défaut dans la [recette du livre ou de la collection][] en définissant les propriétés `:default_font` (nom de la fonte, qui [doit être chargé dans le document](#fontes)), `:default_font_size`  (taille de la police) et `:default_font_style` (style défini pour la fonte, en général ‘:nomal’.
+
+<a name="style-parag-dans-texte"></a>
+
+**STYLE DE PORTIONS DE TEXTES DANS LE PARAGRAPHE **
+
+Le paragraphe peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
+
+~~~
+Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
+~~~
+
+<a name="style-parag-inline"></a>
+
+**STYLISATION “INLINE” DU PARAGRAPHE — `(( {<hash} ))`**
+
+Un paragraphe peut être complètement modifié en utilisant ce qu’on appelle la *stylisation inline* qui consiste à ajouter une ligne juste au-dessus du paragraphe qui contient ses propriétés modifiées. Par exemple :
+
+~~~text
+Un paragraphe au style par défaut.
+
+(( {<data>} ))
+Le paragraphe influencé par les <data> ci-dessus.
+~~~
+
+> Noter les `(( ... ))` (doubles-parenthèses) qui sont la marque de Prawn-for-book et les crochets qui vont définir une table de propriété (un *dictionnaire*, comme dans un langage de programmation.
+
+On peut, à la base, changer par exemple la taille du texte pour ce paragraphe avec la propriété `:font_size`.
+
+~~~text
+(( {font_size:22} ))
+Ce paragraphe aura une taille de 22 pour la police courante.
+~~~
+
+La propriété `font_family` permet de changer de fonte (à nouveau il faut que cette [fonte soit accessible](#fontes)).
+
+~~~text
+(( {font_family: "Arial"} ))
+Ce paragraphe sera en Arial, dans la taille par défaut de la police par défaut.
+~~~
+
+On peut mettre plusieurs propriétés en les séparant par des virgules :
+
+~~~text
+(( {margin_left: 40, margin_top: 50} ))
+IMAGE[images/mon_image.svg]
+~~~
+
+L’image ci-dessus se retrouvera à 40 [points-pdf][] de la marge gauche et à 50 [points-pdf][] de son contenu précédent.
+
+Les propriétés qu’on peut définir sont les suivantes :
+
+| <span style="display:inline-block;width:200px;">Propriété</span> | <span style="display:inline-block;width:300px;">Description</span> | <span style="display:inline-block;width:250px;">Valeurs</span> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **font_family**                                              | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
+| **font_size**                                                | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
+| **font_style**                                               | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
+| **kerning**                                                  | Éloignement des lettres                                      | Entier ou flottant. P.e. `kernel:2`                          |
+| **word_space**                                               | Espacement entre les mots                                    | Entier ou flottant. P.e. `word_space: 1.6`                   |
+| **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
+| **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
+| **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |
+| **margin_left**                                              | Distance de la marge gauche                                  | Idem                                                         |
+| **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
+| **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
+
+**AJUSTEMENT DU PARAGRAPHE**
+
+Une propriété particulièrement utile pour de l’impression professionnelle concerne l’espacement entre les mots qui permet d’éviter les mots seuls en fin de paragraphes par exemple. Supprimer deux ou trois mots sur la dernière ligne peut permettre par exemple de faire remonter un titre de façon élégante.
+
+Pour gérer cette fonctionnalité, on utilise la commande `(( del_last_line ))` (“delete the last line”, “supprimer la dernière ligne”). L’application joue alors elle-même sur l’espacement entre les mots (voire entre les lettres) pour condenser un peu le texte.
+
+**Par mesure de prudence**, pour obtenir un rendu acceptable, n’appliquez jamais cette commande s’il y a trop de mots sur la ligne à supprimer et/ou si le paragraphe est trop cours. Un paragraphe de moins de 4 lignes se met en danger si on lui applique cette commande.
+
+Exemple d’utilisation :
+
+~~~
+(( del_last_line ))
+Ceci  est  un texte  assez long  qui  doit  être  condensé
+pour  que  sa  dernière  ligne  soit supprimée, en  jouant
+sur  les espacements  entre chaque  mot, en les rapprochant
+de  façon discrète  pour  que les trois derniers mots soient
+rayés de la carte.
+~~~
+
+Le paragraphe pouvant avoir plusieurs définitions, on peut utiliser aussi la commande comme propriété :
+
+~~~json
+(( {del_last_line:true, font_size:10.2} ))
+Ceci  est  un texte  assez long  qui  doit  être  condensé
+...
+~~~
+
+
+
+Après traitement, le paragraphe ressemblera à :
+
+~~~
+Ceci est un texte assez long qui doit être condensé pour que
+sa dernière ligne soit supprimée, en jouant sur les espace-
+ments entre chaque mot, en les rapprochant de façon discrète 
+pour que les trois derniers mots soient rayés de la carte.
+~~~
+
+Bien entendu, cette commande ne se place dans le texte du livre que lorsque le PDF a été construit et qu’on a constaté l’état du paragraphe. On ne peut pas le faire au hasard, il faut le faire comme le ferait un metteur en page, sur pièce.
+
+<a name="style-parag-balise"></a>
+
+**STYLISATION DU PARAGRAPHE PAR BALISE INITIALE**
+
+Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
+
+<a name="styles-paragraphes-personnels"></a>
+
+**Personnalisation des paragraphes texte (style de paragraphe personnalisés**
+
+Les *styles de paragraphes personnalisés* doivent être identifiés par une *balise* qui sera placée au début du paragraphe à stylisé. Par exemple, si ma balise est `gros`, cela donnera : 
+
+~~~text
+gros::Le paragraphe qui sera mis dans le style personnalisé "gros".
+~~~
+
+Ensuite, pour fonctionner, il faut dire à *Prawn-for-book* comment styliser ce paragraphe.
+
+Il existe deux manières de le faire :
+
+* la manière simple, en ne se servant que des propriétés ci-dessus. Dans cette utilisation, le style permet simplement de ne pas avoir à répéter toute la ligne de définition du paragraphe avant le paragraphe. 
+
+  Pour cette manière, il faut définir dans le module **`FormaterParagraphModule`**  du  [fichier `formater.rb`][] la méthode **`<balise>_formater(paragraph)`** qui reçoit en premier paramètre l’instance du paragraphe. Ensuite, à l’intérieur de cette méthode, on définit toutes les valeurs :
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def formate_gros(par)
+      par.font = "Arial"
+      par.font_size = 14
+      par.margin_left = "10%"
+      par.kerning = 1.2
+      par.margin_top = 4
+      par.margin_bottom = 12
+      par.text = "FIXED: #{par.text)"
+    end
+  end
+  ~~~
+  ou : 
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def formate_gros(par)
+      par.instance_eval do 
+        font = "Arial"
+        font_size = 14
+        # ...
+        text = "FIXED: #{text}"
+      end
+    end
+  end
+  ~~~
+
+* la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. Elle consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
+
+  ~~~ruby
+  module FormaterParagraphModule
+    def build_gros_paragraph(par, pdf)
+      pdf.update do
+        font(par.font, size: par.font_size)
+        bounding_box([100, cursor], width: bounds.width/2, height: 100) do
+          transparent(0.5) { stroke_bounds }
+          image icone_tip, at: [...]
+          text par.text, 
+        end
+      end
+    end
+  end
+  ~~~
+
+
+<a name="styles-paragraphes-communs"></a>
+
+**Styles paragraphes texte commun**
+
+| Balise                   | Description                                         | Exemples |
+| ------------------------ | --------------------------------------------------- | -------- |
+| **dict::entry::** [TODO] | Entrée de dictionnaire                              |          |
+| **dict::text::** [TODO]  | Description de l’entrée, le texte suivant l’entrée. |          |
+|                          |                                                     |          |
+
+<a name="paragraph-titre"></a>
+
+#### Titres
+
+Le titre se définit comme en [markdown](https://fr.wikipedia.org/wiki/Markdown) c'est-à-dire à l'aide de dièses.
+
+~~~
+# Un grand titre
+## Un chapitre
+### Un sous-chapitre
+etc.
+~~~
+
+<a name="paragraph-image"></a>
+
+#### Images
+
+Les images se définissent à l'aide de la balise :
+
+~~~
+IMAGE[<data>]
+~~~
+
+Les données sont composées d’un chemin d’accès à l’image, puis de données qui définissent l’image. Le **chemin d’accès** doit être soit absolu soit relatif.
+
+> Tip : Il est préférence de mettre les images dans un dossier `images` se trouvant dans le dossier du livre ou de la collection et d’y faire référence simplement par `images/mon_image.jpg`.
+
+Les images peuvent être de tout format, mais puisqu’elles sont destinées à l’impression, leur espace colorimétrique doit être le [modèle colorimétrique CMJN (Cyan, Magenta, Jaune, Noir)](https://www.toutes-les-couleurs.com/code-couleur-cmjn.php).
+
+~~~text
+Ci-dessous une image qui sera présentée sur toute la largeur de la page (hors-marge).
+
+IMAGE[images/pour_voir.jpg]
+L'image gardera de l'air avant ce texte, même s'il est collé dans le texte.
+
+Une image qui sera réduite de moitié.
+
+IMAGE[images/red.jpg|width:50%]
+~~~
+
+**Propriétés de l’image**
+
+Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour les images :
+
+| Propriété   | Description                                                  | Valeurs possibles          |
+| ----------- | ------------------------------------------------------------ | -------------------------- |
+| width       | Dimension de l’image par rapport à elle-même                 | Pourcentage, valeurs fixes |
+| width_space | Quantité d’espace horizontal que l’image doit couvrir, en pourcentage. `100%` signifie que l’image doit couvrir toute la largeur de la page même les marges. | Pourcentage                |
+| TODO        |                                                              |                            |
+
+<a name="paragraph-code"></a>
+
+#### Les paragraphes-codes (pfb-code)
+
+Ces paragraphes sont des paragraphes simples, contenant un seul “mot-programme”, et permettent notamment de gérer le contenu du livre. Ce ne sont donc pas à proprement parler des paragraphes de texte mais ils auront une influence réelle sur le livre produit. On trouve par exemple :
+
+~~~text
+Pour passer la suite à la page suivante :
+
+(( new_page )) 
+
+Pour l'inscription de l'index :
+
+(( index ))
+
+Pour l'inscription de la table des matières :
+
+(( tdm ))
+
+Pour l'inscription d'une bibliographie :
+
+(( biblio(films) ))
+
+Etc.
+~~~
+
+
+
+
+
+---
+
+<a name="numerotation-paragraphes"></a>
+
+#### Numérotation des paragraphes
+
+
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété          | valeurs possibles          |
+| -------------------------------------------------------- | ------- | ------------------ | -------------------------- |
+|                                                          |         | **:numerotation:** | `pages` (défaut), `parags` |
+|                                                          |         | **:num_parag:**    | Table de valeurs           |
+
+
+
+Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:parags` de la [recette du livre ou de la collection][] à `true`.
+
+~~~yaml
+book_format:
+	text:
+		numerotation: pages # ou parags
+~~~
+
+L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
+
+{À refaire}
+
+Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:top_adjustment` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
+
+~~~yaml
+:num_parag:
+	# ...
+	:top_adjustment: 1
+~~~
+
+Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
 
 
 ---
 
 <a name="mark-new-pages"></a>
 
-### Marque de nouvelle page
+### Saut de page
 
-Pour forcer le passage à la page suivante, on utilise dans le texte, seul sur un paragraphe, l’’une de ces deux marques :
+***Prawn-for-book*** gère automatiquement les passages à la page suivante lorsque le texte arrive en bas de page. On peut cependant tout à fait forcer un saut de page pour forcer le passage à la page suivante à l’endroit voulu. On utilise dans le texte, ***seul sur un paragraphe***, l’’une de ces deux marques :
 
 ~~~text
 (( new_page ))
@@ -295,11 +673,64 @@ Pour forcer le passage à la page suivante, on utilise dans le texte, seul sur u
 (( nouvelle_page ))
 ~~~
 
+> Notez la forme d’une *commande Prawn-for-book* (elles permettent d’affiner l’impression du livre jusque dans le moindre détail) :
+>
+> * la double parenthèse
+> * l’espace laissée de chaque côté de cette parenthèse, entre la commande et la parenthèse intérieure.
+
+
+
+Si l'on veut se retrouver **sur une page paire**, utiliser l’une de ces marques :
+
+```
+(( new_even_page ))
+
+ou 
+
+(( nouvelle_page_paire ))
+
+```
+
+Si l'on veut se retrouver sur une page impaire, utiliser l'une de ces marques :
+
+```
+(( new_odd_page ))
+
+ou
+
+(( nouvelle_page_impaire ))
+
+ou
+
+(( new_belle_page ))
+
+```
+
+---
+
+<a name="insertion-texte-externe"></a>
+
+### Insertion d’un texte externe
+
+On peut insérer un autre fichier `pfb.md` (ou autre…) dans le texte `texte.pfb.md` d’un livre Prawn. Pour ce faire, il suffit d’utiliser la commande **`include:`** suivie du chemin relatif ou absolu du fichier.
+
+Par exemple, si le dossier du livre contient un dossier `textes` et un fichier texte `introduction.pfb.md` contenant le texte de l’introduction, on peut l’insérer dans le livre à l’endroit voulu à l’aide de :
+
+```
+(( include: textes/introduction ))
+```
+
+Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n’est utile que s’il existe plusieurs fichiers de même affixe (nom sans l’extension) dans le dossier. Dans le cas contraire, **Prawn-for-book** recherche le fichier dont il est question.
+
+
+
 ---
 
 <a name="headers-footers"></a>
 
 ### Headers & Footers (entêtes et pieds de page)
+
+Par défaut (c’est-à-dire sans aucune précision), seul le pied de page est construit, avec le numéro de la page au milieu. Mais il est possible de définir finement chaque entête (*header*) et chaque pied de page (*footer*) et même d’en créer autant que l’on veut, tout à fait différents, pour les différentes sections du livre.
 
 #### Principe
 
@@ -325,11 +756,12 @@ Une disposition est définie pour un rang de pages qui peut être défini explic
 Le contenu de chaque *TIERS*, quelconque, peut être :
 
 * le numéro de la page,
+* le numéro du paragraphe,
 * le nom du titre courant, de niveau 1, 2 ou 3
 * un contenu textuel explicite (et invariable de page en page — par exemple la date de fabrication du livre-esquisse) — note : il peut contenir des variables ou du code à évaluer,
 * une procédure évaluée à la levée
 
-#### Définition
+#### Définition des entêtes et pieds de page
 
 Pour définir les entêtes et les pieds de page, le mieux est d’utiliser l’assistant, c’est le meilleur moyen de ne pas faire d’erreur pour cette donnée sensible et complexe.
 
@@ -358,9 +790,8 @@ Ces tiers sont repérés par des clés qui portent en préfix l’indication de 
 		:HF0001:
 			:id: :HF0001
 			:name: Le headfooter en démo
-			:font: Times-Roman
+			:font_n_style: "Times-Roman/normal"
 			:size: 12
-			:style: null
 			:pg_left:
 				# ... définition... (il ne faut définir que les tiers utiles)
 			:pg_center:
@@ -369,7 +800,7 @@ Ces tiers sont repérés par des clés qui portent en préfix l’indication de 
 				:content: :titre1 # requise
 				:align: :right
 				:size: 40
-				:font: Geneva
+				:font_n_style: "Geneva/italic"
 				:casse: :min # ou :all_caps, :keep, :title
 			:pd_left:
 				# ... définition...
@@ -769,377 +1200,7 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 <partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
 ~~~
 
-
-
 ---
-
-## Contenu du livre (les pages)
-
-### Passer à la page suivante
-
-Utiliser la marque suivante pour passer à la page suivante
-
-```
-(( new_page ))
-```
-
-Si l'on veut se retrouver sur une page paire, utiliser l’une de ces marques :
-
-```
-(( new_even_page ))
-
-ou 
-
-(( nouvelle_page_paire ))
-
-```
-
-Si l'on veut se retrouver sur une page impaire, utiliser l'une de ces marques :
-
-```
-(( new_odd_page ))
-
-ou
-
-(( nouvelle_page_impaire ))
-
-ou
-
-(( new_belle_page ))
-
-```
-
-
-
-### Insérer un autre texte
-
-On peut insérer un autre fichier `pfb.md` (ou autre…) dans le texte `texte.pfb.md` d’un livre Prawn. Pour ce faire, il suffit d’utiliser la commande **`include:`** suivie du chemin relatif ou absolu du fichier.
-
-Par exemple, si le dossier du livre contient un dossier `textes` et un fichier texte `introduction.pfb.md` contenant le texte de l’introduction, on peut l’insérer dans le livre à l’endroit voulu à l’aide de :
-
-```
-(( include: textes/introduction ))
-```
-
-Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n’est utile que s’il existe plusieurs fichiers de même affixe (nom sans l’extension) dans le dossier. Dans le cas contraire, **Prawn-for-book** recherche le fichier dont il est question.
-
-
-
----
-
-## Contenu du livre (les paragraphes)
-
----
-
-<a name="definition-paragraphe"></a>
-
-### Définition
-
-L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atome puisqu'on peut introduire des éléments sémantiques dans le paragraphe lui-même, qui seront évalués "en ligne").
-
-<a name="types-paragraphes"></a>
-
-### Les différents types de paragraphe
-
-* [Paragraphes de texte](#paragraph-text),
-* [Titres](#paragraph-titre),
-* [Images](#paragraph-image),
-* [Pfb-codes](#paragraph-code).
-
-<a name="paragraph-text"></a>
-
-#### Paragraphes de texte
-
-Le paragraphe de texte se définit simplement en l'écrivant dans la page.
-~~~
-Définit dans le texte par un texte ne répondant pas aux critères suivants. Un paragraphe peut commencer par autant de balises que
-nécessaire pour spécifier les choses. Par exemple :
-citation:bold:center: Une citation qui doit être centrée.
-~~~
-
-Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
-
-* [stylisation par défaut](style-parag-par-defaut),
-* [stylisation en ligne de portion de textes dans le paragraphe](#style-parag-dans-texte),
-* [stylisation *inline* (en ligne)](#style-parag-inline),
-* [stylisation par balise initiale](#style-parag-balise).
-
-<a name="style-parag-par-defaut"></a>
-
-**STYLE PAR DÉFAUT DU PARAGRAPHE**
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété               | valeurs possibles                  |
-| -------------------------------------------------------- | ------- | ----------------------- | ---------------------------------- |
-|                                                          |         | **:default_font:**      | Nom de fonte (police) chargée      |
-|                                                          |         | **:default_font_size:** | Nombre entier                      |
-|                                                          |         | **:default_font_style** | Un des styles défini pour la fonte |
-
-On définit le style du paragraphe par défaut dans la [recette du livre ou de la collection][] en définissant les propriétés `:default_font` (nom de la fonte, qui [doit être chargé dans le document](#fontes)), `:default_font_size`  (taille de la police) et `:default_font_style` (style défini pour la fonte, en général ‘:nomal’.
-
-<a name="style-parag-dans-texte"></a>
-
-**STYLE DE PORTIONS DE TEXTES DANS LE PARAGRAPHE **
-
-Le paragraphe peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
-
-~~~
-Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
-~~~
-
-<a name="style-parag-inline"></a>
-
-**STYLISATION “INLINE” DU PARAGRAPHE — `(( {<hash} ))`**
-
-Un paragraphe peut être complètement modifié en utilisant ce qu’on appelle la *stylisation inline* qui consiste à ajouter une ligne juste au-dessus du paragraphe qui contient ses propriétés modifiées. Par exemple :
-
-~~~text
-Un paragraphe au style par défaut.
-
-(( {<data>} ))
-Le paragraphe influencé par les <data> ci-dessus.
-~~~
-
-> Noter les `(( ... ))` (doubles-parenthèses) qui sont la marque de Prawn-for-book et les crochets qui vont définir une table de propriété (un *dictionnaire*, comme dans un langage de programmation.
-
-On peut, à la base, changer par exemple la taille du texte pour ce paragraphe avec la propriété `:font_size`.
-
-~~~text
-(( {font_
-size:22} ))
-Ce paragraphe aura une taille de 22 pour la police courante.
-~~~
-
-La propriété `font_family` permet de changer de fonte (à nouveau il faut que cette [fonte soit accessible](#fontes)).
-
-~~~text
-(( {font_family: "Arial"} ))
-Ce paragraphe sera en Arial, dans la taille par défaut de la police par défaut.
-~~~
-
-On peut mettre plusieurs propriétés en les séparant par des virgules :
-
-~~~text
-(( {margin_left: 40, margin_top: 50} ))
-IMAGE[images/mon_image.svg]
-~~~
-
-L’image ci-dessus se retrouvera à 40 [points-pdf][] de la marge gauche et à 50 [points-pdf][] de son contenu précédent.
-
-Les propriétés qu’on peut définir sont les suivantes :
-
-| <span style="display:inline-block;width:200px;">Propriété</span> | <span style="display:inline-block;width:300px;">Description</span> | <span style="display:inline-block;width:250px;">Valeurs</span> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **font_family**                                              | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
-| **font_size**                                                | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
-| **font_style**                                               | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
-| **kerning**                                                  | Éloignement des lettres                                      | Entier ou flottant. P.e. `kernel:2`                          |
-| **word_space**                                               | Espacement entre les mots                                    | Entier ou flottant. P.e. `word_space: 1.6`                   |
-| **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
-| **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
-| **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |
-| **margin_left**                                              | Distance de la marge gauche                                  | Idem                                                         |
-| **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
-| **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
-
-<a name="style-parag-balise"></a>
-
-**STYLISATION DU PARAGRAPHE PAR BALISE INITIALE**
-
-Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
-
-<a name="styles-paragraphes-personnels"></a>
-
-**Personnalisation des paragraphes texte (style de paragraphe personnalisés**
-
-Les *styles de paragraphes personnalisés* doivent être identifiés par une *balise* qui sera placée au début du paragraphe à stylisé. Par exemple, si ma balise est `gros`, cela donnera : 
-
-~~~text
-gros::Le paragraphe qui sera mis dans le style personnalisé "gros".
-~~~
-
-Ensuite, pour fonctionner, il faut dire à *Prawn-for-book* comment styliser ce paragraphe.
-
-Il existe deux manières de le faire :
-
-* la manière simple, en ne se servant que des propriétés ci-dessus. Dans cette utilisation, le style permet simplement de ne pas avoir à répéter toute la ligne de définition du paragraphe avant le paragraphe. 
-
-  Pour cette manière, il faut définir dans le module **`FormaterParagraphModule`**  du  [fichier `formater.rb`][] la méthode **`<balise>_formater(paragraph)`** qui reçoit en premier paramètre l’instance du paragraphe. Ensuite, à l’intérieur de cette méthode, on définit toutes les valeurs :
-
-  ~~~ruby
-  module FormaterParagraphModule
-    def formate_gros(par)
-      par.font = "Arial"
-      par.font_size = 14
-      par.margin_left = "10%"
-      par.kerning = 1.2
-      par.margin_top = 4
-      par.margin_bottom = 12
-      par.text = "FIXED: #{par.text)"
-    end
-  end
-  ~~~
-  ou : 
-
-  ~~~ruby
-  module FormaterParagraphModule
-    def formate_gros(par)
-      par.instance_eval do 
-        font = "Arial"
-        font_size = 14
-        # ...
-        text = "FIXED: #{text}"
-      end
-    end
-  end
-  ~~~
-
-* la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. Elle consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
-
-  ~~~ruby
-  module FormaterParagraphModule
-    def build_gros_paragraph(par, pdf)
-      pdf.update do
-        font(par.font, size: par.font_size)
-        bounding_box([100, cursor], width: bounds.width/2, height: 100) do
-          transparent(0.5) { stroke_bounds }
-          image icone_tip, at: [...]
-          text par.text, 
-        end
-      end
-    end
-  end
-  ~~~
-
-
-<a name="styles-paragraphes-communs"></a>
-
-**Styles paragraphes texte commun**
-
-| Balise                   | Description                                         | Exemples |
-| ------------------------ | --------------------------------------------------- | -------- |
-| **dict::entry::** [TODO] | Entrée de dictionnaire                              |          |
-| **dict::text::** [TODO]  | Description de l’entrée, le texte suivant l’entrée. |          |
-|                          |                                                     |          |
-
-<a name="paragraph-titre"></a>
-
-#### Titres
-
-Le titre se définit comme en [markdown](https://fr.wikipedia.org/wiki/Markdown) c'est-à-dire à l'aide de dièses.
-
-~~~
-# Un grand titre
-## Un chapitre
-### Un sous-chapitre
-etc.
-~~~
-
-<a name="paragraph-image"></a>
-
-#### Images
-
-Les images se définissent à l'aide de la balise :
-
-~~~
-IMAGE[<data>]
-~~~
-
-Les données sont composées d’un chemin d’accès à l’image, puis de données qui définissent l’image. Le **chemin d’accès** doit être soit absolu soit relatif.
-
-> Tip : Il est préférence de mettre les images dans un dossier `images` se trouvant dans le dossier du livre ou de la collection et d’y faire référence simplement par `images/mon_image.jpg`.
-
-Les images peuvent être de tout format, mais puisqu’elles sont destinées à l’impression, leur espace colorimétrique doit être le [modèle colorimétrique CMJN (Cyan, Magenta, Jaune, Noir)](https://www.toutes-les-couleurs.com/code-couleur-cmjn.php).
-
-~~~text
-Ci-dessous une image qui sera présentée sur toute la largeur de la page (hors-marge).
-
-IMAGE[images/pour_voir.jpg]
-L'image gardera de l'air avant ce texte, même s'il est collé dans le texte.
-
-Une image qui sera réduite de moitié.
-
-IMAGE[images/red.jpg|width:50%]
-~~~
-
-**Propriétés de l’image**
-
-Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour les images :
-
-| Propriété   | Description                                                  | Valeurs possibles          |
-| ----------- | ------------------------------------------------------------ | -------------------------- |
-| width       | Dimension de l’image par rapport à elle-même                 | Pourcentage, valeurs fixes |
-| width_space | Quantité d’espace horizontal que l’image doit couvrir, en pourcentage. `100%` signifie que l’image doit couvrir toute la largeur de la page même les marges. | Pourcentage                |
-| TODO        |                                                              |                            |
-
-<a name="paragraph-code"></a>
-
-#### Les paragraphes-codes (pfb-code)
-
-Ces paragraphes sont des paragraphes simple, contenant un seul “mot-programme”, et permettent notamment de gérer le contenu du livre. On trouve par exemple :
-
-~~~text
-Pour passer la suite à la page suivante :
-
-(( new_page )) 
-
-Pour l'inscription de l'index :
-
-(( index ))
-
-Pour l'inscription de la table des matières :
-
-(( tdm ))
-
-Pour l'inscription d'une bibliographie :
-
-(( biblio(films) ))
-
-Etc.
-~~~
-
-
-
-
-
----
-
-<a name="numerotation-paragraphes"></a>
-
-### Numérotation des paragraphes
-
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété          | valeurs possibles          |
-| -------------------------------------------------------- | ------- | ------------------ | -------------------------- |
-|                                                          |         | **:numerotation:** | `pages` (défaut), `parags` |
-|                                                          |         | **:num_parag:**    | Table de valeurs           |
-
-
-
-Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:parags` de la [recette du livre ou de la collection][] à `true`.
-
-~~~yaml
-book_format:
-	text:
-		numerotation: pages # ou parags
-~~~
-
-L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
-
-{À refaire}
-
-Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:top_adjustment` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
-
-~~~yaml
-:num_parag:
-	# ...
-	:top_adjustment: 1
-~~~
-
-Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
-
----
-
-
 
 <a name="references"></a>
 
