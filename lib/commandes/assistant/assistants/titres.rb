@@ -91,17 +91,6 @@ class AssistantTitres
 
   end
 
-  def choices_fonts
-    fontes = []
-    fontes += owner.recipe.fonts_data.keys unless owner.recipe.fonts_data.empty?
-    fontes += DEFAULT_FONTS_KEYS.dup
-    cs = []
-    fontes.each do |fontname|
-      cs << {name:fontname, value:fontname}
-    end
-    return cs
-  end
-
 CHOICES_TITRES = [
     CHOIX_SAVE,
     {name: "#{(' ' * 10)}( Police/taille - Nombre de lignes avant/après - leading".gris, disabled:')'}
@@ -111,8 +100,7 @@ end
 
 
 TITRES_PROPERTIES = [
-  {name: "Fonte"                                        , value: :font, type: :string, values: :choices_fonts},
-  {name: "Style de police"                              , value: :style, type: :string},
+  {name: "Fonte et style"                               , value: :font_n_style, type: :string, values: Fonte.method(:as_choices)},
   {name: "Taille police"                                , value: :size, type: :float},
   {name: "Nombre de lignes passées avant"               , value: :lines_before, type: :int},
   {name: 'Nombre de lignes passées après'               , value: :lines_after, type: :int},

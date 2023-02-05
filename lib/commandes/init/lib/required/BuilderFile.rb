@@ -7,13 +7,9 @@ class BuilderFile < SimpleDelegator
 
   attr_reader :build_fname
 
-  # def initialize(initedthing, filename)
-  #   @build_fname = filename
-  # end
-
   # = main = 
   # 
-  # Construction du fichier de recette 
+  # Construction du fichier
   # 
   def build(filename)
     @build_fname = filename

@@ -58,8 +58,6 @@ class << self
         font_name, font_style = recipe.default_font_and_style.split('/')
         font_style = font_style.to_sym
         new(font_name, **{style: font_style, size:default_size})
-      elsif book && recipe.default_font_name
-        new(recipe.default_font_name, **{style: recipe.default_font_style, size:default_size})
       elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
         datafirst = recipe.fonts_data.values.first
           new(recipe.fonts_data.keys.first.to_s, **{style: datafirst.keys.first, size: default_size})
@@ -98,7 +96,7 @@ class << self
             else
               nil
             end
-    if prop.to_s.match?(/font_and_style/)
+    if prop.to_s.match?(/font_a?nd?_style/)
       # 
       # On doit retourner les paires font/style existant
       # 

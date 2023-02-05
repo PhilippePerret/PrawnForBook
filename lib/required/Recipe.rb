@@ -266,7 +266,7 @@ class Recipe
   def default_font_name
     @default_font_name ||= begin
       warn "@deprecated Utiliser default_font_and_style"
-      default_font_and_style.split('/').first.to_sym
+      Prawn4book::Fonte.default_fonte.name
     end
   end
 
@@ -276,11 +276,7 @@ class Recipe
   def default_font_style
     @default_font_style ||= begin
       warn "@deprecated Utiliser default_font_and_style"
-      if default_font_and_style
-        default_font_and_style.split('/').last.to_sym
-      else
-        :normal
-      end
+      Prawn4book::Fonte.default_fonte.style
     end
   end
 

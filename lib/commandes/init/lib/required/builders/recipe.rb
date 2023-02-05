@@ -17,9 +17,9 @@ class InitedThing
     end
 
     #
-    # Que faut-il faire si un fichier recette existe déjà ?
+    # Initialisation du fichier recette
     # 
-    return unless keep_recipe_file_if_exist?
+    init_recipe_file || return
 
     #
     # Demander les informations sur le livre
@@ -254,9 +254,25 @@ class InitedThing
     return tbl
   end
 
-  def keep_recipe_file_if_exist?
-    return true unless File.exist?(recipe_path)
-    File.ask_what_to_do_with_file(recipe_path, 'fichier recette')
+  ##
+  # Initialisation du fichier recette
+  # @note
+  #   S'il existe déjà (réinitialisation) on demande ce qu'il faut
+  #   en faire.
+  def init_recipe_file
+    if File.exist?(recipe_path)
+      reponse = File.ask_what_to_do_with_file(recipe_path, 'fichier recette')
+      return false if reponse == false
+    end
+    unless File.exist?(recipe_path)
+      minimal_data = {
+        app_name:     'prawn-for-book', 
+        app_version:  Prawn4book::VERSION,
+        created_at:   Time.now.jj_mm_aaaa
+      }
+      File.write(recipe_path, minimal_data.to_yaml)
+    end
+    return true
   end
 
   def confirm_create_recipe

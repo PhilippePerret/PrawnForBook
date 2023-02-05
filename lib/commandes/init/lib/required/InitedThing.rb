@@ -21,7 +21,7 @@ class InitedThing
   ##
   # = main =
   # 
-  # Main méthode qui initie la chose
+  # Main méthode qui initie la chose (livre ou collection)
   # 
   def init
     # 
@@ -37,15 +37,19 @@ class InitedThing
   end
 
   def build_base_files
+    BuilderFile.new(self).build('texte.pfb.md') if book?
     BuilderFile.new(self).build('parser.rb')
     BuilderFile.new(self).build('formater.rb')
     BuilderFile.new(self).build('helpers.rb')
-    BuilderFile.new(self).build('texte.pfb.md') if book?
   end
 
   def confirmation_finale
     puts "
-    À présent, vous pouvez jouer ces commandes :
+    À présent, vous pouvez :
+
+    1) rejoindre le dossier du livre avec 'cd #{File.basename(folder)}'
+
+    2) jouer ces commandes :
     
     #{'pfb open -e'.jaune}
         pour ouvrir le dossier dans l'éditeur et modifier la
@@ -54,7 +58,12 @@ class InitedThing
     #{'pfb build -open'.jaune}
         pour produire la première version du livre en PDF 
         prêt à l'impression (et l'ouvrir pour le lire).
+        (vous pouvez même commencer directement par là pour
+        vous faire une idée...)
 
+    #{'pfb assistant'.jaune}
+        pour entrer toutes les données de façon assistée.
+        
     ".bleu
     
   end
