@@ -71,6 +71,11 @@ class InputTextFile
   # titre, bloc formaté, etc. pour produire la propriété @paragraphes
   # de l'input-file
   def parse
+    #
+    # Pour resetter les paragraphes textuels (pour le moment
+    # seulement les numéros)
+    # 
+    PdfBook::NTextParagraph.reset
     # 
     # Pour consigner les cross-références (pour contrôle)
     # 

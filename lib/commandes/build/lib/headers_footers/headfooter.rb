@@ -69,6 +69,8 @@ end #/ << self
     build_pages(:odd)
   end
 
+  # Construction des headers-footers des pages +side+
+  # 
   # @param [Symbol] side Soit :even soit :odd
   def build_pages(side)
     spy "   * Construction pages #{side.inspect}".jaune
@@ -102,20 +104,47 @@ end #/ << self
     # On ajoute tous les tiers nécessaires
     # 
     if dleft
+      dleft.merge!(align: :left) unless dleft.key?(:align)
+      w = tiers
+      unless dcenter
+        w += tiers 
+        w += tiers unless dright
+      end
+      dleft.merge!(width: w)
       procleft = Proc.new { |bpage|
         build_tiers(bpage, [0, top], dleft)
       }
       proce = (proce << procleft)
     end
     if dcenter
+      dcenter.merge!(align: :center) unless dcenter.key?(:align)
+      w   = tiers
+      lf  = tiers
+      unless dleft || dright
+        w += 2 * tiers
+        lf = 0
+      end
+      dcenter.merge!(width: w)
       proccenter = Proc.new { |bpage|
         build_tiers(bpage, [tiers, top], dcenter)
       }
       proce = (proce << proccenter)
     end
     if dright
+      dright.merge!(align: :right) unless dright.key?(:align)
+      w   = tiers
+      lf  = 2 * tiers
+      unless dcenter
+        w += tiers
+        lf -= tiers
+        unless dleft
+          w += tiers 
+          lf -= tiers
+        end
+      end
+      dright.merge!(width: w)
       procright = Proc.new { |bpage|
-        build_tiers(bpage, [2 * tiers, top], dright)
+        build_tiers(bpage, [lf, top], dright)
       }
       proce = (proce << procright)
     end
@@ -126,16 +155,20 @@ end #/ << self
   # Méthode qui dessine véritablement le tiers du headfooter
   # 
   # @return [BookPage] La page (pour l'addition des procédures)
+  # 
+  # @param [Prawn4book::HeadersFooters::BookPage] bpage
+  # @param [Paire] at Position du tiers
+  # @param [Hash]  Données du tiers, à commencer par {:content}
   def build_tiers(bpage, at, dtiers)
-    props = common_tiers_props.merge({at:at, align: dtiers[:align]})
+    props = common_tiers_props.merge({at:at, align: dtiers[:align], width: dtiers[:width]})
     # 
     # Le contenu textuel
     # 
     content = case dtiers[:content]
-    when String   then get_content_as_custom_text(dtiers[:content])
-    when Numeric  then dtiers[:content].to_s
-    when Symbol   then bpage.send(dtiers[:content])
-    when Proc     then dtiers[:content].call(bpage)
+    when String       then get_content_as_custom_text(dtiers[:content])
+    when Numeric      then dtiers[:content].to_s
+    when Symbol       then bpage.send(dtiers[:content])
+    when Proc, Method then dtiers[:content].call(bpage)
     end.to_s # peut être vide
     content = case dtiers[:casse]
     when :all_caps then content.upcase 
@@ -172,7 +205,7 @@ end #/ << self
   def common_tiers_props
     @common_tiers_props ||= begin
       spy "#{'Calcul de la hauteur'.jaune} : #{height.inspect}".bleu
-      {height: height, width: tiers, size: font_size}
+      {height: height, width: tiers, size: font_size, overflow: :expand}
     end
   end
 

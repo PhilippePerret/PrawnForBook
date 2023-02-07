@@ -1,12 +1,11 @@
 # Todo courant
 
 - Travailler sur les livres de la collection Narration pour améliorer l'application
-  * [BUG] Mauvaise numérotation des paragraphes (semble ne pas repartir de 0 au deuxième tour)
-  * [BUG] :numero est demandé dans le pied de page, mais c'est "_NUM_" qui est affiché
-  * Entête : les titres sont coupés
-    => ne pas mettre de :truncate dans la box quand une seule ou deux tiers seulement sont définis
+  * [BUG] Le numéro de page se marque trop haut
   * Entête : ne pas mettre le titre quand c'est la page du titre (comment est-ce qu'on va déterter ça ? il faudrait que titre soit une instance et qu'on sache si la page sur laquelle on doit afficher le titre est aussi la page du titre)
+  * [BUG] Pas assez d'espace entre l'entête et le texte
   * [BUG] Les mots et les films ne semblent pas être trouvés…
+  * [BUG] Formater en markdown avec kramdown
 
 * Pouvoir déterminer la première page par les options de commande (-firts=x)
 * Documenter précisément toutes les sections du fichier recette pour ne pas avoir à les retrouver dans les fichiers de l'application…

@@ -5,11 +5,15 @@ class NTextParagraph < AnyParagraph
 
   @@last_numero = 0
 
-  def self.init_first_turn
+  def self.reset
     @@last_numero = 0
   end
+
+  def self.init_first_turn
+    reset
+  end
   def self.init_second_turn
-    @@last_numero = 0
+    reset
   end
 
   def self.get_next_numero
@@ -27,6 +31,7 @@ class NTextParagraph < AnyParagraph
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
     @numero = self.class.get_next_numero
+    puts "@numero = #{@numero.inspect}"
     prepare_text # pour obtenir tout de suite les balises initiales
   end
 

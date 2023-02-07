@@ -25,7 +25,7 @@ class BookFormat
         int: {name:'Marge intérieure (avec unité)' , default: '25mm'},
       },
       numerotation:             {name:'Numérotation du livre'             , default:'pages', values: :values_numerotations},
-      format_numero:            {name:'Format de la numérotation'         , default:'_NUM_', values: :values_format_numerotation},
+      format_numero:            {name:'Format de la numérotation'         , default:'first-last', values: :values_format_numerotation},
       no_num_empty:             {name:'Pas de numéro sur pages vides'     , default: true   , type: :bool},
       num_only_if_num:          {name: 'Numéroter page seulement si parag.', if: :numerotation_parag?, default: true, type: :bool},
       num_page_if_no_num_parag: {name: 'Numéro de la page si aucun parag.' , if: :numerotation_parag?, default: true, type: :bool},
@@ -68,9 +68,9 @@ class BookFormat
     case get_value('page-numerotation')
     when 'pages'
       [
-        {name: 'Numéro de page seul', value: '_NUM_'},
-        {name: 'Page X'             , value: 'Page _NUM_'},
-        {name: 'P. X'               , value: 'P. _NUM_'},
+        {name: 'Numéro de page seul', value: 'first'},
+        {name: 'Page X'             , value: 'Page first'},
+        {name: 'P. X'               , value: 'P. first'},
       ]
     when 'parags'
       [
