@@ -82,9 +82,8 @@ class << self
   end
 
   # @return [Array<Hash>] La liste des Q-choices pour pouvoir choisir
-  # une police (ou une police associée à un style) dans la liste des 
-  # polices accessibles (polices définies par la recette et polices
-  # par défaut.
+  # une police associée à un style dans la liste des polices accessibles 
+  # (polices définies par la recette et polices par défaut.
   # 
   # @param [Hash] data_choix Les données du choix telles que définies dans les data absolues
   # 

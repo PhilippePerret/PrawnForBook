@@ -64,7 +64,14 @@ On peut obtenir de l’aide de différents moyens :
 
 <a name="init-book-pdf"></a>
 
-## Création d’un livre
+## Créer un livre
+
+Créer un livre avec ***Prawn-for-book*** consiste à créer deux choses, deux fichiers :
+
+* le [fichier recette](#recipe) qui définit tous les aspects du livre, en dehors du contenu textuel lui-même,
+* le [fichier texte](#text-file) qui contient le texte du livre.
+
+Pour créer ces deux éléments de façon assistée, suivez simplement cette procédure :
 
 * Choisir le dossier dans lequel doit être créé le livre,
 * ouvrir une fenêtre Terminal dans ce dossier,
@@ -77,6 +84,8 @@ On peut obtenir de l’aide de différents moyens :
 ## Création d’une collection
 
 Avec **Prawn-for-book**, on peut aussi créer des collections, c’est-à-dire un ensemble de livres qui partageront les mêmes éléments, à commencer par la charte graphique. Plutôt que d’avoir à la copier-coller de livre en livre, entrainant des opérations lourdes à chaque changement, on crée une collection qui définira les éléments communs et on met les livres dedans.
+
+
 
 * Choisir le dossier dans lequel doit être créée la collection,
 * ouvrir une fenêtre Terminal à ce dossier,
@@ -1514,175 +1523,202 @@ Ce fichier contient donc deux modules :
 
 <a name="recipe"></a>
 
-## Recette du livre ou de la collection
-
-### Définition
+## RECETTE DU LIVRE OU DE LA COLLECTION
 
 La *recette du livre* permet de définir tous les aspects que devra prendre le livre, c’est-à-dire le fichier PDF prêt-à-imprimé. On définit dans ce fichier les polices utilisées (à empaqueter), les marges et la taille du papier, les titres, les lignes de base, le titre, les auteurs, etc.
 
-### Création de la recette du livre
+#### Création de la recette du livre
 
-On peut créer de façon assistée la recette d'un livre en ouvrant un Terminal dans le dossier où doit être initié le livre — ou le dossier où se trouve déjà le texte, appelé `texte.pfb.txt` ou `text.pfb.md` — et en  jouant la commande : **`> prawn-for-book init`**.
+Le plus simple pour créer la recette d’un livre est d’[utiliser l’assistant de création](#init-book-pdf).
 
-Cette commande permet de créer un fichier `recipe.yaml` contenant la recette du livre ou de se servir d’un modèle prérempli. Passons en revue les différentes paramètres à régler.
+Cette assistant permet de créer le fichier `recipe.yaml` contenant la recette du livre.
 
 ### Contenu de la recette du livre
 
-<a name="recette-metadata"></a>
+Vous pouvez trouver dans cette partie l’intégralité des propriétés définissables dans le fichier recette du livre ou de la collection.
 
 #### Informations générales
 
+> Si ces informations sont rentrées à la main, ne pas oublier les balises-commentaires (`#<book_data>`) qui permettront d’éditer les données.
+
 ~~~yaml
-:book_title:	Le titre du livre
-:book_subtitle: |
-	Sous-titre qui sera ajouté sous le titre dans la
-	page de titre. Tous les retours chariots ici
-	seront reproduits tels quels.
-:collection: 	false # true => appartient à une collection
-:auteurs: 		['Prénom NOM', 'Prénom NOM']
-:book_id:     identifiant_simple # nom du dossier par exemple
-:main_folder:	"/path/to/folder/principal/du/livre"
-:text_path:   true 	# pour dire texte.pfb.txt ou texte.pfb.md dans le 
-										# dossier du livre, sinon le path absolu
+# in recipe.yaml
+
+#<book_data>
+book_data:
+	title: "Titre du livre"
+	id: "identifiant_livre" # utile
+	subtitle: "Sous-titre\nSur plusieurs\nLignes"
+	collection: true # obsolète, mais bon…
+	auteurs: "Prénom NOM", "Prénom DE NOM"
+	isbn: "128-9-25648-635-8"
+#</book_data>
 ~~~
 
 #### Informations générales pour une collection
 
 ~~~yaml
-
+# Dans collection_recipe.yaml
 :name: "Nom humain de la collection"
 :short_name: "Nom raccourci" # pour les messages seulement
-:main_folder:	"/path/to/folder/principal/de/la/collection"
 ~~~
 
-<a name="recette-aspect-general"></a>
+<a name="book-format"></a>
 
-#### Aspect général du livre
+#### FORMAT du livre
 
 ~~~yaml
-:dimentions: ['210mm', '297mm'] # Ne pas oublier les unités
-:layout: :portrait # ou :landscape
-:marges:
-	:top: '20mm'  # marge haut
-	:bot: '20mm'	# marge bas
-	:ext:	'30mm'  # marge extérieure (*)
-	:int: '15mm'  # marge intérieure (*)
-:background: "/path/to/image/fond.jpg" # pour une image de fond
+# in recipe.yaml
+
+#<book_format>
+book_format:
+	book:
+		width: "125mm"
+		height: "20.19cm"
+		orientation: "portrait"
+	page:
+		numerotation: "pages" # ou "parags"
+		format_numero: 
+		no_num_empty: true # pas de numéro sur pages vides
+		num_only_if_num: true # cf. [001]
+		num_page_if_no_num_parag: true # cf. [002]
+		no_headers_footers: false # self-explanatory
+		skip_page_creation: true # cf. [003]
+		background: "/path/to/image/fond.jpg" # image de fond
+		margins:
+			top: "20mm"  	# marge haute
+			bot: 50 			# marge basse
+			ext: "2cm"		# marge extérieure
+			int: "0.1in"  # marge intérieure
+	text:
+		default_font_n_style: "Helvetica/normal"
+		default_size: 11.2
+		indent: 0 # indentation
+		line_height: 14 # hauteur de ligne cf. [004]
+#</book_format>
 ~~~
-> (\*) Prawn4Book est spécialement désigné pour créer des livres papier, donc les marges sont toujours définies avec la marge intérieure (côté pliure) et la marge extérieure (côté tranche — le vrai sens de "tranche").
+> **[001]** 
+>
+> On ne met un nombre que si réellement il y a un nombre. Par exemple, si c’est une numérotation par paragraphe et que la page ne contient aucun paragraphe, cette page n’aura pas de paragraphe (sauf si l’’option :num_page_if_no_num_parag est activée, bien sûr.
+>
+> **[002]**
+>
+> Si `:numerotation` est réglé sur ‘parags’ (numérotation par les paragraphes) et qu’il n’y a pas de paragraphes dans la page, avec le paramètres `:num_page_if_no_num_parag` à true, le numéro de paragraphe sera remplacé par le numéro de la page.
+>
+> **[003]**
+>
+> À la création (génération) d’un livre avec `Prawn`, une page est automatiquement créée. On peut empêcher ce comportement en mettant ce paramètre à true.
+>
+> **[004]**
+>
+> **`line_height`** est un paramètre particulièrement important puisqu’il détermine la [grille de référence](#reference-grid) du livre qui permet d’aligner toutes les lignes, comme dans tout livre imprimé digne de ce nom.
 
-<a name="”recette-aspect-pages"></a>
-
-#### Aspect des pages
-
-~~~yaml
-:default_font: 			FontName 	# font par défaut
-:default_font_size: 11				# taille de fonte par défaut
-:default_style:     :normal   # style par défaut
-:line_height:				12.5      # Hauteur de la ligne de référence
-:leading:           1 				# Espacement par défaut entre les mots
-:num_page_style:    num_page	# Type de numérotation (
-															# 'num_page' 	=> par numéro de page
-															# 'num_parag' => par numéro de paragraphes
-:opt_num_parag: 		false     # si true, on numérote les paragraphes.
-~~~
-
-La donnée **`:line_height`** est particulièrement importante puisqu’elle détermine où seront placées toutes les lignes du texte dans le livre, sauf exception [[AJOUTER RENVOI VERS CETTE EXCEPTION]]. Elle permet de définir la **grille de références** c’est-à-dire la grille sur laquelle seront alignées toutes les lignes de texte pour produire un livre professionnel.
+---
 
 <a name="data-titles"></a>
 
-#### Données des titres
-
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété    | valeurs possibles |
-| -------------------------------------------------------- | ------- | ------------ | ----------------- |
-|                                                          |         | **:titles:** | Table par titre   |
+#### Données des TITRES
 
 ~~~yaml
+# in recipe.yaml
+
+#<titles>
 :titles:
 	:level1:
 		:next_page: true 		# true => nouvelle page pour ce titre
 		:belle_page: false 	# mettre à true pour que le titre soit
 												# toujours sur une belle page (impaire)
-		:font: "LaFonte"
+		:font_n_style: "LaFonte/lestyle"
 		:size: 30
-		:lines_before: 0
-		:lines_after: 4
-		:leading: -2
+		:lines_before: 0 		# cf. [001] [003]
+		:lines_after: 4			# cf. [001]
+		:leading: -2 				# interlignage cf. [002]
 	:level2:
 		# idem
 	:level3:
 		# idem
 	# etc.
+#</titles>
 ~~~
 
-Les **`lines_before`** et **`lines_after`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux lignes de référence.
+> **[001]**
+>
+> Les **`lines_before`** et **`lines_after`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux [lignes de référence](#reference-grid).
+>
+> **[002]**
+>
+> La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
+>
+> **[003]**
+>
+> le `:line_before` d’un titre suivant s’annule si le titre précédent en possède déjà un. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
+>
+> Bien noter que c’est vrai dans tous les cas. Par exemple, si un titre de niveau 1 a son `:lines_after` réglé à 0, un titre de niveau supérieur aura beau avoir son `:lines_before` réglé à 4 ou 6, le titre de niveau supérieur sera “collé” au titre de niveau 1.
 
-* par défaut, les titres se placent toujours sur des lignes de référence,
+Par défaut, les titres (leur première ligne, s’ils tiennent sur plusieurs lignes) se placent toujours sur des [lignes de référence](#reference-grid).
 
-* on parle toujours du **nombre de lignes ENTRE les éléments**. C’est-à-dire que si `:lines_after` est réglé à 4 pour un titre, on trouvera 4 lignes entre ce titre et l’élément suivant. Donc l’élément suivant sera posé sur une 5e ligne
 
-* le `:line_before` d’un titre suivant s’annule si le titre précédent en possède déjà un. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
-
-  > Bien noter que c’est vrai dans tous les cas. Par exemple, si un titre de niveau 1 a son `:lines_after` réglé à 0, un titre de niveau supérieur aura beau avoir son `:lines_before` réglé à 4 ou 6, le titre de niveau supérieur sera “collé” au titre de niveau 1.
-
-* on peut mettre une valeur flottante pour qu’un titre se place entre deux lignes de référence
-
-La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
 
 <a name="info-publisher"></a>
 
-#### Données de l'éditeur/éditions
-
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété       | valeurs possibles |
-| -------------------------------------------------------- | ------- | --------------- | ----------------- |
-|                                                          |         | **:publisher:** | Table de données  |
-
-
-
-> Utiliser plutôt l’assistant : <console>pfb assistant</console> et choisir “publisher” ou “maison d’édition”.
-
-
+#### Données de la MAISON D’ÉDITIONS
 
 ~~~yaml
-:publisher:
-	:name: 	"Nom édition" # p.e. "Icare Éditions"
-	:adresse: |
-		Numéro Rue de la voie
-		XXXXX La Ville
-	:site:  	"https://site_editions.org"
-	:logo: 		"path/rel/or/abs/to/logo.svg"
-	:siret: 	null # Ou numéro de siret
-	:mail:  	mail@toedition.org
-	:contact: contact@toedition.org
+# in recipe.yaml ou collection_recipe.yaml
+
+#<publishing>
+publishing:
+	name:    		"Nom édition" # p.e. "Icare Éditions"
+	adresse: 		"Numéro Rue\nCode postal Ville\nPays
+	url:     		"https://site-des-editions.com"
+	logo_path: 	"path/to/logo.svg" # cf. [001]
+	siret:      "NUMEROSIRET"
+	mail:       "info@editions.com"    # mail principal
+	contact: 		"contact@editions.com" # mail de contact
+#</publishing>
 ~~~
+
+> **[001]**
+>
+> Ce doit être le chemin d’accès absolu (déconseillé) ou un chemin relatif dans le dossier du livre OU le dossier de la collection.
 
 <a name="recette-fonts"></a>
 
-#### Fontes
+#### Données des POLICES
 
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété   | valeurs possibles |
-| -------------------------------------------------------- | ------- | ----------- | ----------------- |
-|                                                          |         | **:fonts:** | Table de données  |
-
-On peut être assister pour la création de la donnée des fontes (qui nécessite de connaitre les chemins d’accès à toutes les fontes possibles) de cette manière :
-
-* ouvrir un Terminal au dossier du livre ou de la collection
-* jouer la commande <console>pfb aide fontes</console> ou <console>pfb assistant</console> et choisir “Fontes”.
+*(pour définir dans la recette du livre ou de la collection les polices utilisées — à empaqueter)*
 
 ~~~yaml
+# in recipe.yaml ou collection_recipe.yaml
 
-:fonts:
-	<nom utilisé>
-		:<style>: "/path/to/font.tff"
-		:<style>: "/path/to/font.tff"
-
-# etc.
+#<fonts>
+fonts:
+	fontName: # le nom de la police cf/ [001]
+		monstyle: "/path/to/font.ttf" # Style cf. [002]
+		autrestyle: "/path/to/font-autrestyle"
+	autrePolice: 
+		monstyle: "..."
+		# etc.
+#</fonts>
 ~~~
 
-Par exemple :
+> **[001]**
+>
+> C’est le nom que l’on veut, qui servira à renseigner les paramètres *font_n_style* des différents éléments. Par exemple, si le `font_n_style` d’un titre de niveau 2 est “MonArial/styletitre” alors la fonte “MonArial”  doit être définie avec le path du fichier `ttf` à utiliser pour le style `styletitre` :
+>
+> ```yaml
+> fonts:
+> 	MonArial:
+> 		styletitre: "/Users/fontes/Arial Bold.ttf"
+> ```
+>
+> **[002]**
+>
+> Comme on le voit ci-dessus, on peut utiliser n’importe quel nom de style, pourvu qu’il soit associé à un fichier `ttf` existant. Cependant, certains noms de styles sont importants pour gérer correctement les balises de formatages HTML de type `<i>` ou `<b>`. Pour `<i>`, il faut définir le style `italic:` et pour `<b>` il faut définir le style `:bold`.
+
+
+
+Voici un exemple de données qu’’on peut trouver dans le fichier recette :
 
 ~~~yaml
 # ...
@@ -1713,11 +1749,142 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 > L’ordre des fonts ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
 
----
+<a name="biblios-data-in-recipe"></a>
+
+#### Données BIBLIOGRAPHIQUES
+
+*(pour définir dans la recette du livre ou de la collection les données des bibliographies utilisées)*
+
+```yaml
+# in recipe.yaml ou collection_recipe.yaml
+
+#<bibliographies>
+bibliographies:
+	book_identifiant: "livre" # cf. [001]
+	font_n_style: "Times-Roman/normal" # Fonte par défaut
+	# Définition des bibliographies
+	biblios:
+	- tag: letag # par ex. "livre" ou "film" cf. [002]
+		title: "Titre à donner à l'affichage" # cf. [003]
+		path: "path/to/dossier/fiches
+		title_level: 1 # niveau de titre cf. [003]
+		new_page: true # pour la mettre sur une nouvelle page cf. [003]
+		font_n_style: null # ou la "Police/style" des items
+		size: null # par défaut ou la taille des items
+	- tag: autrebiblio
+		path: ...
+#</bibliographies>
+```
+
+> **[001]**
+>
+> Par défaut, il y a toujours une bibliographie pour les livres. On peut définir son “tag” ici.
+>
+> **[002]**
+>
+> Le tag doit toujours être au singulier.
+>
+> **[003]**
+>
+> On parle ici de l’affichage de la bibliographie à la fin du livre, si des items ont été trouvés.
+>
+> 
+
+<a name="recipe-tdm-data"></a>
+
+#### Données de TABLE DES MATIÈRES
+
+*(pour définir dans la recette du livre ou de la collection l’aspect de la table des matières)*
+
+```yaml
+# in recipe.yaml ou collection_recipe.yaml
+
+#<table_of_content>
+table_of_content:
+	title: "Table des matières"
+	no_title: false # cf. [001]
+	title_level: null # 1 par défaut
+	level_max: 3 # niveau de titre maximum
+	line_height: 12 # hauteur de ligne
+	lines_before: 4 # nombre de lignes avant le premier item
+	numeroter: true # pour numéroter cf. [003]
+	separator: "." # caractère entre titre item et numéro
+	add_to_numero_width: 0 # cf. [002]
+	font_n_style: null # ou le "Police/style" à utiliser
+	size: null # ou la taille de police par défaut
+	numero_size: null # ou taille pour le numéro
+	level1:
+		indent: 0 # indentation des items de ce niveau
+		font_n_style: null # "Police/style" pour ce niveau
+		size: null # taille pour ce niveau
+		numero_size: null # taille de numéro pour ce niveau de titre
+	level2:
+		indent: 10
+	levelX: # cf. [004]
+#</table_of_content>
+```
+
+> **[001]**
+>
+> Si cette valeur est true, le titre “Table des matières” (ou autre) ne sera pas affiché. Cela peut servir à ne pas voir le titre, mais cela sert aussi lorsque l’’on veut mettre un titre, mais que ce titre ne soit pas dans la table des matières elle-même. Dans ce cas, dans le fichier texte du livre, on met :
+>
+> ```
+> # {no-tdm}Table des matières
+> ```
+>
+> C’est le `{no-tdm}` qui fait que le titre “Table des matières” ne sera pas inscrit dans la table des matières elle-même.
+>
+> **[002]**
+>
+> Paramètre “maniaque” pour ajuster l’espace vide entre le dernier caractère de séparation et le numéro de page ou de paragraphe.
+>
+> **[003]**
+>
+> SI ce paramètre est à `false`, seuls les titres seront inscrits, sans numéro de page ou de paragraphe.
+>
+> **[004]**
+>
+> Tous les niveaux jusqu’à `:level_max` doivent être définis.
+>
+> 
+
+ <a name="recette-page-infos"></a>
+
+#### Données de la PAGE INFOS
+
+*(pour définir dans la recette du livre ou de la collection les données de la pages-infos, derrière page avec les informations techniques sur le livre ou la collection)*
+
+```yaml
+# in recipe.yaml ou collection_recipe.yaml
+
+#<page_infos>
+page_infos:
+	aspect:
+		libelle: # pour les libellés
+			font_n_style: "Police/style"
+			size: 10
+			color: "CCCCCC"
+		value: # pour les valeurs
+			font_n_style: "Police/style"
+			size: 10
+  # Données
+  conception:
+  	patro: "Prénom NOM" # ou liste
+  	mail   "prenom.nom@chez.lui" # ou liste
+  mise_en_page:
+  	# idem
+  cover: 
+  	# idem
+  correction:
+  	# idem
+  depot_legal: "Trimestre ANNÉES"
+  printing:
+  	name: "Imprimerie de l'Ouest"
+  	lieu: "Ours sur Orge"
+#</page_infos>
+```
 
 
-
-<a name="recette-page-info"></a>
 
 <a name="all-types-pages"></a>
 
@@ -1756,42 +1923,6 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 	# On peut aussi définir la fonte et la taille :
   # :font:  "LaFonte"
 	# :size:  16
-# --- Réglage de la table des matières ---
-# Elle sera affichée à la marque '(( toc ))'
-:table_of_contents:
-	:title: 	"Table des matières" # si false, pas de titre
-	:title_level: 	2 					# niveau de titre du titre ci-dessus
-  :font:    			'fontName'  # police à utiliser (elle doit être chargée)
-  :size:    			11          # taille de la police
-  :line_height: 	null    		# Hauteur de ligne. Par défaut, c'est 14
-  :first_line:    null    		# Hauteur de la première ligne par rapport 
-                        			# au bord haut de la page (hors marge)
-  :add_to_numero_with: null 	# largeur (en unité pdf) à ajouter au
-                            	# numéro de page. Correspond à l'arrêt 
-                            	# des pointillés reliant les titres aux
-                            	# numéros des pages/paragraphes
-  indent_per_offset: null   	# ou liste des indentations en fonction
-                            	# du niveau de titre. Par défaut :
-                              #   [0, 2, 4, 6, 8]
-# --- Réglage de la page d'infos (fin du livre) ---
-:infos:
-  :display:     true 			# pour la produire dans le livre
-  :isbn:        null
-  :depot_bnf:   3e trimestre 2022
-  :cover:       "MM & PP" # auteurs de la couverture
-  :mep:         ['Prénom NOM'] 	# mise en page
-  :conception:  ['Prénom NOM']	# conception du livre
-  :corrections: ['Prénom NOM']
-  :print:       'Imprimé à la demande'
-  
-# --- Réglage des pages de bibliographie ---
-:biblio:
-	- :tag: livre 		  # tag utilisée dans le texte pour identifier les
-										  # éléments à bibliographier
-    :new_page: true   # true => mettre cette bibliographie sur une 
-                      # nouvelle page
-    :title: "Liste des ?"  # titre utilisé sur la page
-    :data:  "biblio/livres.yaml" # source des données
 ~~~
 
 
@@ -1801,6 +1932,22 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 <a name="annexe"></a>
 
 ## Annexe
+
+<a name="reference-grid"></a>
+
+### Grille de référence
+
+La ***grille de référence*** est une “grille” abstraite (mais qu’on peut afficher) sur laquelle viennent s’inscrire toutes les lignes du texte du livre (qu’on appelle les **lignes de référence**). Dans un livre imprimé digne de ce nom, cette grille permet d’avoir les lignes alignées entre la page droite et la page gauche, mais aussi alignées par transparence, afin qu’une ligne d’une feuille précédente ou suivante n’apparaisse pas (trop). 
+
+Dans *Prawn-for-book* on règle cette grille de référence grâce au paramètres **`:line_height`** qui se définit dans le [format du livre (ou de la collection)](#book-format).
+
+On peut demander l’affichage de la grille de référence au moment de la conception du livre (par exemple pour compter le nombre de lignes à laisser entre deux éléments) en utilisant l’option :
+
+~~~
+pfb build -grid
+~~~
+
+
 
 <a name="points-pdf"></a>
 

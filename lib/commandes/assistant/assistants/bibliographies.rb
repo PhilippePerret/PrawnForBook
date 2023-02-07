@@ -217,18 +217,16 @@ DATA_BIBLIO = [
   {name: "Niveau de titre pour affichage"       , value: :title_level, type: :int},
   {name: "Sur nouvelle page ?", value: :new_page, type: :bool},
   {name: 'Dossier des fiches', value: :path, invalid_if: :folder_cards_not_exist?, required: true},
-  {name: 'Font (dans bibliographie)', value: :font, default: 1, values: :police_names_or_default},
+  {name: 'Font (dans bibliographie)', value: :font_n_style, default: 1, values: Fonte.method(:as_choices)},
   {name: 'Taille de police', value: :size, default: 11},
-  {name: 'Style de police', value: :style, default: nil, values: :font_styles_or_default},
 ]
 
 
 MAIN_DATA_BIBLIOGRAPHIES = [
   {name: 'Les bibliographies', value: :biblios, value_method: :hliste_of_biblios, type: :custom, meth: :define_types_bibliographies},
   {name: "Identifiant la bibliographie des livres (livre)", value: :book_identifiant, type: :sym, default: 'livre'},
-  {name: 'Fonte par défaut (dans la bibliographie)', value: :font, default: 1, values: :police_names_or_default},
+  {name: 'Fonte par défaut (dans la bibliographie)', value: :font_n_style, default: 1, values: Fonte.method(:as_choices)},
   {name: 'Taille de police par défaut', value: :size, default: 11},
-  {name: 'Style de police par défaut', value: :style, default: nil, values: :font_styles_or_default},
 ]
 
   # @return [String] La liste humaine des bibliographies courantes
