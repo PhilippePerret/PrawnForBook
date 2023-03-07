@@ -986,7 +986,7 @@ Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recet
 Une bibliographie nécessite :
 
 * de [définir **la balise**](#biblio-tag) qui va repérer les éléments dans le texte (par exemple `film` ou `livre`)
-* de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre (`:title`),
+* de [définir **un titre**](#titre-biblio) qui sera utilisé dans le livre (`:title` ou clé définie par `:main_key`),
 * de [définir le **chemin d’accès**](#biblio-path)  à ses données (`:path`),
 * de [définir **la page**](#page-biblio) sur laquelle sera écrite la bibliographie,
 * de [définir **les données**](#biblio-data) utilisées par la bibliographie et qu’elles soient valides,
@@ -1134,6 +1134,7 @@ La source des données (le dossier) est indiquée dans le fichier recette du liv
       :title: Liste des films
       :title_level: 2
       :path:  data/films
+      :main_key:   :titre_fr # pour définir une autre clé par défaut
       :font: Fonte 	# la fonte à utiliser
       :size: 10 		# la taille de fonte (10 par défaut)
       :style: null  # éventuellement le style de la fonte
@@ -1162,7 +1163,7 @@ ditd:
 # etc.
 ~~~
 
-**NOTE IMPORTANTE** : toute donnée bibliographique doit avoir une propriété `:title` qui sera écrite dans le texte à la place de la balise.
+**NOTE IMPORTANTE** : toute donnée bibliographique doit avoir une propriété `:title` ou la propriété définie par `:main_key` dans la définition de la bibliographie, qui sera écrite dans le texte à la place de la balise. Note : mais ce comportement peut être surclassé en implémentant la méthode `FormaterBibliographieModule::<id biblio>_in_text(data)` qui reçoit la table des données de l’élément tel qu’il est enregistré dans sa fiche.
 
 Voir ensuite dans [la partie mise en forme](#mise-en-forme-biblio) la façon d’utiliser ces données.
 

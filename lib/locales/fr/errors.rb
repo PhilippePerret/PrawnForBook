@@ -73,7 +73,7 @@ ERRORS = {
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette…",
     biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
-    bibitem_requires_title: "Un élément bibliographique requiert toujours, au moins, un titre (dans :title)",
+    bibitem_requires_title: "Un élément bibliographique requiert un titre (défini par :title ou par la clé définie par :main_key dans la définition de la bibliographie)",
     title_already_exists: "Ce titre existe déjà.",
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',
