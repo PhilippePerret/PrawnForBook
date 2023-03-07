@@ -107,6 +107,7 @@ class Bibliography
   def tag         ; id.to_s end
   def title       ; @title        ||= data[:title]          end
   def title_level ; @title_level  ||= data[:title_level]||1 end
+  def main_key    ; @main_key     ||= data[:main_key] || :title end
 
   private
 

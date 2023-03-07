@@ -192,15 +192,16 @@ private
   # @return [String] Le texte formaté
   def __traite_termes_bibliographiques_in(str)
     str.gsub(Bibliography::REG_OCCURRENCES) do
-      item_id, item_titre = $2.freeze.split('|')
-      spy "Biblio pour : #{item_titre.inspect}".rouge
       bib_tag = $1.freeze
-      item_id = item_id.to_sym
+      item_id, item_titre = $2.freeze.split('|')
+      spy "Biblio pour : #{item_titre.inspect}".rouge if item_titre
+      # item_id = item_id.to_sym
       bibitem = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
       if bibitem
         item_titre || bibitem.formated_for_text
       else
         building_error(ERRORS[:biblio][:bib_item_unknown] % [item_id.inspect, bib_tag.inspect])
+        item_id
       end
     end
   end
