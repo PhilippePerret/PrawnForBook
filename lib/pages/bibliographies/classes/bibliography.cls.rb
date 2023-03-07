@@ -133,6 +133,13 @@ class << self
     if bibitem.is_a?(Symbol) || bibitem.is_a?(String)
       bibitem = biblio.get(bibitem.to_sym)
     end
+    bibitem || begin
+      # 
+      # Dans le cas où l'élément bibliographique n'existe pas
+      # 
+      building_error(ERRORS[:biblio][:bib_item_unknown] % [bibitem.inspect, bib_tag.inspect])
+      return nil
+    end
     bibitem.add_occurrence(doccurrence)
     return bibitem
   end

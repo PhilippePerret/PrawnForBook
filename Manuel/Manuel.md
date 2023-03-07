@@ -973,8 +973,7 @@ module PrawnCustomBuilderModule
 end
 ~~~
 
-
-<a name="bibliographie"></a>
+<a name="bibliographies"></a>
 
 #### Pages de bibliographie
 
@@ -1755,6 +1754,8 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 *(pour définir dans la recette du livre ou de la collection les données des bibliographies utilisées)*
 
+Voir ici pour le détail du fonctionnement et de la définition des [bibliographies](#bibliographies).
+
 ```yaml
 # in recipe.yaml ou collection_recipe.yaml
 
@@ -1764,15 +1765,15 @@ bibliographies:
 	font_n_style: "Times-Roman/normal" # Fonte par défaut
 	# Définition des bibliographies
 	biblios:
-	- tag: letag # par ex. "livre" ou "film" cf. [002]
-		title: "Titre à donner à l'affichage" # cf. [003]
-		path: "path/to/dossier/fiches
-		title_level: 1 # niveau de titre cf. [003]
-		new_page: true # pour la mettre sur une nouvelle page cf. [003]
-		font_n_style: null # ou la "Police/style" des items
-		size: null # par défaut ou la taille des items
-	- tag: autrebiblio
-		path: ...
+		letag: # par ex. "livre" ou "film" cf. [002]
+      title: "Titre à donner à l'affichage" # cf. [003]
+      path: "path/to/dossier/fiches
+      title_level: 1 # niveau de titre cf. [003]
+      new_page: true # pour la mettre sur une nouvelle page cf. [003]
+      font_n_style: null # ou la "Police/style" des items
+      size: null # par défaut ou la taille des items
+	  autrebiblio:
+			path: ...
 #</bibliographies>
 ```
 
@@ -1848,9 +1849,88 @@ table_of_content:
 >
 > 
 
+
+
+
+<a name="all-types-pages"></a>
+
+#### Les TYPES DE PAGE à imprimer
+
+##### Impression ou non des pages de type
+
+> Notez que certaines pages ne sont imprimées dans le livre que si les bornes correspondantes sont placées dans le livre. C’est le cas notamment de la table des matières, qui doit être stipulée par :
+>
+> ```
+> (( table_des_matieres ))
+> ```
+>
+> ou de l’index :
+>
+> ```
+> (( index ))
+> ```
+
+Sinon, les autres pages (qui correspondent à des positions fixes dans le livres) doivent être invoquées dans le fichier recette :
+
+~~~yaml
+# in recipe.yaml ou collection_recipe.yaml
+
+# La page créée au tout départ par Prawn (cf. [001])
+book_format:
+	page:
+		:skip_page_creation:  true 	# (true par défaut)
+
+#<inserted_pages>
+inserted_pages:
+	# La PAGE DE GARDE est une page vierge insérée juste avant 
+	# la page de titre
+	page_de_garde: true 	# true par défaut
+	# La PAGE DE TITRE est une page reprenant les informations 
+	# de la couverture ainsi que quelques informations supplémentaires
+	page_de_titre: false 	# false par défaut
+	# La PAGE DE FAUX TITRE est une page insérée avant la page de
+	# titre et après la page de garde, et reprenant juste le titre
+	# de l'ouvrage et son auteur.
+	faux_titre: false     # false par défaut	
+#</inserted_pages>
+
+~~~
+
+> **[001]**
+>
+> Au tout départ de la création d’un fichier PDF par Prawn est créé par défaut une page vierge. Pour empêcher ce comportement, afin de mieux maitriser la gestion des pages, il faut mettre ce paramètre à `true` (vrai)
+
+##### Définition de la PAGE DE TITRE
+
+~~~yaml
+# in recipe.yaml ou collection_recipe.yaml
+
+#<page_de_titre>
+page_de_titre:
+	fonts: 
+		title: "Police/style"    	# police pour le titre du livre
+		subtitle "Police/style"  	# police pour le sous-titre du livre
+		author: "Police/style"   	# police pour l'auteur
+		publisher: "Police/style" # police pour l'éditeur
+		collection_title: null    # police pour le nom de la collection
+	sizes:
+		title: 18 # taille pour le titre du livre
+		subtitle: 11 # taille pour le sous-titre
+		author: 15 # taille pour l'auteur
+		publisher: 12 # taille pour l'éditeur
+		collection_title: 12 # taille pour l'éditeur
+	spaces_before:
+		title: 4 # nombre de lignes avant le titre
+		subtitle: 1 # nombre de lignes avant le sous-titre
+		author: 2 # nombre de lignes avant le nom de l'auteur
+	logo:
+		height: 10 # Hauteur du logo
+#</page_de_titre>
+~~~
+
  <a name="recette-page-infos"></a>
 
-#### Données de la PAGE INFOS
+##### Définition de la PAGE INFOS
 
 *(pour définir dans la recette du livre ou de la collection les données de la pages-infos, derrière page avec les informations techniques sur le livre ou la collection)*
 
@@ -1886,44 +1966,24 @@ page_infos:
 
 
 
-<a name="all-types-pages"></a>
+#### Données pour la PAGE D’INDEX
 
-#### Tous les types de page
+```yaml
+# in recipe.yaml ou collection_recipe.html
 
-(c’est-à-dire la page à la fin du livre présentant les différentes informations sur ce livre)
-
-{TODO À reprendre en totalité}
-
-~~~yaml
-:skip_page_creation:  true 	# à true, la première page automatique
-														# n'est pas générée (ce qui permet de 
-														# contrôler cette première page)
-:page_de_garde:       true
-:page_de_titre:       true  # true => affichage de la page de titre
-														# avec les données par défaut
-	# Sinon, on peut définir les données précisément
-  # :sizes:  # Pour les tailles des différents éléments
-  #   :collection_title: 14
-  #   :title: 34
-  #   :subtitle: 20
-  #   :author: 16
-  #   :publisher: 14
-  # :spaces_before: # pour les "espaces avant" les éléments, en
-  #									# nombre de lignes de référence
-  #   :title: 5 # en nombre de lignes de référence
-  #   :subtitle: 1
-  #   :author: 2
-  # :logo:
-  #   :height: 10 # hauteur du logo en millimètres
-  #   # noter que le logo est toujours placé le plus en bas possible
-  #   # On peut forcer un ':logo: false' pour forcer à ne pas afficher
-  #   # le logo (s'il est défini dans la partie ':publisher')
-
-:faux_titre:          true
-	# On peut aussi définir la fonte et la taille :
-  # :font:  "LaFonte"
-	# :size:  16
-~~~
+#<page_index>
+page_index:
+	aspect:
+		# Pour définir le MOT CANONIQUE
+		canon:
+			font_n_style: "Police/style" # pour le canon
+			size: 10 # taille pour le canon
+		# Pour définir l'aspect des nombres (pages ou paragraphes)
+		number:
+			font_n_style: "Police/style" 
+			szie: 10
+#</page_index>
+```
 
 
 

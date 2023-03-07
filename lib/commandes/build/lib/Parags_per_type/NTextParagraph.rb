@@ -13,6 +13,8 @@ class NTextParagraph < AnyParagraph
   #   en plaçant le curseur, en réglant les propriétés, etc.
   # 
   def print(pdf)
+
+    # spy "text au début de print (paragraphe) : #{text.inspect}".orange
     
     #
     # Si le paragraphe possède son propre builder, on utilise ce
@@ -46,10 +48,17 @@ class NTextParagraph < AnyParagraph
     # TEXTE FINAL du paragraphe
     # @note
     #   C'est dans cette méthode que sont traités les codes ruby, les
-    #   marques bibliographiques, les références (cibles et appels)
-    #   etc.
+    #   marques bibliographiques, les références (cibles et appels),
+    #   le code markdown, etc.
     # 
     final_str = formated_text(pdf)
+
+    # 
+    # Ajout d'un traitement spéciale : formated_text peut retourner
+    # un array définissant en deuxième argument la margin left
+    # 
+    no_num = false
+    mg_bot = nil
 
     #
     # Fonte et style à utiliser pour le paragraphe
@@ -65,6 +74,16 @@ class NTextParagraph < AnyParagraph
     textIndent  = recipe.text_indent
     textAlign   = self.text_align
     # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
+
+    if final_str.is_a?(Array)
+      final_str, specs = final_str
+      mg_left   = specs[:mg_left]   if specs.key?(:mg_left)
+      mg_top    = specs[:mg_top]    if specs.key?(:mg_top)
+      mg_bot    = specs[:mg_bot]    if specs.key?(:mg_bot)
+      mg_right  = specs[:mg_right]  if specs.key?(:mg_right)
+      no_num    = specs[:no_num]    if specs.key?(:no_num)
+      fontSize  = specs[:size]      if specs.key?(:size)
+    end
 
     #
     # Pour invoquer cette instance
@@ -108,6 +127,11 @@ class NTextParagraph < AnyParagraph
         # 
         move_cursor_to_next_reference_line
 
+        #
+        # Écriture du numéro du paragraphe
+        # 
+        parag.print_paragraph_number(pdf) if not(no_num) && pdfbook.recipe.paragraph_number?
+
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
           #
@@ -126,10 +150,10 @@ class NTextParagraph < AnyParagraph
 
           # spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
 
-          #
-          # Écriture du numéro du paragraphe
-          # 
-          parag.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
+          # #
+          # # Écriture du numéro du paragraphe
+          # # 
+          # parag.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
 
           # 
           # Hauteur que prendra le texte
@@ -173,6 +197,11 @@ class NTextParagraph < AnyParagraph
           spy "options = #{options.inspect}"
           text(final_str, **options)
         end
+
+        if mg_bot && mg_bot > 0
+          move_down(mg_bot)
+        end
+
       end
     rescue PrawnFatalError => e
       raise e

@@ -19,16 +19,21 @@ class AnyParagraph
     # text du paragraphe.
     # 
     str ||= text
+
+    # spy "str initial : #{str.inspect}".orange
+
     # 
     # Traitement des codes ruby 
     # 
     str = __traite_codes_ruby_in(str)
+    # spy "str après code ruby : #{str.inspect}".orange
 
     # 
     # Traitement des mots indexé
     #
     if str.match?('index:') || str.match?('index\(')
       str = __traite_mots_indexed_in(str)
+      # spy "str après recherche index : #{str.inspect}".orange
     end
 
     #
@@ -36,6 +41,7 @@ class AnyParagraph
     # 
     if Bibliography.any?
       str = __traite_termes_bibliographiques_in(str)
+      # spy "str après recherche biblio : #{str.inspect}".orange
     end
 
     #
@@ -43,9 +49,19 @@ class AnyParagraph
     # 
     str = __traite_references_in(str)
 
+    # 
+    # Traitement du pseudo-format markdown
+    # 
+    str = __traite_pseudo_markdown_format(str, pdf)
+
     # S'il le faut (options), ajouter la position du curseur en
     # début de paragraphe.
     str = pdf.add_cursor_position(str) if add_cursor_position?
+
+    # if str.match?(/<span/)
+    #   puts "TEXTE CORRIGÉ : #{str.inspect}"
+    #   # exit
+    # end
 
     return str
   end #/formated_text
@@ -67,6 +83,86 @@ class AnyParagraph
   end
 
 private
+
+  REG_BOLD      = /\*\*(.+?)\*\*/
+  SPAN_BOLD     = "<span class=\"bold\">%s</span>".freeze
+  REG_ITALIC    = /\*(.+?)\*/
+  SPAN_ITALIC   = '<em>%s</em>'.freeze
+  REG_UNDERLINE = /_(.+?)_/
+  SPAN_UNDERLINE  = '<u>%s</u>'.freeze
+
+  REG_LIST_ITEM = /^\* (.*)$/
+  
+  # @return [String] Le texte traité 
+  # 
+  # Ça s'appelle "pseudo-markdown" car on utilise les mêmes marques
+  # pour les mêmes choses, mais c'est traité en interne, de façon
+  # tout à fait particulière.
+  # 
+  def __traite_pseudo_markdown_format(str, pdf)
+    # 
+    # Les citations
+    # 
+    is_exergue_citation = str.start_with?('> ')
+
+    str = "<em>#{str[2..-1]}</em>" if is_exergue_citation
+
+    # 
+    # Les listes (repérées par des lignes qui commencent par '* ')
+    # 
+    # @note
+    #   Incompatible avec une citation exergue
+    is_item_of_liste = not(is_exergue_citation) && str.match?(REG_LIST_ITEM)
+
+    if is_exergue_citation && is_item_of_liste
+      raise "Un paragraphe ne peut pas être en même temps une citation en exergue et un item de liste. Faire un style propre, au besoin."
+      is_exergue_citation = false
+    end
+
+    if is_item_of_liste
+      str = str.gsub(REG_LIST_ITEM) do
+        txt = $1.freeze
+        txt
+      end
+    end
+
+    # 
+    # Les gras ('**')
+    # 
+    str = str.gsub(REG_BOLD) do
+      txt = $1.freeze
+      SPAN_BOLD % txt 
+    end
+
+    # 
+    # Les italiques
+    # 
+    str = str.gsub(REG_ITALIC) do
+      txt = $1.freeze
+      SPAN_ITALIC % txt
+    end
+
+    # 
+    # Les soulignés
+    # 
+    str = str.gsub(REG_UNDERLINE) do
+      txt = $1.freeze
+      SPAN_UNDERLINE % txt
+    end
+
+    if is_item_of_liste
+      pdf.update do 
+        float do
+          text '– '
+        end
+      end
+      return [str, {mg_left:0.3.cm, no_num: true}]
+    elsif is_exergue_citation
+      return [str, {size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true}]
+    else
+      return str
+    end
+  end
 
   # @return [String] Le texte formaté
   def __traite_references_in(str)    
@@ -96,12 +192,16 @@ private
   # @return [String] Le texte formaté
   def __traite_termes_bibliographiques_in(str)
     str.gsub(Bibliography::REG_OCCURRENCES) do
-      bib_tag = $1.freeze
       item_id, item_titre = $2.freeze.split('|')
-      spy "item_titre = #{item_titre.inspect}".rouge
+      spy "Biblio pour : #{item_titre.inspect}".rouge
+      bib_tag = $1.freeze
       item_id = item_id.to_sym
       bibitem = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
-      item_titre || bibitem.title
+      if bibitem
+        item_titre || bibitem.formated_for_text
+      else
+        building_error(ERRORS[:biblio][:bib_item_unknown] % [item_id.inspect, bib_tag.inspect])
+      end
     end
   end
 

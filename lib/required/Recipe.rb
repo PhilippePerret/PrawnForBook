@@ -293,26 +293,17 @@ class Recipe
 
   # --- Index ---
 
-  def index_font_name
-    @index_font_name ||= page_index[:aspect][:canon][:font]
+  def index_canon_font_n_style
+    @index_canon_font_n_style ||= page_index[:aspect][:canon][:font_n_style]
   end
-  def index_font_size
-    @index_font_size ||= page_index[:aspect][:canon][:size]
+  def index_canon_font_size
+    @index_canon_font_size ||= page_index[:aspect][:canon][:size]
   end
-  def index_font_style
-    @index_font_style ||= page_index[:aspect][:canon][:style]
-  end
-  alias :index_canon_font_name :index_font_name
-  alias :index_canon_font_size :index_font_size
-  alias :index_canon_font_style :index_font_style
-  def index_number_font_name
-    @index_number_font_name ||= page_index[:aspect][:number][:font]
+  def index_number_font_n_style
+    @index_number_font_n_style ||= page_index[:aspect][:number][:font_n_style]
   end
   def index_number_font_size
     @index_number_font_size ||= page_index[:aspect][:number][:size]
-  end
-  def index_number_font_style
-    @index_number_font_style ||= page_index[:aspect][:number][:style]
   end
 
   # --- Group Recipe Data ---

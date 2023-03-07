@@ -25,13 +25,13 @@ class PageIndex
     # Pour savoir si la police du canon est différente de celle des
     # nombres
     # 
-    diff_font_canon_and_number = (canon_font_name != number_font_name) || (canon_font_size != number_font_size) || (canon_font_style != number_font_style)
+    diff_font_canon_and_number = (canon_fonte != number_fonte)
     # 
     # Police et taille
     # 
     unless diff_font_canon_and_number
-      spy "Font/size appliqués : #{canon_font_name.inspect}/#{font_size.inspect}".bleu
-      pdf.font(canon_font_name, size: font_size, style: font_style)
+      spy "Font/size appliqués : #{canon_fontstyle.inspect}/#{canon_font_size.inspect}".bleu
+      pdf.font(canon_fonte)
     end
     # 
     # Boucle sur la table des index 
@@ -42,8 +42,10 @@ class PageIndex
       pdf.move_cursor_to_next_reference_line
       if diff_font_canon_and_number
         pdf.formatted_text [
-          {text: canon, font: font_name, size: font_size, styles: [font_style]},
-          {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_font_name, size: number_font_size, styles: [number_font_style]}
+          {text: canon, font: canon_fonte},
+          {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_fonte}
+          # {text: canon, font: font_name, size: font_size, styles: [font_style]},
+          # {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_font_name, size: number_font_size, styles: [number_font_style]}
         ]
       else
         pdf.text("#{canon} : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}")
@@ -52,27 +54,31 @@ class PageIndex
     spy "<- /construction de l'index".jaune
   end
 
-  def canon_font_name
-    @canon_font_name ||= recipe.index_canon_font_name
+  def canon_fonte
+    @canon_fonte ||= Fonte.new(canon_fontstyle, **{size: canon_font_size})
   end
-  alias :font_name :canon_font_name
+  def number_fonte
+    @number_fonte ||= begin
+      if canon_fontstyle == number_fontstyle && canon_font_size == number_font_size
+        canon_fonte
+      else
+        Fonte.new(number_fontstyle, **{size:number_font_size})
+      end
+    end
+  end
+
+  def canon_fontstyle
+    @canon_fontstyle ||= recipe.index_canon_font_n_style
+  end
   def canon_font_size
     @canon_font_size ||= recipe.index_canon_font_size
   end
-  alias :font_size :canon_font_size
-  def canon_font_style
-    @canon_font_style ||= recipe.index_canon_font_style
-  end
-  alias :font_style :canon_font_style
 
-  def number_font_name
-    @number_font_name ||= recipe.index_number_font_name
+  def number_fontstyle
+    @number_font_name ||= recipe.index_number_font_n_style
   end
   def number_font_size
     @number_font_size ||= recipe.index_number_font_size
-  end
-  def number_font_style
-    @number_font_style ||= recipe.index_number_font_style
   end
 
 end #/class PageIndex

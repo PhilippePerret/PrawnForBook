@@ -41,7 +41,8 @@ class Bibliography
       ##############################
       pdf.move_cursor_to_next_reference_line
       str = Prawn4book::Bibliography.send(formate_method, bibitem)
-      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", inline_format: true
+      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", **{inline_format: true}
+      pdf.move_down(4)
     end
   end
 

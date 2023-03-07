@@ -12,11 +12,11 @@ class PageDeTitre
   # 
   PAGE_DATA = {
     fonts: {
-      title: {name:"Police du titre", default: ->(){self.first_police_name}, values: :police_names},
-      subtitle: {name:"Police du sous-titre", default: ->(){self.first_police_name}, values: :police_names},
-      author: {name:"Police de l'auteur", default: ->(){self.first_police_name}, values: :police_names},
-      publisher: {name:"Police de l'édition", default: ->(){self.first_police_name}, values: :police_names},
-      collection_title: {name:"Police du nom de la collection", default: ->(){self.first_police_name}, values: :police_names},
+      title: {name:"Police du titre", default: ->(){self.first_police_name}, values: Fonte.method(:as_choices)},
+      subtitle: {name:"Police du sous-titre", default: ->(){self.first_police_name}, values: Fonte.method(:as_choices)},
+      author: {name:"Police de l'auteur", default: ->(){self.first_police_name}, values: Fonte.method(:as_choices)},
+      publisher: {name:"Police de l'édition", default: ->(){self.first_police_name}, values: Fonte.method(:as_choices)},
+      collection_title: {name:"Police du nom de la collection", default: ->(){self.first_police_name}, values: Fonte.method(:as_choices)},
     },
     sizes: {
       title: {name:"Taille du titre", default: 18},

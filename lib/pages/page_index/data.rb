@@ -14,14 +14,12 @@ class PageIndex
   PAGE_DATA = {
     aspect: {
       canon:  {
-        font:   {name:'Fonte pour le canon', default: 'Times-Roman'},
-        size:   {name:'Taille pour le canon', default: 10},
-        style:  {name:'Style pour le canon', default: nil},
+        font_n_style: {name:'Fonte pour le canon', default: 'Times-Roman', values: Fonte.method(:as_choices)},
+        size:         {name:'Taille pour le canon', default: 10},
       },
       number:  {
-        font:   {name:'Fonte pour les numéros', default: 'Times-Roman'},
-        size:   {name:'Taille pour les numéros', default: 10},
-        style:  {name:'Style pour les numéros', default: nil},
+        font_n_style: {name:'Fonte pour les numéros', default: 'Times-Roman', values: Fonte.method(:as_choices)},
+        size:         {name:'Taille pour les numéros', default: 10},
       },
     },
   }

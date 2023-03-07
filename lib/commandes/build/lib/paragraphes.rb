@@ -29,6 +29,8 @@ class PrawnView
       paragraphe.page_numero = page_number
       spy "Page du paragraphe #{idx} : ##{page_number}"
 
+      # spy "Text paragraphe avant parser : #{paragraphe.text.inspect}".orange
+
       # 
       # --- PRÉ-TRAITEMENT DU PARAGRAPHE ---
       # 

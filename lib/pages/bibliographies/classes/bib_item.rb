@@ -159,6 +159,31 @@ class BibItem
     end
   end
 
+  # @return [String] l'item de bibliographie formaté pour le 
+  # texte. 
+  # Soit une méthode propre est définie, soit on utilise la donnée
+  # :title qui doit toujours exister pour une carte de donnée d'un
+  # item de bibliographie (sauf, justement, si une méthode propre
+  # est définie)
+  def formated_for_text
+    @formated_for_text ||= begin
+      if self.class.formatage_in_text_method(biblio) == :none
+        self.title
+      else
+        self.class.formatage_in_text_method.call(data.dup)
+      end
+    end
+  end
+  def self.formatage_in_text_method(biblio = nil)
+    @formatage_in_text_method ||= begin
+      if defined?(FormaterBibliographiesModule) && defined?(FormaterBibliographiesModule.method("#{biblio.id}_in_text".to_sym))
+        FormaterBibliographiesModule.method("#{biblio.id}_in_text".to_sym)
+      else
+        :none
+      end
+    end
+  end
+
   def title
     @title ||= data[:title] || raise(ERRORS[:biblio][:bibitem_requires_title])
   end

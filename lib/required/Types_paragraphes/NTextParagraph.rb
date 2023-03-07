@@ -31,7 +31,6 @@ class NTextParagraph < AnyParagraph
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
     @numero = self.class.get_next_numero
-    puts "@numero = #{@numero.inspect}"
     prepare_text # pour obtenir tout de suite les balises initiales
   end
 

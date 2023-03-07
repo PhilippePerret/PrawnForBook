@@ -112,6 +112,11 @@ class PdfBook
     File.delete(pdf_path) if File.exist?(pdf_path)
 
     #
+    # Pour consigner les erreurs mineures en cours de construction
+    # 
+    PrawnView::Error.reset
+
+    #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #    
     pdf = PrawnView.new(self, pdf_config)
@@ -252,6 +257,11 @@ class PdfBook
 
     
     pdf.save_as(pdf_path)
+
+    #
+    # Afficher les erreurs mineures si on en a rencontrées
+    # 
+    PrawnView::Error.report_building_errors
 
     if File.exist?(pdf_path)
       puts "\n\nLe book PDF a été produit avec succès !".vert
