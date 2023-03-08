@@ -52,16 +52,19 @@ class AnyParagraph
     # 
     # Traitement du pseudo-format markdown
     # 
+    # ATTENTION : cet traitement peut retourner deux éléments
+    # 
     str = __traite_pseudo_markdown_format(str, pdf)
 
     # S'il le faut (options), ajouter la position du curseur en
     # début de paragraphe.
-    str = pdf.add_cursor_position(str) if add_cursor_position?
-
-    # if str.match?(/<span/)
-    #   puts "TEXTE CORRIGÉ : #{str.inspect}"
-    #   # exit
-    # end
+    if add_cursor_position?
+      if str.is_a?(Array)
+        str[0] = pdf.add_cursor_position(str[0])
+      else
+        str = pdf.add_cursor_position(str) 
+      end
+    end
 
     return str
   end #/formated_text
@@ -152,11 +155,12 @@ private
 
     if is_item_of_liste
       pdf.update do 
+        move_cursor_to_next_reference_line
         float do
           text '– '
         end
       end
-      return [str, {mg_left:0.3.cm, no_num: true}]
+      return [str, {mg_left:0.3.cm, no_num: true, cursor_positionned: true}]
     elsif is_exergue_citation
       return [str, {size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true}]
     else

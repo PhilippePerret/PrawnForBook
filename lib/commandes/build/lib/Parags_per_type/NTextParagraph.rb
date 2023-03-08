@@ -51,6 +51,8 @@ class NTextParagraph < AnyParagraph
     #   marques bibliographiques, les références (cibles et appels),
     #   le code markdown, etc.
     # 
+    # ATTENTION : maintenant, il peut retourner un string ou 
+    # un Array contenant [final_str, et nouvelles données]
     final_str = formated_text(pdf)
 
     # 
@@ -73,6 +75,7 @@ class NTextParagraph < AnyParagraph
     fontSize    = font_size(pdf)
     textIndent  = recipe.text_indent
     textAlign   = self.text_align
+    cursor_positionned = false
     # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
 
     if final_str.is_a?(Array)
@@ -83,6 +86,7 @@ class NTextParagraph < AnyParagraph
       mg_right  = specs[:mg_right]  if specs.key?(:mg_right)
       no_num    = specs[:no_num]    if specs.key?(:no_num)
       fontSize  = specs[:size]      if specs.key?(:size)
+      cursor_positionned = specs[:cursor_positionned]
     end
 
     #
@@ -125,7 +129,7 @@ class NTextParagraph < AnyParagraph
         # 
         # Placement sur la première ligne de référence suivante
         # 
-        move_cursor_to_next_reference_line
+        move_cursor_to_next_reference_line unless cursor_positionned
 
         #
         # Écriture du numéro du paragraphe
