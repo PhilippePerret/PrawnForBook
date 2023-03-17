@@ -61,7 +61,7 @@ class Bibliography
   def font_style
     @font_style ||= begin
       if recipe_data[:style] then
-        recipe_data[:style]
+        recipe_data[:style].to_sym
       end
     end
   end

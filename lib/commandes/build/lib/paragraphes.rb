@@ -20,6 +20,14 @@ class PrawnView
 
       next if paragraphe.not_printed?
 
+      #
+      # Tant qu'on n'a pas atteint la première page à traiter, on
+      # passe au paragraphe suivant
+      # Ben oui, mais le faire comme ça, ça ne fonctionne pas : si 
+      # rien n'est écrit, on ne pourra jamais atteindre la première
+      # page à traiter.
+      # next if page_number < first_page
+
       if paragraphe.paragraph?
         spy "Écriture du paragraphe-texte #{paragraphe.numero}…".vert
       elsif paragraphe.titre?
@@ -73,8 +81,12 @@ class PrawnView
       if paragraphe.titre?
         pdfbook.set_current_title(paragraphe, page_number)
       end
-      
-      break if page_number === last_page
+
+      # 
+      # Quand on atteint la dernière page désirée (définie en
+      # options par '-last=XXX'), on s'arrête
+      # 
+      break if page_number >= last_page
 
       #
       # On consigne ce dernier paragraphe

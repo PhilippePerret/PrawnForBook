@@ -28,6 +28,16 @@ class Bibliography
     font_props.merge!(style: font_style) if font_style
     pdf.font(font_name, **font_props)
     # 
+    # Calcul du leading à utiliser
+    # 
+    bib_font = Fonte.new(font_name, **{size:font_size, style: font_style})
+    leading = pdf.font2leading(bib_font, font_size, pdf.line_height)
+    # leading = 0
+    # 
+    # Les options à appliquer
+    # 
+    options = {inline_format: true, leading: leading}
+    # 
     # On écrit tous les items de cette bibliographie
     # 
     biblio.items.values.sort_by do |bibitem|
@@ -41,7 +51,7 @@ class Bibliography
       ##############################
       pdf.move_cursor_to_next_reference_line
       str = Prawn4book::Bibliography.send(formate_method, bibitem)
-      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", **{inline_format: true}
+      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", **options
       pdf.move_down(4)
     end
   end

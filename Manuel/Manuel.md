@@ -665,6 +665,23 @@ Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on
 
 Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
 
+<a name="comments"></a>
+
+### Commentaires dans le texte
+
+On peut insérer des commentaires dans le texte à l'aide du code `<!-- ... -->` (le même que celui utilisé en HTML).
+
+Mais à la différence du HTML, pour le moment, on ne doit utiliser cette balise que sur une ligne seule, pas au bout d'un texte :
+
+~~~text
+
+Un paragraphe de texte.
+<!-- Ce commentaire est valide --> 😃
+
+Un paragraphe de texte.<!-- Commentaire invalide --> 🙁🧨
+~~~
+
+> Note : les émoticones ne doivent bien sûr pas être utilisés de cette manière, ils ne sont là que pour commenter l’utilisation .
 
 ---
 

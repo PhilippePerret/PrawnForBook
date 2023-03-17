@@ -80,6 +80,7 @@ class Paragraphe
   def parse_as_image(line)
     dimg = line.match(REG_IMAGE)[1]
     dimg || raise("L'image '#{line}' est mal formatée.")
+    spy "dimg = #{dimg.inspect}"
     if dimg.start_with?('{') && dimg.end_with?('}')
       # 
       # Définition moderne de l'image par un dictionnaire JSON
@@ -98,7 +99,8 @@ class Paragraphe
       # 
       img_props = dimg.split('|').map { |n|n.strip }
       img_path = img_props[0]
-      dimg = {class:img_props[1], alt:img_props[2], style:img_props[3]}
+      dimg = {style:img_props[1]}
+      # dimg = {class:img_props[1], alt:img_props[2], style:img_props[3]}
     else
       # 
       # Simple path de l'image

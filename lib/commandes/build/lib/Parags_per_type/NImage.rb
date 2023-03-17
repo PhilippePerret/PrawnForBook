@@ -13,12 +13,18 @@ class NImage < AnyParagraph
     @pdf = pdf
     dimage = {}
 
+    # 
+    # Il faut mettre le style par défaut
+    # 
+    pdf.font(pdf.default_font_name, **{style:pdf.default_font_style, size:pdf.default_font_size})
+
     #
     # Redimensionnement de l'image
     # 
     ratio_h = 1 # à appliquer à la hauteur si dimensions changées
     if width
-      dimage.merge!(width: width)
+      real_width = pourcent_to_real_value(width, pdf)
+      dimage.merge!(width: real_width)
       if margin_left_raw.to_s.end_with?('%')
         ratio_h = round(margin_left_raw[0..-2].to_f / 100)
       end
@@ -27,9 +33,7 @@ class NImage < AnyParagraph
     # 
     # Positionnement de l'image
     # 
-    dimage.merge!(at: [margin_left, pdf.cursor - margin_top])
-    # box_width = pdf.bounds.width - (margin_left + margin_right)
-    # boite = [margin_left, pdf.cursor]
+    dimage.merge!(at: [margin_left, pdf.cursor])
     
     # 
     # Propriété à sortir (pour le scope dans pdf)
@@ -39,26 +43,35 @@ class NImage < AnyParagraph
     mg_bottom = margin_bottom
 
     pdf.update do
-      # bounding_box(boite, width:box_width, height: 100) do
-        if image_is_svg
-          dimage.merge!(color_mode: :cmyk)
-          image = svg(IO.read(img_path), dimage)
-          # 
-          # Hauteur prise par l'image
-          # 
-          image_height = image[:height] * ratio_h
-        else
-          image = image(img_path, dimage)
-          # 
-          # Hauteur prise par l'image
-          # 
-          image_height = image.scaled_height
-        end
+      # 
+      # On saute toujours une ligne
+      # 
+      move_down(line_height)
 
-        move_down(image_height + mg_bottom + line_height)
+      if image_is_svg
+        dimage.merge!(color_mode: :cmyk)
+        image = svg(IO.read(img_path), dimage)
+        # 
+        # Hauteur prise par l'image
+        # 
+        image_height = image[:height]
+      else
+        image = image(img_path, dimage)
+        # 
+        # Hauteur prise par l'image
+        # 
+        image_height = image.scaled_height
+        move_down(line_height + image_height)
       end
-    # end #/bounding_box
-  end #/pdf
+      # move_down(image_height + mg_bottom)
+      # 
+      # On saute toujours deux lignes
+      # 
+      move_down(line_height * 2)
+      # text "Le curseur est à #{cursor.inspect}"
+    end
+    
+  end #/print
 
 end #/class NImage
 end #/class PdfBook

@@ -9,7 +9,30 @@ class NImage < AnyParagraph
 
   def initialize(pdfbook, data)
     super(pdfbook)
+    dispatch_style(data[:style]) if data.key?(:style)
     @data = data.merge!(type: 'image')
+  end
+
+  def dispatch_style(style)
+    style.split(';').each do |propval|
+      prop, val = propval.split(':').map{|n|n.strip}
+      self.instance_variable_set("@#{prop}", val)
+    end
+  end
+
+  def pourcent_to_real_value(value, pdf)
+    # 
+    # Vérifier les valeurs en %
+    # 
+    if value.end_with?('%')
+      pct = value[0...-1].strip.to_i
+      value = (pdf.bounds.width * pct).to_f / 100
+      # puts "new value = #{value}"
+      # puts "pdf.width = #{pdf.bounds.width.inspect}"
+      # puts "87mmm = #{87.mm}"
+    end
+    return value
+    
   end
 
 

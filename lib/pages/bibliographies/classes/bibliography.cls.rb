@@ -129,15 +129,21 @@ class << self
   # @return L'instance Bibliography concernée
   # 
   def add_occurrence_to(bib_tag, bibitem, doccurrence)
+    bibitem_ini = bibitem.freeze
     biblio = get(bib_tag) || erreur_fatale(ERRORS[:biblio][:biblio_undefined] % [bib_tag, bibitem.id])
     if bibitem.is_a?(Symbol) || bibitem.is_a?(String)
-      bibitem = biblio.get(bibitem.to_sym)
+      bibitem = biblio.get(bibitem.to_sym) || begin
+        biblio.get(bibitem_ini.gsub(/ /,'_').to_sym)
+      end || begin
+        biblio.get(bibitem_ini.gsub(/ /,'_'))
+      end
     end
     bibitem || begin
       # 
       # Dans le cas où l'élément bibliographique n'existe pas
       # 
-      building_error(ERRORS[:biblio][:bib_item_unknown] % [bibitem.inspect, bib_tag.inspect])
+      ref_bibitem = (bibitem_ini || "nil avec doccurrence = #{doccurrence.inspect}").inspect
+      building_error(ERRORS[:biblio][:bib_item_unknown] % [ref_bibitem, bib_tag.inspect])
       return nil
     end
     bibitem.add_occurrence(doccurrence)

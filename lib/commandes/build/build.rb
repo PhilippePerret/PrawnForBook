@@ -172,7 +172,8 @@ class PdfBook
     # Y a-t-il une DERNIÈRE PAGE définie en options de commande
     # Si oui, on ne doit construire le livre que juste que là
     # 
-    pdf.last_page = CLI.options[:last].to_i if CLI.options[:last]
+    pdf.last_page   = CLI.options[:last] ? CLI.options[:last].to_i : 100000
+    pdf.first_page  = CLI.options[:first] ? CLI.options[:first].to_i : 1
 
     # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
@@ -190,9 +191,10 @@ class PdfBook
     pdf.tdm = tdm
 
     spy "-> Écriture des pages initiales".bleu
-    pdf.start_new_page      if page_de_garde?
-    pdf.build_faux_titre    if page_faux_titre?
-    pdf.build_page_de_titre if page_de_titre?
+    pdf.start_new_page      if page_de_garde? && pdf.first_page < 2
+    pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 3
+    pdf.build_page_de_titre if page_de_titre?  && pdf.first_page < 4
+
     # Toujours commencer sur la BELLE PAGE
     pdf.start_new_page if pdf.page_number.even?
     spy "<- fin de l'écriture des pages initiales".vert
@@ -225,12 +227,12 @@ class PdfBook
     # 
     # - Page infos ? -
     # 
-    pdf.build_page_infos if page_infos?
+    pdf.build_page_infos if page_infos? && pdf.last_page > pdf.page_number
 
     # 
     # - TABLE DES MATIÈRES -
     # 
-    pdf.build_table_of_contents
+    pdf.build_table_of_contents if pdf.first_page == 1
 
     #
     # - ENTETE & PIED DE PAGE -

@@ -151,6 +151,8 @@ class PrawnView
   # Note : ne pas oublier d'indiquer la fonte en sortant de cette
   # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
   # prenant à l'entrée dans la méthode
+  # 
+  # @param [Prawn4book::Fonte|String] L'instance fonte
   def font2leading(fonte, size, hline, **options)
     if debug?
       spy "Fonte   = #{fonte.inspect} (#{fonte.name.inspect}/#{fonte.style.inspect})"

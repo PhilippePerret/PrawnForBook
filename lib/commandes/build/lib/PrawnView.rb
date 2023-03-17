@@ -28,6 +28,7 @@ class PrawnView
   # Dernière page à imprimer (page du pdf), définie
   # en options de la ligne de commande (pour le moment)
   attr_accessor :last_page
+  attr_accessor :first_page
 
   # L'instance PdfBook::Tdm qui gère la table des
   # matière. Permettra d'ajouter les titres pour construire
