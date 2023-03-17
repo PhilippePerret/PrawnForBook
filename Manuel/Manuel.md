@@ -581,13 +581,29 @@ Les images peuvent être de tout format, mais puisqu’elles sont destinées à 
 ~~~text
 Ci-dessous une image qui sera présentée sur toute la largeur de la page (hors-marge).
 
-IMAGE[images/pour_voir.jpg]
+IMAGE[images/pour_voir.jpg|width:100%]
 L'image gardera de l'air avant ce texte, même s'il est collé dans le texte.
 
 Une image qui sera réduite de moitié.
 
 IMAGE[images/red.jpg|width:50%]
 ~~~
+
+##### Images SVG
+
+Pour une raison que je ne comprends pour le moment, lorsque l’on utilise une image `.svg` produite avec *Affinity Publisher*, même lorsque l’on ne prend que la partie conservée, l’image occupe une place plus grande, presque une image.
+
+Il faut utiliser **inkscape** pour *rogner* l’image en ses bords naturels. Pour procéder à cette opération :
+
+* ouvrir un Terminal dans le dossier contenant l’image
+
+* jouer la commande :
+
+  ~~~bash
+  > inkscape -l -D -o image-rogned.svg image.svg
+  ~~~
+
+* => l’image sera rognée, c’est celle-ci qu’il faut utiliser dans le livre.
 
 **Propriétés de l’image**
 
