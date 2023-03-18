@@ -605,6 +605,12 @@ Il faut utiliser **inkscape** pour *rogner* l’image en ses bords naturels. Pou
 
 * => l’image sera rognée, c’est celle-ci qu’il faut utiliser dans le livre.
 
+##### Numéro de paragraphe pour l’image
+
+Par défaut (pour le moment), les images ne sont pas numéroter comme des paragraphes (seuls les paragraphes de texte le sont). Pour numéroter une image, il suffit cependant de laisser un paragraphe avant qui ne contient qu’’une espace insécable.
+
+> Il faut vraiment que ce soit une insécable, sinon le paragraphe sera passé.
+
 **Propriétés de l’image**
 
 Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour les images :

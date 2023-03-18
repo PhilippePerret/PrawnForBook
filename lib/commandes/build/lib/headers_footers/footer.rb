@@ -7,7 +7,7 @@ class Footer < Headfooter
   def header? ; false end
   def footer? ; true  end
 
-  RECTIF = 6
+  RECTIF = -10
 
   ##
   # @return [Integer] Le nombre de points post-script pour positionner

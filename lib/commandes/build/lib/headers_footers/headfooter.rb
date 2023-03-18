@@ -50,6 +50,10 @@ end #/ << self
   # Construction de l'headfooter
   # 
   def build
+    # 
+    # @note
+    #   ni @name ni @id ne semblent définis, ici
+    # 
     spy "-> Construction de l'headfooter <<#{name}>> (ID #{id})".jaune
     build_even_pages if pd_left || pd_right || pd_center
     build_odd_pages  if pg_left || pg_right || pg_center
@@ -160,7 +164,16 @@ end #/ << self
   # @param [Paire] at Position du tiers
   # @param [Hash]  Données du tiers, à commencer par {:content}
   def build_tiers(bpage, at, dtiers)
-    props = common_tiers_props.merge({at:at, align: dtiers[:align], width: dtiers[:width]})
+    if at == [0,0]
+      # at[1] = -15
+    end
+    props = common_tiers_props.merge({
+      at:at, 
+      align: dtiers[:align], 
+      width: dtiers[:width]},
+      overflow: :expand,
+      height: 20
+      )
     # 
     # Le contenu textuel
     # 
@@ -175,11 +188,23 @@ end #/ << self
     when :all_min  then content.downcase
     else content
     end
+    puts "\nContent à mettre : #{content.inspect} (#{props.inspect})".bleu
     # 
     # La fonte à appliquer
     # 
-    pdf.font(fonte(dtiers)) do
-      pdf.text_box(content, **props)
+    lafonte = fonte(dtiers)
+    props_text = {align: props.delete(:align)}
+    pdf.update do
+      font(lafonte) do
+        # bounding_box(at, **{width:props.delete(:width), height:})
+        bounding_box( props.delete(:at), **props) do
+          text(content, **props_text)
+        end
+        # bounding_box( [bounds.left, bounds.bottom - 30], **{width: bounds.width, height: 30}) do
+        #   # text_box(content, **props)
+        #   text content
+        # end
+      end
     end
     # 
     # On retourne la page pour l'addition des procédures
