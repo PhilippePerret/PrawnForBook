@@ -188,7 +188,6 @@ end #/ << self
     when :all_min  then content.downcase
     else content
     end
-    puts "\nContent à mettre : #{content.inspect} (#{props.inspect})".bleu
     # 
     # La fonte à appliquer
     # 
