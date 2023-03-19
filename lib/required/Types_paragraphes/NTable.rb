@@ -50,7 +50,23 @@ class NTable < AnyParagraph
         aligns = raw_lines.shift()
       end
       raw_lines.map do |rawline|
-        dline = rawline.strip[1...-1].split('|')
+        dline = rawline.strip[1...-1].split('|').map do |cell|
+          # 
+          # Évaluation, si la cellule contient une table
+          # 
+          cstrip = cell.strip
+          if cstrip.start_with?('{') && cstrip.end_with?('}')
+            eval(cstrip)
+          elsif cstrip.match?(REG_IMAGE_IN_CELL)
+            found = cstrip.match(REG_IMAGE_IN_CELL)
+            image_path  = found[1]
+            image_style = found[2]
+            image_style = "{#{image_style}}" unless image_style.start_with?('{')
+            image_style = eval(image_style)
+          else
+            cell
+          end
+        end
       end
     end
   end
@@ -74,6 +90,9 @@ class NTable < AnyParagraph
   # --- Data Methods ---
 
   def raw_lines  ; @raw_lines   ||= data[:lines]   end
+
+
+REG_IMAGE_IN_CELL = /^IMAGE\[(.+?)(?:\|(.+?))\]$/
 
 end #/class NTable
 end #/class PdfBook

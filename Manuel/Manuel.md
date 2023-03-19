@@ -682,13 +682,170 @@ Un paragraphe de texte normal.
 | Content | Content | Content |
 ~~~
 
-##### Propriétés définissables
+<a name="cell-attributes"></a>
+
+##### Attributs des cellules
 
 ~~~
-column_widths			Largeur de chaque colonne.
+:column_widths		Largeur de chaque colonne.
 									Array, largeur de chaque colonne.
 									Unité : PS-points ou pourcentage
-width 						Largeur de la table (par défaut adaptée au contenu)
+									On peut aussi ne définir la dimension que de certaines colonnes, en
+									donnant en valeur une table qui contient en clé l'indice 1-start de
+									la colonne est en valeur la dimension. Par exemple :
+									{ column_widths: {2 => '20%'} }
+:width 						Largeur de la table (par défaut adaptée au contenu)
+:header						Si true, la première rangée est considérée comme une entête.
+:position					Pour positionner la table. Valeur
+									:left (positionner à gauche), :right (positionner à droite) :center
+									(positionner au centre) XXX (positionner à xxx ps-points.
+:row_colors				[<even_color>, <odd_color>] pour mettre alternativement les deux 
+									couleurs à chaque rangée. <even_color> et <odd_color> sont des 
+									hexadécimaux (par exemple "F0F0F0").
+:cell_style 			[Hash] Pour définir le style des cellules. Les paramètres sont :
+									* :width (largeur de cellule), :height (hauteur de cellule), :padding
+									(padding de la cellule, soit un nombre soit [top,right,bottom,left])
+									* :borders => [<liste des bords à mettre>] (p.e. [:left, :top]
+									* :border_width => xxxx Épaisseur du trait
+									* :border_color Couleur du bord
+									* :background_color 	Couleur du fond de la cellule
+									* :border_lines => Le style de lignes. Soit une valeur seule, parmi
+									  :solid, :dotted ou :dashed soit un Array de 4 valeurs pour définir 
+									  dans l'ordre : ligne haut, droit, bas et gauche.
+									* :font 			La fonte à utiliser
+									* :font_style Le style
+									* :size 			La taille de police
+									* :min_font_size	Taille minimale pour le texte
+									* :align  		L'alignement, parmi les valeurs traditionnelles
+									* :text_color Couleur de texte (hexadécimale)
+									* :inline_format 	Contient des formatages html
+									* :rotate 		Angle de rotation
+									* :overflow  	Si :shrink_to_fit, étend le texte pour qu'il tienne dans
+																toute la cellule.
+~~~
+
+##### Valeurs en pourcentage
+
+Par défaut, ***Prawn-table*** ne connait que les valeurs fixes. On peut cependant fournir des valeurs en pourcentages, qui seront traitées en fonction de la taille.
+
+> Rappel : on peut utiliser **`pdf.bounds.width`** pour obtenir la largeur utilisable de la page.
+
+##### Insérer une image dans une cellule
+
+Pour insérer une image dans une cellule, utiliser **`IMAGE[path|style]`** où `path` est le chemin absolu ou relatif de l’image et `style` est optionnellement le style à appliquer à l’’image. Par exemple :
+
+~~~
+Ci-dessous un table qui contient une image.
+
+| La belle image | IMAGE[images/mon_image.jpg|scale:0.5] |
+~~~
+
+Les attributs des styles peuvent être :
+
+~~~bash
+:scale 					Échelle de transformation
+:fit 						[<largeur>, <hauteur>] à remplir
+:image_height 	Hauteur de l’image
+:image_width 		Largeur de l’image
+:position 			:center, :left, :right
+:vposition 			:center, :top, :bottom
+
+~~~
+
+> On peut aussi utiliser toutes les [définitions attributs des cellules](#cell-attributes).
+
+##### Fusion de cellules
+
+Pour fusionner des cellules, on utilise **`colspan`** et **`rowspan`** comme en HTML. Mais dans ce cas, il faut définir la cellule avec une table (`Hash`) dont la propriété `:content` définira le contenu textuel.
+
+Par exemple :
+
+~~~
+Ci-dessous une table avec des cellules fusionnées.
+
+| A | B | C |
+| {content:"A+B", colspan: 2} | C |
+| {content:"3+4" rowspan:3} | B | C |
+| B | C |
+| B | C |
+~~~
+
+
+
+##### Définir un style de table
+
+Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chacune tous les attributs, on peut définir un style de table. Au-dessus de la table, il suffira d’indiquer :
+
+~~~
+(( {table_style: :ma_table_customisee} ))
+| Valeur | valeur | valeur |
+...
+~~~
+
+Ensuite, dans [le fichier `parser.rb`](#text-custom-parser) on doit définir une méthode au nom du style de table (ici `ma_table_customisee` qui va recevoir l’instance `PdfBook::NTable` et retournera les options à ajouter à la construction de la table. Ces options sont les propriétés définissables ci-dessus.
+
+Par exemple :
+
+~~~ruby
+# Dans parser.rb
+
+module ParserParagraphModule
+  
+  def table_ma_table_customisee(ntable)
+    # ... Traitement peut-être des lines ...
+    # En modifiant @lines
+    return {column_widths: [100,50,50]}
+  end
+end
+~~~
+
+On peut par exemple ajouter une image seulement dans cette méthode plutôt que d’avoir à la mettre dans toutes les tables. Par exemple, pour les exemples du SRPS avec un smiley souriant et un smiley grimace, on peut imaginer de faire ceci :
+
+Dans le texte : 
+
+~~~
+Ceci est un paragraphe quelconque.
+
+(( {table_style: smiley_sourire} ))
+| | C'est bien de faire comme ça |
+
+Un autre paragraphe quelconque.
+Et puis un autre.
+
+(( {table_style: smiley_grimace} ))
+| | Ça n'est pas bien de faire comme ça |
+| | Ça n'est pas bien non plus comme ça |
+
+Un autre paragraphe encore.
+~~~
+
+Et dans le fichier `parser.rb`, on place :
+
+~~~ruby
+# in parser.rb
+module ParserParagraphModule
+  
+  def table_smiley_sourire(ntable)
+    ntable.lines.each do |line|
+      line[0] = {image: smiley_path(:sourire)}
+    end
+    return smiley_style
+  end
+  
+  def table_smiley_grimace(ntable)
+    ntable.lines.each do |line|
+      line[0] = {image: smiley_path(:grimace)}
+    end
+    return smiley_style
+  end
+  
+  def smiley_style
+    @smiley_style ||= {column_widths: [50, 200]}
+  end
+  def smiley_path(which)
+    return File.join(IMAGE_FOLDER, "smiley_#{which}.jpg")
+  end
+end
 ~~~
 
 
