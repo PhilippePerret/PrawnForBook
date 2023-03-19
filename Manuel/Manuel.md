@@ -57,6 +57,34 @@ On peut obtenir de l’aide de différents moyens :
 * <console>pfb aide</console> ouvrir une aide générale en présentant les commandes principales.
 * <console>pfb aide `<identifiant>`</console> offrira de l’aide sur l’`<identifiant>`. On peut obtenir grâce à cette commande les assistants de création qui permettent de définir très précisément la recette d’un livre ou d’une collection.
 * <console>pfb lexique “groupe de mots”</console> offrira de l’aide sur un mot particulier ou un groupe de mots en en donnant la définition ou le sens dans *Prawn-for-book*. Note : les guillemets ne sont nécessaires que s’il y a plusieurs mots.
+* Pour ouvrir le manuel : <console>pfb manuel</console> (ajouter `-dev` pour l’ouvrir en édition).
+* 
+
+
+
+---
+
+## Aide rapide
+
+### Insérer une IMAGE
+
+Voir comment [insérer une image dans le texte](#paragraph-image).
+
+### Insérer une TABLE (TABLEAU)
+
+Voir comment [insérer une table ou un tableau dans le texte](#paragraphes-table).
+
+<a name="line-vide"></a>
+
+### Passer une ligne vierge
+
+Ajouter à l’endroit voulu :
+
+~~~
+(( line ))
+~~~
+
+> Noter que cette ligne ne sera pas numérotée.
 
 ---
 
@@ -156,9 +184,7 @@ Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent ê
 
 #### Affichage d’un rang précis de pages
 
-Pour commencer à une page précise, utiliser l’option simple `-first` avec le numéro de la page :
-
-<console>pfb build -first=12</console>
+> Note : on ne peut pas demander à imprimer seulement à une page, cela produirait des numéros de pages et de paragraphes faux.
 
 Pour s'arrêter à une page précise, par exemple la 4<sup>e</sup>, utiliser l’option simple `-last` avec le numéro de page :
 
@@ -551,7 +577,7 @@ Il existe deux manières de le faire :
 
 <a name="paragraph-titre"></a>
 
-#### Titres
+#### TITRES
 
 Le titre se définit comme en [markdown](https://fr.wikipedia.org/wiki/Markdown) c'est-à-dire à l'aide de dièses.
 
@@ -564,7 +590,7 @@ etc.
 
 <a name="paragraph-image"></a>
 
-#### Images
+#### IMAGES
 
 Les images se définissent à l'aide de la balise :
 
@@ -591,7 +617,7 @@ IMAGE[images/red.jpg|width:50%]
 
 ##### Images SVG
 
-Pour une raison que je ne comprends pour le moment, lorsque l’on utilise une image `.svg` produite avec *Affinity Publisher*, même lorsque l’on ne prend que la partie conservée, l’image occupe une place plus grande, presque une image.
+Pour une raison qui m’échappe pour le moment, lorsque l’on utilise une image `.svg` produite avec *Affinity Publisher*, même lorsque l’on ne prend que la partie conservée, l’image occupe une place plus grande, presque une image.
 
 Il faut utiliser **inkscape** pour *rogner* l’image en ses bords naturels. Pour procéder à cette opération :
 
@@ -610,6 +636,8 @@ Il faut utiliser **inkscape** pour *rogner* l’image en ses bords naturels. Pou
 Par défaut (pour le moment), les images ne sont pas numéroter comme des paragraphes (seuls les paragraphes de texte le sont). Pour numéroter une image, il suffit cependant de laisser un paragraphe avant qui ne contient qu’’une espace insécable.
 
 > Il faut vraiment que ce soit une insécable, sinon le paragraphe sera passé.
+>
+> Cela ne fonctionne pas non plus si on utilise [`(( line ))`](#line-vide)
 
 **Propriétés de l’image**
 
@@ -620,6 +648,52 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 | width       | Dimension de l’image par rapport à elle-même                 | Pourcentage, valeurs fixes |
 | width_space | Quantité d’espace horizontal que l’image doit couvrir, en pourcentage. `100%` signifie que l’image doit couvrir toute la largeur de la page même les marges. | Pourcentage                |
 | TODO        |                                                              |                            |
+
+
+
+---
+
+<a name="paragraphes-table"></a>
+
+#### TABLES
+
+On peut insérer une table dans le code à l’aide du formatage classique de l’extension de markdown :
+
+~~~md
+| Titre 1 | Titre 2 | Titre 3 |
+| :--- | :---: | ---: |
+[ Colonne 1 | Colonne 2 | Colonne 3 | 
+etc.
+~~~
+
+> Note : au niveau du traitement, on n’utilise pas *Kramdown*, qui sortirait un code HTML alors que **Prawn** ne gère pas le formatage HTML. En fait on utilise le gem **`Prawn-table`**.
+
+Ci-dessous, on remarque qu’une entête est définie (ligne de données avant les `---`) et que l’alignement de chaque colonne est défini. Ce sont les mêmes alignements qu’en markdown, mais avec un nouveau : `|----|` (noter qu’aucune espace n’est laissée avant et après les `|`) qui signifie qu’il faut justifier le texte dans la colonne.
+
+##### Définition précise de la table
+
+On peut définir très précisément la table avec un ligne de code avant, défini entre crochets comme c’est l’usage avec ***Prawn-for-book***. Par exemple :
+
+~~~pfb
+Un paragraphe de texte normal.
+
+(( {column_widths: [100,100, 20]} ))
+| Large | Large | Petite |
+| Content | Content | Content |
+~~~
+
+##### Propriétés définissables
+
+~~~
+column_widths			Largeur de chaque colonne.
+									Array, largeur de chaque colonne.
+									Unité : PS-points ou pourcentage
+width 						Largeur de la table (par défaut adaptée au contenu)
+~~~
+
+
+
+---
 
 <a name="paragraph-code"></a>
 

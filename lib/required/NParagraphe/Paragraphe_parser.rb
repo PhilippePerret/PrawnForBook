@@ -14,10 +14,13 @@ class Paragraphe
     # contraire, reçoit les données dictionnaire de chaque paragraphe
     # et en fait l'élément qui correspond.
     # 
+    # @note
+    #   J'AI L'IMPRESSION QUE CETTE MÉTHODE NE SERT PLUS À RIEN
     def dispatch_by_type(pdfbook, data)
       case data[:type]
       when 'image'  then PdfBook::NImage.new(pdfbook, data)
       when 'titre'  then PdfBook::NTitre.new(pdfbook, data)
+      when 'table'  then PdfBook::NTable.new(pdfbook, data)
                     else PdfBook::NTextParagraph.new(pdfbook, data)
       end
     end
@@ -26,7 +29,7 @@ class Paragraphe
       @codenextparag = pfbcode
     end
     def code_for_next_paragraph
-      @codenextparag
+      return @codenextparag
     end
 
   end #/<< self
@@ -52,6 +55,9 @@ class Paragraphe
   def parse
     iparag =
       case line
+      when Array
+        # => PdfBook::NTable
+        PdfBook::NTable.new(pdfbook, {lines: line, pfbcode: self.class.code_for_next_paragraph})
       when REG_IMAGE
         parse_as_image(line) # => PdfBook::NImage
       when /^\#{1,6} /
@@ -68,7 +74,7 @@ class Paragraphe
     # Le pdfcode vient d'être attribué, on le remet à 
     # nil
     # 
-    if iparag.pfbcode?
+    if iparag.pfbcode? && iparag.for_next_paragraph?
       self.class.code_for_next_paragraph = iparag
     elsif self.class.code_for_next_paragraph
       self.class.code_for_next_paragraph = nil

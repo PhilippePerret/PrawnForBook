@@ -37,7 +37,7 @@ class NTextParagraph < AnyParagraph
   # --- Predicate Methods ---
 
   def paragraph?; true end
-  def sometext? ; true end # seulement le titre aussi
+  def sometext? ; true end # seulement ceux qui contiennent du texte
 
   # --- Data Methods ---
 

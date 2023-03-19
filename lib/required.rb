@@ -3,6 +3,7 @@ require 'fileutils'
 require 'precedences'
 
 require 'prawn'
+require 'prawn/table'
 require "prawn/measurement_extensions" # Pour pouvoir utiliser 1.cm etc.
 Prawn::Fonts::AFM.hide_m17n_warning = true
 

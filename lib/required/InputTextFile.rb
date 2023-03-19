@@ -84,13 +84,16 @@ class InputTextFile
     # 
     # Boucle sur tous les paragraphes du texte
     # 
-    good_paragraphes_in(path).map do |par|
+    traite_blocs_paragraphes_in(good_paragraphes_in(path).map do |par|
       if par.start_with?('(( include') && par.end_with?(' ))')
         paragraphes_of_included_file(par[11..-4])
-      else par end
-    end.flatten.map do |par|
+      else 
+        par 
+      end
+    end.flatten).map do |par|
       #
       # Analyse du paragraphe pour savoir ce que c'est
+      # 
       # 
       # spy "PARAGRAPHE : #{par.inspect}"
       parag = Paragraphe.new(pdfbook, par).parse
@@ -102,6 +105,104 @@ class InputTextFile
     end
     # NE RIEN METTRE (MAP RETOURNÉ)
   end
+
+  ##
+  # Pour le traitement des blocs de paragraphes et typiquement, des
+  # table formatée façon Markdown.
+  # Un "bloc de paragraphes" est un groupe de paragraphes associés
+  # pour une raison ou une autre
+  # 
+  # @note
+  #   Pour le moment, l'idée est de transformer chaque paragraphe
+  #   bloc en un seul paragraphe de code HTML
+  # 
+  # @param [Array[<String>]] paragraphes Liste des paragraphes
+  # @return [Array[<String>]] Liste des paragraphes avec les blocs traités (pour le moment, en HTML)
+  def traite_blocs_paragraphes_in(paragraphes)
+    # 
+    # Le signe attendu pour marquer la fin du bloc (if any)
+    # 
+    bloc_end_sign = nil
+    # 
+    # Le signe de prolongation du bloc (if any)
+    # 
+    bloc_prolong_sign = nil
+    # 
+    # Pour recevoir les paragraphes du bloc
+    # 
+    bloc_lines = nil
+    # 
+    # Pour recevoir la liste des paragraphes qui seront renvoyés
+    # 
+    new_paragraphes = []
+
+    paragraphes.each do |paragraphe|
+
+      if bloc_prolong_sign 
+
+        if paragraphe.start_with?(bloc_prolong_sign)
+          # 
+          # Ce paragraphe appartient au bloc
+          # 
+          bloc_lines << paragraphe
+          next # pour ne pas l'ajouter deux fois
+        else
+          # 
+          # Fin d'un bloc qui se prolonge par un premier caractère
+          # 
+          new_paragraphes << bloc_lines
+          bloc_lines = nil        
+          bloc_prolong_sign = nil
+        end
+      elsif bloc_end_sign && paragraphe.start_with?(bloc_end_sign)
+        # 
+        # Fin d'un bloc qui se termine par un signe particulier
+        # 
+        new_paragraphes << bloc_lines
+        bloc_lines = nil        
+        bloc_end_sign = nil
+      end
+
+      if bloc_prolong_sign.nil? && paragraphe.match?(REG_START_BLOC_WITH_PROLONG)
+        # 
+        # Débug d'un bloc avec signe de prolongation (signe qu'on 
+        # retrouve au début de chacune de ses lignes, comme une
+        # table)
+        # 
+        bloc_prolong_sign = paragraphe.match(REG_START_BLOC_WITH_PROLONG)[1]
+        bloc_lines = []
+        # puts "bloc_prolong_sign = #{bloc_prolong_sign.inspect}"
+
+      elsif bloc_end_sign.nil? && paragraphe.match?(REG_START_BLOC_WITH_END_SIGN)
+        # 
+        # Début d'un bloc avec signe de fin de bloc
+        # 
+        bloc_end_sign = paragraphe.match(REG_START_BLOC_WITH_END_SIGN)[1]
+        bloc_lines = []
+        # puts "bloc_end_sign = #{bloc_end_sign.inspect}"
+
+      end
+
+      if bloc_end_sign || bloc_prolong_sign
+        bloc_lines << paragraphe
+      else
+        #
+        # Quand il n'y a rien à faire
+        # 
+        new_paragraphes << paragraphe
+      end
+
+    end
+
+    unless bloc_lines.nil?
+      new_paragraphes << bloc_lines
+    end
+
+    return new_paragraphes
+  end
+
+  REG_START_BLOC_WITH_PROLONG   = /^(\|)/
+  REG_START_BLOC_WITH_END_SIGN  = /^(DOC)$/
 
   ##
   # @return [Array<String>] La liste des "bons" paragraphes du 

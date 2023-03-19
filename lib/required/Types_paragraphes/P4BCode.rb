@@ -14,8 +14,10 @@ class P4BCode < AnyParagraph
   def initialize(pdfbook, raw_code)
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
-    treat_as_next_parag_code if @raw_code.match?(/^\{.+?\}$/)
     @parag_style = {}
+    if @raw_code.strip.match?(/^\{.+?\}$/)
+      treat_as_next_parag_code 
+    end
   end
 
   def print(pdf)
@@ -43,6 +45,10 @@ class P4BCode < AnyParagraph
       pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_bibliography(pdf)
+    when 'line'
+      pdf.update do
+        text " "
+      end
     else
       erreur_fatale(ERRORS[:unknown_pfbcode] % raw_code.inspect)
     end
