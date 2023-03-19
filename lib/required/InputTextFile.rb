@@ -146,7 +146,9 @@ class InputTextFile
   end
 
   def search_included_file_from(fpath)
+    fpath = fpath.strip
     return fpath if File.exist?(fpath)
+    puts "FPATH = #{fpath.inspect}"
     fpath_ini = fpath.freeze
     fpath = search_included_file_in_folder(fpath_ini, self.folder)
     return fpath if fpath
@@ -156,10 +158,14 @@ class InputTextFile
     end
     raise PrawnFatalError.new(ERRORS[:building][:unfound_included_file] % fpath_ini)
   end
-  def search_included_file_in_folder(fpath, dossier)
-    fpath_ini = fpath.freeze
+  def search_included_file_in_folder(affix, dossier)
+    affix_ini = affix.freeze
+    fpath = File.expand_path(File.join(dossier, affix_ini))
+    return fpath if File.exist?(fpath)
+    dossier = File.dirname(fpath).freeze
+    affix   = File.basename(fpath,File.extname(fpath)).freeze
     ['', '.md','.text','.txt','.pfb.md','.pfb.txt'].each do |ext|
-      fpath = File.join(folder, "#{fpath_ini}#{ext}")
+      fpath = File.join(dossier, "#{affix}#{ext}")
       return fpath if File.exist?(fpath)
     end
     return nil # échec
