@@ -37,6 +37,8 @@ class AbstractRecipe
     indent:       [:book_format, :text, :indent],
     book_height:  [:book_format, :book, :height],
     page_height:  [:book_format, :book, :height],
+    book_width:   [:book_format, :book, :width],
+    page_width:   [:book_format, :book, :width],
     height:       [:book_format, :book, :height],
     margin_top:   [:book_format, :page, :margins, :top],
     top_margin:   [:book_format, :page, :margins, :top],

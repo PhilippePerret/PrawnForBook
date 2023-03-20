@@ -66,8 +66,8 @@ class Book
   # 
   def build(check_if_book_has_been_built = true)
     ensure_book_valid
-    res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid -display_margins 2>&1`
-    # res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY}`
+    # res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY} --display_grid -display_margins 2>&1`
+    res = `cd "#{folder}";pfb build#{' --spy' if RUN_SPY}`
     # puts "res = #{res.inspect}"
     raise res if res.match?(/ERR/)
 

@@ -99,7 +99,7 @@ class << self
       # 
       # On doit retourner les paires font/style existant
       # 
-      (recipe.fonts_data.merge(DEFAUT_FONTS)).map do |font_name, data_font|
+      all_fonts_data.map do |font_name, data_font|
         data_font.map do |style, stylepath|
           {name: "#{font_name}/#{style}", value: "#{font_name}/#{style}"}
         end
@@ -108,12 +108,34 @@ class << self
       # 
       # On ne doit retourner que la liste des fontes
       #
-      (recipe.fonts_data.merge(DEFAUT_FONTS)).map do |font_name, data_font|
+      all_fonts_data.map do |font_name, data_font|
         {name:font_name, value: font_name}
       end
     end
   end
 
+  # @return la liste des fontes définies
+  # 
+  # @note
+  #   Attention, cette méthode a été "bricolée" en vitesse pour
+  #   faire passer l'option -display_grid qui sinon foire
+  # 
+  def fontes
+    @fontes ||= begin
+      all_fonts_data.map do |font_name, data_font|
+        new(font_name, data_font) 
+      end
+    end
+  end
+
+  # @return [Array<Array>] Liste des données des fontes avec les 
+  # éléments qui contiennent en premier item le nom de la fonte
+  # (par exemple 'Numito') et en second item ses données 
+  def all_fonts_data
+    @all_fonts_data ||= begin
+      recipe.fonts_data.merge(DEFAUT_FONTS)
+    end
+  end
 
   # @prop [Prawn4book::PdfBook] Instance du livre courant
   # 

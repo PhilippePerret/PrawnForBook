@@ -64,7 +64,7 @@ On peut obtenir de l’aide de différents moyens :
 
 ---
 
-## Aide rapide
+## AIDE RAPIDE
 
 ### Insérer une IMAGE
 
@@ -770,7 +770,34 @@ Ci-dessous une table avec des cellules fusionnées.
 | B | C |
 ~~~
 
+##### Quelques exemples concrets
 
+Une table sans aucun bord :
+
+~~~md
+(( {cell_style:{border_width: 0}} ))
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+~~~
+
+Une table avec des bords horizontaux
+
+~~~md
+(( {cell_style:{border_width: [1,0]}} ))
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+
+~~~
+
+Une table avec des bords verticaux
+
+~~~md
+(( {cell_style:{border_width: [0, 0.5]}} ))
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+~~~
+
+ 
 
 ##### Définir un style de table
 

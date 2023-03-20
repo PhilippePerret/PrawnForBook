@@ -5,3 +5,7 @@
 tests/essais/
 
 tests/format/generated_book/book_generated
+
+tests/format/generated_book/_generated_books_/
+
+tests/format/generated_book/_generated_book/

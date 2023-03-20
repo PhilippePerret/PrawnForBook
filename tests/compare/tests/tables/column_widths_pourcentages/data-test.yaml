@@ -1,0 +1,5 @@
+---
+name: "Table avec chaque largeur de colonne en pourcentage"
+resume: |
+  Une table où sont définies par pourcentage les largeurs de colonnes.
+  (avec une valeur pour chaque colonne)

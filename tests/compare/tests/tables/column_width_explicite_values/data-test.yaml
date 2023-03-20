@@ -1,0 +1,5 @@
+---
+name: "Table avec largeurs de colonnes en valeurs explicites"
+resume: |
+  Une table où sont définies explicitement les largeurs de colonnes.
+  (avec une valeur différente pour chaque colonne)

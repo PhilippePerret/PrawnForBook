@@ -62,9 +62,8 @@ class PdfBook
         template:           get_recipe(:template, nil),
         # --- Extra definitions ---
         default_font:       recipe.default_font,
-        default_font_name:  recipe.default_font_name,
+        default_font_and_style:  recipe.default_font_and_style,
         default_font_size:  recipe.default_font_size,
-        default_font_style: recipe.default_font_style,
       }.tap do |h|
         spy "options pour #generate : #{h.pretty_inspect}"
       end
