@@ -13,8 +13,8 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = []
-# INCLUDES = /^borders_/
-INCLUDES = nil
+# INCLUDES = /^(formate|largeur)_/
+INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)
 EXCLUDES = []
@@ -22,7 +22,7 @@ EXCLUDES = []
 #
 # Pour jouer un ou des dossiers de collection précis
 # 
-FOLDERS = ['formaters']
+# FOLDERS = ['tables']
 
 class PourLancerTestDeComparaion < Minitest::Test
   def setup
@@ -66,7 +66,7 @@ class TestPerCompare
           instance_test.assert(itest.as_expected?, itest.error_message)
           instance_test.mini_success(itest.message_success)
         else
-          instance_test.refute(true, "Le test n'a pas encore de livre à comparer (expected.pdf)…")
+          instance_test.refute(true, "Le test #{itest.designation} n'a pas encore de livre à comparer (expected.pdf)…")
         end
       end
     end

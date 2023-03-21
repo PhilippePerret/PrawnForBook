@@ -18,17 +18,34 @@ class NTable < AnyParagraph
 
   def print(pdf)
     @pdf = pdf
+
+    #
+    # Check value. Ici, on va calculer les valeurs implicites
+    # 
+    # Les "valeurs" implicites, ce sont les valeurs non fournies.
+    # Par exemple, si on a une table à 3 colonnes mais que dans
+    # column_widths on n'en définit que 2 (où qu'une des valeurs est
+    # nil) alors on calcule la valeur manquante
+    # 
+    calc_implicite_values(pdf)
+
     pdf.move_down(pdf.line_height)
     pdf.move_cursor_to_next_reference_line
 
-    # table = pdf.make_table(lines)
-    # table.draw(**table_style)
+    args = [lines]
+    args << style unless style.nil?
 
-    if table_style.nil?
-      pdf.table(lines)
+    if code_block.nil?
+      pdf.table(*args)
     else
-      pdf.table(lines, **table_style)
+      pdf.table(*args, &code_block)
     end
+
+    # if style.nil?
+    #   pdf.table(lines)
+    # else
+    #   pdf.table(lines, **style)
+    # end
 
     pdf.move_down(2 * pdf.line_height)
   end
@@ -40,6 +57,20 @@ class NTable < AnyParagraph
   def titre?    ; false  end
 
   # --- Volatile Data Methods ---
+
+  def code_block        ; @code_block       end
+  def code_block=(val)  ; @code_block = val  end
+
+  ##
+  # Nombre de colonnes (pour vérifications des valeurs implicites)
+  # 
+  # Cette valeurs est soit donnée explicitement, soit compté en
+  # fonction des données de la première ligne.
+  def col_count
+    @col_count ||= begin
+      lines[0].count
+    end
+  end
 
   ##
   # Les lignes préparées pour Prawn::Table
@@ -76,9 +107,40 @@ class NTable < AnyParagraph
     end
   end
 
-  def table_style
-    @table_style ||= begin
+  def calc_implicite_values(pdf)
+    puts "style = #{style.inspect}".bleu
+    # exit
+    return if style.nil?
+    if style.key?(:column_widths) && style[:column_widths].is_a?(Array)
+      if style[:column_widths].count < col_count
+        style[:column_widths] << nil
+      end
+      style[:column_widths].each_with_index do |wcol, idx|
+        # rappel : ici, il n'existe plus de valeurs en pourcentage
+        if wcol.nil?
+          # Une colonne non définie (note : il ne doit y en avoir
+          # qu'une seule)
+          # 
+          # Largeur de table prise en compte
+          # @note
+          #   Quand une colonne n'est pas définie et que la largeur
+          #   de la table n'est pas définie explicitement, on prend
+          #   la largeur totale par défaut.
+          # 
+          table_width = style[:width] || pdf.bounds.width
+          reste = table_width - style[:column_widths].compact.sum
+          style[:column_widths][idx] = reste
+        end
+      end
+    end
+  end
+
+  def style
+    @style ||= begin
       if pfbcode
+        # S'il y a un pfbcode, il peut définir le style de la table
+        # de façon explicite ou par un nom de class (méthode de 
+        # formatage dans formater.rb)
         rationalise_pourcentages_in(parag_style)
       else
         nil
@@ -86,21 +148,49 @@ class NTable < AnyParagraph
     end
   end
 
+  # @return [Hash] Table des styles définis (note: c'est une valeur
+  # que Prawn-Table peut appréhender — même si calc_implicite_values
+  # doit encore faire son travail dessus) c'est-à-dire qu'on y a
+  # retirer les propriétés propres à Prawn-for-book à commencer par :
+  #   :table_class    Une classe de table définie dans le formateur
+  #   :col_count      Le nombre explicite de colonnes.
+  # 
+  # @note
+  #   Pour utiliser ces définitions, utiliser plutôt #style, qui 
+  #   contient la même chose mais avec des valeurs rationnelles (pas
+  #   de pourcentages)
+  # 
   def parag_style
     @parag_style ||= begin
       ps = pfbcode.parag_style
-      if ps.key?(:style_table)
+      if ps.key?(:col_count)
+        @col_count = ps.delete(:col_count)
+      end
+      if ps.key?(:table_class)
         # 
         # Le code définit un style de table
         # On l'appelle pour qu'il retourne la table de style
         # et qu'il puisse modifier les rangées si nécessaire.
         #
-        self.class.send(ps[:style_table], self)
-      else
-        # 
-        # C'est un code à retourner tel quel
-        ps
+        traite_table_class(ps.delete(:table_class))
       end
+      ps
+    end
+  end
+
+  ##
+  # Si le pfbcode précédent la table définit :table_class, c'est
+  # la class de la table qui doit lui être appliquée. On vérifie
+  # d'abord qu'elle soit bien définie puis on l'invoque.
+  def traite_table_class(table_class)
+    if self.class.respond_to?(table_class)
+      if self.class.method(table_class).arity == 1
+        self.class.send(table_class, self)
+      else
+        raise "La méthode #{table_class.inspect} doit accepter un argument, l'instance NTable de la table."
+      end
+    else
+      raise "La méthode de table #{table_class.inspect} doit être définie dans le module TableFormaterModule du fichier formater.rb (de la collection ou du livre)."
     end
   end
 
@@ -124,6 +214,11 @@ class NTable < AnyParagraph
   # 
   # @return [Hash] La table corrigée
   def rationalise_pourcentages_in(hash)
+    return if hash.nil?
+    unless hash.respond_to?(:each)
+      raise "hash ne répond pas à each : #{hash.inspect}"
+      return hash
+    end
     hash.each do |key, value|
       hash.merge!(key => value_rationalized(value))
     end
@@ -147,7 +242,7 @@ class NTable < AnyParagraph
       value.map do |svalue|
         value_rationalized(svalue)
       end
-    else # par exemple float ou integer
+    else # par exemple float ou integer, ou nil
       value
     end
   end

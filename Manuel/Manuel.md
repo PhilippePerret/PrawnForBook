@@ -730,6 +730,24 @@ Par défaut, ***Prawn-table*** ne connait que les valeurs fixes. On peut cependa
 
 > Rappel : on peut utiliser **`pdf.bounds.width`** pour obtenir la largeur utilisable de la page.
 
+<a name="implicite-values-in-table"></a>
+
+##### Valeurs implicites
+
+Certaines valeurs peuvent être données de façon implicite. Le cas le plus classique concerne les colonnes. Si une colonne doit avoir une largeur adaptable en fonction des deux autres, on ne définit pas sa largeur. On utilise alors la valeur `nil`. Par exemple :
+
+~~~md
+Une table avec largeur de colonne implicite.
+
+(( {width: "50%", col_count:3, column_widths: [10, nil, 10]} ))
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+~~~
+
+**Noter la définition de :col_count ici** qui est importante car c’est cette valeur qui va permettre de savoir, en cas de colspan ou de rowspan combien il y a réellement de colonnes (dans le cas où il y aurait `<nombre de colonnes> - 1` éléments dans la liste `:column_widths`, avec donc une dernière colonne qui ne serait pas précisée explicitement.
+
+> Note : si la valeur `:width` (largeur de la table) n’est pas définie, alors c’est par défaut une table qui prendra toute la largeur de la table.
+
 ##### Insérer une image dans une cellule
 
 Pour insérer une image dans une cellule, utiliser **`IMAGE[path|style]`** où `path` est le chemin absolu ou relatif de l’image et `style` est optionnellement le style à appliquer à l’’image. Par exemple :
@@ -770,6 +788,8 @@ Ci-dessous une table avec des cellules fusionnées.
 | B | C |
 ~~~
 
+> Noter que si les [valeurs implicites](#implicite-values-in-table) sont utilisées et que des colspans ou rowspan aussi, il est extrêmement prudent de définir aussi `:col_count` pour définir explicitement le nombre de colonnes dans la table, afin que les calculs des valeurs implicites puissent se faire correctement.
+
 ##### Quelques exemples concrets
 
 Une table sans aucun bord :
@@ -797,17 +817,21 @@ Une table avec des bords verticaux
 | A2 | B2 | C2 |
 ~~~
 
- 
+ <a name="style-table"></a>
 
 ##### Définir un style de table
 
-Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chacune tous les attributs, on peut définir un style de table. Au-dessus de la table, il suffira d’indiquer :
+Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chacune tous les attributs, on peut définir un style de table avec la propriété **`:table_class`**. Au-dessus de la table, il suffira d’indiquer :
 
 ~~~
-(( {style_table: :ma_table_customisee} ))
+(( {table_class: :ma_table_customisee} ))
 | Valeur | valeur | valeur |
 ...
 ~~~
+
+> Attention, ne pas oublier les “:” avant le nom du style.
+>
+> Noter qu’on peut aussi définir d’autres paramètres que la classe, même quand celle-ci est définie.
 
 Ensuite, dans [le fichier `formater.rb`](#text-custom-formater) on doit définir une méthode au nom du style de table (ici `ma_table_customisee` qui va recevoir l’instance `PdfBook::NTable` et retournera les options à ajouter à la construction de la table. Ces options sont les propriétés définissables ci-dessus.
 
@@ -833,13 +857,13 @@ Dans le texte :
 ~~~
 Ceci est un paragraphe quelconque.
 
-(( {style_table: smiley_sourire} ))
+(( {table_class: smiley_sourire} ))
 | | C'est bien de faire comme ça |
 
 Un autre paragraphe quelconque.
 Et puis un autre.
 
-(( {style_table: smiley_grimace} ))
+(( {table_class: smiley_grimace} ))
 | | Ça n'est pas bien de faire comme ça |
 | | Ça n'est pas bien non plus comme ça |
 
@@ -871,6 +895,37 @@ module TableFormaterModule
   end
   def smiley_path(which)
     return File.join(IMAGE_FOLDER, "smiley_#{which}.jpg")
+  end
+end
+~~~
+
+**Bloc de code**
+
+Mais on peut utiliser aussi la méthode de classe pour définir un bloc de code qui va utiliser la possibilité de bloc sur la table. Se rapporter au manuel pour voir toutes les possibilités.
+
+On le fait de cette manière :
+
+~~~
+<!-- dans le texte -->
+
+(( {table_class: :avec_bloc} ))
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+~~~
+
+Et dans `formater.rb` :
+
+~~~ruby
+module TableFormaterModule
+  
+  def table_avec_bloc(ntable)
+    ntable.code_block = Proc.new do
+      # ... ici le traitement ...
+      # par exemple :
+      cells.width = 50
+      cells.align = [:center, :left, :right]
+      # Voir dans le manuel Prawn-Table toutes les possibilités
+    end
   end
 end
 ~~~
@@ -1814,6 +1869,12 @@ end
 ~~~
 
 Cf. la [section “mise en forme de la bibliographie”](#mise-en-forme-biblio) pour le détail.
+
+---
+
+##### Formatage des tables
+
+Pour le formatage propre des tables, cf. [Définir un style de table](#style-table).
 
 ---
 

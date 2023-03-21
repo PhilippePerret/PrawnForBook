@@ -35,7 +35,7 @@ Dans ce dossier (du livre), il faut mettre :
 
 * le fichier `texte.pfb.md` qui contiendra le texte du livre,
 * le fichier `data-test.yaml` qui contiendra les [données du test](#data-test),
-* le fichier `recipe.yaml`, même vide, qui contiendra la recette du livre (c'est ce fichier qui indique à ***Prawn-for-book*** qu'il s'agit d'un livre).
+* optionnellement le fichier `recipe.yaml` si des recettes sont à ajuster, mais ce fichier n'est pas nécessaire puisque le livre se trouve dans une collection.
 
 ### Tester le test…
 

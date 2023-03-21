@@ -1,0 +1,6 @@
+---
+name: Formatage de la table avec un bloc
+resume: |
+  La table doit être formatée avec un style (style_table) et
+  la méthode de ce style doit utiliser la fonctionnalité de
+  bloc sur les tables.
