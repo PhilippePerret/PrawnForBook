@@ -122,8 +122,8 @@ class PdfBook
     pdf = PrawnView.new(self, pdf_config)
     
     #
-    # S'il existe un module de formatage propre au livre (ou à la
-    # collection) il faut le charger.
+    # S'il existe un module de formatage propre au livre (et/ou à la
+    # collection) il faut le(s) charger.
     #
     if module_formatage?
       require_module_formatage
@@ -132,6 +132,9 @@ class PdfBook
       end
       if defined?(FormaterParagraphModule)
         NTextParagraph.include(FormaterParagraphModule)
+      end
+      if defined?(TableFormaterModule)
+        NTable.extend(TableFormaterModule)
       end
     end
 

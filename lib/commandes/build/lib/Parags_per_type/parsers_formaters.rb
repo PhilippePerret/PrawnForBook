@@ -4,6 +4,9 @@ Module rassemblant toutes les méthodes qui permettent de formater
 les textes (sauf, bien entendu, le formateurs définis pour le livre
 ou la collection dans helpers.rb/formaters.rb)
 
+Pourquoi "bien entendu" ci-dessus ????
+Ça serait pourtant ici que ça serait le mieux.
+
 =end
 module Prawn4book
 class PdfBook

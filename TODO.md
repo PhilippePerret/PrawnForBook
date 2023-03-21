@@ -1,13 +1,8 @@
 # Todo courant
 
-- Travailler sur les livres de la collection Narration pour améliorer l'application
-  * [BUG] Le numéro de page se marque trop haut
-  * Entête : ne pas mettre le titre quand c'est la page du titre (comment est-ce qu'on va déterter ça ? il faudrait que titre soit une instance et qu'on sache si la page sur laquelle on doit afficher le titre est aussi la page du titre)
-  * [BUG] Pas assez d'espace entre l'entête et le texte
-  * [BUG] Les mots et les films ne semblent pas être trouvés…
-  * [BUG] Formater en markdown avec kramdown
+* [Test] Les formaters de la collection et du livre doivent être chargé (#80)
+* Faire fonctionner le bloc dans les tables
 
-* Pouvoir déterminer la première page par les options de commande (-firts=x)
 * Documenter précisément toutes les sections du fichier recette pour ne pas avoir à les retrouver dans les fichiers de l'application…
 
 * Refactoriser l'assistant pour les bibliographies
@@ -19,13 +14,9 @@
       (penser à une api pour pouvoir peupler à partir de données 'externes')
       - faire l'essai avec les films du filmodico
 
-* Pour la collection Narration
-  - faire une bibliographie 'film' et une bibliographie 'term'
-
-
 # Todo
 
-* Mettre en place la gestion de 'helpers.rb' ou 'helper.rb'
+* Mettre en place la gestion de 'formaters.rb' ou 'formater.rb'
   Ça doit être "isolé" dans une classe particulière (PdfHelper)
   Pour le traitement du code, quand on parse le paragraphe, on regarde :
     — si c'est un nom unique (ne contenant qu'un nom de fonction et à la rigueur des parathèses avec quelque chose de quelconque)

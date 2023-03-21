@@ -28,6 +28,19 @@ class NTextParagraph < AnyParagraph
     # formater le paragraphe et on poursuit (contrairement au
     # "constructeur" ci-dessus)
     # 
+    # @question
+    #   Est-ce vraiment bien ici qu'il faut faire ce traitement ?
+    #   Ne faudrait-il pas, aussi, un formateur de fin de chaine
+    #   qui permette de traiter le +final_str+ ci-dessus.
+    #   Les "pre_formaters" et les "post_formaters"
+    # 
+    # @note
+    #   Ces "formateurs" sont des méthodes d'instance. Elles 
+    #   transforment la propriété @text.
+    #   Peut-être vaudrait-il mieux ne pas toucher à @text et
+    #   avoir une propriété @formated_text qui soit modifié
+    #   partout ici.
+    # 
     own_formaters if own_formaters?
 
 
@@ -384,14 +397,17 @@ class NTextParagraph < AnyParagraph
   #  'styled_tags' contient les tags en début de paragraphe, avant
   #   des '::', qui définissent la "class" du paragraphe.
   def own_formaters?
+    spy "styled_tags = #{styled_tags.inspect}".bleu
     return false if styled_tags.nil?
     @own_formaters_methods = []
     styled_tags.each do |tag|
-      if self.respond_to?("formate_#{tag}".to_sym)
-        @own_formaters_methods << "formate_#{tag}".to_sym
+      if self.respond_to?("__formate_#{tag}".to_sym)
+        @own_formaters_methods << "__formate_#{tag}".to_sym
         # Il faut toutes les récupérerer
       elsif self.respond_to?("#{tag}_formater".to_sym)
         @own_formaters_methods << "#{tag}_formater".to_sym
+      else
+        raise "Impossible de traiter le style #{tag.inspect}…"
       end
     end
     return @own_formaters_methods.any?
@@ -400,7 +416,7 @@ class NTextParagraph < AnyParagraph
   def own_formaters
     @own_formaters_methods.each do |formater|
       begin
-        self.send(formater, self)
+        self.send(formater)
       rescue PrawnFatalError => e
         raise e
       rescue Exception => e

@@ -13,12 +13,16 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = []
-INCLUDES = /^borders_/
-# INCLUDES = nil
+# INCLUDES = /^borders_/
+INCLUDES = nil
 # 
 # Tests à exclure (nom du dossier)
 EXCLUDES = []
 # EXCLUDES = /^width/
+#
+# Pour jouer un ou des dossiers de collection précis
+# 
+FOLDERS = ['formaters']
 
 class PourLancerTestDeComparaion < Minitest::Test
   def setup
@@ -38,14 +42,32 @@ class TestPerCompare
 
   # Lancement général des tests par comparaison
   def self.tests_run(instance_test)
-    Dir["#{tests_folder}/**/texte.pfb.md"].each do |fpath|
+    if defined?(FOLDERS)
+      if FOLDERS.is_a?(Array)
+        FOLDERS.each do |folder|
+          run_tests_in_folder("#{tests_folder}/#{folder}/**/texte.pfb.md",instance_test)  
+        end
+      else
+        run_tests_in_folder("#{tests_folder}/#{FOLDERS}/**/texte.pfb.md",instance_test)
+      end
+    else
+      run_tests_in_folder("#{tests_folder}/**/texte.pfb.md",instance_test)
+    end
+  end
+
+  def self.run_tests_in_folder(dossier, instance_test)
+    Dir[dossier].each do |fpath|
       next if exclude?(fpath)
       itest = new(fpath)
       puts "\n\n"
       instance_test.resume(itest.resume)
       if itest.run
-        instance_test.assert(itest.as_expected?, itest.error_message)
-        instance_test.mini_success(itest.message_success)
+        if itest.has_expected_book?
+          instance_test.assert(itest.as_expected?, itest.error_message)
+          instance_test.mini_success(itest.message_success)
+        else
+          instance_test.refute(true, "Le test n'a pas encore de livre à comparer (expected.pdf)…")
+        end
       end
     end
   end
@@ -131,6 +153,13 @@ class TestPerCompare
     File.delete(actual_book) if File.exist?(actual_book)
   end
 
+  # @return true si le test possède un livre à comparer
+  def has_expected_book?
+    File.exist?(expected_book)
+  end
+
+  # @return true si le livre actual.pdf correspond exactement au
+  # livre expected.pdf
   def as_expected?
     FileUtils.identical?(expected_book, actual_book)
   end

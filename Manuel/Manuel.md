@@ -804,19 +804,19 @@ Une table avec des bords verticaux
 Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chacune tous les attributs, on peut définir un style de table. Au-dessus de la table, il suffira d’indiquer :
 
 ~~~
-(( {table_style: :ma_table_customisee} ))
+(( {style_table: :ma_table_customisee} ))
 | Valeur | valeur | valeur |
 ...
 ~~~
 
-Ensuite, dans [le fichier `parser.rb`](#text-custom-parser) on doit définir une méthode au nom du style de table (ici `ma_table_customisee` qui va recevoir l’instance `PdfBook::NTable` et retournera les options à ajouter à la construction de la table. Ces options sont les propriétés définissables ci-dessus.
+Ensuite, dans [le fichier `formater.rb`](#text-custom-formater) on doit définir une méthode au nom du style de table (ici `ma_table_customisee` qui va recevoir l’instance `PdfBook::NTable` et retournera les options à ajouter à la construction de la table. Ces options sont les propriétés définissables ci-dessus.
 
 Par exemple :
 
 ~~~ruby
-# Dans parser.rb
+# Dans formater.rb
 
-module ParserParagraphModule
+module TableFormaterModule
   
   def table_ma_table_customisee(ntable)
     # ... Traitement peut-être des lines ...
@@ -833,13 +833,13 @@ Dans le texte :
 ~~~
 Ceci est un paragraphe quelconque.
 
-(( {table_style: smiley_sourire} ))
+(( {style_table: smiley_sourire} ))
 | | C'est bien de faire comme ça |
 
 Un autre paragraphe quelconque.
 Et puis un autre.
 
-(( {table_style: smiley_grimace} ))
+(( {style_table: smiley_grimace} ))
 | | Ça n'est pas bien de faire comme ça |
 | | Ça n'est pas bien non plus comme ça |
 
@@ -849,8 +849,8 @@ Un autre paragraphe encore.
 Et dans le fichier `parser.rb`, on place :
 
 ~~~ruby
-# in parser.rb
-module ParserParagraphModule
+# in formateur.rb
+module TableFormaterModule
   
   def table_smiley_sourire(ntable)
     ntable.lines.each do |line|
@@ -1743,9 +1743,13 @@ QUI SERA DÉFINIE dans le fichier 'formater.rb' définissant le module 'Formater
 ~~~ruby
 # in ./formater.rb
 module FormaterParagraphModule # Ce nom est absolument à respecter
-	def	__formate_custag(string)
+  # @note
+  # 	__formate_custag est une méthode d'instance du paragraphe, qui
+  # 	a donc accès à toutes ses propriétés, dont @text qui contient le
+  # 	texte.
+	def	__formate_custag
 		# ...
-		return string_formated
+		@text = transformation_de_la_propriete(text)
 	end
 end
 
@@ -1755,7 +1759,45 @@ end #/module
 
 Ce code doit être placé dans un fichier **`formater.rb`** soit dans le dossier du livre soit dans le dossier de la collection si le livre appartient à une collection.
 
-> Noter que si collection et livre contient ce fichier, seul celui de la collection sera chargé.
+> Noter que si collection et livre contiennent ce fichier, **les deux seront chargés** ce qui permet d’avoir des formateurs propres à la collection complète et d’autres propres aux livres en particulier.
+
+Un formatage classique consiste à appliquer une police, taille et style particulière au texte. Par exemple, si on trouve dans le texte :
+
+~~~md
+Ceci est un paragraphe normal.
+style1::Ce paragraphe est stylé par le premier style.
+Un autre paragraphe normal.
+~~~
+
+… alors on peut avoir dans le fichier `formater.rb` de la collection :
+
+~~~ruby
+# Dans collection/formater.rb
+module FormaterParagraphModule
+  LINE_FORMATED = '<font name="Arial" size="40" style="bold italic">%s</font>'
+  def __formate_style1
+    @text = LINE_FORMATED % text
+  end
+end
+~~~
+
+… qui va appliquer la police Arial, les styles gras et italique et la taille 40 au texte.
+
+##### Développements ultérieurs
+
+Pour le moment, ces formatages se font *avant* les autres traitements du texte. Peut-être devraient-ils se faire *après*. Ou alors il faudrait pouvoir définir des “post-traitement”, des “post-formateurs” qui viendraient agir sur le texte juste avant qu’’il ne soit imprimé dans le livre.
+
+Ce traitement “post” pourrait être défini en ajoutant le nom du style à la fin de la phrase, après les “::” :
+
+~~~md
+styleavant::Un paragraphe prétraité par la méthode styleavant.
+
+Un paragraphe posttraité par la méthode styleapres.::styleapres
+
+styleavant::Un paragraphe traité avant et après.::styleapres
+~~~
+
+
 
 ##### Formatage des éléments de bibliographie
 

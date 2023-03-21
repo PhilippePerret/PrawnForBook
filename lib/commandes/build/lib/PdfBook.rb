@@ -101,41 +101,48 @@ class PdfBook
   # Traitement du module de formatage propre au livre s'il existe
   # 
   def require_module_formatage
-    module_formatage_path && require(module_formatage_path)
+    module_formatage_paths.each do |md| require(md) end
   end
   def module_formatage?
-    module_formatage_path && File.exist?(module_formatage_path)
+    not(module_formatage_paths.empty?)
   end
-  def module_formatage_path
-    @module_formatage_path ||= get_module_formatage
+  def module_formatage_paths
+    @module_formatage_paths ||= get_modules_formatage
   end
-  def get_module_formatage
+  ##
+  # On relève les modules de formatage (de la collection — if any —
+  # et du livre). Ce sont les modules formater.rb
+  def get_modules_formatage
+    mds = []
     if in_collection?
       pth = File.join(collection.folder, 'formater.rb')
-      return pth if File.exist?(pth)
+      mds << pth if File.exist?(pth)
     end    
     pth = File.join(folder, 'formater.rb')
-    return pth if File.exist?(pth)
+    mds << pth if File.exist?(pth)
+    return mds
   end
 
   # Parser propre au livre
   def module_parser?
-    module_parser_path && File.exist?(module_parser_path)
+    not(module_parser_paths.empty?)
   end
   def require_module_parser
-    require module_parser_path
+    module_parser_paths.each { |md| require md }
     extend ParserParagraphModule
   end
-  def module_parser_path
-    @module_parser_path ||= get_module_parser_path
+  def module_parser_paths
+    @module_parser_paths ||= get_module_parser_paths
   end
-  def get_module_parser_path
+  def get_module_parser_paths
+    mds = []
     if in_collection?
       pth = File.join(collection.folder, 'parser.rb')
-      return pth if File.exist?(pth)
+      mds << pth if File.exist?(pth)
     end    
     pth = File.join(folder, 'parser.rb')
-    return pth if File.exist?(pth)    
+    mds << pth if File.exist?(pth)
+    return mds
   end
 
   # Reçoit une valeur ou une liste de valeur avec des unités et

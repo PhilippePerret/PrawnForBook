@@ -50,9 +50,7 @@ class NTable < AnyParagraph
       # Si la deuxième ligne ne contient que '-', ':' et '|', c'est
       # une ligne qui définit l'alignement dans les colonnes
       # 
-      puts "\nDeuxième ligne : #{raw_lines[1].inspect}"
       if raw_lines[1].match?(/^[ \-\:\|]+$/)
-        puts "Deuxième ligne d'alignement"
         entete = raw_lines.shift()
         aligns = raw_lines.shift()
       end
@@ -81,9 +79,27 @@ class NTable < AnyParagraph
   def table_style
     @table_style ||= begin
       if pfbcode
-        rationalise_pourcentages_in(pfbcode.parag_style)
+        rationalise_pourcentages_in(parag_style)
       else
         nil
+      end
+    end
+  end
+
+  def parag_style
+    @parag_style ||= begin
+      ps = pfbcode.parag_style
+      if ps.key?(:style_table)
+        # 
+        # Le code définit un style de table
+        # On l'appelle pour qu'il retourne la table de style
+        # et qu'il puisse modifier les rangées si nécessaire.
+        #
+        self.class.send(ps[:style_table], self)
+      else
+        # 
+        # C'est un code à retourner tel quel
+        ps
       end
     end
   end
