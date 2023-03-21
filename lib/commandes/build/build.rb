@@ -49,7 +49,7 @@ class PdfBook
     # - Chargement de la classe Bibliography -
     require 'lib/pages/bibliographies'
     # - Initialisation des paragraphes texte -
-    PdfBook::NTextParagraph.init_first_turn
+    PdfBook::AnyParagraph.init_first_turn
     # - Initialisation de la table de références -
     table_references.init
     #
@@ -81,7 +81,7 @@ class PdfBook
     # 
     if table_references.has_one_appel_sans_reference?
       table_references.second_turn = true
-      PdfBook::NTextParagraph.init_second_turn
+      PdfBook::AnyParagraph.init_second_turn
       spy "-> Deuxième passe de construction".bleu
       ok_book = build_pdf_book
       spy "<- Retour de deuxième passe (ok_book = #{ok_book.inspect}".send(ok_book ? :vert : :rouge)

@@ -7,12 +7,19 @@ class NTable < AnyParagraph
   attr_accessor :page_numero
   attr_reader :data
 
+  attr_reader :numero
+  alias :number :numero
+
   attr_reader :pdf
+  attr_reader :book
 
   def initialize(pdfbook, data)
     super(pdfbook)
+    @book = pdfbook
+    @numero = AnyParagraph.get_next_numero
     @data = data.merge!(type: 'table')
   end
+
 
   # --- Printing Methods ---
 
@@ -29,23 +36,25 @@ class NTable < AnyParagraph
     # 
     calc_implicite_values(pdf)
 
+    # 
+    # Application de la fonte par défaut
+    # (utile par exemple si la table est placée après un titre)
+    ft = pdf.font(Fonte.default_fonte)
+
     pdf.move_down(pdf.line_height)
     pdf.move_cursor_to_next_reference_line
 
-    args = [lines]
-    args << style unless style.nil?
+    #
+    # Écriture du numéro du paragraphe
+    # 
+    print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
+
 
     if code_block.nil?
-      pdf.table(*args)
+      pdf.table(lines, style)
     else
-      pdf.table(*args, &code_block)
+      pdf.table(lines, style, &code_block)
     end
-
-    # if style.nil?
-    #   pdf.table(lines)
-    # else
-    #   pdf.table(lines, **style)
-    # end
 
     pdf.move_down(2 * pdf.line_height)
   end
@@ -60,6 +69,8 @@ class NTable < AnyParagraph
 
   def code_block        ; @code_block       end
   def code_block=(val)  ; @code_block = val  end
+  alias :block_code= :code_block=
+  alias :blockcode=  :code_block=
 
   ##
   # Nombre de colonnes (pour vérifications des valeurs implicites)
@@ -81,7 +92,7 @@ class NTable < AnyParagraph
       # Si la deuxième ligne ne contient que '-', ':' et '|', c'est
       # une ligne qui définit l'alignement dans les colonnes
       # 
-      if raw_lines[1].match?(/^[ \-\:\|]+$/)
+      if raw_lines[1] && raw_lines[1].match?(/^[ \-\:\|]+$/)
         entete = raw_lines.shift()
         aligns = raw_lines.shift()
       end
@@ -100,7 +111,7 @@ class NTable < AnyParagraph
             image_style = "{#{image_style}}" unless image_style.start_with?('{')
             image_style = rationalise_pourcentages_in(eval(image_style))
           else
-            cell
+            formated_text(pdf, cell.strip)
           end
         end
       end
@@ -108,7 +119,6 @@ class NTable < AnyParagraph
   end
 
   def calc_implicite_values(pdf)
-    puts "style = #{style.inspect}".bleu
     # exit
     return if style.nil?
     if style.key?(:column_widths) && style[:column_widths].is_a?(Array)
@@ -137,14 +147,15 @@ class NTable < AnyParagraph
 
   def style
     @style ||= begin
-      if pfbcode
+      st = if pfbcode
         # S'il y a un pfbcode, il peut définir le style de la table
         # de façon explicite ou par un nom de class (méthode de 
         # formatage dans formater.rb)
         rationalise_pourcentages_in(parag_style)
-      else
-        nil
-      end
+      end || {}
+      st.key?(:cell_style) || st.merge!(cell_style: {})
+      st[:cell_style].merge!(inline_format: true)
+      st
     end
   end
 
@@ -172,7 +183,8 @@ class NTable < AnyParagraph
         # On l'appelle pour qu'il retourne la table de style
         # et qu'il puisse modifier les rangées si nécessaire.
         #
-        traite_table_class(ps.delete(:table_class))
+        ps = traite_table_class(ps.delete(:table_class))
+        ps = nil unless ps.is_a?(Array)
       end
       ps
     end

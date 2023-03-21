@@ -3,23 +3,6 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
-  @@last_numero = 0
-
-  def self.reset
-    @@last_numero = 0
-  end
-
-  def self.init_first_turn
-    reset
-  end
-  def self.init_second_turn
-    reset
-  end
-
-  def self.get_next_numero
-    @@last_numero += 1
-  end
-
   attr_reader :data
   attr_reader :numero
   alias :number :numero
@@ -30,7 +13,7 @@ class NTextParagraph < AnyParagraph
   def initialize(pdfbook,data)
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
-    @numero = self.class.get_next_numero
+    @numero = AnyParagraph.get_next_numero
     prepare_text # pour obtenir tout de suite les balises initiales
   end
 

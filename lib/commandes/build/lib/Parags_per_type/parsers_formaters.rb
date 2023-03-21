@@ -2,7 +2,7 @@
 
 Module rassemblant toutes les méthodes qui permettent de formater
 les textes (sauf, bien entendu, le formateurs définis pour le livre
-ou la collection dans helpers.rb/formaters.rb)
+ou la collection dans helpers.rb et formaters.rb)
 
 Pourquoi "bien entendu" ci-dessus ????
 Ça serait pourtant ici que ça serait le mieux.
@@ -16,6 +16,10 @@ class AnyParagraph
   # La méthode générale pour formater le texte +str+
   # Note : on pourrait aussi prendre self.text, mais ça permettra
   # d'envoyer un texte déjà travaillé
+  # + ça permet d'envoyer n'importe quel texte, comme celui provenant
+  #   d'un code à évaluer ou d'un tableau (pour le moment, il semble
+  #   que les tables ne passent pas par là, peut-être parce qu'elles
+  #   sont transformées en lignes et écrites séparément)
   def formated_text(pdf, str = nil)
     # 
     # Soit on utilise le texte +str+ transmis, soit on prend le
@@ -24,6 +28,12 @@ class AnyParagraph
     str ||= text
 
     # spy "str initial : #{str.inspect}".orange
+
+    # 
+    # Traitement des marques de formatage spéciales
+    # (par exemple 'perso(Selma)' dans la collection narration)
+    # TODO C'est traité quelque part, mais il faut tout rassembler
+    # ici
 
     # 
     # Traitement des codes ruby 
@@ -61,7 +71,7 @@ class AnyParagraph
 
     # S'il le faut (options), ajouter la position du curseur en
     # début de paragraphe.
-    if add_cursor_position?
+    if paragraph? && add_cursor_position?
       if str.is_a?(Array)
         str[0] = pdf.add_cursor_position(str[0])
       else
@@ -91,7 +101,7 @@ class AnyParagraph
 private
 
   REG_BOLD      = /\*\*(.+?)\*\*/
-  SPAN_BOLD     = "<span class=\"bold\">%s</span>".freeze
+  SPAN_BOLD     = "<b>%s<b>".freeze
   REG_ITALIC    = /\*(.+?)\*/
   SPAN_ITALIC   = '<em>%s</em>'.freeze
   REG_UNDERLINE = /_(.+?)_/
