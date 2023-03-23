@@ -104,7 +104,7 @@ private
   SPAN_BOLD     = "<b>%s<b>".freeze
   REG_ITALIC    = /\*(.+?)\*/
   SPAN_ITALIC   = '<em>%s</em>'.freeze
-  REG_UNDERLINE = /_(.+?)_/
+  REG_UNDERLINE = /__(.+?)__/
   SPAN_UNDERLINE  = '<u>%s</u>'.freeze
 
   REG_LIST_ITEM = /^\* (.*)$/

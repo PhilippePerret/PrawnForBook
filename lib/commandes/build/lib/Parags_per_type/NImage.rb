@@ -16,7 +16,8 @@ class NImage < AnyParagraph
     # 
     # Il faut mettre le style par défaut
     # 
-    pdf.font(pdf.default_font_name, **{style:pdf.default_font_style, size:pdf.default_font_size})
+    # pdf.font(pdf.default_font_name, **{style:pdf.default_font_style, size:pdf.default_font_size})
+    pdf.font(pdf.default_fonte, **{size:pdf.default_font_size})
 
     #
     # Redimensionnement de l'image

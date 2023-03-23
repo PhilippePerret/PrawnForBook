@@ -127,7 +127,7 @@ class PrawnView
 
   # Surclassement de la méthode Prawn::Document#font permettant de
   # définir la fonte courante.
-  # Il existe maintenant 3 façons diffrentes de définir la fonte :
+  # Il existe maintenant 3 façons différentes de définir la fonte :
   # 
   # - normalement, c'est-à-dire avec le nom [String] en premier 
   #   argument et les autres paramètres en second argument.

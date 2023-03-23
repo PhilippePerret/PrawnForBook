@@ -2,7 +2,9 @@
 
   Runner principal qui lance tous les tests par comparaison.
 
-  Jouer rake test TEST=tests/compare/runner.rb
+  Jouer : 
+
+      rake test TEST=tests/compare/runner.rb
 
 =end
 require 'timeout'
@@ -13,7 +15,7 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = []
-# INCLUDES = /^(formate|largeur)_/
+INCLUDES = /^(all_properties)_/
 INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)

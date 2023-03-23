@@ -720,8 +720,11 @@ Un paragraphe de texte normal.
 									* :text_color Couleur de texte (hexadécimale)
 									* :inline_format 	Contient des formatages html
 									* :rotate 		Angle de rotation
-									* :overflow  	Si :shrink_to_fit, étend le texte pour qu'il tienne dans
-																toute la cellule.
+									* :overflow  	Si :shrink_to_fit, réduit le texte pour qu'il tienne dans
+																la cellule, mais sans descendre en dessous de la taille
+																:min_font_size.
+									* :min_font_size 	Taille minimale quand on "shrink" le texte pour qu'il
+																tienne dans la cellule.
 ~~~
 
 ##### Valeurs en pourcentage
@@ -819,7 +822,7 @@ Une table avec des bords verticaux
 
  <a name="style-table"></a>
 
-##### Définir un style de table
+##### Définir un STYLE DE TABLE
 
 Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chacune tous les attributs, on peut définir un style de table avec la propriété **`:table_class`**. Au-dessus de la table, il suffira d’indiquer :
 
@@ -829,7 +832,7 @@ Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chac
 ...
 ~~~
 
-> Attention, ne pas oublier les “:” avant le nom du style.
+> Attention, **NE PAS OUBLIER LES  “:”** avant le nom du style.
 >
 > Noter qu’on peut aussi définir d’autres paramètres que la classe, même quand celle-ci est définie.
 
@@ -857,13 +860,13 @@ Dans le texte :
 ~~~
 Ceci est un paragraphe quelconque.
 
-(( {table_class: smiley_sourire} ))
+(( {table_class: :smiley_sourire} ))
 | | C'est bien de faire comme ça |
 
 Un autre paragraphe quelconque.
 Et puis un autre.
 
-(( {table_class: smiley_grimace} ))
+(( {table_class: :smiley_grimace} ))
 | | Ça n'est pas bien de faire comme ça |
 | | Ça n'est pas bien non plus comme ça |
 
@@ -929,6 +932,59 @@ module TableFormaterModule
   end
 end
 ~~~
+
+Par exemple :
+
+~~~ruby
+module TableFormaterModule
+  
+  def table_avec_bloc(ntable)
+   
+   #
+   # Modification du contenu d'une cellule
+   # (première cellule de la 3e rangée)
+   #
+   ntable.lines[2][0] = "OOO"
+   #
+   # Ajout d'une ligne à la table :
+   #
+   ntable.lines << ["D1","D2","D3"]
+   #
+   # Remplacement d'une rangée complète
+   #
+   ntable.lines[2] = [{content: "Oh !", colspan: 3}]
+    
+   # @note
+   #   On peut utiliser "blockcode", "code_block" ou "block_code"
+   ntable.blockcode = Proc.new do
+     # column(0)  concerne la première colonne
+     # columns(0) Idem
+     # 						Ces deux valeurs agissent sur toutes les cellules
+     # 						de la première colonnes
+   	 cs = column(0)
+     cs.font = 'Arial'
+     cs.size = 24
+     cs.width = 100 # largeur de la colonne
+     cs.font_style = :bold
+     cs.background_color = 'DDDDDD'
+     cs.text_color = 'CC0000'
+     
+     
+     return nil # IMPORTANT
+   end
+    
+  end
+  
+end
+~~~
+
+> #### Note 1
+>
+> Grâce à ces possibilités, on peut faire une utilisation très puissante des tables, avec par exemple des données injectées depuis des fichiers de données externes. Voir par exemple l’utilisation avec les paradigmes de Field augmentés.
+>
+> #### Note 2
+>
+> On ne peut pas régler les `colspan` et `rowspan` dans le bloc de code. Si on doit le faire au niveau de la définition de la table, il faut le faire en travaillant sur les lignes, comme [cela est expliqué ici](#col-et-row-span-in-table-class)
 
 
 

@@ -83,7 +83,8 @@ class PrawnView
     # 
     # Définition de la fonte à utiliser
     # 
-    fonte = font(default_font_name, size: default_font_size)
+    # fonte = font(default_font_name, size: default_font_size)
+    fonte = font(default_font_and_style, size: default_font_size)
     # 
     # Aspect des lignes (bleues et fines)
     # 

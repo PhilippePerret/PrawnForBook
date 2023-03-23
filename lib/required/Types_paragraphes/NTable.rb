@@ -50,10 +50,21 @@ class NTable < AnyParagraph
     print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
 
 
-    if code_block.nil?
-      pdf.table(lines, style)
-    else
-      pdf.table(lines, style, &code_block)
+    begin
+      if code_block.nil?
+        pdf.table(lines, style)
+      else
+        pdf.table(lines, style, &code_block)
+      end
+    rescue Prawn::Errors::CannotFit => e
+      puts "
+      Problème de taille avec la table (elle est certainement trop 
+      grande ou la taille des colonnes produisent une taille trop 
+      grande.
+      Peut-être aussi le contenu des cellules est-il trop grand par
+      rapport à leur taille.
+      (#{e.message})".rouge
+      exit
     end
 
     pdf.move_down(2 * pdf.line_height)
@@ -117,6 +128,7 @@ class NTable < AnyParagraph
       end
     end
   end
+  def lines=(value); @lines = value end
 
   def calc_implicite_values(pdf)
     # exit
@@ -155,6 +167,11 @@ class NTable < AnyParagraph
       end || {}
       st.key?(:cell_style) || st.merge!(cell_style: {})
       st[:cell_style].merge!(inline_format: true)
+      [:borders, :border_width].each do |cell_prop|
+        if st.key?(cell_prop)
+          st[:cell_style].merge!(cell_prop => st.delete(cell_prop))
+        end
+      end
       st
     end
   end
@@ -174,9 +191,6 @@ class NTable < AnyParagraph
   def parag_style
     @parag_style ||= begin
       ps = pfbcode.parag_style
-      if ps.key?(:col_count)
-        @col_count = ps.delete(:col_count)
-      end
       if ps.key?(:table_class)
         # 
         # Le code définit un style de table
@@ -184,7 +198,10 @@ class NTable < AnyParagraph
         # et qu'il puisse modifier les rangées si nécessaire.
         #
         ps = traite_table_class(ps.delete(:table_class))
-        ps = nil unless ps.is_a?(Array)
+        ps = nil unless ps.is_a?(Hash)
+      end
+      if ps && ps.key?(:col_count)
+        @col_count = ps.delete(:col_count)
       end
       ps
     end
