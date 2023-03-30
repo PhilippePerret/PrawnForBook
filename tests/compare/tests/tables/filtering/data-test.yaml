@@ -1,0 +1,6 @@
+---
+name: "Table filtrée"
+resume: |
+  Une table dont le formatage des cellules est définie par 
+  leur filtrage. D'abord avec la méthode #select native, puis en
+  créant des Prawn::Table::Cells.

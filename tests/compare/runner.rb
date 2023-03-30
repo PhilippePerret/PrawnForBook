@@ -14,8 +14,8 @@ require 'test_helper'
 #
 # Pour ne lancer que les tests ci-dessous
 # 
-# INCLUDES = []
-INCLUDES = /^(all_properties)_/
+# INCLUDES = ['simple_table']
+# INCLUDES = /^filtering/
 INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)

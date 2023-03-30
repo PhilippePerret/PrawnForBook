@@ -18,6 +18,8 @@ class PrawnView
     clear unless debug?
     paragraphes.each_with_index do |paragraphe, idx|
 
+      # puts "Instance Paragraphe: #{paragraphe}"
+
       next if paragraphe.not_printed?
 
       #
@@ -48,7 +50,8 @@ class PrawnView
       # utiles ou faire des remplacements (par exemple des références
       # ou des prises de mots d'index)
       # 
-      if pdfbook.module_parser? && paragraphe.paragraph?
+      # if pdfbook.module_parser? && paragraphe.paragraph?
+      if pdfbook.module_parser? && paragraphe.some_text?
         pdfbook.__paragraph_parser(paragraphe)
       end
       

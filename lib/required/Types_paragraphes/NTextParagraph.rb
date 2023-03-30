@@ -21,6 +21,7 @@ class NTextParagraph < AnyParagraph
 
   def paragraph?; true end
   def sometext? ; true end # seulement ceux qui contiennent du texte
+  alias :some_text? :sometext?
 
   # --- Data Methods ---
 
@@ -28,10 +29,6 @@ class NTextParagraph < AnyParagraph
   REG_LEADING_TAGS  = /^((?:(?:[a-z_0-9]+)::){1,6})(.+)$/.freeze
   def text
     @text 
-  end
-
-  def text=(value)
-    @text = value
   end
 
   def prepare_text

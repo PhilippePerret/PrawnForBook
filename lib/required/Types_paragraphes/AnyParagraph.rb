@@ -111,6 +111,7 @@ class AnyParagraph
 
   def titre?    ; false end
   def sometext? ; false end # surclassé par les filles
+  alias :some_text? :sometext?
   def pfbcode?  ; false end
 
   # Sera mis à true pour les paragraphes qui ne doivent pas être
@@ -153,7 +154,6 @@ class AnyParagraph
     text.match?(/\( \->\((.+?):(.+?)\)/)
   end
 
-REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 
 REG_CIBLE_REFERENCE = /\(\( <\-\((.+?)\) \)\)/
 REG_APPEL_REFERENCE = /\(\( \->\((.+?)\) +\)\)/

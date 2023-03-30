@@ -703,8 +703,11 @@ Un paragraphe de texte normal.
 									couleurs à chaque rangée. <even_color> et <odd_color> sont des 
 									hexadécimaux (par exemple "F0F0F0").
 :cell_style 			[Hash] Pour définir le style des cellules. Les paramètres sont :
-									* :width (largeur de cellule), :height (hauteur de cellule), :padding
-									(padding de la cellule, soit un nombre soit [top,right,bottom,left])
+									* :width (largeur de cellule), 
+									* :height (hauteur de cellule), 
+									* :padding	Padding de la cellule, soit un nombre soit [top, right, 
+										bottom, left])
+									* :padding_top, :padding_right, :padding_bottom, :padding_left
 									* :borders => [<liste des bords à mettre>] (p.e. [:left, :top]
 									* :border_width => xxxx Épaisseur du trait
 									* :border_color Couleur du bord
@@ -902,9 +905,9 @@ module TableFormaterModule
 end
 ~~~
 
-**Bloc de code**
+##### BLOC DE CODE
 
-Mais on peut utiliser aussi la méthode de classe pour définir un bloc de code qui va utiliser la possibilité de bloc sur la table. Se rapporter au manuel pour voir toutes les possibilités.
+Mais on peut utiliser aussi la méthode de classe pour définir un bloc de code qui va utiliser la possibilité de bloc sur la table pour un usage très puissant qui permet de cibler exactement ce que l’on veut. Se rapporter au manuel pour voir toutes les possibilités.
 
 On le fait de cette manière :
 
@@ -985,6 +988,84 @@ end
 > #### Note 2
 >
 > On ne peut pas régler les `colspan` et `rowspan` dans le bloc de code. Si on doit le faire au niveau de la définition de la table, il faut le faire en travaillant sur les lignes, comme [cela est expliqué ici](#col-et-row-span-in-table-class)
+
+On peut utiliser le bloc de code pour filtrer des cellules :
+
+~~~ruby
+module TableFormaterModule
+  
+  def table_filtrante(ntable)
+   
+    #
+    # Utilisation du filtre "naturel" avec les méthodes
+    # :select
+    #
+    cells.filter do |cell|
+      cell.content.match?("oui")
+    end.background_color = '00FF00'
+    
+    #
+    # Utilisation d'un bloc de filtrage ruby
+    #
+    bons = Prawn::Table::Cells.new 
+    bads = Prawn::Table::Cells.new
+    
+    columns(1..-2).rows(2..12).each do |cell|
+      next unless cell.content.numeric?
+      if cell.content.to_i > 25
+        bons << cell
+      else
+        bads << cell
+      end
+    end
+    
+    bons.background_color = "00CC00"
+    bads.background_color = "FF0000"
+    
+  end
+  
+end
+~~~
+
+> Note : la classe `Prawn::Table::Cells` est un `Array` qui possède des méthodes supplémentaires et permet notamment de boucler sur chaque cellule qu’il contient.
+
+On peut également récupérer n’importe quelle valeur passée dans le “pfbcode” (le code entre doubles-parenthèses avant la table) en invoquant `:parag_style`. Par exemple :
+
+~~~md
+Ceci est une table :
+
+(( {table_class: :matable, variable1: "Aujourd'hui"} ))
+| A1 | A2 | A3 |
+| B1 | B2 | B3 |
+~~~
+
+Et dans le formater :
+
+~~~ruby
+module TableFormaterModule
+  
+  def matable(ntable)
+    
+    #
+    # Noter qu'on l'efface en la prenant, pour éviter les problèmes
+    #
+    var1 = ntable.parag_style.delete(:variable1)
+    
+    matable.blockcode = Proc.new do
+	    #
+  	  # On met cette valeur dans la première ligne de la première colonne
+    	#
+	    column(0).row(0).content = var1
+    end
+    
+    #
+    # On pourrait aussi faire ça pour changer le contenu de la cellule
+    #
+    ntable.lines[0][0] = var1
+    
+  end
+end 
+~~~
 
 
 

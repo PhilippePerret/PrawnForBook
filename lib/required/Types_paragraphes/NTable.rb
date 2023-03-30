@@ -52,6 +52,7 @@ class NTable < AnyParagraph
 
     begin
       if code_block.nil?
+        # puts "lines = #{lines.inspect}"
         pdf.table(lines, style)
       else
         pdf.table(lines, style, &code_block)
@@ -73,7 +74,8 @@ class NTable < AnyParagraph
   # --- Predicate Methods ---
 
   def paragraph?; false end
-  def sometext? ; true  end
+  def sometext? ; true end # seulement ceux qui contiennent du texte
+  alias :some_text? :sometext?
   def titre?    ; false  end
 
   # --- Volatile Data Methods ---
@@ -116,13 +118,19 @@ class NTable < AnyParagraph
           if cstrip.start_with?('{') && cstrip.end_with?('}')
             rationalise_pourcentages_in(eval(cstrip))
           elsif cstrip.match?(REG_IMAGE_IN_CELL)
+            # 
+            # Traitement d'une image
+            # 
             found = cstrip.match(REG_IMAGE_IN_CELL)
             image_path  = found[1]
             image_style = found[2]
             image_style = "{#{image_style}}" unless image_style.start_with?('{')
             image_style = rationalise_pourcentages_in(eval(image_style))
           else
-            formated_text(pdf, cell.strip)
+            # 
+            # Traitement d'un simple texte
+            # 
+            preformatage(cell.strip, pdf)
           end
         end
       end

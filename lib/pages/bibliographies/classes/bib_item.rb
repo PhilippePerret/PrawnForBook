@@ -211,7 +211,18 @@ class BibItem
   # @return [String] Chemin d'accès à la fiche de l'item
   # 
   def path
-    @path ||= File.join(biblio.folder, "#{id}.#{biblio.item_data_format}")
+    @path ||= begin
+      rf = nil
+      id_min = id.dup.to_s.downcase
+      id_plein = id.dup.to_s.gsub(/ /,'_')
+      id_plein_min = id_min.dup.to_s.gsub(/ /,'_')
+      rf_temp = File.join(biblio.folder, "%{idt}.#{biblio.item_data_format}").freeze
+      [id, id_min, id_plein, id_plein_min].each do |idt|
+        rf = rf_temp % {idt: idt}
+        break if File.exist?(rf)
+      end
+      rf
+    end
   end
 
   private

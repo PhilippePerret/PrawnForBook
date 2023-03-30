@@ -54,7 +54,8 @@ class NTitre < AnyParagraph
   end
 
   def paragraph?; false end
-  def sometext? ; true  end
+  def sometext? ; true end # seulement ceux qui contiennent du texte
+  alias :some_text? :sometext?
   def titre?    ; true  end
 
   # --- Data Methods ---

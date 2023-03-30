@@ -17,8 +17,18 @@ class NTextParagraph < AnyParagraph
     # spy "text au début de print (paragraphe) : #{text.inspect}".orange
     
     #
+    # Préformatage du texte
+    # (code ruby, )
+    # @note : modifie directement @text
+    # 
+    preformate_text(pdf)
+
+    #
     # Si le paragraphe possède son propre builder, on utilise ce
     # dernier pour le construire et on s'en retourne.
+    # Un paragraphe possède son propre builder lorsqu'il est stylé
+    # (précédé de "<style>::") et qu'il existe une méthode pour
+    # construire ce style dans formater.rb
     # 
     if own_builder?
       return own_builder(pdf) # stop
@@ -39,7 +49,8 @@ class NTextParagraph < AnyParagraph
     #   transforment la propriété @text.
     #   Peut-être vaudrait-il mieux ne pas toucher à @text et
     #   avoir une propriété @formated_text qui soit modifié
-    #   partout ici.
+    #   partout ici. Voir aussi, maintenant, la propriété @final_text
+    #   qui sera le texte vraiment traité.
     # 
     own_formaters if own_formaters?
 
@@ -63,10 +74,7 @@ class NTextParagraph < AnyParagraph
     #   C'est dans cette méthode que sont traités les codes ruby, les
     #   marques bibliographiques, les références (cibles et appels),
     #   le code markdown, etc.
-    # 
-    # ATTENTION : maintenant, il peut retourner un string ou 
-    # un Array contenant [final_str, et nouvelles données]
-    final_str = formated_text(pdf)
+    formate_final_text(pdf)
 
     # 
     # Ajout d'un traitement spéciale : formated_text peut retourner
@@ -91,19 +99,30 @@ class NTextParagraph < AnyParagraph
     cursor_positionned = false
     # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
 
-    if final_str.is_a?(Array)
-      final_str, specs = final_str
-      mg_left   = specs[:mg_left]   if specs.key?(:mg_left)
-      mg_top    = specs[:mg_top]    if specs.key?(:mg_top)
-      mg_bot    = specs[:mg_bot]    if specs.key?(:mg_bot)
-      mg_right  = specs[:mg_right]  if specs.key?(:mg_right)
-      no_num    = specs[:no_num]    if specs.key?(:no_num)
-      fontSize  = specs[:size]      if specs.key?(:size)
-      cursor_positionned = specs[:cursor_positionned]
+    # ANCIENNE FORMULE :
+    # if final_str.is_a?(Array)
+    #   final_str, specs = final_str
+    #   mg_left   = specs[:mg_left]   if specs.key?(:mg_left)
+    #   mg_top    = specs[:mg_top]    if specs.key?(:mg_top)
+    #   mg_bot    = specs[:mg_bot]    if specs.key?(:mg_bot)
+    #   mg_right  = specs[:mg_right]  if specs.key?(:mg_right)
+    #   no_num    = specs[:no_num]    if specs.key?(:no_num)
+    #   fontSize  = specs[:size]      if specs.key?(:size)
+    #   cursor_positionned = specs[:cursor_positionned]
+    # end
+    # NOUVELLE FORMULE
+    mg_left   = final_specs[:mg_left]   if final_specs.key?(:mg_left)
+    mg_top    = final_specs[:mg_top]    if final_specs.key?(:mg_top)
+    mg_bot    = final_specs[:mg_bot]    if final_specs.key?(:mg_bot)
+    mg_right  = final_specs[:mg_right]  if final_specs.key?(:mg_right)
+    no_num    = final_specs[:no_num]    if final_specs.key?(:no_num)
+    fontSize  = final_specs[:size]      if final_specs.key?(:size)
+    if final_specs.key?(:cursor_positionned)
+      cursor_positionned = final_specs[:cursor_positionned]
     end
 
     #
-    # Pour invoquer cette instance
+    # Pour invoquer cette instance dans le pdf.update
     # 
     parag = self
 
@@ -158,14 +177,14 @@ class NTextParagraph < AnyParagraph
           span_options = {position: mg_left}
           # - dans un text box -
           span(wbox, **span_options) do
-            text(final_str, **options)
+            text(parag.final_text, **options)
           end
         else
           # 
           # Écriture du paragraphe dans le flux (texte normal)
           # 
 
-          # spy "Position cursor pour écriture du texte \"#{final_str[0..200]}…\") : #{cursor.inspect}".bleu
+          # spy "Position cursor pour écriture du texte \"#{parag.final_text[0..200]}…\") : #{cursor.inspect}".bleu
 
           # #
           # # Écriture du numéro du paragraphe
@@ -175,13 +194,18 @@ class NTextParagraph < AnyParagraph
           # 
           # Hauteur que prendra le texte
           # 
-          final_height = height_of(final_str)
+          final_height = height_of(parag.final_text)
           # 
           # Le paragraphe tient-il sur deux pages ?
           # 
           chevauchement = (cursor - final_height) < 0
 
           # --- Écriture ---
+          # 
+          # Le bout de texte qui sera vraiment écrit (une partie peut
+          # être écrite sur la page précédente)
+          # 
+          rest_text = nil
 
           if chevauchement
             # 
@@ -194,7 +218,7 @@ class NTextParagraph < AnyParagraph
             # se place sur la place suivante.
             # 
             height_diff = final_height - cursor
-            # spy "Texte trop long (de #{height_diff}) : <<< #{final_str} >>>".rouge
+            # spy "Texte trop long (de #{height_diff}) : <<< #{parag.final_text} >>>".rouge
             # spy "margin bottom: #{parag.margin_bottom}"
             box_height = cursor + line_height
             # spy "Taille box = #{box_height}".rouge
@@ -204,15 +228,17 @@ class NTextParagraph < AnyParagraph
               at:     [0, cursor],
               overflow: :truncate
             }.merge(options)
-            excedant = text_box(final_str, **other_options)
+            excedant = text_box(parag.final_text, **other_options)
             # spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
             start_new_page
             move_cursor_to_next_reference_line
-            final_str = excedant.map {|h| h[:text] }.join('')
+            rest_text = excedant.map {|h| h[:text] }.join('')
+          else
+            rest_text = parag.final_text
           end
-          spy "final_str = #{final_str.inspect}"
+          spy "rest_text = #{rest_text.inspect}"
           spy "options = #{options.inspect}"
-          text(final_str, **options)
+          text(rest_text, **options)
         end
 
         if mg_bot && mg_bot > 0

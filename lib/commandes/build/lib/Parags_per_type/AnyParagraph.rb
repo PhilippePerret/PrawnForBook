@@ -4,6 +4,8 @@ class AnyParagraph
 
   attr_reader :pdf
 
+  def text=(value); @text = value end
+
   def recipe
     @recipe || pdfbook.recipe
   end

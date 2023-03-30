@@ -17,14 +17,26 @@ class Bibliography
     @id       = biblio_id.to_sym
     @items    = {}
     self.class.add_biblio(self)
+    if not(File.directory?(folder)) && folder.end_with?('.yaml')
+      @items = YAML.load_file(folder,**{symbolize_names:true})
+      puts "@items = #{@items.inspect}"
+    end
   end
 
   ##
   # Pour ajouter un item bibliographique
   # 
   # @api public
+  # 
   def add_item(bibitem)
-    @items.merge!(bibitem.id => bibitem)
+    # puts "Ajout item biblio : #{bibitem.id.inspect}"
+    ids = bibitem.id.to_s
+    @items.merge!({
+      ids.to_sym          => bibitem,
+      ids.to_s            => bibitem,
+      ids.downcase        => bibitem,
+      ids.downcase.to_sym => bibitem
+    })
   end
 
   ##
@@ -50,6 +62,7 @@ class Bibliography
   # @param [String] bibitem_id Identifiant unique de l'entité bibliographique
   # 
   def get(bibitem_id)
+    # puts "@items = #{@items.keys.inspect}"
     @items[bibitem_id] || begin
       bibitem = BibItem.new(self, bibitem_id)
       bibitem.exist? ? bibitem : nil
@@ -105,6 +118,7 @@ class Bibliography
   # - Data Methods -
 
   def tag         ; id.to_s end
+  def path        ; @path         ||= File.join(book.folder,data[:path])           end
   def title       ; @title        ||= data[:title]          end
   def title_level ; @title_level  ||= data[:title_level]||1 end
   def main_key    ; @main_key     ||= data[:main_key] || :title end

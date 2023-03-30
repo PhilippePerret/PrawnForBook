@@ -21,6 +21,9 @@ class AnyParagraph
   #   que les tables ne passent pas par là, peut-être parce qu'elles
   #   sont transformées en lignes et écrites séparément)
   def formated_text(pdf, str = nil)
+
+    raise "Je ne dois plus passer par là."
+
     # 
     # Soit on utilise le texte +str+ transmis, soit on prend le
     # text du paragraphe.
@@ -35,11 +38,11 @@ class AnyParagraph
     # TODO C'est traité quelque part, mais il faut tout rassembler
     # ici
 
-    # 
-    # Traitement des codes ruby 
-    # 
-    str = __traite_codes_ruby_in(str)
-    # spy "str après code ruby : #{str.inspect}".orange
+    # # 
+    # # Traitement des codes ruby 
+    # # 
+    # str = __traite_codes_ruby_in(str)
+    # # spy "str après code ruby : #{str.inspect}".orange
 
     # 
     # Traitement des mots indexé
@@ -100,86 +103,8 @@ class AnyParagraph
 
 private
 
-  REG_BOLD      = /\*\*(.+?)\*\*/
-  SPAN_BOLD     = "<b>%s<b>".freeze
-  REG_ITALIC    = /\*(.+?)\*/
-  SPAN_ITALIC   = '<em>%s</em>'.freeze
-  REG_UNDERLINE = /__(.+?)__/
-  SPAN_UNDERLINE  = '<u>%s</u>'.freeze
 
-  REG_LIST_ITEM = /^\* (.*)$/
-  
-  # @return [String] Le texte traité 
-  # 
-  # Ça s'appelle "pseudo-markdown" car on utilise les mêmes marques
-  # pour les mêmes choses, mais c'est traité en interne, de façon
-  # tout à fait particulière.
-  # 
-  def __traite_pseudo_markdown_format(str, pdf)
-    # 
-    # Les citations
-    # 
-    is_exergue_citation = str.start_with?('> ')
 
-    str = "<em>#{str[2..-1]}</em>" if is_exergue_citation
-
-    # 
-    # Les listes (repérées par des lignes qui commencent par '* ')
-    # 
-    # @note
-    #   Incompatible avec une citation exergue
-    is_item_of_liste = not(is_exergue_citation) && str.match?(REG_LIST_ITEM)
-
-    if is_exergue_citation && is_item_of_liste
-      raise "Un paragraphe ne peut pas être en même temps une citation en exergue et un item de liste. Faire un style propre, au besoin."
-      is_exergue_citation = false
-    end
-
-    if is_item_of_liste
-      str = str.gsub(REG_LIST_ITEM) do
-        txt = $1.freeze
-        txt
-      end
-    end
-
-    # 
-    # Les gras ('**')
-    # 
-    str = str.gsub(REG_BOLD) do
-      txt = $1.freeze
-      SPAN_BOLD % txt 
-    end
-
-    # 
-    # Les italiques
-    # 
-    str = str.gsub(REG_ITALIC) do
-      txt = $1.freeze
-      SPAN_ITALIC % txt
-    end
-
-    # 
-    # Les soulignés
-    # 
-    str = str.gsub(REG_UNDERLINE) do
-      txt = $1.freeze
-      SPAN_UNDERLINE % txt
-    end
-
-    if is_item_of_liste
-      pdf.update do 
-        move_cursor_to_next_reference_line
-        float do
-          text '– '
-        end
-      end
-      return [str, {mg_left:0.3.cm, no_num: true, cursor_positionned: true}]
-    elsif is_exergue_citation
-      return [str, {size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true}]
-    else
-      return str
-    end
-  end
 
   # @return [String] Le texte formaté
   def __traite_references_in(str)    
@@ -215,33 +140,17 @@ private
       # item_id = item_id.to_sym
       bibitem = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
       if bibitem
-        item_titre || bibitem.formated_for_text
+        if bibitem.respond_to?(:formated_for_text)
+          item_titre || bibitem.formated_for_text
+        else
+          # puts "Problème avec bibitem : #{bibitem.inspect}".rouge
+          str = bibitem[:title]
+          str = "<i>#{str}</i> (#{bibitem[:auteur]})" if bibitem.key?(:auteur)
+          str
+        end
       else
         building_error(ERRORS[:biblio][:bib_item_unknown] % [item_id.inspect, bib_tag.inspect])
         item_id
-      end
-    end
-  end
-
-  # @return [String] Le texte formaté
-  def __traite_codes_ruby_in(str)
-    str.gsub(/#\{(.+?)\}/) do
-      code = $1.freeze
-      methode = nil
-      if code.match?(REG_HELPER_METHOD)
-        # C'est peut-être une méthode d'helpers qui est appelée
-        methode = code.match(REG_HELPER_METHOD)[1].to_sym
-      end
-      if methode && pdfbook.pdfhelpers && pdfbook.pdfhelpers.respond_to?(methode)
-        # 
-        # Une méthode helper propre au livre ou à la collection
-        # 
-        pdfbook.pdfhelpers.instance_eval(code)
-      else
-        #
-        # Un code général
-        # 
-        eval(code)
       end
     end
   end

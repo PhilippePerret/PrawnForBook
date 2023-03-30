@@ -15,7 +15,7 @@ class << self
   # Appelé en bas de ce fichier
   # 
   def init
-    @biblios= {}
+    @biblios = {}
   end
 
   # Méthode publique permettant de choisir ou de créer une nouvelle
@@ -79,6 +79,9 @@ class << self
     not(biblios.empty?)
   end
 
+  # @return [Bib] l'instance de la bibliographie d'identifiant
+  # +biblio_tag+
+  # 
   def get(biblio_tag, book = nil)
     @biblios[biblio_tag.to_sym] || new(book, biblio_tag)
   end
@@ -146,7 +149,14 @@ class << self
       building_error(ERRORS[:biblio][:bib_item_unknown] % [ref_bibitem, bib_tag.inspect])
       return nil
     end
-    bibitem.add_occurrence(doccurrence)
+    if bibitem.respond_to?(:add_occurrence)
+      bibitem.add_occurrence(doccurrence)
+    elsif bibitem.is_a?(Hash)
+      bibitem.key?(:occurrences) || bibitem.merge!(occurrences: [])
+      bibitem[:occurrences] << doccurrence
+    else
+      raise "Je ne sais pas quoi faire avec bibitem = #{bibitem.inspect}"
+    end
     return bibitem
   end
 
