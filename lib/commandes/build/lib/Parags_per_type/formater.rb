@@ -37,9 +37,31 @@ class AnyParagraph
   # 
   def preformate_text(pdf)
 
+    detecte_et_traite_nature_paragraphe
+
     @text = preformatage(text, pdf)
 
   end
+
+  ##
+  # On doit détecter la nature de certains paragraphes avant le
+  # formatage pour éviter certains problème. Typiquement, si un
+  # paragraphe est un item de liste et qu'il contient un texte en 
+  # italique, il peut ressembler à :
+  #   * un item de *liste* avec italique
+  # Mais s'il est formaté tel quel, alors la portion "* un item de "
+  # va être considérée comme en italique.
+  # Il faut donc :
+  #   - détecter qu'il s'agit un item de liste (self.list_item?)
+  #   - retirer la marque de début dans @text
+  # On peut ensuite le formater comme convenu
+  def detecte_et_traite_nature_paragraphe
+    @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)
+    if list_item?
+      @text = text[1..-1].strip
+    end
+  end
+  REG_LIST_ITEM = /^\* (.*)$/
 
   def preformatage(str, pdf)
     # 
@@ -76,7 +98,7 @@ class AnyParagraph
   def formate_text(pdf, str)
     spy "str initial : #{str.inspect}".orange
 
-    if str.match?(REG_LIST_ITEM)
+    if list_item?
       str = formate_as_list_item(pdf, str)
     elsif str.start_with?('> ')
       str = formate_as_citation(pdf, str)
@@ -86,7 +108,7 @@ class AnyParagraph
   end
 
   def formate_as_list_item(pdf, str)
-    str = str.gsub(REG_LIST_ITEM, '\1'.freeze)
+    str = text
     pdf.update do 
       move_cursor_to_next_reference_line
       float { text '– ' }
@@ -94,7 +116,6 @@ class AnyParagraph
     final_specs.merge!({mg_left:0.3.cm, no_num: true, cursor_positionned: true})
     return str
   end
-  REG_LIST_ITEM = /^\* (.*)$/
 
   def formate_as_citation(pdf, str)
     str = "<em>#{str[2..-1].strip}</em>"

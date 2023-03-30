@@ -4,6 +4,9 @@ class NTextParagraph < AnyParagraph
 
   alias :book :pdfbook
 
+  attr_accessor :is_list_item
+  def list_item?; @is_list_item end
+
   # --- Helper Methods ---
 
   ##
