@@ -19,7 +19,7 @@ class Bibliography
     self.class.add_biblio(self)
     if not(File.directory?(folder)) && folder.end_with?('.yaml')
       @items = YAML.load_file(folder,**{symbolize_names:true})
-      puts "@items = #{@items.inspect}"
+      # puts "@items = #{@items.inspect}"
     end
   end
 
@@ -77,6 +77,10 @@ class Bibliography
   # @return [Boolean] true si la bibliographie existe.
   def exist?(bibitem_id)
     well_defined? && !get(bibitem_id).nil?
+  end
+
+  def par_fiche?
+    :TRUE == @percard ||= true_or_false(File.directory?(folder))
   end
 
   # @prop [String] Chemin d'accès au dossier des fiches de la bibliographie.

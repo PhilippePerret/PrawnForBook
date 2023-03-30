@@ -98,6 +98,11 @@ MINI_AIDE = <<-TEXT
 #{'pfb aide'.jaune}
     Aide en ligne pour pfb
 
+#{'pfb choose <biblio>'.jaune}
+    Pour choisir un item dans une bibliographie courante.
+    Note : le terminal doit être ouvert dans un dossier de
+    livre ou de collection.
+
 #{'pfb assistant'.jaune}
     Permet de choisir un assistant et de le jouer.
 
