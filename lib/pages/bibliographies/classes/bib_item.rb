@@ -18,10 +18,11 @@ class BibItem
   # @param [Prawn4book::Bibliography] biblio L'instance de la bibliographie contenant l'item.
   # @param [String] bibitem_id
   # 
-  def initialize(biblio, bibitem_id)
+  def initialize(biblio, bibitem_id, data = nil)
     @biblio       = biblio
     @id           = bibitem_id
     @occurrences  = []
+    @data         = data # quand fichier unique contenant toutes les données
   end
 
   # --- Public Methods ---
@@ -69,10 +70,15 @@ class BibItem
   end
 
   ##
-  # @return [Boolean] true si l'item existe (sa fiche, donc)
+  # @return [Boolean] true si l'item existe (sa fiche ou sa donnée
+  # dans le fichier unique)
   # 
   def exist?
-    File.exist?(path)
+    if biblio.one_file?
+      biblio.items.key?(id)
+    else
+      File.exist?(path)
+    end
   end
 
   # --- Méthode pour cross-reference (quand livre) ---
@@ -159,21 +165,32 @@ class BibItem
     end
   end
 
+  ##
+  # Méthode appelée quand un titre explicite est donné pour l'item
+  # de bibliographie (par exemple le mot au pluriel) et qui renvoie
+  # le texte formaté.
+  # 
+  # @param [String|NilClass] actual Le mot à afficher vraiment ou nil
+  def formate_for_text(actual, paragraph)
+    if custom_methode_formatage == :none
+      actual || title
+    else
+      custom_methode_formatage.call(data.dup, actual, paragraph)
+    end
+  end
+
   # @return [String] l'item de bibliographie formaté pour le 
   # texte. 
   # Soit une méthode propre est définie, soit on utilise la donnée
   # :title qui doit toujours exister pour une carte de donnée d'un
   # item de bibliographie (sauf, justement, si une méthode propre
   # est définie)
-  def formated_for_text
-    @formated_for_text ||= begin
-      methode_formatage = self.class.formatage_in_text_method(biblio)
-      if methode_formatage == :none
-        self.title
-      else
-        methode_formatage.call(data.dup)
-      end
-    end
+  def formated_for_text(paragraph = nil)
+    @formated_for_text ||= formate_for_text(title, paragraph)
+  end
+
+  def custom_methode_formatage
+    @custom_methode_formatage ||= self.class.formatage_in_text_method(biblio)
   end
   def self.formatage_in_text_method(biblio)
     @methodes_formatage_per_biblio ||= {}

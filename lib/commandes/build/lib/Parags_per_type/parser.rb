@@ -132,30 +132,6 @@ private
   end
 
   # @return [String] Le texte formaté
-  def __traite_termes_bibliographiques_in(str)
-    str.gsub(Bibliography::REG_OCCURRENCES) do
-      bib_tag = $1.freeze
-      item_id, item_titre = $2.freeze.split('|')
-      spy "Biblio pour : #{item_titre.inspect}".rouge if item_titre
-      # item_id = item_id.to_sym
-      bibitem = Bibliography.add_occurrence_to(bib_tag, item_id, {page: first_page, paragraph: numero})
-      if bibitem
-        if bibitem.respond_to?(:formated_for_text)
-          item_titre || bibitem.formated_for_text
-        else
-          # puts "Problème avec bibitem : #{bibitem.inspect}".rouge
-          str = bibitem[:title]
-          str = "<i>#{str}</i> (#{bibitem[:auteur]})" if bibitem.key?(:auteur)
-          str
-        end
-      else
-        building_error(ERRORS[:biblio][:bib_item_unknown] % [item_id.inspect, bib_tag.inspect])
-        item_id
-      end
-    end
-  end
-
-  # @return [String] Le texte formaté
   def __traite_mots_indexed_in(str)
     str = str.gsub(/index:(.+?)(\b)/) do
       dmot = {mot: $1.freeze, page: first_page, paragraph:numero}

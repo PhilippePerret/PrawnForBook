@@ -156,6 +156,13 @@ class NTextParagraph < AnyParagraph
           # font_style:     fontStyle,
           size:           fontSize
         }
+        if parag.final_specs.key?(:kerning)
+          options.merge!(kerning: parag.final_specs[:kerning])
+        end
+        if parag.final_specs.key?(:character_spacing)
+          options.merge!(character_spacing: parag.final_specs[:character_spacing])
+          puts "options au final : #{options.inspect}"
+        end
 
         if mg_top && mg_top > 0
           move_down(mg_top)

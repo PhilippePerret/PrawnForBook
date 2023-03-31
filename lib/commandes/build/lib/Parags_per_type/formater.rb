@@ -20,6 +20,17 @@ class AnyParagraph
   # paragraphe (quel qu'il soit)
   attr_reader :final_specs
 
+  ##
+  # Méthode qui passe par toutes les méthodes de formatage, personna-
+  # lisées comme communes.
+  # 
+  def formate_all(str, pdf)
+    str = pdfbook.parser_formater(str, self) if pdfbook.respond_to?(:parser_formater)
+    str = preformatage(str, pdf)
+    str = formate_text(pdf, str)
+    return str
+  end
+
   # = main =
   #
   # Préformatage du texte
@@ -85,6 +96,7 @@ class AnyParagraph
     return str
   end
 
+
   # = main =
   #
   # Méthode principale qui va produire le texte final qui sera vraiment
@@ -103,9 +115,23 @@ class AnyParagraph
     elsif str.start_with?('> ')
       str = formate_as_citation(pdf, str)
     end
+
+    #
+    # Traitement des marques bibliograghiques
+    # 
+    if Bibliography.any?
+      str = __traite_termes_bibliographiques_in(str)
+      # spy "str après recherche biblio : #{str.inspect}".orange
+    end
+
+    #
+    # Traitement des références (appels et cibles)
+    # 
+    str = __traite_references_in(str)
     
     return str
   end
+
 
   def formate_as_list_item(pdf, str)
     str = text
@@ -162,18 +188,18 @@ class AnyParagraph
       # spy "str après recherche index : #{str.inspect}".orange
     end
 
-    #
-    # Traitement des marques bibliograghiques
-    # 
-    if Bibliography.any?
-      str = __traite_termes_bibliographiques_in(str)
-      # spy "str après recherche biblio : #{str.inspect}".orange
-    end
+    # #
+    # # Traitement des marques bibliograghiques
+    # # 
+    # if Bibliography.any?
+    #   str = __traite_termes_bibliographiques_in(str)
+    #   # spy "str après recherche biblio : #{str.inspect}".orange
+    # end
 
-    #
-    # Traitement des références (appels et cibles)
-    # 
-    str = __traite_references_in(str)
+    # #
+    # # Traitement des références (appels et cibles)
+    # # 
+    # str = __traite_references_in(str)
 
     # 
     # Traitement du pseudo-format markdown
@@ -213,6 +239,54 @@ class AnyParagraph
 
 
 private
+
+
+  ##
+  # Traitement des termes propres aux bibliographies
+  # 
+  # @return [String] Le texte formaté
+  def __traite_termes_bibliographiques_in(str)
+    str.gsub(Bibliography::REG_OCCURRENCES) do
+      
+      bib_tag = $1.freeze
+      item_av, item_ap = $2.freeze.split('|')
+
+      biblio = Bibliography.get(bib_tag) || raise("Impossible de trouver la bibliographie de tag #{bib_tag.inspect}")
+      canon, actual = 
+        if (bibitem = biblio.exist?(item_av))
+          [item_av, item_ap]
+        elsif item_ap && (bibitem = biblio.exist?(item_ap))
+          [item_ap, item_av]
+        else
+          # 
+          # Item de bibliographie inconnu
+          # 
+          unfound = [item_av,item_ap].compact.join("/")
+          building_error(ERRORS[:biblio][:bib_item_unknown] % ["#{unfound}".inspect, bib_tag])
+          [nil, item_av]
+        end
+
+      unless canon.nil?
+        # 
+        # Si le canon est défini (ie si le mot a été reconnu dans la bibliographie)
+        # alors on enregistre une occurrence pour lui.
+        # 
+
+        # 
+        # Ajout de cette occurrence
+        # 
+        bibitem.add_occurrence({page: first_page, paragraph: numero})
+
+        if actual
+          bibitem.formate_for_text(actual, self)
+        elsif bibitem.respond_to?(:formated_for_text)
+          bibitem.formated_for_text(self)
+        else
+          bibitem.title
+        end
+      end
+    end
+  end
 
   # 
   # Traitement des codes ruby, qui se présentent dans le texte par

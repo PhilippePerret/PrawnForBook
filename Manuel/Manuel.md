@@ -1698,6 +1698,36 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 <partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
 ~~~
 
+##### Mise en forme dans le texte
+
+La section précédente parlait de la mise en forme de la bibliographie elle-même. On peut également définir comme l’item apparaitra dans le texte lui-même.
+
+On le fait grâce à la méthode **`<tag biblio>_in_text`** dans le fichier `formater.rb` :
+
+~~~ruby
+module FormaterBibliographiesModule
+  
+  # @param [Hash] data  Données de l'item, telles que définies dans sa carte
+  # 										ou son enregistrement.
+  # @param [String] actual  Optionnellement, le mot à écrire (par exemple le
+  # 												mot au pluriel.
+  # @param [NTextParagraph] paragraph L'instance du paragraphe. Typiquement
+  # 		             	pour être en mesure de modifier paragraph.final_specs
+  # 									qui permet d'ajouter des traitements à pdf.text
+  # 									Mais ATTENTION : ces traitements touchent tout le para-
+  # 									graphe, pas seulement le mot. Si, par exemple, on définit
+  # 									paragraphe.final_specs.merge!({kerning:true, \
+  #										character_spacing: -1}) alors ce sont tous les mots du
+  # 									paragraphe qui seront modifiés.
+  #
+  def film_in_text(data, actual, paragraph)
+    # traitement à partir des +data+ de l'item
+    return texte_a_afficher
+  end
+~~~
+
+Rappel : en utilisant le [stylage *inline*](#inline-style), on peut modifier considérablement l’aspect des mots de bibliographie.
+
 ---
 
 <a name="references"></a>
@@ -2530,6 +2560,36 @@ page_index:
 <a name="annexe"></a>
 
 ## Annexe
+
+<a name="inline-style"></a>
+
+### Style *inline*
+
+Le *style inline* est un formatage qui utilise les balises HTML pour formater le texte. On peut le faire partout (c’est-à-dire dans tous les paragraphes et toutes les définitions de formatage, avec Prawn-for-book.
+
+Pour rappel, les balises utilisables sont :
+
+~~~html
+b 						gras
+i							italique
+u						  souligné
+strikethrough barré
+sub						subscript
+sup						exposant
+font 		Définition d'une fonte, qui accepte :
+				name 		Nom de la fonte (qui doit être définie)
+				size 		Taille du texte
+				character_spacing 	Espacement entre les caractères
+				Par exemple :
+				<font name="Courier" size="12" character_spacing="2">
+color    Définition d'une couleur, qui accepte :
+         rbg  (p.e. <color rgb="FF0934">...</color>
+         c/m/y/k attributes (p.e. <color c="100" m="50" y="12" k="0">
+link     Définition d'un lien (pas très utile pour l'impression…)
+         href 
+~~~
+
+
 
 <a name="reference-grid"></a>
 

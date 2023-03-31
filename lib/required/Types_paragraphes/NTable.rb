@@ -78,6 +78,11 @@ class NTable < AnyParagraph
   alias :some_text? :sometext?
   def titre?    ; false  end
 
+  # Mis en test pour le moment, pour quand on utilise la méthode
+  # #formate_all sur le contenu des cellules, qui travaille normale-
+  # ment avec une instance paragraphe qui définit cette valeur.
+  def list_item?; false end
+
   # --- Volatile Data Methods ---
 
   def code_block        ; @code_block       end
@@ -221,10 +226,17 @@ class NTable < AnyParagraph
   # d'abord qu'elle soit bien définie puis on l'invoque.
   def traite_table_class(table_class)
     if self.class.respond_to?(table_class)
-      if self.class.method(table_class).arity == 1
-        self.class.send(table_class, self)
-      else
-        raise "La méthode #{table_class.inspect} doit accepter un argument, l'instance NTable de la table."
+      begin
+        if self.class.method(table_class).arity == 1
+          self.class.send(table_class, self)
+        elsif self.class.method(table_class).arity == 2
+          self.class.send(table_class, self, pdf)
+        else
+          raise "La méthode #{table_class.inspect} doit accepter un argument, l'instance NTable de la table."
+        end
+      rescue Psych::SyntaxError => e
+        puts "\n\nUne erreur est survenue au cours du parsing du fichier YAML (vers le paragraphe #{numero}) :\n#{e.message}".rouge
+        exit
       end
     else
       raise "La méthode de table #{table_class.inspect} doit être définie dans le module TableFormaterModule du fichier formater.rb (de la collection ou du livre)."

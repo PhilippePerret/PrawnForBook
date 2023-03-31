@@ -17,10 +17,22 @@ class Bibliography
     @id       = biblio_id.to_sym
     @items    = {}
     self.class.add_biblio(self)
-    if not(File.directory?(folder)) && folder.end_with?('.yaml')
-      @items = YAML.load_file(folder,**{symbolize_names:true})
-      # puts "@items = #{@items.inspect}"
-    end
+    @as_one_file = not(File.directory?(folder)) && folder.end_with?('.yaml')
+    @asfolderofcard = not(@as_one_file)
+    load_items_from_file if one_file?
+  end
+
+
+  # @return true si la bibliographie fonctionne avec un fichier
+  # unique contenant toutes les données
+  def one_file?
+    @as_one_file
+  end
+
+  # @return true si la bibliographie fonctionne avec un dossier
+  # contenant toutes les cartes des données
+  def cards?
+    @asfolderofcard
   end
 
   ##
@@ -37,6 +49,17 @@ class Bibliography
       ids.downcase        => bibitem,
       ids.downcase.to_sym => bibitem
     })
+  end
+
+  ##
+  # À l'instanciation de la bibliographie, si elle fonctionne avec
+  # un fichier YAML unique contenant toutes les données, on les charge
+  # dans les items
+  def load_items_from_file
+    YAML.load_file(folder,**{symbolize_names:true}).each do |k, ditem|
+      bibitem = BibItem.new(self, k, ditem)
+      add_item(bibitem)
+    end
   end
 
   ##
@@ -76,7 +99,9 @@ class Bibliography
   # 
   # @return [Boolean] true si la bibliographie existe.
   def exist?(bibitem_id)
-    well_defined? && !get(bibitem_id).nil?
+    return false if not(well_defined?)
+    bibitem = get(bibitem_id)
+    return bibitem # nil si inexistant
   end
 
   def par_fiche?
@@ -113,6 +138,9 @@ class Bibliography
   # raise une erreur dans le cas contraire.
   # 
   def well_defined?
+    :TRUE == @iswelldefined ||= true_or_false(check_if_well_defined)
+  end
+  def check_if_well_defined
     prefix_err = ERRORS[:biblio][:biblio_malformed] % tag
     data.key?(:title)   || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:title_undefined]))
     data.key?(:path)    || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:path_undefined]))
