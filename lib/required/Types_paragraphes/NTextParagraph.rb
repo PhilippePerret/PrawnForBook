@@ -86,14 +86,6 @@ class NTextParagraph < AnyParagraph
     # 
     self.first_page = pdf.page_number
 
-    #
-    # Préformatage du paragraphe
-    # 
-    # C'est ici, par exemple, qu'on regarde si c'est un item de liste
-    # ou une citation.
-    # 
-    preformate
-
     # 
     # Ajout d'un traitement spéciale : formated_text peut retourner
     # un array définissant en deuxième argument la margin left
@@ -109,11 +101,12 @@ class NTextParagraph < AnyParagraph
     # parse du paragraphe (dont les balises initiales peuvent
     # modifier l'aspect)
     # 
+    spy "final_specs = #{final_specs.inspect}".jaune, true
     fontFamily  = font_family(pdf)
     fontStyle   = font_style(pdf)
-    fontSize    = font_size(pdf)
-    textIndent  = recipe.text_indent
-    textAlign   = self.text_align
+    fontSize    = final_specs[:size]    || font_size(pdf)
+    textIndent  = final_specs[:indent]  || recipe.text_indent
+    textAlign   = final_specs[:align]   || self.text_align
     cursor_positionned = false
     # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
 
@@ -122,7 +115,6 @@ class NTextParagraph < AnyParagraph
     mg_bot    = final_specs[:mg_bot]    if final_specs.key?(:mg_bot)
     mg_right  = final_specs[:mg_right]  if final_specs.key?(:mg_right)
     no_num    = final_specs[:no_num]    if final_specs.key?(:no_num)
-    fontSize  = final_specs[:size]      if final_specs.key?(:size)
     if final_specs.key?(:cursor_positionned)
       cursor_positionned = final_specs[:cursor_positionned]
     end

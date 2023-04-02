@@ -59,14 +59,21 @@ class AnyParagraph
     self.final_specs = {}
     if pfbcode && pfbcode.parag_style
       final_specs.merge!(pfbcode.parag_style)
-    end    
+    end
+    # 
+    # Détection de la nature du texte
+    # 
     detecte_et_traite_nature_paragraphe
+    # 
+    # Préformatage général
+    # 
     @text = self.class.preformatage(text)
 
   end
 
   #
   # @produit @final_text (le texte final à afficher)
+  # 
   def final_formatage(pdf)
     spy "Final formatage de #{text.inspect}"
     @text = formate_text(pdf, text)
@@ -126,6 +133,7 @@ class AnyParagraph
     @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)
     if list_item?
       @text = text[1..-1].strip
+      final_specs.merge!({mg_left:3.mm, no_num: true, cursor_positionned: true})
     end
   end
   REG_LIST_ITEM = /^\* (.*)$/.freeze
@@ -138,7 +146,7 @@ class AnyParagraph
 
     if list_item?
       str = formate_as_list_item(pdf, str)
-    elsif str.start_with?('> ')
+    elsif citation?
       str = formate_as_citation(pdf, str)
     end
 
@@ -182,12 +190,12 @@ class AnyParagraph
   end
 
   def formate_as_list_item(pdf, str)
+    spy "Formatage comme list item de #{str.inspect}", true
     str = text
     pdf.update do 
       move_cursor_to_next_reference_line
       float { text '– ' }
     end
-    final_specs.merge!({mg_left:0.3.cm, no_num: true, cursor_positionned: true})
     return str
   end
 
