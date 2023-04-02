@@ -6,7 +6,7 @@
 
 Ce dossier est voué à devenir le seul dossier pour les tests.
 
-Tous les tests doivent fonctionner de la même manière, sur la base de la méthode `FileUtils#identical?(expected_book, actual_book)`.
+Tous les tests doivent fonctionner de la même manière, sur la base de la méthode `FileUtils#identical?(expected_book, actual_book)` qui compare deux documents pour savoir s'ils sont identiques.
 
 ## Fonctionnement général
 

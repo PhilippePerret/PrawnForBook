@@ -128,8 +128,12 @@ class PdfBook
     not(module_parser_paths.empty?)
   end
   def require_module_parser
+    spy "Chargement des parsers/formaters".jaune, true
     module_parser_paths.each { |md| require md }
     extend ParserParagraphModule
+    # self.class.current = self
+    spy "self respond to :parser_formater ? #{PdfBook.current.respond_to?(:parser_formater).inspect}".bleu,true
+    spy "Fin des chargements des parsers/formaters".jaune,true
   end
   def module_parser_paths
     @module_parser_paths ||= get_module_parser_paths

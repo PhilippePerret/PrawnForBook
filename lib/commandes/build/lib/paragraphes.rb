@@ -51,9 +51,9 @@ class PrawnView
       # ou des prises de mots d'index)
       # 
       # if pdfbook.module_parser? && paragraphe.paragraph?
-      if pdfbook.module_parser? && paragraphe.some_text?
-        pdfbook.__paragraph_parser(paragraphe)
-      end
+      # if pdfbook.module_parser? && paragraphe.some_text?
+      #   pdfbook.__paragraph_parser(paragraphe, self)
+      # end
       
       # 
       # --- ÉCRITURE DU PARAGRAPHE ---

@@ -10,71 +10,20 @@ Pourquoi "bien entendu" ci-dessus ????
 =end
 module Prawn4book
 class PdfBook
+  # Méthode qui doit être surclassée par les modules propres
+  def parser_formater(str,pdf); str end
+
 class AnyParagraph
 
-  # [String] Le texte final, tel qu'il est vraiment écrit par 
-  # pdf.
-  attr_reader :final_text
-  
-  # [Hash] Table des spécifications finales pour l'impression du
-  # paragraphe (quel qu'il soit)
-  attr_reader :final_specs
-
   ##
-  # Méthode qui passe par toutes les méthodes de formatage, personna-
-  # lisées comme communes.
+  # Préformatage d'un string quelconque, dissocié de tout élément.
+  # Ça peut être tout aussi bien le @text d'un paragraphe que le
+  # contenu d'une cellule de table.
   # 
-  def formate_all(str, pdf)
-    str = pdfbook.parser_formater(str, self) if pdfbook.respond_to?(:parser_formater)
-    str = preformatage(str, pdf)
-    str = formate_text(pdf, str)
-    return str
-  end
-
-  # = main =
-  #
-  # Préformatage du texte
+  # Ce préformatage n'a pas besoin de connaitre le pdf-viewer
+  # courant.
   # 
-  # Une des différences avec le formatage final, par exemple, c'est
-  # que ce préformatage se fait avant la construction par les propres
-  # builders
-  # 
-  # C'est @text lui-même qui est modifié
-  # 
-  # @note
-  #   - la méthode preformatage est "détachée" car pour les tables,
-  #     par exemple, c'est chaque ligne de texte qui doit être 
-  #     formatée séparéement.
-  # 
-  def preformate_text(pdf)
-
-    detecte_et_traite_nature_paragraphe
-
-    @text = preformatage(text, pdf)
-
-  end
-
-  ##
-  # On doit détecter la nature de certains paragraphes avant le
-  # formatage pour éviter certains problème. Typiquement, si un
-  # paragraphe est un item de liste et qu'il contient un texte en 
-  # italique, il peut ressembler à :
-  #   * un item de *liste* avec italique
-  # Mais s'il est formaté tel quel, alors la portion "* un item de "
-  # va être considérée comme en italique.
-  # Il faut donc :
-  #   - détecter qu'il s'agit un item de liste (self.list_item?)
-  #   - retirer la marque de début dans @text
-  # On peut ensuite le formater comme convenu
-  def detecte_et_traite_nature_paragraphe
-    @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)
-    if list_item?
-      @text = text[1..-1].strip
-    end
-  end
-  REG_LIST_ITEM = /^\* (.*)$/
-
-  def preformatage(str, pdf)
+  def self.preformatage(str)
     # 
     # Traitement des codes ruby 
     # 
@@ -92,20 +41,86 @@ class AnyParagraph
     # 
     str = __traite_format_markdown_inline(str)
     # spy "str après format markdown inline : #{text.inspect}".orange
-    
+
+    return str    
+  end
+
+  # [String] Le texte final, tel qu'il est vraiment écrit par 
+  # pdf.
+  attr_reader :final_text
+  
+  # [Hash] Table des spécifications finales pour l'impression du
+  # paragraphe (quel qu'il soit)
+  attr_accessor :final_specs
+
+
+  def preformate
+    self.final_specs = {}
+    if pfbcode && pfbcode.parag_style
+      final_specs.merge!(pfbcode.parag_style)
+    end    
+    detecte_et_traite_nature_paragraphe
+    @text = self.class.preformatage(text)
+
+  end
+
+  def final_formatage(pdf)
+    @final_text = self.class.formatage_final(text, pdf)
+    #
+    # Maintenant qu'on a tous les éléments (options), on peut
+    # parser et formater le paragraphe.
+    # 
+    if pdfbook.module_parser? # && parag.some_text?
+      pdfbook.__paragraph_parser(self, pdf)
+    end
+  end
+
+  ##
+  # Méthode qui passe par toutes les méthodes de formatage, personna-
+  # lisées comme communes.
+  # 
+  def self.formatage_final(str, pdf)
+    str = pdfbook.parser_formater(str, pdf)
     return str
   end
 
+  def self.pdfbook; @pdfbook ||= PdfBook.current end
 
   # = main =
   #
-  # Méthode principale qui va produire le texte final qui sera vraiment
-  # écrit dans le livre (@final_text).
-  # 
-  def formate_final_text(pdf)
-    @final_specs  = {}
-    @final_text   = formate_text(pdf, self.text)
+
+  ##
+  # On doit détecter la nature de certains paragraphes avant le
+  # formatage pour éviter certains problème. Typiquement, si un
+  # paragraphe est un item de liste et qu'il contient un texte en 
+  # italique, il peut ressembler à :
+  #   * un item de *liste* avec italique
+  # Mais s'il est formaté tel quel, alors la portion "* un item de "
+  # va être considérée comme en italique.
+  # Il faut donc :
+  #   - détecter qu'il s'agit un item de liste (self.list_item?)
+  #   - retirer la marque de début dans @text
+  # On peut ensuite le formater comme convenu
+  def detecte_et_traite_nature_paragraphe
+    # 
+    # Est-ce une citation ?
+    # 
+    @is_citation = paragraph? && text.match?(REG_CITATION)
+    if citation?
+      @text = text[1..-1].strip
+    end
+    # 
+    # Est-ce un item de liste
+    # 
+    @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)
+    if list_item?
+      @text = text[1..-1].strip
+    end
   end
+  REG_LIST_ITEM = /^\* (.*)$/.freeze
+  REG_CITATION  = /^> (.+)$/.freeze
+
+
 
   def formate_text(pdf, str)
     spy "str initial : #{str.inspect}".orange
@@ -128,10 +143,28 @@ class AnyParagraph
     # Traitement des références (appels et cibles)
     # 
     str = __traite_references_in(str)
+
+    #
+    # Traitement des mots indexés
+    # 
+    str = __traite_mot_indexed(str)
+
+    #
+    # Ajout (optionnel) de la position du cursor
+    # (débuggage et mise en place du texte)
+    # 
+    str = __maybe_add_cursor_position(str)
     
     return str
   end
 
+
+  def __traite_mot_indexed(str)
+    if str.match?('index:') || str.match?('index\(')
+      str = __traite_mots_indexed_in(str)
+      # spy "str après recherche index : #{str.inspect}".orange
+    end
+  end
 
   def formate_as_list_item(pdf, str)
     str = text
@@ -149,77 +182,6 @@ class AnyParagraph
     return str
   end
 
-  # La méthode générale pour formater le texte +str+
-  # Note : on pourrait aussi prendre self.text, mais ça permettra
-  # d'envoyer un texte déjà travaillé
-  # + ça permet d'envoyer n'importe quel texte, comme celui provenant
-  #   d'un code à évaluer ou d'un tableau (pour le moment, il semble
-  #   que les tables ne passent pas par là, peut-être parce qu'elles
-  #   sont transformées en lignes et écrites séparément)
-  def formated_text(pdf, str = nil)
-
-    raise "Doit devenir obsolète ?"
-    # 
-
-    # Soit on utilise le texte +str+ transmis, soit on prend le
-    # text du paragraphe.
-    # 
-    str ||= text
-
-    # spy "str initial : #{str.inspect}".orange
-
-    # 
-    # Traitement des marques de formatage spéciales
-    # (par exemple 'perso(Selma)' dans la collection narration)
-    # TODO C'est traité quelque part, mais il faut tout rassembler
-    # ici
-
-    # # 
-    # # Traitement des codes ruby 
-    # # 
-    # str = __traite_codes_ruby_in(str)
-    # # spy "str après code ruby : #{str.inspect}".orange
-
-    # 
-    # Traitement des mots indexé
-    #
-    if str.match?('index:') || str.match?('index\(')
-      str = __traite_mots_indexed_in(str)
-      # spy "str après recherche index : #{str.inspect}".orange
-    end
-
-    # #
-    # # Traitement des marques bibliograghiques
-    # # 
-    # if Bibliography.any?
-    #   str = __traite_termes_bibliographiques_in(str)
-    #   # spy "str après recherche biblio : #{str.inspect}".orange
-    # end
-
-    # #
-    # # Traitement des références (appels et cibles)
-    # # 
-    # str = __traite_references_in(str)
-
-    # 
-    # Traitement du pseudo-format markdown
-    # 
-    # ATTENTION : cet traitement peut retourner deux éléments
-    # 
-    str = __traite_pseudo_markdown_format(str, pdf)
-
-    # S'il le faut (options), ajouter la position du curseur en
-    # début de paragraphe.
-    if paragraph? && add_cursor_position?
-      if str.is_a?(Array)
-        str[0] = pdf.add_cursor_position(str[0])
-      else
-        str = pdf.add_cursor_position(str) 
-      end
-    end
-
-    return str
-  end #/formated_text
 
   ##
   # Pour le debuggage on peut vouloir ajouter la valeur du curseur
@@ -240,6 +202,60 @@ class AnyParagraph
 
 private
 
+  # @return [String] Le texte formaté
+  def __traite_references_in(str)    
+    if str.match?('\( <\-')
+      str = str.gsub(REG_CIBLE_REFERENCE) do
+        cible = $1.freeze
+        spy "[REFERENCES] Consignation de la référence #{cible.inspect}".bleu
+        pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
+        ''
+      end
+      # 
+      # On corrige les éventuels retours chariot intempestifs
+      # 
+      str = str.gsub(/  +/, ' ')
+    end
+    # Appels de référence
+    if str.match?('\( \->')
+      str = str.gsub(REG_APPEL_REFERENCE) do
+        appel = $1.freeze
+        spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
+        pdfbook.table_references.get(appel, self)
+      end
+    end
+    return str
+  end
+
+  # @return [String] Le texte formaté
+  def __traite_mots_indexed_in(str)
+    str = str.gsub(/index:(.+?)(\b)/) do
+      dmot = {mot: $1.freeze, page: first_page, paragraph:numero}
+      pdfbook.page_index.add(dmot)
+      dmot[:mot] + $2
+    end
+    str = str.gsub(/index\((.+?)\)/) do
+      mot, canon = $1.freeze.split('|')
+      dmot = {mot: mot, canon: canon, page: first_page, paragraph: numero}
+      pdfbook.page_index.add(dmot)
+      dmot[:mot]
+    end
+    return str
+  end
+
+  def __maybe_add_cursor_position(str)
+    # S'il le faut (options), ajouter la position du curseur en
+    # début de paragraphe.
+    if paragraph? && add_cursor_position?
+      if str.is_a?(Array)
+        str[0] = pdf.add_cursor_position(str[0])
+      else
+        str = pdf.add_cursor_position(str) 
+      end
+    end
+
+    return str    
+  end
 
   ##
   # Traitement des termes propres aux bibliographies
@@ -298,7 +314,7 @@ private
   # @return [String] Le texte formaté
   # 
   REG_CODE_RUBY = /#\{(.+?)\}/.freeze
-  def __traite_codes_ruby_in(str)
+  def self.__traite_codes_ruby_in(str)
     str.gsub(REG_CODE_RUBY) do
       code = $1.freeze
       methode = nil
@@ -322,7 +338,7 @@ private
   REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\(.+?\))?$/
 
 
-  def __traite_format_markdown_inline(str)
+  def self.__traite_format_markdown_inline(str)
     # 
     # Les gras ('**')
     # 
@@ -343,7 +359,7 @@ private
     return str
   end
 
-  def __traite_bold(str)
+  def self.__traite_bold(str)
     str = str.gsub(REG_BOLD) do
       txt = $1.freeze
       SPAN_BOLD % txt 
@@ -352,7 +368,7 @@ private
   REG_BOLD      = /\*\*(.+?)\*\*/.freeze
   SPAN_BOLD     = "<b>%s<b>".freeze
 
-  def __traite_italic(str)
+  def self.__traite_italic(str)
     return str unless str.match?('\*')
     str .gsub(REG_ETOILE, 'mmSTARmm'.freeze)
         .gsub(REG_ITALIC, SPAN_ITALIC)
@@ -363,7 +379,7 @@ private
   SPAN_ITALIC   = '<em>\1</em>'.freeze
   REG_START     = /mmSTARmm/.freeze
 
-  def __traite_underline(str)
+  def self.__traite_underline(str)
     return str unless str.match?('_')
     str .gsub(REG_TIRET_PLAT, 'mmTIRETmmPLATmm'.freeze)
         .gsub(REG_UNDERLINE, SPAN_UNDERLINE)
@@ -374,7 +390,7 @@ private
   SPAN_UNDERLINE = '<u>\1</u>'.freeze
   REG_PLAT_TIRET = /mmTIRETmmPLATmm/.freeze
 
-  def __traite_superscript(str)
+  def self.__traite_superscript(str)
     str = str.gsub(REG_EXPOSANT) do
       lettre = $1.freeze
       expo   = $2.freeze

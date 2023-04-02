@@ -6,15 +6,31 @@
   Pour débuggage dans une autre fenêtre de Terminal
   version 0.1.0
 
-  @usage
+  @usages
 
-  spy(message)
+    spy(message)    Ecrire un message
+    spy(message, true)  Forcer l'écriture même si le spy est inactif.
+
+    spy(:on)        Activiter à l'endroit voulu
+    spy(:off)       Désactiver à l'endroit voulu
+  
 
 =end
 require 'clir'
 
-def spy(msg)
-  return unless debug? || spy?
+def spy(msg, forcer = false)
+  if msg == :on
+    @spysrunning = :TRUE
+    spy_in_term("- SPY ACTIVATED -")
+  elsif msg == :off
+    spy_in_term("- SPY DÉSACTIVATED -")
+    @spysrunning = :FALSE
+  else
+    return unless debug? || spy? || forcer
+    spy_in_term(msg)
+  end
+end
+def spy_in_term(msg)
   @dterm ||= DebugInOtherTerm.new
   @dterm << msg
 end
@@ -48,7 +64,14 @@ class DebugInOtherTerm
   # Pour écrire dans la fenêtre de débuggage
   #
   def write(msg)
-    `printf '#{msg.gsub(/'/,'’').gsub(/\{/,'')}\n' > #{term}`
+    begin
+      cmd = "printf '#{msg.gsub(/'/,'’').gsub(/\{/,'\\{')}\n' > #{term}"
+      # puts "Commande spy = #{cmd}"
+      `#{cmd}`
+    rescue Exception => e
+      `printf "Problème avec #{msg}" > #{term} (erreur : #{e.message}`
+      exit
+    end
   end
   alias :<< :write
 

@@ -35,6 +35,11 @@ class PrawnView
   # la table des matières finales
   attr_accessor :tdm
 
+  # Les options courantes au moment où le paragraphe est
+  # écrit (notamment pour connaitre la fonte et particulièrement
+  # sa taille, lorsqu'on traite des polices proportionnelles)
+  attr_accessor :current_options
+
   def initialize(pdfbook, config)
     @pdfbook  = pdfbook
     @config   = config
@@ -182,5 +187,16 @@ class PrawnView
     end
   end
 
+  def current_font_size
+    # spy(:on)
+    # spy "font = #{font.inspect}"
+    # spy "Méthode de Font : #{font.methods}"
+    # spy("Option : #{font.options.inspect}")
+    # spy("Attributes : #{font.attributes.inspect}")
+    # spy "PDF.current_options : #{current_options.inspect}"
+    # spy(:off)
+    # return font.options[:size]
+    return current_options[:size] || current_options[:font_size] || font.options[:size]
+  end
 end #/PrawnView
 end #/module Prawn4book

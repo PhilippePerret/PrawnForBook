@@ -98,6 +98,8 @@ class AnyParagraph
     end
   end
 
+  attr_reader :pdf
+
   attr_reader :pdfbook
 
   # @prop Première et dernière page du paragraphe
@@ -108,6 +110,8 @@ class AnyParagraph
   def initialize(pdfbook)
     @pdfbook = pdfbook
   end
+
+  # --- Predicate Methods ---
 
   def titre?    ; false end
   def sometext? ; false end # surclassé par les filles
@@ -121,13 +125,84 @@ class AnyParagraph
     @isnotprinted === true
   end
 
-  def pfbcode
-    @pfbcode ||= data[:pfbcode]
+  # --- Text Methods ---
+
+  def text=(value); @text = value end
+
+
+  # --- Méthodes d'aspect et de positionnement ---
+
+  # - Alignement du texte -
+  def text_align        ; @text_align || :justify end
+  def text_align=(value); @text_align = value     end
+  alias :alignment :text_align
+  alias :align :text_align
+
+  # - Marge haute du paragraphe (en nombre de lignes) -
+  def margin_top ; @margin_top ||= (pfbcode && pfbcode[:margin_top]) || 0 end
+  def margin_top=(value); @margin_top = value end
+
+  # - Marge basse du paragraphe (en nombre de lignes) -
+  def margin_bottom ; @margin_bottom ||= (pfbcode && pfbcode[:margin_bottom]) || 0 end
+
+  def width
+    @width ||= begin
+      w = pfbcode && pfbcode[:width]
+      if w
+        if w.is_a?(String) && w.end_with?('%')
+          w = pourcentage_to_pdfpoints(w, pdf.bounds.width)
+        end
+      end
+      w
+    end
   end
 
-  def length
-    @length ||= text.length
+  def margin_left
+    @margin_left ||= begin
+      ml = margin_left_raw
+      if ml
+        if ml.is_a?(String) && ml.end_with?('%')
+          ml = pourcentage_to_pdfpoints(ml, pdf.bounds.width)
+        end
+      end
+      ml || 0
+    end
   end
+  def margin_left=(ml)
+    if ml.is_a?(String) && ml.end_with?('%')
+      ml = pourcentage_to_pdfpoints(ml, pdf.bounds.width)
+    end
+    @margin_left = ml
+  end
+
+  def margin_left_raw
+    @margin_left_raw ||= pfbcode && pfbcode[:margin_left]
+  end
+
+  def margin_right
+    @margin_right ||= 0
+  end
+  def margin_right=(mg)
+    if mg.is_a?(String) && mg.end_with?('%')
+      mg = pourcentage_to_pdfpoints(mg, pdf.bounds.width)
+    end
+   @margin_right = mg
+  end
+
+
+  # --- Volatile Data ---
+
+  def pfbcode ; @pfbcode ||= data[:pfbcode] end
+
+  def length  ; @length ||= text.length     end
+
+  # --- Raccourcis ---
+
+  # @shortcut
+  def recipe; @recipe || pdfbook.recipe end
+
+
+
 
   # --- Cross-references Methods ---
 
@@ -154,6 +229,26 @@ class AnyParagraph
     text.match?(/\( \->\((.+?):(.+?)\)/)
   end
 
+
+  private
+
+  # --- Calcul Methods --- #
+
+    ##
+    # Reçoit une valeur par exemple en pourcentage ("50%") et 
+    # retourne une valeur en points-pdf
+    #
+    # @param  value {String|Integer} Valeur pourcentage à calculer
+    #               Soit le nombre (pe 50) soit le string (pe '50%')
+    # @param  refval {Measurment} La valeur de référence. Par exemple
+    #         la largeur de la page si on veut une valeur horizontale
+    #         En d'autres termes, cette valeur correspond au 100 %
+    def pourcentage_to_pdfpoints(value, refval)
+      if value.is_a?(String)
+        value = value[0..-2].to_i
+      end
+      refval * value / 100
+    end
 
 REG_CIBLE_REFERENCE = /\(\( <\-\((.+?)\) \)\)/
 REG_APPEL_REFERENCE = /\(\( \->\((.+?)\) +\)\)/

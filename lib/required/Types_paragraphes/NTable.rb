@@ -135,7 +135,11 @@ class NTable < AnyParagraph
             # 
             # Traitement d'un simple texte
             # 
-            preformatage(cell.strip, pdf)
+            spy "Texte initial #{cstrip.inspect}", true
+            str = self.class.preformatage(cstrip)
+            str = self.class.formatage_final(str, pdf)
+            spy "Texte table final : #{str.inspect}", true
+            str
           end
         end
       end
