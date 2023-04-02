@@ -39,7 +39,7 @@ class NTextParagraph < AnyParagraph
     # (code ruby, )
     # @note : modifie directement @text
     # 
-    preformate
+    preformate(pdf)
 
     #
     # Si le paragraphe possède son propre builder, on utilise ce

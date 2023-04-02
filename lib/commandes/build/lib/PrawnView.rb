@@ -80,7 +80,7 @@ class PrawnView
     # Réglage des marges de la prochaine page
     # 
     new_options = {margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options)
-    spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
+    # spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
     super(new_options)
     @table_reference_grid || begin
       spy "Définition du leading par défaut"
@@ -190,15 +190,12 @@ class PrawnView
   end
 
   def current_font_size
-    # spy(:on)
-    # spy "font = #{font.inspect}"
-    # spy "Méthode de Font : #{font.methods}"
-    # spy("Option : #{font.options.inspect}")
-    # spy("Attributes : #{font.attributes.inspect}")
-    # spy "PDF.current_options : #{current_options.inspect}"
-    # spy(:off)
-    # return font.options[:size]
-    return current_options[:size] || current_options[:font_size] || font.options[:size]
+    fsize = 
+    if current_options
+      current_options[:size] || current_options[:font_size]
+    end
+    return fsize || font.options[:size]
   end
+
 end #/PrawnView
 end #/module Prawn4book

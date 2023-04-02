@@ -58,7 +58,7 @@ class NTitre < AnyParagraph
     # 
     # Formatage du titre
     # 
-    titre.preformate
+    titre.preformate(pdf)
     titre.final_formatage(pdf)
     ftext = titre.final_text
     # ftext = titre.formated_text(self)

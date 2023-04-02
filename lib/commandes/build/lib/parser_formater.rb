@@ -54,7 +54,7 @@ class AnyParagraph
   attr_accessor :final_specs
 
 
-  def preformate
+  def preformate(pdf)
     spy "#preformate de #{text.inspect}"
     self.final_specs = {}
     if pfbcode && pfbcode.parag_style
@@ -63,7 +63,7 @@ class AnyParagraph
     # 
     # Détection de la nature du texte
     # 
-    detecte_et_traite_nature_paragraphe
+    detecte_et_traite_nature_paragraphe(pdf)
     # 
     # Préformatage général
     # 
@@ -119,13 +119,14 @@ class AnyParagraph
   #   - détecter qu'il s'agit un item de liste (self.list_item?)
   #   - retirer la marque de début dans @text
   # On peut ensuite le formater comme convenu
-  def detecte_et_traite_nature_paragraphe
+  def detecte_et_traite_nature_paragraphe(pdf)
     # 
     # Est-ce une citation ?
     # 
     @is_citation = paragraph? && text.match?(REG_CITATION)
     if citation?
       @text = text[1..-1].strip
+      final_specs.merge!({size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true})
     end
     # 
     # Est-ce un item de liste
@@ -136,8 +137,8 @@ class AnyParagraph
       final_specs.merge!({mg_left:3.mm, no_num: true, cursor_positionned: true})
     end
   end
-  REG_LIST_ITEM = /^\* (.*)$/.freeze
-  REG_CITATION  = /^> (.+)$/.freeze
+  REG_LIST_ITEM = /^\* .+$/.freeze
+  REG_CITATION  = /^> .+$/.freeze
 
 
 
@@ -190,7 +191,6 @@ class AnyParagraph
   end
 
   def formate_as_list_item(pdf, str)
-    spy "Formatage comme list item de #{str.inspect}", true
     str = text
     pdf.update do 
       move_cursor_to_next_reference_line
@@ -200,8 +200,7 @@ class AnyParagraph
   end
 
   def formate_as_citation(pdf, str)
-    str = "<em>#{str[2..-1].strip}</em>"
-    final_specs.merge!({size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true})
+    str = "<em>#{str.strip}</em>"
     return str
   end
 
