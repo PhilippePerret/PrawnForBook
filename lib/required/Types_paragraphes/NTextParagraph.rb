@@ -72,26 +72,10 @@ class NTextParagraph < AnyParagraph
     # 
     own_formaters if own_formaters?
 
-
-    mg_left   = self.margin_left
-    if pfbcode && pfbcode[:margin_left]
-      mg_left += pfbcode[:margin_left]
-    end
-    mg_right  = self.margin_right
-    mg_top    = self.margin_top
-    theindent = self.indent
-
     # 
     # Indication de la première page du paragraphe
     # 
     self.first_page = pdf.page_number
-
-    # 
-    # Ajout d'un traitement spéciale : formated_text peut retourner
-    # un array définissant en deuxième argument la margin left
-    # 
-    no_num = false
-    mg_bot = nil
 
     #
     # Fonte et style à utiliser pour le paragraphe
@@ -101,23 +85,20 @@ class NTextParagraph < AnyParagraph
     # parse du paragraphe (dont les balises initiales peuvent
     # modifier l'aspect)
     # 
-    spy "final_specs = #{final_specs.inspect}".jaune, true
+    # spy "final_specs = #{final_specs.inspect}".jaune, true
     fontFamily  = font_family(pdf)
     fontStyle   = font_style(pdf)
     fontSize    = final_specs[:size]    || font_size(pdf)
     textIndent  = final_specs[:indent]  || recipe.text_indent
     textAlign   = final_specs[:align]   || self.text_align
     cursor_positionned = false
-    # spy "Indentation du texte : #{textIndent.inspect}" if textIndent > 0
 
-    mg_left   = final_specs[:mg_left]   if final_specs.key?(:mg_left)
-    mg_top    = final_specs[:mg_top]    if final_specs.key?(:mg_top)
-    mg_bot    = final_specs[:mg_bot]    if final_specs.key?(:mg_bot)
-    mg_right  = final_specs[:mg_right]  if final_specs.key?(:mg_right)
-    no_num    = final_specs[:no_num]    if final_specs.key?(:no_num)
-    if final_specs.key?(:cursor_positionned)
-      cursor_positionned = final_specs[:cursor_positionned]
-    end
+    mg_left   = final_specs[:mg_left] || (pfbcode && pfbcode[:margin_left]) || self.margin_left
+    mg_top    = final_specs[:mg_top]  || self.margin_top
+    mg_bot    = final_specs[:mg_bot]  || nil # ...
+    mg_right  = final_specs[:mg_right] || self.margin_right
+    no_num    = final_specs[:no_num] || false
+    cursor_positionned = final_specs[:cursor_positionned] || false
 
     #
     # Pour invoquer cette instance dans le pdf.update
