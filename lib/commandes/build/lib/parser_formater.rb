@@ -55,6 +55,7 @@ class AnyParagraph
 
 
   def preformate
+    spy "#preformate de #{text.inspect}"
     self.final_specs = {}
     if pfbcode && pfbcode.parag_style
       final_specs.merge!(pfbcode.parag_style)
@@ -64,8 +65,14 @@ class AnyParagraph
 
   end
 
+  #
+  # @produit @final_text (le texte final à afficher)
   def final_formatage(pdf)
+    spy "Final formatage de #{text.inspect}"
+    @text = formate_text(pdf, text)
+
     @final_text = self.class.formatage_final(text, pdf)
+
     #
     # Maintenant qu'on a tous les éléments (options), on peut
     # parser et formater le paragraphe.
@@ -73,9 +80,13 @@ class AnyParagraph
     if pdfbook.module_parser? # && parag.some_text?
       pdfbook.__paragraph_parser(self, pdf)
     end
+
+    spy "Fin #final_formatage de #{text.inspect}"
   end
 
-  ##
+  #
+  # @class
+  # 
   # Méthode qui passe par toutes les méthodes de formatage, personna-
   # lisées comme communes.
   # 
@@ -123,7 +134,7 @@ class AnyParagraph
 
 
   def formate_text(pdf, str)
-    spy "str initial : #{str.inspect}".orange
+    spy "[formate_text] str initial : #{str.inspect}".orange
 
     if list_item?
       str = formate_as_list_item(pdf, str)
@@ -154,6 +165,8 @@ class AnyParagraph
     # (débuggage et mise en place du texte)
     # 
     str = __maybe_add_cursor_position(str)
+
+    spy "[formate_text] str final : #{str.inspect}".orange
     
     return str
   end
@@ -164,6 +177,8 @@ class AnyParagraph
       str = __traite_mots_indexed_in(str)
       # spy "str après recherche index : #{str.inspect}".orange
     end
+    
+    return str
   end
 
   def formate_as_list_item(pdf, str)
@@ -229,6 +244,7 @@ private
 
   # @return [String] Le texte formaté
   def __traite_mots_indexed_in(str)
+    # spy "Traitement de #{str.inspect} pour l'index"
     str = str.gsub(/index:(.+?)(\b)/) do
       dmot = {mot: $1.freeze, page: first_page, paragraph:numero}
       pdfbook.page_index.add(dmot)
@@ -366,7 +382,7 @@ private
     end
   end
   REG_BOLD      = /\*\*(.+?)\*\*/.freeze
-  SPAN_BOLD     = "<b>%s<b>".freeze
+  SPAN_BOLD     = "<b>%s</b>".freeze
 
   def self.__traite_italic(str)
     return str unless str.match?('\*')

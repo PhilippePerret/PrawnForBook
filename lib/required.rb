@@ -17,9 +17,9 @@ CLI.set_options_table({
 # Note : penser à utiliser 'color_mode: :cmyk'
 require 'prawn-svg'
 
-require_relative 'required/constants'
+require_relative 'required/Divers/constants'
 
-require_relative 'required/PrawnOwner'
+require_relative 'required/Divers/PrawnOwner'
 module Prawn4book; class PdfBook < PrawnOwner; end; end
 module Prawn4book; class Collection < PrawnOwner; end; end
 

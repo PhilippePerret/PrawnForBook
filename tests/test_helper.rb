@@ -34,8 +34,8 @@ $LOAD_PATH.unshift File.join(Dir.home,'Programmes','Gems','pdf-checker','lib')
 require 'pdf/checker'
 
 
-require_relative '../lib/required/constants'
-require_relative '../lib/required/Spy'
+require_relative '../lib/required/Divers/constants'
+require_relative '../lib/required/utils/Spy'
 RUN_SPY = true
 if RUN_SPY
   CLI.options.merge!(spy: true)

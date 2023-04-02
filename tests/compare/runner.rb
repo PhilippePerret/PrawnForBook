@@ -2,9 +2,11 @@
 
   Runner principal qui lance tous les tests par comparaison.
 
-  Jouer : 
+  @usage
+  ------
 
-      rake test TEST=tests/compare/runner.rb
+      1. Ouvrir un Terminal au dossier de Prawn-for-book
+      2. Jouer 'rake test TEST=tests/compare/runner.rb'
 
 =end
 require 'timeout'
@@ -15,7 +17,7 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = ['simple_table']
-# INCLUDES = /proportion/
+INCLUDES = /^index/
 INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)

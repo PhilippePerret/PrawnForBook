@@ -166,8 +166,6 @@ class NTextParagraph < AnyParagraph
           options.merge!(character_spacing: parag.final_specs[:character_spacing])
         end
 
-        spy("options au final : #{options.inspect}", true)
-
         if mg_top && mg_top > 0
           move_down(mg_top)
         end

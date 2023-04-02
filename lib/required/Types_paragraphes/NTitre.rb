@@ -58,7 +58,10 @@ class NTitre < AnyParagraph
     # 
     # Formatage du titre
     # 
-    ftext = titre.formated_text(self)
+    titre.preformate
+    titre.final_formatage(pdf)
+    ftext = titre.final_text
+    # ftext = titre.formated_text(self)
 
     #
     # Nombre de lignes avant
@@ -181,6 +184,8 @@ class NTitre < AnyParagraph
   def sometext? ; true end # seulement ceux qui contiennent du texte
   alias :some_text? :sometext?
   def titre?    ; true  end
+  def citation? ; false end
+  def list_item?; false end
 
   # --- Data Methods ---
 

@@ -1,18 +1,14 @@
 # Todo courant
 
-* [Test] Les formaters de la collection et du livre doivent être chargé (#80)
-* Faire fonctionner le bloc dans les tables
+* pour l'apostrophe : apostrophe courbe
+* [snippet] quand on tape "(({[tab]" => "(( {} ))" (documenter)
+
 
 * Documenter précisément toutes les sections du fichier recette pour ne pas avoir à les retrouver dans les fichiers de l'application…
 
 * Refactoriser l'assistant pour les bibliographies
   - Utiliser le livre assets/essais/book_essais/
   * [BUG] Voir pourquoi la liste des films apparait deux fois en bibliographie
-  - POURSUIVRE L'IMPLÉMENTATION DE LA DÉFINITION DU FORMAT DES DONNÉES
-    * en faire le tour
-    * faire l'assistant qui va permettre de créer de nouveaux itemps
-      (penser à une api pour pouvoir peupler à partir de données 'externes')
-      - faire l'essai avec les films du filmodico
 
 # Todo
 

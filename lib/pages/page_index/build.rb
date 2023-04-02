@@ -37,7 +37,32 @@ class PageIndex
     # Boucle sur la table des index 
     # 
     table_index.sort_by do |canon, dcanon|
+      # 
+      # Classement des canons dans l'ordre
+      # 
       dcanon[:canon_for_sort]
+    end.each do |canon, dcanon|
+      # 
+      # Regrouper les index qui ont la même page (si numérotation
+      # par page) ou le même paragraphe (si numérotation par 
+      # paragraphe).
+      # ATTENTION : pour le moment, ça modifie la propriété :items 
+      # du canon.
+      new_items = []
+      table_ref = {} # pour ranger par page/paragraphe
+      dcanon[:items].each do |dmot|
+        ref = dmot[key_num]
+        table_ref.merge!(ref => 0) unless table_ref.key?(ref)
+        table_ref[ref] += 1
+      end
+      new_items = table_ref.map do |ref, nombre_fois|
+        if nombre_fois > 1
+          {key_num => "#{ref} (x #{nombre_fois})"}
+        else
+          {key_num => ref}
+        end
+      end
+      dcanon.merge!(items: new_items)
     end.each do |canon, dcanon|
       pdf.move_cursor_to_next_reference_line
       if diff_font_canon_and_number
