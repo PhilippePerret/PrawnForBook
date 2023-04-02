@@ -32,6 +32,10 @@ class AnyParagraph
   end
 
 
+  #
+  # Attention : ça n'est que le début commun de l'impression. Voir
+  # dans chaque class les traitements particuliers.
+  # 
   def print(pdf)
     # 
     # Indication de la première page du paragraphe (titre, images,

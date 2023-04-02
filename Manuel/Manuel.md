@@ -66,13 +66,23 @@ On peut obtenir de l’aide de différents moyens :
 
 ## AIDE RAPIDE
 
-### Insérer une IMAGE
+### BIBLIOGRAPHIE
+
+Voir comment [utiliser une bibliographie](#bibliographies)
+
+### IMAGES
 
 Voir comment [insérer une image dans le texte](#paragraph-image).
 
-### Insérer une TABLE (TABLEAU)
+### TABLES (TABLEAU)
 
 Voir comment [insérer une table ou un tableau dans le texte](#paragraphes-table).
+
+### HEADERS/FOOTERS
+
+Voir comment [définir les pieds et page et entêtes de page](#headers-footers).
+
+---
 
 <a name="line-vide"></a>
 
@@ -364,7 +374,7 @@ L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atom
 
 <a name="paragraph-text"></a>
 
-#### Paragraphes de texte
+#### PARAGRAPHES DE TEXTE
 
 Le paragraphe de texte se définit simplement en l'écrivant dans le fichier `.pfb.md`.
 ~~~
@@ -399,6 +409,10 @@ Le paragraphe peut contenir de la mise en forme simple, "en ligne", comme le gra
 
 ~~~
 Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
+
+<!-- Ou, en pseudo-markdown -->
+
+Un mot en **gras** et un mot en *italique*. Une expression __soulignée__. Noter les deux traits plats de chaque côté.
 ~~~
 
 <a name="style-parag-inline"></a>
@@ -1226,7 +1240,7 @@ Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n�
 
 <a name="headers-footers"></a>
 
-### Headers & Footers (entêtes et pieds de page)
+### HEADERS & FOOTERS (entêtes et pieds de page)
 
 Par défaut (c’est-à-dire sans aucune précision), seul le pied de page est construit, avec le numéro de la page au milieu. Mais il est possible de définir finement chaque entête (*header*) et chaque pied de page (*footer*) et même d’en créer autant que l’on veut, tout à fait différents, pour les différentes sections du livre.
 
@@ -1464,7 +1478,7 @@ end
 
 <a name="bibliographies"></a>
 
-#### Pages de bibliographie
+#### BIBLIOGRAPHIES
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre pour avoir un aperçu rapide des la définition d’une bibliographie.
 
@@ -1732,7 +1746,7 @@ Rappel : en utilisant le [stylage *inline*](#inline-style), on peut modifier con
 
 <a name="references"></a>
 
-### Références (et références croisées)
+### RÉFÉRENCES (et références croisées)
 
 On peut faire très simplement des références dans le livre (références à d'autres pages ou d'autres paragraphes, du livre ou d'autres livres) à l'aide des balises :
 
@@ -1830,7 +1844,56 @@ Noter que par rapport à du markdown pur, il est inutile de laisser des lignes v
 
 <a name="custom-modules-formatage"></a>
 
-### Méthodes de traitement et de formatage propres
+### PARSE(U)RS & FORMATE(U)RS
+
+> **Utilisation *expert*, connaissances en programmation ruby requise.**
+
+Les *parseurs* et les *formateurs* sont un moyen puissant pour mettre en forme de façon homogène tout le texte du livre.
+
+À titre d’exemple, voici un code qui utilise leur puissance :
+
+~~~markdown
+Je connais gens(John) mais aussi gens(Mathilde) et même gens(René).
+~~~
+
+> J’utilise ici la tournure `identifiant(contenu)` mais on peut utiliser n’importe quelle forme qui peut être reconnue par une expression régulière.
+
+Il me suffit ensuite de définir, dans le module `parser.rb` :
+
+~~~ruby
+# in parser.rb (collection ou livre)
+
+module ParserParagraphModule
+  class Personne
+    @@personnes = []
+  end
+  
+  def parser_formater(str, pdf)
+    #
+    # Ici, on analyse le texte du paragraphe est on le transforme
+    #
+    str = str.gsub(/gens\((.+?)\)/) do
+      lapersonne = $1.freeze
+      # 
+      # Je peux même la mettre de côté pour une utilisation future
+      #
+      Personne.personnes << lapersonne
+      #
+      # Je mets en forme le texte. "gens(quelqu'un)" sera remplacé par
+      # "quelqu'un" dans une autre police de caractère.
+      #
+      "<font name='Geneva'>#{lapersonne}</font>"
+    end
+    return str
+  end
+  
+  def __paragraph_parser(paragraph, pdf
+  	# Tous les paragraphes passent par là
+    paragraph.text = parser_formater(paragraph.text, pdf)
+  end
+~~~
+
+
 
 *Prawn-for-book* utilise 3 moyens de travailler avec les paragraphes au niveau du code :
 
@@ -1842,7 +1905,7 @@ Ces trois fichiers (`parser.rb`, `helpers.rb` et `formater.rb`) sont propres à 
 
 <a name="custom-helpers"></a>
 
-#### Méthode d’helpers —`(( #<method>(<args>) ))`
+#### Méthode d’helpers
 
 Les méthodes d'helpers s'utilisent dans le texte comme un code ruby :
 
@@ -1975,7 +2038,7 @@ module FormaterParagraphModule # Ce nom est absolument à respecter
 	end
 end
 
-module FormaterBibliographiesModule # ce nom est absolument à respect
+module FormaterBibliographiesModule # ce nom est absolument à respecter
 end #/module
 ~~~
 
@@ -2588,6 +2651,19 @@ color    Définition d'une couleur, qui accepte :
 link     Définition d'un lien (pas très utile pour l'impression…)
          href 
 ~~~
+
+<a name="snippets"></a>
+
+### Snippets
+
+Si vous utilisez le package sublime-text “Prawn-for-book”, vous disposez des facilités suivantes :
+
+> Le signe $ indique la position du pointeur (curseur).
+
+| Code tapé | Effet        |
+| --------- | ------------ |
+| `<!`      | `<!-- $ -->` |
+| `((`      | `(( $ ))`    |
 
 
 

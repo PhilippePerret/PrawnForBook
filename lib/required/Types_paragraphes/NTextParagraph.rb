@@ -40,13 +40,6 @@ class NTextParagraph < AnyParagraph
 
     # spy "text au début de print (paragraphe) : #{text.inspect}".orange
     
-    # #
-    # # Préformatage du texte
-    # # (code ruby, )
-    # # @note : modifie directement @text
-    # # 
-    # preformate(pdf)
-
     #
     # Si le paragraphe possède son propre builder, on utilise ce
     # dernier pour le construire et on s'en retourne.
@@ -152,7 +145,7 @@ class NTextParagraph < AnyParagraph
         # 
         # Maintenant que nous sommes positionnés et que toutes les
         # options sont définis, on peut formater le texte final
-        pdf.current_options = options
+        self.current_options = options
         parag.final_formatage(pdf)
 
         #
@@ -168,10 +161,6 @@ class NTextParagraph < AnyParagraph
           wbox = bounds.width - (mg_left + mg_right)
           span_options = {position: mg_left}
           # - dans un text box -
-          # 
-          # TODO
-          # ATTENTION : LE TEXTE N'EST PAS CORRIGÉ, ICI
-          # 
           # 
           span(wbox, **span_options) do
             text(parag.final_text, **options)
@@ -226,8 +215,8 @@ class NTextParagraph < AnyParagraph
             move_cursor_to_next_reference_line
             rest_text = excedant.map {|h| h[:text] }.join('')
           else
-            # rest_text = parag.final_text
-            rest_text = parag.text
+            rest_text = parag.final_text
+            # rest_text = parag.text
           end
           spy "rest_text = #{rest_text.inspect}"
           spy "options = #{options.inspect}"
