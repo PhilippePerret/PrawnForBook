@@ -79,7 +79,9 @@ class PrawnView
     # 
     # Réglage des marges de la prochaine page
     # 
-    super({margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options))
+    new_options = {margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options)
+    spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
+    super(new_options)
     @table_reference_grid || begin
       spy "Définition du leading par défaut"
       define_default_leading

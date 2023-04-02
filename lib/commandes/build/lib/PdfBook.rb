@@ -48,6 +48,8 @@ class PdfBook
         margin:             conf_margin(:top),
         left_margin:        conf_margin(:ext),
         right_margin:       conf_margin(:int),
+        ext_margin:         conf_margin(:ext),
+        int_margin:         conf_margin(:int),
         top_margin:         conf_margin(:top),
         bot_margin:         conf_margin(:bot),
         compress:           get_recipe(:compress),
