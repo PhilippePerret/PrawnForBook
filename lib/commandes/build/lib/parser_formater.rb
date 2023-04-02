@@ -229,7 +229,7 @@ private
     if str.match?('\( <\-')
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
-        spy "[REFERENCES] Consignation de la référence #{cible.inspect}".bleu
+        spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero}})".bleu
         pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
         ''
       end

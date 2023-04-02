@@ -4,13 +4,20 @@ module Prawn4book
 class PdfBook
 class NTitre < AnyParagraph
 
+  # Numéro de page du titre
   attr_accessor :page_numero
+
+  # Numéro de paragraphe de titre
+  # (correspond au numéro du paragraphe suivant, puisque les
+  #  titres ne sont pas numérotés)
+  attr_accessor :numero
 
   attr_reader :data
 
   def initialize(pdfbook, data)
     super(pdfbook)
     @data = data.merge!(type: 'titre')
+    @numero = (1 + AnyParagraph.last_numero).freeze
     check_inscription_in_tdm
   end
 
@@ -51,6 +58,12 @@ class NTitre < AnyParagraph
     end
 
     #
+    # Quelques traitements communs, comme la retenue du numéro de
+    # la page ou le préformatage pour les éléments textuels.
+    # 
+    super
+
+    #
     # Application de la fonte
     # 
     ft = pdf.font(titre.fonte)
@@ -58,7 +71,7 @@ class NTitre < AnyParagraph
     # 
     # Formatage du titre
     # 
-    titre.preformate(pdf)
+    # titre.preformate(pdf) -- fait dans super
     titre.final_formatage(pdf)
     ftext = titre.final_text
     # ftext = titre.formated_text(self)

@@ -32,14 +32,20 @@ class NTextParagraph < AnyParagraph
   # 
   def print(pdf)
 
+    #
+    # Quelques traitements communs, comme la retenue du numéro de
+    # la page ou le préformatage pour les éléments textuels.
+    # 
+    super
+
     # spy "text au début de print (paragraphe) : #{text.inspect}".orange
     
-    #
-    # Préformatage du texte
-    # (code ruby, )
-    # @note : modifie directement @text
-    # 
-    preformate(pdf)
+    # #
+    # # Préformatage du texte
+    # # (code ruby, )
+    # # @note : modifie directement @text
+    # # 
+    # preformate(pdf)
 
     #
     # Si le paragraphe possède son propre builder, on utilise ce
@@ -71,11 +77,6 @@ class NTextParagraph < AnyParagraph
     #   qui sera le texte vraiment traité.
     # 
     own_formaters if own_formaters?
-
-    # 
-    # Indication de la première page du paragraphe
-    # 
-    self.first_page = pdf.page_number
 
     #
     # Fonte et style à utiliser pour le paragraphe

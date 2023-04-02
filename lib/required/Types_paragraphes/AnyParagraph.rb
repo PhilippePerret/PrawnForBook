@@ -22,6 +22,28 @@ class AnyParagraph
   def self.get_next_numero
     @@last_numero += 1
   end
+  # @return [Integer] le dernier numéro de paragraphe (utilisé par
+  # les titres pour connaitre le numéro de leur premier paragraphe)
+  # @note
+  #   Inauguré pour les références internes, pour que ça fonctionne
+  #   avec le titre et une numérotation des paragraphes.
+  def self.last_numero
+    @@last_numero
+  end
+
+
+  def print(pdf)
+    # 
+    # Indication de la première page du paragraphe (titre, images,
+    # etc.)
+    # 
+    self.first_page = pdf.page_number
+    # 
+    # Préformatage, si c'est un texte
+    # 
+    preformate(pdf) if some_text?
+
+  end
 
 
   ##

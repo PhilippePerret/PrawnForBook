@@ -62,6 +62,7 @@ class ReferencesTable
     ref = table[ref_id] || begin
       set_un_appel_sans_reference
       {page:"xx", paragraph:'xxx'}
+      return "(( ->(#{ref_id}) ))" # -- pour essayer que la seconde fois il soit corrigé
     end
     call_to(ref)
   end

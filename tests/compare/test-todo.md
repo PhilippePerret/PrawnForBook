@@ -1,8 +1,10 @@
 # Tests à faire
 
+* Index par paragraphe
+* références croisées (utiliser le livre "references_internes")
 * [Table] Sur la méthode `before_rendering_page`
-* [Table] Sur la production de tables à la volée
-* [Table] Sur la définition dans les blocs ou pas par la propriété :style
+* les bibliographies
+  * mise en forme des bibliographies
 
 ## Plus tard
 
