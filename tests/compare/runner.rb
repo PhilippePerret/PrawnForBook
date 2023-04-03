@@ -17,7 +17,7 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = ['simple_table']
-INCLUDES = /^references/
+# INCLUDES = /cross_references/
 INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)
@@ -115,6 +115,7 @@ class TestPerCompare
   def run
     delete_book
     res = `cd "#{folder}";pfb build`
+    # res = `cd "#{folder}";pfb build -debug`
     raise res if res.match?(/ERR/)
 
     Timeout.timeout(5) { sleep 0.2 until File.exist?(actual_book) }

@@ -34,14 +34,16 @@ class BibItem
   # 
   # @api public
   def add_occurrence(doccurrence)
-    spy "-> add_occurrence de :\n\tbibitem = #{title}\n\tdoccurrence : #{doccurrence.inspect}".jaune
+    # SI J'UTILISE spy ICI, ÇA PLANTE POUR : can't modify frozen string…
+    # spy "-> add_occurrence de :\n\tbibitem = #{title}\n\tdoccurrence : #{doccurrence.inspect}".jaune
     # 
     # Si c'est la toute première occurrence, il faut ajouter cet
     # item à la liste des items de sa bibliographie (pour qu'elle 
     # soit prise en compte)
     # 
     if @occurrences.empty?
-      spy "   (ajouté à sa bibliographie)".gris
+      # SI J'UTILISE spy ICI, ÇA PLANTE POUR : can't modify frozen string…
+      # spy "   (ajouté à sa bibliographie)".gris
       biblio.add_item(self)
     end
     # 
@@ -160,6 +162,13 @@ class BibItem
         pth = File.join(biblio.book.folder, pth_ini)
         pth = File.join(pth, 'references.yaml') if File.exist?(File.join(pth, 'references.yaml'))
       end
+      #
+      # Le livre peut se trouver dans la collection
+      # 
+      File.exist?(pth) || begin
+        pth = File.expand_path(File.join(biblio.book.folder,'..',pth_ini))
+        pth = File.join(pth, 'references.yaml') if File.exist?(File.join(pth, 'references.yaml'))
+      end
       File.exist?(pth) || raise(PrawnBuildingError.new( (ERRORS[:biblio][:uncrossable] % id.to_s) + ERRORS[:biblio][:crossable_refs_path_unfound] % pth_ini))
       pth
     end
@@ -203,9 +212,13 @@ class BibItem
     end
   end
 
+  # @note
+  #   Je ne sais pas du tout pourquoi, mais ici, si j'utilise
+  #   '@title ||=' pour mettre en cache la donnée titre, ça plante
+  #   avec un cant' modify frozen string
   def title
-    @title ||= data[biblio.main_key] || raise(ERRORS[:biblio][:bibitem_requires_title])
-    # @title ||= data[:title] || data[biblio.main_key] || raise(ERRORS[:biblio][:bibitem_requires_title])
+    keytitle = biblio.respond_to?(:main_key) ? biblio.main_key : :title
+    data[keytitle] || raise(ERRORS[:biblio][:bibitem_requires_title])
   end
 
   # @return [String] Le titre, mais normalisé pour pouvoir servir de
@@ -216,7 +229,7 @@ class BibItem
 
   # @return [Hash] Table de données de l'item bibliographique
   def data
-    @data ||= begin
+  @data ||= begin
       case biblio.item_data_format.to_s
       when 'yaml' then YAML.load_file(path, **{aliases:true, symbolize_names:true})
       when 'json' then JSON.parse(File.read(path))
@@ -242,12 +255,17 @@ class BibItem
     end
   end
 
+  # - shortcut -
+  def recipe
+    @recipe ||= biblio.book.recipe
+  end
+
   private
 
     # @return [Symbol] :page ou :paragraph en fonction du type de
     # numérotation.
     def key_numerotation
-      @key_numerotation ||= biblio.book.recipe.page_number? ? :page : :paragraph
+      @key_numerotation ||= recipe.page_number? ? :page : :paragraph
     end
 
 end #/class BibItem

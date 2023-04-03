@@ -33,6 +33,19 @@ class NTextParagraph < AnyParagraph
   def print(pdf)
 
     #
+    # Pour repartir du texte initial, même lorsqu'un second tour est
+    # nécessaire pour traiter les références croisées.
+    # 
+    # @exemple
+    #   Par exemple, si le paragraphe est un item de liste, il 
+    #   commence par '* '. Mais au préformatage, ce '* ' est retiré
+    #   de @text. La deuxième fois qu'on traite l'impression, on se
+    #   retrouve(rait) donc avec un @text qui ne commencerait plus 
+    #   par '* ' et qui ne serait donc plus un item de liste…
+    # 
+    @text = @text_ini
+
+    #
     # Quelques traitements communs, comme la retenue du numéro de
     # la page ou le préformatage pour les éléments textuels.
     # 
@@ -397,7 +410,8 @@ class NTextParagraph < AnyParagraph
         text
       end
     end
-    @text = tx
+    @text     = tx
+    @text_ini = tx
   end
 
 end #/class NTextParagraph

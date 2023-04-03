@@ -33,6 +33,10 @@ end
 def spy_in_term(msg)
   @dterm ||= DebugInOtherTerm.new
   @dterm << msg
+rescue Exception => e
+  err_msg = e.message
+  err_msg = "#{err_msg[0..390]} (…)" if err_msg.length > 400
+  puts "Problème avec l'espion : #{err_msg}"
 end
 
 def spy?
@@ -88,7 +92,7 @@ class DebugInOtherTerm
 
   def get_data_if_file_exists
     if exist?
-      puts "Le fichier .debugterm existe".orange if debug?
+      # puts "Le fichier .debugterm existe".orange if debug?
       return good_term?(File.read(path).split("\t"))
     else
       return false
@@ -103,7 +107,7 @@ class DebugInOtherTerm
     dterm = get_term(t)
     # puts "dterm = #{dterm.inspect}"
     if dterm.any? && now.day == d.to_i && now.month == m.to_i && dterm[:logging] == l
-      puts "La fenêtre terminale est valide.".orange if debug?
+      # puts "La fenêtre terminale est valide.".orange if debug?
       @term     = t
       @logging  = l
       return true

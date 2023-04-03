@@ -75,7 +75,7 @@ class AnyParagraph
   # @produit @final_text (le texte final à afficher)
   # 
   def final_formatage(pdf)
-    spy "-> final_formatage de #{text.inspect}".jaune, true
+    spy "-> final_formatage de #{text.inspect}".jaune
     @text = formate_text(pdf, text)
 
     @final_text = self.class.formatage_final(text, pdf)
@@ -99,7 +99,6 @@ class AnyParagraph
   # 
   def self.formatage_final(str, pdf)
     str = pdfbook.parser_formater(str, pdf)
-    puts "[self.formatage_final] str retour de parser_formater: #{str.inspect}".gris, true
     return str
   end
 

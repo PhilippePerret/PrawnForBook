@@ -1772,7 +1772,7 @@ Pour traiter une référence croisée, on a besoin de plusieurs choses :
 * connaitre le livre en tant que livre “Prawn-for-book”, qui définira, dans son dossier, un fichier `references.yaml` contenant les références relevées lors de la dernière compilation du livre.
 * connaitre la relation entre ces deux éléments (l’entité bibliographique et le livre pfb). Question : cette relation ne pourrait-elle pas être définie dans l’entité bibliographique ? ce qui permettrait de n’avoir qu’à définir cet entité, sans avoir à définir les deux derniers éléments.
 
-Ces deux choses sont définies à un seul endroit : la fiche bibliographique du film ciblé. Cette fiche, en plus de `:title`, doit définir `refs_path` qui contient soit le chemin complet au [fichier `references.yaml`](#references-file) des références, soit au dossier du livre, qui contiendra ce fichier lorsque le livre aura été construit.
+Ces deux choses sont définies à un seul endroit : la fiche bibliographique du film ciblé. Cette fiche, en plus de `:title`, doit définir **`refs_path`** qui contient soit le chemin complet au [fichier `references.yaml`](#references-file) des références, soit au dossier du livre, qui contiendra ce fichier lorsque le livre aura été construit.
 
 ##### Référence croisée vers un livre non prawn
 
@@ -2068,18 +2068,51 @@ end
 
 … qui va appliquer la police Arial, les styles gras et italique et la taille 40 au texte.
 
-##### Développements ultérieurs
+<a name="police-proportionnelle"></a>
 
-Pour le moment, ces formatages se font *avant* les autres traitements du texte. Peut-être devraient-ils se faire *après*. Ou alors il faudrait pouvoir définir des “post-traitement”, des “post-formateurs” qui viendraient agir sur le texte juste avant qu’’il ne soit imprimé dans le livre.
+##### Tailles de police proportionnelles
 
-Ce traitement “post” pourrait être défini en ajoutant le nom du style à la fin de la phrase, après les “::” :
+Une des limites de **Prawn** est de ne pas pouvoir utiliser les unités proportionnelles comme `em` ou `rem`. Pour adapter une police au contexte — lorsqu’elle ne garde pas sa taille normale —, il faut donc utiliser un détour.
 
-~~~md
-styleavant::Un paragraphe prétraité par la méthode styleavant.
+Pour ce faire, on va utiliser un rapport à utiliser dans la police.
 
-Un paragraphe posttraité par la méthode styleapres.::styleapres
+Imaginons que nous utilisons une balise `perso(Selma)` pour marquer de façon différente les personnages dans livre analysant un film. Cette balise utilise la police `Bangla` qui doit être réduite pour s’adapter correctement à la police Garamond du livre. Nous savons que sa taille doit être `8.75` lorsque Garamond fait `12`. Le rapport est donc `8.75 / 12`.
 
-styleavant::Un paragraphe traité avant et après.::styleapres
+On pourra alors utiliser ce code :
+
+~~~ruby
+# Dans parser.rb
+module ParserParagraphModule
+  
+  def	__paragraph_parser(paragraph, pdf)
+    paragraph.text = parser_formater(paragraph.text, pdf
+  end
+   
+   # @note
+   # Traitement séparé pour être appelé par les textes seuls, comme dans les
+   # table
+   def parser_formater(str, pdf)
+     #
+     # On calcule une seule fois le rapport
+     #
+     @rapport_size_perso ||= 8.75 / 12
+     #
+     # On peut calculer la taille courante dans la balise grâce
+     # à la taille courante dans le pdf
+     #
+     size_perso = (@rapport_size_perso * pdf.current_font_size).round(2)
+     #
+     # On remplace dans le texte
+     #
+     str = str.gsub(REG_PERSO){ SPAN_PERSO % [size_perso, $1] }
+     
+     return str
+   end
+    
+   REG_PERSO = /perso\((.+?)\)/.freeze
+   SPAN_PERSO = '<font name="Bangla" size="%s">%s</font>'.freeze
+    
+end #/module ParserParagraphModule
 ~~~
 
 

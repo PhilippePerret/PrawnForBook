@@ -56,9 +56,9 @@ class PdfBook
     # On doit parser le texte avant de voir si le livre est
     # conforme
     # 
-    spy "-> PARSE DU TEXTE".jaune, true
+    spy "-> PARSE DU TEXTE".bleu
     inputfile.parse
-    spy "<- /PARSE DU TEXTE".jaune, true
+    spy "<- /PARSE DU TEXTE".bleu
     #
     # Le livre doit être conforme, c'est-à-dire posséder les 
     # éléments requis
