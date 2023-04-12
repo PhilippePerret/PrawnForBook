@@ -38,22 +38,6 @@ class PrawnView
 
       paragraphe.page_numero = page_number
       spy "Page du paragraphe #{idx} : ##{page_number}"
-
-      # spy "Text paragraphe avant parser : #{paragraphe.text.inspect}".orange
-
-      # 
-      # --- PRÉ-TRAITEMENT DU PARAGRAPHE ---
-      # 
-      # S'il existe un module parser et que le paragraphe est vraiment
-      # un paragraphe (et non pas une définition, un style ou autre)
-      # alors on parse ce paragraphe pour en tirer les informations
-      # utiles ou faire des remplacements (par exemple des références
-      # ou des prises de mots d'index)
-      # 
-      # if pdfbook.module_parser? && paragraphe.paragraph?
-      # if pdfbook.module_parser? && paragraphe.some_text?
-      #   pdfbook.__paragraph_parser(paragraphe, self)
-      # end
       
       # 
       # --- ÉCRITURE DU PARAGRAPHE ---

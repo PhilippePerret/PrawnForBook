@@ -289,7 +289,7 @@ class NTextParagraph < AnyParagraph
 
   def font_size(pdf)
     @font_size ||= begin
-      inline_style(:font_size, pdf.default_font_size)
+      inline_style(:font_size, Metric.default_font_size)
     end
   end
   def font_size=(val)

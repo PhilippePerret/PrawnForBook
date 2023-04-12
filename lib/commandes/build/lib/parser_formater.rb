@@ -81,8 +81,10 @@ class AnyParagraph
     @final_text = self.class.formatage_final(text, pdf)
 
     #
-    # Maintenant qu'on a tous les éléments (options), on peut
+    # Maintenant qu'on a tous les éléments (options*), on peut
     # parser et formater le paragraphe.
+    # *MAIS d'où viennent-ils et comment les récupère-t-on… il y a
+    # un bug là-dessus et je n'en plus aucune idée…………………
     # 
     if pdfbook.module_parser? # && parag.some_text?
       # pdfbook.__paragraph_parser(self, pdf)
@@ -126,7 +128,7 @@ class AnyParagraph
     @is_citation = paragraph? && text.match?(REG_CITATION)
     if citation?
       @text = text[1..-1].strip
-      final_specs.merge!({size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true})
+      final_specs.merge!({size: font_size(pdf) + 1, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true})
     end
     # 
     # Est-ce un item de liste

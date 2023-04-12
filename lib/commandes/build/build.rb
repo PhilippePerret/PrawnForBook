@@ -120,6 +120,8 @@ class PdfBook
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #    
     pdf = PrawnView.new(self, pdf_config)
+    # Pour pouvoir l'atteindre partout
+    Metric.pdf = pdf
     
     #
     # S'il existe un module de formatage propre au livre (et/ou à la

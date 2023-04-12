@@ -190,7 +190,7 @@ class PrawnView
   end
 
   def default_font_size
-    @default_font_size ||= config[:default_font_size]
+    @default_font_size ||= Metric.default_font_size
   end
 
   def default_font_style
