@@ -56,13 +56,20 @@ class NImage < AnyParagraph
 
     pdf.update do
       # 
-      # On saute toujours une ligne
+      # On passe toujours à la ligne
       # 
       move_down(line_height)
 
       if image_is_svg
         dimage.merge!(color_mode: :cmyk)
+
+        #
+        # Pour le moment, je ne sais pas gérer la rotation,
+        # il faut tourner l’image d’origine et mettre la
+        # bonne largeur/hauteur
+        # 
         image = svg(IO.read(img_path), dimage)
+
         # 
         # Hauteur prise par l'image
         # 
