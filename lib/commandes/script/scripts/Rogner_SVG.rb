@@ -50,13 +50,20 @@ class << self
         end
       end
       if svg.rogned_exist?
-        puts "L'image rognée #{svg.rogned_name.inspect} a été produite avec succès.".vert
+        on_success(svg)
       else
         puts "Bizarrement, l'image rognée n'a pas pu être produite…".rouge
       end
     else
       puts "L'image SVG est introuvable.".rouge
     end
+  end
+
+  def on_success(svg)
+    puts "\nL'image rognée #{svg.rogned_name.inspect} a été produite avec succès.".vert
+    code_image = "IMAGE[images/#{svg.rogned_name}|width:100%%]"
+    clip(code_image, true)
+    puts "\nÀ tout hasard, j'ai mis le code :\n\n\t #{code_image.gsub(/%%/,'%')}\n\n… dans le presse-papier.\n".bleu
   end
 
 end #/ << self SVGRogneur
@@ -185,28 +192,3 @@ end #/SVGImage
 end #/ SVGRogneur
 
 SVGRogneur.rogne(ARGV[1])
-
-exit 1
-
-
-#
-# === Ne rien toucher ci-dessous ===
-#
-
-folder = File.dirname(IMG_SRC)
-affixe = File.basename(IMG_SRC, File.extname(IMG_SRC))
-NAME_ROGNED = "#{affixe}-rogned.svg"
-IMG_ROGNED = File.join(folder, NAME_ROGNED)
-
-puts "Commande jouée : #{ROGN_CMD}"
-`#{ROGN_CMD}`
-
-
-if File.exist?(IMG_ROGNED)
-  puts "L'image #{affixe.inspect} a été rognée avec succès.".vert
-  code_image = "IMAGE[images/#{NAME_ROGNED}|width:100\\\%\\\]"
-  clip(code_image)
-  puts "À tout hasard, j'ai mis le code #{code_image.inspect} dans le presse-papier".bleu
-else
-  puts "Bizarrement, l'image rognée de #{affixe.inspect} n'a pas été produit…".rouge
-end
