@@ -2649,7 +2649,77 @@ page_index:
 #</page_index>
 ```
 
+---
 
+<a name="scripts"></a>
+
+## Les scripts
+
+Les ***scripts*** sont des petits programmes ruby qui permettent d’exécuter des opérations “externes” sur un livre ou toute une collection. Typiquement, on trouve par exemple, de base, un script qui permet de rogner les images SVG produites par une application externe comme *Affinity Publisher*. Typiquement, ils peuvent permettre par exemple d’ajouter un élément bibliographique ou d’obtenir le dernier ID utilisé pour une liste d’éléments.
+
+Il y existe deux sortes de scripts :
+
+* les scripts natifs de *Prawn-for-book* (ils se trouve dans `./lib/commandes/script/scripts/` et ne devraient pas être modifiés),
+* les scripts propres aux livres et aux collections qui se trouvent dans un dossier `./scripts` à la racine du dossier du livre ou de la collection.
+
+### Lancer un script
+
+Pour lancer un script, on utilise la commande :
+
+~~~bash
+> pfb script [<nom ou partie du nom du script>[ <arguments>]]
+~~~
+
+Par exemple, pour rogner une image, on joue :
+
+~~~bash
+> pfb script rogner ./images/monplan.svg
+~~~
+
+Cette commande produira l’image `./images/monplan-rogned.svg` qui se trouve dans le dossier `images` à la racine du livre.
+
+Si on ne connait pas le nom du script, on peut simplement jouer la commande :
+
+~~~bash
+> pfb script
+~~~
+
+… qui va afficher la liste des scripts natifs et ceux définis pour l’application.
+
+### Créer un script
+
+Un script étant chargé dans l’application, il bénéficie de toutes les fonctionnalités de l’application et notamment :
+
+* le gem ‘clir’ (qui permet par exemple l’interactivité avec les méthodes `Q.ask`, `Q.select`, etc., qui permet les couleurs, la gestion des précédences etc),
+
+* la connaissance du livre ou de la collection :
+
+  ~~~ruby
+  Prawn4book::Prawn4book.current # => instance du livre courant
+  
+  Prawn4book::Prawn4book.current.recipe # => recette du livre courant
+  ~~~
+
+#### Arguments passés au script
+
+Les arguments passés par la commande sont obtenus à partir de `ARGV[1`.
+
+Par exemple, si on appelle :
+
+~~~bash
+> pfb script monscript 12 "Bonjour"
+~~~
+
+… alors on pourra utiliser :
+
+~~~ruby
+# Dans ./scripts/monscript_qui_fait_quelque_chose.rb
+
+douze   = ARGV[1]
+bonjour = ARGV[2]
+~~~
+
+> Note : `ARGV[0]` contient le chemin d’accès au dossier du livre (ou de la collection) pour que le script puisse être utilisé même en dehors de *Prawn-for-book*.
 
 ---
 

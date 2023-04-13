@@ -14,7 +14,7 @@ module Prawn4book
 class MetricClass
   include Singleton
 
-  # Instance [Prawn4book::Prawnview]
+  # Instance [Prawn4book::Prawnvie]
   attr_accessor :pdf
 
   def recipe

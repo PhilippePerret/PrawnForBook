@@ -7,84 +7,130 @@
   * jouer la commande 'pfb sandbox'
 
 =end
-require 'lib/commandes/build/lib/PrawnView'
+# require 'lib/commandes/build/lib/PrawnView'
 module Prawn4book
 class Command
-  def proceed; Prawn4book.run_script end
+  def proceed; Prawn4book::Script.run_script end
 end #/Command
 
+class Script
+class << self
 ##
 # Commande pour exécuter un script du livre ou de la collection
 # Cf. manuel
 #
-def self.run_script
+def run_script
+  # clear
+  # 
+  # Il faut s'assurer qu'il y ait un livre/collection actif
+  # 
   @current_book = PdfBook.ensure_current || return
-  script_name = CLI.components[0] || ask_for_script() || return
-  
-  puts "script_name = #{script_name.inspect}"
-
-  #
-  # On cherche le script exact (si c'est un nom approchant qui 
-  # a été donné) ou/et ses données
-  #
-  script_data = nil
-  script_list.each do |dscript|
-    if dscript[:name].match(/#{script_name}/i)
-      script_data = dscript
-      break
-    end
-  end
-
-  puts "script_data = #{script_data.inspect}"
-
-  script_data || begin
-    puts "Le script est introuvable…".rouge
+  # 
+  # Le script à jouer
+  # 
+  script.exist? || begin
+    puts "Script introuvable…".rouge
     return
   end
+  
+  puts "Nom du script à jouer : #{script.name.inspect}".bleu
+
 
   ARGV[0] = @current_book.folder
   ARGV[1..4] = CLI.components[1..4]
-  load script_data[:value]
+
+
+  script.run
+  
 
 end
 
-def self.ask_for_script
-  script_list || return
-  choix = precedencize(script_list,File.join(__dir__,'scripts.precedences')) do |q|
-    q.question "Script à jouer"
-  end
-  File.basename(choix, File.extname(choix))
+# @return [Prawn4Book::Script] Instance du script à jouer (ou nil)
+def script
+  @script ||= new(CLI.components[0])
 end
 
-def self.script_list
-  @@script_list ||= begin
+def script_list
+  @script_list ||= begin
     ary = []
+    ary += get_scripts_in(File.join(COMMAND_FOLDER,'scripts'))
     ary += get_scripts_in(File.join(@current_book.folder,'scripts'))
     ary += get_scripts_in(File.join(@current_book.folder,'..','scripts'))
     ary
   end
 end
 
-def self.get_scripts_in(folder)
+def get_scripts_in(folder)
   folder = File.expand_path(folder)
   Dir["#{folder}/**/*.rb"].map do |fpath|
     {name: File.basename(fpath, File.extname(fpath)), value: fpath}
   end
 end
 
-def self.folders_script
-  @@folders_script ||= begin
-    ary = []
-    if File.exist?(File.join(current_book.folder,'scripts'))
-      ary << File.join(current_book.folder,'scripts')
-    end
-    collection_scripts_folder = File.expand_path(File.join(current_book.folder,'..','scripts'))
-    puts "collection_scripts_folder : #{collection_scripts_folder.inspect}"
-    if File.exist?(collection_scripts_folder)
-      ary << collection_scripts_folder
-    end    
-    ary
-  end
-end
 
+end # << self Script
+
+###################       INSTANCE      ###################
+  
+  def initialize(prox_name)
+    @prox_name = prox_name
+  end
+
+  def exist?
+    path && File.exist?(path)
+  end
+
+  def run
+    load path
+  end
+
+  def path
+    @path ||= get_script_path
+  end
+  def name
+    @name ||= File.basename(path)
+  end
+
+  private
+
+    # @return [String] Le chemin d'accès au script
+    def get_script_path
+      if @prox_name
+        #
+        # <= Un nom a été fourni, peut-être le bon, ou approchant
+        # => On le cherche dans la liste des scripts
+        #
+        search_script_path_in_script_list
+      else
+        # 
+        # <= Aucun nom n'a été fourni
+        # => On propose la liste des scripts pour en choisir un
+        #
+        choose_a_script
+      end
+
+    end
+
+    def search_script_path_in_script_list
+      regexp = /#{@prox_name}/i.freeze
+      script_list.each do |dscript|
+        return dscript[:value] if dscript[:name].match?(regexp)
+      end        
+    end
+
+    # @return [String] Chemin d'accès complet du script
+    # 
+    # Permet de choisir un script dans la liste de tous les
+    # scripts, natifs comme propre au livre ou la collection
+    # 
+    def choose_a_script
+      precedencize(script_list, File.join(__dir__,'script.prec')) do |q|
+        q.question "Quel script jouer ?"
+      end
+    end
+
+    # Raccourci
+    def script_list; self.class.script_list end
+
+end #/class Script
 end #/module Prawn4book
