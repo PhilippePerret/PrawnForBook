@@ -95,6 +95,10 @@ MINI_AIDE = <<-TEXT
 ********************************
 *** #{'pfb'.jaune} mini aide ***
 
+#{'pfb build'.jaune}
+    Construire le livre du livre courant.
+    Ajouter l'option '-open' pour l'ouvrir après fabrication.
+
 #{'pfb aide'.jaune}
     Aide en ligne pour pfb
 
@@ -108,6 +112,12 @@ MINI_AIDE = <<-TEXT
 
 #{'pfb manuel'.jaune}
     Manuel PDF
+    Ajouter '-dev' pour ouvrir la version markdown.
+
+#{'pfb script'.jaune}
+    Pour jouer un script (natif ou propre au livre/à la collection)
+    On peut utiliser 
+    'pfb script <nom script partiel> ./images/<nom image partiel>'
 
 #{'pfb lexique "<mot>"'.jaune}
     Aide lexicale sur le mot <mot>.
@@ -115,9 +125,6 @@ MINI_AIDE = <<-TEXT
 #{'pfb init'.jaune}
     Initier un nouveau livre dans le dossier
     courant.
-
-#{'pfb build'.jaune}
-    Construire le livre du livre courant.
 
 #{'pfb open'.jaune}
     Ouvrir le fichier PDF du livre courant.
