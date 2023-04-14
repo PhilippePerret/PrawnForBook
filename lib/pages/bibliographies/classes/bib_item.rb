@@ -194,8 +194,15 @@ class BibItem
   # :title qui doit toujours exister pour une carte de donnée d'un
   # item de bibliographie (sauf, justement, si une méthode propre
   # est définie)
+  # 
+  # @note
+  #   Maintenant, on ne le met plus en cache, car il dépend de la
+  #   taille de police courante. On pourrait la checker, mais, 
+  #   quelque part, ça serait une dépense d'énergie aussi grande…
+  # 
   def formated_for_text(paragraph = nil)
-    @formated_for_text ||= formate_for_text(title, paragraph)
+    # @formated_for_text ||= formate_for_text(title, paragraph)
+    formate_for_text(title, paragraph)
   end
 
   def custom_methode_formatage

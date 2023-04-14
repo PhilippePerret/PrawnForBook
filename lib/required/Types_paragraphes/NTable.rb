@@ -115,7 +115,7 @@ class NTable < AnyParagraph
         aligns = raw_lines.shift()
       end
       raw_lines.map do |rawline|
-        dline = rawline.strip[1...-1].split('|').map do |cell|
+        dline = rawline.strip[1...-1].split(/(?!\\)\|/).map do |cell|
           # 
           # Évaluation, si la cellule contient une table
           # 
@@ -135,9 +135,10 @@ class NTable < AnyParagraph
             # 
             # Traitement d'un simple texte
             # 
-            str = self.class.preformatage(cstrip)
-            str = self.class.formatage_final(str, pdf)
-            str
+            treate_simple_text(cstrip)
+            # str = self.class.preformatage(cstrip)
+            # str = self.class.formatage_final(str, pdf)
+            # str
           end
         end
       end
@@ -262,7 +263,8 @@ class NTable < AnyParagraph
   # 
   # @note
   #   Pour le moment, on ne sait traiter que les valeurs horizontales
-  # 
+  # @note
+  #   Traite aussi les textes définis dans des :content
   # @return [Hash] La table corrigée
   def rationalise_pourcentages_in(hash)
     return if hash.nil?
@@ -270,10 +272,11 @@ class NTable < AnyParagraph
       raise "hash ne répond pas à each : #{hash.inspect}"
       return hash
     end
-    hash.each do |key, value|
-      hash.merge!(key => value_rationalized(value))
-    end
-    return hash
+    return value_rationalized(hash)
+    # hash.each do |key, value|
+    #   hash.merge!(key => value_rationalized(value))
+    # end
+    # return hash
   end
 
   def value_rationalized(value)
@@ -287,7 +290,37 @@ class NTable < AnyParagraph
       end
     when Hash
       value.each do |k, v|
-        value.merge!(k => value_rationalized(v))
+        v = k == :content ? v : value_rationalized(v)
+        value.merge!(k => v)
+      end
+      #
+      # Si la table contient :content, il faut parser et formater
+      # le texte.
+      # Mais la table définit peut-être d'autres valeurs, comme la
+      # police ou la taille. Il faut indiquer à :pdf que ce sont les
+      # valeurs courantes, mais seulement localement.
+      # 
+      if value.key?(:content)
+        #
+        # On prend les options :pdf courante (pour les remettre ensuite)
+        # 
+        current_pdf_options = pdf.current_options.dup
+        #
+        # On définit les options provisoires
+        # 
+        pdf.current_options.merge!(size: value[:size]) if value.key?(:size)
+        pdf.current_options.merge!(font_name: value[:font]) if value.key?(:font)
+        pdf.current_options.merge!(font_style: value[:font_style]) if value.key?(:font_style)
+        #
+        # On peut transformer le texte
+        # 
+        final_formatage(pdf) # => @final_text
+        value.merge!(content: @final_text || @text)
+        # value.merge!(content: treate_simple_text(value[:content]))
+        #
+        # On remet les options courantes
+        # 
+        pdf.current_options = current_pdf_options
       end
     when Array      
       value.map do |svalue|
@@ -296,6 +329,15 @@ class NTable < AnyParagraph
     else # par exemple float ou integer, ou nil
       value
     end
+  end
+
+  def treate_simple_text(str)
+    str = self.class.preformatage(str)
+    str = self.class.formatage_final(str, pdf)
+    # str = self.formate_text(pdf, str)
+    # self.final_formatage(pdf)
+    # return @final_text
+    return str
   end
 
   def page_width

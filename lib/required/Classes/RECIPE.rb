@@ -254,7 +254,7 @@ class Recipe
   # Font par défaut (la première définie ou par défaut)
   # 
   # @note
-  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
+  #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_fonte instead (ne pas oublier le "e").
   def default_font
     @default_font ||= fonts_data.values.first
   end

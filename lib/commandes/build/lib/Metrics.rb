@@ -27,6 +27,10 @@ class MetricClass
     end
   end
 
+  def current_font_size
+    
+  end
+
   def default_font_and_style
     @default_font_and_style ||= begin
       recipe.default_font_and_style

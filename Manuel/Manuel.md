@@ -768,6 +768,10 @@ Une table avec largeur de colonne implicite.
 
 > Note : si la valeur `:width` (largeur de la table) n’est pas définie, alors c’est par défaut une table qui prendra toute la largeur de la table.
 
+##### Insérer un trait droit dans le texte
+
+Pour utiliser le caractère « | » dans le texte d’’une cellule sans qu’il soit interprété comme un diviseur de colonne, il suffit de mettre `#{"\u007C"}`.
+
 ##### Insérer une image dans une cellule
 
 Pour insérer une image dans une cellule, utiliser **`IMAGE[path|style]`** où `path` est le chemin absolu ou relatif de l’image et `style` est optionnellement le style à appliquer à l’’image. Par exemple :
@@ -2020,7 +2024,7 @@ ALORS ce paragraphe sera mis en forme à l'aide d'une méthode de nom :
 
 		__formate_<nom balise>
 		
-		par exemple : def __formate_custag(string)
+		par exemple : def __formate_custag
 
 QUI SERA DÉFINIE dans le fichier 'formater.rb' définissant le module 'FormaterParagraphModule'
 ~~~

@@ -289,6 +289,7 @@ private
   def __traite_termes_bibliographiques_in(str)
     str.gsub(Bibliography::REG_OCCURRENCES) do
       
+
       bib_tag = $1.freeze
       item_av, item_ap = $2.freeze.split('|')
 

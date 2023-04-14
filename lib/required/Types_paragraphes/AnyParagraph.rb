@@ -108,7 +108,8 @@ class AnyParagraph
       recipe = pdf.pdfbook.recipe
       parag_height = nil
       numer_height = nil
-      pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
+      pdf.font(Prawn4book::Fonte.default_fonte) do
+      # pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
         parag_height = pdf.height_of("Mot")
       end
       pdf.font(recipe.parag_num_font_name, **{size:recipe.parag_num_font_size}) do
@@ -143,6 +144,8 @@ class AnyParagraph
   def sometext? ; false end # surclassé par les filles
   alias :some_text? :sometext?
   def pfbcode?  ; false end
+  def citation? ; false end
+  def list_item?; false end 
 
   # Sera mis à true pour les paragraphes qui ne doivent pas être
   # imprimés, par exemple les paragraphes qui définissent des 
