@@ -347,13 +347,10 @@
 			"file": "lib/commandes/build/build.rb",
 			"settings":
 			{
-				"buffer_size": 14291,
+				"buffer_size": 14351,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
+			}
 		},
 		{
 			"file": "/Users/philippeperret/Library/Application Support/Sublime Text/Packages/Prawn4Book/APP_DESCRIPTION.md",
@@ -373,7 +370,7 @@
 						"characters": " ou"
 					},
 					"AwAAALsAAAAAAAAAvAAAAAAAAAAAAAAAvAAAAAAAAAC9AAAAAAAAAAAAAAC9AAAAAAAAAL4AAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAuwAAAAAAAAC7AAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAC7AAAAAAAAALsAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					5,
@@ -383,7 +380,7 @@
 						"characters": " simplement"
 					},
 					"CwAAAL4AAAAAAAAAvwAAAAAAAAAAAAAAvwAAAAAAAADAAAAAAAAAAAAAAADAAAAAAAAAAMEAAAAAAAAAAAAAAMEAAAAAAAAAwgAAAAAAAAAAAAAAwgAAAAAAAADDAAAAAAAAAAAAAADDAAAAAAAAAMQAAAAAAAAAAAAAAMQAAAAAAAAAxQAAAAAAAAAAAAAAxQAAAAAAAADGAAAAAAAAAAAAAADGAAAAAAAAAMcAAAAAAAAAAAAAAMcAAAAAAAAAyAAAAAAAAAAAAAAAyAAAAAAAAADJAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAvgAAAAAAAAC+AAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAC+AAAAAAAAAL4AAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					6,
@@ -393,7 +390,7 @@
 						"characters": " "
 					},
 					"AQAAAMkAAAAAAAAAygAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAyQAAAAAAAADJAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADJAAAAAAAAAMkAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					7,
@@ -401,7 +398,7 @@
 					"",
 					null,
 					"AQAAAMoAAAAAAAAAywAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAygAAAAAAAADKAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADKAAAAAAAAAMoAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					8,
@@ -409,7 +406,7 @@
 					"",
 					null,
 					"AQAAAMoAAAAAAAAAygAAAAAAAAABAAAAYA",
-					"AQAAAAAAAAABAAAAywAAAAAAAADLAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADLAAAAAAAAAMsAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					9,
@@ -419,7 +416,7 @@
 						"contents": "`$0`"
 					},
 					"AQAAAMoAAAAAAAAAzAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAygAAAAAAAADKAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADKAAAAAAAAAMoAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					10,
@@ -429,7 +426,7 @@
 						"characters": "pfb-"
 					},
 					"BAAAAMsAAAAAAAAAzAAAAAAAAAAAAAAAzAAAAAAAAADNAAAAAAAAAAAAAADNAAAAAAAAAM4AAAAAAAAAAAAAAM4AAAAAAAAAzwAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAywAAAAAAAADLAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADLAAAAAAAAAMsAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					11,
@@ -437,7 +434,7 @@
 					"left_delete",
 					null,
 					"AQAAAM4AAAAAAAAAzgAAAAAAAAABAAAALQ",
-					"AQAAAAAAAAABAAAAzwAAAAAAAADPAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADPAAAAAAAAAM8AAAAAAAAAAAAAAAAA8L8"
 				]
 			]
 		},
@@ -445,7 +442,7 @@
 			"file": "/Users/philippeperret/Library/Application Support/Sublime Text/Packages/Prawn4Book/Default (OSX).sublime-keymap",
 			"settings":
 			{
-				"buffer_size": 2404,
+				"buffer_size": 4462,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			},
@@ -457,7 +454,7 @@
 					"duplicate_line",
 					null,
 					"AQAAAMMAAAAAAAAAhAEAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAAgAAAAAAAADDAAAAAAAAAAAAAAAAAAAA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAACAAAAAAAAAMMAAAAAAAAAAAAAAAAAAAA"
 				],
 				[
 					9,
@@ -467,7 +464,7 @@
 						"characters": "super+"
 					},
 					"BgAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADSAAAAAAAAAAAAAADSAAAAAAAAANMAAAAAAAAAAAAAANMAAAAAAAAA1AAAAAAAAAAAAAAA1AAAAAAAAADVAAAAAAAAAAAAAADVAAAAAAAAANYAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADQAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANAAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					12,
@@ -477,7 +474,7 @@
 						"characters": "\\\""
 					},
 					"AwAAAA8BAAAAAAAAEAEAAAAAAAAAAAAAEAEAAAAAAAAQAQAAAAAAAAMAAADigJwQAQAAAAAAABEBAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAEAEAAAAAAAAPAQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAQAQAAAAAAAA8BAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					15,
@@ -485,7 +482,7 @@
 					"left_delete",
 					null,
 					"AQAAABMBAAAAAAAAEwEAAAAAAAADAAAA4oCd",
-					"AQAAAAAAAAABAAAAFAEAAAAAAAATAQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAUAQAAAAAAABMBAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					16,
@@ -495,7 +492,7 @@
 						"characters": "\\\""
 					},
 					"AgAAABMBAAAAAAAAFAEAAAAAAAAAAAAAFAEAAAAAAAAVAQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAEwEAAAAAAAATAQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAATAQAAAAAAABMBAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					26,
@@ -505,7 +502,7 @@
 						"characters": "lat"
 					},
 					"BAAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADRAAAAAAAAAAUAAABzdXBlctEAAAAAAAAA0gAAAAAAAAAAAAAA0gAAAAAAAADTAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADVAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANUAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					27,
@@ -513,7 +510,7 @@
 					"left_delete",
 					null,
 					"AwAAANIAAAAAAAAA0gAAAAAAAAABAAAAdNEAAAAAAAAA0QAAAAAAAAABAAAAYdAAAAAAAAAA0AAAAAAAAAABAAAAbA",
-					"AQAAAAAAAAABAAAA0wAAAAAAAADTAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADTAAAAAAAAANMAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					28,
@@ -523,7 +520,7 @@
 						"characters": "alt"
 					},
 					"AwAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADSAAAAAAAAAAAAAADSAAAAAAAAANMAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADQAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANAAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					34,
@@ -533,7 +530,7 @@
 						"characters": "option"
 					},
 					"BwAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADRAAAAAAAAAAMAAABhbHTRAAAAAAAAANIAAAAAAAAAAAAAANIAAAAAAAAA0wAAAAAAAAAAAAAA0wAAAAAAAADUAAAAAAAAAAAAAADUAAAAAAAAANUAAAAAAAAAAAAAANUAAAAAAAAA1gAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADTAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANMAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					39,
@@ -543,7 +540,7 @@
 						"characters": "\n\n\n"
 					},
 					"CAAAAOICAAAAAAAA4wIAAAAAAAAAAAAA4wIAAAAAAADlAgAAAAAAAAAAAADlAgAAAAAAAOYCAAAAAAAAAAAAAOYCAAAAAAAA6AIAAAAAAAAAAAAA4wIAAAAAAADjAgAAAAAAAAIAAAAgIOYCAAAAAAAA5wIAAAAAAAAAAAAA5wIAAAAAAADpAgAAAAAAAAAAAADkAgAAAAAAAOQCAAAAAAAAAgAAACAg",
-					"AQAAAAAAAAABAAAA4gIAAAAAAADiAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADiAgAAAAAAAOICAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					41,
@@ -553,7 +550,7 @@
 						"characters": "\n"
 					},
 					"AgAAAOMCAAAAAAAA5AIAAAAAAAAAAAAA5gIAAAAAAADmAgAAAAAAAAIAAAAgIA",
-					"AQAAAAAAAAABAAAA4wIAAAAAAADjAgAAAAAAAAAAAAAAADhA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADjAgAAAAAAAOMCAAAAAAAAAAAAAAAAOEA"
 				],
 				[
 					42,
@@ -561,7 +558,7 @@
 					"paste",
 					null,
 					"AQAAAOQCAAAAAAAAEAQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA5AIAAAAAAADkAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADkAgAAAAAAAOQCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					45,
@@ -571,7 +568,7 @@
 						"file": "res://Packages/Default/Delete Left Right.sublime-macro"
 					},
 					"AgAAAPMCAAAAAAAA8wIAAAAAAAABAAAAIvMCAAAAAAAA8wIAAAAAAAABAAAAIg",
-					"AQAAAAAAAAABAAAA9AIAAAAAAAD0AgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAD0AgAAAAAAAPQCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					46,
@@ -579,7 +576,7 @@
 					"left_delete",
 					null,
 					"AQAAAPICAAAAAAAA8gIAAAAAAAABAAAAXA",
-					"AQAAAAAAAAABAAAA8wIAAAAAAADzAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADzAgAAAAAAAPMCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					47,
@@ -589,7 +586,7 @@
 						"contents": "($0)"
 					},
 					"AQAAAPICAAAAAAAA9AIAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA8gIAAAAAAADyAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADyAgAAAAAAAPICAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					48,
@@ -597,7 +594,7 @@
 					"right_delete",
 					null,
 					"AQAAAPMCAAAAAAAA8wIAAAAAAAABAAAAKQ",
-					"AQAAAAAAAAABAAAA8wIAAAAAAADzAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADzAgAAAAAAAPMCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					49,
@@ -607,7 +604,7 @@
 						"contents": "\"$0\""
 					},
 					"AQAAAPMCAAAAAAAA9QIAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA8wIAAAAAAADzAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADzAgAAAAAAAPMCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					50,
@@ -615,7 +612,7 @@
 					"right_delete",
 					null,
 					"AQAAAPQCAAAAAAAA9AIAAAAAAAABAAAAIg",
-					"AQAAAAAAAAABAAAA9AIAAAAAAAD0AgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAD0AgAAAAAAAPQCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					53,
@@ -625,7 +622,7 @@
 						"contents": "(${0:$SELECTION})"
 					},
 					"AgAAACwDAAAAAAAALAMAAAAAAAAPAAAAJHswOiRTRUxFQ1RJT059LAMAAAAAAAA9AwAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAALAMAAAAAAAA7AwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsAwAAAAAAADsDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					55,
@@ -633,7 +630,7 @@
 					"left_delete",
 					null,
 					"AgAAACsDAAAAAAAAKwMAAAAAAAABAAAAIioDAAAAAAAAKgMAAAAAAAABAAAAXA",
-					"AQAAAAAAAAABAAAALAMAAAAAAAAsAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAsAwAAAAAAACwDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					59,
@@ -641,7 +638,7 @@
 					"right_delete",
 					null,
 					"AgAAADsDAAAAAAAAOwMAAAAAAAABAAAAXDsDAAAAAAAAOwMAAAAAAAABAAAAIg",
-					"AQAAAAAAAAABAAAAOwMAAAAAAAA7AwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA7AwAAAAAAADsDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					68,
@@ -649,7 +646,7 @@
 					"paste",
 					null,
 					"AQAAAAIEAAAAAAAAYQQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAAgQAAAAAAAACBAAAAAAAAAAAAAAAAAAA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAACBAAAAAAAAAIEAAAAAAAAAAAAAAAAAAA"
 				],
 				[
 					71,
@@ -659,7 +656,7 @@
 						"characters": ","
 					},
 					"AQAAAAEEAAAAAAAAAgQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAAQQAAAAAAAABBAAAAAAAAP///////+9/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAABBAAAAAAAAAEEAAAAAAAA////////738"
 				],
 				[
 					73,
@@ -669,7 +666,7 @@
 						"characters": "\t"
 					},
 					"AQAAAAMEAAAAAAAABQQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAAwQAAAAAAAADBAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAADBAAAAAAAAAMEAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					76,
@@ -677,7 +674,7 @@
 					"right_delete",
 					null,
 					"AQAAAG8EAAAAAAAAbwQAAAAAAAABAAAACg",
-					"AQAAAAAAAAABAAAAbwQAAAAAAABvBAAAAAAAAAAAAAAAADhA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABvBAAAAAAAAG8EAAAAAAAAAAAAAAAAOEA"
 				],
 				[
 					82,
@@ -685,7 +682,7 @@
 					"paste",
 					null,
 					"AQAAAN0CAAAAAAAAOwMAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA3QIAAAAAAADdAgAAAAAAAAAAAAAAAAAA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADdAgAAAAAAAN0CAAAAAAAAAAAAAAAAAAA"
 				],
 				[
 					85,
@@ -695,7 +692,7 @@
 						"characters": ","
 					},
 					"AQAAANwCAAAAAAAA3QIAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA3AIAAAAAAADcAgAAAAAAAP///////+9/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADcAgAAAAAAANwCAAAAAAAA////////738"
 				],
 				[
 					89,
@@ -705,7 +702,7 @@
 						"characters": "tr!e"
 					},
 					"BQAAACADAAAAAAAAIQMAAAAAAAAAAAAAIQMAAAAAAAAhAwAAAAAAAAUAAABmYWxzZSEDAAAAAAAAIgMAAAAAAAAAAAAAIgMAAAAAAAAjAwAAAAAAAAAAAAAjAwAAAAAAACQDAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAIAMAAAAAAAAlAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAgAwAAAAAAACUDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					90,
@@ -713,7 +710,7 @@
 					"left_delete",
 					null,
 					"AgAAACMDAAAAAAAAIwMAAAAAAAABAAAAZSIDAAAAAAAAIgMAAAAAAAABAAAAIQ",
-					"AQAAAAAAAAABAAAAJAMAAAAAAAAkAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAkAwAAAAAAACQDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					91,
@@ -723,7 +720,7 @@
 						"characters": "ue"
 					},
 					"AgAAACIDAAAAAAAAIwMAAAAAAAAAAAAAIwMAAAAAAAAkAwAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAIgMAAAAAAAAiAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAiAwAAAAAAACIDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					93,
@@ -731,7 +728,7 @@
 					"left_delete",
 					null,
 					"AQAAAOICAAAAAAAA4gIAAAAAAAACAAAAICA",
-					"AQAAAAAAAAABAAAA5AIAAAAAAADkAgAAAAAAAAAAAAAAAFJA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADkAgAAAAAAAOQCAAAAAAAAAAAAAAAAUkA"
 				],
 				[
 					95,
@@ -741,7 +738,7 @@
 						"characters": "\t"
 					},
 					"AQAAAIICAAAAAAAAhAIAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAggIAAAAAAACCAgAAAAAAAAAAAAAAAEhA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACCAgAAAAAAAIICAAAAAAAAAAAAAAAASEA"
 				],
 				[
 					98,
@@ -751,7 +748,7 @@
 						"characters": "\t"
 					},
 					"AQAAAOQCAAAAAAAA5gIAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA5AIAAAAAAADkAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADkAgAAAAAAAOQCAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					102,
@@ -761,7 +758,7 @@
 						"characters": "\n\t"
 					},
 					"AwAAAA0CAAAAAAAADgIAAAAAAAAAAAAADgIAAAAAAAAQAgAAAAAAAAAAAAAQAgAAAAAAABICAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAADQIAAAAAAAANAgAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAANAgAAAAAAAA0CAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					105,
@@ -771,7 +768,7 @@
 						"characters": "\n\t"
 					},
 					"AwAAAEUDAAAAAAAARgMAAAAAAAAAAAAARgMAAAAAAABIAwAAAAAAAAAAAABIAwAAAAAAAEoDAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAARQMAAAAAAABFAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABFAwAAAAAAAEUDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					106,
@@ -779,7 +776,7 @@
 					"left_delete",
 					null,
 					"AQAAAEgDAAAAAAAASAMAAAAAAAACAAAAICA",
-					"AQAAAAAAAAABAAAASgMAAAAAAABKAwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABKAwAAAAAAAEoDAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					108,
@@ -789,7 +786,7 @@
 						"characters": "\t"
 					},
 					"AQAAAEQDAAAAAAAARgMAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAARAMAAAAAAABEAwAAAAAAAAAAAAAAADhA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABEAwAAAAAAAEQDAAAAAAAAAAAAAAAAOEA"
 				],
 				[
 					116,
@@ -799,7 +796,7 @@
 						"characters": "super"
 					},
 					"BgAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADRAAAAAAAAAAYAAABvcHRpb27RAAAAAAAAANIAAAAAAAAAAAAAANIAAAAAAAAA0wAAAAAAAAAAAAAA0wAAAAAAAADUAAAAAAAAAAAAAADUAAAAAAAAANUAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADWAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANYAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					119,
@@ -809,7 +806,7 @@
 						"characters": "7"
 					},
 					"AgAAANYAAAAAAAAA1wAAAAAAAAAAAAAA1wAAAAAAAADXAAAAAAAAAAIAAABcIg",
-					"AQAAAAAAAAABAAAA1gAAAAAAAADYAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADWAAAAAAAAANgAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					125,
@@ -819,7 +816,7 @@
 						"characters": "options"
 					},
 					"CAAAANAAAAAAAAAA0QAAAAAAAAAAAAAA0QAAAAAAAADRAAAAAAAAAAUAAABzdXBlctEAAAAAAAAA0gAAAAAAAAAAAAAA0gAAAAAAAADTAAAAAAAAAAAAAADTAAAAAAAAANQAAAAAAAAAAAAAANQAAAAAAAAA1QAAAAAAAAAAAAAA1QAAAAAAAADWAAAAAAAAAAAAAADWAAAAAAAAANcAAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0AAAAAAAAADVAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADQAAAAAAAAANUAAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					126,
@@ -827,7 +824,7 @@
 					"left_delete",
 					null,
 					"AQAAANYAAAAAAAAA1gAAAAAAAAABAAAAcw",
-					"AQAAAAAAAAABAAAA1wAAAAAAAADXAAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADXAAAAAAAAANcAAAAAAAAAAAAAAAAA8L8"
 				]
 			]
 		},
@@ -847,7 +844,7 @@
 					"left_delete",
 					null,
 					"AwAAAKgFAAAAAAAAqAUAAAAAAABBAgAAICAgICAjIAogICAgICAjIC0tLSBQUsOJLVRSQUlURU1FTlQgRFUgUEFSQUdSQVBIRSAtLS0KICAgICAgIyAKICAgICAgIyBTJ2lsIGV4aXN0ZSB1biBtb2R1bGUgcGFyc2VyIGV0IHF1ZSBsZSBwYXJhZ3JhcGhlIGVzdCB2cmFpbWVudAogICAgICAjIHVuIHBhcmFncmFwaGUgKGV0IG5vbiBwYXMgdW5lIGTDqWZpbml0aW9uLCB1biBzdHlsZSBvdSBhdXRyZSkKICAgICAgIyBhbG9ycyBvbiBwYXJzZSBjZSBwYXJhZ3JhcGhlIHBvdXIgZW4gdGlyZXIgbGVzIGluZm9ybWF0aW9ucwogICAgICAjIHV0aWxlcyBvdSBmYWlyZSBkZXMgcmVtcGxhY2VtZW50cyAocGFyIGV4ZW1wbGUgZGVzIHLDqWbDqXJlbmNlcwogICAgICAjIG91IGRlcyBwcmlzZXMgZGUgbW90cyBkJ2luZGV4KQogICAgICAjIAogICAgICAjIGlmIHBkZmJvb2subW9kdWxlX3BhcnNlcj8gJiYgcGFyYWdyYXBoZS5wYXJhZ3JhcGg/CiAgICAgICMgaWYgcGRmYm9vay5tb2R1bGVfcGFyc2VyPyAmJiBwYXJhZ3JhcGhlLnNvbWVfdGV4dD8KICAgICAgIyAgIHBkZmJvb2suX19wYXJhZ3JhcGhfcGFyc2VyKHBhcmFncmFwaGUsIHNlbGYpCiAgICAgICMgZW5kCqcFAAAAAAAApwUAAAAAAAABAAAAIKYFAAAAAAAApgUAAAAAAAABAAAACg",
-					"AQAAAAAAAAABAAAAqAUAAAAAAADlBwAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACoBQAAAAAAAOUHAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					7,
@@ -855,7 +852,7 @@
 					"left_delete",
 					null,
 					"AgAAAFcFAAAAAAAAVwUAAAAAAABPAAAAICAgICAgIyBzcHkgIlRleHQgcGFyYWdyYXBoZSBhdmFudCBwYXJzZXIgOiAje3BhcmFncmFwaGUudGV4dC5pbnNwZWN0fSIub3JhbmdlClYFAAAAAAAAVgUAAAAAAAABAAAACg",
-					"AQAAAAAAAAABAAAAVwUAAAAAAACmBQAAAAAAAAAAAAAAAAAA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABXBQAAAAAAAKYFAAAAAAAAAAAAAAAAAAA"
 				]
 			]
 		},
@@ -863,22 +860,16 @@
 			"file": "lib/required/Types_paragraphes/NTextParagraph.rb",
 			"settings":
 			{
-				"buffer_size": 12315,
+				"buffer_size": 12318,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
+			}
 		},
 		{
-			"contents": "=begin\n\nModule rassemblant toutes les méthodes qui permettent de formater\nles textes (sauf, bien entendu, le formateurs définis pour le livre\nou la collection dans helpers.rb et formaters.rb)\n\nPourquoi \"bien entendu\" ci-dessus ????\nÇa serait pourtant ici que ça serait le mieux.\n\n=end\nmodule Prawn4book\nclass PdfBook\n  # Méthode qui doit être surclassée par les modules propres\n  def parser_formater(str,pdf); str end\n\nclass AnyParagraph\n\n  ##\n  # Préformatage d'un string quelconque, dissocié de tout élément.\n  # Ça peut être tout aussi bien le @text d'un paragraphe que le\n  # contenu d'une cellule de table.\n  # \n  # Ce préformatage n'a pas besoin de connaitre le pdf-viewer\n  # courant.\n  # \n  def self.preformatage(str)\n    # \n    # Traitement des codes ruby \n    # \n    # (ce sont tous les codes qui sont mis dans #{...})\n    # \n    str = __traite_codes_ruby_in(str)\n    # spy \"str après code ruby : #{text.inspect}\".orange\n\n    # \n    # Traitement des formats inline markdown \n    # (les étoiles, tirets plats, etc.)\n    # \n    # Ne sont pas traités ici les listes (qui demande un traitement\n    # au moment de l'impression) ou les blocs de notes\n    # \n    str = __traite_format_markdown_inline(str)\n    # spy \"str après format markdown inline : #{text.inspect}\".orange\n\n    return str    \n  end\n\n  # [String] Le texte final, tel qu'il est vraiment écrit par \n  # pdf.\n  attr_reader :final_text\n  \n  # [Hash] Table des spécifications finales pour l'impression du\n  # paragraphe (quel qu'il soit)\n  attr_accessor :final_specs\n\n\n  def preformate(pdf)\n    spy \"#preformate de #{text.inspect}\"\n    self.final_specs = {}\n    if pfbcode && pfbcode.parag_style\n      final_specs.merge!(pfbcode.parag_style)\n    end\n    # \n    # Détection de la nature du texte\n    # \n    detecte_et_traite_nature_paragraphe(pdf)\n    # \n    # Préformatage général\n    # \n    @text = self.class.preformatage(text)\n\n  end\n\n  #\n  # @produit @final_text (le texte final à afficher)\n  # \n  def final_formatage(pdf)\n    spy \"-> final_formatage de #{text.inspect}\".jaune\n    @text = formate_text(pdf, text)\n\n    @final_text = self.class.formatage_final(text, pdf)\n\n    #\n    # Maintenant qu'on a tous les éléments (options*), on peut\n    # parser et formater le paragraphe.\n    # *MAIS d'où viennent-ils et comment les récupère-t-on… il y a\n    # un bug là-dessus et je n'en plus aucune idée…………………\n    # \n    if pdfbook.module_parser? # && parag.some_text?\n    if pdfbook.module_parser? # && parag.some_text?\n      # pdfbook.__paragraph_parser(self, pdf)\n    end\n\n    spy \"Fin #final_formatage de #{text.inspect}\"\n  end\n\n  #\n  # @class\n  # \n  # Méthode qui passe par toutes les méthodes de formatage, personna-\n  # lisées comme communes.\n  # \n  def self.formatage_final(str, pdf)\n    str = pdfbook.parser_formater(str, pdf)\n    return str\n  end\n\n  def self.pdfbook; @pdfbook ||= PdfBook.current end\n\n  # = main =\n  #\n\n  ##\n  # On doit détecter la nature de certains paragraphes avant le\n  # formatage pour éviter certains problème. Typiquement, si un\n  # paragraphe est un item de liste et qu'il contient un texte en \n  # italique, il peut ressembler à :\n  #   * un item de *liste* avec italique\n  # Mais s'il est formaté tel quel, alors la portion \"* un item de \"\n  # va être considérée comme en italique.\n  # Il faut donc :\n  #   - détecter qu'il s'agit un item de liste (self.list_item?)\n  #   - retirer la marque de début dans @text\n  # On peut ensuite le formater comme convenu\n  def detecte_et_traite_nature_paragraphe(pdf)\n    # \n    # Est-ce une citation ?\n    # \n    @is_citation = paragraph? && text.match?(REG_CITATION)\n    if citation?\n      @text = text[1..-1].strip\n      final_specs.merge!({size: font_size(pdf) + 2, mg_left: 1.cm, mg_right: 1.cm, mg_top: 0.5.cm, mg_bot: 0.5.cm, no_num:true})\n    end\n    # \n    # Est-ce un item de liste\n    # \n    @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)\n    if list_item?\n      @text = text[1..-1].strip\n      final_specs.merge!({mg_left:3.mm, no_num: true, cursor_positionned: true})\n    end\n  end\n  REG_LIST_ITEM = /^\\* .+$/.freeze\n  REG_CITATION  = /^> .+$/.freeze\n\n\n\n  def formate_text(pdf, str)\n    spy \"[formate_text] str initial : #{str.inspect}\".orange\n\n    if list_item?\n      str = formate_as_list_item(pdf, str)\n    elsif citation?\n      str = formate_as_citation(pdf, str)\n    end\n\n    #\n    # Traitement des marques bibliograghiques\n    # \n    if Bibliography.any?\n      str = __traite_termes_bibliographiques_in(str)\n      # spy \"str après recherche biblio : #{str.inspect}\".orange\n    end\n\n    #\n    # Traitement des références (appels et cibles)\n    # \n    str = __traite_references_in(str)\n\n    #\n    # Traitement des mots indexés\n    # \n    str = __traite_mot_indexed(str)\n\n    #\n    # Ajout (optionnel) de la position du cursor\n    # (débuggage et mise en place du texte)\n    # \n    str = __maybe_add_cursor_position(str)\n\n    spy \"[formate_text] str final : #{str.inspect}\".orange\n    \n    return str\n  end\n\n\n  def __traite_mot_indexed(str)\n    if str.match?('index:') || str.match?('index\\(')\n      str = __traite_mots_indexed_in(str)\n      # spy \"str après recherche index : #{str.inspect}\".orange\n    end\n    \n    return str\n  end\n\n  def formate_as_list_item(pdf, str)\n    str = text\n    pdf.update do \n      move_cursor_to_next_reference_line\n      float { text '– ' }\n    end\n    return str\n  end\n\n  def formate_as_citation(pdf, str)\n    str = \"<em>#{str.strip}</em>\"\n    return str\n  end\n\n\n  ##\n  # Pour le debuggage on peut vouloir ajouter la valeur du curseur\n  # en début de texte du paragraphe. Pour ce faire, on ajouter\n  # l'option '--cursor' à la ligne de commande\n  # @rappel\n  #   Le \"curseur\", c'est la hauteur vertical du prochain texte\n  #   écrit avec 'pdf.text'\n  # \n  # @return [Boolean] true s'il faut ajouter la valeur du curseur\n  def self.add_cursor_position?\n    :TRUE == @@addcurspos ||= true_or_false(CLI.option(:cursor))\n  end\n  def add_cursor_position?\n    self.class.add_cursor_position?\n  end\n\n\nprivate\n\n  # @return [String] Le texte formaté\n  def __traite_references_in(str)    \n    if str.match?('\\( <\\-')\n      str = str.gsub(REG_CIBLE_REFERENCE) do\n        cible = $1.freeze\n        spy \"[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero}})\".bleu\n        pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})\n        ''\n      end\n      # \n      # On corrige les éventuels retours chariot intempestifs\n      # \n      str = str.gsub(/  +/, ' ')\n    end\n    # Appels de référence\n    if str.match?('\\( \\->')\n      str = str.gsub(REG_APPEL_REFERENCE) do\n        appel = $1.freeze\n        spy \"[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}\".bleu\n        pdfbook.table_references.get(appel, self)\n      end\n    end\n    return str\n  end\n\n  # @return [String] Le texte formaté\n  def __traite_mots_indexed_in(str)\n    # spy \"Traitement de #{str.inspect} pour l'index\"\n    str = str.gsub(/index:(.+?)(\\b)/) do\n      dmot = {mot: $1.freeze, page: first_page, paragraph:numero}\n      pdfbook.page_index.add(dmot)\n      dmot[:mot] + $2\n    end\n    str = str.gsub(/index\\((.+?)\\)/) do\n      mot, canon = $1.freeze.split('|')\n      dmot = {mot: mot, canon: canon, page: first_page, paragraph: numero}\n      pdfbook.page_index.add(dmot)\n      dmot[:mot]\n    end\n    return str\n  end\n\n  def __maybe_add_cursor_position(str)\n    # S'il le faut (options), ajouter la position du curseur en\n    # début de paragraphe.\n    if paragraph? && add_cursor_position?\n      if str.is_a?(Array)\n        str[0] = pdf.add_cursor_position(str[0])\n      else\n        str = pdf.add_cursor_position(str) \n      end\n    end\n\n    return str    \n  end\n\n  ##\n  # Traitement des termes propres aux bibliographies\n  # \n  # @return [String] Le texte formaté\n  def __traite_termes_bibliographiques_in(str)\n    str.gsub(Bibliography::REG_OCCURRENCES) do\n      \n      bib_tag = $1.freeze\n      item_av, item_ap = $2.freeze.split('|')\n\n      biblio = Bibliography.get(bib_tag) || raise(\"Impossible de trouver la bibliographie de tag #{bib_tag.inspect}\")\n      canon, actual = \n        if (bibitem = biblio.exist?(item_av))\n          [item_av, item_ap]\n        elsif item_ap && (bibitem = biblio.exist?(item_ap))\n          [item_ap, item_av]\n        else\n          # \n          # Item de bibliographie inconnu\n          # \n          unfound = [item_av,item_ap].compact.join(\"/\")\n          building_error(ERRORS[:biblio][:bib_item_unknown] % [\"#{unfound}\".inspect, bib_tag])\n          [nil, item_av]\n        end\n\n      unless canon.nil?\n        # \n        # Si le canon est défini (ie si le mot a été reconnu dans la bibliographie)\n        # alors on enregistre une occurrence pour lui.\n        # \n\n        # \n        # Ajout de cette occurrence\n        # \n        bibitem.add_occurrence({page: first_page, paragraph: numero})\n\n        if actual\n          bibitem.formate_for_text(actual, self)\n        elsif bibitem.respond_to?(:formated_for_text)\n          bibitem.formated_for_text(self)\n        else\n          bibitem.title\n        end\n      end\n    end\n  end\n\n  # \n  # Traitement des codes ruby, qui se présentent dans le texte par\n  # « #{...} »\n  # Le code à l'intérieur des accolades peut être du code à interpréter\n  # tel quel (un opération par exemple, ou une date) ou alors une\n  # méthode personnalisée définie dans les helpers.\n  # \n  # @return [String] Le texte formaté\n  # \n  REG_CODE_RUBY = /#\\{(.+?)\\}/.freeze\n  def self.__traite_codes_ruby_in(str)\n    str.gsub(REG_CODE_RUBY) do\n      code = $1.freeze\n      methode = nil\n      if code.match?(REG_HELPER_METHOD)\n        # C'est peut-être une méthode d'helpers qui est appelée\n        methode = code.match(REG_HELPER_METHOD)[1].to_sym\n      end\n      if methode && pdfbook.pdfhelpers && pdfbook.pdfhelpers.respond_to?(methode)\n        # \n        # Une méthode helper propre au livre ou à la collection\n        # \n        pdfbook.pdfhelpers.instance_eval(code)\n      else\n        #\n        # Un code général\n        # \n        eval(code)\n      end\n    end\n  end\n  REG_HELPER_METHOD = /^([a-zA-Z0-9_]+)(\\(.+?\\))?$/\n\n\n  def self.__traite_format_markdown_inline(str)\n    # \n    # Les gras ('**')\n    # \n    str = __traite_bold(str)\n    # \n    # Les italiques\n    # \n    str = __traite_italic(str)\n    # \n    # Les soulignés\n    # \n    str = __traite_underline(str)\n    #\n    # Les exposants\n    # \n    str = __traite_superscript(str)\n\n    return str\n  end\n\n  def self.__traite_bold(str)\n    str = str.gsub(REG_BOLD) do\n      txt = $1.freeze\n      SPAN_BOLD % txt \n    end\n  end\n  REG_BOLD      = /\\*\\*(.+?)\\*\\*/.freeze\n  SPAN_BOLD     = \"<b>%s</b>\".freeze\n\n  def self.__traite_italic(str)\n    return str unless str.match?('\\*')\n    str .gsub(REG_ETOILE, 'mmSTARmm'.freeze)\n        .gsub(REG_ITALIC, SPAN_ITALIC)\n        .gsub(REG_START,  '*'.freeze)\n  end\n  REG_ETOILE    = /\\\\\\*/.freeze\n  REG_ITALIC    = /\\*(.+?)\\*/.freeze\n  SPAN_ITALIC   = '<em>\\1</em>'.freeze\n  REG_START     = /mmSTARmm/.freeze\n\n  def self.__traite_underline(str)\n    return str unless str.match?('_')\n    str .gsub(REG_TIRET_PLAT, 'mmTIRETmmPLATmm'.freeze)\n        .gsub(REG_UNDERLINE, SPAN_UNDERLINE)\n        .gsub(REG_PLAT_TIRET, '_'.freeze)\n  end\n  REG_TIRET_PLAT = /\\\\_/.freeze\n  REG_UNDERLINE = /__(.+?)__/.freeze\n  SPAN_UNDERLINE = '<u>\\1</u>'.freeze\n  REG_PLAT_TIRET = /mmTIRETmmPLATmm/.freeze\n\n  def self.__traite_superscript(str)\n    str = str.gsub(REG_EXPOSANT) do\n      lettre = $1.freeze\n      expo   = $2.freeze\n      SPAN_EXPOSANT % [lettre, expo]\n    end\n  end\n  REG_EXPOSANT = /([0-9XVIC])\\^(er|re|e)/.freeze\n  SPAN_EXPOSANT = '%s<sup>%s</sup>'.freeze\n\n\nend #/class AnyParagraph\nend #/class PdfBook\nend #/module Prawn4book\n",
 			"file": "lib/commandes/build/lib/parser_formater.rb",
-			"file_size": 11778,
-			"file_write_time": 133256881873884859,
 			"settings":
 			{
-				"buffer_size": 11722,
+				"buffer_size": 12975,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			},
@@ -892,7 +883,7 @@
 						"characters": "*"
 					},
 					"AQAAAJcIAAAAAAAAmAgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAlwgAAAAAAACXCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACXCAAAAAAAAJcIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					6,
@@ -902,7 +893,7 @@
 						"characters": "\n"
 					},
 					"AgAAAMoIAAAAAAAAywgAAAAAAAAAAAAAywgAAAAAAADPCAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAyggAAAAAAADKCAAAAAAAAAAAAAAAkINA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADKCAAAAAAAAMoIAAAAAAAAAAAAAACQg0A"
 				],
 				[
 					7,
@@ -912,7 +903,7 @@
 						"block": false
 					},
 					"AQAAAM8IAAAAAAAA0QgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAzwgAAAAAAADPCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADPCAAAAAAAAM8IAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					8,
@@ -922,7 +913,7 @@
 						"characters": "ùao"
 					},
 					"AwAAANEIAAAAAAAA0ggAAAAAAAAAAAAA0ggAAAAAAADTCAAAAAAAAAAAAADTCAAAAAAAANQIAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0QgAAAAAAADRCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADRCAAAAAAAANEIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					9,
@@ -930,7 +921,7 @@
 					"left_delete",
 					null,
 					"AwAAANMIAAAAAAAA0wgAAAAAAAABAAAAb9IIAAAAAAAA0ggAAAAAAAABAAAAYdEIAAAAAAAA0QgAAAAAAAACAAAAw7k",
-					"AQAAAAAAAAABAAAA1AgAAAAAAADUCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADUCAAAAAAAANQIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					10,
@@ -940,7 +931,7 @@
 						"characters": "*mais"
 					},
 					"BQAAANEIAAAAAAAA0ggAAAAAAAAAAAAA0ggAAAAAAADTCAAAAAAAAAAAAADTCAAAAAAAANQIAAAAAAAAAAAAANQIAAAAAAAA1QgAAAAAAAAAAAAA1QgAAAAAAADWCAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0QgAAAAAAADRCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADRCAAAAAAAANEIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					11,
@@ -948,7 +939,7 @@
 					"left_delete",
 					null,
 					"BAAAANUIAAAAAAAA1QgAAAAAAAABAAAAc9QIAAAAAAAA1AgAAAAAAAABAAAAadMIAAAAAAAA0wgAAAAAAAABAAAAYdIIAAAAAAAA0ggAAAAAAAABAAAAbQ",
-					"AQAAAAAAAAABAAAA1ggAAAAAAADWCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADWCAAAAAAAANYIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					12,
@@ -958,7 +949,7 @@
 						"characters": "MAIS"
 					},
 					"BAAAANIIAAAAAAAA0wgAAAAAAAAAAAAA0wgAAAAAAADUCAAAAAAAAAAAAADUCAAAAAAAANUIAAAAAAAAAAAAANUIAAAAAAAA1ggAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA0ggAAAAAAADSCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADSCAAAAAAAANIIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					13,
@@ -968,7 +959,7 @@
 						"characters": " d'o"
 					},
 					"BAAAANYIAAAAAAAA1wgAAAAAAAAAAAAA1wgAAAAAAADYCAAAAAAAAAAAAADYCAAAAAAAANkIAAAAAAAAAAAAANkIAAAAAAAA2ggAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA1ggAAAAAAADWCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADWCAAAAAAAANYIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					14,
@@ -976,7 +967,7 @@
 					"",
 					null,
 					"AQAAANoIAAAAAAAA2wgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA2ggAAAAAAADaCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADaCAAAAAAAANoIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					15,
@@ -984,7 +975,7 @@
 					"",
 					null,
 					"AQAAANoIAAAAAAAA2ggAAAAAAAABAAAAXg",
-					"AQAAAAAAAAABAAAA2wgAAAAAAADbCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADbCAAAAAAAANsIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					16,
@@ -994,7 +985,7 @@
 						"characters": "^"
 					},
 					"AQAAANoIAAAAAAAA2wgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA2ggAAAAAAADaCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADaCAAAAAAAANoIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					17,
@@ -1002,7 +993,7 @@
 					"left_delete",
 					null,
 					"AQAAANoIAAAAAAAA2ggAAAAAAAABAAAAXg",
-					"AQAAAAAAAAABAAAA2wgAAAAAAADbCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADbCAAAAAAAANsIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					18,
@@ -1012,7 +1003,7 @@
 						"characters": "ù"
 					},
 					"AQAAANoIAAAAAAAA2wgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA2ggAAAAAAADaCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADaCAAAAAAAANoIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					19,
@@ -1022,7 +1013,7 @@
 						"characters": " viennent"
 					},
 					"CQAAANsIAAAAAAAA3AgAAAAAAAAAAAAA3AgAAAAAAADdCAAAAAAAAAAAAADdCAAAAAAAAN4IAAAAAAAAAAAAAN4IAAAAAAAA3wgAAAAAAAAAAAAA3wgAAAAAAADgCAAAAAAAAAAAAADgCAAAAAAAAOEIAAAAAAAAAAAAAOEIAAAAAAAA4ggAAAAAAAAAAAAA4ggAAAAAAADjCAAAAAAAAAAAAADjCAAAAAAAAOQIAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA2wgAAAAAAADbCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADbCAAAAAAAANsIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					20,
@@ -1032,7 +1023,7 @@
 						"characters": " "
 					},
 					"AQAAAOQIAAAAAAAA5QgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA5AgAAAAAAADkCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADkCAAAAAAAAOQIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					21,
@@ -1040,7 +1031,7 @@
 					"left_delete",
 					null,
 					"AQAAAOQIAAAAAAAA5AgAAAAAAAABAAAAIA",
-					"AQAAAAAAAAABAAAA5QgAAAAAAADlCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADlCAAAAAAAAOUIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					22,
@@ -1050,7 +1041,7 @@
 						"characters": "-ils"
 					},
 					"BAAAAOQIAAAAAAAA5QgAAAAAAAAAAAAA5QgAAAAAAADmCAAAAAAAAAAAAADmCAAAAAAAAOcIAAAAAAAAAAAAAOcIAAAAAAAA6AgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA5AgAAAAAAADkCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADkCAAAAAAAAOQIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					23,
@@ -1060,7 +1051,7 @@
 						"characters": " et"
 					},
 					"AwAAAOgIAAAAAAAA6QgAAAAAAAAAAAAA6QgAAAAAAADqCAAAAAAAAAAAAADqCAAAAAAAAOsIAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA6AgAAAAAAADoCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADoCAAAAAAAAOgIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					24,
@@ -1070,7 +1061,7 @@
 						"characters": " comment"
 					},
 					"CAAAAOsIAAAAAAAA7AgAAAAAAAAAAAAA7AgAAAAAAADtCAAAAAAAAAAAAADtCAAAAAAAAO4IAAAAAAAAAAAAAO4IAAAAAAAA7wgAAAAAAAAAAAAA7wgAAAAAAADwCAAAAAAAAAAAAADwCAAAAAAAAPEIAAAAAAAAAAAAAPEIAAAAAAAA8ggAAAAAAAAAAAAA8ggAAAAAAADzCAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA6wgAAAAAAADrCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADrCAAAAAAAAOsIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					25,
@@ -1080,7 +1071,7 @@
 						"characters": " les"
 					},
 					"BAAAAPMIAAAAAAAA9AgAAAAAAAAAAAAA9AgAAAAAAAD1CAAAAAAAAAAAAAD1CAAAAAAAAPYIAAAAAAAAAAAAAPYIAAAAAAAA9wgAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA8wgAAAAAAADzCAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADzCAAAAAAAAPMIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					26,
@@ -1090,7 +1081,7 @@
 						"characters": " récupère"
 					},
 					"CQAAAPcIAAAAAAAA+AgAAAAAAAAAAAAA+AgAAAAAAAD5CAAAAAAAAAAAAAD5CAAAAAAAAPoIAAAAAAAAAAAAAPoIAAAAAAAA+wgAAAAAAAAAAAAA+wgAAAAAAAD8CAAAAAAAAAAAAAD8CAAAAAAAAP0IAAAAAAAAAAAAAP0IAAAAAAAA/ggAAAAAAAAAAAAA/ggAAAAAAAD/CAAAAAAAAAAAAAD/CAAAAAAAAAAJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAA9wgAAAAAAAD3CAAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAD3CAAAAAAAAPcIAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					27,
@@ -1100,7 +1091,7 @@
 						"characters": "-t-on…"
 					},
 					"BgAAAAAJAAAAAAAAAQkAAAAAAAAAAAAAAQkAAAAAAAACCQAAAAAAAAAAAAACCQAAAAAAAAMJAAAAAAAAAAAAAAMJAAAAAAAABAkAAAAAAAAAAAAABAkAAAAAAAAFCQAAAAAAAAAAAAAFCQAAAAAAAAYJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAAAkAAAAAAAAACQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAACQAAAAAAAAAJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					28,
@@ -1110,7 +1101,7 @@
 						"characters": " i"
 					},
 					"AgAAAAYJAAAAAAAABwkAAAAAAAAAAAAABwkAAAAAAAAICQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAABgkAAAAAAAAGCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAGCQAAAAAAAAYJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					29,
@@ -1120,7 +1111,7 @@
 						"characters": " "
 					},
 					"AQAAAAgJAAAAAAAACQkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAACAkAAAAAAAAICQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAICQAAAAAAAAgJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					30,
@@ -1128,7 +1119,7 @@
 					"left_delete",
 					null,
 					"AQAAAAgJAAAAAAAACAkAAAAAAAABAAAAIA",
-					"AQAAAAAAAAABAAAACQkAAAAAAAAJCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAJCQAAAAAAAAkJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					31,
@@ -1138,7 +1129,7 @@
 						"characters": "l"
 					},
 					"AQAAAAgJAAAAAAAACQkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAACAkAAAAAAAAICQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAICQAAAAAAAAgJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					32,
@@ -1148,7 +1139,7 @@
 						"characters": " y"
 					},
 					"AgAAAAkJAAAAAAAACgkAAAAAAAAAAAAACgkAAAAAAAALCQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAACQkAAAAAAAAJCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAJCQAAAAAAAAkJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					33,
@@ -1158,7 +1149,7 @@
 						"characters": " a"
 					},
 					"AgAAAAsJAAAAAAAADAkAAAAAAAAAAAAADAkAAAAAAAANCQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAACwkAAAAAAAALCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAALCQAAAAAAAAsJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					34,
@@ -1168,7 +1159,7 @@
 						"characters": "\n#"
 					},
 					"AwAAAA0JAAAAAAAADgkAAAAAAAAAAAAADgkAAAAAAAASCQAAAAAAAAAAAAASCQAAAAAAABMJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAADQkAAAAAAAANCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAANCQAAAAAAAA0JAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					35,
@@ -1178,7 +1169,7 @@
 						"characters": " un"
 					},
 					"AwAAABMJAAAAAAAAFAkAAAAAAAAAAAAAFAkAAAAAAAAVCQAAAAAAAAAAAAAVCQAAAAAAABYJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAEwkAAAAAAAATCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAATCQAAAAAAABMJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					36,
@@ -1188,7 +1179,7 @@
 						"characters": " bug"
 					},
 					"BAAAABYJAAAAAAAAFwkAAAAAAAAAAAAAFwkAAAAAAAAYCQAAAAAAAAAAAAAYCQAAAAAAABkJAAAAAAAAAAAAABkJAAAAAAAAGgkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAFgkAAAAAAAAWCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAWCQAAAAAAABYJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					37,
@@ -1198,7 +1189,7 @@
 						"characters": " là-dessus"
 					},
 					"CgAAABoJAAAAAAAAGwkAAAAAAAAAAAAAGwkAAAAAAAAcCQAAAAAAAAAAAAAcCQAAAAAAAB0JAAAAAAAAAAAAAB0JAAAAAAAAHgkAAAAAAAAAAAAAHgkAAAAAAAAfCQAAAAAAAAAAAAAfCQAAAAAAACAJAAAAAAAAAAAAACAJAAAAAAAAIQkAAAAAAAAAAAAAIQkAAAAAAAAiCQAAAAAAAAAAAAAiCQAAAAAAACMJAAAAAAAAAAAAACMJAAAAAAAAJAkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAGgkAAAAAAAAaCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAaCQAAAAAAABoJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					38,
@@ -1208,7 +1199,7 @@
 						"characters": " et"
 					},
 					"AwAAACQJAAAAAAAAJQkAAAAAAAAAAAAAJQkAAAAAAAAmCQAAAAAAAAAAAAAmCQAAAAAAACcJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAJAkAAAAAAAAkCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAkCQAAAAAAACQJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					39,
@@ -1218,7 +1209,7 @@
 						"characters": " je"
 					},
 					"AwAAACcJAAAAAAAAKAkAAAAAAAAAAAAAKAkAAAAAAAApCQAAAAAAAAAAAAApCQAAAAAAACoJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAJwkAAAAAAAAnCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAnCQAAAAAAACcJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					40,
@@ -1228,7 +1219,7 @@
 						"characters": " n'en"
 					},
 					"BQAAACoJAAAAAAAAKwkAAAAAAAAAAAAAKwkAAAAAAAAsCQAAAAAAAAAAAAAsCQAAAAAAAC0JAAAAAAAAAAAAAC0JAAAAAAAALgkAAAAAAAAAAAAALgkAAAAAAAAvCQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAKgkAAAAAAAAqCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAqCQAAAAAAACoJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					41,
@@ -1238,7 +1229,7 @@
 						"characters": " plus"
 					},
 					"BQAAAC8JAAAAAAAAMAkAAAAAAAAAAAAAMAkAAAAAAAAxCQAAAAAAAAAAAAAxCQAAAAAAADIJAAAAAAAAAAAAADIJAAAAAAAAMwkAAAAAAAAAAAAAMwkAAAAAAAA0CQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAALwkAAAAAAAAvCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAvCQAAAAAAAC8JAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					42,
@@ -1248,7 +1239,7 @@
 						"characters": " audun"
 					},
 					"BgAAADQJAAAAAAAANQkAAAAAAAAAAAAANQkAAAAAAAA2CQAAAAAAAAAAAAA2CQAAAAAAADcJAAAAAAAAAAAAADcJAAAAAAAAOAkAAAAAAAAAAAAAOAkAAAAAAAA5CQAAAAAAAAAAAAA5CQAAAAAAADoJAAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAANAkAAAAAAAA0CQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA0CQAAAAAAADQJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					43,
@@ -1256,7 +1247,7 @@
 					"left_delete",
 					null,
 					"AwAAADkJAAAAAAAAOQkAAAAAAAABAAAAbjgJAAAAAAAAOAkAAAAAAAABAAAAdTcJAAAAAAAANwkAAAAAAAABAAAAZA",
-					"AQAAAAAAAAABAAAAOgkAAAAAAAA6CQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA6CQAAAAAAADoJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					44,
@@ -1266,7 +1257,7 @@
 						"characters": "cune"
 					},
 					"BAAAADcJAAAAAAAAOAkAAAAAAAAAAAAAOAkAAAAAAAA5CQAAAAAAAAAAAAA5CQAAAAAAADoJAAAAAAAAAAAAADoJAAAAAAAAOwkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAANwkAAAAAAAA3CQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA3CQAAAAAAADcJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					45,
@@ -1276,7 +1267,7 @@
 						"characters": " idée………………"
 					},
 					"CwAAADsJAAAAAAAAPAkAAAAAAAAAAAAAPAkAAAAAAAA9CQAAAAAAAAAAAAA9CQAAAAAAAD4JAAAAAAAAAAAAAD4JAAAAAAAAPwkAAAAAAAAAAAAAPwkAAAAAAABACQAAAAAAAAAAAABACQAAAAAAAEEJAAAAAAAAAAAAAEEJAAAAAAAAQgkAAAAAAAAAAAAAQgkAAAAAAABDCQAAAAAAAAAAAABDCQAAAAAAAEQJAAAAAAAAAAAAAEQJAAAAAAAARQkAAAAAAAAAAAAARQkAAAAAAABGCQAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAOwkAAAAAAAA7CQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA7CQAAAAAAADsJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					46,
@@ -1286,7 +1277,7 @@
 						"characters": "…"
 					},
 					"AQAAAEYJAAAAAAAARwkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAARgkAAAAAAABGCQAAAAAAAAAAAAAAAPC/"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABGCQAAAAAAAEYJAAAAAAAAAAAAAAAA8L8"
 				],
 				[
 					49,
@@ -1294,7 +1285,15 @@
 					"duplicate_line",
 					null,
 					"AQAAAIMJAAAAAAAAtwkAAAAAAAAAAAAA",
-					"AQAAAAAAAAABAAAAggkAAAAAAACCCQAAAAAAAAAAAAAAcIVA"
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACCCQAAAAAAAIIJAAAAAAAAAAAAAABwhUA"
+				],
+				[
+					1,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAAA2LgAAPWJlZ2luCgpNb2R1bGUgcmFzc2VtYmxhbnQgdG91dGVzIGxlcyBtw6l0aG9kZXMgcXVpIHBlcm1ldHRlbnQgZGUgZm9ybWF0ZXIKbGVzIHRleHRlcyAoc2F1ZiwgYmllbiBlbnRlbmR1LCBsZSBmb3JtYXRldXJzIGTDqWZpbmlzIHBvdXIgbGUgbGl2cmUKb3UgbGEgY29sbGVjdGlvbiBkYW5zIGhlbHBlcnMucmIgZXQgZm9ybWF0ZXJzLnJiKQoKUG91cnF1b2kgImJpZW4gZW50ZW5kdSIgY2ktZGVzc3VzID8/Pz8Kw4dhIHNlcmFpdCBwb3VydGFudCBpY2kgcXVlIMOnYSBzZXJhaXQgbGUgbWlldXguCgo9ZW5kCm1vZHVsZSBQcmF3bjRib29rCmNsYXNzIFBkZkJvb2sKICAjIE3DqXRob2RlIHF1aSBkb2l0IMOqdHJlIHN1cmNsYXNzw6llIHBhciBsZXMgbW9kdWxlcyBwcm9wcmVzCiAgZGVmIHBhcnNlcl9mb3JtYXRlcihzdHIscGRmKTsgc3RyIGVuZAoKY2xhc3MgQW55UGFyYWdyYXBoCgogICMjCiAgIyBQcsOpZm9ybWF0YWdlIGQndW4gc3RyaW5nIHF1ZWxjb25xdWUsIGRpc3NvY2nDqSBkZSB0b3V0IMOpbMOpbWVudC4KICAjIMOHYSBwZXV0IMOqdHJlIHRvdXQgYXVzc2kgYmllbiBsZSBAdGV4dCBkJ3VuIHBhcmFncmFwaGUgcXVlIGxlCiAgIyBjb250ZW51IGQndW5lIGNlbGx1bGUgZGUgdGFibGUuCiAgIyAKICAjIENlIHByw6lmb3JtYXRhZ2UgbidhIHBhcyBiZXNvaW4gZGUgY29ubmFpdHJlIGxlIHBkZi12aWV3ZXIKICAjIGNvdXJhbnQuCiAgIyAKICBkZWYgc2VsZi5wcmVmb3JtYXRhZ2Uoc3RyKQogICAgIyAKICAgICMgVHJhaXRlbWVudCBkZXMgY29kZXMgcnVieSAKICAgICMgCiAgICAjIChjZSBzb250IHRvdXMgbGVzIGNvZGVzIHF1aSBzb250IG1pcyBkYW5zICN7Li4ufSkKICAgICMgCiAgICBzdHIgPSBfX3RyYWl0ZV9jb2Rlc19ydWJ5X2luKHN0cikKICAgICMgc3B5ICJzdHIgYXByw6hzIGNvZGUgcnVieSA6ICN7dGV4dC5pbnNwZWN0fSIub3JhbmdlCgogICAgIyAKICAgICMgVHJhaXRlbWVudCBkZXMgZm9ybWF0cyBpbmxpbmUgbWFya2Rvd24gCiAgICAjIChsZXMgw6l0b2lsZXMsIHRpcmV0cyBwbGF0cywgZXRjLikKICAgICMgCiAgICAjIE5lIHNvbnQgcGFzIHRyYWl0w6lzIGljaSBsZXMgbGlzdGVzIChxdWkgZGVtYW5kZSB1biB0cmFpdGVtZW50CiAgICAjIGF1IG1vbWVudCBkZSBsJ2ltcHJlc3Npb24pIG91IGxlcyBibG9jcyBkZSBub3RlcwogICAgIyAKICAgIHN0ciA9IF9fdHJhaXRlX2Zvcm1hdF9tYXJrZG93bl9pbmxpbmUoc3RyKQogICAgIyBzcHkgInN0ciBhcHLDqHMgZm9ybWF0IG1hcmtkb3duIGlubGluZSA6ICN7dGV4dC5pbnNwZWN0fSIub3JhbmdlCgogICAgcmV0dXJuIHN0ciAgICAKICBlbmQKCiAgIyBbU3RyaW5nXSBMZSB0ZXh0ZSBmaW5hbCwgdGVsIHF1J2lsIGVzdCB2cmFpbWVudCDDqWNyaXQgcGFyIAogICMgcGRmLgogIGF0dHJfcmVhZGVyIDpmaW5hbF90ZXh0CiAgCiAgIyBbSGFzaF0gVGFibGUgZGVzIHNww6ljaWZpY2F0aW9ucyBmaW5hbGVzIHBvdXIgbCdpbXByZXNzaW9uIGR1CiAgIyBwYXJhZ3JhcGhlIChxdWVsIHF1J2lsIHNvaXQpCiAgYXR0cl9hY2Nlc3NvciA6ZmluYWxfc3BlY3MKCgogIGRlZiBwcmVmb3JtYXRlKHBkZikKICAgIHNweSAiI3ByZWZvcm1hdGUgZGUgI3t0ZXh0Lmluc3BlY3R9IgogICAgc2VsZi5maW5hbF9zcGVjcyA9IHt9CiAgICBpZiBwZmJjb2RlICYmIHBmYmNvZGUucGFyYWdfc3R5bGUKICAgICAgZmluYWxfc3BlY3MubWVyZ2UhKHBmYmNvZGUucGFyYWdfc3R5bGUpCiAgICBlbmQKICAgICMgCiAgICAjIETDqXRlY3Rpb24gZGUgbGEgbmF0dXJlIGR1IHRleHRlCiAgICAjIAogICAgZGV0ZWN0ZV9ldF90cmFpdGVfbmF0dXJlX3BhcmFncmFwaGUocGRmKQogICAgIyAKICAgICMgUHLDqWZvcm1hdGFnZSBnw6luw6lyYWwKICAgICMgCiAgICBAdGV4dCA9IHNlbGYuY2xhc3MucHJlZm9ybWF0YWdlKHRleHQpCgogIGVuZAoKICAjCiAgIyBAcHJvZHVpdCBAZmluYWxfdGV4dCAobGUgdGV4dGUgZmluYWwgw6AgYWZmaWNoZXIpCiAgIyAKICBkZWYgZmluYWxfZm9ybWF0YWdlKHBkZikKICAgIHNweSAiLT4gZmluYWxfZm9ybWF0YWdlIGRlICN7dGV4dC5pbnNwZWN0fSIuamF1bmUKICAgIEB0ZXh0ID0gZm9ybWF0ZV90ZXh0KHBkZiwgdGV4dCkKCiAgICBAZmluYWxfdGV4dCA9IHNlbGYuY2xhc3MuZm9ybWF0YWdlX2ZpbmFsKHRleHQsIHBkZikKCiAgICAjCiAgICAjIE1haW50ZW5hbnQgcXUnb24gYSB0b3VzIGxlcyDDqWzDqW1lbnRzIChvcHRpb25zKiksIG9uIHBldXQKICAgICMgcGFyc2VyIGV0IGZvcm1hdGVyIGxlIHBhcmFncmFwaGUuCiAgICAjICpNQUlTIGQnb8O5IHZpZW5uZW50LWlscyBldCBjb21tZW50IGxlcyByw6ljdXDDqHJlLXQtb27igKYgaWwgeSBhCiAgICAjIHVuIGJ1ZyBsw6AtZGVzc3VzIGV0IGplIG4nZW4gcGx1cyBhdWN1bmUgaWTDqWXigKbigKbigKbigKbigKbigKbigKYKICAgICMgCiAgICBpZiBwZGZib29rLm1vZHVsZV9wYXJzZXI/ICMgJiYgcGFyYWcuc29tZV90ZXh0PwogICAgaWYgcGRmYm9vay5tb2R1bGVfcGFyc2VyPyAjICYmIHBhcmFnLnNvbWVfdGV4dD8KICAgICAgIyBwZGZib29rLl9fcGFyYWdyYXBoX3BhcnNlcihzZWxmLCBwZGYpCiAgICBlbmQKCiAgICBzcHkgIkZpbiAjZmluYWxfZm9ybWF0YWdlIGRlICN7dGV4dC5pbnNwZWN0fSIKICBlbmQKCiAgIwogICMgQGNsYXNzCiAgIyAKICAjIE3DqXRob2RlIHF1aSBwYXNzZSBwYXIgdG91dGVzIGxlcyBtw6l0aG9kZXMgZGUgZm9ybWF0YWdlLCBwZXJzb25uYS0KICAjIGxpc8OpZXMgY29tbWUgY29tbXVuZXMuCiAgIyAKICBkZWYgc2VsZi5mb3JtYXRhZ2VfZmluYWwoc3RyLCBwZGYpCiAgICBzdHIgPSBwZGZib29rLnBhcnNlcl9mb3JtYXRlcihzdHIsIHBkZikKICAgIHJldHVybiBzdHIKICBlbmQKCiAgZGVmIHNlbGYucGRmYm9vazsgQHBkZmJvb2sgfHw9IFBkZkJvb2suY3VycmVudCBlbmQKCiAgIyA9IG1haW4gPQogICMKCiAgIyMKICAjIE9uIGRvaXQgZMOpdGVjdGVyIGxhIG5hdHVyZSBkZSBjZXJ0YWlucyBwYXJhZ3JhcGhlcyBhdmFudCBsZQogICMgZm9ybWF0YWdlIHBvdXIgw6l2aXRlciBjZXJ0YWlucyBwcm9ibMOobWUuIFR5cGlxdWVtZW50LCBzaSB1bgogICMgcGFyYWdyYXBoZSBlc3QgdW4gaXRlbSBkZSBsaXN0ZSBldCBxdSdpbCBjb250aWVudCB1biB0ZXh0ZSBlbiAKICAjIGl0YWxpcXVlLCBpbCBwZXV0IHJlc3NlbWJsZXIgw6AgOgogICMgICAqIHVuIGl0ZW0gZGUgKmxpc3RlKiBhdmVjIGl0YWxpcXVlCiAgIyBNYWlzIHMnaWwgZXN0IGZvcm1hdMOpIHRlbCBxdWVsLCBhbG9ycyBsYSBwb3J0aW9uICIqIHVuIGl0ZW0gZGUgIgogICMgdmEgw6p0cmUgY29uc2lkw6lyw6llIGNvbW1lIGVuIGl0YWxpcXVlLgogICMgSWwgZmF1dCBkb25jIDoKICAjICAgLSBkw6l0ZWN0ZXIgcXUnaWwgcydhZ2l0IHVuIGl0ZW0gZGUgbGlzdGUgKHNlbGYubGlzdF9pdGVtPykKICAjICAgLSByZXRpcmVyIGxhIG1hcnF1ZSBkZSBkw6lidXQgZGFucyBAdGV4dAogICMgT24gcGV1dCBlbnN1aXRlIGxlIGZvcm1hdGVyIGNvbW1lIGNvbnZlbnUKICBkZWYgZGV0ZWN0ZV9ldF90cmFpdGVfbmF0dXJlX3BhcmFncmFwaGUocGRmKQogICAgIyAKICAgICMgRXN0LWNlIHVuZSBjaXRhdGlvbiA/CiAgICAjIAogICAgQGlzX2NpdGF0aW9uID0gcGFyYWdyYXBoPyAmJiB0ZXh0Lm1hdGNoPyhSRUdfQ0lUQVRJT04pCiAgICBpZiBjaXRhdGlvbj8KICAgICAgQHRleHQgPSB0ZXh0WzEuLi0xXS5zdHJpcAogICAgICBmaW5hbF9zcGVjcy5tZXJnZSEoe3NpemU6IGZvbnRfc2l6ZShwZGYpICsgMiwgbWdfbGVmdDogMS5jbSwgbWdfcmlnaHQ6IDEuY20sIG1nX3RvcDogMC41LmNtLCBtZ19ib3Q6IDAuNS5jbSwgbm9fbnVtOnRydWV9KQogICAgZW5kCiAgICAjIAogICAgIyBFc3QtY2UgdW4gaXRlbSBkZSBsaXN0ZQogICAgIyAKICAgIEBpc19saXN0X2l0ZW0gPSBwYXJhZ3JhcGg/ICYmIHRleHQubWF0Y2g/KFJFR19MSVNUX0lURU0pCiAgICBpZiBsaXN0X2l0ZW0/CiAgICAgIEB0ZXh0ID0gdGV4dFsxLi4tMV0uc3RyaXAKICAgICAgZmluYWxfc3BlY3MubWVyZ2UhKHttZ19sZWZ0OjMubW0sIG5vX251bTogdHJ1ZSwgY3Vyc29yX3Bvc2l0aW9ubmVkOiB0cnVlfSkKICAgIGVuZAogIGVuZAogIFJFR19MSVNUX0lURU0gPSAvXlwqIC4rJC8uZnJlZXplCiAgUkVHX0NJVEFUSU9OICA9IC9ePiAuKyQvLmZyZWV6ZQoKCgogIGRlZiBmb3JtYXRlX3RleHQocGRmLCBzdHIpCiAgICBzcHkgIltmb3JtYXRlX3RleHRdIHN0ciBpbml0aWFsIDogI3tzdHIuaW5zcGVjdH0iLm9yYW5nZQoKICAgIGlmIGxpc3RfaXRlbT8KICAgICAgc3RyID0gZm9ybWF0ZV9hc19saXN0X2l0ZW0ocGRmLCBzdHIpCiAgICBlbHNpZiBjaXRhdGlvbj8KICAgICAgc3RyID0gZm9ybWF0ZV9hc19jaXRhdGlvbihwZGYsIHN0cikKICAgIGVuZAoKICAgICMKICAgICMgVHJhaXRlbWVudCBkZXMgbWFycXVlcyBiaWJsaW9ncmFnaGlxdWVzCiAgICAjIAogICAgaWYgQmlibGlvZ3JhcGh5LmFueT8KICAgICAgc3RyID0gX190cmFpdGVfdGVybWVzX2JpYmxpb2dyYXBoaXF1ZXNfaW4oc3RyKQogICAgICAjIHNweSAic3RyIGFwcsOocyByZWNoZXJjaGUgYmlibGlvIDogI3tzdHIuaW5zcGVjdH0iLm9yYW5nZQogICAgZW5kCgogICAgIwogICAgIyBUcmFpdGVtZW50IGRlcyByw6lmw6lyZW5jZXMgKGFwcGVscyBldCBjaWJsZXMpCiAgICAjIAogICAgc3RyID0gX190cmFpdGVfcmVmZXJlbmNlc19pbihzdHIpCgogICAgIwogICAgIyBUcmFpdGVtZW50IGRlcyBtb3RzIGluZGV4w6lzCiAgICAjIAogICAgc3RyID0gX190cmFpdGVfbW90X2luZGV4ZWQoc3RyKQoKICAgICMKICAgICMgQWpvdXQgKG9wdGlvbm5lbCkgZGUgbGEgcG9zaXRpb24gZHUgY3Vyc29yCiAgICAjIChkw6lidWdnYWdlIGV0IG1pc2UgZW4gcGxhY2UgZHUgdGV4dGUpCiAgICAjIAogICAgc3RyID0gX19tYXliZV9hZGRfY3Vyc29yX3Bvc2l0aW9uKHN0cikKCiAgICBzcHkgIltmb3JtYXRlX3RleHRdIHN0ciBmaW5hbCA6ICN7c3RyLmluc3BlY3R9Ii5vcmFuZ2UKICAgIAogICAgcmV0dXJuIHN0cgogIGVuZAoKCiAgZGVmIF9fdHJhaXRlX21vdF9pbmRleGVkKHN0cikKICAgIGlmIHN0ci5tYXRjaD8oJ2luZGV4OicpIHx8IHN0ci5tYXRjaD8oJ2luZGV4XCgnKQogICAgICBzdHIgPSBfX3RyYWl0ZV9tb3RzX2luZGV4ZWRfaW4oc3RyKQogICAgICAjIHNweSAic3RyIGFwcsOocyByZWNoZXJjaGUgaW5kZXggOiAje3N0ci5pbnNwZWN0fSIub3JhbmdlCiAgICBlbmQKICAgIAogICAgcmV0dXJuIHN0cgogIGVuZAoKICBkZWYgZm9ybWF0ZV9hc19saXN0X2l0ZW0ocGRmLCBzdHIpCiAgICBzdHIgPSB0ZXh0CiAgICBwZGYudXBkYXRlIGRvIAogICAgICBtb3ZlX2N1cnNvcl90b19uZXh0X3JlZmVyZW5jZV9saW5lCiAgICAgIGZsb2F0IHsgdGV4dCAn4oCTICcgfQogICAgZW5kCiAgICByZXR1cm4gc3RyCiAgZW5kCgogIGRlZiBmb3JtYXRlX2FzX2NpdGF0aW9uKHBkZiwgc3RyKQogICAgc3RyID0gIjxlbT4je3N0ci5zdHJpcH08L2VtPiIKICAgIHJldHVybiBzdHIKICBlbmQKCgogICMjCiAgIyBQb3VyIGxlIGRlYnVnZ2FnZSBvbiBwZXV0IHZvdWxvaXIgYWpvdXRlciBsYSB2YWxldXIgZHUgY3Vyc2V1cgogICMgZW4gZMOpYnV0IGRlIHRleHRlIGR1IHBhcmFncmFwaGUuIFBvdXIgY2UgZmFpcmUsIG9uIGFqb3V0ZXIKICAjIGwnb3B0aW9uICctLWN1cnNvcicgw6AgbGEgbGlnbmUgZGUgY29tbWFuZGUKICAjIEByYXBwZWwKICAjICAgTGUgImN1cnNldXIiLCBjJ2VzdCBsYSBoYXV0ZXVyIHZlcnRpY2FsIGR1IHByb2NoYWluIHRleHRlCiAgIyAgIMOpY3JpdCBhdmVjICdwZGYudGV4dCcKICAjIAogICMgQHJldHVybiBbQm9vbGVhbl0gdHJ1ZSBzJ2lsIGZhdXQgYWpvdXRlciBsYSB2YWxldXIgZHUgY3Vyc2V1cgogIGRlZiBzZWxmLmFkZF9jdXJzb3JfcG9zaXRpb24/CiAgICA6VFJVRSA9PSBAQGFkZGN1cnNwb3MgfHw9IHRydWVfb3JfZmFsc2UoQ0xJLm9wdGlvbig6Y3Vyc29yKSkKICBlbmQKICBkZWYgYWRkX2N1cnNvcl9wb3NpdGlvbj8KICAgIHNlbGYuY2xhc3MuYWRkX2N1cnNvcl9wb3NpdGlvbj8KICBlbmQKCgpwcml2YXRlCgogICMgQHJldHVybiBbU3RyaW5nXSBMZSB0ZXh0ZSBmb3JtYXTDqQogIGRlZiBfX3RyYWl0ZV9yZWZlcmVuY2VzX2luKHN0cikgICAgCiAgICBpZiBzdHIubWF0Y2g/KCdcKCA8XC0nKQogICAgICBzdHIgPSBzdHIuZ3N1YihSRUdfQ0lCTEVfUkVGRVJFTkNFKSBkbwogICAgICAgIGNpYmxlID0gJDEuZnJlZXplCiAgICAgICAgc3B5ICJbUkVGRVJFTkNFU10gQ29uc2lnbmF0aW9uIGRlIGxhIHLDqWbDqXJlbmNlICN7Y2libGUuaW5zcGVjdH0gKHtwYWdlOiN7Zmlyc3RfcGFnZX0sIHBhcmFncmFwaDoje251bWVyb319KSIuYmxldQogICAgICAgIHBkZmJvb2sudGFibGVfcmVmZXJlbmNlcy5hZGQoY2libGUsIHtwYWdlOmZpcnN0X3BhZ2UsIHBhcmFncmFwaDpudW1lcm99KQogICAgICAgICcnCiAgICAgIGVuZAogICAgICAjIAogICAgICAjIE9uIGNvcnJpZ2UgbGVzIMOpdmVudHVlbHMgcmV0b3VycyBjaGFyaW90IGludGVtcGVzdGlmcwogICAgICAjIAogICAgICBzdHIgPSBzdHIuZ3N1YigvICArLywgJyAnKQogICAgZW5kCiAgICAjIEFwcGVscyBkZSByw6lmw6lyZW5jZQogICAgaWYgc3RyLm1hdGNoPygnXCggXC0+JykKICAgICAgc3RyID0gc3RyLmdzdWIoUkVHX0FQUEVMX1JFRkVSRU5DRSkgZG8KICAgICAgICBhcHBlbCA9ICQxLmZyZWV6ZQogICAgICAgIHNweSAiW1JFRkVSRU5DRVNdIENvbnNpZ25hdGlvbiBkZSBsJ2FwcGVsIMOgIGxhIHLDqWbDqXJlbmNlICN7YXBwZWwuaW5zcGVjdH0iLmJsZXUKICAgICAgICBwZGZib29rLnRhYmxlX3JlZmVyZW5jZXMuZ2V0KGFwcGVsLCBzZWxmKQogICAgICBlbmQKICAgIGVuZAogICAgcmV0dXJuIHN0cgogIGVuZAoKICAjIEByZXR1cm4gW1N0cmluZ10gTGUgdGV4dGUgZm9ybWF0w6kKICBkZWYgX190cmFpdGVfbW90c19pbmRleGVkX2luKHN0cikKICAgICMgc3B5ICJUcmFpdGVtZW50IGRlICN7c3RyLmluc3BlY3R9IHBvdXIgbCdpbmRleCIKICAgIHN0ciA9IHN0ci5nc3ViKC9pbmRleDooLis/KShcYikvKSBkbwogICAgICBkbW90ID0ge21vdDogJDEuZnJlZXplLCBwYWdlOiBmaXJzdF9wYWdlLCBwYXJhZ3JhcGg6bnVtZXJvfQogICAgICBwZGZib29rLnBhZ2VfaW5kZXguYWRkKGRtb3QpCiAgICAgIGRtb3RbOm1vdF0gKyAkMgogICAgZW5kCiAgICBzdHIgPSBzdHIuZ3N1YigvaW5kZXhcKCguKz8pXCkvKSBkbwogICAgICBtb3QsIGNhbm9uID0gJDEuZnJlZXplLnNwbGl0KCd8JykKICAgICAgZG1vdCA9IHttb3Q6IG1vdCwgY2Fub246IGNhbm9uLCBwYWdlOiBmaXJzdF9wYWdlLCBwYXJhZ3JhcGg6IG51bWVyb30KICAgICAgcGRmYm9vay5wYWdlX2luZGV4LmFkZChkbW90KQogICAgICBkbW90Wzptb3RdCiAgICBlbmQKICAgIHJldHVybiBzdHIKICBlbmQKCiAgZGVmIF9fbWF5YmVfYWRkX2N1cnNvcl9wb3NpdGlvbihzdHIpCiAgICAjIFMnaWwgbGUgZmF1dCAob3B0aW9ucyksIGFqb3V0ZXIgbGEgcG9zaXRpb24gZHUgY3Vyc2V1ciBlbgogICAgIyBkw6lidXQgZGUgcGFyYWdyYXBoZS4KICAgIGlmIHBhcmFncmFwaD8gJiYgYWRkX2N1cnNvcl9wb3NpdGlvbj8KICAgICAgaWYgc3RyLmlzX2E/KEFycmF5KQogICAgICAgIHN0clswXSA9IHBkZi5hZGRfY3Vyc29yX3Bvc2l0aW9uKHN0clswXSkKICAgICAgZWxzZQogICAgICAgIHN0ciA9IHBkZi5hZGRfY3Vyc29yX3Bvc2l0aW9uKHN0cikgCiAgICAgIGVuZAogICAgZW5kCgogICAgcmV0dXJuIHN0ciAgICAKICBlbmQKCiAgIyMKICAjIFRyYWl0ZW1lbnQgZGVzIHRlcm1lcyBwcm9wcmVzIGF1eCBiaWJsaW9ncmFwaGllcwogICMgCiAgIyBAcmV0dXJuIFtTdHJpbmddIExlIHRleHRlIGZvcm1hdMOpCiAgZGVmIF9fdHJhaXRlX3Rlcm1lc19iaWJsaW9ncmFwaGlxdWVzX2luKHN0cikKICAgIHN0ci5nc3ViKEJpYmxpb2dyYXBoeTo6UkVHX09DQ1VSUkVOQ0VTKSBkbwogICAgICAKICAgICAgYmliX3RhZyA9ICQxLmZyZWV6ZQogICAgICBpdGVtX2F2LCBpdGVtX2FwID0gJDIuZnJlZXplLnNwbGl0KCd8JykKCiAgICAgIGJpYmxpbyA9IEJpYmxpb2dyYXBoeS5nZXQoYmliX3RhZykgfHwgcmFpc2UoIkltcG9zc2libGUgZGUgdHJvdXZlciBsYSBiaWJsaW9ncmFwaGllIGRlIHRhZyAje2JpYl90YWcuaW5zcGVjdH0iKQogICAgICBjYW5vbiwgYWN0dWFsID0gCiAgICAgICAgaWYgKGJpYml0ZW0gPSBiaWJsaW8uZXhpc3Q/KGl0ZW1fYXYpKQogICAgICAgICAgW2l0ZW1fYXYsIGl0ZW1fYXBdCiAgICAgICAgZWxzaWYgaXRlbV9hcCAmJiAoYmliaXRlbSA9IGJpYmxpby5leGlzdD8oaXRlbV9hcCkpCiAgICAgICAgICBbaXRlbV9hcCwgaXRlbV9hdl0KICAgICAgICBlbHNlCiAgICAgICAgICAjIAogICAgICAgICAgIyBJdGVtIGRlIGJpYmxpb2dyYXBoaWUgaW5jb25udQogICAgICAgICAgIyAKICAgICAgICAgIHVuZm91bmQgPSBbaXRlbV9hdixpdGVtX2FwXS5jb21wYWN0LmpvaW4oIi8iKQogICAgICAgICAgYnVpbGRpbmdfZXJyb3IoRVJST1JTWzpiaWJsaW9dWzpiaWJfaXRlbV91bmtub3duXSAlIFsiI3t1bmZvdW5kfSIuaW5zcGVjdCwgYmliX3RhZ10pCiAgICAgICAgICBbbmlsLCBpdGVtX2F2XQogICAgICAgIGVuZAoKICAgICAgdW5sZXNzIGNhbm9uLm5pbD8KICAgICAgICAjIAogICAgICAgICMgU2kgbGUgY2Fub24gZXN0IGTDqWZpbmkgKGllIHNpIGxlIG1vdCBhIMOpdMOpIHJlY29ubnUgZGFucyBsYSBiaWJsaW9ncmFwaGllKQogICAgICAgICMgYWxvcnMgb24gZW5yZWdpc3RyZSB1bmUgb2NjdXJyZW5jZSBwb3VyIGx1aS4KICAgICAgICAjIAoKICAgICAgICAjIAogICAgICAgICMgQWpvdXQgZGUgY2V0dGUgb2NjdXJyZW5jZQogICAgICAgICMgCiAgICAgICAgYmliaXRlbS5hZGRfb2NjdXJyZW5jZSh7cGFnZTogZmlyc3RfcGFnZSwgcGFyYWdyYXBoOiBudW1lcm99KQoKICAgICAgICBpZiBhY3R1YWwKICAgICAgICAgIGJpYml0ZW0uZm9ybWF0ZV9mb3JfdGV4dChhY3R1YWwsIHNlbGYpCiAgICAgICAgZWxzaWYgYmliaXRlbS5yZXNwb25kX3RvPyg6Zm9ybWF0ZWRfZm9yX3RleHQpCiAgICAgICAgICBiaWJpdGVtLmZvcm1hdGVkX2Zvcl90ZXh0KHNlbGYpCiAgICAgICAgZWxzZQogICAgICAgICAgYmliaXRlbS50aXRsZQogICAgICAgIGVuZAogICAgICBlbmQKICAgIGVuZAogIGVuZAoKICAjIAogICMgVHJhaXRlbWVudCBkZXMgY29kZXMgcnVieSwgcXVpIHNlIHByw6lzZW50ZW50IGRhbnMgbGUgdGV4dGUgcGFyCiAgIyDCqyAjey4uLn0gwrsKICAjIExlIGNvZGUgw6AgbCdpbnTDqXJpZXVyIGRlcyBhY2NvbGFkZXMgcGV1dCDDqnRyZSBkdSBjb2RlIMOgIGludGVycHLDqXRlcgogICMgdGVsIHF1ZWwgKHVuIG9ww6lyYXRpb24gcGFyIGV4ZW1wbGUsIG91IHVuZSBkYXRlKSBvdSBhbG9ycyB1bmUKICAjIG3DqXRob2RlIHBlcnNvbm5hbGlzw6llIGTDqWZpbmllIGRhbnMgbGVzIGhlbHBlcnMuCiAgIyAKICAjIEByZXR1cm4gW1N0cmluZ10gTGUgdGV4dGUgZm9ybWF0w6kKICAjIAogIFJFR19DT0RFX1JVQlkgPSAvI1x7KC4rPylcfS8uZnJlZXplCiAgZGVmIHNlbGYuX190cmFpdGVfY29kZXNfcnVieV9pbihzdHIpCiAgICBzdHIuZ3N1YihSRUdfQ09ERV9SVUJZKSBkbwogICAgICBjb2RlID0gJDEuZnJlZXplCiAgICAgIG1ldGhvZGUgPSBuaWwKICAgICAgaWYgY29kZS5tYXRjaD8oUkVHX0hFTFBFUl9NRVRIT0QpCiAgICAgICAgIyBDJ2VzdCBwZXV0LcOqdHJlIHVuZSBtw6l0aG9kZSBkJ2hlbHBlcnMgcXVpIGVzdCBhcHBlbMOpZQogICAgICAgIG1ldGhvZGUgPSBjb2RlLm1hdGNoKFJFR19IRUxQRVJfTUVUSE9EKVsxXS50b19zeW0KICAgICAgZW5kCiAgICAgIGlmIG1ldGhvZGUgJiYgcGRmYm9vay5wZGZoZWxwZXJzICYmIHBkZmJvb2sucGRmaGVscGVycy5yZXNwb25kX3RvPyhtZXRob2RlKQogICAgICAgICMgCiAgICAgICAgIyBVbmUgbcOpdGhvZGUgaGVscGVyIHByb3ByZSBhdSBsaXZyZSBvdSDDoCBsYSBjb2xsZWN0aW9uCiAgICAgICAgIyAKICAgICAgICBwZGZib29rLnBkZmhlbHBlcnMuaW5zdGFuY2VfZXZhbChjb2RlKQogICAgICBlbHNlCiAgICAgICAgIwogICAgICAgICMgVW4gY29kZSBnw6luw6lyYWwKICAgICAgICAjIAogICAgICAgIGV2YWwoY29kZSkKICAgICAgZW5kCiAgICBlbmQKICBlbmQKICBSRUdfSEVMUEVSX01FVEhPRCA9IC9eKFthLXpBLVowLTlfXSspKFwoLis/XCkpPyQvCgoKICBkZWYgc2VsZi5fX3RyYWl0ZV9mb3JtYXRfbWFya2Rvd25faW5saW5lKHN0cikKICAgICMgCiAgICAjIExlcyBncmFzICgnKionKQogICAgIyAKICAgIHN0ciA9IF9fdHJhaXRlX2JvbGQoc3RyKQogICAgIyAKICAgICMgTGVzIGl0YWxpcXVlcwogICAgIyAKICAgIHN0ciA9IF9fdHJhaXRlX2l0YWxpYyhzdHIpCiAgICAjIAogICAgIyBMZXMgc291bGlnbsOpcwogICAgIyAKICAgIHN0ciA9IF9fdHJhaXRlX3VuZGVybGluZShzdHIpCiAgICAjCiAgICAjIExlcyBleHBvc2FudHMKICAgICMgCiAgICBzdHIgPSBfX3RyYWl0ZV9zdXBlcnNjcmlwdChzdHIpCgogICAgcmV0dXJuIHN0cgogIGVuZAoKICBkZWYgc2VsZi5fX3RyYWl0ZV9ib2xkKHN0cikKICAgIHN0ciA9IHN0ci5nc3ViKFJFR19CT0xEKSBkbwogICAgICB0eHQgPSAkMS5mcmVlemUKICAgICAgU1BBTl9CT0xEICUgdHh0IAogICAgZW5kCiAgZW5kCiAgUkVHX0JPTEQgICAgICA9IC9cKlwqKC4rPylcKlwqLy5mcmVlemUKICBTUEFOX0JPTEQgICAgID0gIjxiPiVzPC9iPiIuZnJlZXplCgogIGRlZiBzZWxmLl9fdHJhaXRlX2l0YWxpYyhzdHIpCiAgICByZXR1cm4gc3RyIHVubGVzcyBzdHIubWF0Y2g/KCdcKicpCiAgICBzdHIgLmdzdWIoUkVHX0VUT0lMRSwgJ21tU1RBUm1tJy5mcmVlemUpCiAgICAgICAgLmdzdWIoUkVHX0lUQUxJQywgU1BBTl9JVEFMSUMpCiAgICAgICAgLmdzdWIoUkVHX1NUQVJULCAgJyonLmZyZWV6ZSkKICBlbmQKICBSRUdfRVRPSUxFICAgID0gL1xcXCovLmZyZWV6ZQogIFJFR19JVEFMSUMgICAgPSAvXCooLis/KVwqLy5mcmVlemUKICBTUEFOX0lUQUxJQyAgID0gJzxlbT5cMTwvZW0+Jy5mcmVlemUKICBSRUdfU1RBUlQgICAgID0gL21tU1RBUm1tLy5mcmVlemUKCiAgZGVmIHNlbGYuX190cmFpdGVfdW5kZXJsaW5lKHN0cikKICAgIHJldHVybiBzdHIgdW5sZXNzIHN0ci5tYXRjaD8oJ18nKQogICAgc3RyIC5nc3ViKFJFR19USVJFVF9QTEFULCAnbW1USVJFVG1tUExBVG1tJy5mcmVlemUpCiAgICAgICAgLmdzdWIoUkVHX1VOREVSTElORSwgU1BBTl9VTkRFUkxJTkUpCiAgICAgICAgLmdzdWIoUkVHX1BMQVRfVElSRVQsICdfJy5mcmVlemUpCiAgZW5kCiAgUkVHX1RJUkVUX1BMQVQgPSAvXFxfLy5mcmVlemUKICBSRUdfVU5ERVJMSU5FID0gL19fKC4rPylfXy8uZnJlZXplCiAgU1BBTl9VTkRFUkxJTkUgPSAnPHU+XDE8L3U+Jy5mcmVlemUKICBSRUdfUExBVF9USVJFVCA9IC9tbVRJUkVUbW1QTEFUbW0vLmZyZWV6ZQoKICBkZWYgc2VsZi5fX3RyYWl0ZV9zdXBlcnNjcmlwdChzdHIpCiAgICBzdHIgPSBzdHIuZ3N1YihSRUdfRVhQT1NBTlQpIGRvCiAgICAgIGxldHRyZSA9ICQxLmZyZWV6ZQogICAgICBleHBvICAgPSAkMi5mcmVlemUKICAgICAgU1BBTl9FWFBPU0FOVCAlIFtsZXR0cmUsIGV4cG9dCiAgICBlbmQKICBlbmQKICBSRUdfRVhQT1NBTlQgPSAvKFswLTlYVklDXSlcXihlcnxyZXxlKS8uZnJlZXplCiAgU1BBTl9FWFBPU0FOVCA9ICclczxzdXA+JXM8L3N1cD4nLmZyZWV6ZQoKCmVuZCAjL2NsYXNzIEFueVBhcmFncmFwaAplbmQgIy9jbGFzcyBQZGZCb29rCmVuZCAjL21vZHVsZSBQcmF3bjRib29rCgAAAAAAAAAArzIAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAtgkAAAAAAAC2CQAAAAAAAAAAAAAAAPC/"
 				]
 			]
 		},
@@ -1306,10 +1305,7 @@
 				"line_ending": "Unix",
 				"name": "Find Results",
 				"scratch": true
-			},
-			"undo_stack":
-			[
-			]
+			}
 		},
 		{
 			"file": "lib/commandes/build/lib/PdfBook.rb",
@@ -1318,10 +1314,7 @@
 				"buffer_size": 5508,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
-			},
-			"undo_stack":
-			[
-			]
+			}
 		},
 		{
 			"file": "lib/required/NParagraphe/NParagraphe_predicate.rb",
@@ -1567,7 +1560,7 @@
 	],
 	"find":
 	{
-		"height": 45.0
+		"height": 33.0
 	},
 	"find_in_files":
 	{
@@ -1744,15 +1737,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14291,
+						"buffer_size": 14351,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6059,
-								6059
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1763,7 +1756,7 @@
 							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4762.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -1809,15 +1802,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2404,
+						"buffer_size": 4462,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								213,
-								213
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1860,7 +1853,7 @@
 							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 915.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -1873,15 +1866,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 12315,
+						"buffer_size": 12318,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								712,
-								712
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1892,7 +1885,7 @@
 							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 752.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -1915,7 +1908,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11722,
+						"buffer_size": 12975,
 						"regions":
 						{
 						},
@@ -1934,7 +1927,7 @@
 							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1165.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -2044,10 +2037,12 @@
 							"incomplete_sync": null,
 							"line_numbers": false,
 							"output_tag": 2,
+							"remote_loading": false,
 							"result_base_dir": "",
 							"result_file_regex": "^([^ \t].*):$",
 							"result_line_regex": "^ +([0-9]+):",
 							"scroll_past_end": true,
+							"synced": false,
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
@@ -2084,7 +2079,7 @@
 							"syntax": "Packages/Ruby/Ruby.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2632.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,

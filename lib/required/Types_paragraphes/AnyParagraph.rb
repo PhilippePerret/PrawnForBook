@@ -231,34 +231,6 @@ class AnyParagraph
   def recipe; @recipe || pdfbook.recipe end
 
 
-
-
-  # --- Cross-references Methods ---
-
-  # Noter que ces méthodes, pour le moment, ne servent qu'à des fins
-  # de check, pour voir si les références sont bien définies.
-
-  # @return [Hash] Liste des références croisées que contient
-  # le paragraphe (texte ou le titre). La clé  est l'identifiant
-  # du livre (tel qu'il est défini dans la bibliographie des livres)
-  # et la valeur est la liste des cibles de ce livre.
-  def cross_references
-    tbl = {}
-    text.scan(REG_APPEL_CROSS_REFERENCE).to_a.each do |book_id, cible|
-      tbl.key?(book_id) || tbl.merge!(book_id => [])
-      tbl[book_id] << cible
-    end
-    return tbl
-  end
-
-  # @return [Boolean] True si le paragraphe (texte ou titre) contient
-  # des références croisées
-  # 
-  def match_cross_reference?
-    text.match?(/\( \->\((.+?):(.+?)\)/)
-  end
-
-
   private
 
   # --- Calcul Methods --- #
@@ -279,9 +251,6 @@ class AnyParagraph
       refval * value / 100
     end
 
-REG_CIBLE_REFERENCE = /\(\( <\-\((.+?)\) \)\)/
-REG_APPEL_REFERENCE = /\(\( \->\((.+?)\) +\)\)/
-REG_APPEL_CROSS_REFERENCE = /\(\( \->\((.+?):(.+?)\) +\)\)/
 
 end #/class AnyParagraph
 end #/class PdfBook

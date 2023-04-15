@@ -1,5 +1,9 @@
+require_relative 'ReferencesTable'
+
 module Prawn4book
 class PdfBook
+
+  attr_reader :folder
 
   ##
   # Instanciation du PdfBook qui va permettre de générer le fichier
@@ -13,23 +17,6 @@ class PdfBook
   def sous_titre  ; recette.subtitle  end
   alias :subtitle :sous_titre
   def auteurs     ; recette.auteurs   end
-
-
-  # # Pour actualiser le fichier recette
-  # # S'il s'agit d'une collection, on actualise le fichier recette
-  # # de cette collection. C'est pour cette raison que pdfbook.recipe
-  # # ne doit pas être appelée directement par les méthodes.
-  # # 
-  # # @param new_data {Hash} Table ne contenant que les nouvelles
-  # #                 données à enregistrer.
-  # # 
-  # def update_recipe(new_data)
-  #   if in_collection?
-  #     recipe.update_collection(new_data)
-  #   else
-  #     recipe.update(new_data)
-  #   end
-  # end
 
 
   # Pour ouvrir le livre dans Aperçu, en double pages
@@ -50,6 +37,25 @@ class PdfBook
     fontes.key?(font_name) ? font_name : second_font  
   end
 
+  ##
+  # Pour gérer les références (internes et croisées) du livre
+  # 
+  # @note
+  #   Les références sont une liste de cibles dans le texte ou dans
+  #   le texte d'un autre livre, qui peuvent être atteinte depuis
+  #   un pointeur dans le texte.
+  #
+  def table_references
+    @table_references ||= begin
+      PdfBook::ReferencesTable.new(self).tap do |reft|
+        reft.init
+      end
+    end
+  end 
+
+  ##
+  # Pour gérer l'index du livre
+  # 
   def page_index
     @page_index ||= begin
       require 'lib/pages/page_index'

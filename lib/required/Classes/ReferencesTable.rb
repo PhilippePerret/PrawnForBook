@@ -83,6 +83,7 @@ class ReferencesTable
   # dans le texte
   # @note
   #   Les références croisées utilisent une autre méthode.
+  # 
   def call_to(ref)
     ref = pdfbook.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
     return ref

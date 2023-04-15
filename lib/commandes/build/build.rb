@@ -26,8 +26,6 @@ class PdfBook
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
 
-  # @prop instance ReferencesTable gérant les références du livre
-  attr_reader :table_references
 
   def generate_pdf_book
     spy "Génération du livre #{ensured_title.inspect}".bleu
@@ -35,14 +33,6 @@ class PdfBook
     # Initialiser le suivi des titres par niveau
     # 
     @current_titles = {}
-    # 
-    # Instanciation de la table de référence
-    # @note
-    #   Les références sont une liste de cibles dans le texte ou dans
-    #   le texte d'un autre livre, qui peuvent être atteinte depuis
-    #   un pointeur dans le texte.
-    # 
-    @table_references = PdfBook::ReferencesTable.new(self)
     # 
     # INITIALISATIONS
     # 
