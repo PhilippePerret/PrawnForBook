@@ -20,11 +20,17 @@ class ReferencesTable
   end
 
   ##
-  # Ajout d'une référence rencontrée
+  # Ajout d'une référence interne rencontrée au cours du parsing
+  # du texte (du paragraphe ou autre — titre, cellule de table, etc.)
+  # 
+  # @note
+  #   Il s'agit uniquement des références internes. Pour les références
+  #   croisées, voir la méthode suivante.
   # 
   # @param ref_id {String} IDentifiant de la référence
   # @param ref_data {Hash} Données de la référence, contient
   #         {:page, :paragraph}
+  # 
   def add(ref_id, ref_data)
     return if second_turn
     ref_id = ref_id.to_sym
@@ -33,6 +39,32 @@ class ReferencesTable
     else
       table.merge!(ref_id => ref_data)
     end
+  end
+
+  ##
+  # Traitement d'une référence croisée.
+  # 
+  # Méthode appelée lors du parse d'un texte (de paragraphe ou autre)
+  # lorsqu'une référence croisée est rencontrée. Elle permet en même
+  # temps de vérifier la pertinence de la référence (son existence)
+  # et de renvoyer le texte à écrire.
+  # 
+  # @return [String] Le texte pour remplacer l'appel à la cible
+  # 
+  # @oaram [String] book_id   L'identifiant du livre dans la bibliographie
+  # @param [String] cible     L'identifiant de la cible dans le livre
+  # 
+  def add_and_get_cross_reference(book_id, cible_id)
+    book = Bibliography::Livres.get(book_id) || begin
+      # - quand le livre n'existe pas -
+      raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
+    end
+    book.cible?(cible_id) || begin
+      # - quand la cible n'existe pas (ou le livre) -
+      PrawnBuildingError.new(ERRORS[:references][:cross_ref_unfound] % [cible_id, book_id])
+    end
+    
+    return book.reference_to(cible_id)
   end
 
   ##
@@ -108,29 +140,6 @@ class ReferencesTable
   # définie.
   def set_un_appel_sans_reference
     @hasoneappelsansref = :TRUE
-  end
-
-  # --- CROSS-REFERENCES TREATMENT ---
-
-  ##
-  # Retourne la référence à un autre livre
-  # Dans ce cas, +ref_id+ contient "<book id>:<ref id>"
-  # 
-  # @param ref_id {Symbol} Cf. l'explication dans #get
-  # 
-  # @return {String} Le texte à écrire dans la page.
-  # 
-  def get_cross_reference(ref_id, paragraph)
-    book_id, ref_id = ref_id.split(':')
-    extbook = Bibliography::Livres.get(book_id)
-    # 
-    # Tout est OK, on ajoute un élément bibliographique
-    # 
-    Bibliography.add_occurrence_book(extbook, paragraph)
-    # 
-    # On retourne le texte à placer dans le texte
-    # 
-    return extbook.reference_to(ref_id, pdfbook)
   end
 
   # --- Path Methods ---

@@ -93,10 +93,10 @@ class NTextParagraph < AnyParagraph
     # modifier l'aspect)
     # 
     # spy "final_specs = #{final_specs.inspect}".jaune, true
-    fontFamily  = font_family(pdf)
-    fontStyle   = font_style(pdf)
+    # fontFamily  = font_family(pdf)
+    # fontStyle   = font_style(pdf)
     fontSize    = final_specs[:size]    || font_size(pdf)
-    textIndent  = final_specs[:indent]  || recipe.text_indent
+    # textIndent  = final_specs[:indent]  || recipe.text_indent
     textAlign   = final_specs[:align]   || self.text_align
     cursor_positionned = false
 
@@ -119,8 +119,8 @@ class NTextParagraph < AnyParagraph
       # 
       begin
         spy "Application de la fonte : #{Fonte.default_fonte.inspect}"
-        ft = font(Fonte.default_fonte)
-      rescue Prawn::Errors::UnknownFont => e
+        font(Fonte.default_fonte)
+      rescue Prawn::Errors::UnknownFont
         spy "--- fonte inconnue ---"
         spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
         raise
@@ -211,7 +211,7 @@ class NTextParagraph < AnyParagraph
             # texte possible, puis on passe à la page suivante et on
             # se place sur la place suivante.
             # 
-            height_diff = final_height - cursor
+            # height_diff = final_height - cursor
             # spy "Texte trop long (de #{height_diff}) : <<< #{parag.final_text} >>>".rouge
             # spy "margin bottom: #{parag.margin_bottom}"
             box_height = cursor + line_height

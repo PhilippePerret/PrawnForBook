@@ -7,24 +7,21 @@
 #   - jouer : rake test TEST=tests/unit/parser_formater_test.rb
 # 
 require 'test_helper'
-# require './lib/required/Classes/PdfBook.rb'
-# require './lib/required/Classes/PdfBook.cls.rb'
-# require './lib/commandes/build/lib/parser_formater.rb'
-# require './lib/required/Classes/Fonte.rb'
-# require './lib/pages/page_index'
 
 #
 # Il faut tout charger pour faire ces tests
 # 
 require './lib/required'
-Dir["./lib/commandes/build/lib/**/*.rb"].each { |m|
-  # puts "Requérir : #{m.inspect}"
-  require(m)
-}
-# exit
+Dir["./lib/commandes/build/lib/**/*.rb"].each { |m| require(m) }
+require 'lib/pages/bibliographies'
 
+# - raccourci -
 CLASSE = Prawn4book::PdfBook::AnyParagraph
 
+#
+# Pseudo classe pour les paragraphes
+# (pour bénéficier de certaines méthodes sans avoir à tout initialiser)
+# 
 class PseudoClassParagraphe
   attr_accessor :text
   attr_accessor :first_page, :numero
@@ -37,10 +34,17 @@ class ParserFormaterTest < Minitest::Test
     book_folder = File.join(ASSETS_FOLDER,'all_books','books','hello_book')
     File.exist?(book_folder) && File.directory?(book_folder) || begin
       puts "Il faut que le livre #{book_folder.inspect} existe.".rouge
-      puts "Ça n'est pas le cas. Il faut le reconstruire (peu importe la recette et le texte) ou changer le livre défini ici.".rouge
+      puts "Ça n'est pas le cas. Il faut le reconstruire (avec une recette définissant le livre externe) ou changer le livre défini ici.".rouge
       exit
     end
+    Prawn4book::PdfBook.current = Prawn4book::PdfBook.new(book_folder)
     CLI.components[1] = book_folder
+    Prawn4book::Bibliography.init_biblio_livres(pdfbook)
+  end
+
+  # - raccourci vers le book courant -
+  def pdfbook
+    Prawn4book::PdfBook.current
   end
 
   def parag1
@@ -83,6 +87,16 @@ class ParserFormaterTest < Minitest::Test
     end
   end
 
+  def parag5
+    @parag5 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Paragraphe avec une cible de référence croisée à la (( ->(livre_externe:cible_externe) ))."
+        inst.first_page = 6
+        inst.numero     = 5
+      end
+    end
+  end
+
   def test_main_parse_method
     assert_respond_to CLASSE, :__parse
     [
@@ -106,7 +120,7 @@ class ParserFormaterTest < Minitest::Test
     # - le texte doit avoir été corrigé -
     assert_equal(expected, actual)
     # - les 3 mots indexés doivent avoir été retenus -
-    pindex = Prawn4book::PdfBook.current.page_index
+    pindex = pdfbook.page_index
     table  = pindex.table_index
     assert_equal(3, table.count, "La table des index devrait posséder 3 entrées.")
     assert(table.key?('mot1'))
@@ -123,7 +137,22 @@ class ParserFormaterTest < Minitest::Test
     expected = "Paragraphe avec une cible de référence à la page 2."
     assert_equal(expected, actual)
     # - les références doivent être mémorisées -
-    # TODO
+    table = pdfbook.table_references
+    expected = {paragraph:3, page:2}
+    actual = table.table[:refintern]
+    assert_equal(expected, actual, "La table de référence devrait bien définir la référence :refintern. Elle contient #{table.table.inspect}.")
   end
+
+  def test_bad_cross_reference
+    skip "On doit tester une mauvaise référence externe."
+  end
+  def test_good_cross_reference
+    actual   = CLASSE.__parse(parag5.text, {paragraph:parag5})
+    expected = "Paragraphe avec une cible de référence croisée à la page 12 de <i>Mon beau livre externe</i>."
+    assert_equal(expected, actual)
+    # - la référence doit être mémorisée -
+    # TODO    
+  end
+
 
 end #/class Minitest

@@ -9,4 +9,7 @@
       :tag: :essai
       :title: Liste des essais
       :path: biblios/essais
+    livre:
+      tag: livre
+      path: livres.yaml
 #</bibliographies>

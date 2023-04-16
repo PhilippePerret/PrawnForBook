@@ -32,13 +32,6 @@ class << self
     # fichier bibliographiy_definition.rb)
     # 
     biblio.has_data_format? || assiste_creation_data_format(book, biblio) || return
-    # 
-    # 
-    # 
-    puts "Je dois apprendre à créer un item de bibliographie".jaune
-    choices_ini = biblio.data_format.map do |dprop|
-      {name: dprop[:name], value: dprop}
-    end
 
     dbibitem = {}
     tty_define_object_with_data(biblio.data_format, dbibitem)

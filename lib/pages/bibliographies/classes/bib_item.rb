@@ -83,12 +83,12 @@ class BibItem
     end
   end
 
-  # --- Méthode pour cross-reference (quand livre) ---
+  # --- Méthode pour cross-reference (quand Bibliography::Livres) ---
 
   # @return [Boolean] true si la cible +cible_id+ existe dans le
   # livre.
   def cible?(cible_id)
-    crossable? && reference_exist?(cible_id)
+    crossable? && has_reference?(cible_id)
   end
 
   # @return true si la cible +cible_id+ existe dans le fichier
@@ -98,10 +98,10 @@ class BibItem
   end
 
   # @return [String] La référence à copier dans le texte
-  def reference_to(cible_id, book)
+  def reference_to(cible_id)
     ref = ref_to(cible_id)
-    str = book.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
-    str = "#{str} de <i>#{title}</i>"
+    str = PdfBook.current.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
+    return "#{str} de <i>#{title}</i>"
   end
 
   # @return [Hash] table de la référence +cible_id+, contenant 
@@ -156,7 +156,7 @@ class BibItem
     @refs_path ||= begin
       pth = data[:refs_path] || raise(PrawnBuildingError.new( (ERRORS[:biblio][:uncrossable] % id.to_s) + ERRORS[:biblio][:crossable_requires_refs_path]))
       pth_ini = data[:refs_path].freeze
-      pth = File.join(pth, 'references.yaml') unless File.exists?(pth)
+      pth = File.join(pth, 'references.yaml') unless File.exist?(pth)
       File.exist?(pth) || begin
         # Le chemin peut être relatif
         pth = File.join(biblio.book.folder, pth_ini)

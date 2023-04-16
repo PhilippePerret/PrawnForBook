@@ -119,8 +119,8 @@ class AnyParagraph
       spy "Calcul de la différence entre fonte normale et numéro de paragraphe\n".jaune +
         "    parag_height = #{parag_height.inspect}\n".bleu +
         "    numer_height = #{numer_height.inspect}\n".bleu +
-        "    diff         = #{diff.inspect}"
-        "    Rectifié à   = #{diff - 1}"
+        "    diff         = #{diff.inspect}".bleu +
+        "    Rectifié à   = #{diff - 1}".bleu
       diff - recipe.parag_numero_vadjust
     end
   end

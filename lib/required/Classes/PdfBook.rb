@@ -14,6 +14,7 @@ class PdfBook
     @folder = folder
   end
 
+  # TODO Mettre à un endroit plus logique
   def sous_titre  ; recette.subtitle  end
   alias :subtitle :sous_titre
   def auteurs     ; recette.auteurs   end

@@ -178,7 +178,8 @@ class << self
   #   Avant, c'est toujours 'livre' pour identifier les livres.
   #   Maintenant, c'est une donnée qu'on peut régler dans la recette,
   #   au path [:bibliographies][:book_identifiant]
-  def init_livres(pdfbook)
+  def init_biblio_livres(pdfbook)
+    self.remove_const('Livres') if defined?(Livres)
     self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
   end
 

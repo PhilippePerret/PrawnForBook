@@ -3,6 +3,8 @@ class Pages
 class PageIndex
 
   attr_reader :table_index
+  # - raccourcis -
+  alias :pdfbook :thing
 
   def initialize(*args)
     super

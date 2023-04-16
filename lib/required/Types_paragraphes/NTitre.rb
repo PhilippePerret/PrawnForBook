@@ -66,7 +66,7 @@ class NTitre < AnyParagraph
     #
     # Application de la fonte
     # 
-    ft = pdf.font(titre.fonte)
+    pdf.font(titre.fonte)
 
     # 
     # Formatage du titre

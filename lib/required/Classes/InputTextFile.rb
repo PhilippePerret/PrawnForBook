@@ -54,15 +54,6 @@ class InputTextFile
     @paragraphes ||= parse
   end
 
-  # @return [Array<String>] La liste des références croisées qu'on
-  # peut trouver dans le texte (pour vérification des informations
-  # au lancement de la construction du livre)
-  def cross_references ; @cross_references end
-
-  def has_cross_references?
-    !cross_references.empty?
-  end
-
   ##
   # Parse le fichier pour en tirer les paragraphes
   #
@@ -76,11 +67,6 @@ class InputTextFile
     # seulement les numéros)
     # 
     PdfBook::NTextParagraph.reset
-    # 
-    # Pour consigner les cross-références (pour contrôle)
-    # 
-    @cross_references = {}
-    # 
     # 
     # Boucle sur tous les paragraphes du texte
     # 
@@ -96,12 +82,8 @@ class InputTextFile
       # 
       # 
       # spy "PARAGRAPHE : #{par.inspect}"
-      parag = Paragraphe.new(pdfbook, par).parse
+      Paragraphe.new(pdfbook, par).parse
       # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
-      if parag.sometext? && parag.match_cross_reference?
-        @cross_references.deep_merge!(parag.cross_references)
-      end
-      parag # map
     end
     # NE RIEN METTRE (MAP RETOURNÉ)
   end

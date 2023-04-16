@@ -38,6 +38,9 @@ class PdfBook
     # 
     # - Chargement de la classe Bibliography -
     require 'lib/pages/bibliographies'
+    # - pour le moment, ici, l'initialisation des livres (if any) -
+    # @note : produit Bibliography::Livres
+    Bibliography.init_biblio_livres(self)
     # - Initialisation des paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
     # - Initialisation de la table de références -
@@ -429,32 +432,13 @@ class PdfBook
       Bibliography.prepare
     end
 
-    # 
-    # Si le texte complet contient un appel de référence croisé,
-    # il faut s'assurer qu'ils sont tous bien définis.
-    # 
-    if inputfile.has_cross_references?
-      Bibliography.init_livres(self)
-      inputfile.cross_references.each do |book_id, cibles|
-        Bibliography::Livres.exist?(book_id) || begin
-          raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
-        end
-        extbook = Bibliography::Livres.get(book_id)
-        cibles.each do |cible_id|
-          extbook.has_reference?(cible_id) || begin
-            PrawnBuildingError.new(ERRORS[:references][:cross_ref_unfound] % [cible_id, book_id])
-          end
-        end
-      end
-    end
-
   rescue PrawnBuildingError => e
     formated_error(e)
     spy "👎 Le livre n'est pas conforme.".rouge
     return false
   rescue Exception => e
     formated_error(e)
-    spy "🤪 ERREUR SYSTÉMATIQUE.".rouge
+    spy "🤪 ERREUR SYSTÉMIQUE.".rouge
     return false
   else
     spy "👍 Le livre est conforme".vert

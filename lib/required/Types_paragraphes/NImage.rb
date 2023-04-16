@@ -33,12 +33,10 @@ class NImage < AnyParagraph
     #
     # Redimensionnement de l'image
     # 
-    ratio_h = 1 # à appliquer à la hauteur si dimensions changées
     if width
       real_width = pourcent_to_real_value(width, pdf)
       dimage.merge!(width: real_width)
       if margin_left_raw.to_s.end_with?('%')
-        ratio_h = round(margin_left_raw[0..-2].to_f / 100)
       end
     end
 
@@ -52,7 +50,7 @@ class NImage < AnyParagraph
     # 
     image_is_svg = svg?
     img_path = path
-    mg_bottom = margin_bottom
+    # mg_bottom = margin_bottom
 
     pdf.update do
       # 

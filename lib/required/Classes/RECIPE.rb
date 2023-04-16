@@ -484,7 +484,7 @@ class Recipe
   def data
     @data ||= begin
       dt = {}
-      cfolder = File.expand_path('.').freeze
+      cfolder = owner.folder
       # 
       # On remonte 3 dossiers pour voir s'il y a la recette d'une
       # collection.

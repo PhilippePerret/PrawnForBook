@@ -50,9 +50,15 @@ module ParserFormaterClass
     str = __traite_mots_indexed_in(str, context)
 
     #
-    # Traitement des références (internes et croisées)
+    # Traitement des références externes
+    # 
+    str = __traite_cross_references_in(str, context)
+    
+    #
+    # Traitement des références internes
     # 
     str = __traite_references_in(str, context)
+
 
     #
     # Si une méthode de parsing propre existe, on l'appelle
@@ -65,7 +71,12 @@ module ParserFormaterClass
   end
 end
 
+
 module ParserFormater
+  #
+  # Module destiné à contenir les méthodes d'instance pour les
+  # parseurs/formateurs
+  # 
 
 end
 
@@ -320,7 +331,36 @@ private
     return str
   end
 
+  ##
+  # Traitement des références croisées
+  # 
+  # @note
+  #   Seulement les références croisées. Pour les références
+  #   internes, voir la méthode suivante
+  # 
+  def self.__traite_cross_references_in(str, context)
+    #
+    # Note : ici, contrairement aux références internes, on a 
+    # que des appels.
+    # 
+    str = str.gsub(REG_APPEL_CROSS_REFERENCE) do
+      book_id = $1.freeze
+      cible   = $2.freeze
+      pdfbook.table_references.add_and_get_cross_reference(book_id, cible)
+    end
+
+    return str    
+  end
+  REG_APPEL_CROSS_REFERENCE = /\(\( \->\((.+?):(.+?)\) +\)\)/.freeze
+
+  ##
+  # Traitement des références interne (seulement interne)
+  # 
+  # @note
+  #   Voir la méthode précédente pour les références externes
+  # 
   # @return [String] Le texte formaté
+  # 
   def self.__traite_references_in(str, context)
     first_page = context[:paragraph].first_page
     numero_par = context[:paragraph].numero
@@ -349,40 +389,11 @@ private
         pdfbook.table_references.get(appel, self)
       end
     end
+
     return str
   end
   REG_CIBLE_REFERENCE       = /\(\( <\-\((.+?)\) \)\)/.freeze
   REG_APPEL_REFERENCE       = /\(\( \->\((.+?)\) +\)\)/.freeze
-  REG_APPEL_CROSS_REFERENCE = /\(\( \->\((.+?):(.+?)\) +\)\)/.freeze
-
-  ##
-  # @note : instance method
-  # 
-  # @return [Hash] Liste des références croisées que contient
-  # le paragraphe (texte ou le titre). La clé  est l'identifiant
-  # du livre (tel qu'il est défini dans la bibliographie des livres)
-  # et la valeur est la liste des cibles de ce livre.
-  def cross_references
-    tbl = {}
-    text.scan(REG_APPEL_CROSS_REFERENCE).to_a.each do |book_id, cible|
-      tbl.key?(book_id) || tbl.merge!(book_id => [])
-      tbl[book_id] << cible
-    end
-    return tbl
-  end
-
-  ##
-  # @note : instance method
-  # 
-  # @return [Boolean] True si le paragraphe (texte ou titre) contient
-  # des références croisées
-  # 
-  def match_cross_reference?
-    text.match?(REG_APPEL_CROSS_REFERENCE)
-  end
-
-
-
 
 
 
@@ -455,6 +466,7 @@ private
   #
   # === SOUS-SOUS MÉTHODES ===
   # 
+
   def self.__traite_bold(str)
     str = str.gsub(REG_BOLD) do
       txt = $1.freeze

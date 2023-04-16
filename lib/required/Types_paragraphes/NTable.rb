@@ -39,7 +39,7 @@ class NTable < AnyParagraph
     # 
     # Application de la fonte par défaut
     # (utile par exemple si la table est placée après un titre)
-    ft = pdf.font(Fonte.default_fonte)
+    pdf.font(Fonte.default_fonte)
 
     pdf.move_down(pdf.line_height)
     pdf.move_cursor_to_next_reference_line
@@ -111,11 +111,11 @@ class NTable < AnyParagraph
       # une ligne qui définit l'alignement dans les colonnes
       # 
       if raw_lines[1] && raw_lines[1].match?(/^[ \-\:\|]+$/)
-        entete = raw_lines.shift()
-        aligns = raw_lines.shift()
+        raw_lines.shift()
+        raw_lines.shift()
       end
       raw_lines.map do |rawline|
-        dline = rawline.strip[1...-1].split(/(?!\\)\|/).map do |cell|
+        rawline.strip[1...-1].split(/(?!\\)\|/).map do |cell|
           # 
           # Évaluation, si la cellule contient une table
           # 
@@ -127,7 +127,7 @@ class NTable < AnyParagraph
             # Traitement d'une image
             # 
             found = cstrip.match(REG_IMAGE_IN_CELL)
-            image_path  = found[1]
+            _  = found[1]
             image_style = found[2]
             image_style = "{#{image_style}}" unless image_style.start_with?('{')
             image_style = rationalise_pourcentages_in(eval(image_style))
