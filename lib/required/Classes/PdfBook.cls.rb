@@ -63,6 +63,7 @@ class << self
 
   def current=(pdfbook)
     @current = pdfbook
+    @cfolder = pdfbook.folder
   end
 
 end #/<< self

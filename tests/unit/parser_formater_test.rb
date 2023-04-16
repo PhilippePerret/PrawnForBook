@@ -38,8 +38,19 @@ class ParserFormaterTest < Minitest::Test
       exit
     end
     Prawn4book::PdfBook.current = Prawn4book::PdfBook.new(book_folder)
+    #
+    # On requiert tous les formateurs
+    # 
+    require 'lib/commandes/build/build'
+    pdfbook.require_custom_parsers_formaters
+    #
+    # On donne le dossier à la ligne de commande
+    # 
     CLI.components[1] = book_folder
-    Prawn4book::Bibliography.init_biblio_livres(pdfbook)
+    #
+    # Initialisation des bibliographies
+    # 
+    Prawn4book::Bibliography.init
   end
 
   # - raccourci vers le book courant -
@@ -97,6 +108,36 @@ class ParserFormaterTest < Minitest::Test
     end
   end
 
+  def parag6
+    @parag6 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Référence croisée vers un livre non défini à la (( ->(unknown_book:cible_externe) ))."
+        inst.first_page = 7
+        inst.numero     = 6
+      end
+    end
+  end
+
+  def parag7
+    @parag7 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Référence croisée vers un livre défini mais une référence non définie à la (( ->(livre_externe:unknown_target) ))."
+        inst.first_page = 12
+        inst.numero     = 7
+      end
+    end
+  end
+
+  def parag8
+    @parag8 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Un firstbiblio(lien_bibliographique) personnalisé et un autre firstbiblio(lien_bibliographique)."
+        inst.first_page = 12
+        inst.numero     = 8
+      end
+    end
+  end
+
   def test_main_parse_method
     assert_respond_to CLASSE, :__parse
     [
@@ -143,9 +184,19 @@ class ParserFormaterTest < Minitest::Test
     assert_equal(expected, actual, "La table de référence devrait bien définir la référence :refintern. Elle contient #{table.table.inspect}.")
   end
 
-  def test_bad_cross_reference
-    skip "On doit tester une mauvaise référence externe."
+  def test_bad_cross_reference_with_unknown_book
+    err = assert_raises(PrawnBuildingError){CLASSE.__parse(parag6.text, {paragraph:parag6})}
+    expected = "Le livre d'identifiant 'unknown_book' n'est pas défini pour les références croisées…"
+    actual = err.message
+    assert_equal(expected, actual)
   end
+  def test_bad_cross_reference_with_unknown_target
+    err = assert_raises(PrawnBuildingError){CLASSE.__parse(parag7.text, {paragraph:parag7})}
+    expected = "La référence 'unknown_target' dans le livre identifié 'livre_externe' est inconnue."
+    actual = err.message
+    assert_equal(expected, actual)
+  end
+
   def test_good_cross_reference
     actual   = CLASSE.__parse(parag5.text, {paragraph:parag5})
     expected = "Paragraphe avec une cible de référence croisée à la page 12 de <i>Mon beau livre externe</i>."
@@ -154,5 +205,25 @@ class ParserFormaterTest < Minitest::Test
     # TODO    
   end
 
-
+  def test_bibliographie
+    #
+    # Le texte est bien corrigé
+    # 
+    actual = CLASSE.__parse(parag8.text, {paragraph:parag8})
+    expected = "Un lien bibliographique personnalisé et un autre lien bibliographique."
+    assert_equal(expected, actual)
+    #
+    # La bibliography existe
+    # 
+    biblio = Prawn4book::Bibliography.get('firstbiblio')
+    assert(biblio, "La bibliographie 'firstbiblio' devrait exister.")
+    # - le lien bibliographique doit avoir été mémorisé -
+    bibitem = biblio.get('lien_bibliographique')
+    assert_instance_of(Prawn4book::Bibliography::BibItem, bibitem)
+    occs = bibitem.occurrences
+    assert_equal(1, occs.count, "Il ne devrait y avoir qu'une seule occurrence (même paragraphe)")
+    expected = {page:12, paragraph:8}
+    actual   = occs.first
+    assert_equal(expected, actual)
+  end
 end #/class Minitest

@@ -8,6 +8,7 @@ class Bibliography
 class BibItem
 
   attr_reader :id, :biblio
+  attr_reader :occurrences
 
   ##
   # Instanciation de l'item bibliographique
@@ -49,7 +50,9 @@ class BibItem
     # 
     # Ajouter cette occurrence
     # 
-    @occurrences << doccurrence
+    unless @occurrences.include?(doccurrence)
+      @occurrences << doccurrence
+    end
   end
 
   # @return [String] Une liste pour le livre des occurrences de l'item
@@ -88,7 +91,7 @@ class BibItem
   # @return [Boolean] true si la cible +cible_id+ existe dans le
   # livre.
   def cible?(cible_id)
-    crossable? && has_reference?(cible_id)
+    crossable?(true) && has_reference?(cible_id)
   end
 
   # @return true si la cible +cible_id+ existe dans le fichier
@@ -99,7 +102,9 @@ class BibItem
 
   # @return [String] La référence à copier dans le texte
   def reference_to(cible_id)
-    ref = ref_to(cible_id)
+    ref = ref_to(cible_id) || begin
+      raise PrawnBuildingError.new(ERRORS[:references][:cross_ref_unfound] % [cible_id, self.id])
+    end
     str = PdfBook.current.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
     return "#{str} de <i>#{title}</i>"
   end

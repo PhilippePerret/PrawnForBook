@@ -33,18 +33,23 @@ class PdfBook
     # Initialiser le suivi des titres par niveau
     # 
     @current_titles = {}
+
     # 
-    # INITIALISATIONS
+    # --- INITIALISATIONS ---
     # 
     # - Chargement de la classe Bibliography -
+    # (auto initiée)
     require 'lib/pages/bibliographies'
-    # - pour le moment, ici, l'initialisation des livres (if any) -
-    # @note : produit Bibliography::Livres
-    Bibliography.init_biblio_livres(self)
     # - Initialisation des paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
     # - Initialisation de la table de références -
     table_references.init
+
+    #
+    # On requiert tous les parseurs/formateurs personnalisés
+    # 
+    require_custom_parsers_formaters
+
     #
     # On doit parser le texte avant de voir si le livre est
     # conforme
@@ -116,39 +121,12 @@ class PdfBook
     # Pour pouvoir l'atteindre partout
     Metric.pdf = pdf
     
-    #
-    # S'il existe un module de formatage propre au livre (et/ou à la
-    # collection) il faut le(s) charger.
-    #
-    if module_formatage?
-      require_module_formatage
-      if defined?(PdfBookFormatageModule)
-        PrawnView.extend PdfBookFormatageModule
-      end
-      if defined?(FormaterParagraphModule)
-        NTextParagraph.include(FormaterParagraphModule)
-      end
-      if defined?(TableFormaterModule)
-        NTable.extend(TableFormaterModule)
-      end
-    end
-
     # 
     # On définit la clé à utiliser (numéro de page ou numéro de
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
     # ment : leurs occurrences)
     # 
     Bibliography.page_or_paragraph_key = page_number? ? :page : :paragraph
-
-    # 
-    # CUSTOM PARSER (if any)
-    # 
-    require_module_parser if module_parser?
-
-    #
-    # CUSTOM HELPERS (if any)
-    # 
-    require_modules_helpers(pdf) if module_helpers?
 
     #
     # Pour consigner les informations sur les pages, à commencer
@@ -272,6 +250,51 @@ class PdfBook
       puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
       return false
     end
+  end
+
+  ##
+  # Requiert tous les modules de parsing, formating et helping.
+  # 
+  def require_custom_parsers_formaters
+    #
+    # S'il existe des modules de formatage propre au livre (et/ou à la
+    # collection) il faut le(s) charger.
+    #
+    custom_parser_paths.each { |m| require(m) }
+
+    #
+    # - Modules de formatages -
+    # 
+    custom_formater_paths.each { |m| require(m) }
+
+    #
+    # - Modules d'helpers -
+    # 
+    custom_helper_paths.each { |m| require(m) }
+
+
+    #
+    # On les distribue
+    # 
+    if defined?(ParserFormaterClass)
+      puts "J'étends avec ParserFormaterClass".jaune
+      Prawn4book::PdfBook::AnyParagraph.extend(ParserFormaterClass)
+    end
+    if defined?(ParserFormater)
+      puts "J'étends avec ParserFormater".jaune
+      Prawn4book::PdfBook::AnyParagraph.include(ParserFormater)
+    end
+
+    if defined?(PdfBookFormatageModule)
+      PrawnView.extend PdfBookFormatageModule
+    end
+    if defined?(FormaterParagraphModule)
+      NTextParagraph.include(FormaterParagraphModule)
+    end
+    if defined?(TableFormaterModule)
+      NTable.extend(TableFormaterModule)
+    end
+
   end
 
   def display_reference_grid?

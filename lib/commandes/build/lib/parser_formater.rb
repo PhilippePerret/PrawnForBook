@@ -21,9 +21,11 @@ module ParserFormaterClass
   # @param [Hash]   context   Le contexte (et notamment le paragraph, les styles, etc.)
   # 
   # @return [String] la chaine de caractère corrigée
-  def __parse(str, context = nil)
+  def __parse(str, context)
 
-    context ||= {}
+    context[:paragraph] || begin
+      raise ERRORS[:parsing][:paragraph_required]
+    end
 
     #
     # Si une méthode de "pré-parsing" existe, on l'appelle. Elle
@@ -53,12 +55,16 @@ module ParserFormaterClass
     # Traitement des références externes
     # 
     str = __traite_cross_references_in(str, context)
-    
+
     #
     # Traitement des références internes
     # 
     str = __traite_references_in(str, context)
 
+    #
+    # Traitement des marques bibliograghiques
+    # 
+    str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
 
     #
     # Si une méthode de parsing propre existe, on l'appelle
@@ -133,18 +139,8 @@ class AnyParagraph
     spy "Fin #final_formatage de #{text.inspect}"
   end
 
-  #
-  # @class
-  # 
-  # Méthode qui passe par toutes les méthodes de formatage, personna-
-  # lisées comme communes.
-  # 
-  def self.formatage_final(str, pdf)
-    str = pdfbook.parser_formater(str, pdf)
-    return str
-  end
-
-  def self.pdfbook; @pdfbook ||= PdfBook.current end
+  # (ne pas mettre en cache : les tests foirent, sinon)
+  def self.pdfbook; PdfBook.current end
 
   # = main =
   #
@@ -196,14 +192,6 @@ class AnyParagraph
       str = formate_as_list_item(pdf, str)
     elsif citation?
       str = formate_as_citation(pdf, str)
-    end
-
-    #
-    # Traitement des marques bibliograghiques
-    # 
-    if Bibliography.any?
-      str = __traite_termes_bibliographiques_in(str)
-      # spy "str après recherche biblio : #{str.inspect}".orange
     end
 
     #
@@ -395,36 +383,20 @@ private
   REG_CIBLE_REFERENCE       = /\(\( <\-\((.+?)\) \)\)/.freeze
   REG_APPEL_REFERENCE       = /\(\( \->\((.+?)\) +\)\)/.freeze
 
-
-
-
-
-  def __maybe_add_cursor_position(str)
-    # S'il le faut (options), ajouter la position du curseur en
-    # début de paragraphe.
-    if paragraph? && add_cursor_position?
-      if str.is_a?(Array)
-        str[0] = pdf.add_cursor_position(str[0])
-      else
-        str = pdf.add_cursor_position(str) 
-      end
-    end
-
-    return str    
-  end
-
   ##
   # Traitement des termes propres aux bibliographies
   # 
   # @return [String] Le texte formaté
-  def __traite_termes_bibliographiques_in(str)
-    str.gsub(Bibliography::REG_OCCURRENCES) do
-      
+  def self.__traite_termes_bibliographiques_in(str, context)
+    parag_num   = context[:paragraph].numero.freeze
+    first_page  = context[:paragraph].first_page.freeze
+
+    str.gsub(Prawn4book::Bibliography::REG_OCCURRENCES) do
 
       bib_tag = $1.freeze
       item_av, item_ap = $2.freeze.split('|')
 
-      biblio = Bibliography.get(bib_tag) || raise("Impossible de trouver la bibliographie de tag #{bib_tag.inspect}")
+      biblio = Prawn4book::Bibliography.get(bib_tag) || raise("Impossible de trouver la bibliographie de tag #{bib_tag.inspect}")
       canon, actual = 
         if (bibitem = biblio.exist?(item_av))
           [item_av, item_ap]
@@ -448,7 +420,7 @@ private
         # 
         # Ajout de cette occurrence
         # 
-        bibitem.add_occurrence({page: first_page, paragraph: numero})
+        bibitem.add_occurrence({page: first_page, paragraph: parag_num})
 
         if actual
           bibitem.formate_for_text(actual, self)
@@ -461,6 +433,22 @@ private
     end
   end
 
+
+
+
+  def __maybe_add_cursor_position(str)
+    # S'il le faut (options), ajouter la position du curseur en
+    # début de paragraphe.
+    if paragraph? && add_cursor_position?
+      if str.is_a?(Array)
+        str[0] = pdf.add_cursor_position(str[0])
+      else
+        str = pdf.add_cursor_position(str) 
+      end
+    end
+
+    return str    
+  end
 
 
   #

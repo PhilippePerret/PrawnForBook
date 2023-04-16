@@ -21,13 +21,6 @@ class Bibliography
     prefix: {name:'Préfixe d’un appel dans le texte', default: 'page'},
   }
 
-  # 
-  # Ci-dessous, définition des méthodes utiles aux données, à 
-  # commencer par les méthodes qui doivent définir les :values des
-  # propriétés à valeurs définies
-  # 
-
-
 end #/class Bibliography
 end #/class Pages
 end #/module Prawn4book

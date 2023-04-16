@@ -1764,46 +1764,89 @@ La référence sera tout simplement supprimée du texte (attention de ne pas lai
 
 #### Références croisées
 
-Pour une *référence croisée*, c’est-à-dire la référence à un autre livre, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant.
+Pour une *référence croisée*, c’est-à-dire la référence à un autre livre, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant. Elle peut ressembler à :
 
 ~~~text
-Pour trouver la référence croisée, rendez-vous sur la (( ->(IDLIVRE:id_reference_unique) )).
+Rendez-vous sur la (( ->(IDLIVRE:id_ref_uniq) )).
 ~~~
+
+Par exemple :
+
+~~~
+Rendez-vous sur la (( ->(mon_livre:sa_reference) )).
+~~~
+
+… qui sera transformé en :
+
+~~~
+Rendez-vous sur la page 12 de <i>Mon beau livre référrencé</i>.
+~~~
+
+Ci-dessus, `IDLIVRE` est l’identifiant du livre (tel que défini dans la bibliographie (des livres) et `id_ref_uniq` est une référence définie pour le livre.
 
 Pour traiter une référence croisée, on a besoin de plusieurs choses :
 
-* connaitre le livre en tant qu’entité bibliographique qui contiendra notamment les données qui seront ajoutées à la bibliographie (titre, auteurs, année, ISBN, etc.)
-* connaitre le livre en tant que livre “Prawn-for-book”, qui définira, dans son dossier, un fichier `references.yaml` contenant les références relevées lors de la dernière compilation du livre.
-* connaitre la relation entre ces deux éléments (l’entité bibliographique et le livre pfb). Question : cette relation ne pourrait-elle pas être définie dans l’entité bibliographique ? ce qui permettrait de n’avoir qu’à définir cet entité, sans avoir à définir les deux derniers éléments.
+* que la bibliographie des livres soit définie dans le fichier recette (du livre ou de la collection :
 
-Ces deux choses sont définies à un seul endroit : la fiche bibliographique du film ciblé. Cette fiche, en plus de `:title`, doit définir **`refs_path`** qui contient soit le chemin complet au [fichier `references.yaml`](#references-file) des références, soit au dossier du livre, qui contiendra ce fichier lorsque le livre aura été construit.
+  ~~~yaml
+  ---
+  # ...
+  #<bibliographie>
+  bibliographies:
+  	biblios:
+  		livre:
+  			title: Liste des livres
+  			path:  livres.yaml
+  #</bibliographie>
+  ~~~
 
-##### Référence croisée vers un livre non prawn
+* que le livre en question soit défini dans les données bibliographiques (le fichier `livres.yaml` ci-dessus, qui se trouve donc à la racine du dossier du livre — ou de la collection), avec, en plus des autres livres, une définition du fichier contenant les références :
 
-On peut tout à fait faire référence à un endroit précis d’un livre quelconque non fabriqué par Prawn. Pour cela, il suffit de définir son [fichier de référence](#references-file) “à la main”, conformément à son format ci-dessous.
+  ~~~yaml
+  # dans ./livres.yaml
+  ---
+  # ... des livres
+  mon_livre:
+  	title: Mon beau livre référencé # le titre qui sera repris
+  	refs_path: resources/mon_livre.references.yaml
+  	auteur: # etc.
+  ~~~
 
-> Noter qu’il peut être difficile de connaitre le numéro de paragraphe dans un livre imprimé. Dans ce cas, laisser la donnée vide et, si les références se font par paragraphe, c’est exceptionnellement la donnée page qui sera utilisée).
+  > Notez que le livre peut ou peut ne pas être un livre prawn-for-book. Dans le cas d’un livre prawn-for-book, le fichier s’appellera toujours `references.yaml` et sera toujours placé à la racine du dossier du livre. On pourra avoir alors :
+  >
+  > ~~~yaml
+  > # dans ../livres.yaml (dossier de la collection)
+  > ---
+  > # ... des livres
+  > livre_collection_1:
+  > 	titre: "Premier tome de la collection"
+  > 	refs_path: "tome1/references.yaml"
+  > 	# etc.
+  > livre_collection_2:
+  > 	titre : "Deuxième tome de la collection"
+  > 	refs_path: "tome2/references.yaml"
+  > 	# etc.
+  > ~~~
+  >
+  > 
 
-Ce fichier peut être placé dans le dossier du livre lui-même, dans un dossier “livres_imprimes_pour_references”, par exemple, et créer dedans des dossiers, au titre des livres, et dans ces dossiers, le fichier `references.yaml`.
+* que les références soient bien définies avec, en clé, leur identifiant et en valeur la page et le paragraphe cibles. Par exemple :
 
-<a name="references-file"></a>
+  ~~~yaml
+  # dans ./tome1/references.yaml
+  ---
+  sa_reference:
+  	page: 12
+  	paragraphe: 59
+  autre_reference:
+  	page: 15
+  	paragraphe: 78
+  # etc.
+  ~~~
 
-#### Fichier de références
-
-Les références du livre sont enregistrées dans un fichier `references.yaml` qui permettra à d’autres livres d’y faire… référence.
-
-Il est constitué de cette manière :
-
-~~~YAML
----
-<cible_id>:
-	page: <num page>
-	paragraph: <num paragraph>
-<cible_id>:
-	page: <num page>
-	paragraph: <num paragraph>
-# etc.
-~~~
+  > Notez quand même, ci-dessus, que s’il s’agit d’un livre prawn-for-book, ce fichier de références est automatiquement produit, donc il n’y pas besoin de le faire.
+  >
+  > Noter qu’il peut être difficile de connaitre le numéro de paragraphe dans un livre imprimé. Dans ce cas, laisser la donnée vide et, si les références se font par paragraphe, c’est exceptionnellement la donnée page qui sera utilisée).
 
 
 

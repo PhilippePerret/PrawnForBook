@@ -16,6 +16,12 @@ class << self
   # 
   def init
     @biblios = {}
+    pdfbook = Prawn4book::PdfBook.ensure_current || return
+    pdfbook.recipe.bibliographies[:biblios].each do |bib_id, bib_data|
+      new(pdfbook, bib_id)
+    end
+    init_biblio_livres(pdfbook)
+    prepare
   end
 
   # Méthode publique permettant de choisir ou de créer une nouvelle
@@ -70,6 +76,7 @@ class << self
     # Définition de l'expression régulière qui va permettre de
     # récupérer tous les items bibliographiques dans les paragraphes
     # 
+    self.remove_const('REG_OCCURRENCES') if defined?(REG_OCCURRENCES)
     self.const_set('REG_OCCURRENCES', /(#{biblios.keys.join('|')})\((.+?)\)/)
   end
 

@@ -12,4 +12,8 @@
     livre:
       tag: livre
       path: livres.yaml
+    firstbiblio:
+      title: "La première bibliographie"
+      tag: firstbiblio
+      path: biblios/firstbiblio.yaml
 #</bibliographies>

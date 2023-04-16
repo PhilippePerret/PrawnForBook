@@ -90,63 +90,36 @@ class PdfBook
 
   # --- Formating Methods ---
 
-  # TODO: Mettre ces deux méthode dans Prawn4book::PdfHelper pour
-  # appeler une bonne fois pour toutes les fichiers candidats
-  def require_modules_helpers(pdf)
-    @pdfhelpers = PdfHelpers.create_instance(self, pdf)
-  end
-  def module_helpers?
-    PdfHelpers.modules_helpers?(self)
+  def custom_formater_paths
+    get_custom_modules('formater')
   end
 
+  def custom_parser_paths
+    get_custom_modules('parser')
+  end
+
+  def custom_helper_paths
+    get_custom_modules('helper')    
+  end
   ##
-  # Traitement du module de formatage propre au livre s'il existe
+
+  ##
+  # @return [Array<String>] Liste des modules livre ou/et collection trouvés, de type +type+
   # 
-  def require_module_formatage
-    module_formatage_paths.each do |md| require(md) end
-  end
-  def module_formatage?
-    not(module_formatage_paths.empty?)
-  end
-  def module_formatage_paths
-    @module_formatage_paths ||= get_modules_formatage
-  end
-  ##
-  # On relève les modules de formatage (de la collection — if any —
-  # et du livre). Ce sont les modules formater.rb
-  def get_modules_formatage
+  # @param [String] type Le type de module, 'formater','parser' ou 'helper'
+  # 
+  def get_custom_modules(type)
+    module_name = "#{type}.rb"
     mds = []
     if in_collection?
-      pth = File.join(collection.folder, 'formater.rb')
+      pth = File.join(collection.folder, module_name)
       mds << pth if File.exist?(pth)
     end    
-    pth = File.join(folder, 'formater.rb')
+    pth = File.join(folder, module_name)
     mds << pth if File.exist?(pth)
     return mds
   end
 
-  # Parser propre au livre
-  def module_parser?
-    not(module_parser_paths.empty?)
-  end
-  def require_module_parser
-    module_parser_paths.each { |md| require md }
-    extend ParserParagraphModule
-    # self.class.current = self
-  end
-  def module_parser_paths
-    @module_parser_paths ||= get_module_parser_paths
-  end
-  def get_module_parser_paths
-    mds = []
-    if in_collection?
-      pth = File.join(collection.folder, 'parser.rb')
-      mds << pth if File.exist?(pth)
-    end    
-    pth = File.join(folder, 'parser.rb')
-    mds << pth if File.exist?(pth)
-    return mds
-  end
 
   # Reçoit une valeur ou une liste de valeur avec des unités et
   # retourne la valeur correspondante en nombre grâce aux méthodes
