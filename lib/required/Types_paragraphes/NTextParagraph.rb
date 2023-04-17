@@ -11,7 +11,7 @@ class NTextParagraph < AnyParagraph
 
 
   # Liste des balises de style de paragraphe
-  attr_accessor :styled_tags
+  attr_accessor :class_tags
 
 
   def initialize(pdfbook,data)
@@ -60,29 +60,7 @@ class NTextParagraph < AnyParagraph
     # (précédé de "<style>::") et qu'il existe une méthode pour
     # construire ce style dans formater.rb
     # 
-    if own_builder?
-      return own_builder(pdf) # stop
-    end
-    #
-    # Si le paragraphe possède un formateur, on s'en sert pour 
-    # formater le paragraphe et on poursuit (contrairement au
-    # "constructeur" ci-dessus)
-    # 
-    # @question
-    #   Est-ce vraiment bien ici qu'il faut faire ce traitement ?
-    #   Ne faudrait-il pas, aussi, un formateur de fin de chaine
-    #   qui permette de traiter le +final_str+ ci-dessus.
-    #   Les "pre_formaters" et les "post_formaters"
-    # 
-    # @note
-    #   Ces "formateurs" sont des méthodes d'instance. Elles 
-    #   transforment la propriété @text.
-    #   Peut-être vaudrait-il mieux ne pas toucher à @text et
-    #   avoir une propriété @formated_text qui soit modifié
-    #   partout ici. Voir aussi, maintenant, la propriété @final_text
-    #   qui sera le texte vraiment traité.
-    # 
-    own_formaters if own_formaters?
+    return own_builder(pdf) if own_builder?
 
     #
     # Fonte et style à utiliser pour le paragraphe
@@ -328,8 +306,8 @@ class NTextParagraph < AnyParagraph
   end
 
   def own_builder?
-    return false if styled_tags.nil?
-    styled_tags.each do |tag|
+    return false if class_tags.nil?
+    class_tags.each do |tag|
       if self.respond_to?("build_#{tag}_paragraph".to_sym)
         @own_builder_method = "build_#{tag}_paragraph".to_sym
         return true
@@ -341,39 +319,6 @@ class NTextParagraph < AnyParagraph
   # Constructeur propre
   def own_builder(pdf)
     send(@own_builder_method, self, pdf)
-  end
-
-  #
-  # @note
-  #  'styled_tags' contient les tags en début de paragraphe, avant
-  #   des '::', qui définissent la "class" du paragraphe.
-  def own_formaters?
-    spy "styled_tags = #{styled_tags.inspect}".bleu
-    return false if styled_tags.nil?
-    @own_formaters_methods = []
-    styled_tags.each do |tag|
-      if self.respond_to?("__formate_#{tag}".to_sym)
-        @own_formaters_methods << "__formate_#{tag}".to_sym
-        # Il faut toutes les récupérerer
-      elsif self.respond_to?("#{tag}_formater".to_sym)
-        @own_formaters_methods << "#{tag}_formater".to_sym
-      else
-        raise "Impossible de traiter le style #{tag.inspect}…"
-      end
-    end
-    return @own_formaters_methods.any?
-  end
-
-  def own_formaters
-    @own_formaters_methods.each do |formater|
-      begin
-        self.send(formater)
-      rescue PrawnFatalError => e
-        raise e
-      rescue Exception => e
-        puts "FORMATER ERROR: #{e.message}".rouge
-      end
-    end
   end
 
   # --- Predicate Methods ---
@@ -390,26 +335,14 @@ class NTextParagraph < AnyParagraph
 
   # --- Data Methods ---
 
-  REG_LEADING_TAG   = /^[a-z_0-9]+::/.freeze
-  REG_LEADING_TAGS  = /^((?:(?:[a-z_0-9]+)::){1,6})(.+)$/.freeze
   def text
     @text 
   end
 
   def prepare_text
-    tx = data[:text]||data[:raw_line]
-    if tx.match?(REG_LEADING_TAG)
-      # 
-      # <= Le texte contient des balises de style
-      # => Il faut relever ces balises et les retirer du
-      #    texte.
-      tx = tx.gsub(REG_LEADING_TAGS) do
-        tags = $1.freeze
-        text = $2.freeze
-        self.styled_tags = tags.split('::')
-        text
-      end
-    end
+    recup = {}
+    tx = self.class.__get_class_tags_in(data[:text]||data[:raw_line], recup)
+    self.class_tags = recup[:class_tags]
     @text     = tx
     @text_ini = tx
   end

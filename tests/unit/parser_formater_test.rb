@@ -30,6 +30,7 @@ CLASSE = Prawn4book::PdfBook::AnyParagraph
 class PseudoClassParagraphe
   attr_accessor :text
   attr_accessor :first_page, :numero
+  attr_accessor :class_tags
 end
 
 class ParserFormaterTest < Minitest::Test
@@ -318,5 +319,22 @@ class ParserFormaterTest < Minitest::Test
     assert_equal({page:13, paragraph:9}, liste['reformate'])
   end
 
+
+  def parag14
+    @parag14 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "gras::italic::Mon texte avec des class-tags."
+        inst.first_page = 16
+        inst.numero     = 14
+      end
+    end
+  end
+
+  def test_class_tags
+    context = {paragraph:parag14}
+    actual = CLASSE.__parse(parag14.text, context)
+    expected = "<i><b>Mon texte avec des class-tags.</b></i>"
+    assert_equal(expected, actual)
+  end
 
 end #/class Minitest

@@ -7,7 +7,7 @@ require 'prawn'
 require 'pdf/inspector'
 require 'pdf/reader'
 require 'clir'
-require 'clirtest'
+# require 'clirtest'
 require 'osascript'
 require 'osatest'
 

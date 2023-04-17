@@ -37,9 +37,12 @@ class PdfBook
     # 
     # --- INITIALISATIONS ---
     # 
+
     # - Chargement de la classe Bibliography -
-    # (auto initiée)
+    # 
     require 'lib/pages/bibliographies'
+    Bibliography.init
+
     # - Initialisation des paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
     # - Initialisation de la table de références -
@@ -57,37 +60,44 @@ class PdfBook
     spy "-> PARSE DU TEXTE".bleu
     inputfile.parse
     spy "<- /PARSE DU TEXTE".bleu
+
     #
     # Le livre doit être conforme, c'est-à-dire posséder les 
     # éléments requis
     # 
-    check_if_conforme || return
+    conforme? || return
+
     # 
-    # Première passe, pour récupérer les références (if any)
+    # = PREMIÈRE PASSE =
     # 
-    spy "-> Première passe de construction".bleu
+    # Pour récupérer les références (if any)
+    # (il y en aura 2 si des références avant sont trouvées)
+    # 
     ok_book = build_pdf_book
-    spy "<- Retour de première passe (ok_book = #{ok_book.inspect})".send(ok_book ? :vert : :rouge)
+
     # 
     # Si des références ont été trouvées, on actualise le fichier
     # des références du livre.
     # 
     table_references.save if table_references.any?
+
     # 
-    # Si des appels de références ont été trouvées, on refait une
-    # passe pour les appliquer.
+    # = DEUXIÈME PASSE =
+    # 
+    # Si des appels de références avant ont été trouvées, on refait
+    # une passe pour les appliquer.
     # 
     if table_references.has_one_appel_sans_reference?
       table_references.second_turn = true
       PdfBook::AnyParagraph.init_second_turn
-      spy "-> Deuxième passe de construction".bleu
       ok_book = build_pdf_book
-      spy "<- Retour de deuxième passe (ok_book = #{ok_book.inspect}".send(ok_book ? :vert : :rouge)
     end
 
-    if ok_book
-      open_book if CLI.option(:open)
-    end
+    #
+    # S'il faut ouvrir le livre
+    # 
+    open_book if CLI.option(:open) && ok_book
+
   end
 
   ##
@@ -106,6 +116,7 @@ class PdfBook
     
     # 
     # Détruire le fichier PDF final s'il existe déjà
+    # (note : il existe toujours si c'est un deuxième tour)
     # 
     File.delete(pdf_path) if File.exist?(pdf_path)
 
@@ -135,19 +146,17 @@ class PdfBook
     @pages = {}
 
     # 
-    # FONTS
-    # (les empaqueter dans le fichier PDF)
+    # = FONTS =
     # 
-    spy "-> Empaquetage des fontes…".bleu
+    # Empacketage
+    # 
     pdf.define_required_fonts(book_fonts)
-    spy "<- Fontes empaquetées.".vert
 
     #
     # Y a-t-il une DERNIÈRE PAGE définie en options de commande
     # Si oui, on ne doit construire le livre que juste que là
     # 
     pdf.last_page   = CLI.options[:last] ? CLI.options[:last].to_i : 100000
-    pdf.first_page  = CLI.options[:first] ? CLI.options[:first].to_i : 1
 
     # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
@@ -164,14 +173,17 @@ class PdfBook
     tdm = Prawn4book::Tdm.new(self, pdf)
     pdf.tdm = tdm
 
-    spy "-> Écriture des pages initiales".bleu
+    #
+    # - Premières pages -
+    # 
     pdf.start_new_page      if page_de_garde? && pdf.first_page < 2
     pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 3
     pdf.build_page_de_titre if page_de_titre?  && pdf.first_page < 4
 
+    #
     # Toujours commencer sur la BELLE PAGE
+    # 
     pdf.start_new_page if pdf.page_number.even?
-    spy "<- fin de l'écriture des pages initiales".vert
 
     # 
     # ========================
@@ -180,36 +192,34 @@ class PdfBook
     # 
     # cf. modules/pdfbook/generate_builder/paragraphes.rb
     # 
-    spy "-> Écriture des paragraphes…".bleu
     pdf.print_paragraphs(inputfile.paragraphes)
-    spy "<- Fin de l'écriture des paragraphes".vert
 
     #
     # - PAGES SUPPLÉMENTAIRES -
     # 
-    # Note : la page d'index s'appelle directement dans le
+    # Note : sauf la page d'index s'appelle directement dans le
     # texte par la marque '(( index ))'
     # 
     # Écriture des pages supplémentaires obtenues par le 
     # parser, if any
     # 
-    if module_parser? && defined?(PrawnCustomBuilderModule)
+    if defined?(PrawnCustomBuilderModule)
       extend PrawnCustomBuilderModule
       __custom_builder(pdf)
     end
 
     # 
-    # - Page infos ? -
+    # - PAGE INFOS -
     # 
     pdf.build_page_infos if page_infos? && pdf.last_page > pdf.page_number
 
     # 
     # - TABLE DES MATIÈRES -
     # 
-    pdf.build_table_of_contents if pdf.first_page == 1
+    pdf.build_table_of_contents
 
     #
-    # - ENTETE & PIED DE PAGE -
+    # = ENTETE & PIED DE PAGE =
     # 
     # Écriture des numéros de page ou numéros de paragraphes
     # En bas de toutes les pages qui le nécessitent.
@@ -217,7 +227,7 @@ class PdfBook
     pdf.build_headers_and_footers(self, pdf)
 
 
-    if module_parser? && ParserParagraphModule.respond_to?(:report)
+    if defined?(ParserParagraphModule) && ParserParagraphModule.respond_to?(:report)
       ParserParagraphModule.report
     end
 
@@ -240,7 +250,7 @@ class PdfBook
     PrawnView::Error.report_building_errors
 
     if File.exist?(pdf_path)
-      puts "\n\nLe book PDF a été produit avec succès !".vert
+      puts "\nLe book PDF a été produit avec succès !".vert
       puts "(in #{pdf_path})".gris
       puts "\n"
       return true
@@ -422,7 +432,7 @@ class PdfBook
   # 
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
-  def check_if_conforme
+  def conforme?
     # 
     # Si la page de titre est demandée, il faut s'assurer que les
     # informations minimales sont fournies (titre et auteur) et que

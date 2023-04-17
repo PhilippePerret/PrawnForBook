@@ -42,10 +42,31 @@ class AnyParagraph
     # etc.)
     # 
     self.first_page = pdf.page_number
+
+    #
+    # Spécifications suivant le code qui peut être contenu
+    # dans le paragraphe précédent
     # 
-    # Préformatage, si c'est un texte
-    # 
-    preformate(pdf) if some_text?
+    self.final_specs = {}
+    if pfbcode && pfbcode.parag_style
+      final_specs.merge!(pfbcode.parag_style)
+    end
+
+    if some_text?
+      
+      # 
+      # Suivant la nature du paragraphe (liste, table, etc.)
+      # on pré-traite son formatage et son texte
+      # 
+      traite_nature_paragraphe_per_nature(pdf)
+      
+      # 
+      # Formatage général
+      # 
+      context = { pdf: pdf, paragraph:self }
+      @text = self.class.__parse(text, context)
+    
+    end
 
   end
 

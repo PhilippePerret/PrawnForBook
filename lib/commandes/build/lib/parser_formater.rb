@@ -23,9 +23,19 @@ module ParserFormaterClass
   # @return [String] la chaine de caractère corrigée
   def __parse(str, context)
 
-    context[:paragraph] || begin
-      raise ERRORS[:parsing][:paragraph_required]
+    str.is_a?(String) || begin
+      raise(Prawn4book::ERRORS[:parsing][:parse_required_string] % [str.inspect, str.class.name])
     end
+
+    context[:paragraph] || begin
+      raise Prawn4book::ERRORS[:parsing][:paragraph_required]
+    end
+
+    #
+    # Est-ce un texte avec un class-tags ?
+    # (cf. l'explication au-dessus de la méthode, ci-dessous)
+    #   
+    str = __get_class_tags_in(str, context)
 
     #
     # Si une méthode de "pré-parsing" existe, on l'appelle. Elle
@@ -67,11 +77,14 @@ module ParserFormaterClass
     str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
 
     #
+    # Traitement des class-tags
+    # 
+    str = __traite_class_tags_in(str, context)
+    
+    #
     # Si une méthode de parsing propre existe, on l'appelle
     # 
-    if respond_to?(:parse)
-      str = parse(str, context)
-    end
+    str = parse(str, context) if respond_to?(:parse)
 
     return str
   end
@@ -103,30 +116,6 @@ class AnyParagraph
   attr_accessor :final_specs
 
 
-  def preformate(pdf)
-    spy "#preformate de #{text.inspect}"
-    self.final_specs = {}
-    if pfbcode && pfbcode.parag_style
-      final_specs.merge!(pfbcode.parag_style)
-    end
-    
-    # 
-    # Détection de la nature du texte
-    # 
-    # @note
-    #   C'est dans cette méthode, aussi, qu'on définit les paramètres
-    #   spéciaux de formatage (par exemple la marge pour les listes
-    #   ou les citations)
-    # 
-    detecte_et_traite_nature_paragraphe(pdf)
-    
-    # 
-    # Formatage général
-    # 
-    @text = self.class.__parse(text, {pdf: pdf, paragraph: self})
-
-  end
-
   #
   # @produit @final_text (le texte final à afficher)
   # 
@@ -157,7 +146,7 @@ class AnyParagraph
   #   - détecter qu'il s'agit un item de liste (self.list_item?)
   #   - retirer la marque de début dans @text
   # On peut ensuite le formater comme convenu
-  def detecte_et_traite_nature_paragraphe(pdf)
+  def traite_nature_paragraphe_per_nature(pdf)
     # 
     # Est-ce une citation ?
     # 
@@ -174,10 +163,16 @@ class AnyParagraph
       @text = text[1..-1].strip
       final_specs.merge!({mg_left:3.mm, no_num: true, cursor_positionned: true})
     end
+
+    #
+    # Est-ce un paragraphe formaté ?
+    # 
+    
     #
     # Est-ce une ligne de table ?
     # 
     @is_table_line = paragraph? && text.match?(REG_TABLE_LINE)
+
   end
   REG_LIST_ITEM   = /^\* .+$/.freeze
   REG_CITATION    = /^> .+$/.freeze
@@ -185,8 +180,7 @@ class AnyParagraph
 
 
 
-  def formate_text(pdf, str)
-    spy "[formate_text] str initial : #{str.inspect}".orange
+  def formate_per_nature(pdf, str)
 
     if list_item?
       str = formate_as_list_item(pdf, str)
@@ -200,20 +194,18 @@ class AnyParagraph
     # 
     str = __maybe_add_cursor_position(str)
 
-    spy "[formate_text] str final : #{str.inspect}".orange
-    
     return str
   end
 
 
-  def __traite_mot_indexed(str)
-    if str.match?('index:') || str.match?('index\(')
-      str = __traite_mots_indexed_in(str)
-      # spy "str après recherche index : #{str.inspect}".orange
-    end
+  # def __traite_mot_indexed(str)
+  #   if str.match?('index:') || str.match?('index\(')
+  #     str = __traite_mots_indexed_in(str)
+  #     # spy "str après recherche index : #{str.inspect}".orange
+  #   end
     
-    return str
-  end
+  #   return str
+  # end
 
   def formate_as_list_item(pdf, str)
     str = text
@@ -255,6 +247,32 @@ class AnyParagraph
 # 
 
 private
+
+  #
+  # Traitement des class-tags
+  # 
+  # @rappel
+  #   Une "class-tag" est une marque, au début du texte, suivi
+  #   de "::" qui permet d'application une "classe" au paragraphe
+  #   par exemple "monformat::Ce texte sera mis au style monformat."
+  # 
+  # @note
+  #   Il peut y avoir autant de class_tags qu'on veut
+  # 
+  # @note
+  #   Cette méthode est utilisée aussi bien pour des textes isolés,
+  #   comme les textes d'une table, que pour la préparation des 
+  #   paragraphes de texte.
+  # 
+  def self.__get_class_tags_in(str, context)
+    return str unless str.match?(REG_LEADING_TAG)
+    class_tags = str.split('::')
+    str = class_tags.pop
+    context.merge!(class_tags: class_tags)
+    return str
+  end
+  REG_LEADING_TAG   = /^[a-z_0-9]+::/.freeze
+  REG_LEADING_TAGS  = /^((?:(?:[a-z_0-9]+)::){1,6})(.+)$/.freeze
 
   # 
   # Traitement des codes ruby, qui se présentent dans le texte par
@@ -427,6 +445,32 @@ private
         bibitem.formated(context, actual)
       end
     end
+  end
+
+  ##
+  # @private
+  # 
+  # Traitement des class-tags
+  # 
+  # @note
+  #   Elles peuvent être définies dans context[:class_tags] (pour les
+  #   textes isolés comme les textes de cellule de table) ou dans
+  #   context[:paragraph].class_tags pour les paragraphes
+  # 
+  def self.__traite_class_tags_in(str, context)
+    class_tags = context[:class_tags] || context[:paragraph].class_tags
+    #
+    # Rien à faire si aucune classe n'est définie
+    # 
+    return str if class_tags.nil? || class_tags.empty?
+    #
+    # Sinon, on applique tous les styles
+    # 
+    class_tags.each do |class_tag|
+      str = self.send("formate_#{class_tag}".to_sym, str, context)
+    end
+
+    return str
   end
 
 

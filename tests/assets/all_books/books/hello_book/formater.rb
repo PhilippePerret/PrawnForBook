@@ -1,3 +1,14 @@
+module ParserFormaterClass
+  def formate_gras(str, context)
+    str = "<b>#{str}</b>"
+    return str
+  end
+  def formate_italic(str, context)
+    str = "<i>#{str}</i>"
+    return str
+  end
+end #/module ParserFormaterClass
+
 module BibliographyFormaterModule
 
   ##

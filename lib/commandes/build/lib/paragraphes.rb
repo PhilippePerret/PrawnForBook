@@ -4,8 +4,13 @@ class PrawnView
   attr_accessor :previous_paragraph
   attr_accessor :previous_text_paragraph
 
-
+  ##
+  # @public
+  # 
+  # ÉCRITURE DE TOUS LES PARAGRAPHES
+  # 
   # @param [Array<AnyParagraph>] paragraphes Les paragraphes à écrire.
+  # 
   def print_paragraphs(paragraphes)
     # On boucle sur tous les paragraphes du fichier d'entrée
     # 
@@ -13,34 +18,29 @@ class PrawnView
     # son type. Par exemple, les images sont des PdfBook::NImage,
     # les titres sont des PdfBook::NTitre, etc.
     # 
-    # Note : 'with_index' permet juste de faire des essais
-    green_point = '.'.vert
+    green_point = '.'.vert.freeze
     clear unless debug?
     paragraphes.each_with_index do |paragraphe, idx|
 
       # puts "Instance Paragraphe: #{paragraphe}"
 
+      #
+      # On s'en retourne tout de suite s'il ne faut pas écrire ce
+      # paragraphe.
+      # 
       next if paragraphe.not_printed?
 
       #
-      # Tant qu'on n'a pas atteint la première page à traiter, on
-      # passe au paragraphe suivant
-      # Ben oui, mais le faire comme ça, ça ne fonctionne pas : si 
-      # rien n'est écrit, on ne pourra jamais atteindre la première
-      # page à traiter.
-      # next if page_number < first_page
-
-      if paragraphe.paragraph?
-        spy "Écriture du paragraphe-texte #{paragraphe.numero}…".vert
-      elsif paragraphe.titre?
-        spy "Écriture du paragraphe-titre index #{idx} #{paragraphe.text.inspect}".vert
-      end
-
+      # Réglage du numéro de page du paragraphe (quel que soit son
+      # type)
+      # 
       paragraphe.page_numero = page_number
-      spy "Page du paragraphe #{idx} : ##{page_number}"
       
       # 
       # --- ÉCRITURE DU PARAGRAPHE ---
+      # 
+      # (quel que soit son type, mais chaque type possède sa propre
+      #  méthode #print)
       # 
       paragraphe.print(self)
       STDOUT.write green_point

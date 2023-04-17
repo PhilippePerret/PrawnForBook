@@ -513,7 +513,7 @@ Bien entendu, cette commande ne se place dans le texte du livre que lorsque le P
 
 **STYLISATION DU PARAGRAPHE PAR BALISE INITIALE**
 
-Un paragraphe de texte peut également commencer par une *balise* qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
+Un paragraphe de texte peut également commencer par une *balise* , qu’on appelle ici **class-tag**, qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
 
 <a name="styles-paragraphes-personnels"></a>
 
@@ -531,36 +531,31 @@ Il existe deux manières de le faire :
 
 * la manière simple, en ne se servant que des propriétés ci-dessus. Dans cette utilisation, le style permet simplement de ne pas avoir à répéter toute la ligne de définition du paragraphe avant le paragraphe. 
 
-  Pour cette manière, il faut définir dans le module **`FormaterParagraphModule`**  du  [fichier `formater.rb`][] la méthode **`<balise>_formater(paragraph)`** qui reçoit en premier paramètre l’instance du paragraphe. Ensuite, à l’intérieur de cette méthode, on définit toutes les valeurs :
+  Pour cette manière, il faut définir dans le module **`ParserFormaterClass`**  du  [fichier `formater.rb`][] la méthode **`formate_<class_tag>(str, context)`** qui reçoit en premier paramètre le texte à traiter et en second paramètre son contexte. Ensuite, à l’intérieur de cette méthode, on définit toutes les valeurs :
 
   ~~~ruby
-  module FormaterParagraphModule
-    def formate_gros(par)
+  module ParserFormaterClass
+    
+    # Utilisation simple
+    def formate_gras(str, context)
+      return "<strong>#{str}</strong>"
+    end
+    
+    # Utilisation complexe
+    def formate_gros(str, context)
+      par = context[:paragraph]
       par.font = "Arial"
       par.font_size = 14
       par.margin_left = "10%"
       par.kerning = 1.2
       par.margin_top = 4
       par.margin_bottom = 12
-      par.text = "FIXED: #{par.text)"
+      par.text = "FIXED: #{par.text}"
+  		return par.text
     end
   end
   ~~~
-  ou : 
-
-  ~~~ruby
-  module FormaterParagraphModule
-    def formate_gros(par)
-      par.instance_eval do 
-        font = "Arial"
-        font_size = 14
-        # ...
-        text = "FIXED: #{text}"
-      end
-    end
-  end
-  ~~~
-
+  
 * la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. Elle consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
 
   ~~~ruby

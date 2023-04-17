@@ -25,6 +25,7 @@ ERRORS = {
   # --- Parsing ---
 
   parsing: {
+    parse_required_string: "La méthode Prawn4book::PdfBook::AnyParagraph::__parse requiert une chaine de caractères en premier argument. Le premier argument, %s, est de classe %s.",
     paragraph_required: "Quel que soit le texte à parser/formater, le paragraphe est toujours requis.",
   },
   
