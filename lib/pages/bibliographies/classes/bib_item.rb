@@ -29,6 +29,45 @@ class BibItem
   # --- Public Methods ---
 
   ##
+  # Formatage de l'élément bibliographique
+  # (dans le texte)
+  # 
+  # @return [String] l'item de bibliographie formaté pour le 
+  # texte. 
+  # 
+  # Soit une méthode propre est définie, soit on utilise la donnée
+  # :title qui doit toujours exister pour une carte de donnée d'un
+  # item de bibliographie (sauf, justement, si une méthode propre
+  # est définie)
+  # 
+  # @note
+  #   On ne le met pas en cache, car l'affichage peut dépendre de
+  #   beaucoupu de choses, et notamment du +context+.
+  # 
+  # @param [Hash] context   Contexte d'écriture, notamment le paragraphe (donc la page, le numéro de paragraphe, la police courante, etc.)
+  # @param [String] actual  Le texte explicite peut-être fourni. Dans ce cas, c'est lui qu'on met en forme.
+  #
+  def formated(context, actual)
+    if biblio.custom_formating_method?
+      biblio.custom_format_method.call(self, context, actual)
+    else
+      actual || title
+    end
+  end
+
+  #
+  # Pour pouvoir utiliser <instance>.<propriété> pour
+  # obtenir les valeurs de l'instance
+  # 
+  def method_missing(methode, *args, &block)
+    if data.key?(methode)
+      data[methode]
+    else
+      raise NoMethodError.new(methode, args, &block)
+    end
+  end
+
+  ##
   # Pour ajouter une occurrence à l'item
   # 
   # @param [Hash] doccurrence Table contenant :page et :paragraph
@@ -179,50 +218,6 @@ class BibItem
     end
   end
 
-  ##
-  # Méthode appelée quand un titre explicite est donné pour l'item
-  # de bibliographie (par exemple le mot au pluriel) et qui renvoie
-  # le texte formaté.
-  # 
-  # @param [String|NilClass] actual Le mot à afficher vraiment ou nil
-  def formate_for_text(actual, paragraph)
-    if custom_methode_formatage == :none
-      actual || title
-    else
-      custom_methode_formatage.call(data.dup, actual, paragraph)
-    end
-  end
-
-  # @return [String] l'item de bibliographie formaté pour le 
-  # texte. 
-  # Soit une méthode propre est définie, soit on utilise la donnée
-  # :title qui doit toujours exister pour une carte de donnée d'un
-  # item de bibliographie (sauf, justement, si une méthode propre
-  # est définie)
-  # 
-  # @note
-  #   Maintenant, on ne le met plus en cache, car il dépend de la
-  #   taille de police courante. On pourrait la checker, mais, 
-  #   quelque part, ça serait une dépense d'énergie aussi grande…
-  # 
-  def formated_for_text(paragraph = nil)
-    # @formated_for_text ||= formate_for_text(title, paragraph)
-    formate_for_text(title, paragraph)
-  end
-
-  def custom_methode_formatage
-    @custom_methode_formatage ||= self.class.formatage_in_text_method(biblio)
-  end
-  def self.formatage_in_text_method(biblio)
-    @methodes_formatage_per_biblio ||= {}
-    @methodes_formatage_per_biblio[biblio.id] ||= begin
-      if defined?(FormaterBibliographiesModule) && defined?(FormaterBibliographiesModule.method("#{biblio.id}_in_text".to_sym))
-        FormaterBibliographiesModule.method("#{biblio.id}_in_text".to_sym)
-      else
-        :none
-      end
-    end
-  end
 
   # @note
   #   Je ne sais pas du tout pourquoi, mais ici, si j'utilise

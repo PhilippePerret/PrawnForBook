@@ -1,7 +1,7 @@
-module FormaterBibliographiesModule
+module BibliographyFormaterModule
 
   
-end #/module FormaterBibliographiesModule
+end #/module BibliographyFormaterModule
 
 module FormaterParagraphModule
 

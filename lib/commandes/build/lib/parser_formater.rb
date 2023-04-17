@@ -410,30 +410,24 @@ private
           building_error(ERRORS[:biblio][:bib_item_unknown] % ["#{unfound}".inspect, bib_tag])
           [nil, item_av]
         end
+      #
+      # Pour la clarté sémantique
+      # 
+      bibitem_has_been_found = not(canon.nil?)
 
-      unless canon.nil?
-        # 
-        # Si le canon est défini (ie si le mot a été reconnu dans la bibliographie)
-        # alors on enregistre une occurrence pour lui.
-        # 
-
+      if bibitem_has_been_found
         # 
         # Ajout de cette occurrence
         # 
         bibitem.add_occurrence({page: first_page, paragraph: parag_num})
-
-        if actual
-          bibitem.formate_for_text(actual, self)
-        elsif bibitem.respond_to?(:formated_for_text)
-          bibitem.formated_for_text(self)
-        else
-          bibitem.title
-        end
+        #
+        # Formatage de l'élément bibliographique
+        # (propre ou simplement le :title)
+        # 
+        bibitem.formated(context, actual)
       end
     end
   end
-
-
 
 
   def __maybe_add_cursor_position(str)

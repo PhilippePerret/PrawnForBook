@@ -85,7 +85,7 @@ MESSAGES[:biblio].merge!(explaination_after_create: <<-TEXT)
 
 Il vous reste quelques petites choses à faire :
 
-Le module FormaterBibliographiesModule du fichier formater.rb doit
+Le module BibliographyFormaterModule du fichier formater.rb doit
 définir la ou les méthodes :
 %s
 … qui vont permettre de formater les éléments dans la bibliographie.

@@ -22,6 +22,32 @@ class Bibliography
     load_items_from_file if one_file?
   end
 
+  ##
+  # @public
+  # 
+  # @return true si la bibliographie possède une méthode
+  # de formatage personnalisée
+  # 
+  def custom_formating_method?
+    :TRUE == @hasformatmethod ||= true_or_false(not(custom_format_method.nil?))
+  end
+
+  ##
+  # @public
+  # 
+  # @return [Method] La méthode de formatage personnalisée de cette bibliographie
+  #
+  def custom_format_method
+    @custom_format_method ||= begin
+      method_name = "#{id}_in_text".to_sym
+      if \
+        defined?(BibliographyFormaterModule) && \
+        BibliographyFormaterModule.respond_to?(method_name)
+      then
+        BibliographyFormaterModule.method(method_name)
+      end
+    end
+  end
 
   # @return true si la bibliographie fonctionne avec un fichier
   # unique contenant toutes les données
@@ -99,6 +125,10 @@ class Bibliography
   # 
   # @return [Boolean] true si la bibliographie existe.
   def exist?(bibitem_id)
+    #
+    # On s'assure d'abord que la bibliographie elle-même
+    # est bien formatée
+    # 
     return false if not(well_defined?)
     bibitem = get(bibitem_id)
     return bibitem # nil si inexistant
@@ -142,7 +172,7 @@ class Bibliography
   end
   def check_if_well_defined
     prefix_err = ERRORS[:biblio][:biblio_malformed] % tag
-    data.key?(:title)   || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:title_undefined]))
+    data.key?(:title)   || raise(PrawnBuildingError.new(prefix_err + (ERRORS[:biblio][:malformation][:title_undefined])))
     data.key?(:path)    || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:path_undefined]))
     File.exist?(folder) || raise(PrawnBuildingError.new(prefix_err + (ERRORS[:biblio][:malformation][:path_unfound] % data[:path])))
   end

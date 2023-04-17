@@ -16,7 +16,7 @@ module FormaterParagraphModule
 
 end
 
-module FormaterBibliographiesModule
+module BibliographyFormaterModule
 
   def biblio_livre(book)
     c = []

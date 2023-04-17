@@ -2,14 +2,14 @@
 
   Ce fichier définit les modules : 
 
-    - FormaterBibliographiesModule
+    - BibliographyFormaterModule
     - FormaterParagraphModule
 
 =end
 
 =begin
 
-  FormaterBibliographiesModule
+  BibliographyFormaterModule
   ----------------------------
 
   Module de formatage des bibliographies.
@@ -22,7 +22,7 @@
     pour l'affichage de la bibliographie des films.
 
 =end
-module FormaterBibliographiesModule
+module BibliographyFormaterModule
 
   # # Par exemple, pour une bibliographie de balise 'film'
   # def biblio_film(film)

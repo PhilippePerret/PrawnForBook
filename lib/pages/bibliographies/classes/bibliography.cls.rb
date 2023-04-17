@@ -124,8 +124,8 @@ class << self
   # 
   def require_formaters(book)
     book.require_module_formatage
-    if defined?(FormaterBibliographiesModule)
-      Bibliography.extend FormaterBibliographiesModule
+    if defined?(BibliographyFormaterModule)
+      Bibliography.extend BibliographyFormaterModule
     end
   end
 

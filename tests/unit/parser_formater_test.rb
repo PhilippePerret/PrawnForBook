@@ -143,15 +143,6 @@ class ParserFormaterTest < Minitest::Test
     end
   end
 
-  def parag9
-    @parag9 ||= begin
-      PseudoClassParagraphe.new().tap do |inst|
-        inst.text = "Ce texte possède du reformate(formatage particulier) de mot. Il reformate(reformate) certains mots en les gardant."
-        inst.first_page = 13
-        inst.numero     = 9
-      end
-    end
-  end
 
   def test_main_parse_method
     assert_respond_to CLASSE, :__parse
@@ -242,6 +233,75 @@ class ParserFormaterTest < Minitest::Test
     assert_equal(expected, actual)
   end
 
+  def parag10
+    @parag10 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Je cite livre(Narration) pour la première fois."
+        inst.first_page = 13
+        inst.numero     = 10
+      end
+    end
+  end
+
+  def parag11
+    @parag11 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Je cite à nouveau livre(Narration) à moins de 10 pages."
+        inst.first_page = 13
+        inst.numero     = 11
+      end
+    end
+  end
+
+  def parag12
+    @parag12 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Je cite encore livre(Narration) à plus de 10 pages."
+        inst.first_page = 24
+        inst.numero     = 12
+      end
+    end
+  end
+
+  def test_custom_bibliography
+    #
+    # Test pour voir le formatage personnalisé d'une bibliographie
+    # Sans autre définition, une bibliographie remplace simplement la
+    # marque par le titre (@title) de l'item de bibliographie. Mais
+    # on peut obtenir un traitement beaucoup plus fin.
+    # 
+    # Ici, on va tester avec les livres (bibliographie "livre") avec 
+    # un formater assez complexe qui tient compte de présence du livre
+    # avec ces conditions :
+    #   - si c'est la première apparition, le livre indique l'auteur,
+    #     et l'année (premier formatage)
+    #   - si c'est une autre apparition à moins de 10 pages, on indique
+    #     seulement le titre (deuxième formatage)
+    #   - si c'est une ré-apparition à plus de 10 pages, on remet l'année
+    #     (troisième formatage)
+    # 
+    actual   = CLASSE.__parse(parag10.text, {paragraph: parag10})
+    expected = "Je cite <i>Narration</i> (Philippe Perret, 2023) pour la première fois."
+    assert_equal(expected, actual)
+
+    actual   = CLASSE.__parse(parag11.text, {paragraph: parag11})
+    expected = "Je cite à nouveau <i>Narration</i> à moins de 10 pages."
+    assert_equal(expected, actual)
+
+    actual   = CLASSE.__parse(parag12.text, {paragraph: parag12})
+    expected = "Je cite encore <i>Narration</i> (2023) à plus de 10 pages."
+    assert_equal(expected, actual)
+  end
+
+  def parag9
+    @parag9 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Ce texte possède du reformate(formatage particulier) de mot. Il reformate(reformate) certains mots en les gardant."
+        inst.first_page = 13
+        inst.numero     = 9
+      end
+    end
+  end
 
   def test_custom_parser
     actual = CLASSE.__parse(parag9.text, {paragraph:parag9})
@@ -256,12 +316,6 @@ class ParserFormaterTest < Minitest::Test
     assert(liste.key?('reformate'))
     assert_equal({page:13, paragraph:9}, liste['formatage particulier'])
     assert_equal({page:13, paragraph:9}, liste['reformate'])
-  end
-
-  def test_custom_formatage_biblio
-    #
-    # Teste un formatage personnalisé de la bibliographie
-    # 
   end
 
 

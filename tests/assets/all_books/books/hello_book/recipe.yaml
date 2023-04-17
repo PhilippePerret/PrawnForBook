@@ -10,6 +10,7 @@
       :title: Liste des essais
       :path: biblios/essais
     livre:
+      title: "Liste des ouvrages cités"
       tag: livre
       path: livres.yaml
     firstbiblio:

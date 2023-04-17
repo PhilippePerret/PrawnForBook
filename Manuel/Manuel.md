@@ -1684,7 +1684,7 @@ Il faut y définir une méthode préfixée `biblio_` suivi par la balise (`:tag`
 
 ~~~ruby
 # in formater.rb
-module FormaterBibliographiesModule # attention au pluriel
+module BibliographyFormaterModule # attention au pluriel
   
   # Méthode mettant en forme les données à faire apparaitre et renvoyant
   # le string correspondant.
@@ -1703,7 +1703,7 @@ module FormaterBibliographiesModule # attention au pluriel
     '%{title.upcase} de %{writers}, %{year}' % element.data
   end
   
-end #/module FormaterBibliographiesModule
+end #/module BibliographyFormaterModule
 ~~~
 
 Noter qu’avec cette formule, les données sont toujours présentées sur une ligne. À l’avenir, on pourra imaginer une méthode qui reçoit `pdf` (l’instance `{Prawn::View}`) et permette d’imprimer les données exactement comme on veut, même dans un affichage complexe.
@@ -1723,7 +1723,7 @@ La section précédente parlait de la mise en forme de la bibliographie elle-mê
 On le fait grâce à la méthode **`<tag biblio>_in_text`** dans le fichier `formater.rb` :
 
 ~~~ruby
-module FormaterBibliographiesModule
+module BibliographyFormaterModule
   
   # @param [Hash] data  Données de l'item, telles que définies dans sa carte
   # 										ou son enregistrement.
@@ -2085,7 +2085,7 @@ module FormaterParagraphModule # Ce nom est absolument à respecter
 	end
 end
 
-module FormaterBibliographiesModule # ce nom est absolument à respecter
+module BibliographyFormaterModule # ce nom est absolument à respecter
 end #/module
 ~~~
 
@@ -2166,12 +2166,12 @@ end #/module ParserParagraphModule
 
 ##### Formatage des éléments de bibliographie
 
-Le formatage est défini dans des méthodes `biblio_<tag>` dans un module **`FormaterBibliographiesModule`** du fichier `formater.rb`:
+Le formatage est défini dans des méthodes `biblio_<tag>` dans un module **`BibliographyFormaterModule`** du fichier `formater.rb`:
 
 ~~~ruby
 # in formater.rb
 
-module FormaterBibliographiesModule
+module BibliographyFormaterModule
   def biblio_film(film)
     # ...
   end
