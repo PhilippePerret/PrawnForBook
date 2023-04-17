@@ -25,7 +25,7 @@ module BibliographyFormaterModule
       str = "#{str} (#{livre.auteur}, #{livre.annee})"
     else
       if citation_lointaine
-        str = "#{str} (#{livre.annee})"
+        str = "#{str} (#{livre.auteur_last_name}, #{livre.annee})"
       end
       @@livres_cites[livre.id][:last_page] = pa.first_page
     end
@@ -33,4 +33,19 @@ module BibliographyFormaterModule
     return str
   end
 
+
+  class Prawn4book::Bibliography::BibItem
+    def auteur_last_name
+      @auteur_last_name ||= begin
+        dauteur = auteur.split(' ')
+        if dauteur.count == 2
+          dauteur[1]
+        else
+          dauteur.select do |mot|
+            mot.upcase == mot
+          end.join(' ')
+        end
+      end
+    end
+  end
 end #/module BibliographyFormaterModule

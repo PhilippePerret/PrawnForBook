@@ -1684,7 +1684,7 @@ Il faut y définir une méthode préfixée `biblio_` suivi par la balise (`:tag`
 
 ~~~ruby
 # in formater.rb
-module BibliographyFormaterModule # attention au pluriel
+module BibliographyFormaterModule
   
   # Méthode mettant en forme les données à faire apparaitre et renvoyant
   # le string correspondant.
@@ -1718,18 +1718,18 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 
 ##### Mise en forme dans le texte
 
-La section précédente parlait de la mise en forme de la bibliographie elle-même. On peut également définir comme l’item apparaitra dans le texte lui-même.
+La section précédente parlait de la mise en forme de la bibliographie elle-même, souvent placée à la fin du livre. On peut également définir comme l’item apparaitra dans le texte lui-même de façon très fine et très complexe.
 
 On le fait grâce à la méthode **`<tag biblio>_in_text`** dans le fichier `formater.rb` :
 
 ~~~ruby
 module BibliographyFormaterModule
   
-  # @param [Hash] data  Données de l'item, telles que définies dans sa carte
-  # 										ou son enregistrement.
-  # @param [String] actual  Optionnellement, le mot à écrire (par exemple le
-  # 												mot au pluriel.
-  # @param [NTextParagraph] paragraph L'instance du paragraphe. Typiquement
+  # @param [Bibliography::BibItem] instance  Item bibliographique. On peut
+  # 									obtenir toutes ses données par instance.property
+  # @param [Hash] context 	Le contexte d'écriture (pour connaitre la page,
+  # 												le paragraphe, la taille de police, etc.
+  # @option context [AnyParagraph] paragraph L'instance du paragraphe. Typiquement
   # 		             	pour être en mesure de modifier paragraph.final_specs
   # 									qui permet d'ajouter des traitements à pdf.text
   # 									Mais ATTENTION : ces traitements touchent tout le para-
@@ -1737,14 +1737,88 @@ module BibliographyFormaterModule
   # 									paragraphe.final_specs.merge!({kerning:true, \
   #										character_spacing: -1}) alors ce sont tous les mots du
   # 									paragraphe qui seront modifiés.
+  # @param [String] actual  Optionnellement, le mot à écrire (par exemple le
+  # 												mot au pluriel.
   #
-  def film_in_text(data, actual, paragraph)
+  # @return [String] Le texte à afficher
+  def film_in_text(instance, context, actual)
     # traitement à partir des +data+ de l'item
     return texte_a_afficher
   end
 ~~~
 
 Rappel : en utilisant le [stylage *inline*](#inline-style), on peut modifier considérablement l’aspect des mots de bibliographie.
+
+À titre d’exemple de complexité, on présente ci-dessous le traitement d’une bibliographie de livres, avec trois affichages différents en fonction du contexte. Lorsque le livre est cité pour la première fois dans le texte, il contient toutes ses informations (c’est-à-dire, ici, son titre, son auteur et son année de publication). Pour une citation suivante, mais assez proche (moins de 10 pages), on ne met que le titre du livre, en italiques. Si, enfin, le livre est à nouveau cité, mais à plus de 10 pages, on ajoute l’année de publication à nouveau et seulement le nom.
+
+~~~ruby
+module BibliographyFormaterModule
+
+  ##
+  # Formatage d'une citation de livre dans le livre en exemple
+  # 
+  # Il y a trois formatages différents :
+  #   - la première fois où le livre est cité
+  #   - une autre fois proche de la dernière citation (< 10 pages)
+  #   - une autre fois loin de la dernière citation (> 10 pages)
+  # 
+  def self.livre_in_text(livre, context, actual)
+    pa = context[:paragraph]
+    #
+    # Pour consigner les informations des livres déjà cités
+    #
+    @@livres_cites ||= {}
+
+    # true si c'est la toute première citation du livre
+    premiere_fois = not(@@livres_cites.key?(livre.id))
+    # true si le livre a été cité la dernière fois à plus
+    # de 10 pages de là
+    citation_lointaine = not(premiere_fois) && (pa.first_page >= @@livres_cites[livre.id][:last_page] + 10)
+    
+    str = "<i>#{livre.title}</i>"
+    # @note
+    # 	'title' peut être la propriété définie par :main_key dans la 
+    # 	définition de la bibliographie.
+
+    if premiere_fois
+      @@livres_cites.merge!(livre.id => {last_page: pa.first_page})
+      str = "#{str} (#{livre.auteur}, #{livre.annee})"
+    else
+      if citation_lointaine
+        str = "#{str} (#{livre.auteur_last_name}, #{livre.annee})"
+      end
+      #
+      # On consigne la dernière utilisation
+      #
+      @@livres_cites[livre.id][:last_page] = pa.first_page
+    end
+
+    return str
+  end
+
+	#
+  # Extension de BibItem pour obtenir le patronyme de l'auteur
+  # seulement (écriture façon univsersité).
+  class Prawn4book::Bibliography::BibItem
+    def auteur_last_name
+      @auteur_last_name ||= begin
+        dauteur = auteur.split(' ')
+        if dauteur.count == 2
+          dauteur[1]
+        else
+          dauteur.select do |mot|
+            mot.upcase == mot
+          end.join(' ')
+        end
+      end
+    end
+  end
+end #/module BibliographyFormaterModule
+~~~
+
+
+
+> Noter comment on peut étendre la classe `Prawn4book::Bibliography::BitItem` pour définir de nouvelle méthodes/propriétés pratiques.
 
 ---
 

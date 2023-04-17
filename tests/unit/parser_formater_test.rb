@@ -289,7 +289,7 @@ class ParserFormaterTest < Minitest::Test
     assert_equal(expected, actual)
 
     actual   = CLASSE.__parse(parag12.text, {paragraph: parag12})
-    expected = "Je cite encore <i>Narration</i> (2023) à plus de 10 pages."
+    expected = "Je cite encore <i>Narration</i> (Perret, 2023) à plus de 10 pages."
     assert_equal(expected, actual)
   end
 

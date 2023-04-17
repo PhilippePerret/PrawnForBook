@@ -51,7 +51,7 @@ class BibItem
     if biblio.custom_formating_method?
       biblio.custom_format_method.call(self, context, actual)
     else
-      actual || title
+      actual || title # peut être :main_key si défini
     end
   end
 
