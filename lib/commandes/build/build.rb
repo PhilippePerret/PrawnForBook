@@ -134,8 +134,6 @@ class PdfBook
     # 
     @pages = {}
 
-    me = self
-    
     # 
     # FONTS
     # (les empaqueter dans le fichier PDF)
@@ -277,11 +275,9 @@ class PdfBook
     # On les distribue
     # 
     if defined?(ParserFormaterClass)
-      puts "J'étends avec ParserFormaterClass".jaune
       Prawn4book::PdfBook::AnyParagraph.extend(ParserFormaterClass)
     end
     if defined?(ParserFormater)
-      puts "J'étends avec ParserFormater".jaune
       Prawn4book::PdfBook::AnyParagraph.include(ParserFormater)
     end
 

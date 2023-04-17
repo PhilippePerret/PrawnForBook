@@ -1,15 +1,26 @@
 module ParserFormaterClass
 
   def pre_parse(str, context)
-    puts "Pour pré-parser le texte #{str.inspect}"
 
     return str
   end
 
   def parse(str,context)
-    puts "Pour parser #{str.inspect}"
+    @@liste_formatage ||= {}
 
+    pa = context[:paragraph]
+
+    str = str.gsub(/reformate\((.+?)\)/.freeze) do
+      mot = $1.freeze
+      @@liste_formatage.merge!(mot => {page:pa.first_page, paragraph:pa.numero})
+      '<font name="Courrier" size="12">%s</font>'.freeze % mot
+    end
+    
     return str
+  end
+
+  def liste_formatage
+    @@liste_formatage
   end
 
 end #/module ParserFormaterClass

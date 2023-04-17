@@ -1,6 +1,11 @@
 # 
 # Ce test d'avril 2023 valide le travail du parseur principal
 # 
+# Il travaille "hors" de l'application, en appelant simplement la
+# méthode Prawn4book::PdfBook::AnyParagraph.__parse avec un faux
+# paragraphe (instance capable de renvoyer @text, @first_page et
+# @numéro).
+# 
 # Pour le jouer :
 # 
 #   - ouvrir un Terminal au dossier de l'application
@@ -138,6 +143,16 @@ class ParserFormaterTest < Minitest::Test
     end
   end
 
+  def parag9
+    @parag9 ||= begin
+      PseudoClassParagraphe.new().tap do |inst|
+        inst.text = "Ce texte possède du reformate(formatage particulier) de mot. Il reformate(reformate) certains mots en les gardant."
+        inst.first_page = 13
+        inst.numero     = 9
+      end
+    end
+  end
+
   def test_main_parse_method
     assert_respond_to CLASSE, :__parse
     [
@@ -226,4 +241,28 @@ class ParserFormaterTest < Minitest::Test
     actual   = occs.first
     assert_equal(expected, actual)
   end
+
+
+  def test_custom_parser
+    actual = CLASSE.__parse(parag9.text, {paragraph:parag9})
+    expected = "Ce texte possède du <font name=\"Courrier\" size=\"12\">formatage particulier</font> de mot. Il <font name=\"Courrier\" size=\"12\">reformate</font> certains mots en les gardant."
+    assert_equal(expected, actual)
+    #
+    # Le mot a été conservé 
+    # 
+    liste = CLASSE.liste_formatage
+    assert_equal(2, liste.count, "La liste de capture des mots devrait en contenir 2")
+    assert(liste.key?('formatage particulier'))
+    assert(liste.key?('reformate'))
+    assert_equal({page:13, paragraph:9}, liste['formatage particulier'])
+    assert_equal({page:13, paragraph:9}, liste['reformate'])
+  end
+
+  def test_custom_formatage_biblio
+    #
+    # Teste un formatage personnalisé de la bibliographie
+    # 
+  end
+
+
 end #/class Minitest
