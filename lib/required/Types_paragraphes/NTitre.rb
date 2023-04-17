@@ -69,12 +69,9 @@ class NTitre < AnyParagraph
     pdf.font(titre.fonte)
 
     # 
-    # Formatage du titre
+    # Le titre formaté
     # 
-    # titre.preformate(pdf) -- fait dans super
-    titre.final_formatage(pdf)
-    ftext = titre.final_text
-    # ftext = titre.formated_text(self)
+    ftext = titre.text
 
     #
     # Nombre de lignes avant

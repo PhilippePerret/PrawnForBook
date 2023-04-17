@@ -311,12 +311,7 @@ class NTable < AnyParagraph
         pdf.current_options.merge!(size: value[:size]) if value.key?(:size)
         pdf.current_options.merge!(font_name: value[:font]) if value.key?(:font)
         pdf.current_options.merge!(font_style: value[:font_style]) if value.key?(:font_style)
-        #
-        # On peut transformer le texte
-        # 
-        final_formatage(pdf) # => @final_text
-        value.merge!(content: @final_text || @text)
-        # value.merge!(content: treate_simple_text(value[:content]))
+        value.merge!(content: treate_simple_text(value[:content]))
         #
         # On remet les options courantes
         # 
@@ -331,12 +326,12 @@ class NTable < AnyParagraph
     end
   end
 
+  ##
+  # Méthode qui traite complètement, en profondeur et à tous les 
+  # niveau, le texte de cellule +str+
+  # 
   def treate_simple_text(str)
-    str = self.class.preformatage(str)
-    str = self.class.formatage_final(str, pdf)
-    # str = self.formate_text(pdf, str)
-    # self.final_formatage(pdf)
-    # return @final_text
+    str = self.class.__parse(str, {paragraph: self})
     return str
   end
 

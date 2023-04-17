@@ -2,6 +2,9 @@ module Prawn4book
 class PdfBook
 class AnyParagraph
 
+  # Liste des balises de style de paragraphe
+  attr_accessor :class_tags
+
   # Méthodes utiles pour la numérotation
   # 
   # @note

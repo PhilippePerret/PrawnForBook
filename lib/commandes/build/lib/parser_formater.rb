@@ -80,7 +80,7 @@ module ParserFormaterClass
     # Traitement des class-tags
     # 
     str = __traite_class_tags_in(str, context)
-    
+
     #
     # Si une méthode de parsing propre existe, on l'appelle
     # 
@@ -107,26 +107,10 @@ class AnyParagraph
   include ParserFormater
 
 
-  # [String] Le texte final, tel qu'il est vraiment écrit par 
-  # pdf.
-  attr_reader :final_text
-  
   # [Hash] Table des spécifications finales pour l'impression du
   # paragraphe (quel qu'il soit)
   attr_accessor :final_specs
 
-
-  #
-  # @produit @final_text (le texte final à afficher)
-  # 
-  def final_formatage(pdf)
-    spy "-> final_formatage de #{text.inspect}".jaune
-    @text = formate_text(pdf, text)
-
-    @final_text = self.class.formatage_final(text, pdf)
-
-    spy "Fin #final_formatage de #{text.inspect}"
-  end
 
   # (ne pas mettre en cache : les tests foirent, sinon)
   def self.pdfbook; PdfBook.current end
@@ -467,7 +451,12 @@ private
     # Sinon, on applique tous les styles
     # 
     class_tags.each do |class_tag|
-      str = self.send("formate_#{class_tag}".to_sym, str, context)
+      method_name = "formate_#{class_tag}".to_sym
+      if self.respond_to?(method_name)
+        str = self.send(method_name, str, context)
+      else
+        raise (ERRORS[:parsing][:class_tag_formate_method_required] % method_name)
+      end
     end
 
     return str

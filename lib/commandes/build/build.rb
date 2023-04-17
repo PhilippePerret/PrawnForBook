@@ -448,19 +448,6 @@ class PdfBook
       spy "La page de titre N'EST PAS démandée".jaune
     end
 
-    # 
-    # Les bibliographies doivent être bien définies
-    # 
-    dbibs = recipe.bibliographies[:biblios]
-    unless dbibs.nil?
-      dbibs.is_a?(Hash) || raise(PrawnBuildingError.new(ERRORS[:biblio][:biblios_malformed]))
-      Bibliography.require_formaters(self)
-      # - Toutes les bibliographies doivent être bien définies -
-      dbibs.map { |tag, dbib|Bibliography.get(tag, self)}.each(&:well_defined?)
-      # - On finit la préparation des bibliographies -
-      Bibliography.prepare
-    end
-
   rescue PrawnBuildingError => e
     formated_error(e)
     spy "👎 Le livre n'est pas conforme.".rouge

@@ -10,10 +10,6 @@ class NTextParagraph < AnyParagraph
   alias :book :pdfbook
 
 
-  # Liste des balises de style de paragraphe
-  attr_accessor :class_tags
-
-
   def initialize(pdfbook,data)
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
@@ -137,7 +133,6 @@ class NTextParagraph < AnyParagraph
         # Maintenant que nous sommes positionnés et que toutes les
         # options sont définis, on peut formater le texte final
         self.current_options = options
-        parag.final_formatage(pdf)
 
         #
         # Écriture du numéro du paragraphe
@@ -154,7 +149,7 @@ class NTextParagraph < AnyParagraph
           # - dans un text box -
           # 
           span(wbox, **span_options) do
-            text(parag.final_text, **options)
+            text(parag.text, **options)
           end
         else
 
@@ -165,7 +160,7 @@ class NTextParagraph < AnyParagraph
           # 
           # Hauteur que prendra le texte
           # 
-          final_height = height_of(parag.final_text)
+          final_height = height_of(parag.text)
 
           # 
           # Le paragraphe tient-il sur deux pages ?
@@ -190,7 +185,7 @@ class NTextParagraph < AnyParagraph
             # se place sur la place suivante.
             # 
             # height_diff = final_height - cursor
-            # spy "Texte trop long (de #{height_diff}) : <<< #{parag.final_text} >>>".rouge
+            # spy "Texte trop long (de #{height_diff}) : <<< #{parag.text} >>>".rouge
             # spy "margin bottom: #{parag.margin_bottom}"
             box_height = cursor + line_height
             # spy "Taille box = #{box_height}".rouge
@@ -200,13 +195,13 @@ class NTextParagraph < AnyParagraph
               at:     [0, cursor],
               overflow: :truncate
             }.merge(options)
-            excedant = text_box(parag.final_text, **other_options)
+            excedant = text_box(parag.text, **other_options)
             # spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
             start_new_page
             move_cursor_to_next_reference_line
             rest_text = excedant.map {|h| h[:text] }.join('')
           else
-            rest_text = parag.final_text
+            rest_text = parag.text
             # rest_text = parag.text
           end
           spy "rest_text = #{rest_text.inspect}"
@@ -225,7 +220,7 @@ class NTextParagraph < AnyParagraph
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e
-      puts "Problème avec le paragraphe #{final_text.inspect}".rouge
+      puts "Problème avec le paragraphe #{text.inspect}".rouge
       puts e.backtrace.join("\n").rouge if debug?
       puts "ERREUR : #{e.message}"
       exit

@@ -117,17 +117,17 @@ class << self
     @biblios.merge!(biblio.id.to_sym => biblio)
   end
 
-  ##
-  # Pour requérir le formater du livre +book+
-  # 
-  # @param [Prawn4book::PdfBook] book L'instance du livre
-  # 
-  def require_formaters(book)
-    book.require_module_formatage
-    if defined?(BibliographyFormaterModule)
-      Bibliography.extend BibliographyFormaterModule
-    end
-  end
+  # ##
+  # # Pour requérir le formater du livre +book+
+  # # 
+  # # @param [Prawn4book::PdfBook] book L'instance du livre
+  # # 
+  # def require_formaters(book)
+  #   book.require_module_formatage
+  #   if defined?(BibliographyFormaterModule)
+  #     Bibliography.extend BibliographyFormaterModule
+  #   end
+  # end
 
   # Au cours du parsing des paragraphes, on utilise cette méthode
   # pour ajouter une occurrence à une des bibliographies
@@ -192,10 +192,5 @@ class << self
 
 end #/<< self Bibliography
 end #/ class Bibliography
-
-##
-# Au chargement du module, on initialise la classe
-# 
-Bibliography.init
 
 end #/module Prawn4book
