@@ -133,12 +133,9 @@ class NTable < AnyParagraph
             image_style = rationalise_pourcentages_in(eval(image_style))
           else
             # 
-            # Traitement d'un simple texte
+            # Traitement d'un "simple" texte
             # 
             treate_simple_text(cstrip)
-            # str = self.class.preformatage(cstrip)
-            # str = self.class.formatage_final(str, pdf)
-            # str
           end
         end
       end
@@ -331,8 +328,12 @@ class NTable < AnyParagraph
   # niveau, le texte de cellule +str+
   # 
   def treate_simple_text(str)
-    str = self.class.__parse(str, {paragraph: self})
+    str = self.class.__parse(str, context)
     return str
+  end
+
+  def context
+    @context ||= {paragraph: self, pdf: pdf}.merge(parag_style)
   end
 
   def page_width

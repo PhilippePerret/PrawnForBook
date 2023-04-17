@@ -5,6 +5,13 @@ class AnyParagraph
   # Liste des balises de style de paragraphe
   attr_accessor :class_tags
 
+  # [Hash] Table des spécifications finales pour l'impression du
+  # paragraphe (quel qu'il soit)
+  # Permet par exemple de consigner :size ou :font_size pour la 
+  # taille courante de police (qui peut être définie par pfbcode, le
+  # code qui précède le paragraphe.
+  attr_accessor :final_specs
+
   # Méthodes utiles pour la numérotation
   # 
   # @note

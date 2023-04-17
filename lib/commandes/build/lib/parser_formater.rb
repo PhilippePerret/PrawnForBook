@@ -107,11 +107,6 @@ class AnyParagraph
   include ParserFormater
 
 
-  # [Hash] Table des spécifications finales pour l'impression du
-  # paragraphe (quel qu'il soit)
-  attr_accessor :final_specs
-
-
   # (ne pas mettre en cache : les tests foirent, sinon)
   def self.pdfbook; PdfBook.current end
 
