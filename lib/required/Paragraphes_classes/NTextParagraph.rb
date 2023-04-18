@@ -4,6 +4,7 @@ class PdfBook
 class NTextParagraph < AnyParagraph
 
   attr_reader :data
+  attr_reader :text
   attr_reader :numero
   alias :number :numero
 
@@ -14,9 +15,55 @@ class NTextParagraph < AnyParagraph
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
     @numero = AnyParagraph.get_next_numero
-    prepare_text # pour obtenir tout de suite les balises initiales
+    #
+    # On regarde tout de suite la nature du paragraphe (table ? item
+    # de liste ? citation ? etc. pour pouvoir faire un pré-traitement
+    # de son texte et pré-définir ses styles)
+    pre_parse_text_paragraph
   end
 
+  ##
+  # Pré-parsing du paragraphe à l'instanciation
+  # Permet de définir sa nature, par exemple citation ou item de
+  # liste
+  # 
+  def pre_parse_text_paragraph
+    @text = data[:text] || data[:raw_line]
+
+    @is_citation    = text.match?(REG_CITATION)
+    @is_list_item   = text.match?(REG_LIST_ITEM)
+    @is_table_line  = text.match?(REG_TABLE_LINE)
+    #
+    # En cas de citation ou d'item de liste, on retire la marque
+    # de début du paragraphe ("> " ou "* ")
+    @text = text[1..-1].strip if citation? || list_item?
+
+    recup = {}
+    tx = self.class.__get_class_tags_in(text, recup)
+    self.class_tags = recup[:class_tags]
+    @text = tx
+    
+    # 
+    # Pré-définition des styles en fonction de la nature du paragra-
+    # phe de texte
+    # 
+    if citation?
+      @text = "<i>#{@text}</i>"
+      add_style({font_size: font_size + 1, margin_left: 1.cm, margin_right: 1.cm, margin_top: 0.5.cm, margin_bottom: 0.5.cm, no_num:true})
+    elsif list_item?
+      add_style({margin_left:3.mm, no_num: true, cursor_positionned: true})
+    elsif table_line?
+      # rien à faire
+    elsif tagged_line?
+      # rien à faire
+    end
+
+    @text_ini = @text
+
+  end
+  REG_CITATION    = /^> .+$/.freeze
+  REG_LIST_ITEM   = /^\* .+$/.freeze
+  REG_TABLE_LINE  = /^\|/.freeze 
 
   # --- Helper Methods ---
 
@@ -69,6 +116,17 @@ class NTextParagraph < AnyParagraph
     # 
     pa = self
 
+    #
+    # Préformatage par nature de paragraphe
+    # 
+    # Typiquement, c'est ici qu'on ajoute un "- " au début des items
+    # de liste
+    # 
+    formate_per_nature(pdf)
+
+    #
+    # On inscrit enfin le texte
+    # 
     pdf.update do
 
       # 
@@ -221,13 +279,6 @@ class NTextParagraph < AnyParagraph
     @indent ||= book.recipe.text_indent
   end
 
-  def margin_left; @margin_left ||= 0 end
-  def margin_left=(val); @margin_left = val end
-
-  def margin_right; @margin_right ||= 0 end
-  def margin_right=(val); @margin_right = val end
-
-
   def method_missing(method_name, *args, &block)
     if method_name.to_s.end_with?('=')
       prop_name = method_name.to_s[0..-2].to_sym
@@ -266,24 +317,11 @@ class NTextParagraph < AnyParagraph
   def sometext? ; true end # seulement ceux qui contiennent du texte
   alias :some_text? :sometext?
 
-  def list_item?; @is_list_item end
+  def citation?     ; @is_citation      end
+  def table_line?   ; @is_table_line    end
+  def tagged_line?  ; @is_tagged_line   end
+  def list_item?    ; @is_list_item     end
   attr_accessor :is_list_item
-
-  def citation? ; @is_citation  end
-
-  # --- Data Methods ---
-
-  def text
-    @text 
-  end
-
-  def prepare_text
-    recup = {}
-    tx = self.class.__get_class_tags_in(data[:text]||data[:raw_line], recup)
-    self.class_tags = recup[:class_tags]
-    @text     = tx
-    @text_ini = tx
-  end
 
 end #/class NTextParagraph
 end #/class PdfBook

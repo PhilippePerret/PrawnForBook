@@ -55,19 +55,11 @@ class AnyParagraph
     self.first_page = pdf.page_number
 
     if some_text?
-      
-      # 
-      # Suivant la nature du paragraphe (liste, table, etc.)
-      # on pré-traite son formatage et son texte
-      # 
-      traite_nature_paragraphe_per_nature(pdf)
-      
       # 
       # Formatage général
       # 
       context = { pdf: pdf, paragraph:self }
       @text = self.class.__parse(text, context)
-    
     end
 
   end

@@ -56,6 +56,13 @@ module ParserFormaterClass
     str = __traite_codes_ruby_in(str, context)
 
     #
+    # Ajout (optionnel) de la position du cursor (en début de texte)
+    # (pour débuggage et mise en place du texte, avec l'option 
+    #  -cursor)
+    # 
+    str = __maybe_add_cursor_position(str, context)
+
+    #
     # Traitement du code in-line pseudo-markdown
     # 
     str = __traite_markdown_inline_in(str, context)
@@ -115,96 +122,16 @@ class AnyParagraph
   # (ne pas mettre en cache : les tests foirent, sinon)
   def self.pdfbook; PdfBook.current end
 
-  # = main =
-  #
-
-  ##
-  # On doit détecter la nature de certains paragraphes avant le
-  # formatage pour éviter certains problèmes. Typiquement, si un
-  # paragraphe est un item de liste et qu'il contient un texte en 
-  # italique, il peut ressembler à :
-  #   * un item de *liste* avec italique
-  # Mais s'il est formaté tel quel, alors la portion "* un item de *"
-  # va être considérée comme en italique.
-  # Il faut donc :
-  #   - détecter qu'il s'agit un item de liste (self.list_item?)
-  #   - retirer la marque de début dans @text
-  # On peut ensuite le formater comme convenu
-  def traite_nature_paragraphe_per_nature(pdf)
-    # 
-    # Est-ce une citation ?
-    # 
-    @is_citation = paragraph? && text.match?(REG_CITATION)
-    if citation?
-      @text = text[1..-1].strip
-      add_style({font_size: font_size + 1, margin_left: 1.cm, margin_right: 1.cm, margin_top: 0.5.cm, margin_bottom: 0.5.cm, no_num:true})
-    end
-    # 
-    # Est-ce un item de liste ?
-    # 
-    @is_list_item = paragraph? && text.match?(REG_LIST_ITEM)
-    if list_item?
-      @text = text[1..-1].strip
-      add_style({margin_left:3.mm, no_num: true, cursor_positionned: true})
-    end
-
-    #
-    # Est-ce un paragraphe formaté ?
-    # 
-    
-    #
-    # Est-ce une ligne de table ?
-    # 
-    @is_table_line = paragraph? && text.match?(REG_TABLE_LINE)
-
-  end
-  REG_LIST_ITEM   = /^\* .+$/.freeze
-  REG_CITATION    = /^> .+$/.freeze
-  REG_TABLE_LINE  = /^\|/.freeze 
-
-
-
-  def formate_per_nature(pdf, str)
-
-    if list_item?
-      str = formate_as_list_item(pdf, str)
-    elsif citation?
-      str = formate_as_citation(pdf, str)
-    end
-
-    #
-    # Ajout (optionnel) de la position du cursor
-    # (débuggage et mise en place du texte)
-    # 
-    str = __maybe_add_cursor_position(str)
-
-    return str
-  end
-
-
-  # def __traite_mot_indexed(str)
-  #   if str.match?('index:') || str.match?('index\(')
-  #     str = __traite_mots_indexed_in(str)
-  #     # spy "str après recherche index : #{str.inspect}".orange
-  #   end
-    
-  #   return str
-  # end
-
-  def formate_as_list_item(pdf, str)
-    str = text
+  def formate_per_nature(pdf)
+    return unless paragraph?
+    pa = self
     pdf.update do 
-      move_cursor_to_next_reference_line
-      float { text '– ' }
+      if pa.list_item?
+        move_cursor_to_next_reference_line
+        float { text '– ' }
+      end
     end
-    return str
   end
-
-  def formate_as_citation(pdf, str)
-    str = "<em>#{str.strip}</em>"
-    return str
-  end
-
 
   ##
   # Pour le debuggage on peut vouloir ajouter la valeur du curseur
@@ -463,10 +390,10 @@ private
   end
 
 
-  def __maybe_add_cursor_position(str)
+  def self.__maybe_add_cursor_position(str,context)
     # S'il le faut (options), ajouter la position du curseur en
     # début de paragraphe.
-    if paragraph? && add_cursor_position?
+    if context[:paragraph].paragraph? && add_cursor_position?
       if str.is_a?(Array)
         str[0] = pdf.add_cursor_position(str[0])
       else

@@ -9,7 +9,6 @@ module FormaterParagraphModule
     @text = "<font name=\"Arial\" style=\"Bold\" size=\"30\">#{text}</font>"
   end
 
-  
 
 end #/module FormaterParagraphModule
 
