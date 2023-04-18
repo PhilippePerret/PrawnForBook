@@ -20,6 +20,8 @@
 :fonts:
   Geneva:
     :regular: "/System/Library/Fonts/Geneva.ttf"
+    :bold: "/System/Library/Fonts/Supplemental/Verdana Bold.ttf"
+    :italic: "/System/Library/Fonts/NewYorkItalic.ttf"
   NewYork:
     :normal: "/System/Library/Fonts/NewYork.ttf"
     :italic: "/System/Library/Fonts/NewYorkItalic.ttf"

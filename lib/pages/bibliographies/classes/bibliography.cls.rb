@@ -17,7 +17,6 @@ class << self
   def init
     @biblios = {}
     pdfbook = Prawn4book::PdfBook.ensure_current || begin
-
       raise "Il faut un livre courant (dans #{File.expand_path('.')})"
     end
     if pdfbook.recipe.bibliographies[:biblios]
@@ -182,7 +181,6 @@ class << self
   #   Maintenant, c'est une donnée qu'on peut régler dans la recette,
   #   au path [:bibliographies][:book_identifiant]
   def init_biblio_livres(pdfbook)
-    spy "J'initialise Bibliography::Livres",true
     self.remove_const('Livres') if defined?(Livres)
     self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
   end

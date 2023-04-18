@@ -19,38 +19,45 @@
 :last_updated: 20/03/2023
 
 #<fonts>
-:fonts:
-  Geneva:
-    :regular: "/System/Library/Fonts/Geneva.ttf"
-  NewYork:
-    :normal: "/System/Library/Fonts/NewYork.ttf"
-    :italic: "/System/Library/Fonts/NewYorkItalic.ttf"
-  ArialBlack:
-    :normal: "/System/Library/Fonts/Supplemental/Arial Black.ttf"
+fonts:
+  Times:
+    regular: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Roman-01.ttf"
+    bold: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Bold-02.ttf"
+    italic: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Italic-03.ttf"
+    bold_italic: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-BoldItalic-04.ttf"
+#   Geneva:
+#     :regular: "/System/Library/Fonts/Geneva.ttf"
+#     :bold: "/System/Library/Fonts/Supplemental/Verdana Bold.ttf"
+#     :italic: "/System/Library/Fonts/NewYorkItalic.ttf"
+#   NewYork:
+#     :normal: "/System/Library/Fonts/NewYork.ttf"
+#     :italic: "/System/Library/Fonts/NewYorkItalic.ttf"
+#   ArialBlack:
+#     :normal: "/System/Library/Fonts/Supplemental/Arial Black.ttf"
   Arial:
     :bold_italic: "/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf"
     :bold: "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
     :italic: "/System/Library/Fonts/Supplemental/Arial Italic.ttf"
     :normal: "/System/Library/Fonts/Supplemental/Arial.ttf"
-  ArialNarrow:
-    :bold_italic: "/System/Library/Fonts/Supplemental/Arial Narrow Bold Italic.ttf"
-    :bold: "/System/Library/Fonts/Supplemental/Arial Narrow Bold.ttf"
-    :italic: "/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf"
-    :normal: "/System/Library/Fonts/Supplemental/Arial Narrow.ttf"
-  ArialRounded:
-    :normal: "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
-  Courier:
-    :bold_italic: "/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf"
-    :bold: "/System/Library/Fonts/Supplemental/Courier New Bold.ttf"
-    :italic: "/System/Library/Fonts/Supplemental/Courier New Italic.ttf"
-    :normal: "/System/Library/Fonts/Supplemental/Courier New.ttf"
-  GaramondN:
-    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Book Narrow
-      Italic.ttf"
-  GaramondL:
-    :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed
-      Italic.ttf"
-    :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
+#   ArialNarrow:
+#     :bold_italic: "/System/Library/Fonts/Supplemental/Arial Narrow Bold Italic.ttf"
+#     :bold: "/System/Library/Fonts/Supplemental/Arial Narrow Bold.ttf"
+#     :italic: "/System/Library/Fonts/Supplemental/Arial Narrow Italic.ttf"
+#     :normal: "/System/Library/Fonts/Supplemental/Arial Narrow.ttf"
+#   ArialRounded:
+#     :normal: "/System/Library/Fonts/Supplemental/Arial Rounded Bold.ttf"
+#   Courier:
+#     :bold_italic: "/System/Library/Fonts/Supplemental/Courier New Bold Italic.ttf"
+#     :bold: "/System/Library/Fonts/Supplemental/Courier New Bold.ttf"
+#     :italic: "/System/Library/Fonts/Supplemental/Courier New Italic.ttf"
+#     :normal: "/System/Library/Fonts/Supplemental/Courier New.ttf"
+#   GaramondN:
+#     :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Book Narrow
+#       Italic.ttf"
+#   GaramondL:
+#     :italic: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed
+#       Italic.ttf"
+#     :normal: "/Users/philippeperret/Library/Fonts/ITC - ITC Garamond Std Light Condensed.ttf"
   Verdana:
     :bold_italic: "/System/Library/Fonts/Supplemental/Verdana Bold Italic.ttf"
     :bold: "/System/Library/Fonts/Supplemental/Verdana Bold.ttf"
