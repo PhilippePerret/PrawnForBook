@@ -433,12 +433,20 @@ class Recipe
   # --- Bibliographies ---
 
   def biblio_book_identifiant
-    @biblio_book_identifiant ||= bibliographies[:book_identifiant] || :livre
+    @biblio_book_identifiant ||= bibliographies[:book_identifiant]
   end
 
   def bibliographies
-    @bibliographies ||= get(:bibliographies, {})
+    @bibliographies ||= DEFAULT_BIBLIOGRAPHIES.merge(get(:bibliographies, {}))
   end
+  DEFAULT_BIBLIOGRAPHIES = {
+    book_identifiant: :livre,
+    biblios: {
+      livre: {
+        path: './livres.yaml'
+      }
+    }
+  }
 
   def fonts_data
     @fonts_data ||= get(:fonts, {})

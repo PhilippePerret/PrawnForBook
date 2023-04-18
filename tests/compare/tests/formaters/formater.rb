@@ -3,10 +3,11 @@ module BibliographyFormaterModule
   
 end #/module BibliographyFormaterModule
 
-module FormaterParagraphModule
+module ParserFormaterClass
 
-  def __formate_coll_style1
-    @text = "<font name=\"Arial\" style=\"Bold\" size=\"30\">#{text}</font>"
+  def formate_coll_style1(str, context)
+    str = "<font name=\"Arial\" style=\"Bold\" size=\"30\">#{str}</font>"
+    return str
   end
 
 

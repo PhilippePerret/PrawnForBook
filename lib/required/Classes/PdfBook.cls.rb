@@ -17,8 +17,9 @@ class << self
   # @return true si on se trouve dans un dossier de livre
   # ou de collection
   def current?
-    File.exist?(File.join(cfolder,'recipe.yaml')) || 
-    File.exist?(File.join(cfolder,'recipe_collection.yaml'))
+    File.exist?(File.join(cfolder,'recipe.yaml')) || \
+    File.exist?(File.join(cfolder,'recipe_collection.yaml')) || \
+    File.exist?(File.expand_path(File.join(cfolder,'..','recipe_collection.yaml')))
   end
 
   def in_collection?

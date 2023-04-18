@@ -16,9 +16,17 @@ class << self
   # 
   def init
     @biblios = {}
-    pdfbook = Prawn4book::PdfBook.ensure_current || return
-    pdfbook.recipe.bibliographies[:biblios].each do |bib_id, bib_data|
-      new(pdfbook, bib_id)
+    pdfbook = Prawn4book::PdfBook.ensure_current || begin
+
+      raise "Il faut un livre courant (dans #{File.expand_path('.')})"
+    end
+    if pdfbook.recipe.bibliographies[:biblios]
+      pdfbook.recipe.bibliographies[:biblios].each do |bib_id, bib_data|
+        new(pdfbook, bib_id)
+      end
+    else
+      # - Toujours la bibliographie des livres -
+      add_biblio(new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
     end
     init_biblio_livres(pdfbook)
     prepare
@@ -117,18 +125,6 @@ class << self
     @biblios.merge!(biblio.id.to_sym => biblio)
   end
 
-  # ##
-  # # Pour requérir le formater du livre +book+
-  # # 
-  # # @param [Prawn4book::PdfBook] book L'instance du livre
-  # # 
-  # def require_formaters(book)
-  #   book.require_module_formatage
-  #   if defined?(BibliographyFormaterModule)
-  #     Bibliography.extend BibliographyFormaterModule
-  #   end
-  # end
-
   # Au cours du parsing des paragraphes, on utilise cette méthode
   # pour ajouter une occurrence à une des bibliographies
   # 
@@ -186,6 +182,7 @@ class << self
   #   Maintenant, c'est une donnée qu'on peut régler dans la recette,
   #   au path [:bibliographies][:book_identifiant]
   def init_biblio_livres(pdfbook)
+    spy "J'initialise Bibliography::Livres",true
     self.remove_const('Livres') if defined?(Livres)
     self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
   end

@@ -19,7 +19,7 @@ class Bibliography
     self.class.add_biblio(self)
     @as_one_file = not(File.directory?(folder)) && folder.end_with?('.yaml')
     @asfolderofcard = not(@as_one_file)
-    load_items_from_file if one_file?
+    load_items_from_file if one_file? && data_file_exist? # pour ne pas être obligé de chargé quand la bibliographie n'est pas définie
   end
 
   ##
@@ -53,6 +53,11 @@ class Bibliography
   # unique contenant toutes les données
   def one_file?
     @as_one_file
+  end
+
+  # @return true si le fichier unique des données existe
+  def data_file_exist?
+    File.exist?(folder)
   end
 
   # @return true si la bibliographie fonctionne avec un dossier

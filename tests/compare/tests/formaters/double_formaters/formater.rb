@@ -1,16 +1,14 @@
 module BibliographyFormaterModule
-
-  
 end #/module BibliographyFormaterModule
-
-module FormaterParagraphModule
-
-  def __formate_book_style1
-    @text = "<font name=\"Courier\" size=\"18\"><b><i>#{text}</i></b></font>"
-  end
-
-end #/module FormaterParagraphModule
-
 
 module TableFormaterModule
 end
+
+module ParserFormaterClass
+
+  def formate_book_style1(str, context)
+    str = "<font name=\"Courier\" size=\"18\"><b><i>#{str}</i></b></font>"
+    return str
+  end
+
+end #/module ParserFormaterClass
