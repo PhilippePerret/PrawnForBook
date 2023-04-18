@@ -65,7 +65,8 @@ class NTextParagraph < AnyParagraph
   REG_LIST_ITEM   = /^\* .+$/.freeze
   REG_TABLE_LINE  = /^\|/.freeze 
 
-  # --- Helper Methods ---
+  
+  # --- Printing Methods ---
 
   ##
   # Méthode principale d'écriture du paragraphe
@@ -173,7 +174,8 @@ class NTextParagraph < AnyParagraph
         # 
         # Maintenant que nous sommes positionnés et que toutes les
         # options sont définis, on peut formater le texte final
-        self.current_options = options
+        # 
+        # self.current_options = options
 
         #
         # Écriture du numéro du paragraphe
@@ -187,6 +189,7 @@ class NTextParagraph < AnyParagraph
           # 
           wbox = bounds.width - (mg_left + mg_right)
           span_options = {position: mg_left}
+          spy "(pour #{pa.text.inspect}, options = #{options.inspect}", pa.citation?
           # - dans un text box -
           # 
           span(wbox, **span_options) do
@@ -243,10 +246,9 @@ class NTextParagraph < AnyParagraph
             rest_text = excedant.map {|h| h[:text] }.join('')
           else
             rest_text = pa.text
-            # rest_text = pa.text
           end
-          spy "rest_text = #{rest_text.inspect}"
-          spy "options = #{options.inspect}"
+          # spy "rest_text = #{rest_text.inspect}"
+          # spy "(pour #{rest_text.inspect}, options = #{options.inspect}"
           # ------------------------------
           # L'écriture véritable du texte
           # ------------------------------
@@ -257,7 +259,8 @@ class NTextParagraph < AnyParagraph
           move_down(mg_bot)
         end
 
-      end
+      end #/pdf
+
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e

@@ -9,6 +9,7 @@
       :top: 0
       :bot: 0
   :text:
+    default_size: 12
     :line_height: 13
 #</book_format>
 :inserted_pages:
