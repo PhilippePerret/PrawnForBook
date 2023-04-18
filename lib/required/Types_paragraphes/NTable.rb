@@ -39,6 +39,7 @@ class NTable < AnyParagraph
     # 
     # Application de la fonte par défaut
     # (utile par exemple si la table est placée après un titre)
+    # 
     pdf.font(Fonte.default_fonte)
 
     pdf.move_down(pdf.line_height)
@@ -53,9 +54,9 @@ class NTable < AnyParagraph
     begin
       if code_block.nil?
         # puts "lines = #{lines.inspect}"
-        pdf.table(lines, style)
+        pdf.table(lines, table_style)
       else
-        pdf.table(lines, style, &code_block)
+        pdf.table(lines, table_style, &code_block)
       end
     rescue Prawn::Errors::CannotFit => e
       puts "
@@ -143,14 +144,22 @@ class NTable < AnyParagraph
   end
   def lines=(value); @lines = value end
 
+  ##
+  # Calcule les valeurs implicites permettant de styliser la table
+  # 
+  # Les "valeurs implicites" sont des valeurs qui ne sont pas fournies
+  # ou qui sont définies de façon générales. Par exemple, une table
+  # à trois colonnes peut définir la largeur de seulement 2 colonnes.
+  # Il faut donc calculer la valeur de la troisième.
+  # 
   def calc_implicite_values(pdf)
     # exit
-    return if style.nil?
-    if style.key?(:column_widths) && style[:column_widths].is_a?(Array)
-      if style[:column_widths].count < col_count
-        style[:column_widths] << nil
+    return if table_style.nil?
+    if table_style.key?(:column_widths) && table_style[:column_widths].is_a?(Array)
+      if table_style[:column_widths].count < col_count
+        table_style[:column_widths] << nil
       end
-      style[:column_widths].each_with_index do |wcol, idx|
+      table_style[:column_widths].each_with_index do |wcol, idx|
         # rappel : ici, il n'existe plus de valeurs en pourcentage
         if wcol.nil?
           # Une colonne non définie (note : il ne doit y en avoir
@@ -162,22 +171,17 @@ class NTable < AnyParagraph
           #   de la table n'est pas définie explicitement, on prend
           #   la largeur totale par défaut.
           # 
-          table_width = style[:width] || pdf.bounds.width
-          reste = table_width - style[:column_widths].compact.sum
-          style[:column_widths][idx] = reste
+          table_width = table_style[:width] || pdf.bounds.width
+          reste = table_width - table_style[:column_widths].compact.sum
+          table_style[:column_widths][idx] = reste
         end
       end
     end
   end
 
-  def style
-    @style ||= begin
-      st = if pfbcode
-        # S'il y a un pfbcode, il peut définir le style de la table
-        # de façon explicite ou par un nom de class (méthode de 
-        # formatage dans formater.rb)
-        rationalise_pourcentages_in(parag_style)
-      end || {}
+  def table_style
+    @table_style ||= begin
+      st = table_definition ? rationalise_pourcentages_in(table_definition) : {}
       st.key?(:cell_style) || st.merge!(cell_style: {})
       st[:cell_style].merge!(inline_format: true)
       [:borders, :border_width].each do |cell_prop|
@@ -201,22 +205,24 @@ class NTable < AnyParagraph
   #   contient la même chose mais avec des valeurs rationnelles (pas
   #   de pourcentages)
   # 
-  def parag_style
-    @parag_style ||= begin
-      ps = pfbcode.parag_style
-      if ps.key?(:table_class)
-        # 
-        # Le code définit un style de table
-        # On l'appelle pour qu'il retourne la table de style
-        # et qu'il puisse modifier les rangées si nécessaire.
-        #
-        ps = traite_table_class(ps.delete(:table_class))
-        ps = nil unless ps.is_a?(Hash)
+  def table_definition
+    @table_definition ||= begin
+      if pfbcode && pfbcode.parag_style
+        ps = pfbcode.parag_style
+        if ps.key?(:table_class)
+          # 
+          # Le code définit un style de table
+          # On l'appelle pour qu'il retourne la table de style
+          # et qu'il puisse modifier les rangées si nécessaire.
+          #
+          ps = traite_table_class(ps.delete(:table_class))
+          ps = nil unless ps.is_a?(Hash)
+        end
+        if ps && ps.key?(:col_count)
+          @col_count = ps.delete(:col_count)
+        end
+        ps
       end
-      if ps && ps.key?(:col_count)
-        @col_count = ps.delete(:col_count)
-      end
-      ps
     end
   end
 
@@ -270,10 +276,6 @@ class NTable < AnyParagraph
       return hash
     end
     return value_rationalized(hash)
-    # hash.each do |key, value|
-    #   hash.merge!(key => value_rationalized(value))
-    # end
-    # return hash
   end
 
   def value_rationalized(value)
@@ -287,7 +289,7 @@ class NTable < AnyParagraph
       end
     when Hash
       value.each do |k, v|
-        v = k == :content ? v : value_rationalized(v)
+        v = (k == :content) ? v : value_rationalized(v)
         value.merge!(k => v)
       end
       #
@@ -305,15 +307,12 @@ class NTable < AnyParagraph
         #
         # On définit les options provisoires
         # 
-        pdf.current_options.merge!(size: value[:size]) if value.key?(:size)
-        pdf.current_options.merge!(font_name: value[:font]) if value.key?(:font)
-        pdf.current_options.merge!(font_style: value[:font_style]) if value.key?(:font_style)
+        context.merge!(font_size: value[:size]) if value.key?(:size)
+        context.merge!(font_name: value[:font]) if value.key?(:font)
+        context.merge!(font_style: value[:font_style]) if value.key?(:font_style)
         value.merge!(content: treate_simple_text(value[:content]))
-        #
-        # On remet les options courantes
-        # 
-        pdf.current_options = current_pdf_options
       end
+      value
     when Array      
       value.map do |svalue|
         value_rationalized(svalue)
@@ -333,7 +332,8 @@ class NTable < AnyParagraph
   end
 
   def context
-    @context ||= {paragraph: self, pdf: pdf}.merge(parag_style)
+    # @context ||= {paragraph: self, pdf: pdf}.merge(table_definition)
+    @context ||= {paragraph: self}.merge(table_definition||{})
   end
 
   def page_width

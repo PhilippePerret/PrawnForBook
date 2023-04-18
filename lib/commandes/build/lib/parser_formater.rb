@@ -31,11 +31,10 @@ module ParserFormaterClass
       raise Prawn4book::ERRORS[:parsing][:paragraph_required]
     end
 
-    # Pour simplifier 
-    context[:font_size] = context[:paragraph].font_size
-
-    puts "Avec #{str.inspect}".jaune
-    puts "context[:font_size] = #{context[:font_size].inspect}"
+    #
+    # La taille actuelle de la fonte
+    # 
+    context[:font_size] ||= context[:size] || (context[:pdf] && context[:pdf].current_options && context[:pdf].current_options[:font_size]) || context[:paragraph].font_size
 
     #
     # Est-ce un texte avec un class-tags ?
@@ -138,7 +137,7 @@ class AnyParagraph
     @is_citation = paragraph? && text.match?(REG_CITATION)
     if citation?
       @text = text[1..-1].strip
-      add_style.merge!({font_size: font_size(pdf) + 1, margin_left: 1.cm, margin_right: 1.cm, margin_top: 0.5.cm, margin_bottom: 0.5.cm, no_num:true})
+      add_style({font_size: font_size + 1, margin_left: 1.cm, margin_right: 1.cm, margin_top: 0.5.cm, margin_bottom: 0.5.cm, no_num:true})
     end
     # 
     # Est-ce un item de liste ?

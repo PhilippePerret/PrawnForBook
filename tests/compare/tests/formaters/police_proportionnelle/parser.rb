@@ -1,13 +1,11 @@
-module ParserParagraphModule
-
-  def parser_formater(str, pdf)
+module ParserFormaterClass
+  def parse(str, context)
     # 
     # calcul de la taille
     # 
     # @default_font_size ||= PdfBook.current.recipe.default_font_size
     @rapport_size_mot ||= 9.3 / 12
-    size_mot = (@rapport_size_mot * pdf.current_font_size).round(2)
-    # spy "pdf.current_font_size : #{pdf.current_font_size.inspect}".orange
+    size_mot = (@rapport_size_mot * context[:font_size]).round(2)
     # 
     # On parse le texte
     # 
@@ -21,12 +19,4 @@ module ParserParagraphModule
   end
   REG_MOT  = /mot\((.+?)\)/.freeze
   SPAN_MOT = '<font name="Verdana" size="%s">%s</font>'.freeze
-
-  #
-  # Méthode appelée par tous les paragraphes
-  # 
-  def __paragraph_parser(paragraph, pdf)
-    paragraph.text = parser_formater(paragraph.text, pdf)
-  end
-
-end
+end #/module ParserFormaterClass
