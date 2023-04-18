@@ -189,7 +189,6 @@ class NTextParagraph < AnyParagraph
           # 
           wbox = bounds.width - (mg_left + mg_right)
           span_options = {position: mg_left}
-          spy "(pour #{pa.text.inspect}, options = #{options.inspect}", pa.citation?
           # - dans un text box -
           # 
           span(wbox, **span_options) do
