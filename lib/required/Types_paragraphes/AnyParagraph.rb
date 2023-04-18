@@ -10,6 +10,7 @@ class AnyParagraph
   # Permet par exemple de consigner :size ou :font_size pour la 
   # taille courante de police (qui peut être définie par pfbcode, le
   # code qui précède le paragraphe.
+  # @OBSOLÈTE Doit être remplacé par la propriété @style
   attr_accessor :final_specs
 
   # Méthodes utiles pour la numérotation
@@ -43,7 +44,7 @@ class AnyParagraph
 
 
   #
-  # Attention : ça n'est que le début commun de l'impression. Voir
+  # Attention : ça n'est QUE le début commun de l'impression. Voir
   # dans chaque class les traitements particuliers.
   # 
   def print(pdf)
@@ -52,15 +53,6 @@ class AnyParagraph
     # etc.)
     # 
     self.first_page = pdf.page_number
-
-    #
-    # Spécifications suivant le code qui peut être contenu
-    # dans le paragraphe précédent
-    # 
-    self.final_specs = {}
-    if pfbcode && pfbcode.parag_style
-      final_specs.merge!(pfbcode.parag_style)
-    end
 
     if some_text?
       
@@ -192,33 +184,39 @@ class AnyParagraph
 
   # --- Méthodes d'aspect et de positionnement ---
 
+  def font_size
+    @font_size ||= style[:font_size] || recipe.default_font_size
+  end
+
+  def font_family
+    @font_family ||= style[:font_family] || recipe.default_font_family
+  end
+
+  def font_style
+    @font_style ||= style[:font_style] || recipe.default_font_style
+  end
+
   # - Alignement du texte -
-  def text_align        ; @text_align || :justify end
+  def text_align
+    @text_align || style[:align] ||style[:text_align] || :justify 
+  end
   def text_align=(value); @text_align = value     end
   alias :alignment :text_align
   alias :align :text_align
 
   # - Marge haute du paragraphe (en nombre de lignes) -
-  def margin_top ; @margin_top ||= (pfbcode && pfbcode[:margin_top]) || 0 end
+  def margin_top
+    @margin_top ||= style[:margin_top] || 0 
+  end
   def margin_top=(value); @margin_top = value end
 
   # - Marge basse du paragraphe (en nombre de lignes) -
-  def margin_bottom ; @margin_bottom ||= (pfbcode && pfbcode[:margin_bottom]) || 0 end
-
-  def width
-    @width ||= begin
-      w = pfbcode && pfbcode[:width]
-      if w
-        if w.is_a?(String) && w.end_with?('%')
-          w = pourcentage_to_pdfpoints(w, pdf.bounds.width)
-        end
-      end
-      w
-    end
+  def margin_bottom
+    @margin_bottom ||= style[:margin_bottom] || 0 
   end
 
   def margin_left
-    @margin_left ||= begin
+    @margin_left ||= style[:margin_left] || begin
       ml = margin_left_raw
       if ml
         if ml.is_a?(String) && ml.end_with?('%')
@@ -240,7 +238,7 @@ class AnyParagraph
   end
 
   def margin_right
-    @margin_right ||= 0
+    @margin_right ||= style[:margin_right] || 0
   end
   def margin_right=(mg)
     if mg.is_a?(String) && mg.end_with?('%')
@@ -249,8 +247,55 @@ class AnyParagraph
    @margin_right = mg
   end
 
+  def kerning?
+    not(kerning.nil?)
+  end
+  def kerning
+    style[:kerning]
+  end
+
+  def character_spacing?
+    not(character_spacing.nil?)
+  end
+  def character_spacing
+    style[:character_spacing]
+  end
+
+  def width
+    @width ||= style[:width] || begin
+      w = pfbcode && pfbcode[:width]
+      if w
+        if w.is_a?(String) && w.end_with?('%')
+          w = pourcentage_to_pdfpoints(w, pdf.bounds.width)
+        end
+      end
+      w
+    end
+  end
+
 
   # --- Volatile Data ---
+
+  ##
+  # Style précis du paragraphe
+  # 
+  # Est censé contenir tout ce qu'il faut savoir sur le paragraphe
+  # à commencer par les styles définis par le pfbcode (paragraphe
+  # précédent)
+  # 
+  def style
+    @style ||= begin
+      sty = {}
+      sty.merge!(pfbcode.parag_style) if pfbcode 
+      sty
+    end
+  end
+  ##
+  # Pour ajouter du style à la volée
+  # 
+  def add_style(table)
+    style.merge!(table)
+  end
 
   def pfbcode ; @pfbcode ||= data[:pfbcode] end
 

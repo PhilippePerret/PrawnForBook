@@ -38,14 +38,12 @@ class PdfBook
     # --- INITIALISATIONS ---
     # 
 
-    # - Chargement de la classe Bibliography -
-    # 
+    # - Bibliographies -
     require 'lib/pages/bibliographies'
     Bibliography.init
-
-    # - Initialisation des paragraphes texte -
+    # - paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
-    # - Initialisation de la table de références -
+    # - table de références -
     table_references.init
 
     #

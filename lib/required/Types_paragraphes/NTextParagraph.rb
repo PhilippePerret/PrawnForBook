@@ -58,33 +58,16 @@ class NTextParagraph < AnyParagraph
     # 
     return own_builder(pdf) if own_builder?
 
-    #
-    # Fonte et style à utiliser pour le paragraphe
-    # (note : peut avoir été modifié de force ou par le style)
-    # 
-    # Note : elles ne peuvent être définies qu'ici, après le
-    # parse du paragraphe (dont les balises initiales peuvent
-    # modifier l'aspect)
-    # 
-    # spy "final_specs = #{final_specs.inspect}".jaune, true
-    # fontFamily  = font_family(pdf)
-    # fontStyle   = font_style(pdf)
-    fontSize    = final_specs[:size]    || font_size(pdf)
-    # textIndent  = final_specs[:indent]  || recipe.text_indent
-    textAlign   = final_specs[:align]   || self.text_align
-    cursor_positionned = false
-
-    mg_left   = final_specs[:mg_left] || (pfbcode && pfbcode[:margin_left]) || self.margin_left
-    mg_top    = final_specs[:mg_top]  || self.margin_top
-    mg_bot    = final_specs[:mg_bot]  || nil # ...
-    mg_right  = final_specs[:mg_right] || self.margin_right
-    no_num    = final_specs[:no_num] || false
-    cursor_positionned = final_specs[:cursor_positionned] || false
+    mg_left   = margin_left
+    mg_bot    = margin_bottom  || nil # ...
+    mg_right  = margin_right
+    no_num    = style[:no_num] || false
+    cursor_positionned = style[:cursor_positionned] || false
 
     #
     # Pour invoquer cette instance dans le pdf.update
     # 
-    parag = self
+    pa = self
 
     pdf.update do
 
@@ -109,19 +92,19 @@ class NTextParagraph < AnyParagraph
       pdf.update do
         options = {
           inline_format:  true,
-          align:          textAlign,
-          size:           fontSize
+          align:          pa.text_align,
+          size:           pa.font_size
         }
 
-        if parag.final_specs.key?(:kerning)
-          options.merge!(kerning: parag.final_specs[:kerning])
+        if pa.kerning?
+          options.merge!(kerning: pa.kerning)
         end
-        if parag.final_specs.key?(:character_spacing)
-          options.merge!(character_spacing: parag.final_specs[:character_spacing])
+        if pa.character_spacing?
+          options.merge!(character_spacing: pa.character_spacing)
         end
 
-        if mg_top && mg_top > 0
-          move_down(mg_top)
+        if pa.margin_top && pa.margin_top > 0
+          move_down(pa.margin_top)
         end
 
         # 
@@ -137,7 +120,7 @@ class NTextParagraph < AnyParagraph
         #
         # Écriture du numéro du paragraphe
         # 
-        parag.print_paragraph_number(pdf) if not(no_num) && pdfbook.recipe.paragraph_number?
+        pa.print_paragraph_number(pdf) if not(no_num) && pdfbook.recipe.paragraph_number?
 
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
@@ -149,7 +132,7 @@ class NTextParagraph < AnyParagraph
           # - dans un text box -
           # 
           span(wbox, **span_options) do
-            text(parag.text, **options)
+            text(pa.text, **options)
           end
         else
 
@@ -160,7 +143,7 @@ class NTextParagraph < AnyParagraph
           # 
           # Hauteur que prendra le texte
           # 
-          final_height = height_of(parag.text)
+          final_height = height_of(pa.text)
 
           # 
           # Le paragraphe tient-il sur deux pages ?
@@ -195,14 +178,14 @@ class NTextParagraph < AnyParagraph
               at:     [0, cursor],
               overflow: :truncate
             }.merge(options)
-            excedant = text_box(parag.text, **other_options)
+            excedant = text_box(pa.text, **other_options)
             # spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
             start_new_page
             move_cursor_to_next_reference_line
             rest_text = excedant.map {|h| h[:text] }.join('')
           else
-            rest_text = parag.text
-            # rest_text = parag.text
+            rest_text = pa.text
+            # rest_text = pa.text
           end
           spy "rest_text = #{rest_text.inspect}"
           spy "options = #{options.inspect}"
@@ -238,45 +221,12 @@ class NTextParagraph < AnyParagraph
     @indent ||= book.recipe.text_indent
   end
 
-  def margin_bottom
-    @margin_bottom || book.recipe.book_format[:page][:margins][:bot]
-  end
-  def margin_top
-    @margin_top ||= super || 0
-  end
-
   def margin_left; @margin_left ||= 0 end
   def margin_left=(val); @margin_left = val end
 
   def margin_right; @margin_right ||= 0 end
   def margin_right=(val); @margin_right = val end
 
-  def font_family(pdf)
-    @font_family ||= begin
-      pdf.default_font_name
-    end
-  end
-  def font_family=(val)
-    @font_family = val
-  end
-
-  def font_size(pdf)
-    @font_size ||= begin
-      inline_style(:font_size, Metric.default_font_size)
-    end
-  end
-  def font_size=(val)
-    @font_size = val
-  end
-
-  def font_style(pdf)
-    @font_style ||= begin
-      pdf.default_font_style
-    end
-  end
-  def font_style=(val)
-    @font_style = val
-  end
 
   def method_missing(method_name, *args, &block)
     if method_name.to_s.end_with?('=')
@@ -291,13 +241,6 @@ class NTextParagraph < AnyParagraph
     else
       raise NoMethodError.new("La méthode #{method_name.inspect} est inconnue de nos services.")
     end
-  end
-
-  # @return le style qui est peut-être défini par un code en ligne
-  # au-dessus du paragraphe.
-  def inline_style(key, default)
-    return default if pfbcode.nil?
-    pfbcode.parag_style[key] || default
   end
 
   def own_builder?
