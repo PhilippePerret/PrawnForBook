@@ -5,29 +5,15 @@ class Paragraphe
 
   REG_IMAGE = /^IMAGE\[(.+?)\]$/
 
-  @codenextparag = nil
 
   class << self
-    #
-    # La méthode précédente (parse) s'occupe d'un texte pas encore
-    # analysé et enregistré dans son fichier YAML. Cette méthode, au
-    # contraire, reçoit les données dictionnaire de chaque paragraphe
-    # et en fait l'élément qui correspond.
-    # 
-    # @note
-    #   J'AI L'IMPRESSION QUE CETTE MÉTHODE NE SERT PLUS À RIEN
-    def dispatch_by_type(pdfbook, data)
-      case data[:type]
-      when 'image'  then PdfBook::NImage.new(pdfbook, data)
-      when 'titre'  then PdfBook::NTitre.new(pdfbook, data)
-      when 'table'  then PdfBook::NTable.new(pdfbook, data)
-                    else PdfBook::NTextParagraph.new(pdfbook, data)
-      end
-    end
+    
+    @codenextparag = nil
 
     def code_for_next_paragraph=(pfbcode)
       @codenextparag = pfbcode
     end
+
     def code_for_next_paragraph
       return @codenextparag
     end
