@@ -2044,6 +2044,8 @@ Ceci est un paragraphe avec qui devra apprendre à dire (( #code_ruby("bonjour t
 
 > Attention : ne pas oublier les espaces à l’intérieur des parenthèses, comme c’est le cas avec le signe de Prawn, les doubles parenthèses.
 
+**Au besoin, cette méthode d’helpers peut générer des pages entières.**
+
 Cette méthode ou variable `code_ruby_simple` doit être définie en *Ruby* dans le fichier `helpers.rb` du [livre][] ou de la [collection][] de la manière suivante :
 
 ~~~ruby

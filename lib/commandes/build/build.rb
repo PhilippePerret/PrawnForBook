@@ -71,13 +71,13 @@ class PdfBook
     # Pour savoir si un parseur de tous les paragraphes existe pour
     # le livre.
 
-    if File.exist?(File.join(folder,'parser.rb'))
-      require File.join(folder,'parser')
-      # load File.join(folder,'parser.rb')
-    end
     if File.exist?(File.expand_path(File.join(folder, '..' ,'parser.rb')))
       require File.expand_path(File.join(folder, '..' ,'parser'))
-      # load File.expand_path(File.join(folder, '..' ,'parser.rb'))
+    end
+    # Attention : les méthodes du livre écraseront complètement les 
+    # méthodes de la collection.
+    if File.exist?(File.join(folder,'parser.rb'))
+      require File.join(folder,'parser')
     end
     has_custom_paragraph_parser = 
         defined?(ParserParagraphModule) && 
