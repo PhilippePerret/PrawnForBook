@@ -24,7 +24,8 @@ module ParserFormaterClass
   # 
   def __parse(str, context)
 
-    spy "On passe avec le texte : #{str.inspect}".orange
+    # spy "ParserFormaterClass#__parse avec le texte : #{str.inspect}".orange
+    # spy "Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser? = #{Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?.inspect}".orange
 
     str.is_a?(String) || begin
       raise(Prawn4book::ERRORS[:parsing][:parse_required_string] % [str.inspect, str.class.name])
@@ -92,21 +93,23 @@ module ParserFormaterClass
     str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
 
     #
+    # Si des formatages propres existent 
+    # 
+    if Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?
+      str = ParserParagraphModule.paragraph_parser(str, context[:pdf])
+    end
+
+    #
     # Traitement des class-tags
     # 
     str = __traite_class_tags_in(str, context)
 
     #
     # Si une méthode de parsing propre existe, on l'appelle
+    # (@note : je ne sais plus à quoi elle correspond)
     # 
     str = parse(str, context) if respond_to?(:parse)
 
-    #
-    # Si des formatages propres existent 
-    # 
-    if Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?
-      str = ParserParagraphModule.paragraph_parser(str, context[:pdf])
-    end
 
     return str
   end
