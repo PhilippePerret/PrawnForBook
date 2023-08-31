@@ -26,7 +26,6 @@ class PdfBook
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
 
-
   def generate_pdf_book
     spy "Génération du livre #{ensured_title.inspect}".bleu
     # 
@@ -64,6 +63,26 @@ class PdfBook
     # éléments requis
     # 
     conforme? || return
+
+    #
+    # --- PRÉFÉRENCES ---
+    # 
+
+    # Pour savoir si un parseur de tous les paragraphes existe pour
+    # le livre.
+
+    if File.exist?(File.join(folder,'parser.rb'))
+      require File.join(folder,'parser')
+      # load File.join(folder,'parser.rb')
+    end
+    if File.exist?(File.expand_path(File.join(folder, '..' ,'parser.rb')))
+      require File.expand_path(File.join(folder, '..' ,'parser'))
+      # load File.expand_path(File.join(folder, '..' ,'parser.rb'))
+    end
+    has_custom_paragraph_parser = 
+        defined?(ParserParagraphModule) && 
+        ParserParagraphModule.respond_to?(:paragraph_parser)
+    Prawn4book::PdfBook::AnyParagraph.custom_paragraph_parser_exists = has_custom_paragraph_parser
 
     # 
     # = PREMIÈRE PASSE =
@@ -174,11 +193,16 @@ class PdfBook
     #
     # - Premières pages -
     # 
-    pdf.start_new_page      if page_de_garde? && pdf.first_page < 2
-    pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 3
-    pdf.build_page_de_titre if page_de_titre?  && pdf.first_page < 4
-
+    
+    pdf.start_new_page      if page_de_garde?   # && pdf.first_page < 2 [1]
+    pdf.build_faux_titre    if page_faux_titre? # && pdf.first_page < 3
+    pdf.build_page_de_titre if page_de_titre?   # && pdf.first_page < 4
     #
+    # [1] En reprenant le programme, pdf.first_page n'est plus 
+    #     défini. La seule méthode first_page qui existe est 
+    #     celle de la disposition des entêtes et pieds de page
+    #
+    
     # Toujours commencer sur la BELLE PAGE
     # 
     pdf.start_new_page if pdf.page_number.even?
@@ -441,7 +465,9 @@ class PdfBook
       spy "La page de titre est démandée".jaune
       not(titre.nil?)     || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, le titre du livre est requis."))
       not(auteurs.nil?)   || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, l'auteur du livre est requis."))
-      (logo_defined? && logo_exists?) ||raise(PrawnBuildingError.new("Impossible de faire la page de titre, le logo est introuvable."))
+      if logo_defined?
+        logo_exists? ||raise(PrawnBuildingError.new("Impossible de faire la page de titre, le logo est introuvable."))
+      end
     else
       spy "La page de titre N'EST PAS démandée".jaune
     end

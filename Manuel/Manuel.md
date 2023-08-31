@@ -13,12 +13,16 @@
 
 **Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un simple texte en véritable PDF prêt pour l’impression, grâce au (lovely) gem **`Prawn`** (d’où le nom de l’application.
 
-L’application met en forme le texte, dans ses moindres détails et ses moindres aspects, empaquette les polices nécessaires, gère les références — même les références croisées —, gère les index et les bibliographies — autant que l’on veut — et produit un PDF conforme en tout points à ses désirs.
+Sa commande (qui doit être installée) est : **`pfb`** (« Prawn For Book »).
+
+L’application met en forme le texte, dans ses moindres détails et ses moindres aspects, empaquette les polices nécessaires, gère les références — même les références croisées —, gère les index et les bibliographies — autant que l’on veut —, gère les mises en place complexes pour produire un PDF conforme en tous points aux désirs de l’’auteur ou de l’éditeur.
 
 ### Les grandes forces de Prawn-for-book
 
 Les grandes forces de ***PRAWN-FOR-BOOK*** sont donc :
 
+* production simple d’un document PDF valide, professionnel, prêt à être imprimé en livre publié par un imprimeur,
+* gestion cohérente de toute une collection de livres,
 * mise en forme du texte dans ses moindre détails (feuilles de style, modules complexes — experts — de formatage),
 * gestion des références internes (renvois, références à une page ou un paragraphes, etc.),
 * gestion des références croisées (références à la page d’un autre livre)
@@ -68,7 +72,7 @@ On peut obtenir de l’aide de différents moyens :
 
 ### BIBLIOGRAPHIE
 
-Voir comment [utiliser une bibliographie](#bibliographies)
+Voir comment [utiliser une bibliographie](#bibliographies).
 
 ### IMAGES
 
@@ -82,19 +86,6 @@ Voir comment [insérer une table ou un tableau dans le texte](#paragraphes-table
 
 Voir comment [définir les pieds et page et entêtes de page](#headers-footers).
 
----
-
-<a name="line-vide"></a>
-
-### Passer une ligne vierge
-
-Ajouter à l’endroit voulu :
-
-~~~
-(( line ))
-~~~
-
-> Noter que cette ligne ne sera pas numérotée.
 
 ---
 
@@ -104,10 +95,14 @@ Ajouter à l’endroit voulu :
 
 ## Créer un livre
 
-Créer un livre avec ***Prawn-for-book*** consiste à créer deux choses, deux fichiers :
+Créer un livre avec ***Prawn-for-book*** consiste à créer deux choses [1], deux fichiers :
 
-* le [fichier recette](#recipe) qui définit tous les aspects du livre, en dehors du contenu textuel lui-même,
-* le [fichier texte](#text-file) qui contient le texte du livre.
+* le **[fichier recette](#recipe) `recipe.yaml`** qui définit tous les aspects du livre, en dehors du contenu textuel lui-même,
+* le **[fichier texte](#text-file) `texte.pfb.md`** qui contient le texte du livre.
+
+> **[1]**
+>
+> En réalité, il suffit même d’un seul fichier : le fichier texte avec le nom exact `texte.pfb.md`, et toutes les autres valeurs seront définies par défaut.
 
 Pour créer ces deux éléments de façon assistée, suivez simplement cette procédure :
 
@@ -121,15 +116,31 @@ Pour créer ces deux éléments de façon assistée, suivez simplement cette pro
 
 ## Création d’une collection
 
-Avec **Prawn-for-book**, on peut aussi créer des collections, c’est-à-dire un ensemble de livres qui partageront les mêmes éléments, à commencer par la charte graphique. Plutôt que d’avoir à la copier-coller de livre en livre, entrainant des opérations lourdes à chaque changement, on crée une collection qui définira les éléments communs et on met les livres dedans.
+Avec **Prawn-for-book**, on peut aussi créer des collections, c’est-à-dire un ensemble de livres qui partageront les mêmes éléments, à commencer par la charte graphique. Plutôt que d’avoir à la copier-coller les informations de livre en livre (informations de mise en forme, de collaborateurs, d’édition, etc.), entrainant des opérations lourdes à chaque changement, on crée une collection qui définira les éléments communs et on met les livres dedans.
 
-
+Pour créer une collection :
 
 * Choisir le dossier dans lequel doit être créée la collection,
 * ouvrir une fenêtre Terminal à ce dossier,
 * jouer la commande <console>pfb init</console>,
 * choisir de construire une collection,
 * suivre l’assistant de création.
+
+> Tous les livres de la collection devront se trouver dans le dossier de la collection, à la racine.
+>
+> ~~~bash
+> dossier_collection
+> 				|
+> 				|____ dossier_livre_1
+> 				|
+> 				|____ dossier_livre_2
+> 				|
+> 				|____ recipe_collection.yaml
+> 				|
+> 				|____ dossier_ressources
+> ~~~
+>
+> 
 
 ---
 
@@ -145,70 +156,31 @@ Suivre la [procédure d’initiation d’un nouveau livre](#init-book-pdf) mais 
 
 ## Construction du PDF du livre
 
-Pour lancer la fabrication du PDF qui servira à l'impression du livre, jouer la commande :
+Pour produire le fichier PDF qui servira à l'impression du livre, jouer la commande <console>pfb build</console> dans le dossier du livre :
 
 ~~~bash
 > cd path/to/book/folder
 > pfb build
 ~~~
 
-**À bien noter : cette commande fabrique vraiment le PDF qu’il suffira d’envoyer à l’imprimeur pour tirer le livre.**
+> **À bien noter : cette commande fabrique vraiment le PDF qu’il suffira d’envoyer à l’imprimeur pour tirer le livre.**
 
 ### Ouvrir le fichier PDF produit
 
-Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `--open`.
-<console>prawn-for-book build --open</console>
+Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `-open` à la commande `build`.
+<console>pfb build -open</console>
 
-### Options de fabrication (pour le travail)
+### Options de fabrication (travail du livre)
 
-Certaines options permettent de travailler le livre avant sa fabrication définitive. On peut par exemple :
+Certaines options de la commande `build` permettent de définir les attributs du livre plus facilement (les marges, la grille de référence, etc.).
 
-* demander l’affichage des marges,
-* demander l’affichage de la grilles de référence (la grille sur laquelle se calent les lignes pour être bien alignées),
-* demander la fabrication de seulement quelques pages, voire une seule,
-* l’affichage de la hauteur du curseur.
-
-#### Affichage des marges
-
-On peut par exemple demander l’affichage des marges à l’aide de l’option **`--display_margins`**  au moment de la fabrication du livre :
-
-<console>pfb build -display_margins</console>
-
-Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les marges (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
-
-<console>pfb build -display_margins grid=4-12</console>
-
-… pour n’afficher les marges que sur les pages de 4 à 12.
-
-#### Affichage de la grille de référence
-
-On peut afficher les lignes de la grille de référence (pour voir comment seront alignées les lignes du texte) à l’aide de l’option **`--display_grid`**  au moment de la fabrication du livre :
-
-<console>pfb build -display_grid</console> ou <console>pfb build -g</console>
-
-Utiliser le paramètre `grid` pour préciser les pages sur lesquelles doivent être dessinées les lignes de références (sans cette précision elles seront dessinées sur toutes les pages) en les séparant d’un tiret simple. Par exemple :
-
-<console>pfb build -display_grid grid=4-12</console>
-
-… pour n’afficher la grille de référence que sur les pages de 4 à 12.
-
-#### Affichage d’un rang précis de pages
-
-> Note : on ne peut pas demander à imprimer seulement à une page, cela produirait des numéros de pages et de paragraphes faux.
-
-Pour s'arrêter à une page précise, par exemple la 4<sup>e</sup>, utiliser l’option simple `-last` avec le numéro de page :
-
-<console>pfb build -last=4</console>
-
-Un usage très utile, par exemple, si l’on est limité à un nombre minimal de pages comme sur KDP (24) mais qu’on ne veut pas imprimer tout le livre (s’il est gros) consiste à sortir le PDF avec seulement les 24 premières pages et d’envoyer le PDF pour impression.
-
-<console>pfb build -last=24</console>
-
-#### Affichage du curseur
-
-Avec l'option `-c/--cursor` on peut demander à ce que les positions curseur soient ajoutées au livre.
-
-
+| Résultat de l’’option                                        | Option                                        |
+| ------------------------------------------------------------ | --------------------------------------------- |
+| Affichage des marges sur chaque page                         | `-display_margins`                            |
+| Pour limiter à un nombre de pages                            | `-grid=X-Y`<br />`-display_margins -grid=X-Y` |
+| Affichage de la [grille de référence](#reference-grid)       | `-display_grid`                               |
+| Production du livre jusqu’à la page X                        | `-last=X`                                     |
+| Affichage de la position du cursor vertical (sa hauteur sera ajoutée en début de paragraphe). | `-c/-cursor`                                  |
 
 ---
 
@@ -220,25 +192,23 @@ On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 
 <console>pfb open book</console>
 
+> Note : on doit se trouver dans le dossier du livre.
+
 ---
 
 <a name="texte-livre"></a>
 
-## Texte du livre
+## Rédaction du texte du livre
 
-On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit que le texte se termine par **`.pfb.txt`** ou **`.pfb.md`** pour que Sublime Text applique le format *Prawn4Book*.
+On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit, **avec le plugin PrawnForBook**, que le texte se termine par **`.pfb.txt`** ou **`.pfb.md`** pour que Sublime Text applique le format *Prawn4Book*.
 
 ### Package Sublime Text
 
 Ce package est défini dans le dossier package `Prawn4Book` de Sublime Text. On peut ouvrir ce package rapidement en jouant :
 
-<console>prawn-for-book open package-st</console>
+<console>pfb open package-st</console>
 
-### Modifier l’aspect du texte dans Sublime Text (son affichage dans l’application)
-
-Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text* (<console>prawn-for-book open package-st</console>) et modifier le code dans le fichier `Prawn4Book.sublime-settings` (pour la police, la taille de police, etc.) ou le fichier `Prawn4Book.sublime-color-scheme` (pour modifier la colorisation syntaxique ou les scopes).
-
----
+> Voir en annexe comment [modifier l’aspect du texte dans Sublime Text](#modify-aspect-in-sublime-text)
 
 <a name="aspect-livre"></a>
 
@@ -255,31 +225,34 @@ Les marges sont définies de façon très strictes et concernent vraiment la par
 ~~~
 				
 					v------ marge gauche (ou intérieure)
-  			|_fond perdu (10) _________________
-				|	_________________________________
-				|		|			
-Mtop 	 -|   |
-				|	__|________________________
-Header -|   |	 Titre du livre
-				|	__|_________________________
-            |
-            | 23  Le 23e paragraphe
-            | 24  Un autre paragraphe
-            | ...
-            |
-          __|___________________________
-Footer  -|  | p. 42
-				 |__|___________________________
-				 |
-Mg Bot  -|
-				 |________________________________________________
-				 |_fond perdu (10)________________________________
+  			    |_________________________________
+Fond perdu	|_________________________________
+						|		|			
+	Marge  	  |   |
+	haute	  	|	  |
+						|___|________________________
+						|		|
+	Header	  |   |	 Titre du livre
+						|___|_________________________
+    		    |   |
+        		|   | 23  Le 23e paragraphe
+		        |   | 24  Un autre paragraphe
+    		    |   | ...
+        		|   |
+		        |___|___________________________
+		Footer  |   | p. 42
+						|___|___________________________
+						|
+	Marge		  |
+	basse 		|
+						|____________________________________
+Fond perdu  |____________________________________
 				 
 ~~~
 
-Ce qui signifie que le haut et le bas du texte sont calculés en fonction des marges et des header et footer.
+Ce qui signifie que le haut et le bas du texte sont calculés en fonction des marges et des header (entête) et footer (pied de page).
 
-> Noter qu’il y a toujours un fond perdu de 10 post-script points autour de la page.
+> Noter qu’il y a toujours un fond perdu de 10 post-script points autour de la page. Je crois qu’on ne peut pas le modifier.
 
 ---
 
@@ -664,7 +637,18 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 
 <a name="paragraphes-table"></a>
 
-#### TABLES
+### TABLES
+
+Les tables sont certainement le meilleur moyen de formater des paragraphes de façon particulière sans trop de complexité/difficulté. Par exemple, si l’on désire une boite de cadre avec un fond de couleur particulière, utiliser une table se révèle beaucoup plus pratique et flexible que toute autre solution qui utiliserait les propriétés des `bounding_box`(es) de `Prawn`, par exemple.
+
+Notez que dans ce cas, une table se réduit très souvent à définir une classe de table et mettre le texte entre traits droits, de cette manière :
+
+~~~pfb-md
+(( {table_class: :ma_table} ))
+| Le texte qui doit se présenter d'une manière particulière |
+~~~
+
+#### Insertion d’une table
 
 On peut insérer une table dans le code à l’aide du formatage classique de l’extension de markdown :
 
@@ -1167,6 +1151,20 @@ Un paragraphe de texte.<!-- Commentaire invalide --> 🙁🧨
 ~~~
 
 > Note : les émoticones ne doivent bien sûr pas être utilisés de cette manière, ils ne sont là que pour commenter l’utilisation .
+
+---
+
+<a name="line-vide"></a>
+
+### Passer une ligne vierge
+
+Ajouter à l’endroit voulu :
+
+~~~
+(( line ))
+~~~
+
+> Noter que cette ligne ne sera pas numérotée.
 
 ---
 
@@ -1984,7 +1982,9 @@ module ParserParagraphModule
     @@personnes = []
   end
   
-  def parser_formater(str, pdf)
+  # Cette méthode sera automatiquement appelée avec le texte du 
+  # paragraphe.
+  def self.parser_formater(str, pdf)
     #
     # Ici, on analyse le texte du paragraphe est on le transforme
     #
@@ -2002,11 +2002,6 @@ module ParserParagraphModule
     end
     return str
   end
-  
-  def __paragraph_parser(paragraph, pdf
-  	# Tous les paragraphes passent par là
-    paragraph.text = parser_formater(paragraph.text, pdf)
-  end
 ~~~
 
 
@@ -2018,6 +2013,22 @@ module ParserParagraphModule
 * un module de méthode de `parsing` qui traite de façon propre le paragraphe (`parser.rb`).
 
 Ces trois fichiers (`parser.rb`, `helpers.rb` et `formater.rb`) sont propres à chaque livre ou chaque collection et seront toujours automatiquement chargés s’ils existent.
+
+<a name="gestion-erreurs"></a>
+
+#### Méthode d’erreurs (gestion des erreurs)
+
+Dans tous les modules ruby, on peut ajouter des erreurs mineures — qui n’interrompront pas la fabrication du livre, mais génèreront une erreur à la fin — à l’aide de la méthode de haut niveau `add_erreur(err, options)`.
+
+Par exemple :
+
+~~~ruby
+def balise_parser(str)
+  str.length < 10 || add_erreur("La balise #{str.inspect} devrait faire moins de 10 signes.")
+end
+~~~
+
+
 
 <a name="custom-helpers"></a>
 
@@ -2302,21 +2313,27 @@ Ce fichier contient donc deux modules :
 
 <a name="recipe"></a>
 
-## RECETTE DU LIVRE OU DE LA COLLECTION
+## RECETTE DU LIVRE
 
-La *recette du livre* permet de définir tous les aspects que devra prendre le livre, c’est-à-dire le fichier PDF prêt-à-imprimé. On définit dans ce fichier les polices utilisées (à empaqueter), les marges et la taille du papier, les titres, les lignes de base, le titre, les auteurs, etc.
+### Présentation générale
+
+La *recette du livre* (ou *de la collection*) permet de définir tous les aspects que devra prendre le livre, c’est-à-dire le fichier PDF prêt-à-imprimé, dans le moindre détail. On définit dans ce fichier les polices utilisées (à empaqueter), les marges et la taille du papier, les titres, les lignes de base, le titre, les auteurs, le décalage du chiffrage du paragraphe, le contenu des entêtes par section, etc.
 
 #### Création de la recette du livre
 
 Le plus simple pour créer la recette d’un livre est d’[utiliser l’assistant de création](#init-book-pdf).
 
-Cette assistant permet de créer le fichier `recipe.yaml` contenant la recette du livre.
+Cet assistant permet de créer le fichier `recipe.yaml` contenant la recette du livre (ou `recipe_collection.yaml` pour la recette de la collection.
 
-### Contenu de la recette du livre
+> Une recette de collection permet de répéter les mêmes recettes pour tous les livres de la collection en question.
 
-Vous pouvez trouver dans cette partie l’intégralité des propriétés définissables dans le fichier recette du livre ou de la collection.
+#### Contenu de la recette du livre
 
-#### Informations générales
+Dans la partie suivante est présentée l’intégralité des propriétés définissables dans le fichier recette du livre ou de la collection.
+
+### Éléments de la recette
+
+#### • book_data (informations générales du livre)
 
 > Si ces informations sont rentrées à la main, ne pas oublier les balises-commentaires (`#<book_data>`) qui permettront d’éditer les données.
 
@@ -2326,28 +2343,31 @@ Vous pouvez trouver dans cette partie l’intégralité des propriétés défini
 #<book_data>
 book_data:
 	title: "Titre du livre"
-	id: "identifiant_livre" # utile
 	subtitle: "Sous-titre\nSur plusieurs\nLignes"
-	collection: true # obsolète, mais bon…
-	auteurs: "Prénom NOM", "Prénom DE NOM"
+	id: "identifiant_livre" # utile
+	auteurs: ["Prénom NOM", "Prénom DE NOM"]
 	isbn: "128-9-25648-635-8"
 #</book_data>
 ~~~
 
-#### Informations générales pour une collection
+#### • collection_data (données pour la collection)
 
 ~~~yaml
 # Dans collection_recipe.yaml
-:name: "Nom humain de la collection"
-:short_name: "Nom raccourci" # pour les messages seulement
+
+#<collection_data>
+collection_data:
+	name: "Nom humain de la collection"
+	short_name: "Nom raccourci" # pour les messages seulement
+#</collection_data>
 ~~~
 
 <a name="book-format"></a>
 
-#### FORMAT du livre
+#### • book_format (format du livre)
 
 ~~~yaml
-# in recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<book_format>
 book_format:
@@ -2356,62 +2376,68 @@ book_format:
 		height: "20.19cm"
 		orientation: "portrait"
 	page:
-		numerotation: "pages" # ou "parags"
-		format_numero: 
-		no_num_empty: true # pas de numéro sur pages vides
-		num_only_if_num: true # cf. [001]
-		num_page_if_no_num_parag: true # cf. [002]
-		no_headers_footers: false # self-explanatory
-		skip_page_creation: true # cf. [003]
-		background: "/path/to/image/fond.jpg" # image de fond
 		margins:
 			top: "20mm"  	# marge haute
 			bot: 50 			# marge basse
 			ext: "2cm"		# marge extérieure
 			int: "0.1in"  # marge intérieure
+		numerotation: "pages" # ou "parags"
+		format_numero: "first-last" # pour numérotation paragraphes
+		no_num_empty: true # pas de numéro sur pages vides
+		num_only_if_num: true # cf. [1]
+		num_page_if_no_num_parag: true # cf. [2]
+		no_headers_footers: false # self-explanatory
+		skip_page_creation: true # cf. [3]
 	text:
-		default_font_n_style: "Helvetica/normal"
+		default_font_and_style: "Helvetica/normal"
 		default_size: 11.2
+		line_height: 14 # hauteur de ligne cf. [4]
 		indent: 0 # indentation
-		line_height: 14 # hauteur de ligne cf. [004]
+		leading: 0 # espace entre paragraphes
+		parag_numero_vadjust: 1 		# ajustement vertical numéro paragraphe
+		parag_num_dist_from_text: 0 # ajustement horizontal
 #</book_format>
 ~~~
-> **[001]** 
+> **[1]** 
 >
 > On ne met un nombre que si réellement il y a un nombre. Par exemple, si c’est une numérotation par paragraphe et que la page ne contient aucun paragraphe, cette page n’aura pas de paragraphe (sauf si l’’option :num_page_if_no_num_parag est activée, bien sûr.
 >
-> **[002]**
+> **[2]**
 >
 > Si `:numerotation` est réglé sur ‘parags’ (numérotation par les paragraphes) et qu’il n’y a pas de paragraphes dans la page, avec le paramètres `:num_page_if_no_num_parag` à true, le numéro de paragraphe sera remplacé par le numéro de la page.
 >
-> **[003]**
+> **[3]**
 >
 > À la création (génération) d’un livre avec `Prawn`, une page est automatiquement créée. On peut empêcher ce comportement en mettant ce paramètre à true.
 >
-> **[004]**
+> **[4]**
 >
 > **`line_height`** est un paramètre particulièrement important puisqu’il détermine la [grille de référence](#reference-grid) du livre qui permet d’aligner toutes les lignes, comme dans tout livre imprimé digne de ce nom.
+>
+> **[5]**
+>
+> Ajustement de la position du numéro de paragraphe (si c’est une numérotation par paragraphe). D’abord verticalement, puis horizontalement en distance par rapport au texte.
 
 ---
 
 <a name="data-titles"></a>
 
-#### Données des TITRES
+#### • titles (données d’affichage des titres)
 
 ~~~yaml
-# in recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<titles>
-:titles:
-	:level1:
-		:next_page: true 		# true => nouvelle page pour ce titre
-		:belle_page: false 	# mettre à true pour que le titre soit
-												# toujours sur une belle page (impaire)
+titles:
+	# Données pour le titre du niveau 1
+	level1:
+		next_page:     true 	# sur nouvelle page ?
+		belle_page:    false 	# toujours sur belle page ?
 		:font_n_style: "LaFonte/lestyle"
-		:size: 30
-		:lines_before: 0 		# cf. [001] [003]
-		:lines_after: 4			# cf. [001]
-		:leading: -2 				# interlignage cf. [002]
+		:size: 					30
+		:lines_before: 	0 		# cf. [1] [3]
+		:lines_after: 	4			# cf. [1]
+		:leading: 			-2 		# interlignage cf. [2]
 	:level2:
 		# idem
 	:level3:
@@ -2420,15 +2446,15 @@ book_format:
 #</titles>
 ~~~
 
-> **[001]**
+> **[1]**
 >
 > Les **`lines_before`** et **`lines_after`** se comptent toujours en nombre de lignes de référence, car les titres sont toujours alignés par défaut avec ces lignes (pour un meilleur aspect). On peut cependant mettre une valeur flottante (par exemple `2.5`) pour changer ce comportement et placer le titre entre deux [lignes de référence](#reference-grid).
 >
-> **[002]**
+> **[2]**
 >
 > La valeur du **`leading`** permet de resserrer les lignes du titre afin qu’‘il ait un aspect plus “compact“, ce qui est meilleur pour un titre. Ne pas trop resserrer cependant.
 >
-> **[003]**
+> **[3]**
 >
 > le `:line_before` d’un titre suivant s’annule si le titre précédent en possède déjà un. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
 >
@@ -2440,48 +2466,68 @@ Par défaut, les titres (leur première ligne, s’ils tiennent sur plusieurs li
 
 <a name="info-publisher"></a>
 
-#### Données de la MAISON D’ÉDITIONS
+#### • publishing (données de la maison d’édition)
 
 ~~~yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<publishing>
 publishing:
 	name:    		"Nom édition" # p.e. "Icare Éditions"
 	adresse: 		"Numéro Rue\nCode postal Ville\nPays
 	url:     		"https://site-des-editions.com"
-	logo_path: 	"path/to/logo.svg" # cf. [001]
+	logo_path: 	"path/to/logo.svg" # cf. [1]
 	siret:      "NUMEROSIRET"
 	mail:       "info@editions.com"    # mail principal
 	contact: 		"contact@editions.com" # mail de contact
+	[2]
 #</publishing>
 ~~~
 
-> **[001]**
+> **[1]**
 >
 > Ce doit être le chemin d’accès absolu (déconseillé) ou un chemin relatif dans le dossier du livre OU le dossier de la collection.
+>
+> **[2]**
+>
+> On peut tout à fait ajouter toutes les informations supplémentaires que l’on voudra, le nom de l’éditeur par exemple. On pourra y faire référence ensuite, dans le livre, à l’aide de `recipe.publishing[<key>]`. Par exemple :
+>
+> ~~~yaml
+> publishing:
+> 	# ...
+> 	# publisher: Gaston GALLIMARD
+> ~~~
+>
+> Dans le texte, on pourra y faire référence par :
+>
+> ~~~pfb-md
+> Le plus connu des éditeurs est sans doute #{recipe.publishing[:publisher]} créateur de la célèbre maison d'éditions de même nom.
+> ~~~
+>
+> 
 
 <a name="recette-fonts"></a>
 
-#### Données des POLICES
-
-*(pour définir dans la recette du livre ou de la collection les polices utilisées — à empaqueter)*
+#### • fonts (données des polices)
 
 ~~~yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<fonts>
 fonts:
-	fontName: # le nom de la police cf/ [001]
-		monstyle: "/path/to/font.ttf" # Style cf. [002]
-		autrestyle: "/path/to/font-autrestyle"
+	fontName: # le nom de la police cf/ [1]
+		monstyle: 		"/path/to/font.ttf" # Style cf. [2]
+		autrestyle: 	"/path/to/font-autrestyle"
+		bold: 				"/path/to/bold.ttf" # [2]
+		italic:	 			"/path/to/italic.ttf" # [2]
+		bold_italic: 	"/path/to/bold italic.ttf" # [2]
 	autrePolice: 
 		monstyle: "..."
 		# etc.
 #</fonts>
 ~~~
 
-> **[001]**
+> **[1]**
 >
 > C’est le nom que l’on veut, qui servira à renseigner les paramètres *font_n_style* des différents éléments. Par exemple, si le `font_n_style` d’un titre de niveau 2 est “MonArial/styletitre” alors la fonte “MonArial”  doit être définie avec le path du fichier `ttf` à utiliser pour le style `styletitre` :
 >
@@ -2491,13 +2537,13 @@ fonts:
 > 		styletitre: "/Users/fontes/Arial Bold.ttf"
 > ```
 >
-> **[002]**
+> **[2]**
 >
 > Comme on le voit ci-dessus, on peut utiliser n’importe quel nom de style, pourvu qu’il soit associé à un fichier `ttf` existant. Cependant, certains noms de styles sont importants pour gérer correctement les balises de formatages HTML de type `<i>` ou `<b>`. Pour `<i>`, il faut définir le style `italic:` et pour `<b>` il faut définir le style `:bold`.
 
+##### Dossiers des fontes
 
-
-Voici un exemple de données qu’’on peut trouver dans le fichier recette :
+On peut définir les dossiers des fontes par variables pour y faire référence plus facilement. Mais notez que cette utilisation fonctionne seulement pour une définition des polices « à la main ». Pour les définir avec l’assistant, il faut définir les dossiers dans la constante **`DATA_FONTS_FOLDERS`** du fichier `./lib/commandes/assistant/assistants/fontes.rb`.
 
 ~~~yaml
 # ...
@@ -2509,7 +2555,7 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 # Définition des fontes (note : ce sont celles par défaut quand on
 # utilise les templates)
 #<fontes>
-:fonts:
+fonts:
   Garamond:
     :normal: "*dosfonts/ITC - ITC Garamond Std Light Condensed.ttf"
     :italic: "*dosfonts/ITC - ITC Garamond Std Light Condensed Italic.ttf"
@@ -2530,26 +2576,28 @@ prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fo
 
 <a name="biblios-data-in-recipe"></a>
 
-#### Données BIBLIOGRAPHIQUES
-
-*(pour définir dans la recette du livre ou de la collection les données des bibliographies utilisées)*
+#### • bibliographies (données bibliographiques)
 
 Voir ici pour le détail du fonctionnement et de la définition des [bibliographies](#bibliographies).
 
+> Rappel : le terme « bibliographies », ici, est très général, il peut concerner bien d’’autres choses que des livres. Il peut concerner tout élément du texte que l’on veut rassembler, en fin de livre, sur une ou plusieurs pages, pour pouvoir y faire référence plus facilement.
+>
+> On peut, par exemple, faire une bibliographie des personnages de l’histoire. À la fin du livre, on trouvera alors la liste de tous les personnages, avec le numéro des pages où ils apparaissent.
+
 ```yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<bibliographies>
 bibliographies:
-	book_identifiant: "livre" # cf. [001]
+	book_identifiant: "livre" # cf. [1]
 	font_n_style: "Times-Roman/normal" # Fonte par défaut
-	# Définition des bibliographies
+	# Définition de toutes bibliographies utilisées
 	biblios:
-		letag: # par ex. "livre" ou "film" cf. [002]
-      title: "Titre à donner à l'affichage" # cf. [003]
-      path: "path/to/dossier/fiches
-      title_level: 1 # niveau de titre cf. [003]
-      new_page: true # pour la mettre sur une nouvelle page cf. [003]
+		letag: # par ex. "livre" ou "film" cf. [2]
+      title: "Titre à donner à l'affichage" # cf. [3]
+      path: "path/to/dossier/fiches/or/fichier
+      title_level: 1 # niveau de titre cf. [3]
+      new_page: true # pour la mettre sur une nouvelle page cf. [3]
       font_n_style: null # ou la "Police/style" des items
       size: null # par défaut ou la taille des items
 	  autrebiblio:
@@ -2557,15 +2605,42 @@ bibliographies:
 #</bibliographies>
 ```
 
-> **[001]**
+> **[1]**
 >
 > Par défaut, il y a toujours une bibliographie pour les livres. On peut définir son “tag” ici.
 >
-> **[002]**
+> On pourrait avoir par exemple la bibliographie pour les personnages, dont on parlait plus haut, qui utiliserait dans le texte la balise `personnage` :
+>
+> ~~~pfb-md
+> Il y a sur cette page personnage(Tom) qui intervient dans l'action. Il parle à personnage(Sarah), la pulpeuse sirène.
+> ~~~
+>
+>  Elle sera définie ainsi dans le livre de recette du livre ou de la collection (avec un titre de troisième niveau, sur la page courante et les police, style et taille par défaut) :
+>
+> ~~~yaml
+> #<bibliographies>
+> 	# ...
+> 	biblio: 
+> 		# ...
+> 		personnages:
+> 			title: 				"Liste des personnages"
+> 			path:   			"ressources/personnages.yaml" [1]
+> 			title_level: 	3
+> 			new_page: 		false
+> #</bibliographies>
+> ~~~
+>
+> > **[1]**
+> >
+> > Le fichier `./ressources/personnages.yaml` (chemin relatif par rapport au dossier du livre ou de la collection) doit définir tous les personnages du livre.
+>
+> Noter que l’affichage de cette bibliographie particulière pourra être [définie très précisément](#mise-en-forme-biblio) par rapport aux informations qui seront données dans le fichier `personnages.yaml` qui contiendra peut-être la fonction du personnage, sa relation avec les autres personnages, ses caractères positives, négatives ou ambivalentes, etc.
+>
+> **[2]**
 >
 > Le tag doit toujours être au singulier.
 >
-> **[003]**
+> **[3]**
 >
 > On parle ici de l’affichage de la bibliographie à la fin du livre, si des items ont été trouvés.
 >
@@ -2573,39 +2648,38 @@ bibliographies:
 
 <a name="recipe-tdm-data"></a>
 
-#### Données de TABLE DES MATIÈRES
+#### • table_of_content (données de table des matières)
 
 *(pour définir dans la recette du livre ou de la collection l’aspect de la table des matières)*
 
 ```yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<table_of_content>
 table_of_content:
 	title: "Table des matières"
-	no_title: false # cf. [001]
+	no_title: false # cf. [1]
 	title_level: null # 1 par défaut
 	level_max: 3 # niveau de titre maximum
 	line_height: 12 # hauteur de ligne
 	lines_before: 4 # nombre de lignes avant le premier item
-	numeroter: true # pour numéroter cf. [003]
+	numeroter: true # pour numéroter cf. [3]
 	separator: "." # caractère entre titre item et numéro
-	add_to_numero_width: 0 # cf. [002]
-	font_n_style: null # ou le "Police/style" à utiliser
-	size: null # ou la taille de police par défaut
-	numero_size: null # ou taille pour le numéro
+	add_to_numero_width: 0 # cf. [2]
 	level1:
 		indent: 0 # indentation des items de ce niveau
 		font_n_style: null # "Police/style" pour ce niveau
 		size: null # taille pour ce niveau
 		numero_size: null # taille de numéro pour ce niveau de titre
+		separator:  '.' # entre le titre et le numéro de page/paragraphe
 	level2:
 		indent: 10
-	levelX: # cf. [004]
+		# etc.
+	levelX: # cf. [4]
 #</table_of_content>
 ```
 
-> **[001]**
+> **[1]**
 >
 > Si cette valeur est true, le titre “Table des matières” (ou autre) ne sera pas affiché. Cela peut servir à ne pas voir le titre, mais cela sert aussi lorsque l’’on veut mettre un titre, mais que ce titre ne soit pas dans la table des matières elle-même. Dans ce cas, dans le fichier texte du livre, on met :
 >
@@ -2615,15 +2689,15 @@ table_of_content:
 >
 > C’est le `{no-tdm}` qui fait que le titre “Table des matières” ne sera pas inscrit dans la table des matières elle-même.
 >
-> **[002]**
+> **[2]**
 >
 > Paramètre “maniaque” pour ajuster l’espace vide entre le dernier caractère de séparation et le numéro de page ou de paragraphe.
 >
-> **[003]**
+> **[3]**
 >
 > SI ce paramètre est à `false`, seuls les titres seront inscrits, sans numéro de page ou de paragraphe.
 >
-> **[004]**
+> **[4]**
 >
 > Tous les niveaux jusqu’à `:level_max` doivent être définis.
 >
@@ -2634,28 +2708,14 @@ table_of_content:
 
 <a name="all-types-pages"></a>
 
-#### Les TYPES DE PAGE à imprimer
+#### • inserted_pages (types de page à imprimer)
 
-##### Impression ou non des pages de type
 
-> Notez que certaines pages ne sont imprimées dans le livre que si les bornes correspondantes sont placées dans le livre. C’est le cas notamment de la table des matières, qui doit être stipulée par :
->
-> ```
-> (( table_des_matieres ))
-> ```
->
-> ou de l’index :
->
-> ```
-> (( index ))
-> ```
-
-Sinon, les autres pages (qui correspondent à des positions fixes dans le livres) doivent être invoquées dans le fichier recette :
 
 ~~~yaml
 # in recipe.yaml ou collection_recipe.yaml
 
-# La page créée au tout départ par Prawn (cf. [001])
+# La page créée au tout départ par Prawn (cf. [1])
 book_format:
 	page:
 		:skip_page_creation:  true 	# (true par défaut)
@@ -2676,23 +2736,41 @@ inserted_pages:
 
 ~~~
 
-> **[001]**
+> **[1]**
 >
 > Au tout départ de la création d’un fichier PDF par Prawn est créé par défaut une page vierge. Pour empêcher ce comportement, afin de mieux maitriser la gestion des pages, il faut mettre ce paramètre à `true` (vrai)
 
-##### Définition de la PAGE DE TITRE
+##### Impression forcée des pages de type
+
+Notez que certaines pages ne sont imprimées dans le livre que si les bornes correspondantes sont placées dans le livre. C’est le cas notamment de la table des matières, qui doit être stipulée par :
+
+```
+(( table_des_matieres ))
+```
+
+ou de l’index :
+
+```
+(( index ))
+```
+
+---
+
+#### • page_de_titre (définition de la page de titre)
+
+> La « page de titre » est la page qui se situe dans les premières pages du livre, reprenant le titre, l’autre, l’éditeur, etc.
 
 ~~~yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<page_de_titre>
 page_de_titre:
 	fonts: 
-		title: "Police/style"    	# police pour le titre du livre
-		subtitle "Police/style"  	# police pour le sous-titre du livre
-		author: "Police/style"   	# police pour l'auteur
-		publisher: "Police/style" # police pour l'éditeur
-		collection_title: null    # police pour le nom de la collection
+		title: 			"Police/style"   	# police pour le titre du livre
+		subtitle 		"Police/style"  	# police pour le sous-titre du livre
+		author: 		"Police/style"   	# police pour l'auteur
+		publisher: 	"Police/style"	 	# police pour l'éditeur
+		collection_title: null    		# police pour le nom de la collection
 	sizes:
 		title: 18 # taille pour le titre du livre
 		subtitle: 11 # taille pour le sous-titre
@@ -2700,22 +2778,26 @@ page_de_titre:
 		publisher: 12 # taille pour l'éditeur
 		collection_title: 12 # taille pour l'éditeur
 	spaces_before:
-		title: 4 # nombre de lignes avant le titre
-		subtitle: 1 # nombre de lignes avant le sous-titre
-		author: 2 # nombre de lignes avant le nom de l'auteur
-	logo:
-		height: 10 # Hauteur du logo
+		title: 4 			# nombre de lignes avant le titre
+		subtitle: 1 	# nombre de lignes avant le sous-titre
+		author: 2 		# nombre de lignes avant le nom de l'auteur
+	logo: [1]
+		height: 10 		# Hauteur du logo
 #</page_de_titre>
 ~~~
 
+> **[1]**
+>
+> Le chemin d’accès au logo est défini dans [les informations sur la maison d’édition]().
+
  <a name="recette-page-infos"></a>
 
-##### Définition de la PAGE INFOS
+#### • page_info (définition de la page des informations)
 
-*(pour définir dans la recette du livre ou de la collection les données de la pages-infos, derrière page avec les informations techniques sur le livre ou la collection)*
+> On appelle « page des informations » ou « page d’infos » la page, en fin de livre, qui indique les contributeurs à la fabrication du livre, depuis la maison d’édition et son éditeur jusqu’aux correcteurs, concepteurs de la couverture, ainsi que d’autres informations comme le numéro ISBN et la date de publication.
 
 ```yaml
-# in recipe.yaml ou collection_recipe.yaml
+# in recipe.yaml/collection_recipe.yaml
 
 #<page_infos>
 page_infos:
@@ -2727,10 +2809,11 @@ page_infos:
 		value: # pour les valeurs
 			font_n_style: "Police/style"
 			size: 10
+		disposition: 'distribute' [2]
   # Données
   conception:
   	patro: "Prénom NOM" # ou liste
-  	mail   "prenom.nom@chez.lui" # ou liste
+  	mail   "prenom.nom@chez.lui" # ou liste [1]
   mise_en_page:
   	# idem
   cover: 
@@ -2744,12 +2827,24 @@ page_infos:
 #</page_infos>
 ```
 
+> **[1]**
+>
+> Cette liste doit être dans le même ordre que la liste `:patro`. Le premier mail sera attribué au premier patro, le deuxième mail au deuxième patro, etc.
+>
+> **[2]**
+>
+> Disposition générale dans la page. Les trois valeurs possibles sont :
+>
+> ‘distribute’ 		Toutes les informations sont « distribuées » régulièrement sur la page
+> ‘top’ 					Toutes les informations sont placées au-dessus de la page
+> ‘bottom’	 		Toutes les informations sont placées en bas de la page
 
+#### • page_index (données d’’affichage de la page d’index)
 
-#### Données pour la PAGE D’INDEX
+> Rappel : pour que la page d’index soit affichée dans le livre, il faut placer une balise `(( index ))` à l’endroit où on veut mettre cet index.
 
 ```yaml
-# in recipe.yaml ou collection_recipe.html
+# in recipe.yaml/collection_recipe.html
 
 #<page_index>
 page_index:
@@ -2884,7 +2979,11 @@ Si vous utilisez le package sublime-text “Prawn-for-book”, vous disposez des
 | `<!`      | `<!-- $ -->` |
 | `((`      | `(( $ ))`    |
 
+<a name="custom-snippets"></a>
 
+#### Snippets personnalisés
+
+Pour le moment, il n’existe pas de moyens simples et programmatique et créer des snippets. Mais si vous êtes à l’aise avec **Sublime Text**, vous pouvez en créer de nouveau dans le fichier 
 
 <a name="reference-grid"></a>
 
@@ -2934,6 +3033,8 @@ Pour ne pas afficher les espaces insécables dans Sublime Text :
 
 * enregistrer.
 
+---
+
 ## Package Sublime Text
 
 Pour travailler le texte, le mieux est d’utiliser un éditeur de texte. Sublime Text est mon éditeur de choix et on peut trouver dans le dossier `./resources/Sublime Text/` un package `Prawn4Book` qu’on peut ajouter au dossier `Packages` de son éditeur (dans Sublime Text, activer le menu “Sublime Text > Préférences > Browse packages…” et mettre le dossier `Prawn4Book` dans le dossier `Packages`.
@@ -2947,6 +3048,14 @@ Plus tard, la procédure pourra être automatisée, mais pour le moment, pour mo
 On peut ouvrir ce package dans Sublime Text à l’aide de :
 
 <console>pfb open package-st</console>.
+
+<a name="modify-aspect-in-sublime-text"></a>
+
+### Modifier l’aspect du texte dans Sublime Text (son affichage dans l’application)
+
+Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text* (<console>pfb open package-st</console>) et modifier le code dans le fichier `Prawn4Book.sublime-settings` (pour la police, la taille de police, etc.) ou le fichier `Prawn4Book.sublime-color-scheme` (pour modifier la colorisation syntaxique ou les scopes).
+
+---
 
 
 

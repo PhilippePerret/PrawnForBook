@@ -6,7 +6,11 @@
 
 # Pour exposer une méthode qui permettra d'enregistrer une erreur
 # mineur au cours de la construction.
-def building_error(err_message, options = nil)
+def building_error(err_message, **options)
+  Prawn4book::PrawnView::Error.add_building_error(err_message, options)
+end
+
+def add_erreur(err_message, **options)
   Prawn4book::PrawnView::Error.add_building_error(err_message, options)
 end
 
@@ -21,7 +25,7 @@ class << self
 
   def report_building_errors
     return if @errors.empty?
-    puts "Nombre d'erreurs mineures survenues : #{@errors.count}".rouge
+    puts "\n\nNombre d'erreurs mineures survenues : #{@errors.count}".rouge
     @errors.each_with_index do |derror, idx|
       puts "ERROR #{idx + 1}: #{derror[:message]}".rouge
     end

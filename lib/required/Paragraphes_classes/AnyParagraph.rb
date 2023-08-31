@@ -43,6 +43,19 @@ class AnyParagraph
   end
 
 
+  # @return true si un parseur de paragraphe customisé est utilisé
+  # (il existe quand un fichier parser.rb, propre au film et/ou à la
+  #  collection définit la méthode ParserParagraphModule::paragraph_parser
+  #  donc self.paragraph_parser dans le module ParserParagraphModule
+  #  cf. le manuel pour le détail)
+  def self.has_custom_paragraph_parser?
+    @@custom_paragraph_parser_exists == true
+  end
+  def self.custom_paragraph_parser_exists=(value)
+    @@custom_paragraph_parser_exists = value
+  end
+
+
   #
   # Attention : ça n'est QUE le début commun de l'impression. Voir
   # dans chaque class les traitements particuliers.

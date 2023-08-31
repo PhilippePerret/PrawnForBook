@@ -102,7 +102,8 @@ class NTextParagraph < AnyParagraph
     # dernier pour le construire et on s'en retourne.
     # Un paragraphe possède son propre builder lorsqu'il est stylé
     # (précédé de "<style>::") et qu'il existe une méthode pour
-    # construire ce style dans formater.rb
+    # construire ce style dans formater.rb de nom
+    #     build_<style>_paragraph
     # 
     return own_builder(pdf) if own_builder?
 
@@ -189,6 +190,7 @@ class NTextParagraph < AnyParagraph
           # 
           wbox = bounds.width - (mg_left + mg_right)
           span_options = {position: mg_left}
+          #
           # - dans un text box -
           # 
           span(wbox, **span_options) do

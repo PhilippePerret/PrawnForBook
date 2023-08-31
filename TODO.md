@@ -1,7 +1,5 @@
 # Todo courant
 
-* voir ci-dessous la [réflexion sur la correction des textes](#correction-textes).
-
 * Documenter précisément toutes les sections du fichier recette pour ne pas avoir à les retrouver dans les fichiers de l'application…
 
 * Refactoriser l'assistant pour les bibliographies

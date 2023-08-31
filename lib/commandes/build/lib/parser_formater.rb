@@ -21,7 +21,10 @@ module ParserFormaterClass
   # @param [Hash]   context   Le contexte (et notamment le paragraph, les styles, etc.)
   # 
   # @return [String] la chaine de caractère corrigée
+  # 
   def __parse(str, context)
+
+    spy "On passe avec le texte : #{str.inspect}".orange
 
     str.is_a?(String) || begin
       raise(Prawn4book::ERRORS[:parsing][:parse_required_string] % [str.inspect, str.class.name])
@@ -98,8 +101,16 @@ module ParserFormaterClass
     # 
     str = parse(str, context) if respond_to?(:parse)
 
+    #
+    # Si des formatages propres existent 
+    # 
+    if Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?
+      str = ParserParagraphModule.paragraph_parser(str, context[:pdf])
+    end
+
     return str
   end
+
 end
 
 

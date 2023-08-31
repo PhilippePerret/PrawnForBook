@@ -9,6 +9,18 @@ class Assistant
 
 class FontAssistant
 
+  #
+  # Liste des dossiers où se trouvent les polices, sur
+  # l'ordinateur
+  # 
+  DATA_FONTS_FOLDERS = [
+    # {name: 'Dossiers fonts du livre', value: nil}, # peut être ajouté
+    # {name: 'Dossiers fonts de la collection', value: nil}, # peut être ajouté
+    {name: PROMPTS[:fonts][:system_fonts_folder], value: '/System/Library/Fonts'},
+    {name: PROMPTS[:fonts][:system_fonts_sup_folder], value: '/System/Library/Fonts/Supplemental'},
+    {name: PROMPTS[:fonts][:user_fonts_folder], value: File.join(Dir.home,'Library','Fonts')},
+  ]
+
   attr_reader :owner
 
 
@@ -284,13 +296,6 @@ class FontAssistant
     end        
   end
 
-  DATA_FONTS_FOLDERS = [
-    # {name: 'Dossiers fonts du livre', value: nil}, # peut être ajouté
-    # {name: 'Dossiers fonts de la collection', value: nil}, # peut être ajouté
-    {name: PROMPTS[:fonts][:system_fonts_folder], value: '/System/Library/Fonts'},
-    {name: PROMPTS[:fonts][:system_fonts_sup_folder], value: '/System/Library/Fonts/Supplemental'},
-    {name: PROMPTS[:fonts][:user_fonts_folder], value: File.join(Dir.home,'Library','Fonts')},
-  ]
 
 end #/class FontAssistant
 end #/class Assistant

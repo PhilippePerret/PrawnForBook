@@ -14,7 +14,6 @@ class BookData
   PAGE_DATA = {
     title:        {name:'Titre du livre'                      , default:nil, required: true},
     subtitle:     {name:'Sous-titre du livre (\n = return)'   , default:nil},
-    collection:   {name:'Appartient à une collection'         , default: false, values: :yes_no_answers},
     id:           {name:'ID du livre (lettres simples et "_"' , default:nil, required: true},
     auteurs:      {name:'Auteurs du livre (Prenom NOM,...)'   , default:nil},
     isbn:         {name:'ISBN', default: nil},
