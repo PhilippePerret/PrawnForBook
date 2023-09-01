@@ -71,7 +71,7 @@ class Bibliography
         method_name = "biblio_#{id}".to_sym
         if self.methods.include?(method_name) # true ou false
           nombre_parametres = self.method(method_name).parameters.count
-          nombre_parametres == 1 || raise(FatalPrawForBookError.new(731, {method_name: method_name}))
+          nombre_parametres == 2 || raise(FatalPrawForBookError.new(731, {method_name: method_name, nb_args: "#{nombre_parametres}#{' seul'if nombre_parametres == 1} argument#{'s' if nombre_parametres > 1}"}))
           method_name
         end
       end

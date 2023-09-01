@@ -221,13 +221,14 @@ ERRORS = {
         Dans le module BibliographyFormaterModule du fichier formater.rb,
         la méthode `%{method_name}' ne reçoit pas le bon nombre d'arguments.
         Une méthode de formatage d'un élément de bibliographie dans la biblio
-        elle-même doit toujours recevoir : <item bibligraphique>.
+        elle-même doit toujours recevoir : <item bibligraphique> et <pdf>.
+        Votre méthode reçoit %{nb_args}.
 
         C'est-à-dire : 
 
         # in ./formater.rb
         module BibliographyFormaterModule
-          def %{method_name}(bibitem)
+          def %{method_name}(bibitem, pdf)
             # ...
           end
         end

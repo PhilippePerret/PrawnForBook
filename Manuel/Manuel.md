@@ -1687,9 +1687,8 @@ module BibliographyFormaterModule
   # Méthode mettant en forme les données à faire apparaitre et renvoyant
   # le string correspondant.
   # @param \Bibliography::BibItem element L'élément bibliographique
-  # @param \Hash context (contient :pdf, :pdfbook, :paragraph ?
-  # @param \String actual La valeur donnée dans le texte pour cet élément
-  def biblio_tt(element, context, actual)
+  # @param \PrawnView
+  def biblio_tt(element, pdf)
     c = []
     element.instance_eval do 
       c << title
@@ -1700,9 +1699,10 @@ module BibliographyFormaterModule
   end
   
   # Autre tournure possible
-  def biblio_tt(element, context, actual)
-    '%{title.upcase} de %{writers}, %{year}' % element.data
+  def biblio_tt(element, pdf)
+    TEMPLATE_TT % element.data
   end
+  TEMPLATE_TT = '%{title} de %{writers}, %{year}'.freeze
   
 end #/module BibliographyFormaterModule
 ~~~

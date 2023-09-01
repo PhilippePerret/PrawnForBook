@@ -65,15 +65,13 @@ class Bibliography
         # C'est peut-être une méthode utilisateur qui est utilisée
         # ici, il faut donc s'attendre au pire. On la protège.
         # 
-        str = item_formatage_method.call(bibitem)
+        str = item_formatage_method.call(bibitem, pdf)
+        # La méthode peut retourner nil si le code a été écrit 
+        # directement dans le document pdf.
       rescue Exception => e
-        raise FatalPrawForBookError.new(740, **{
-          method: "#{item_formatage_method.name}",
-          err: e.message,
-          err_class: "#{e.class}"
-        })
+        raise FatalPrawForBookError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
       end
-      pdf.text str, **options
+      pdf.text(str, **options) unless str.nil?
       pdf.move_down(4)
     end
   end
@@ -82,7 +80,7 @@ end #/class Bibliography
 end #/class Pages
 
 class Bibliography
-  def self.default_formate_method(bibitem)
+  def self.default_formate_method(bibitem, pdf)
     spy "Je dois imprimer l'item #{bibitem.title} avec la méthode par défaut des bibliographies.".jaune
     "#{bibitem.title} : #{bibitem.occurences_pretty_list}."
   end
