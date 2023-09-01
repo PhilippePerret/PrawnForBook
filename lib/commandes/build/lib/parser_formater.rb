@@ -401,7 +401,7 @@ private
       if self.respond_to?(method_name)
         str = self.send(method_name, str, context)
       else
-        raise (ERRORS[:parsing][:class_tag_formate_method_required] % method_name)
+        raise FatalPrawForBookError.new(1000, **{meth: method_name})
       end
     end
 

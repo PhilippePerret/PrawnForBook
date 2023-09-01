@@ -49,27 +49,41 @@ class P4BCode < AnyParagraph
       pdf.update do
         text " "
       end
-    else
-      #
-      # La balise peut être définie dans le fichier d'helpers
-      # (sinon, on lève une exception)
-      # 
-      if PrawnHelpersMethods.respond_to?(raw_code.to_sym)
-        methode = raw_code.to_sym
+    when /^([a-z0-9_]+)(?:\((.*?)\))?$/
+      methode = $1.to_sym.freeze
+      params  = $2.freeze
+      if self.respond_to?(methode)
+        #
+        # Quand la méthode est définie comme méthode d'instance 
+        # (avec ou sans arguments)
+        #
+        begin
+          @pdf      = pdf
+          @pdfbook  = pdfbook
+          self.instance_eval(raw_code)
+        rescue Exception => e
+          # 
+          # La méthode est peut-être mal implémentée
+          # 
+          raise FatalPrawForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
+        end
+      elsif PrawnHelpersMethods.respond_to?(methode)
+        #
+        # Quand la méthode est définie comme méthode de classe
+        # 
         parameters_count = PrawnHelpersMethods.method(methode).parameters.count
         str = 
           case parameters_count
+          when 2 then PrawnHelpersMethods.send(methode,pdf,pdfbook)
           when 1 then PrawnHelpersMethods.send(methode,pdf)
           when 0 then PrawnHelpersMethods.send(methode)
           end
-        puts "str retourné par PrawnHelpersMethods::#{methode} : #{str.inspect}".orange
-        sleep 3
         pdf.update do
           text(str)
         end
-      else
-        erreur_fatale(ERRORS[:unknown_pfbcode] % raw_code.inspect)
       end
+    else
+      raise FatalPrawForBookError.new(1001, {code:raw_code, page: pdf.page_number})
     end
   end
 

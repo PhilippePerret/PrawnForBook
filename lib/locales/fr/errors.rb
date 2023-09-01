@@ -25,9 +25,39 @@ ERRORS = {
   # --- Parsing ---
 
   parsing: {
-    parse_required_string: "La méthode Prawn4book::PdfBook::AnyParagraph::__parse requiert une chaine de caractères en premier argument. Le premier argument, %s, est de classe %s.",
-    paragraph_required: "Quel que soit le texte à parser/formater, le paragraphe est toujours requis.",
-    class_tag_formate_method_required: "La méthode #%s doit être définie dans le module ParserFormaterClass du fichier formater.rb du livre ou de la collection.",
+    parse_required_string: <<~ERR,
+      La méthode Prawn4book::PdfBook::AnyParagraph::__parse requiert une 
+      chaine de caractères en premier argument. Le premier argument, 
+      %s, est de classe %s.
+      ERR
+    paragraph_required: <<~ERR,
+      Quel que soit le texte à parser/formater, le paragraphe est toujours 
+      requis.
+      ERR
+    class_tag_formate_method_required: <<~ERR,
+      La méthode #%{meth} doit être définie dans le module ParserFormaterClass
+      du fichier formater.rb du livre ou de la collection.
+      # in ./formater.rb
+      module ParserFormaterClass
+        def %{meth}
+          # ... définir le code ici
+        end
+      end
+      ERR
+  },
+
+  # --- Modules externes (helpers, formaters, etc.) ---
+
+  modules: {
+    runtime_error: <<~ERR,
+      Une erreur s'est produite en interprétant le code :
+      %{code}
+      (%{lieu})
+      Erreur : %{err_msg}
+      Backtrace
+      ---------
+      %{backtrace}
+      ERR
   },
   
   # --- Aide ---
@@ -39,7 +69,20 @@ ERRORS = {
   # --- Texte du livre ---
   
   unfound_text_file: "Le fichier texte %s est introuvable…",
-  unknown_pfbcode:   "Je ne sais pas traiter la balise '%s'…",
+  unknown_pfbcode:  <<~ERR,
+    Je ne sais pas traiter le code '%{code}' (page %{page})…
+
+    Peut-être doit-il être traité comme une méthode d'instance dans le
+    module PrawnHelpersMethods dans le helpers.rb du livre ou de la collection.
+
+    # Dans ./helpers.rb
+    module PrawnHelpersMethods
+      def %{code}
+        # ... 
+      end
+    end
+
+    ERR
 
   # --- Recette en général --- #
 

@@ -6,10 +6,15 @@ module Prawn4book
     begin
       command = Prawn4book::Command.new(help? ? 'help' : CLI.main_command)
       command.run
+    rescue FatalPrawForBookError => e
+      puts "\n\n" + e.message.rouge
+      if debug?
+        puts e.backtrace.join("\n")
+      end
     rescue RecipeError => e
       puts "\nERREUR DE DÉFINITION DE LA RECETTE\n#{e.message}".rouge
-      puts "\n\n"
     end
+    puts "\n\n"
   end
 
 end #/module Prawn4book

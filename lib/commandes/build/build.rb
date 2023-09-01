@@ -65,8 +65,9 @@ class PdfBook
     conforme? || return
 
     #
-    # --- PRÉFÉRENCES ---
+    # --- MODULES COMPLÉMENTAIRES ---
     # 
+    # TODO : PLACER CE TRAITEMENT AILLEURS
 
     # Pour savoir si un parseur de tous les paragraphes existe pour
     # le livre.
@@ -82,6 +83,13 @@ class PdfBook
         require File.join(folder,affixe)
       end
     end
+    #
+    # Include le module PrawnHelpersMethods dans AnyParagraph
+    # 
+    if defined?(PrawnHelpersMethods)
+      PdfBook::AnyParagraph.include(PrawnHelpersMethods)
+    end
+
     has_custom_paragraph_parser = 
         defined?(ParserParagraphModule) && 
         ParserParagraphModule.respond_to?(:paragraph_parser)
