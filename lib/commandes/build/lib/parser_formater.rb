@@ -1,3 +1,8 @@
+#
+# Module User qui pourra contenir la définition des helpers
+# 
+module PrawnHelpersMethods
+end
 =begin
 
 Module rassemblant toutes les méthodes qui permettent de parser et

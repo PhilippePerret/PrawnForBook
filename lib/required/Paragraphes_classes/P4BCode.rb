@@ -50,7 +50,26 @@ class P4BCode < AnyParagraph
         text " "
       end
     else
-      erreur_fatale(ERRORS[:unknown_pfbcode] % raw_code.inspect)
+      #
+      # La balise peut être définie dans le fichier d'helpers
+      # (sinon, on lève une exception)
+      # 
+      if PrawnHelpersMethods.respond_to?(raw_code.to_sym)
+        methode = raw_code.to_sym
+        parameters_count = PrawnHelpersMethods.method(methode).parameters.count
+        str = 
+          case parameters_count
+          when 1 then PrawnHelpersMethods.send(methode,pdf)
+          when 0 then PrawnHelpersMethods.send(methode)
+          end
+        puts "str retourné par PrawnHelpersMethods::#{methode} : #{str.inspect}".orange
+        sleep 3
+        pdf.update do
+          text(str)
+        end
+      else
+        erreur_fatale(ERRORS[:unknown_pfbcode] % raw_code.inspect)
+      end
     end
   end
 

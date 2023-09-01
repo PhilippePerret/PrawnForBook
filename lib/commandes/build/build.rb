@@ -71,18 +71,22 @@ class PdfBook
     # Pour savoir si un parseur de tous les paragraphes existe pour
     # le livre.
 
-    if File.exist?(File.expand_path(File.join(folder, '..' ,'parser.rb')))
-      require File.expand_path(File.join(folder, '..' ,'parser'))
-    end
-    # Attention : les méthodes du livre écraseront complètement les 
-    # méthodes de la collection.
-    if File.exist?(File.join(folder,'parser.rb'))
-      require File.join(folder,'parser')
+    ['parser','helper','helpers'].each do |affixe|
+      fname = "#{affixe}.rb"
+      if File.exist?(File.expand_path(File.join(folder, '..' ,fname)))
+        require File.expand_path(File.join(folder, '..' ,affixe))
+      end
+      # Attention : les méthodes du livre écraseront complètement les 
+      # méthodes de la collection.
+      if File.exist?(File.join(folder,fname))
+        require File.join(folder,affixe)
+      end
     end
     has_custom_paragraph_parser = 
         defined?(ParserParagraphModule) && 
         ParserParagraphModule.respond_to?(:paragraph_parser)
     Prawn4book::PdfBook::AnyParagraph.custom_paragraph_parser_exists = has_custom_paragraph_parser
+
 
     # 
     # = PREMIÈRE PASSE =
