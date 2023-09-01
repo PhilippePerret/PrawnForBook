@@ -21,6 +21,11 @@ class FatalPrawForBookError < StandardError
       # -- Recette(s) ---
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
+      # -- Bibliographies --
+      710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],
+      711   => Prawn4book::ERRORS[:biblio][:malformation][:path_undefined],
+      712   => Prawn4book::ERRORS[:biblio][:malformation][:path_unfound],
+      713   => Prawn4book::ERRORS[:biblio][:bibitem_requires_title],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],

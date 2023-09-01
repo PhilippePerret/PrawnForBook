@@ -1647,18 +1647,16 @@ Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML` et `
 ~~~yaml
 # in data/films/titanic.yaml
 ---
-titanic:
-	title: The Titanic
-	title_fr: Le Titanic
-	annee: 1999
-	realisateur: James CAMERON
+title: The Titanic
+title_fr: Le Titanic
+annee: 1999
+realisateur: James CAMERON
 	
 # in data/films/ditd.yaml
 ---
-ditd:
-	title: Dancer in The Dark
-	annee: 2000
-	realisateur: Lars VON TRIER
+title: Dancer in The Dark
+annee: 2000
+realisateur: Lars VON TRIER
 
 # etc.
 ~~~

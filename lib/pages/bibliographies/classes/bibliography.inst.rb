@@ -177,9 +177,9 @@ class Bibliography
   end
   def check_if_well_defined
     prefix_err = ERRORS[:biblio][:biblio_malformed] % tag
-    data.key?(:title)   || raise(PrawnBuildingError.new(prefix_err + (ERRORS[:biblio][:malformation][:title_undefined])))
-    data.key?(:path)    || raise(PrawnBuildingError.new(prefix_err + ERRORS[:biblio][:malformation][:path_undefined]))
-    File.exist?(folder) || raise(PrawnBuildingError.new(prefix_err + (ERRORS[:biblio][:malformation][:path_unfound] % data[:path])))
+    data.key?(:title)   || raise(FatalPrawForBookError.new(710, **{prefix: prefix_err, tag: tag}))
+    data.key?(:path)    || raise(FatalPrawForBookError.new(711, **{prefix: prefix_err, tag: tag}))
+    File.exist?(folder) || raise(FatalPrawForBookError.new(712, **{prefix: prefix_err, tag: tag, path:data[:path]}))
   end
 
   # - Data Methods -

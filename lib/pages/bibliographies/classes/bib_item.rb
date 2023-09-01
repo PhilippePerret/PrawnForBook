@@ -225,7 +225,7 @@ class BibItem
   #   avec un cant' modify frozen string
   def title
     keytitle = biblio.respond_to?(:main_key) ? biblio.main_key : :title
-    data[keytitle] || raise(ERRORS[:biblio][:bibitem_requires_title])
+    data[keytitle] || raise(FatalPrawForBookError.new(713, {id: self.id, tag:biblio.tag}))
   end
 
   # @return [String] Le titre, mais normalisé pour pouvoir servir de

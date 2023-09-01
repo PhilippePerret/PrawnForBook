@@ -27,7 +27,7 @@ class << self
       # - Toujours la bibliographie des livres -
       add_biblio(new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
     end
-    init_biblio_livres(pdfbook)
+    # init_biblio_livres(pdfbook)
     prepare
   end
 
@@ -180,10 +180,10 @@ class << self
   #   Avant, c'est toujours 'livre' pour identifier les livres.
   #   Maintenant, c'est une donnée qu'on peut régler dans la recette,
   #   au path [:bibliographies][:book_identifiant]
-  def init_biblio_livres(pdfbook)
-    self.remove_const('Livres') if defined?(Livres)
-    self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
-  end
+  # def init_biblio_livres(pdfbook)
+  #   self.remove_const('Livres') if defined?(Livres)
+  #   self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
+  # end
 
 end #/<< self Bibliography
 end #/ class Bibliography

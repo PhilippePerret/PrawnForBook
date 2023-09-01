@@ -133,16 +133,57 @@ ERRORS = {
     formater_malformed: "Le fichier formater.rb devrait définir le module 'BibliographyFormaterModule'\n(bien vérifier le nom, avec un pluriel)…",
     biblio_malformed: "La donnée recette de la bibliographie '%s' est malformée : ",
     malformation: {
-      title_undefined: "Le titre de la bibliographie (:title) doit absolument être défini",
-      path_undefined: "Le chemin d'accès au dossier des items doit être défini (:path) et non nil.",
-      path_unfound: "Le dossier des fiches bibliographiques est introuvable… ('%s' cherché en tant que chemin absolu ou relatif dans le dossier du livre ou de la collection)",
+      title_undefined: <<~ERR,
+        %{prefix}
+        Le titre de la bibliographie doit absolument être défini dans
+        la recette de la collection ou du livre en particulier.
+
+        # in recipe.yaml / recipe_collection.yaml
+        #<bibliographies>
+        bibliographies:
+          biblios:
+            %{tag}:
+              # ...
+              title:
+        #</bibliographies>
+
+        ERR
+      path_undefined: <<~ERR,
+        %{prefix}
+        Le chemin d'accès au dossier des items doit être défini et non nil.
+        Ajouter cette information au fichier recette de la collection ou du
+        livre :
+
+        # in recipe.yaml / recipe_collection.yaml
+        #<bibliographies>
+        bibliographies:
+          biblios:
+            %{tag}:
+              # ...
+              path:
+        #</bibliographies>
+        ERR
+      path_unfound: <<~ERR,
+        %{prefix}
+        Le dossier des fiches bibliographiques est introuvable…
+        (%{path}
+          cherché en tant que chemin absolu ou relatif dans le dossier du 
+          livre ou de la collection)
+        ERR
     },
     bad_format_bibitem: "Le format '%s' est un format de données bibliographique invalide.",
     biblio_method_required: "Le module BibliographyFormaterModule dans formater.rb doit définir la méthode 'biblio_%s'…",
     biblio_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette…",
     biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
-    bibitem_requires_title: "Un élément bibliographique requiert un titre (défini par :title ou par la clé définie par :main_key dans la définition de la bibliographie)",
+    
+    bibitem_requires_title: <<~ERR,
+      Problème avec l'élément bibliographique  `%{id}' 
+      de la bibliothèque : `%{tag}'
+      Cet élément bibliographique requiert obligatoirement un titre défini par 
+      la clé `:title' ou par la clé définie par :main_key dans la définition de 
+      la bibliographie dans le livre de recette.
+      ERR
     title_already_exists: "Ce titre existe déjà.",
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',
