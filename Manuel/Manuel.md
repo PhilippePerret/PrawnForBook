@@ -1116,6 +1116,8 @@ Pour un livre technique, où les références sont fréquentes, ou si l’on veu
 
 ~~~yaml
 book_format:
+	book: 
+		numerotation: pages # ou parags
 	text:
 		numerotation: pages # ou parags
 ~~~
@@ -1124,12 +1126,15 @@ L’affichage utilise par défaut la police `Bangla`, mais elle peut être défi
 
 {À refaire}
 
-Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:top_adjustment` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
+Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:parag_numero_vadjust` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
 
 ~~~yaml
-:num_parag:
+book_format:
 	# ...
-	:top_adjustment: 1
+	text:
+		# ...
+		numerotation: parags
+		parag_numero_vadjust: 1
 ~~~
 
 Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
