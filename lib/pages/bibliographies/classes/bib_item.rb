@@ -29,8 +29,9 @@ class BibItem
   # --- Public Methods ---
 
   ##
-  # Formatage de l'élément bibliographique
-  # (dans le texte)
+  # Formatage de l'élément bibliographique DANS LE TEXTE
+  # Pour le formatage de l'élément dans la bibliographie, voir
+  # la méthode ???
   # 
   # @return [String] l'item de bibliographie formaté pour le 
   # texte. 
@@ -49,9 +50,9 @@ class BibItem
   #
   def formated(context, actual)
     if biblio.custom_formating_method?
-      biblio.custom_format_method.call(self, context, actual)
+      str = biblio.send(biblio.custom_format_method, self, context, actual)
     else
-      actual || title # peut être :main_key si défini
+      actual || title
     end
   end
 
@@ -99,7 +100,7 @@ class BibItem
   #
   # @api public
   # 
-  def occurrences_as_displayed_list
+  def occurences_pretty_list
     unite = TERMS[key_numerotation]
     unite = "#{unite}s" if @occurrences.count > 1
     "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
@@ -232,6 +233,10 @@ class BibItem
   # clé de classement.
   def keysort
     @keysort ||= title.normalized.downcase
+  end
+
+  def temp_data
+    data.merge(occ_list: occurences_pretty_list)
   end
 
   # @return [Hash] Table de données de l'item bibliographique

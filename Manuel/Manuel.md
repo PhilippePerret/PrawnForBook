@@ -1676,6 +1676,8 @@ Voir ensuite dans [la partie mise en forme](#mise-en-forme-biblio) la façon d�
 
 La mise en forme des bibliographies (ou de *la* bibliographie) doit être définie dans le [fichier `formater.rb`][].
 
+<span style="font-weight:bold;color:red;">Attention : ici, nous parlons bien de la mise en forme des éléments dans la bibliographie, par exemple en fin d’ouvrage. Il ne s’agit pas de la mise en forme dans le texte, qui sera abordée plus bas.</span>
+
 Il faut y définir une méthode préfixée `biblio_` suivi par la balise (`:tag`) de la bibliographie concernée. Ce sera par exemple la méthode `biblio_film` pour la liste des films.
 
 ~~~ruby
@@ -1684,7 +1686,10 @@ module BibliographyFormaterModule
   
   # Méthode mettant en forme les données à faire apparaitre et renvoyant
   # le string correspondant.
-  def biblio_film(element) # l'element, ici, est un film, son instance
+  # @param \Bibliography::BibItem element L'élément bibliographique
+  # @param \Hash context (contient :pdf, :pdfbook, :paragraph ?
+  # @param \String actual La valeur donnée dans le texte pour cet élément
+  def biblio_tt(element, context, actual)
     c = []
     element.instance_eval do 
       c << title
@@ -1695,7 +1700,7 @@ module BibliographyFormaterModule
   end
   
   # Autre tournure possible
-  def biblio_autre(element)
+  def biblio_tt(element, context, actual)
     '%{title.upcase} de %{writers}, %{year}' % element.data
   end
   

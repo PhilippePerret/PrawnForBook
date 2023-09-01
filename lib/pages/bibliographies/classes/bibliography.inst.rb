@@ -35,16 +35,45 @@ class Bibliography
   ##
   # @public
   # 
-  # @return [Method] La méthode de formatage personnalisée de cette bibliographie
+  # @return [Method] La méthode de formatage personnalisée d'un item
+  # de cette bibliographie DANS LE TEXTE. Pour la méthode de formatage
+  # de l'item dans la bibliographie elle-même, voir la méthode
+  # #custom_format_method_for_biblio
   #
   def custom_format_method
     @custom_format_method ||= begin
-      method_name = "#{id}_in_text".to_sym
-      if \
-        defined?(BibliographyFormaterModule) && \
-        BibliographyFormaterModule.respond_to?(method_name)
-      then
-        BibliographyFormaterModule.method(method_name)
+      if BibliographyFormaterModule
+        self.extend(BibliographyFormaterModule)
+        method_name = "#{id}_in_text".to_sym
+        if self.methods.include?(method_name) # true ou false
+          nombre_parametres = self.method(method_name).parameters.count
+          nombre_parametres == 3 || raise(FatalPrawForBookError.new(730, {method_name: method_name}))
+          method_name
+        end
+      end
+    end
+  end
+
+  ##
+  # @public
+  # 
+  # @return true si la bibliographie possède une méthode
+  # de formatage personnalisée
+  # 
+  def custom_formating_method_for_biblio?
+    :TRUE == @hasformatmethodforbiblio ||= true_or_false(not(custom_format_method_for_biblio.nil?))
+  end
+
+  def custom_format_method_for_biblio
+    @custom_format_method_for_biblio ||= begin
+      if BibliographyFormaterModule
+        self.extend(BibliographyFormaterModule)
+        method_name = "biblio_#{id}".to_sym
+        if self.methods.include?(method_name) # true ou false
+          nombre_parametres = self.method(method_name).parameters.count
+          nombre_parametres == 1 || raise(FatalPrawForBookError.new(731, {method_name: method_name}))
+          method_name
+        end
       end
     end
   end

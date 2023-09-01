@@ -126,6 +126,23 @@ ERRORS = {
   # --- Bibliographie --- #
 
   biblio: {
+    custom_format_method_error: <<~ERR,
+      Une erreur a été levée par votre méthode BibliographyFormaterModule#%{method}
+      (qui doit être définie dans le module formater.rb)
+      Erreur : %{err}::%{err_class}
+
+      Merci de bien vouloir corriger cette erreur et de relancer la fabrication
+      du livre.
+
+      module BibliographyFormaterModule
+
+        def %{method}(bibitem)
+          ### ERREUR ###
+          ### %{err} ###
+        end
+
+      end
+      ERR
     instanciation_requires_book: "Une livre est requis, pour l'instanciation d'une bibliographie.",
     data_undefined: "La recette du livre ou de la collection ne définit aucun donnée bibliographique (consulter le mode d'emploi pour remédier au problème ou lancer l'assistant bibliographies).",
     biblios_malformed: "La recette bibliographie (:biblios) devrait être une table (un item par type d'élément).",
@@ -177,13 +194,46 @@ ERRORS = {
     biblio_item_undefined: "La bibliographie d'identifiant '%s' est inconnue de la recette… Impossible d'enregistrer l'élément d'identifiant '%s'.",
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
     
-    bibitem_requires_title: <<~ERR,
-      Problème avec l'élément bibliographique  `%{id}' 
-      de la bibliothèque : `%{tag}'
-      Cet élément bibliographique requiert obligatoirement un titre défini par 
-      la clé `:title' ou par la clé définie par :main_key dans la définition de 
-      la bibliographie dans le livre de recette.
-      ERR
+    bibitem: {
+      requires_title: <<~ERR,
+        Problème avec l'élément bibliographique  `%{id}' 
+        de la bibliothèque : `%{tag}'
+        Cet élément bibliographique requiert obligatoirement un titre défini par 
+        la clé `:title' ou par la clé définie par :main_key dans la définition de 
+        la bibliographie dans le livre de recette.
+        ERR
+      bad_arguments_count: <<~ERR,
+        Dans le module BibliographyFormaterModule du fichier formater.rb,
+        la méthode `%{method_name}' ne reçoit pas le bon nombre d'arguments.
+        Une méthode de formatage d'un élément de bibliographie doit toujours
+        recevoir : <item bibligraphique>, <context>, <valeur fournie>
+
+        C'est-à-dire : 
+
+        # in ./formater.rb
+        module BibliographyFormaterModule
+          def %{method_name}(bibitem, context, actual)
+            # ...
+          end
+        end
+        ERR
+      bad_arguments_count_biblio: <<~ERR,
+        Dans le module BibliographyFormaterModule du fichier formater.rb,
+        la méthode `%{method_name}' ne reçoit pas le bon nombre d'arguments.
+        Une méthode de formatage d'un élément de bibliographie dans la biblio
+        elle-même doit toujours recevoir : <item bibligraphique>.
+
+        C'est-à-dire : 
+
+        # in ./formater.rb
+        module BibliographyFormaterModule
+          def %{method_name}(bibitem)
+            # ...
+          end
+        end
+        ERR
+
+    },
     title_already_exists: "Ce titre existe déjà.",
     tag_already_exists: "Ce tag est déjà utilisé. Choisissez-en un autre.",
     bad_tag: 'Tag non conforme. Il ne devrait contenir que des lettres minuscules.',

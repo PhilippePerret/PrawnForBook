@@ -16,6 +16,15 @@ class Bibliography
       puts (MESSAGES[:biblio][:no_occurrence] % [biblio.title]).orange
       return
     end
+    #
+    # Méthode formatage à utiliser pour les items de bibliographie
+    # 
+    item_formatage_method = 
+      if biblio.custom_formating_method_for_biblio?
+        biblio.method(biblio.custom_format_method_for_biblio)
+      else
+        Prawn4book::Bibliography.method(:default_formate_method)
+      end
     # 
     # Inscription du TITRE DE LA BIBLIOGRAPHIE
     # 
@@ -50,8 +59,21 @@ class Bibliography
       ###                        ###
       ##############################
       pdf.move_cursor_to_next_reference_line
-      str = Prawn4book::Bibliography.send(formate_method, bibitem)
-      pdf.text "#{str} : #{bibitem.occurrences_as_displayed_list}.", **options
+      # str = Prawn4book::Bibliography.send(formate_method, bibitem)
+      begin
+        #
+        # C'est peut-être une méthode utilisateur qui est utilisée
+        # ici, il faut donc s'attendre au pire. On la protège.
+        # 
+        str = item_formatage_method.call(bibitem)
+      rescue Exception => e
+        raise FatalPrawForBookError.new(740, **{
+          method: "#{item_formatage_method.name}",
+          err: e.message,
+          err_class: "#{e.class}"
+        })
+      end
+      pdf.text str, **options
       pdf.move_down(4)
     end
   end
@@ -62,7 +84,7 @@ end #/class Pages
 class Bibliography
   def self.default_formate_method(bibitem)
     spy "Je dois imprimer l'item #{bibitem.title} avec la méthode par défaut des bibliographies.".jaune
-    bibitem.title
+    "#{bibitem.title} : #{bibitem.occurences_pretty_list}."
   end
 end
 end #/module Prawn4book
