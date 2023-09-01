@@ -21,10 +21,14 @@ class MetricClass
     @recipe ||= PdfBook.current.recipe
   end
 
+  def default_font_name
+    @default_font_name ||= recipe.default_font_name
+  end
+  def default_font_style
+    @default_font_style ||= recipe.default_font_style
+  end
   def default_font_size
-    @default_font_size ||= begin
-      recipe.default_font_size
-    end
+    @default_font_size ||= recipe.default_font_size
   end
 
   def current_font_size

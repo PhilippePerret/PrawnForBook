@@ -357,6 +357,7 @@ class Recipe
   #   La méthode s'appuie sur les données définies dans les "pages
   #   spcéciales" (fichier data.rb) qui définissent forcément les
   #   valeurs par défaut.
+  # 
   def self.peuple_with_default_data(receiver, referencer)
     referencer.each do |k, v|
       if v.key?(:default) # => une valeur

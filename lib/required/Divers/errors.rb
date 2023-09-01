@@ -20,6 +20,7 @@ class FatalPrawForBookError < StandardError
     @errors_by_num ||= {
       # -- Recette(s) ---
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
+      610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],

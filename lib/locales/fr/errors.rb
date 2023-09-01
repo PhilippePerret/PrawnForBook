@@ -100,6 +100,11 @@ ERRORS = {
         %{missing_keys}
         
         ERR
+      bad_font_definition: <<~ERR,
+        La définition des fontes, pour la page des infos (au moins) est
+        mauvaise. Je n'arrive pas à calculer les emplacements et les 
+        positions.
+        ERR
     },
 
   }, #/ :recipe

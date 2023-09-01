@@ -217,7 +217,13 @@ class PdfBook
     # 
     # - PAGE INFOS -
     # 
-    pdf.build_page_infos if page_infos? && pdf.last_page > pdf.page_number
+    if page_infos?
+      if pdf.last_page > pdf.page_number
+        pdf.build_page_infos
+      else
+        spy "Ce n'est pas la dernière page, on n'écrit donc pas la page d'infos.".rouge
+      end
+    end
 
     # 
     # - TABLE DES MATIÈRES -

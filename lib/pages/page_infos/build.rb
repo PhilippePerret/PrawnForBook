@@ -27,8 +27,10 @@ class PageInfos
     # On commence par se placer sur la bonne page
     # 
     pdf.update do
-      start_new_page
-      start_new_page if page_number.even?
+      nombre_blanches = page_number.even? ? 3 : 2
+      nombre_blanches.times {
+        start_new_page  
+      }
     end
     # 
     # Pour appel dans pdf
@@ -141,15 +143,18 @@ class PageInfos
     # on doit les répartir.
     # 
     surface_height = recipe.book_format[:book][:height]
+    surface_height = pdf.pdfbook.proceed_unit(surface_height) if surface_height.is_a?(String)
     surface_height -= 40    # pour laisser encore de l'air au-dessus
     # 
     # Hauteur prise par un label
     # 
     height_for_label = get_label_height(pdf)
+    height_for_label.is_a?(Float) || raise(FatalPrawForBookError.new(610))
     # 
     # Hauteur prise par une valeur
     # 
     height_for_value = get_value_height(pdf)
+    height_for_value.is_a?(Float) || raise(FatalPrawForBookError.new(610))
     # 
     # On passe en revue toutes les infos pour voir l'espace total
     # qui restera et le répartir dans les interstices
@@ -325,7 +330,9 @@ class PageInfos
     # qui détermine ce comportement
     # 
     def define_linear_delimitor
-      Object.const_set('LINEAR_DELIMITOR', mode_distributed? ? "\n" : " ")
+      unless defined?(LINEAR_DELIMITOR)
+        Object.const_set('LINEAR_DELIMITOR', mode_distributed? ? "\n" : " ")
+      end
     end
 
 
@@ -403,23 +410,23 @@ class PageInfos
   end
 
   def info_font
-    @info_font ||= page_infos[:aspect][:value][:font]
+    @info_font ||= page_infos[:aspect][:value][:font]||Metric.default_font_name
   end
   def info_style
-    @info_style ||= page_infos[:aspect][:value][:style]
+    @info_style ||= page_infos[:aspect][:value][:style]||Metric.default_font_style
   end
   def info_size
-    @info_size ||= page_infos[:aspect][:value][:size]
+    @info_size ||= page_infos[:aspect][:value][:size]||Metric.default_font_size
   end
 
   def label_font
-    @label_font ||= page_infos[:aspect][:libelle][:font]
+    @label_font ||= page_infos[:aspect][:libelle][:font]||Metric.default_font_name
   end
   def label_style
-    @label_style ||= page_infos[:aspect][:libelle][:style]
+    @label_style ||= page_infos[:aspect][:libelle][:style]||Metric.default_font_style
   end
   def label_size
-    @label_size ||= page_infos[:aspect][:libelle][:size]
+    @label_size ||= page_infos[:aspect][:libelle][:size]||Metric.default_font_size
   end
   def label_color
     @label_color ||= page_infos[:aspect][:libelle][:color]
