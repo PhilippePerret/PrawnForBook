@@ -4,7 +4,7 @@ class Bibliography
 
   # = main =
   #
-  # Méthode principale construisant la page
+  # Méthode principale construisant la/les page/s de bibliographie
   # 
   def build(pdf)
     # 

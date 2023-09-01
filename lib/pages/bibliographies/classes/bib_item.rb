@@ -262,7 +262,7 @@ class BibItem
     end
   end
 
-  # - shortcut -
+  # @shortcut vers la recette
   def recipe
     @recipe ||= biblio.book.recipe
   end

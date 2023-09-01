@@ -72,14 +72,9 @@ class Bibliography
   # @api public
   # 
   def add_item(bibitem)
-    # puts "Ajout item biblio : #{bibitem.id.inspect}"
-    ids = bibitem.id.to_s
-    @items.merge!({
-      ids.to_sym          => bibitem,
-      ids.to_s            => bibitem,
-      ids.downcase        => bibitem,
-      ids.downcase.to_sym => bibitem
-    })
+    key = bibitem.id.to_s.downcase
+    # puts "Ajout item biblio : #{bibitem.id.inspect} avec la clé #{key}"
+    @items.merge!(key => bibitem)
   end
 
   ##
