@@ -45,6 +45,9 @@ class P4BCode < AnyParagraph
       pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_bibliography(pdf)
+    when /^(<\-\(|\->\()/
+      # Une cible de référence (ou un lien) seule sur une ligne
+      treate_as_references(pdf, pdfbook)
     when 'line'
       pdf.update do
         text " "
@@ -108,6 +111,35 @@ class P4BCode < AnyParagraph
   #   - l'imprimer dans le livre
   def treate_as_bibliography(pdf)
     Bibliography.print(raw_code.match(/^biblio.*?\((.+?)\)$/)[1], pdfbook, pdf)
+  end
+
+  #
+  # Noter qu'on ne passe ici que lorsque la balise de référence 
+  # "occupe" toute la ligne (lorsqu'il n'y a pas d'autre texte). Ça
+  # arrive surtout lorsque c'est une cible qu'il faut définir.
+  def treate_as_references(pdf, pdfbook)
+    #
+    # On doit transformer le paragraphe courant (\P4BCode) en 
+    # paragraphe de texte \NTextParagraph
+    # 
+    as_text_paragraph = PdfBook::NTextParagraph.new(pdfbook, **{
+      raw_line: raw_code, pfbcode: nil
+    })
+    context = {pdf: pdf, pdfbook: pdfbook, paragraph: as_text_paragraph}
+    str = AnyParagraph.__traite_references_in("(( #{raw_code} ))", **context)
+
+    #
+    # Écriture du texte restant
+    # 
+    # @note
+    #   Mais en toute vraisemblance, sauf si c'est un lien vers une
+    #   cible tout seul sur la ligne) rien ne devrait être à écrire
+    #   puisque c'est la cible qui peut être définie de cette manière
+    # 
+    unless str.empty?
+      pdf.update { text(str) }
+    end
+
   end
 
   # Pour pouvoir obtenir une valeur de style "inline" en faisant

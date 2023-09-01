@@ -7,6 +7,9 @@
 =end
 module Prawn4book
 class Command
+  #
+  # Méthode appelée quand on doit construire le livre (`pfb build')
+  # 
   def proceed
     PdfBook.current.generate_pdf_book
   end
@@ -63,37 +66,6 @@ class PdfBook
     # éléments requis
     # 
     conforme? || return
-
-    #
-    # --- MODULES COMPLÉMENTAIRES ---
-    # 
-    # TODO : PLACER CE TRAITEMENT AILLEURS
-
-    # Pour savoir si un parseur de tous les paragraphes existe pour
-    # le livre.
-
-    ['parser','helper','helpers'].each do |affixe|
-      fname = "#{affixe}.rb"
-      if File.exist?(File.expand_path(File.join(folder, '..' ,fname)))
-        require File.expand_path(File.join(folder, '..' ,affixe))
-      end
-      # Attention : les méthodes du livre écraseront complètement les 
-      # méthodes de la collection.
-      if File.exist?(File.join(folder,fname))
-        require File.join(folder,affixe)
-      end
-    end
-    #
-    # Include le module PrawnHelpersMethods dans AnyParagraph
-    # 
-    if defined?(PrawnHelpersMethods)
-      PdfBook::AnyParagraph.include(PrawnHelpersMethods)
-    end
-
-    has_custom_paragraph_parser = 
-        defined?(ParserParagraphModule) && 
-        ParserParagraphModule.respond_to?(:paragraph_parser)
-    Prawn4book::PdfBook::AnyParagraph.custom_paragraph_parser_exists = has_custom_paragraph_parser
 
 
     # 
@@ -318,22 +290,34 @@ class PdfBook
     #
     # On les distribue
     # 
-    if defined?(ParserFormaterClass)
-      Prawn4book::PdfBook::AnyParagraph.extend(ParserFormaterClass)
+    if defined?(PrawnHelpersMethods)
+      spy "Inclusion du module PrawnHelpersMethods dans PdfBook::AnyParagraph".bleu
+      Prawn4book::PdfBook::AnyParagraph.include(PrawnHelpersMethods)
     end
     if defined?(ParserFormater)
+      spy "Inclusion du module ParserFormater dans PdfBook::AnyParagraph".bleu
       Prawn4book::PdfBook::AnyParagraph.include(ParserFormater)
+    end
+    if defined?(ParserFormaterClass)
+      spy "Extension du module ParserFormaterClass dans PdfBook::AnyParagraph".bleu
+      Prawn4book::PdfBook::AnyParagraph.extend(ParserFormaterClass)
     end
 
     if defined?(PdfBookFormatageModule)
+      spy "Extension du module PdfBookFormatageModule dans PrawnView".bleu
       PrawnView.extend PdfBookFormatageModule
     end
     if defined?(FormaterParagraphModule)
+      spy "Inclusion du module FormaterParagraphModule dans NTextParagraph".bleu
       NTextParagraph.include(FormaterParagraphModule)
     end
     if defined?(TableFormaterModule)
+      spy "Extension du module TableFormaterModule dans NTable".bleu
       NTable.extend(TableFormaterModule)
     end
+
+    Prawn4book::PdfBook::AnyParagraph.custom_paragraph_parser_exists = 
+      defined?(ParserParagraphModule) && ParserParagraphModule.respond_to?(:paragraph_parser)
 
   end
 

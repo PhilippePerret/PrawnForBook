@@ -51,7 +51,7 @@ class Paragraphe
       when /^\(\( (.+) \)\)$/
         PdfBook::P4BCode.new(pdfbook, line)
       else 
-        PdfBook::NTextParagraph.new(pdfbook, {
+        PdfBook::NTextParagraph.new(pdfbook, **{
           raw_line: line, 
           pfbcode:  self.class.code_for_next_paragraph
         })

@@ -88,6 +88,19 @@ ERRORS = {
 
   recipe: {
     main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
+    page_infos: {
+      require_info: <<~ERR,
+        Je ne suis pas en mesure de produire la page d'information de fin
+        de livre, il me manque ces informations : 
+        %{missing_infos}
+        
+        Vous devez les renseigner dans la recette du livre ou de la 
+        collection :
+
+        %{missing_keys}
+        
+        ERR
+    },
 
   }, #/ :recipe
 

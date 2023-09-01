@@ -360,24 +360,30 @@ class PageInfos
     # page d'informations
     # 
     missing_functions = []
+    page_infos_missing_keys = []
+    publishing_missing_keys = []
     [
-      [ infs[:conception][:patro]   ,'le concepteur/rédacteur'],
-      [ infs[:cover][:patro]        ,'le concepteur de la couverture'],
-      [ infs[:correction][:patro]   ,'la correctrice'],
-      [ infs[:mise_en_page][:patro] ,'le metteur en page'],
-      [ infs[:printing][:name]      ,'l\'imprimerie' ],
-      [ publ[:name]                  ,'la maison d\'édition'],
-    ].each do |value, fonction|
-      value || missing_functions.push(fonction)
+      [ infs[:conception][:patro]   ,'le concepteur/rédacteur', "  conception:\n    patro: ..."],
+      [ infs[:cover][:patro]        ,'le concepteur de la couverture', "  cover:\n    patro: ..."],
+      [ infs[:correction][:patro]   ,'la correctrice', "  correction:\n    patro: ..."],
+      [ infs[:mise_en_page][:patro] ,'le metteur en page', "  mise_en_page:\n    patro: ..."],
+      [ infs[:printing][:name]      ,'l’imprimerie', "  printing:\n    name: ..." ],
+      [ publ[:name]                  ,'la maison d’édition', nil, "#<publishing>\npublishing:\n  name: ...\n#</publishing>"],
+    ].each do |value, fonction, page_infos_keys, publishing_keys|
+      value || begin
+        missing_functions.push(fonction)
+        page_infos_missing_keys << page_infos_keys if page_infos_keys
+        publishing_missing_keys << publishing_keys if publishing_keys
+      end
     end
     missing_functions.empty? || begin
-      prefix = missing_functions.count == 1 ? 'Est requis' : 'Sont requis'
-      msg_err = "Impossible de produire la page d'informations. #{prefix} : #{missing_functions.pretty_join}"
-      raise PrawnBuildingError.new(msg_err)
+      unless page_infos_missing_keys.empty?
+        page_infos_missing_keys.unshift("#<page_infos>\npage_infos:")
+        page_infos_missing_keys << "#</page_infos>"
+      end
+      missing_keys = (page_infos_missing_keys + publishing_missing_keys).join("\n")
+      raise FatalPrawForBookError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
     end
-  rescue PrawnBuildingError => e
-    formated_error(e)
-    exit
   end
 
   def mode_distributed?

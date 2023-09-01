@@ -99,7 +99,7 @@ class PdfBook
   end
 
   def custom_helper_paths
-    get_custom_modules('helper')    
+    get_custom_modules('helper') + get_custom_modules('helpers')
   end
   ##
 
