@@ -59,14 +59,7 @@ class NTable < AnyParagraph
         pdf.table(lines, table_style, &code_block)
       end
     rescue Prawn::Errors::CannotFit => e
-      puts "
-      Problème de taille avec la table (elle est certainement trop 
-      grande ou la taille des colonnes produisent une taille trop 
-      grande.
-      Peut-être aussi le contenu des cellules est-il trop grand par
-      rapport à leur taille.
-      (#{e.message})".rouge
-      exit
+      raise FatalPrawForBookError.new(3000, {err: e.message})
     end
 
     pdf.move_down(2 * pdf.line_height)

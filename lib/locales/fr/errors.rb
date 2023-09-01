@@ -84,6 +84,18 @@ ERRORS = {
 
     ERR
 
+  # --- TABLES --- #
+
+  table: {
+    can_not_fit: <<~ERR
+      Problème de dimension avec la table (elle est certainement trop grande
+      ou la taille des colonnes produisent une taille trop grande.
+      Peut-être aussi le contenu des cellules est-il trop grand par rapport à
+      leur taille.
+      Erreur soulevée : %{err}
+      ERR
+  },
+
   # --- Recette en général --- #
 
   recipe: {
@@ -110,6 +122,7 @@ ERRORS = {
   }, #/ :recipe
 
   # --- Fontes ---
+
   fontes: {
     font_argument_nil: "Les paramètres de #font doivent être définis (font-name et font-properties, Hash ou Prawn4book::Fonte)",
     invalid_font_params: "Les paramètres pour #font sont invalides (soit les paramètres traditionnels — font-name, {font-params} — soit un Hash contenant {:name, :size, :style}, soit une instance Prawn4book::Fonte).",
@@ -249,6 +262,7 @@ ERRORS = {
   }, #/biblio
 
   # --- Références --- #
+
   references: {
     cross_book_undefined: "Le livre d'identifiant '%s' n'est pas défini pour les références croisées…",
     cross_path_undefined: "Aucune path n'est définie pour le livre '%s'…",

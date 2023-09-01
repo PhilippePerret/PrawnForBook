@@ -1064,6 +1064,109 @@ module TableFormaterModule
 end 
 ~~~
 
+<a name="table-pour-paragraphes"></a>
+
+##### Table pour style de paragraphe
+
+Il est possible d’utiliser la puissance des tables pour mettre en forme un style de paragraphe sans passer par les tables. C’’est particulièrement utile pour la mise en forme des bibliographies et autres index par exemple.
+
+Le principe général est de créer une instance `Prawn4book::PdfBook::NTable` et de l’imprimer.
+
+Une instance `Prawn4book::PdfBook::NTable` reçoit deux arguments : le `pdfbook` et les données de la table :
+
+~~~ruby
+table = Prawn4book::PdfBook::NTable.new(pdfbook, table_data)
+~~~
+
+Les données `table_data` de la table contiennent deux données, une pour définir les lignes, l’autre pour définir le style, en passant par un `P4BCode` :
+
+~~~ruby
+table_data = {
+  pfbcode: <instance Prawn4book::PdfBook::P4BCode>,
+  lines:   <liste Arraydes lignes>
+}
+~~~
+
+L'instance `Prawn4book::PdfBook::P4BCode` doit être créée en fournissant le `pdfbook` (qu’on peut obtenir de `pdf` par `pdf.pdfbook`) et la ligne string définissant la table. Par exemple :
+
+~~~ruby
+p4bcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column_widths: 30} ))")
+~~~
+
+
+
+> **TIP 1** : Plutôt que de faire une liste de lignes (difficile à gérer si on utilise des valeurs template), on peut utiliser cette tournure :
+>
+> ~~~ruby
+> lines = <<~LINES % data_template
+> 	|      | %{v1} | %{v2} |
+>   | %{x} |       |       |
+> 	LINES
+> 
+> table_data = {
+>   lines: lines.split("\n")
+> }
+> ~~~
+
+> **TIP 2** : De la même manière, plutôt que d’avoir à écrire en string le P4BCode qui va définir la table, on peut utiliser la tournure suivante :
+>
+> ~~~ruby
+> pfbcode = {
+>   col_count: 3,
+>   column_widths: [20, 100],
+>   cell_style: {
+>     padding: 0
+>   }
+> }
+> pfbcode_string = "(( #{pfbcode.inspect} ))"
+> ~~~
+>
+
+Noter que pour fonctionner, il faut que la méthode reçoive `pdf`, comme c’est le cas des mises en forme de bibliographie.
+
+Voici justement un exemple pour afficher de façon complexe un item de bibliographie :
+
+~~~ruby
+# in ./formater.rb
+module BibliographyFormaterModule # définition pour les bibliographies
+  
+  # Cette méthode sert à formater les items de la bibliographie 'livre' dans
+  # l'affichage de fin de livre
+  #
+  def biblio_livres(bibitem, pdf) # ces deux arguments sont toujours fournis
+		pdfbook = pdf.pdfbook
+    
+    # Aspect de la table
+    data = {
+      col_count: 2,
+      column_widths: [20, nil],
+      cell_style: {
+        padding: 0
+      }
+    }
+    
+    # Définition de la table
+    table_data = {
+      p4bcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{data.inspect} ))"),
+      lines: [
+        "| %{title} | %{auteur} |" % bibitem.temp_data,
+        "|          | %{resume} |" % bibitem.temp_data,
+      ]
+    }
+    
+    # Instanciation de la table
+    table = Prawn4book::PdfBook::NTable.new(pdfbook, table_data)
+    
+    # Impression de la table
+    table.print(pdf)
+    
+    # Il faut retourner nil pour que le texte ne soit pas écrit dans le pdf
+    # puisque cette méthode s'en charge elle-même avec `table.print(pdf)'
+    return nil
+  end
+end
+~~~
+
 
 
 ---
