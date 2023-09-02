@@ -76,7 +76,3 @@ DATA_STYLES_FONTS = [
   {name: 'Bold Italic'    , value: :bold_italic   , index:10},
   {name: 'Roman'          , value: :roman         , index:11},
 ]
-
-
-class PrawnBuildingError < StandardError; end
-class PrawnFatalError < StandardError; end

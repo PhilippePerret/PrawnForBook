@@ -1,6 +1,8 @@
 # Pour déclencher une erreur de recette
 class RecipeError < StandardError
 end
+class PrawnBuildingError < StandardError; end
+class PrawnFatalError < StandardError; end
 
 # Pour produire une erreur fatale par son numéro d'erreur
 class FatalPrawForBookError < StandardError

@@ -1068,6 +1068,32 @@ module TableFormaterModule
 end 
 ~~~
 
+##### Suppression de la numérotation
+
+Quand la numérotation par paragraphe est activée, on peut supprimer la numérotation des tables en utilisant :
+
+~~~ruby
+table.print(pdf, **{numerotation: false})
+~~~
+
+##### Suppression de l’espace autour des tables
+
+Par défaut, un espace est laissé entre les tables. On peut le supprimer complètement en utilisant :
+
+~~~ruby
+table.print(pdf, **{no_space: true})
+~~~
+
+##### Réglage de l’espace autour de la table
+
+Par défaut, l’espace est bien calculé autour d’une table. On peut cependant le régler précisément avec :
+
+~~~ruby
+table.print(pdf, **{space_before: 2.mm, space_after: 1.02689.cm})
+~~~
+
+> Noter la façon d’écrire les distances, en profitant des méthodes de `Prawn::Measurements`.
+
 <a name="table-pour-paragraphes"></a>
 
 ##### Table pour style de paragraphe
@@ -1164,7 +1190,7 @@ module BibliographyFormaterModule # définition pour les bibliographies
     table = Prawn4book::PdfBook::NTable.new(pdfbook, table_data)
     
     # Impression de la table
-    table.print(pdf, **{numerotation: false})
+    table.print(pdf, **{numerotation: false, no_space: true})
     
     # Il faut retourner nil pour que le texte ne soit pas écrit dans le pdf
     # puisque cette méthode s'en charge elle-même avec `table.print(pdf)'
@@ -3111,6 +3137,25 @@ Si vous utilisez le package sublime-text “Prawn-for-book”, vous disposez des
 #### Snippets personnalisés
 
 Pour le moment, il n’existe pas de moyens simples et programmatique et créer des snippets. Mais si vous êtes à l’aise avec **Sublime Text**, vous pouvez en créer de nouveau dans le fichier 
+
+<a name="convert-dimension"></a>
+
+### Conversion des dimensions
+
+Une dimension `String` — par exemple "2cm" — peut-être convertie en points-scripts (points PDF) à l'aide de la méthode :
+
+~~~ruby
+"2.3cm".to_f
+"3mm".to_f
+~~~
+
+Mais le plus simple reste quand même d’utiliser :
+
+~~~ruby
+2.3.cm
+~~~
+
+
 
 <a name="reference-grid"></a>
 

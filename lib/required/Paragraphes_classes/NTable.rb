@@ -26,7 +26,10 @@ class NTable < AnyParagraph
   # Impression de la table
   # 
   # @param \Hash options
-  #   @option :numerotation   Si false, on ne numérote pas la table
+  #   @option :numerotation   \Bool Si false, on ne numérote pas la table
+  #   @option :no_space       \Bool Supprimer l'espace autour de la table (en haut et en bas)
+  #   @option :space_before   \String Distance à laisser avant la table (p.e. '2.3mm')
+  #   @option :space_after    \String Distance à laisser après la table (idem)
   # 
   def print(pdf, **options)
     @pdf = pdf
@@ -47,7 +50,12 @@ class NTable < AnyParagraph
     # 
     pdf.font(Fonte.default_fonte)
 
-    pdf.move_down(pdf.line_height)
+    # - Réglage de l'espace avant la table -
+    if options.key?(:space_before)
+      pdf.move_down(options[:space_before])
+    elsif not(options[:no_space] == true)
+      pdf.move_down(pdf.line_height)
+    end
     pdf.move_cursor_to_next_reference_line
 
     #
@@ -68,7 +76,12 @@ class NTable < AnyParagraph
       raise FatalPrawForBookError.new(3000, {err: e.message})
     end
 
-    pdf.move_down(2 * pdf.line_height)
+    # - Réglage de l'espace après la table -
+    if options.key?(:space_after)
+      pdf.move_down(options[:space_after])
+    elsif not(options[:no_space] == true)
+      pdf.move_down(2 * pdf.line_height)
+    end
   end
 
   # --- Predicate Methods ---
