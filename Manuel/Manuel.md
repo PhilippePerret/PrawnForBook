@@ -3070,6 +3070,47 @@ page_index:
 
 ---
 
+<a name="custom-modules"></a>
+
+### Modules personnalisés (Expert)
+
+\[Expert] On peut créer des modules personnalisés qui vont permettre des traitements particuliers.
+
+C’est nécessaire par exemple pour réinitialiser des valeurs lorsqu’un « deuxième tour » est nécessaire pour traiter toutes les références. Dans ce cas, il peut être nécessaire d’appeler une méthode de réinitialisation propre au livre, ou à la collection, pour remettre les compteurs à zéro. Dans le cas contraire, on prend le risque de se retrouver avec des doublons.
+
+Cette méthode de réinitialisation s’appelle `Prawn4book.reset`.
+
+On doit la définir dans un fichier **`prawn4book.rb`** à la racine de la collection ou du livre (si les deux fichiers existent, ils seront chargés).
+
+Dans ce fichier, on écrit :
+
+~~~ruby
+# in ./prawn4book.rb
+module Prawn4book
+  def self.reset
+    # ... Tout ce qu'il faut faire au début de chaque tour 
+    # ... d'impression du livre.
+  end
+end
+~~~
+
+Dans ce fichier, on pourrait imaginer, par exemple, charger des parseurs et des formateurs si on ne veut pas utiliser les fichiers par défaut. Par exemple :
+
+~~~ruby
+# in ./prawn4book.rb
+
+require_relative 'assets/parseurs_formateurs/helpers'
+
+module Prawn4book
+  
+end
+~~~
+
+
+
+
+---
+
 <a name="scripts"></a>
 
 ## Les scripts [experts]

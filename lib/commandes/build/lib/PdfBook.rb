@@ -88,6 +88,12 @@ class PdfBook
   end
 
 
+  # --- Modules personnalisés ---
+   
+  def custom_modules_prawn4book
+    get_custom_modules('prawn4book')
+  end
+
   # --- Formating Methods ---
 
   def custom_formater_paths

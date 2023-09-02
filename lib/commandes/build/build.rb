@@ -54,6 +54,12 @@ class PdfBook
     require_custom_parsers_formaters
 
     #
+    # S'il existe une méthode de reset propre au livre ou à la 
+    # collection, on l'invoque
+    # 
+    Prawn4book.reset if Prawn4book.respond_to?(:reset)
+
+    #
     # On doit parser le texte avant de voir si le livre est
     # conforme
     # 
@@ -89,6 +95,12 @@ class PdfBook
     # une passe pour les appliquer.
     # 
     if table_references.has_one_appel_sans_reference?
+      #
+      # S'il existe une méthode de reset propre au livre ou à la 
+      # collection, on l'invoque
+      # 
+      Prawn4book.reset if Prawn4book.respond_to?(:reset)
+
       table_references.second_turn = true
       PdfBook::AnyParagraph.init_second_turn
       ok_book = build_pdf_book
@@ -276,6 +288,13 @@ class PdfBook
   # Requiert tous les modules de parsing, formating et helping.
   # 
   def require_custom_parsers_formaters
+
+    #
+    # S'il existe un module ruby général
+    # (par exemple pour reseter certaines données)
+    # 
+    custom_modules_prawn4book.each { |m| require(m) }
+
     #
     # S'il existe des modules de formatage propre au livre (et/ou à la
     # collection) il faut le(s) charger.

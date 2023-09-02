@@ -71,8 +71,10 @@ class Bibliography
       rescue Exception => e
         raise FatalPrawForBookError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
       end
-      pdf.text(str, **options) unless str.nil?
-      pdf.move_down(4)
+      unless str.nil?
+        pdf.text(str, **options)
+        pdf.move_down(4)
+      end
     end
   end
 
