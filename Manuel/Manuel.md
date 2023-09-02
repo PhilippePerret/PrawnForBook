@@ -1379,6 +1379,61 @@ Par exemple, si le dossier du livre contient un dossier `textes` et un fichier t
 
 Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n’est utile que s’il existe plusieurs fichiers de même affixe (nom sans l’extension) dans le dossier. Dans le cas contraire, **Prawn-for-book** recherche le fichier dont il est question.
 
+---
+
+### Production d’une page dynamique (ou de plusieurs) (Expert)
+
+\[Expert] Parfois, on peut vouloir produire une page dynamiquement, avec les données récoltées en cours de fabrication du livre. C’est le cas par exemple pour les analyses de film où un scénier est produit automatiquement à la fin des livres en relevant les intitulés au cours de la fabrication.
+
+On utilise dans ce cas, dans le texte, à l’endroit où l’on veut que la page soit imprimée, la tournure :
+
+~~~markdown
+(( ma_methode_de_fabrication_de_la_page ))
+~~~
+
+… et l’on définit cette méthode dans `helpers.rb` :
+
+~~~ruby
+module PrawnHelpersMethods
+  
+  def ma_methode_de_fabrication_de_la_page
+    
+    pdf.update do
+      text "Mon texte pour la page".
+    end
+  end
+end
+~~~
+
+Noter que la méthode a accès à `pdf` (`Prawn::View`) pour imprimer dans le livre et `pdfbook` pour obtenir toutes les informations sur le livre.
+
+Des arguments peuvent être transmis à cette méthode :
+
+~~~markdown
+<!-- dans le texte markdown -->
+
+Je vais afficher ici les tarifs des abonnements.
+
+(( affichage_tarifs(:abonnement) ))
+
+Vous savez à quoi vous en tenir.
+~~~
+
+Et dans le module `PrawnHelpersMethods` :
+
+~~~ruby
+module PrawnHelpersMethods
+  
+  def affichage_tarifs(what)
+    case what
+    when :livre then ...
+    when :abonnements then ...
+    end
+  end
+      
+end
+~~~
+
 
 
 ---

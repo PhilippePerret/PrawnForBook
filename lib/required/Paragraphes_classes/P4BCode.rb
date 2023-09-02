@@ -53,6 +53,9 @@ class P4BCode < AnyParagraph
         text " "
       end
     when /^([a-z0-9_]+)(?:\((.*?)\))?$/
+      #
+      # Une méthode appelée entre (( ... )) sur la ligne
+      # 
       methode = $1.to_sym.freeze
       params  = $2.freeze
       if self.respond_to?(methode)

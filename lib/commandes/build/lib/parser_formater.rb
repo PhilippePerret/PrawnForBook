@@ -113,7 +113,9 @@ module ParserFormaterClass
     # Si une méthode de parsing propre existe, on l'appelle
     # (@note : je ne sais plus à quoi elle correspond)
     # 
-    str = parse(str, context) if respond_to?(:parse)
+    if respond_to?(:parse)
+      str = parse(str, context)
+    end
 
 
     return str
