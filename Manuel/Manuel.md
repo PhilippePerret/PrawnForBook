@@ -1,7 +1,6 @@
 <style style="text/css">console {background-color: #333333;color:white;font-family:courier;font-size:11pt;display:inline-block;padding:0 12px;}console:before{content:"$> "}</style>
 
-
-# Prawn4book<br />Manuel
+# Prawn For Book<br />Manuel
 
 
 
@@ -11,7 +10,7 @@
 
 ### Présentation
 
-**Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un simple texte en véritable PDF prêt pour l’impression, grâce au (lovely) gem **`Prawn`** (d’où le nom de l’application.
+**Prawn4book** — ou **Prawn For Book**, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un simple texte  pseudo-markdown en véritable PDF prêt pour l’imprimerie, grâce au (formidable) gem **`Prawn`** qui donne son nom à l’application.
 
 Sa commande (qui doit être installée) est : **`pfb`** (« Prawn For Book »).
 
@@ -80,7 +79,7 @@ Voir comment [insérer une image dans le texte](#paragraph-image).
 
 ### TABLES (TABLEAU)
 
-Voir comment [insérer une table ou un tableau dans le texte](#paragraphes-table).
+Voir comment [insérer une table ou un tableau dans le texte](#tables).
 
 ### HEADERS/FOOTERS
 
@@ -490,7 +489,7 @@ Un paragraphe de texte peut également commencer par une *balise* , qu’on appe
 
 <a name="styles-paragraphes-personnels"></a>
 
-**Personnalisation des paragraphes texte (style de paragraphe personnalisés**
+**Personnalisation des paragraphes texte (style de paragraphe personnalisés) [Expert]**
 
 Les *styles de paragraphes personnalisés* doivent être identifiés par une *balise* qui sera placée au début du paragraphe à stylisé. Par exemple, si ma balise est `gros`, cela donnera : 
 
@@ -529,7 +528,11 @@ Il existe deux manières de le faire :
   end
   ~~~
   
-* la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. Elle consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
+* la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. 
+
+  > Noter qu’on peut aussi [utiliser la puissance des tables](#table-pour-paragraphes) pour mettre en forme de façon très précise les paragraphes.
+
+  La manière complexe consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
 
   ~~~ruby
   module FormaterParagraphModule
@@ -545,6 +548,7 @@ Il existe deux manières de le faire :
     end
   end
   ~~~
+
 
 
 <a name="styles-paragraphes-communs"></a>
@@ -635,7 +639,7 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 
 ---
 
-<a name="paragraphes-table"></a>
+<a name="tables"></a>
 
 ### TABLES
 
@@ -711,8 +715,8 @@ Un paragraphe de texte normal.
 									* :font 			La fonte à utiliser
 									* :font_style Le style
 									* :size 			La taille de police
-									* :min_font_size	Taille minimale pour le texte
-									* :align  		L'alignement, parmi les valeurs traditionnelles
+									* :align  		L'alignement, parmi les valeurs traditionnelles 
+																(:justify, :right, :left)
 									* :text_color Couleur de texte (hexadécimale)
 									* :inline_format 	Contient des formatages html
 									* :rotate 		Angle de rotation
@@ -1100,7 +1104,7 @@ p4bcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column
 > ~~~ruby
 > lines = <<~LINES % data_template
 > 	|      | %{v1} | %{v2} |
->   | %{x} |       |       |
+>     | %{x} |       |       |
 > 	LINES
 > 
 > table_data = {
@@ -1124,7 +1128,9 @@ p4bcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column
 
 Noter que pour fonctionner, il faut que la méthode reçoive `pdf`, comme c’est le cas des mises en forme de bibliographie.
 
-Voici justement un exemple pour afficher de façon complexe un item de bibliographie :
+<a name="item-biblio-par-table"></a>
+
+Voici justement un **exemple pour afficher de façon complexe un item de bibliographie** :
 
 ~~~ruby
 # in ./formater.rb
@@ -1158,7 +1164,7 @@ module BibliographyFormaterModule # définition pour les bibliographies
     table = Prawn4book::PdfBook::NTable.new(pdfbook, table_data)
     
     # Impression de la table
-    table.print(pdf)
+    table.print(pdf, **{numerotation: false})
     
     # Il faut retourner nil pour que le texte ne soit pas écrit dans le pdf
     # puisque cette méthode s'en charge elle-même avec `table.print(pdf)'
@@ -1227,8 +1233,6 @@ book_format:
 
 L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
 
-{À refaire}
-
 Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:parag_numero_vadjust` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
 
 ~~~yaml
@@ -1240,7 +1244,17 @@ book_format:
 		parag_numero_vadjust: 1
 ~~~
 
-Noter qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
+Noter ci-dessus qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
+
+**Non numérotation des tables**
+
+Si les [tables sont utilisées pour la mise en forme des bibliographies](#item-biblio-par-table), on peut demander de ne pas mettre la numération en utilisant :
+
+~~~ruby
+table.print(pdf, **{numerotation: false})
+~~~
+
+
 
 <a name="comments"></a>
 
@@ -1810,7 +1824,7 @@ module BibliographyFormaterModule
 end #/module BibliographyFormaterModule
 ~~~
 
-Noter qu’avec cette formule, les données sont toujours présentées sur une ligne. À l’avenir, on pourra imaginer une méthode qui reçoit `pdf` (l’instance `{Prawn::View}`) et permette d’imprimer les données exactement comme on veut, même dans un affichage complexe.
+Noter qu’avec cette formule, les données sont toujours présentées sur une ligne. Mais on peut, grâce aux [tables](#table), obtenir un affichage très précis. Voir l’[exemple plus haut](#item-biblio-par-table).
 
 Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont cités les éléments, cette information est ajoutée automatiquement par l’application, après le titre et deux points. L’indication par page ou par paragraphe dépend du type de [pagination](#pagination) adoptée dans le livre. En conclusion, le listing final ressemblera à :
 
@@ -1820,7 +1834,7 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 <partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
 ~~~
 
-##### Mise en forme dans le texte
+##### Mise en forme de l’item de bibliographie dans le texte
 
 La section précédente parlait de la mise en forme de la bibliographie elle-même, souvent placée à la fin du livre. On peut également définir comme l’item apparaitra dans le texte lui-même de façon très fine et très complexe.
 
@@ -2446,7 +2460,7 @@ Dans la partie suivante est présentée l’intégralité des propriétés défi
 
 ### Éléments de la recette
 
-#### • book_data (informations générales du livre)
+#### book_data (informations générales du livre)
 
 > Si ces informations sont rentrées à la main, ne pas oublier les balises-commentaires (`#<book_data>`) qui permettront d’éditer les données.
 
@@ -2463,7 +2477,7 @@ book_data:
 #</book_data>
 ~~~
 
-#### • collection_data (données pour la collection)
+#### collection_data (données pour la collection)
 
 ~~~yaml
 # Dans collection_recipe.yaml
@@ -2477,7 +2491,7 @@ collection_data:
 
 <a name="book-format"></a>
 
-#### • book_format (format du livre)
+#### book_format (format du livre)
 
 ~~~yaml
 # in recipe.yaml/collection_recipe.yaml
@@ -2535,7 +2549,7 @@ book_format:
 
 <a name="data-titles"></a>
 
-#### • titles (données d’affichage des titres)
+#### titles (données d’affichage des titres)
 
 ~~~yaml
 # in recipe.yaml/collection_recipe.yaml
@@ -2579,7 +2593,7 @@ Par défaut, les titres (leur première ligne, s’ils tiennent sur plusieurs li
 
 <a name="info-publisher"></a>
 
-#### • publishing (données de la maison d’édition)
+#### publishing (données de la maison d’édition)
 
 ~~~yaml
 # in recipe.yaml/collection_recipe.yaml
@@ -2621,7 +2635,7 @@ publishing:
 
 <a name="recette-fonts"></a>
 
-#### • fonts (données des polices)
+#### fonts (données des polices)
 
 ~~~yaml
 # in recipe.yaml/collection_recipe.yaml
@@ -2689,7 +2703,7 @@ fonts:
 
 <a name="biblios-data-in-recipe"></a>
 
-#### • bibliographies (données bibliographiques)
+#### bibliographies (données bibliographiques)
 
 Voir ici pour le détail du fonctionnement et de la définition des [bibliographies](#bibliographies).
 
@@ -2761,7 +2775,7 @@ bibliographies:
 
 <a name="recipe-tdm-data"></a>
 
-#### • table_of_content (données de table des matières)
+#### table_of_content (données de table des matières)
 
 *(pour définir dans la recette du livre ou de la collection l’aspect de la table des matières)*
 
@@ -2821,7 +2835,7 @@ table_of_content:
 
 <a name="all-types-pages"></a>
 
-#### • inserted_pages (types de page à imprimer)
+#### inserted_pages (types de page à imprimer)
 
 
 
@@ -2869,7 +2883,7 @@ ou de l’index :
 
 ---
 
-#### • page_de_titre (définition de la page de titre)
+#### page_de_titre (définition de la page de titre)
 
 > La « page de titre » est la page qui se situe dans les premières pages du livre, reprenant le titre, l’autre, l’éditeur, etc.
 
@@ -2905,7 +2919,7 @@ page_de_titre:
 
  <a name="recette-page-infos"></a>
 
-#### • page_info (définition de la page des informations)
+#### page_info (définition de la page des informations)
 
 > On appelle « page des informations » ou « page d’infos » la page, en fin de livre, qui indique les contributeurs à la fabrication du livre, depuis la maison d’édition et son éditeur jusqu’aux correcteurs, concepteurs de la couverture, ainsi que d’autres informations comme le numéro ISBN et la date de publication.
 
@@ -2952,7 +2966,7 @@ page_infos:
 > ‘top’ 					Toutes les informations sont placées au-dessus de la page
 > ‘bottom’	 		Toutes les informations sont placées en bas de la page
 
-#### • page_index (données d’’affichage de la page d’index)
+#### page_index (données d’’affichage de la page d’index)
 
 > Rappel : pour que la page d’index soit affichée dans le livre, il faut placer une balise `(( index ))` à l’endroit où on veut mettre cet index.
 
@@ -2977,7 +2991,7 @@ page_index:
 
 <a name="scripts"></a>
 
-## Les scripts
+## Les scripts [experts]
 
 Les ***scripts*** sont des petits programmes ruby qui permettent d’exécuter des opérations “externes” sur un livre ou toute une collection. Typiquement, on trouve par exemple, de base, un script qui permet de rogner les images SVG produites par une application externe comme *Affinity Publisher*. Typiquement, ils peuvent permettre par exemple d’ajouter un élément bibliographique ou d’obtenir le dernier ID utilisé pour une liste d’éléments.
 

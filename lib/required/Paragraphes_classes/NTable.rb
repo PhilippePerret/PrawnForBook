@@ -23,7 +23,12 @@ class NTable < AnyParagraph
 
   # --- Printing Methods ---
 
-  def print(pdf)
+  # Impression de la table
+  # 
+  # @param \Hash options
+  #   @option :numerotation   Si false, on ne numérote pas la table
+  # 
+  def print(pdf, **options)
     @pdf = pdf
 
     #
@@ -48,8 +53,9 @@ class NTable < AnyParagraph
     #
     # Écriture du numéro du paragraphe
     # 
-    print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
-
+    unless options[:numerotation] == false
+      print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
+    end
 
     begin
       if code_block.nil?
