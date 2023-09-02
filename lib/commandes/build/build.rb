@@ -57,7 +57,7 @@ class PdfBook
     # S'il existe une méthode de reset propre au livre ou à la 
     # collection, on l'invoque
     # 
-    Prawn4book.reset if Prawn4book.respond_to?(:reset)
+    Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
 
     #
     # On doit parser le texte avant de voir si le livre est
@@ -99,7 +99,7 @@ class PdfBook
       # S'il existe une méthode de reset propre au livre ou à la 
       # collection, on l'invoque
       # 
-      Prawn4book.reset if Prawn4book.respond_to?(:reset)
+      Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
 
       table_references.second_turn = true
       PdfBook::AnyParagraph.init_second_turn

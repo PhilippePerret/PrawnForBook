@@ -304,7 +304,7 @@ class AnyParagraph
 
   def pfbcode ; @pfbcode ||= data[:pfbcode] end
 
-  def length  ; @length ||= text.length     end
+  def length  ; @length ||= (text||'').length     end
 
   # --- Raccourcis ---
 

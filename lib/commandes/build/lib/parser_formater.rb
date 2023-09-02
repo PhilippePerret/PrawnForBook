@@ -25,7 +25,7 @@ module ParserFormaterClass
   # @param [String] str La chaine de caractère à traiter
   # @param [Hash]   context   Le contexte (et notamment le paragraph, les styles, etc.)
   # 
-  # @return [String] la chaine de caractère corrigée
+  # @return [String|Nil] la chaine de caractère corrigée ou nil si le texte a été traité avant.
   # 
   def __parse(str, context)
 
@@ -107,7 +107,7 @@ module ParserFormaterClass
     #
     # Traitement des class-tags
     # 
-    str = __traite_class_tags_in(str, context)
+    str = __traite_class_tags_in(str, context) || return # quand nil
 
     #
     # Si une méthode de parsing propre existe, on l'appelle

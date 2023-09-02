@@ -1179,10 +1179,11 @@ module BibliographyFormaterModule # définition pour les bibliographies
     
     # Définition de la table
     table_data = {
-      p4bcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{data.inspect} ))"),
+      # [2]
+      pfbcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{data.inspect} ))"),
       lines: [
         "| %{title} | %{auteur} |" % bibitem.temp_data,
-        "|          | %{resume} |" % bibitem.temp_data,
+        "|          | %{resume} |" % bibitem.temp_data, # [1]
       ]
     }
     
@@ -1199,7 +1200,15 @@ module BibliographyFormaterModule # définition pour les bibliographies
 end
 ~~~
 
-
+> **\[1]** Pour cette utilisation, **<font color="red">penser à supprimer tous les retours chariots</font>** des textes insérés en utilisant par exemple :
+>
+> ~~~ruby
+> texte = texte.strip.gsub(/\r?\n/,'<br />')
+> ~~~
+>
+> Dans le cas contraire, les tables seraient tronquées.
+>
+> **\[2]** <font color="red"><b>Attention à la confusion possible</b></font> : c’’est la class `P4BCode` mais la propriété s’appelle `pfbcode`.
 
 ---
 
@@ -3072,7 +3081,7 @@ page_index:
 
 <a name="custom-modules"></a>
 
-### Modules personnalisés (Expert)
+## Modules personnalisés (Expert)
 
 \[Expert] On peut créer des modules personnalisés qui vont permettre des traitements particuliers.
 
@@ -3087,12 +3096,21 @@ Dans ce fichier, on écrit :
 ~~~ruby
 # in ./prawn4book.rb
 module Prawn4book
-  def self.reset
+  def self.reset(first_turn) # [1]
+    @is_first_turn = first_turn
     # ... Tout ce qu'il faut faire au début de chaque tour 
     # ... d'impression du livre.
   end
+  
+  # Pour pouvoir faire n'importe où dans le programme :
+  # 		Prawn4book.first_turn?
+  def self.first_turn?
+    @is_first_turn === true
+  end
 end
 ~~~
+
+> **[1]** +first_turn+ est à true lorsque c’est le premier tour et à false au deuxième tour (@rappel : un deuxième tour est exécuté lorsque des références arrières ont été trouvés et qu’il faut faire le livre en deux temps).
 
 Dans ce fichier, on pourrait imaginer, par exemple, charger des parseurs et des formateurs si on ne veut pas utiliser les fichiers par défaut. Par exemple :
 

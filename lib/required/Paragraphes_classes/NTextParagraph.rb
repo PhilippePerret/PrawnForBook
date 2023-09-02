@@ -107,6 +107,14 @@ class NTextParagraph < AnyParagraph
     # 
     return own_builder(pdf) if own_builder?
 
+    #
+    # Le texte a pu être déjà écrit par les formateurs personnalisés
+    # Dans ce cas, on ne fait rien ici.
+    # 
+    if @text.nil? || @text == ""
+      return 
+    end
+
     mg_left   = margin_left
     mg_bot    = margin_bottom  || nil # ...
     mg_right  = margin_right
