@@ -249,7 +249,7 @@ class InputTextFile
   def search_included_file_from(fpath)
     fpath = fpath.strip
     return fpath if File.exist?(fpath)
-    puts "FPATH = #{fpath.inspect}"
+    spy "Path relatif du fichier inclus : #{fpath.inspect}"
     fpath_ini = fpath.freeze
     fpath = search_included_file_in_folder(fpath_ini, self.folder)
     return fpath if fpath
