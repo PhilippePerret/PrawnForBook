@@ -1112,19 +1112,19 @@ Une instance `Prawn4book::PdfBook::NTable` reçoit deux arguments : le `pdfbook
 table = Prawn4book::PdfBook::NTable.new(pdfbook, table_data)
 ~~~
 
-Les données `table_data` de la table contiennent deux données, une pour définir les lignes, l’autre pour définir le style, en passant par un `P4BCode` :
+Les données `table_data` de la table contiennent deux données, une pour définir les lignes, l’autre pour définir le style, en passant par un `PFBCode` :
 
 ~~~ruby
 table_data = {
-  pfbcode: <instance Prawn4book::PdfBook::P4BCode>,
+  pfbcode: <instance Prawn4book::PdfBook::PFBCode>,
   lines:   <liste Arraydes lignes>
 }
 ~~~
 
-L'instance `Prawn4book::PdfBook::P4BCode` doit être créée en fournissant le `pdfbook` (qu’on peut obtenir de `pdf` par `pdf.pdfbook`) et la ligne string définissant la table. Par exemple :
+L'instance `Prawn4book::PdfBook::PFBCode` doit être créée en fournissant le `pdfbook` (qu’on peut obtenir de `pdf` par `pdf.pdfbook`) et la ligne string définissant la table. Par exemple :
 
 ~~~ruby
-pfbcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column_widths: 30} ))")
+pfbcode = Prawn4book::PdfBook::PFBCode.new(pdf.pdfbook, "(( {col_count:3, column_widths: 30} ))")
 ~~~
 
 
@@ -1142,7 +1142,7 @@ pfbcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column
 > }
 > ~~~
 
-> **TIP 2** : De la même manière, plutôt que d’avoir à écrire en string le P4BCode qui va définir la table, on peut utiliser la tournure suivante :
+> **TIP 2** : De la même manière, plutôt que d’avoir à écrire en string le PFBCode qui va définir la table, on peut utiliser la tournure suivante :
 >
 > ~~~ruby
 > pfbcode = {
@@ -1190,7 +1190,7 @@ module ParserFormaterClass
     
     # Puis nous définissons la table
     data_table = {
-      pfbcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{aspect.inspect} ))")
+      pfbcode: Prawn4book::PdfBook::PFBCode.new(pdfbook, "(( #{aspect.inspect} ))")
       lines: ["| | #{str} |"]
       }
     table = Prawn4book::PdfBook::NTable.new(pdfbook, **data_table)
@@ -1240,7 +1240,7 @@ module BibliographyFormaterModule # définition pour les bibliographies
     
     # Définition de la table
     table_data = {
-      pfbcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{data.inspect} ))"),
+      pfbcode: Prawn4book::PdfBook::PFBCode.new(pdfbook, "(( #{data.inspect} ))"),
       lines: [
         "| %{title} | %{auteur} |" % bibitem.temp_data,
         "|          | %{resume} |" % bibitem.temp_data, # [1]
@@ -1696,7 +1696,7 @@ Ce index(mot|verbe) doit être indexé avec le mot "verbe" tandis que :
 
 Ces index(mots-là|idiome) doivent être indexé avec le mot "idiome".
 
-# La barre "|" sert souvent pour séparer les données dans P4B.
+# La barre "|" sert souvent pour séparer les données dans PFB.
 
 ~~~
 

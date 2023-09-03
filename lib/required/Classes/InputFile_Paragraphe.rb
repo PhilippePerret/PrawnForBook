@@ -49,7 +49,7 @@ class Paragraphe
       when /^\#{1,6} /
         parse_as_titre(line) # => PdfBook::NTitre
       when /^\(\( (.+) \)\)$/
-        PdfBook::P4BCode.new(pdfbook, line)
+        PdfBook::PFBCode.new(pdfbook, line)
       else 
         PdfBook::NTextParagraph.new(pdfbook, **{
           raw_line: line, 

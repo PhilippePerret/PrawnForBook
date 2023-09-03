@@ -1496,7 +1496,7 @@
 		"/Users/philippeperret/Programmes/Prawn4book/lib/commandes/build/lib/paragraphes.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/required/PrawnOwner.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/required/Fonte.rb",
-		"/Users/philippeperret/Programmes/Prawn4book/lib/required/Types_paragraphes/P4BCode.rb",
+		"/Users/philippeperret/Programmes/Prawn4book/lib/required/Types_paragraphes/PFBCode.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/required/NParagraphe/Paragraphe_parser.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/required.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/required/PdfBook.rb",

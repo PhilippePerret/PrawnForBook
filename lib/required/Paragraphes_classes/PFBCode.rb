@@ -1,7 +1,7 @@
 require_relative 'AnyParagraph'
 module Prawn4book
 class PdfBook
-class P4BCode < AnyParagraph
+class PFBCode < AnyParagraph
 
   attr_reader :raw_code
 
@@ -122,7 +122,7 @@ class P4BCode < AnyParagraph
   # arrive surtout lorsque c'est une cible qu'il faut définir.
   def treate_as_references(pdf, pdfbook)
     #
-    # On doit transformer le paragraphe courant (\P4BCode) en 
+    # On doit transformer le paragraphe courant (\PFBCode) en 
     # paragraphe de texte \NTextParagraph
     # 
     as_text_paragraph = PdfBook::NTextParagraph.new(pdfbook, **{
@@ -159,6 +159,6 @@ class P4BCode < AnyParagraph
     @is_for_next_paragraph === true
   end
 
-end #/class P4BCode
+end #/class PFBCode
 end #/class PdfBook
 end #/module Prawn4book
