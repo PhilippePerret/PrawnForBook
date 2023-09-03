@@ -751,9 +751,13 @@ Une table avec largeur de colonne implicite.
 
 > Note : si la valeur `:width` (largeur de la table) n’est pas définie, alors c’est par défaut une table qui prendra toute la largeur de la table.
 
-##### Insérer un trait droit dans le texte
+##### Protection du texte
 
-Pour utiliser le caractère « | » dans le texte d’’une cellule sans qu’il soit interprété comme un diviseur de colonne, il suffit de mettre `#{"\u007C"}`.
+Différents caractères sont « dangereux » pour les tables, à commencer par le trait droit (« | ») qui permet de délimiter en pseudo-markdown les tables. Pour obtenir un texte sans problème, quand on insert du texte dans une table, on peut utiliser la méthode de classe `Prawn4book::PdfBook::NTable::safeize` :
+
+~~~ruby
+safe_str = Prawn4book::PdfBook::NTable.safeize(bad_str)
+~~~
 
 ##### Insérer une image dans une cellule
 
@@ -1120,7 +1124,7 @@ table_data = {
 L'instance `Prawn4book::PdfBook::P4BCode` doit être créée en fournissant le `pdfbook` (qu’on peut obtenir de `pdf` par `pdf.pdfbook`) et la ligne string définissant la table. Par exemple :
 
 ~~~ruby
-p4bcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column_widths: 30} ))")
+pfbcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column_widths: 30} ))")
 ~~~
 
 
@@ -1154,9 +1158,66 @@ p4bcode = Prawn4book::PdfBook::P4BCode.new(pdf.pdfbook, "(( {col_count:3, column
 
 Noter que pour fonctionner, il faut que la méthode reçoive `pdf`, comme c’est le cas des mises en forme de bibliographie.
 
+<a name="style-paragraphe-par-table"></a>
+
+Voici un **exemple pour mettre en forme un style de paragraphe par balise** (tag) :
+
+Dans le texte, on trouve :
+
+~~~markdown
+synopsis::Le synopsis de la scène.
+~~~
+
+Ce texte va donc appeler la méthode `ParserFormaterClass#formate_synopsis` qui devrait retourner le texte à écrire. Mais nous voulons mettre le synopsis en forme de façon particulière et les tables sont bienvenues.
+
+Nous utilisons donc :
+
+~~~ruby
+# in ./parser.rb
+
+module ParserFormaterClass
+  def formate_synopsis(str, context)
+    pdf = context[:pdf]
+    pdfbook = pdf.pdfbook
+
+		# Nous demandons l'écriture du numéro de paragraph car le
+    # livre fonctionne en numérotant les paragraphes
+		context[:paragraph].print_paragraph_number(pdf)
+    
+    # On protège le texte à insérer dans la table (il ne doit
+    # pas contenir de trait droit.
+    str = Prawn4book::PdfBook::NTable.safeize(str)
+    
+    # Puis nous définissons la table
+    data_table = {
+      pfbcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{aspect.inspect} ))")
+      lines: ["| | #{str} |"]
+      }
+    table = Prawn4book::PdfBook::NTable.new(pdfbook, **data_table)
+    
+    # Nous imprimons le synopsis, tout près du texte précédent
+    table.print(pdf, **{numerotation:false, no_space: true})
+  end
+
+  # @return les données Prawn pour la table
+  def aspect
+    {
+      col_count: 2,
+      column_widths: [80, nil]
+      cell_style: {
+        padding: 0,
+        border_width: 0
+        }
+      }.freeze
+  end
+end
+~~~
+
+
+
 <a name="item-biblio-par-table"></a>
 
-Voici justement un **exemple pour afficher de façon complexe un item de bibliographie** :
+Voici un **exemple pour afficher de façon complexe un item de bibliographie** :
 
 ~~~ruby
 # in ./formater.rb
@@ -1179,7 +1240,6 @@ module BibliographyFormaterModule # définition pour les bibliographies
     
     # Définition de la table
     table_data = {
-      # [2]
       pfbcode: Prawn4book::PdfBook::P4BCode.new(pdfbook, "(( #{data.inspect} ))"),
       lines: [
         "| %{title} | %{auteur} |" % bibitem.temp_data,
@@ -1208,7 +1268,6 @@ end
 >
 > Dans le cas contraire, les tables seraient tronquées.
 >
-> **\[2]** <font color="red"><b>Attention à la confusion possible</b></font> : c’’est la class `P4BCode` mais la propriété s’appelle `pfbcode`.
 
 ---
 

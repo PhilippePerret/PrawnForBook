@@ -4,6 +4,30 @@ module Prawn4book
 class PdfBook
 class NTable < AnyParagraph
 
+  # Pour insérer une texte dans une table, il doit être clean (ne
+  # pas posséder de "|" par exemple)
+  def self.safeize(str)
+    str.chomp.gsub(/\|/,'TRAITDROIT').gsub(/\r?\n/,'RETCHARIOT').gsub(/\(/,'OUVERTURECOL').gsub(/\)/,'FERMETURECOL')
+  end
+
+  def self.desafeize_lines(lines)
+    lines.collect do |aline|
+      aline.collect { |str| desafeize(str) }
+    end
+  end
+
+  def self.desafeize(str)
+    if str.is_a?(Hash)
+      str[:content] = _desafe(str[:content])
+      str
+    else
+      _desafe(str)
+    end
+  end
+  def self._desafe(str)
+    str.gsub(/TRAITDROIT/,'|').gsub(/RETCHARIOT/,"\n").gsub(/OUVERTURECOL/,'(').gsub(/FERMETURECOL/,')')
+  end
+
   attr_accessor :page_numero
   attr_reader :data
 
@@ -65,9 +89,16 @@ class NTable < AnyParagraph
       print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
     end
 
+    #
+    # On remet les textes originaux
+    # 
+    @lines = self.class.desafeize_lines(lines) unless lines.nil?
+
+    #
+    # --- ÉCRITURE DE LA TABLE ---
+    # 
     begin
       if code_block.nil?
-        # puts "lines = #{lines.inspect}"
         pdf.table(lines, table_style)
       else
         pdf.table(lines, table_style, &code_block)

@@ -109,7 +109,13 @@ class NTextParagraph < AnyParagraph
 
     #
     # Le texte a pu être déjà écrit par les formateurs personnalisés
-    # Dans ce cas, on ne fait rien ici.
+    # Dans ce cas, on écrit le numéro du paragraphe si nécessaire et
+    # on s'en retourne.
+    # 
+    # @note
+    #   Si le paragraphe doit être numéroté, il faut que la méthode
+    #   de formatage elle-même s'en occupe (celle qui met le texte
+    #   à nil si c'est le cas, parce qu'elle s'en occupe)
     # 
     if @text.nil? || @text == ""
       return 
@@ -193,9 +199,12 @@ class NTextParagraph < AnyParagraph
 
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
+
           #
           # Écriture du paragraphe dans une boite
+          # (quand la marge gauche est fixée)
           # 
+          
           wbox = bounds.width - (mg_left + mg_right)
           span_options = {position: mg_left}
           #

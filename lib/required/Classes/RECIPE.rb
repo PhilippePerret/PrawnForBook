@@ -267,20 +267,14 @@ class Recipe
   # @note
   #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_name
-    @default_font_name ||= begin
-      warn "@deprecated default_font_name, Utiliser default_font_and_style"
-      Prawn4book::Fonte.default_fonte.name
-    end
+    @default_font_name ||= Prawn4book::Fonte.default_fonte.name
   end
 
   # 
   # @note
   #   Ne pas utiliser directement. Use Prawn4book::Fonte.default_font instead.
   def default_font_style
-    @default_font_style ||= begin
-      warn "@deprecated default_font_style, Utiliser default_font_and_style"
-      Prawn4book::Fonte.default_fonte.style
-    end
+    @default_font_style ||= Prawn4book::Fonte.default_fonte.style
   end
 
   # 

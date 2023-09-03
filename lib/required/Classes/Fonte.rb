@@ -198,7 +198,7 @@ class << self
     elsif DEFAUT_FONTS.key?(font_name.to_s)
       DEFAUT_FONTS[font_name.to_s].keys.first
     else
-      raise "Je ne connais la font #{font_name.inspect} ni dans le livre ni dans #{DEFAUT_FONTS.inspect}"
+      raise "Je ne connais la fonte #{font_name.inspect} ni dans le livre ni dans #{DEFAUT_FONTS.inspect}"
     end || :normal
 
   end
