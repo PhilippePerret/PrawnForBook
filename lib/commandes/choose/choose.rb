@@ -2,7 +2,7 @@ require 'lib/pages/bibliographies'
 module Prawn4book
 class Command
   def proceed
-    book = Prawn4book::PdfBook.ensure_current || return
+    book = Prawn4book::Bibliography.init
     clear
     biblio_tag = CLI.components[0]
     case biblio_tag

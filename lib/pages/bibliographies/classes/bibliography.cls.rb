@@ -14,6 +14,8 @@ class << self
   ##
   # Appelé en bas de ce fichier
   # 
+  # @return \Prawn4book::PdfBook Le livre courant. Ce retour n'est
+  # utile que pour les commandes et les scripts.
   def init
     @biblios = {}
     pdfbook = Prawn4book::PdfBook.ensure_current || begin
@@ -29,6 +31,8 @@ class << self
     end
     # init_biblio_livres(pdfbook)
     prepare
+
+    return pdfbook
   end
 
   # Méthode publique permettant de choisir ou de créer une nouvelle
