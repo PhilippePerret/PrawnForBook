@@ -20,16 +20,17 @@ L’application met en forme le texte, dans ses moindres détails et ses moindre
 
 Les grandes forces de ***PRAWN-FOR-BOOK*** sont donc :
 
-* production simple d’un document PDF valide, professionnel, prêt à être imprimé en livre publié par un imprimeur,
+* production simple d’un document PDF valide, professionnel, prêt pour l’imprimerie,
 * gestion cohérente de toute une collection de livres,
 * mise en forme du texte dans ses moindre détails (feuilles de style, modules complexes — experts — de formatage),
 * gestion des références internes (renvois, références à une page ou un paragraphes, etc.),
 * gestion des références croisées (références à la page d’un autre livre)
 * gestion d’un index, 
 * gestion d’autant de bibliographies que l’on veut,
-* gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…)
+* gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…),
+* gestion puissante de n’importe quelle information au fil du texte.
 
-### Commande(s)
+### Commande principale
 
 Sa commande simple est (*) : 
 
@@ -48,6 +49,8 @@ Ou en version longue (*) :
 > Et sur Windows grâce à :
 >
 > TODO ?
+
+Pour les sous-commandes de Prawn-for-book, [voir l’annexe](#sous-commandes).
 
 ---
 
@@ -3263,6 +3266,27 @@ bonjour = ARGV[2]
 <a name="annexe"></a>
 
 ## Annexe
+
+<a name="sous-commandes"></a>
+
+### Sous-commandes
+
+> Note : toutes ces commandes doivent être exécutée depuis un Terminal ouvert dans le dossier du livre (pas de la collection).
+
+| Description                                             | Commande                  | Note                                             |
+| ------------------------------------------------------- | ------------------------- | ------------------------------------------------ |
+| Produire le PDF pour l’imprimerie                       | **`pfb build`**           |                                                  |
+| Obtenir de l’aide pour l’application                    | **`pfb -h`**              |                                                  |
+| Ouvrir le manuel                                        | **`pfb manuel`**          | Ajouter l’option `-dev` pour l’ouvrir en édition |
+| Lister toutes les cibles présentent dans le texte       | **`pfb targets`**         | `cibles` peut être aussi utilisé                 |
+| Choisir un itemp dans une bibliographie                 | **`pfb choose <biblio>`** |                                                  |
+| Jouer un script (du livre, de la collection, ou commun) | **`pfb script <nom>`**    |                                                  |
+| Lancer un assistant                                     | **`pfb assistant`**       | Affiche la liste des assistants                  |
+|                                                         |                           |                                                  |
+
+
+
+---
 
 <a name="inline-style"></a>
 
