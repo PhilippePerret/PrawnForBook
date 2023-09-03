@@ -282,10 +282,11 @@ class NTextParagraph < AnyParagraph
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e
-      puts "Problème avec le paragraphe #{text.inspect}".rouge
-      puts e.backtrace.join("\n").rouge if debug?
-      puts "ERREUR : #{e.message}"
-      exit
+      raise FatalPrawForBookError.new(100, {
+        text:text.inspect, 
+        err: e.message, 
+        backtrace:(debug? ? e.backtrace.join("\n") : '')
+      })
     end
 
     # 

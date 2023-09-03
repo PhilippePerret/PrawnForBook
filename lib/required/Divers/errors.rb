@@ -20,6 +20,8 @@ class FatalPrawForBookError < StandardError
 
   def error_by_num(err_id)
     @errors_by_num ||= {
+      # -- Paragraphes --
+      100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       # -- Recette(s) ---
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],

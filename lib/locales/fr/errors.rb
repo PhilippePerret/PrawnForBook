@@ -67,6 +67,17 @@ ERRORS = {
   },
 
   # --- Texte du livre ---
+
+  paragraph: {
+    print: {
+      unknown_error: <<~ERR,
+        Problème avec le Prawn4book::NTextParagraph contenant le texte :
+        %{text}
+        Problème : %{err}
+        %{backtrace}
+        ERR
+    },
+  },
   
   unfound_text_file: "Le fichier texte %s est introuvable…",
   unknown_pfbcode:  <<~ERR,
