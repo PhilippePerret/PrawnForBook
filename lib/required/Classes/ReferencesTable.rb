@@ -2,6 +2,9 @@ module Prawn4book
 class PdfBook
 class ReferencesTable
 
+  REG_CIBLE_REFERENCE = /^<\-\((.+?)\)$/.freeze
+  REG_LIEN_REFERENCE = /^\->\((.+?)\)$/.freeze
+
   attr_reader :pdfbook
   attr_reader :table
 

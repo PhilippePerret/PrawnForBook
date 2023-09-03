@@ -33,6 +33,9 @@ class AnyParagraph
   def self.get_next_numero
     @@last_numero += 1
   end
+  def self.get_current_numero
+    @@last_numero
+  end
   # @return [Integer] le dernier numéro de paragraphe (utilisé par
   # les titres pour connaitre le numéro de leur premier paragraphe)
   # @note

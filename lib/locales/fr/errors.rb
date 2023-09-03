@@ -282,6 +282,11 @@ ERRORS = {
     cross_ref_unfound: "La référence '%s' dans le livre identifié '%s' est inconnue.",
     bib_livre_not_defined: "La bibliographie 'livre' n'est pas définie. Consultez le manuel pour plus d'information.",
     book_undefined_in_bib_livre: "Le livre d'identifiant '%s' n'est pas défini dans la bibliographie 'livre'.",
+  
+    no_lien_seul_on_line: <<~ERR,
+      Un « appel » à une cible de référence ne doit jamais se trouver
+      seul sur une ligne. Mettre le texte (( %{code} )) à un meilleur endroit.
+      ERR
   }, #/:references
 
 

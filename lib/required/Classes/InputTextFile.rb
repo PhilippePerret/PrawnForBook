@@ -68,7 +68,7 @@ class InputTextFile
     # 
     PdfBook::NTextParagraph.reset
     # 
-    # Boucle sur tous les paragraphes du texte
+    # Boucle sur tous les paragraphes du texte, quels qu'ils soient
     # 
     traite_blocs_paragraphes_in(good_paragraphes_in(path).map do |par|
       if par.start_with?('(( include') && par.end_with?(' ))')
@@ -82,6 +82,7 @@ class InputTextFile
       # 
       # 
       # spy "PARAGRAPHE : #{par.inspect}"
+      # puts "Traitement du paragraphe : #{par.inspect}".orange
       Paragraphe.new(pdfbook, par).parse
       # => instance PdfBook::NImage, PdfBook::NTextParagraph, etc.
     end

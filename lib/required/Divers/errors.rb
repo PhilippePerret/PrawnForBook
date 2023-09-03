@@ -27,6 +27,8 @@ class FatalPrawForBookError < StandardError
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
       # -- Tables --
       3000  => Prawn4book::ERRORS[:table][:can_not_fit],
+      # -- Références --
+      2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
       # -- Bibliographies --
       710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],
       711   => Prawn4book::ERRORS[:biblio][:malformation][:path_undefined],

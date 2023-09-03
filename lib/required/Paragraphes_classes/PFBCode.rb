@@ -11,12 +11,19 @@ class PFBCode < AnyParagraph
   # p.e. {font_size: 42}
   attr_reader :parag_style
 
+  # Certains paragraphes de code doivent utiliser la propriété
+  # @numero (par exemple les codes qui sont des cibles de référence)
+  attr_reader :numero
+
   def initialize(pdfbook, raw_code)
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
     @parag_style = {}
-    if @raw_code.strip.match?(/^\{.+?\}$/)
+    case @raw_code.strip
+    when /^\{.+?\}$/
       treat_as_next_parag_code 
+    when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
+      @numero = AnyParagraph.get_current_numero + 1
     end
   end
 
@@ -45,9 +52,12 @@ class PFBCode < AnyParagraph
       pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_bibliography(pdf)
-    when /^(<\-\(|\->\()/
+    when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Une cible de référence (ou un lien) seule sur une ligne
-      treate_as_references(pdf, pdfbook)
+      # Pour le moment, on considère que ça ne peut être qu'une cible
+      treate_as_cible_references(pdf, pdfbook)
+    when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
+      raise FatalPrawForBookError.new(2000, {code: raw_code})
     when 'line'
       pdf.update do
         text " "
@@ -120,29 +130,9 @@ class PFBCode < AnyParagraph
   # Noter qu'on ne passe ici que lorsque la balise de référence 
   # "occupe" toute la ligne (lorsqu'il n'y a pas d'autre texte). Ça
   # arrive surtout lorsque c'est une cible qu'il faut définir.
-  def treate_as_references(pdf, pdfbook)
-    #
-    # On doit transformer le paragraphe courant (\PFBCode) en 
-    # paragraphe de texte \NTextParagraph
-    # 
-    as_text_paragraph = PdfBook::NTextParagraph.new(pdfbook, **{
-      raw_line: raw_code, pfbcode: nil
-    })
-    context = {pdf: pdf, pdfbook: pdfbook, paragraph: as_text_paragraph}
-    str = AnyParagraph.__traite_references_in("(( #{raw_code} ))", **context)
-
-    #
-    # Écriture du texte restant
-    # 
-    # @note
-    #   Mais en toute vraisemblance, sauf si c'est un lien vers une
-    #   cible tout seul sur la ligne) rien ne devrait être à écrire
-    #   puisque c'est la cible qui peut être définie de cette manière
-    # 
-    unless str.empty?
-      pdf.update { text(str) }
-    end
-
+  def treate_as_cible_references(pdf, pdfbook)
+    cible  = raw_code[3...-1]
+    pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
   end
 
   # Pour pouvoir obtenir une valeur de style "inline" en faisant

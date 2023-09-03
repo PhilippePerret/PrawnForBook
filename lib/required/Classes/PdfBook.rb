@@ -39,7 +39,8 @@ class PdfBook
   end
 
   ##
-  # Pour gérer les références (internes et croisées) du livre
+  # Instance pour gérer les références (internes et croisées) 
+  # du livre courant.
   # 
   # @note
   #   Les références sont une liste de cibles dans le texte ou dans
