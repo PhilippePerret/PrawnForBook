@@ -58,6 +58,7 @@ COMMAND_NAMES_TO_COMMAND_REAL_NAME = {
   'outils'    => 'tools',
   'ouvre'     => 'open',
   'choisir'   => 'choose',
+  'cibles'    => 'targets',
 }
 def self.add_commands_substitutes(real_command, substitutes)
   substitutes.each do |cmd|
