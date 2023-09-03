@@ -19,6 +19,9 @@ class PFBCode < AnyParagraph
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
     @parag_style = {}
+    #
+    # Traitement immédiat de certains type de paragraphe
+    # 
     case @raw_code.strip
     when /^\{.+?\}$/
       treat_as_next_parag_code 
@@ -62,7 +65,8 @@ class PFBCode < AnyParagraph
       pdf.update do
         text " "
       end
-    when /^([a-z0-9_]+)(?:\((.*?)\))?$/
+    when /^([a-zA-Z0-9_]+)(?:\((.*?)\))?$/
+      puts "Traitement de #{raw_code.inspect}"
       #
       # Une méthode appelée entre (( ... )) sur la ligne
       # 
@@ -77,6 +81,7 @@ class PFBCode < AnyParagraph
           @pdf      = pdf
           @pdfbook  = pdfbook
           self.instance_eval(raw_code)
+          puts "Il passe"
         rescue Exception => e
           # 
           # La méthode est peut-être mal implémentée
