@@ -18,9 +18,7 @@ class << self
   # utile que pour les commandes et les scripts.
   def init
     @biblios = {}
-    pdfbook = Prawn4book::PdfBook.ensure_current || begin
-      raise "Il faut un livre courant (dans #{File.expand_path('.')})"
-    end
+    pdfbook = Prawn4book::PdfBook.ensure_current
     if pdfbook.recipe.bibliographies[:biblios]
       pdfbook.recipe.bibliographies[:biblios].each do |bib_id, bib_data|
         new(pdfbook, bib_id)

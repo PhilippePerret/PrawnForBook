@@ -4,7 +4,15 @@ ERRORS = {
 
   # --- Application --- #
 
-  require_a_book_or_collection: "Il faut se trouver dans un dossier de livre ou de collection.",
+  app: {
+    require_a_book_or_collection: <<~ERR,
+      Il faut se trouver dans un dossier de livre ou de collection.
+      %{path}
+      … ne contient pas de recette, donc ça ne peut pas être un dossier de 
+      livre ou de collection.
+      ERR
+  },
+
   unfound_folder: "Le dossier '%s' est introuvable…",
   prawn_manual_unfound: "Le manuel de Prawn est introuvable. Il vous faut définir son chemin d'accès dans le fichier ./lib/constants.rb dans la constante PRAWN_MANUEL_PATH.",
 

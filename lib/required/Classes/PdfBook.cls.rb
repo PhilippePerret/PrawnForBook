@@ -10,8 +10,7 @@ class << self
   # @api public
   def ensure_current
     return current if current?
-    puts ERRORS[:require_a_book_or_collection].rouge
-    return false
+    raise FatalPrawForBookError.new(1, { path: File.expand_path('.') })
   end
 
   # @return true si on se trouve dans un dossier de livre

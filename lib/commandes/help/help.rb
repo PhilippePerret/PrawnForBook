@@ -107,6 +107,10 @@ MINI_AIDE = <<-TEXT
     Note : le terminal doit être ouvert dans un dossier de
     livre ou de collection.
 
+#{'pfb cibles'.jaune}
+    Pour pouvoir choisir une cible à copier-coller dans
+    le texte.
+
 #{'pfb assistant'.jaune}
     Permet de choisir un assistant et de le jouer.
 

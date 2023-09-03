@@ -70,13 +70,7 @@ class InputTextFile
     # 
     # Boucle sur tous les paragraphes du texte, quels qu'ils soient
     # 
-    traite_blocs_paragraphes_in(good_paragraphes_in(path).map do |par|
-      if par.start_with?('(( include') && par.end_with?(' ))')
-        paragraphes_of_included_file(par[11..-4])
-      else 
-        par 
-      end
-    end.flatten).map do |par|
+    real_all_paragraphes.map do |par|
       #
       # Analyse du paragraphe pour savoir ce que c'est
       # 
@@ -187,6 +181,29 @@ class InputTextFile
   REG_START_BLOC_WITH_PROLONG   = /^(\|)/
   REG_START_BLOC_WITH_END_SIGN  = /^(DOC)$/
 
+
+  # @return \Array<\String> La liste des paragraphes réels, après 
+  # remplacement des textes inclus.
+  def real_all_paragraphes
+    traite_blocs_paragraphes_in(good_paragraphes_in(path).map do |par|
+      if par.start_with?('(( include') && par.end_with?(' ))')
+        paragraphes_of_included_file(par[11..-4])
+      else 
+        par 
+      end
+    end.flatten)
+  end
+
+  # @return \String Le texte complet du fichier pour le livre, après
+  # inclusion des textes à inclure.
+  # 
+  # @note
+  #   Cette méthode ne sert pas pour construire le livre, mais pour
+  #   les autres commandes
+  # 
+  def full_text
+    real_all_paragraphes.join("\n")  
+  end
   ##
   # @return [Array<String>] La liste des "bons" paragraphes du 
   # fichier de chemin +pth+

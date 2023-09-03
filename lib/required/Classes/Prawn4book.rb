@@ -12,6 +12,7 @@ module Prawn4book
         puts e.backtrace.join("\n")
       end
     rescue RecipeError => e
+      warn "Ne plus utiliser. Utiliser FatalPrawForBookError plutôt"
       puts "\nERREUR DE DÉFINITION DE LA RECETTE\n#{e.message}".rouge
     end
     puts "\n\n"
