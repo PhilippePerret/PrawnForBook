@@ -24,6 +24,7 @@ class FatalPrawForBookError < StandardError
       1     => Prawn4book::ERRORS[:app][:require_a_book_or_collection],
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
+      200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Recette(s) ---
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
@@ -42,6 +43,7 @@ class FatalPrawForBookError < StandardError
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],
+      1002  => Prawn4book::ERRORS[:parsing][:unknown_method],
       1100  => Prawn4book::ERRORS[:modules][:runtime_error],
     }
     @errors_by_num[err_id]

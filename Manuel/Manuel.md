@@ -362,6 +362,7 @@ Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire
 * [stylisation par défaut](style-parag-par-defaut),
 * [stylisation en ligne de portion de textes dans le paragraphe](#style-parag-dans-texte),
 * [stylisation *inline* (en ligne)](#style-parag-inline),
+* [stylisation d’un extrait par helper](#style-extrait-with-helper),
 * [stylisation par balise initiale](#style-parag-balise).
 
 <a name="style-parag-par-defaut"></a>
@@ -483,6 +484,36 @@ pour que les trois derniers mots soient rayés de la carte.
 ~~~
 
 Bien entendu, cette commande ne se place dans le texte du livre que lorsque le PDF a été construit et qu’on a constaté l’état du paragraphe. On ne peut pas le faire au hasard, il faut le faire comme le ferait un metteur en page, sur pièce.
+
+<a name="style-extrait-with-helper"></a>
+
+**STYLISATION D’UN EXTRAIT DU PARAGRAPHE PAR HELPER [Expert]**
+
+[Expert] On peut créer une méthode ruby pour mettre en forme (ou tout autre chose) en la définissant en helper. Par exemple, si je veux mettre dans une forme spéciale des horloges, je peux utiliser :
+
+~~~markdown
+Je suis arrivé à #{time('0:12:25')} et je repartirai à #{time('0,30,0')}.
+~~~
+
+Pour ce faire, on implémente dans le fichier `helpers.rb` de la collection ou du livre :
+
+~~~ruby
+# in ./helpers.rb
+module Prawn4book
+  class PdfBook::NTextParagraph # ou AnyParagraph
+    def time(str)
+      # ... traitement de +str+...
+      return str
+    end
+  end
+end
+~~~
+
+> Attention aux collisions de nom, le nom de la méthode utilisée ne doit pas exister dans le programme.
+>
+> TIP : pour s’en assurer, il suffit d’appeler la méthode dans le texte avant de l’implémenter. Si une erreur est produite, informant que la méthode n’existe pas, alors c’est bon.
+
+---
 
 <a name="style-parag-balise"></a>
 
@@ -1301,6 +1332,35 @@ Etc.
 ~~~
 
 
+
+**Paragraphes-codes de méthodes personnalisées**
+
+Ces paragraphes-codes peuvent aussi définir du code personnalisé. Ils peuvent alors être de trois sortes :
+
+* le paragraphe code qui retourne du texte à écrire,
+
+  Utiliser le module `ParserFormaterClass` dans `parser.rb` pour le définir.
+
+* le paragraphe code qui écrit un texte dans le livre,
+
+  Utiliser le module `ParserFormaterClass` dans `parser.rb` pour le définir.
+
+* le paragraphe code qui ne produit aucun texte mais reçoit une donnée utile pour la suite.
+
+  Utiliser le module `Prawn4book` dans `prawn4book.rb` pour le définir en tant que méthode de classe.
+
+  ~~~ruby
+  # in ./prawn4book.rb (collection ou livre)
+  module Prawn4book
+    def self.<methode>(<paramètres>) # [1]
+      # ... traitement ...
+    end
+  end
+  ~~~
+
+  > **\[1]** **Les paramètres de la méthode** vont déterminer ce qui doit être envoyé à la méthode. S’il n’y a aucun argument, la méthode sera appelée sans arguments, même si des arguments sont passés au code par erreur. Si le nombre d’’arguments attendus correspond au nombre d’arguments fourni, ils sont transmis tels quels. Si le nombre de paramètres de la méthode est supérieur au nombre d’arguments fournis, le `pdf` est lui aussi transmis à la méthode. Cela permet alors d’imprimer quelque chose dans le texte.
+
+  Voir les [exemples d’appel à une méthode générale](#exemples-methode-paragraphe-code).
 
 
 
@@ -3283,6 +3343,57 @@ bonjour = ARGV[2]
 | Jouer un script (du livre, de la collection, ou commun) | **`pfb script <nom>`**    |                                                  |
 | Lancer un assistant                                     | **`pfb assistant`**       | Affiche la liste des assistants                  |
 |                                                         |                           |                                                  |
+
+---
+
+<a name="exemples-codes"></a>
+
+### Exemples de codes
+
+<a name="exemples-methode-paragraphe-code"></a>
+
+#### Exemple de méthode générale par paragraphe code
+
+Imaginons qu’on ait besoin de mémoriser le numéro de paragraphe d’’un endroit particulier du livre, sans rien faire d’autre.
+
+On place dans le texte :
+
+~~~markdown
+Un paragraphe.
+
+(( memoriser_cette_ligne ))
+
+Un autre paragraphe.
+~~~
+
+Puisque la méthode ne doit rien écrire, on la programme dans le module `Prawn4book` du fichier `prawn4book.rb` :
+
+~~~ruby
+# in ./prawn4book.rb
+module Prawn4book
+  def self.memoriser_cette_ligne(pdf) # [1]
+    @@ligne = pdf.current_cursor # ou autre valeur
+  end
+end
+~~~
+
+> **\[1]** Puisqu’il y a un paramètre à la méthode et qu’aucun argument n’est transmis par le paragraphe-code, le programme sait qu’’il faut transmettre `pdf`.
+
+Pour passer des arguments à une méthode générale, il faut absolument les écrire comme du « vrai » code. Par exemple, si c’est un `String`, il faut l’entourer de guillemets (dans Sublime Text, avec le thème, on les obtient en faisant ALT-MAJ-7) :
+
+~~~markdown
+(( methode_argument_string(mauvaise écriture) ))
+# => erreur
+
+(( methode_argument_string("bonne écriture") ))
+# => OK
+~~~
+
+On passe plusieurs arguments normalement, ne les séparant par des virgules :
+
+~~~markdown
+(( methode(:un_symbole, "un string", 12, {un: "hash"})
+~~~
 
 
 

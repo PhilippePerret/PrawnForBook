@@ -65,32 +65,69 @@ class PFBCode < AnyParagraph
       pdf.update do
         text " "
       end
-    when /^([a-zA-Z0-9_]+)(?:\((.*?)\))?$/
-      puts "Traitement de #{raw_code.inspect}"
+    when REG_METHODE_WITH_ARGS
       #
       # Une méthode appelée entre (( ... )) sur la ligne
       # 
       methode = $1.to_sym.freeze
       params  = $2.freeze
+      traite_as_methode_with_params(pdf, methode, params)
+    else
+      raise FatalPrawForBookError.new(1001, {code:raw_code, page: pdf.page_number})
+    end
+  end
+
+  # Traitement d'un code comme une méthode avec ou sans paramètres
+  # 
+  # Attention : cette méthode peut-être en fait un objet avec
+  # méthode, c'est-à-dire <objet>.<methode> (mais il ne peut pas
+  # y avoir plus que ça)
+  # 
+  def traite_as_methode_with_params(pdf, methode, params)
+    @pdf      = pdf
+    @pdfbook  = pdfbook
+    begin
+      #
+      # Quand la méthode est définie comme méthode d'instance 
+      # (avec ou sans arguments)
+      #
+      if methode.to_s.match?(/\./)
+        objet, methode = methode.to_s.split('.').collect { |m| m.to_sym }
+        if self.respond_to?(objet)
+          self.instance_eval(raw_code)
+        elsif Prawn4book.respond_to?(objet)
+          objet = Prawn4book.send(objet)
+        elsif PrawnHelpersMethods.respond_to?(objet)
+          objet = PrawnHelpersMethods.send(objet)
+        end
+        # 
+        # Cet objet connait-il la méthode +methode+ ?
+        # 
+        if objet.respond_to?(methode)
+          params = params ? eval("[#{params}]") : []
+          params_count = objet.method(methode).parameters.count
+          if params_count == 0
+            objet.send(methode)
+          elsif params_count == params.count
+            objet.send(methode, *params)
+          else
+            params.unshift(pdf)
+            objet.send(methode, *params)
+          end
+        else
+          raise 'méthode inconnue'
+        end
+        return
+      end
+
       if self.respond_to?(methode)
         #
-        # Quand la méthode est définie comme méthode d'instance 
-        # (avec ou sans arguments)
+        # --- Méthode définie comme méthode d'instance ---
         #
-        begin
-          @pdf      = pdf
-          @pdfbook  = pdfbook
-          self.instance_eval(raw_code)
-          puts "Il passe"
-        rescue Exception => e
-          # 
-          # La méthode est peut-être mal implémentée
-          # 
-          raise FatalPrawForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
-        end
+        self.instance_eval(raw_code)
       elsif PrawnHelpersMethods.respond_to?(methode)
         #
-        # Quand la méthode est définie comme méthode de classe
+        # --- Méthode définie comme méthode de classe ---
         # 
         parameters_count = PrawnHelpersMethods.method(methode).parameters.count
         str = 
@@ -102,10 +139,29 @@ class PFBCode < AnyParagraph
         pdf.update do
           text(str)
         end
+      elsif Prawn4book.respond_to?(methode)
+        params = params ? eval("[#{params}]") : []
+        params_count = Prawn4book.method(methode).parameters.count
+        if params_count == 0
+          Prawn4book.send(methode)
+        elsif params_count == params.count
+          Prawn4book.send(methode, *params)
+        else
+          params.unshift(pdf)
+          Prawn4book.send(methode, *params)
+        end
+      else
+        raise 'méthode inconnue'
       end
-    else
-      raise FatalPrawForBookError.new(1001, {code:raw_code, page: pdf.page_number})
+    rescue Exception => e
+      if e.message == 'méthode inconnue'
+        raise FatalPrawForBookError.new(1002, {code:raw_code, meth: methode})
+      else
+        # Méthode mal implémentée
+        raise FatalPrawForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
+      end
     end
+  
   end
 
   ##
@@ -153,6 +209,8 @@ class PFBCode < AnyParagraph
   def for_next_paragraph?
     @is_for_next_paragraph === true
   end
+
+  REG_METHODE_WITH_ARGS = /^([a-zA-Z0-9_.]+)(?:\((.*?)\))?$/.freeze
 
 end #/class PFBCode
 end #/class PdfBook

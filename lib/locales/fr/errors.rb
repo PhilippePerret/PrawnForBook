@@ -52,6 +52,33 @@ ERRORS = {
         end
       end
       ERR
+    unknown_method: <<~ERR
+      Je ne sais pas comment traiter le code `%{code}'.
+      Peut-être est-ce une méthode à traiter dans le module formater.rb ou
+      dans le module prawn4book.rb du livre ou de la collection.
+
+      Si le code doit retourner un texte à écrire :
+      (ou alors renvoyer nil)
+
+      # in ./formater.rb
+      module ParserFormaterClass
+        def %{meth}(...)
+          # ... traitement ...
+        end
+      end
+
+      Ou :
+
+      Si le texte ne doit pas retourner de code à écrire :
+
+      # in ./prawn4book.rb
+      module Prawn4book
+        def self.%{meth}(...)
+          # ... traitement ...
+        end
+      end
+
+      ERR
   },
 
   # --- Modules externes (helpers, formaters, etc.) ---
@@ -59,7 +86,7 @@ ERRORS = {
   modules: {
     runtime_error: <<~ERR,
       Une erreur s'est produite en interprétant le code :
-      %{code}
+        %{code}
       (%{lieu})
       Erreur : %{err_msg}
       Backtrace
@@ -85,6 +112,22 @@ ERRORS = {
         %{backtrace}
         ERR
     },
+    formate: {
+      unknown_method: <<~ERR,
+        La méthode #%{mname} est inconnue de l'instance paragraphe.
+        Pour fixer ce problème, vous pouvez l'implémenter dans le fichier
+        helpers.rb :
+
+        # in ./helpers.rb
+        module Prawn4book
+          class PdfBook::NTextParagraph # Ou AnyParagraph pour tous
+          def %{mname}(str)
+            ... Traitement de +str+ ... 
+          end
+        end
+        end
+        ERR
+    }
   },
   
   unfound_text_file: "Le fichier texte %s est introuvable…",
@@ -177,10 +220,13 @@ ERRORS = {
       ERR
     instanciation_requires_book: "Une livre est requis, pour l'instanciation d'une bibliographie.",
     data_undefined: "La recette du livre ou de la collection ne définit aucun donnée bibliographique (consulter le mode d'emploi pour remédier au problème ou lancer l'assistant bibliographies).",
-    biblios_malformed: "La recette bibliographie (:biblios) devrait être une table (un item par type d'élément).",
+    biblios_malformed: <<~ERR,
+      La recette bibliographie (:biblios) devrait être une table (un item par 
+      type d'élément).
+      ERR
     formater_required: "Un fichier 'formater.rb' devrait exister dans '%s' pour définir la mise en forme à adopter pour la bibliographie.",
     formater_malformed: "Le fichier formater.rb devrait définir le module 'BibliographyFormaterModule'\n(bien vérifier le nom, avec un pluriel)…",
-    biblio_malformed: "La donnée recette de la bibliographie '%s' est malformée : ",
+    biblio_malformed: "La donnée recette de la bibliographie '%{tag}' est malformée : ",
     malformation: {
       title_undefined: <<~ERR,
         %{prefix}

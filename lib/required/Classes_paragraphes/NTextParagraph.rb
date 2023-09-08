@@ -312,7 +312,7 @@ class NTextParagraph < AnyParagraph
         raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
       end
     else
-      raise NoMethodError.new("La méthode #{method_name.inspect} est inconnue de nos services.")
+      raise FatalPrawForBookError.new(200, **{mname: method_name})
     end
   end
 

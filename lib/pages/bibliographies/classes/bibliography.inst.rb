@@ -170,7 +170,9 @@ class Bibliography
   # @prop [String] Chemin d'accès au dossier des fiches de la bibliographie.
   def folder
     @folder ||= begin
-      pth = data[:path] || raise(PrawnBuildingError.new((ERRORS[:biblio][:biblio_malformed] % id.to_s) + ERRORS[:biblio][:malformation][:path_undefined]))
+      pth = data[:path] || begin
+        raise FatalPrawForBookError.new(711, {prefix:ERRORS[:biblio][:biblio_malformed] % {tag:id.to_s}, tag:id.to_s})
+      end
       pth_ini = data[:path].freeze
       # 
       # Si c'est un chemin relatif dans le dossier du livre ou de
@@ -200,7 +202,7 @@ class Bibliography
     :TRUE == @iswelldefined ||= true_or_false(check_if_well_defined)
   end
   def check_if_well_defined
-    prefix_err = ERRORS[:biblio][:biblio_malformed] % tag
+    prefix_err = ERRORS[:biblio][:biblio_malformed] % {tag: tag}
     data.key?(:title)   || raise(FatalPrawForBookError.new(710, **{prefix: prefix_err, tag: tag}))
     data.key?(:path)    || raise(FatalPrawForBookError.new(711, **{prefix: prefix_err, tag: tag}))
     File.exist?(folder) || raise(FatalPrawForBookError.new(712, **{prefix: prefix_err, tag: tag, path:data[:path]}))
