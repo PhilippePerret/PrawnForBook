@@ -20,13 +20,19 @@ class PFBCode < AnyParagraph
     @raw_code = raw_code[3..-3].strip
     @parag_style = {}
     #
+    # On met toujours le numéro, ça peut servir à diverses méthodes
+    # utilisateur
+    # 
+    @numero = AnyParagraph.get_current_numero + 1
+    
+    #
     # Traitement immédiat de certains type de paragraphe
     # 
     case @raw_code.strip
     when /^\{.+?\}$/
       treat_as_next_parag_code 
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
-      @numero = AnyParagraph.get_current_numero + 1
+      
     end
   end
 
@@ -106,13 +112,23 @@ class PFBCode < AnyParagraph
         if objet.respond_to?(methode)
           params = params ? eval("[#{params}]") : []
           params_count = objet.method(methode).parameters.count
+          puts "params_count = #{params_count}".orange
+          puts "objet : #{objet}"
+          puts "params: #{params}"
+          sleep 2
           if params_count == 0
             objet.send(methode)
           elsif params_count == params.count
             objet.send(methode, *params)
-          else
+          elsif params_count == params.count + 1
             params.unshift(pdf)
             objet.send(methode, *params)
+          elsif params_count == params.count + 2
+            params.unshift(pdf)
+            params << self
+            objet.send(methode, *params)
+          else
+            raise "Nombre de paramètres incorrects."
           end
         else
           raise 'méthode inconnue'
