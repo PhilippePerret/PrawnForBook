@@ -227,7 +227,7 @@ class Recipe
     @parag_num_font_name ||= "Helvetica"
   end
   def parag_num_font_size
-    @parag_num_font_size ||= 8
+    @parag_num_font_size ||= parag_num_size || 8
   end
   def parag_num_font_style
     nil
@@ -239,8 +239,14 @@ class Recipe
     @parag_num_distance_from_text ||= book_format[:text][:parag_num_dist_from_text] || 5
   end
 
-  def parag_numero_vadjust
-    @parag_numero_vadjust ||= book_format[:text][:parag_numero_vadjust] || 1
+  def parag_num_size
+    @parag_num_size ||= book_format[:text][:parag_num_size]
+  end
+  def parag_num_vadjust
+    @parag_num_vadjust ||= book_format[:text][:parag_num_vadjust] || 1
+  end
+  def parag_num_strength
+    @parag_num_strength ||= book_format[:text][:parag_num_strength] || 80
   end
 
   def format_numero

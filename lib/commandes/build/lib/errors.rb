@@ -34,13 +34,17 @@ class << self
   end
 
   def report_building_errors
+    puts "\n\n"
     unless @errors.empty?
-      puts "\n\nNombre d'erreurs mineures survenues : #{@errors.count}".rouge
+      titre = "Erreurs mineures (#{@errors.count})"
+      puts "#{titre}\n#{'-'*titre.length}".rouge
       @errors.each_with_index do |derror, idx|
         puts "[#{idx + 1}] ERREUR : #{derror[:message]}".rouge
       end
     end
     unless @notices.empty?
+      titre = "Notifications (#{@notices.count})"
+      puts "\n#{titre}\n#{'-'*titre.length}".bleu
       @notices.each_with_index do |dnotice, idx|
         puts "[#{idx + 1}] NOTICE : #{dnotice[:message]}".bleu
       end

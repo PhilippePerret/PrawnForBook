@@ -85,6 +85,7 @@ class AnyParagraph
   # Impression du numéro de paragraphe en regard du paragraphe
   # 
   def print_paragraph_number(pdf)
+
     numero = number.to_s
     
     #
@@ -121,7 +122,7 @@ class AnyParagraph
         float {
           move_down(me.class.diff_height_num_parag_and_parag(pdf))
           span(@span_number_width, position: span_pos_num) do
-            text "#{numero}", color: '777777'
+            text "#{numero}", color: me.parag_numero_color
           end
         }
       end #/font
@@ -132,7 +133,21 @@ class AnyParagraph
     @distance_from_text ||= book.recipe.parag_num_distance_from_text
   end
 
+  def parag_numero_color
+    @parag_numero_color ||= begin
+      self.class.paragraph_numero_color(book.recipe.parag_num_strength)
+    end
+  end
+
   # --- Print Data Methods --- #
+
+  def self.paragraph_numero_color(strength)
+    @@paragraph_numero_color ||= begin
+      (((100 - strength) * 255 / 100).to_s(16).upcase.rjust(2,'0') * 3 ).tap { |n| add_notice("Couleur : #{n}") }
+      # => p.e. "030303" ou "CCCCCC"
+    end
+  end
+
 
   def self.diff_height_num_parag_and_parag(pdf)
     @@diff_height_num_parag_and_parag ||= begin
@@ -152,7 +167,7 @@ class AnyParagraph
         "    numer_height = #{numer_height.inspect}\n".bleu +
         "    diff         = #{diff.inspect}".bleu +
         "    Rectifié à   = #{diff - 1}".bleu
-      diff - recipe.parag_numero_vadjust
+      diff - recipe.parag_num_vadjust
     end
   end
 

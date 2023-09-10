@@ -1371,12 +1371,14 @@ Ces paragraphes-codes peuvent aussi définir du code personnalisé. Ils peuvent 
 #### Numérotation des paragraphes
 
 
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété          | valeurs possibles          |
-| -------------------------------------------------------- | ------- | ------------------ | -------------------------- |
-|                                                          |         | **:numerotation:** | `pages` (défaut), `parags` |
-|                                                          |         | **:num_parag:**    | Table de valeurs           |
-
-
+| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                       | valeurs possibles          |
+| -------------------------------------------------------- | ------- | ------------------------------- | -------------------------- |
+|                                                          |         | **:numerotation:**              | `pages` (défaut), `parags` |
+|                                                          |         | **:num_parag:**                 | Table de valeurs           |
+| Ajustement de hauteur                                    |         | **`parag_num_vadjust`**         | `Integer`                  |
+| Distance avec le texte                                   |         | **`:parag_num_dist_from_text`** | `Integer`                  |
+| Taille de la police                                      |         | **`:parag_num_size`**           | `Integer`                  |
+| Force (opacité)                                          |         | **`:parag_num_length`**         | `>0` - `100`               |
 
 Pour un livre technique, où les références sont fréquentes, ou si l’on veut que l’index ou les bibliographies renvoient à des endroits très précis du livre, il peut être intéressant de numéroter les paragraphes. Pour ce faire, on met la propriété `:parags` de la [recette du livre ou de la collection][] à `true`.
 
@@ -1390,7 +1392,7 @@ book_format:
 
 L’affichage utilise par défaut la police `Bangla`, mais elle peut être définie grâce à la propriété **`:num_parag`** de la recette, après s’être assuré que cette fonte était définie dans les [fontes](#recette-fonts) du livre ou de la collection :
 
-Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:parag_numero_vadjust` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
+Le chiffre peut ne pas être tout à fait ajusté au paragraphe. Dans ce cas, on utilise la propriété `:parag_num_vadjust` pour l’aligner parfaitement. La valeur doit être donnée en *pixels PDF*, elle doit être assez faible (attention de ne pas décaler tous les numéros vers un paragraphe suivant ou précédent.
 
 ~~~yaml
 book_format:
@@ -1398,7 +1400,10 @@ book_format:
 	text:
 		# ...
 		numerotation: parags
-		parag_numero_vadjust: 1
+		parag_num_vadjust: 1
+    parag_num_dist_from_text: 12
+    parag_num_size: 9
+    parag_num_strength: 72
 ~~~
 
 Noter ci-dessus qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
@@ -2758,8 +2763,10 @@ book_format:
 		line_height: 14 # hauteur de ligne cf. [4]
 		indent: 0 # indentation
 		leading: 0 # espace entre paragraphes
-		parag_numero_vadjust: 1 		# ajustement vertical numéro paragraphe
+		parag_num_vadjust: 1 		# ajustement vertical numéro paragraphe
 		parag_num_dist_from_text: 0 # ajustement horizontal
+    parag_num_size: 9 # taille de la police pour les numéros de paragraphe
+    parag_num_strength: 72 # "force" (opacité) du numéro de paragraphe
 #</book_format>
 ~~~
 > **[1]** 

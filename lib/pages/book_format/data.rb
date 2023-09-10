@@ -38,8 +38,10 @@ class BookFormat
       indent:                   {name:'Indentation du premier paragraphe' , default: '0mm'},
       line_height:              {name:'Hauteur de lignes (en points-pdf)' , default: 14.0},
       leading:                  {name:'Espace entre paragraphes'          , default: 0.0},
-      parag_numero_vadjust:     {name:'Ajustement vertical du numéro de paragraphe'   , if: :numerotation_parag?, values: (-20..20), default: 1},
+      parag_num_vadjust:        {name:'Ajustement vertical du numéro de paragraphe'   , if: :numerotation_parag?, values: (-20..20), default: 1},
       parag_num_dist_from_text: {name:'Ajustement horizontal du numéro de paragraphe' , if: :numerotation_parag?, values: (-20..20), default: 5},
+      parag_num_size:           {name:'Taille du numéro de paragraphe', if: :numerotation_parag?, values: (7..25), default: 9},
+      parag_num_strength:       {name:'Force (\% d’opacité) du numéro de paragraphe', if: :numerotation_parag?, values: (20..100), default: 75},
     },
   }
 
