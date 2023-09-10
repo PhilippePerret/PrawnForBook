@@ -13,7 +13,7 @@ class Bibliography
     # 
     if empty?
       spy "Aucun item bibliographique pour #{biblio.title.inspect}".orange
-      puts (MESSAGES[:biblio][:no_occurrence] % [biblio.title]).orange
+      add_notice(MESSAGES[:biblio][:no_occurrence] % [biblio.title])
       return
     end
     #

@@ -28,7 +28,7 @@ MESSAGES = {
   biblio: {
 
 
-    no_occurrence: "Aucune occurrence pour la bibliographie « %s ».",
+    no_occurrence: "Il n'existe aucune occurrence pour la bibliographie « %s ».\nC'est peut-être normal.",
     
     intro_assistant: "
     Nous allons programmer les bibliographies du livre courant
