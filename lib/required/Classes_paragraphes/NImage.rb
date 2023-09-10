@@ -55,6 +55,7 @@ class NImage < AnyParagraph
     pdf.update do
       # 
       # On passe toujours à la ligne
+      # TODO : non, pas quand l'image occupe toute la page
       # 
       move_down(line_height)
 
@@ -73,7 +74,7 @@ class NImage < AnyParagraph
         # 
         image_height = image[:height]
       else
-        image = image(img_path, dimage)
+        image = image(img_path, **dimage)
         # 
         # Hauteur prise par l'image
         # 
@@ -83,6 +84,8 @@ class NImage < AnyParagraph
       # move_down(image_height + mg_bottom)
       # 
       # On saute toujours deux lignes
+      # TODO : Non, pas quand l'image prend toute la page, comme
+      # un paradigme de Field par exemple
       # 
       move_down(line_height * 2)
       # text "Le curseur est à #{cursor.inspect}"
@@ -106,12 +109,8 @@ class NImage < AnyParagraph
     if value.end_with?('%')
       pct = value[0...-1].strip.to_i
       value = (pdf.bounds.width * pct).to_f / 100
-      # puts "new value = #{value}"
-      # puts "pdf.width = #{pdf.bounds.width.inspect}"
-      # puts "87mmm = #{87.mm}"
     end
     return value
-    
   end
 
 

@@ -7,32 +7,50 @@
 # Pour exposer une méthode qui permettra d'enregistrer une erreur
 # mineur au cours de la construction.
 def building_error(err_message, **options)
-  Prawn4book::PrawnView::Error.add_building_error(err_message, options)
+  Prawn4book::PrawnView::Error.add_building_error(err_message, **options)
 end
 
 def add_erreur(err_message, **options)
-  Prawn4book::PrawnView::Error.add_building_error(err_message, options)
+  Prawn4book::PrawnView::Error.add_building_error(err_message, **options)
 end
+
+def add_notice(mg_message, **options)
+  Prawn4book::PrawnView::Error.add_building_notice(mg_message, **options)
+end
+alias :add_message :add_notice
+  
 
 module Prawn4book
 class PrawnView
 class Error
 class << self
 
-  def add_building_error(err_message, params)
+  def add_building_error(err_message, **params)
     @errors << {message: err_message, params: params}
   end
 
+  def add_building_notice(msg, **params)
+    @notices << {message:msg, params: params}
+  end
+
   def report_building_errors
-    return if @errors.empty?
-    puts "\n\nNombre d'erreurs mineures survenues : #{@errors.count}".rouge
-    @errors.each_with_index do |derror, idx|
-      puts "ERROR #{idx + 1}: #{derror[:message]}".rouge
+    unless @errors.empty?
+      puts "\n\nNombre d'erreurs mineures survenues : #{@errors.count}".rouge
+      @errors.each_with_index do |derror, idx|
+        puts "[#{idx + 1}] ERREUR : #{derror[:message]}".rouge
+      end
+    end
+    unless @notices.empty?
+      @notices.each_with_index do |dnotice, idx|
+        puts "[#{idx + 1}] NOTICE : #{dnotice[:message]}".bleu
+      end
     end
   end
 
+
   def reset
-    @errors = []
+    @errors   = []
+    @notices  = []
   end
 
 end #/<< self

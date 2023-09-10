@@ -1494,6 +1494,12 @@ ou
 
 ```
 
+#### Saut de page dans le programme [Expert]
+
+Dans le code ruby, donc pour tout ce relève des *formaters*, on ajoute un saut de page en faisant `pdf.start_new_page`
+
+
+
 ---
 
 <a name="insertion-texte-externe"></a>
@@ -2351,11 +2357,13 @@ module ParserParagraphModule
 
 Ces trois fichiers (`parser.rb`, `helpers.rb` et `formater.rb`) sont propres à chaque livre ou chaque collection et seront toujours automatiquement chargés s’ils existent.
 
+---
+
 <a name="gestion-erreurs"></a>
 
 #### Méthode d’erreurs (gestion des erreurs)
 
-Dans tous les modules ruby, on peut ajouter des erreurs mineures — qui n’interrompront pas la fabrication du livre, mais génèreront une erreur à la fin — à l’aide de la méthode de haut niveau `add_erreur(err, options)`.
+Dans tous les modules ruby, on peut ajouter des erreurs mineures — qui n’interrompront pas la fabrication du livre, mais génèreront une erreur à la fin — à l’aide de la méthode de haut niveau **`add_erreur(err, options)`**.
 
 Par exemple :
 
@@ -2365,7 +2373,24 @@ def balise_parser(str)
 end
 ~~~
 
+### Message de notification
 
+Comme pour la [gestion des erreurs](#gestion-erreurs), on peut produire des messages « notice » à la fin du processus de fabrication du livre à l’aide de la méthode **`add_notice(msg, **options)`**.
+
+~~~ruby
+def affiche_image
+  if image.exist?
+	  add_notice("Pour actualiser l'image, la détruire.")
+  else
+    fabrique_image
+  end
+  # ...
+end
+~~~
+
+
+
+---
 
 <a name="custom-helpers"></a>
 
