@@ -15,6 +15,7 @@ class PFBCode < AnyParagraph
   # @numero (par exemple les codes qui sont des cibles de référence)
   attr_reader :numero
 
+
   def initialize(pdfbook, raw_code)
     super(pdfbook)
     @raw_code = raw_code[3..-3].strip
@@ -83,6 +84,10 @@ class PFBCode < AnyParagraph
     end
   end
 
+  def data
+    @data ||= {pfbcode: self}
+  end
+
   # Traitement d'un code comme une méthode avec ou sans paramètres
   # 
   # Attention : cette méthode peut-être en fait un objet avec
@@ -112,10 +117,6 @@ class PFBCode < AnyParagraph
         if objet.respond_to?(methode)
           params = params ? eval("[#{params}]") : []
           params_count = objet.method(methode).parameters.count
-          puts "params_count = #{params_count}".orange
-          puts "objet : #{objet}"
-          puts "params: #{params}"
-          sleep 2
           if params_count == 0
             objet.send(methode)
           elsif params_count == params.count

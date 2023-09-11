@@ -347,6 +347,24 @@ L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atom
 * les [Images](#paragraph-image),
 * les [Pfb-codes](#paragraph-code).
 
+#### Évaluation du texte du paragraphe (interprétation des variables)
+
+Un texte de paragraphe est souvent constitué de variables qui dépendent du contexte ou sont définis pour un livre. En règle générale, ces variables sont estimées au cours de la fabrication du livre.
+
+Mais parfois, il est nécessaire de forcer cette interprétation des variables. C’est le cas, par exemple, pour le Paradigme de Field Augmenté fabriqué dans les analyses de film des éditions Icare.
+
+Dans ce cas, il faut explicitement appeler la méthode `Prawn4book::PdfBook::AnyParagraph.__parse` en lui fournissant les bons arguments :
+
+~~~ruby
+str_corriged = Prawn4book::PdfBook::AnyParagraph.__parse(<string>, <context>)
+
+# avec <context> qui doit absolument définir :
+# 		:pdf [Prawn::PrawnView] Le document en cours de fabrication
+#     :paragraph [NTextParagraph|PFBCode] Instance du paragraphe contenant le texte
+~~~
+
+> Rappel : pour obtenir `:pdf`, se souvenir que plusieurs méthodes de parsing et de formatage personnalisées peuvent utiliser leur nombre de paramètres pour déterminer les informations qui seront transmises.
+
 <a name="paragraph-text"></a>
 
 #### PARAGRAPHES DE TEXTE
@@ -1134,9 +1152,9 @@ table.print(pdf, **{space_before: 2.mm, space_after: 1.02689.cm})
 
 <a name="table-pour-paragraphes"></a>
 
-##### Table pour style de paragraphe
+##### Table pour style de paragraphe [Expert]
 
-Il est possible d’utiliser la puissance des tables pour mettre en forme un style de paragraphe sans passer par les tables. C’’est particulièrement utile pour la mise en forme des bibliographies et autres index par exemple.
+Il est possible d’utiliser la puissance des tables pour mettre en forme un style de paragraphe sans passer par les tables (c’est-à-dire sans passer par la définition `(( {table_class: ...} ))`. C’’est particulièrement utile pour la mise en forme des bibliographies et autres index par exemple.
 
 Le principe général est de créer une instance `Prawn4book::PdfBook::NTable` et de l’imprimer.
 
@@ -1219,7 +1237,7 @@ module ParserFormaterClass
 		context[:paragraph].print_paragraph_number(pdf)
     
     # On protège le texte à insérer dans la table (il ne doit
-    # pas contenir de trait droit.
+    # pas, entre autres choses, contenir de trait droit.
     str = Prawn4book::PdfBook::NTable.safeize(str)
     
     # Puis nous définissons la table
@@ -1266,6 +1284,7 @@ module BibliographyFormaterModule # définition pour les bibliographies
     # Aspect de la table
     data = {
       col_count: 2,
+      width: 100,
       column_widths: [20, nil],
       cell_style: {
         padding: 0
@@ -1301,7 +1320,39 @@ end
 > ~~~
 >
 > Dans le cas contraire, les tables seraient tronquées.
->
+
+**Code Prawn**
+
+Si on est expert de Prawn, on peut aussi passer par le code direct.
+
+~~~ruby
+# pfd [Prawn::PrawnView]
+
+pdf.update do 
+  table(lines, aspect) do |tb|
+    tb.row(0).style(borders:[:top, :left, :right], border_width: 1})
+	end
+end
+~~~
+
+Avec :
+
+~~~ruby
+aspect = {
+  width: taille,
+  column_widths: largeur des colonnes
+  cell_style: ...
+  # etc. même données que ci-dessus
+  }
+
+lines = [
+  ["Première colonne première ligne", "Deuxième colonne première ligne"],
+  ["first column deuxième ligne", "2e colonne 2e ligne"],
+  # etc.
+ ]
+~~~
+
+
 
 ---
 
@@ -1473,7 +1524,7 @@ Ajouter à l’endroit voulu :
 
 
 
-Si l'on veut se retrouver **sur une page paire**, utiliser l’une de ces marques :
+Si l'on veut se retrouver **sur une page paire** (donc une page de gauche), utiliser l’une de ces marques :
 
 ```
 (( new_even_page ))
@@ -1484,7 +1535,7 @@ ou
 
 ```
 
-Si l'on veut se retrouver sur une page impaire, utiliser l'une de ces marques :
+Si l'on veut se retrouver sur une **page impaire** (donc la page de droite), utiliser l'une de ces marques :
 
 ```
 (( new_odd_page ))
@@ -1680,7 +1731,7 @@ Ces tiers sont repérés par des clés qui portent en préfix l’indication de 
 
 #### Variables
 
-On peut utiliser des variables à l’aide de `#{nom_de_la_variable}` dans un texte personnalisé (`:custom_text`).
+On peut utiliser des variables à l’aide de `#{nom_de_la_variable}` dans un texte personnalisé.
 
 ---
 
