@@ -37,8 +37,9 @@ Header V-Ajustement
 
 Numéro de paragraphe
   Le numéro de paragraphe peut être écrit à gauche ou à droite du
-  paragraphe. Cette numéro apparait lorsque la numérotation des
-  pages (book_format:page:numerotation:) est réglée à 'parags'.
+  paragraphe. Ce numéro apparait lorsque la numérotation des
+  pages (book_format:page:numerotation:) est réglée à 'parags' ou
+  à 'hybrid'
 
   Dans l'assistant pour le format du livre, on peut alors régler
   l'alignement vertical du numéro, qui permet de le caler juste

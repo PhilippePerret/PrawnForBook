@@ -175,7 +175,7 @@ class Recipe
     :TRUE == @numerotertdm ||= true_or_false(table_of_content[:numeroter])
   end
   def paragraph_number?
-    :TRUE == @numeroterpar ||= true_or_false(book_format[:page][:numerotation] == 'parags')
+    :TRUE == @numeroterpar ||= true_or_false(['parags','hybrid'].include?(parag_num_type))
   end
   def page_number?
     :TRUE == @numeroterpage ||= true_or_false(book_format[:page][:numerotation] == 'pages')
@@ -239,14 +239,37 @@ class Recipe
     @parag_num_distance_from_text ||= book_format[:text][:parag_num_dist_from_text] || 5
   end
 
+  def parag_num_type
+    @parag_num_type ||= begin
+      book_format[:text][:numerotation] || begin
+        collection_recipe&.parag_num_type || 'none'
+      end
+    end
+  end
   def parag_num_size
-    @parag_num_size ||= book_format[:text][:parag_num_size]
+    @parag_num_size ||= begin
+      book_format[:text][:parag_num_size] || begin
+        collection_recipe&.parag_num_size || 8
+      end
+    end
   end
   def parag_num_vadjust
-    @parag_num_vadjust ||= book_format[:text][:parag_num_vadjust] || 1
+    @parag_num_vadjust ||= begin
+      book_format[:text][:parag_num_vadjust] || begin
+        collection_recipe&.parag_num_vadjust || 1
+      end
+    end
   end
   def parag_num_strength
-    @parag_num_strength ||= book_format[:text][:parag_num_strength] || 80
+    @parag_num_strength ||= begin
+      book_format[:text][:parag_num_strength] || begin
+        collection_recipe&.parag_num_strength || 80
+      end
+    end
+  end
+
+  def collection_recipe
+    @collection_recipe ||= owner.collection ? owner.collection.recipe : nil
   end
 
   def format_numero
@@ -412,6 +435,22 @@ class Recipe
       self.class.peuple_with_default_data(get(:page_index, {}), Pages::PageIndex::PAGE_DATA)
     end
   end
+
+  # TODO
+  # 
+  # RATIONNALISER LES DONNÉES POUR NE PLUS DU TOUT AVOIR À CHERCHER
+  # DANS LA RECETTE DU LIVRE OU DE LA COLLECTION. SYSTÉMATIQUEMENT,
+  # ON CHERCHE LA VALEUR DANS LE LIVRE ET SI ON NE LA TROUVE PAS, ON
+  # PREND DANS LA COLLECTION ET SI ON NE LA TROUVE PAS, ON PREND LA
+  # VALEUR PAR DÉFAUT.
+  # FAIRE ENSUITE UNE RECHERCHE SUR "collection" POUR VOIR PARTOUT
+  # OÙ FERAIT L'UTILISATION.
+  # 
+  # EN PROFITER AUSSI POUR FAIRE *TOUJOURS* APPEL À LA RECETTE (CETTE
+  # INSTANCE) QUAND ON VEUT CONNAITRE UNE VALEUR. NE PLUS JAMAIS PASSER
+  # PAR UN RACCOURCI OU, SI ON EST OBLIGÉ DE LE FAIRE, LUI DONNER 
+  # STRICTEMENT LE MÊME NOM QU'ICI.
+  # 
 
   def page_de_titre
     @page_de_titre ||= begin

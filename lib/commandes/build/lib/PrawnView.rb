@@ -98,6 +98,15 @@ class PrawnView
     spy "-> déplacement du curseur en haut de la page…".bleu
     move_cursor_to_top_of_the_page
 
+    # 
+    # Si l'on est en mode pagination hybride (hybrid), il faut 
+    # réinitialiser les numéros de paragraphe
+    # 
+    if pdfbook.recipe.parag_num_type == 'hybrid'
+      PdfBook::AnyParagraph.reset_numero
+      dbg "Remise du dernier numéro de paragraphe à #{PdfBook::AnyParagraph.last_numero}".orange
+    end
+
     spy "<- Nouvelle page initiée avec succès".vert
   end
 

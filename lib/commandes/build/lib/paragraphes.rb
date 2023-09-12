@@ -32,7 +32,7 @@ class PrawnView
 
       #
       # Réglage du numéro de page du paragraphe (quel que soit son
-      # type)
+      # type de pagination et son type)
       # 
       paragraphe.page_numero = page_number
       

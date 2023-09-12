@@ -11,16 +11,8 @@
 module Prawn4book
 class PdfBook
 
-  # --- Numérotation Paragraphes ---
-
-  def num_parag_font
-    @num_parag_font ||= recipe.parag_num_font_name
-  end
-
-  def num_parag_font_size
-    @num_parag_font_size ||= recipe.parag_num_font_size
-  end
-
+  alias :recipe :recette
+  
   # --- Predicate Methods (shortcuts) ---
 
   def skip_page_creation?   ;recette.skip_page_creation?  end

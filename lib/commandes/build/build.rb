@@ -150,6 +150,8 @@ class PdfBook
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
     # ment : leurs occurrences)
     # 
+    # TODO: Tenir compte du format :hybrid
+    # 
     Bibliography.page_or_paragraph_key = page_number? ? :page : :paragraph
 
     #

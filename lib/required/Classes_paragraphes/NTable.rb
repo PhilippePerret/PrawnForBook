@@ -40,7 +40,7 @@ class NTable < AnyParagraph
   def initialize(pdfbook, data)
     super(pdfbook)
     @book = pdfbook
-    @numero = AnyParagraph.get_next_numero
+    # @numero = AnyParagraph.get_next_numero
     @data = data.merge!(type: 'table')
   end
 
@@ -57,6 +57,12 @@ class NTable < AnyParagraph
   # 
   def print(pdf, **options)
     @pdf = pdf
+
+    #
+    # Définir le numéro du paragraphe ici, pour que
+    # le format :hybrid (n° page + n° paragraphe) fonctionne
+    # 
+    @numero = AnyParagraph.get_next_numero
 
     #
     # Check value. Ici, on va calculer les valeurs implicites

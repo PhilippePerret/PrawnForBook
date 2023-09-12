@@ -6,7 +6,6 @@ class NTextParagraph < AnyParagraph
   attr_reader :data
   attr_reader :text
   attr_reader :numero
-  alias :number :numero
 
   alias :book :pdfbook
 
@@ -14,7 +13,8 @@ class NTextParagraph < AnyParagraph
   def initialize(pdfbook,data)
     super(pdfbook)
     @data   = data.merge!(type: 'paragraph')
-    @numero = AnyParagraph.get_next_numero
+    # @numero = AnyParagraph.get_next_numero
+    # dbg "@numero = #{@numero.inspect}".bleu
     #
     # On regarde tout de suite la nature du paragraphe (table ? item
     # de liste ? citation ? etc. pour pouvoir faire un pré-traitement
@@ -60,7 +60,8 @@ class NTextParagraph < AnyParagraph
 
     @text_ini = @text
 
-  end
+  end #/pre_parse_text_paragraph
+
   REG_CITATION    = /^> .+$/.freeze
   REG_LIST_ITEM   = /^\* .+$/.freeze
   REG_TABLE_LINE  = /^\|/.freeze 
@@ -88,6 +89,13 @@ class NTextParagraph < AnyParagraph
     #   par '* ' et qui ne serait donc plus un item de liste…
     # 
     @text = @text_ini
+
+    #
+    # Définir le numéro du paragraphe ici, pour que
+    # le format :hybrid (n° page + n° paragraphe) fonctionne
+    # 
+    @numero = AnyParagraph.get_next_numero
+    # dbg "@numero = #{@numero.inspect}".bleu
 
     #
     # Quelques traitements communs, comme la retenue du numéro de
@@ -195,7 +203,7 @@ class NTextParagraph < AnyParagraph
         #
         # Écriture du numéro du paragraphe
         # 
-        pa.print_paragraph_number(pdf) if not(no_num) && pdfbook.recipe.paragraph_number?
+        pa.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number? && not(no_num)
 
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0

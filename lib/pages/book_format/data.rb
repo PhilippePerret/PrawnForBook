@@ -57,9 +57,10 @@ class BookFormat
 
   def values_numerotations
     [
-      {name:'Numéroter les pages'       , value: 'pages'  },
-      {name:'Numéroter les paragraphes' , value: 'parags' },
-      {name:'Pas de numérotation'       , value: 'none'   },
+      {name:'Numéroter les pages'             , value: 'pages'  },
+      {name:'Numéroter les paragraphes'       , value: 'parags' },
+      {name:'Numéroter en pages-paragraphes'  , value: 'hybrid' },
+      {name:'Pas de numérotation'             , value: 'none'   },
     ]
   end
 
@@ -73,7 +74,7 @@ class BookFormat
         {name: 'Page X'             , value: 'Page first'},
         {name: 'P. X'               , value: 'P. first'},
       ]
-    when 'parags'
+    when 'parags', 'hybrid'
       [
         {name:'x-y'   , value: 'first-last'},
         {name:'x/y'   , value: 'first/last'},

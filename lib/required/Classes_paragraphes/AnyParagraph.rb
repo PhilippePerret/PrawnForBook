@@ -20,8 +20,11 @@ class AnyParagraph
   #   le moment que pour le NTextParagraph et le NTable (mais à 
   #   l'avenir, on peut imaginer qu'elles servent aussi pour les
   #   images, qui pourraient être aussi numérotées)
-  @@last_numero = 0
   def self.reset
+    reset_numero
+  end
+  @@last_numero = 0
+  def self.reset_numero
     @@last_numero = 0
   end
   def self.init_first_turn
@@ -86,7 +89,7 @@ class AnyParagraph
   # 
   def print_paragraph_number(pdf)
 
-    numero = number.to_s
+    num = numero.to_s
     
     #
     # Pour l'intérieur de pdf.update
@@ -98,13 +101,13 @@ class AnyParagraph
       # 
       # Fonte spécifique pour cette numérotation
       # 
-      font(me.book.num_parag_font, size: me.book.num_parag_font_size) do
+      font(me.recipe.parag_num_font_name, size: me.recipe.parag_num_font_size) do
       
         # 
         # Calcul de la position du numéro de paragraphe en fonction du
         # fait qu'on se trouve sur une page gauche ou une page droite
         # 
-        parag_number_width = width_of(numero)
+        parag_number_width = width_of(num)
         
         span_pos_num = 
           if belle_page?
@@ -115,14 +118,14 @@ class AnyParagraph
 
         @span_number_width ||= 1.cm
 
-        spy "Numéro #{numero} appliqué au paragraphe".orange
+        spy "Numéro #{num} appliqué au paragraphe".orange
         spy "    @span_number_width = #{@span_number_width.inspect}".orange
         spy "    position: #{span_pos_num.inspect}".orange
 
         float {
           move_down(me.class.diff_height_num_parag_and_parag(pdf))
           span(@span_number_width, position: span_pos_num) do
-            text "#{numero}", color: me.parag_numero_color
+            text "#{num}", color: me.parag_numero_color
           end
         }
       end #/font
