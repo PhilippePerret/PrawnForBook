@@ -259,7 +259,7 @@ class NTitre < AnyParagraph
   end
 
   def self.data_titles
-    @@data_titles ||= PdfBook.current.recette.titles_data
+    @@data_titles ||= PdfBook.current.recette.format_titles
   end
 
 end #/class NTitre

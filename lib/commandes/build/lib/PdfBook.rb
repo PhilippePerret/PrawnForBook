@@ -105,34 +105,6 @@ class PdfBook
   end
 
 
-  # Reçoit une valeur ou une liste de valeur avec des unités et
-  # retourne la valeur correspondante en nombre grâce aux méthodes
-  # de Prawn::Measurements
-  def proceed_unit(foo)
-    return if foo.nil?
-    return foo if foo.is_a?(Integer) || foo.is_a?(Float)
-    valeur_string_seule = foo.is_a?(String)
-    foo = [foo] if valeur_string_seule
-    foo = foo.map do |n|
-      if n.is_a?(String)
-        if n.numeric?
-          n.to_f
-        else
-          unite   = n[-2..-1]
-          nombre  = n[0..-3].to_f
-          nombre.send(unite.to_sym)
-        end
-      else
-        n
-      end
-    end
-
-    if valeur_string_seule
-      foo.first
-    else
-      foo
-    end
-  end
 
 end #/class PdfBook
 end #/module Prawn4book

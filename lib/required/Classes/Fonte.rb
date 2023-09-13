@@ -54,8 +54,8 @@ class << self
   # @api public
   def default_fonte
     @default_fonte ||= begin
-      if book && recipe.default_font_and_style
-        font_name, font_style = recipe.default_font_and_style.split('/')
+      if book && recipe.default_font_n_style
+        font_name, font_style = recipe.default_font_n_style.split('/')
         font_style = font_style.to_sym
         new(font_name, **{style: font_style, size:default_size})
       elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
@@ -164,7 +164,7 @@ class << self
   def titre_default(level, size)
     key_level = "level#{level}".to_sym
     font_name, font_style, font_size =
-      if book && recipe.titles_data && (df = recipe.titles_data[key_level])
+      if book && recipe.format_titles && (df = recipe.format_titles[key_level])
         # spy "df (data titre level #{level}) : #{df.inspect}".orange
         # 
         # Si le style n'est pas défini, on prend le premier existant

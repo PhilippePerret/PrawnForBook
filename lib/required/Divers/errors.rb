@@ -26,6 +26,7 @@ class FatalPrawForBookError < StandardError
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Recette(s) ---
+      499   => Prawn4book::ERRORS[:recipe][:missing_even_default_data],
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
       # -- Tables --

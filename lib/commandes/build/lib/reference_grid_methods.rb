@@ -197,7 +197,7 @@ class PrawnView
   end
 
   # - shortcut -
-  def leading     ; pdfbook.recette.leading       end
+  def leading     ; pdfbook.recette.text_leading  end
   def line_height ; pdfbook.recette.line_height   end
 
 end #/class PrawnView

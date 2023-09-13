@@ -161,6 +161,14 @@ ERRORS = {
   # --- Recette en général --- #
 
   recipe: {
+
+    missing_even_default_data: <<~ERR,
+      Des données sont manquantes dans la recette :
+          %{data}
+      Ces données devraient pourtant être définies car des valeurs par
+      défaut sont fournies. Vous avez dû toucher le fichier de recette par 
+      défaut… Vous n'avez plus qu'à recharger l'application…
+      ERR
     main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
     page_infos: {
       require_info: <<~ERR,

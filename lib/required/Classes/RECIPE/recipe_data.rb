@@ -68,11 +68,11 @@ class Recipe
   end
 
   def book_height
-    @book_height      ||= proceed_unit(format_book[:height])
+    @book_height      ||= format_book[:height].proceed_unit
   end
 
   def book_width
-    @book_width       ||= proceed_unit(format_book[:width])
+    @book_width       ||= format_book[:width].proceed_unit
   end
 
   # [Symbol] Orientation de la page
@@ -85,16 +85,16 @@ class Recipe
   end
 
   def top_margin
-    @top_margin         ||= proceed_unit(format_page[:margins][:top])
+    @top_margin         ||= format_page[:margins][:top].proceed_unit
   end
   def ext_margin
-    @ext_margin         ||= proceed_unit(format_page[:margins][:ext])
+    @ext_margin         ||= format_page[:margins][:ext].proceed_unit
   end
   def int_margin
-    @int_margin         ||= proceed_unit(format_page[:margins][:int])
+    @int_margin         ||= format_page[:margins][:int].proceed_unit
   end
   def bot_margin
-    @bot_margin         ||= proceed_unit(format_page[:margins][:bot])
+    @bot_margin         ||= format_page[:margins][:bot].proceed_unit
   end
 
   def pagination_format
@@ -157,16 +157,16 @@ class Recipe
   # -- Polices --
 
   def default_font_n_style
-    @default_font_n_style     ||= format_text[:default_font_n_style]
+    @default_font_n_style       ||= format_text[:default_font_n_style]
   end
   def default_font_name
-    @default_font_name        ||= format_text[:default_font]
+    @default_font_name          ||= format_text[:default_font]
   end
   def default_font_size
-    @default_font_size        ||= format_text[:default_size]
+    @default_font_size          ||= format_text[:default_size]
   end
   def default_font_style
-    @default_font_style        ||= format_text[:default_style]
+    @default_font_style         ||= format_text[:default_style]
   end
 
   # --- Page d'index ---
@@ -220,7 +220,7 @@ class Recipe
 
   # ne pas confondre avec la clé :book_format de la cette
   def format_book 
-    @format_book        ||= DATA[:book_format][:book]
+    @format_book        ||= DATA[:book_format][:book] || raise(FatalPrawForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
   end
 
   def format_titles
@@ -288,7 +288,7 @@ class Recipe
       #
       # Les valeurs par défaut
       # 
-      get_data_in_recipe(File.join(__dir__,'RECEIPE_DEFAULT.yaml'))
+      get_data_in_recipe(File.join(__dir__,'RECIPE_DEFAULT.yaml'))
       #
       # Les valeurs dans les recettes en remontant les dossiers. Les
       # données lointaines sont toujours écrasées par les données

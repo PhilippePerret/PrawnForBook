@@ -102,7 +102,7 @@ class PrawnView
     # Si l'on est en mode pagination hybride (hybrid), il faut 
     # réinitialiser les numéros de paragraphe
     # 
-    if pdfbook.recipe.parag_num_type == 'hybrid'
+    if page_number.even? && pdfbook.recipe.hybrid_numerotation?
       PdfBook::AnyParagraph.reset_numero
       dbg "Remise du dernier numéro de paragraphe à #{PdfBook::AnyParagraph.last_numero}".orange
     end
