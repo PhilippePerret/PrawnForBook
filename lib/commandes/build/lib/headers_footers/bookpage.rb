@@ -128,8 +128,8 @@ class BookPage
 
   def format_numero_paragraphs
     @format_numero_paragraphs ||= begin
-      if book.recipe.format_numero
-        book.recipe.format_numero.gsub(/first/,'%{first}').gsub(/last/,'%{last}')
+      if book.recipe.pagination_format
+        book.recipe.pagination_format.gsub(/first/,'%{first}').gsub(/last/,'%{last}')
       else
         '%{first}/%{last}'
       end

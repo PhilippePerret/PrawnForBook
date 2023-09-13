@@ -30,7 +30,7 @@
       :ext: 11mm
       :bot: 12mm
       :int: 13mm
-    :no_num_empty: false
+    :no_num_if_empty: false
     :numerotation: parags
     :num_only_if_num: false
 #</book_format>

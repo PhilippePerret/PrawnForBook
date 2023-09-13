@@ -142,8 +142,7 @@ class PageInfos
     # Surface sur laquelle pourront se mettre les informations si
     # on doit les répartir.
     # 
-    surface_height = recipe.book_format[:book][:height]
-    surface_height = pdf.pdfbook.proceed_unit(surface_height) if surface_height.is_a?(String)
+    surface_height = recipe.book_height
     surface_height -= 40    # pour laisser encore de l'air au-dessus
     # 
     # Hauteur prise par un label

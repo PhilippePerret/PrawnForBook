@@ -1,0 +1,259 @@
+---
+#
+# Valeurs par défaut de tout prawn-book
+#
+
+#
+# --- Définition des variables ---
+#
+define: &default_font_1 "Times"
+define: &default_font_2 "Helvetica"
+define: &default_font_3 "Courier"
+define: &default_style3 ""
+define: &default_style1 "Roman"
+define: &default_style2 "Normal"
+define: &default_style3 "Italic"
+define: &default_style4 "Bold"
+
+define: &default1_font_n_style "Times/Roman"
+define: &default2_font_n_style "Helvetica/"
+define: &default3_font_n_style "Helvetica/Bold"
+
+# --- Données du livre ---
+# (elles sont propres à chaque livre mais sont mises ici pour
+#  que des données existent même sans que rien n'ait été fourni)
+#<book_data>
+book_data:
+  id:             null
+  titre:          "Sans titre"
+  subtitle:       null
+  author:         "Prénom NOM"
+  depot_legal:    null
+  isbn:           '---'
+  asin:           null
+#</book_data>
+
+#<page_data>
+page_data: 
+  title:      "Sans titre"
+  subtitle:   null
+  id:         null
+  auteurs:    null
+  isbn:       null
+#</page_data>
+#<publishing>
+publishing:
+  logo_path:    null
+#</publishing>
+#
+# --- FORMAT DU LIVRE ---
+#<book_format>
+book_format:
+  book:
+    width:        127mm
+    height:       203.2mm
+    taille:       null # ou "a4"
+    orientation:  'portrait'
+  page:
+    background:                  null
+    margins:
+      top:    20mm
+      ext:    15mm
+      bot:    15mm
+      int:    25mm
+    numerotation:               'pages' # ou 'parags', 'hybrid'
+    pagination_format:          'first-last'
+    no_num_if_empty:            true
+    num_font_name:              *default_font2
+    num_font_style:             *default_font1
+    num_font_size:              10
+    num_only_if_num:            true
+    num_page_if_no_num_parag:   true
+    no_headers_footers:         false
+    skip_page_creation:         true
+  text:
+    default_font_n_style:   *default1_font_n_style
+    default_font:             *default_font1
+    default_style:            *default_style1
+    default_size:             12
+    indent:                   0
+    line_height:              14
+    leading:                  0.0
+    numerotation:             false
+    parag_num_vadjust:        1
+    parag_num_dist_from_text: 5
+    parag_num_font:           *default_font2
+    parag_num_size:           8
+    parag_num_strength:       75
+  titles:
+    level1:
+      font_n_style:   *default2_font_n_style
+      font:           *default_font2
+      style:          *default_style2
+      size:           20
+      lines_before:   0
+      lines_after:    10
+      leading:        0
+      next_page:      true
+      belle_page:     true
+    level2:
+      font_n_style:   *default2_font_n_style
+      font:           *default_font2
+      style:          *default_style2
+      size:           18
+      lines_before:   7
+      lines_after:    5
+      leading:        0
+      next_page:      false
+      belle_page:     false
+    level3:
+      font_n_style:   *default2_font_n_style
+      font:           *default_font2
+      style:          *default_style2
+      size:           16
+      lines_before:   6
+      lines_after:    4
+      leading:        0
+    level4:
+      font_n_style:   *default2_font_n_style
+      font:           *default_font2
+      style:          *default_style2
+      size:           14
+      lines_before:   5
+      lines_after:    3
+      leading:        0
+    level5:
+      font_n_style:   *default2_font_n_style
+      font:           *default_font2
+      style:          *default_style2
+      size:           12
+      lines_before:   4
+      lines_after:    2
+      leading:        0
+    level6:
+      font_n_style:   *default3_font_n_style
+      font:           *default_font2
+      style:          *default_style4
+      size:           11
+      lines_before:   2
+      lines_after:    0
+      leading:        0
+
+
+#</book_format>
+
+#
+# --- PAGES INSÉRÉES ---
+#<inserted_pages>
+inserted_pages:
+  page_de_garde:  true
+  faux_titre:     false
+  page_de_titre:  true
+  page_infos:     true
+#</inserted_pages>
+
+#
+# --- PAGE DE TITRE ---
+#<page_de_titre>
+page_de_titre:
+  fonts:
+    title:              *default_font_1
+    subtitle:           *default_font_1
+    author:             *default_font_1
+    publisher:          *default_font_1
+    collection_title:   *default_font_1
+  sizes:
+    title:              18
+    subtitle:           11
+    author:             15
+    publisher:          12
+    collection_title:   12
+  spaces_before:
+    title:              4
+    subtitle:           1
+    author:             2
+  logo:
+    height:             10
+#</page_de_titre>
+#
+# --- TABLE DES MATIÈRES ---
+#
+#<table_of_content>
+table_of_content:
+  title:                "Table des matières"
+  no_title:             false
+  title_level:          1
+  level_max:            3
+  line_height:          14
+  lines_before:         10
+  separator:            '.'
+  add_to_numero_width:  0
+  numeroter:            true
+  level1:
+    font_n_style: *default1_font_n_style
+    size:         12
+    numero_size:  10
+    indent:       0
+    separator:    null
+  level2:
+    font_n_style: *default1_font_n_style
+    size:         10
+    numero_size:  10
+    indent:       '10mm'
+    separator:    null
+  level3:
+    font_n_style: *default1_font_n_style
+    size:         9
+    numero_size:  10
+    indent:       '20mm'
+    separator:    null
+  level4:
+    font_n_style: *default1_font_n_style
+    size:         8
+    numero_size:  10
+    indent:       '30mm'
+    separator:    null
+#</table_of_content>
+#
+# --- La page d'infos ---
+#
+#<page_infos>
+page_infos:
+  conception:
+    patro:      null
+    mail:       null
+  mise_en_page:
+    patro:      null
+    mail:       null
+  cover: 
+    patro:      null
+    mail:       null
+  correction:
+    patro:      null
+    mail:       null
+  aspect:
+    libelle:
+      font_n_style: *default1_font_n_style
+      size:         10
+      color:        null
+    value:
+      font_n_style: *default1_font_n_style
+      size:         11
+      color:        null
+    disposition:    'distribute' # 'bottom', 'top'
+  printing: 
+    name:           'à la demande'
+    lieu:           null
+#</page_infos>
+#
+# --- La page d'index ---
+#<page_index>
+page_index:
+  aspect:
+    canon:
+      font_n_style: *default1_font_n_style
+      size:         10
+    number:
+      font_n_style: *default1_font_n_style
+      size:         10
+#</page_index>

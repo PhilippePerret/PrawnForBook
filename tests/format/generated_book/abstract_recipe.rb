@@ -50,8 +50,8 @@ class AbstractRecipe
     margin_right: [:book_format, :page, :margins, :right],
     right_margin: [:book_format, :page, :margins, :right],
     numerotation: [:book_format, :page, :numerotation],
-    format_numero:[:book_format, :page, :format_numero],
-    no_num_empty: [:book_format, :page, :no_num_empty],
+    pagination_format:[:book_format, :page, :pagination_format],
+    no_num_if_empty: [:book_format, :page, :no_num_if_empty],
     num_only_if_num: [:book_format, :page, :num_only_if_num],
     numpag_ifno_numpar: [:book_format, :page, :num_page_if_no_num_parag],
     # - les pages à insérer -

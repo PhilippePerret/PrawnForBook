@@ -2802,8 +2802,8 @@ book_format:
 			ext: "2cm"		# marge extérieure
 			int: "0.1in"  # marge intérieure
 		numerotation: "pages" # ou "parags"
-		format_numero: "first-last" # pour numérotation paragraphes
-		no_num_empty: true # pas de numéro sur pages vides
+		pagination_format: "first-last" # pour numérotation paragraphes
+		no_num_if_empty: true # pas de numéro sur pages vides
 		num_only_if_num: true # cf. [1]
 		num_page_if_no_num_parag: true # cf. [2]
 		no_headers_footers: false # self-explanatory

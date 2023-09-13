@@ -37,7 +37,6 @@
 # utiles (cf. le manuel, "Numérotation des paragraphes")
 # :num_parag:
 #   :top_adjustment: 0
-:num_page_style:  %{numpage} # style de numérotation des pages
 
 # --- Pages à insérer ou à sauter ---
 # Table des matières : cf. plus bas

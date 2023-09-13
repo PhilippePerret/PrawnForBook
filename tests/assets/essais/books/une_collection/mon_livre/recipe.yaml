@@ -18,7 +18,6 @@
 :fonts:           :collection
 :faux_titre:      :collection
 :page_de_garde:   :collection
-:num_page_style:  :collection
 :tdm:             :collection
 :header:
   :from_page: 10

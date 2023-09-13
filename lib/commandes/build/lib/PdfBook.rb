@@ -35,29 +35,25 @@ class PdfBook
       {
         # Options qu'on trouve dans [1]
         skip_page_creation: skip_page_creation?,
-        page_size:          proceed_unit(recipe.dimensions), # p.e. "a4"
-        page_layout:        recipe.book_format[:book][:orientation].to_sym,
-        margin:             conf_margin(:top),
-        left_margin:        conf_margin(:ext),
-        right_margin:       conf_margin(:int),
-        ext_margin:         conf_margin(:ext),
-        int_margin:         conf_margin(:int),
-        top_margin:         conf_margin(:top),
-        bot_margin:         conf_margin(:bot),
-        compress:           get_recipe(:compress),
-        background:         get_recipe(:background),
+        page_size:          recipe.page_size, # p.e. "a4"
+        page_layout:        recipe.page_layout,
+        margin:             recipe.top_margin,
+        left_margin:        recipe.ext_margin,
+        right_margin:       recipe.int_margin,
+        ext_margin:         recipe.ext_margin,
+        int_margin:         recipe.int_margin,
+        top_margin:         recipe.top_margin,
+        bot_margin:         recipe.bot_margin,
+        compress:           true, # fixe pour le moment
+        optimize_objects:   true, # fixe, pour le moment
+        background:         recipe.page_background,
         info:               nil, # ?
         text_formatter:     nil, # ?
         print_scaling:      nil, # ?
         # Autres options
-        default_leading:    recipe.book_format[:text][:interligne],
-        optimize_objects:   get_recipe(:optimize_objects, true),
+        default_leading:    recipe.text_leading,
         infos:              recipe.page_infos,
-        template:           get_recipe(:template, nil),
-        # --- Extra definitions ---
-        default_font:       recipe.default_font,
-        default_font_and_style:  recipe.default_font_and_style,
-        default_font_size:  recipe.default_font_size,
+        template:           recipe.template,
       }.tap do |h|
         spy "options pour #generate : #{h.pretty_inspect}"
       end
@@ -69,16 +65,6 @@ class PdfBook
   def book_fonts
     @book_fonts ||= recipe.fonts_data
   end
-
-  def get_recipe(property, default_value = nil)
-    recette[property] || default_value
-  end
-
-  # Retourne la configuration du livre pour la marge +side+
-  def conf_margin(side)
-    proceed_unit(recipe.book_format[:page][:margins][side])
-  end
-
 
   # --- Modules personnalisés ---
    

@@ -12,7 +12,6 @@
 :interligne: :collection
 :opt_num_parag: :collection
 :fonts: :collection
-:num_page_style: num_parags
 :header:
   :from_page: 10
   :to_page: 200

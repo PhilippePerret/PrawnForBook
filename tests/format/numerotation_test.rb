@@ -120,8 +120,8 @@ class NumerotationTestor < Minitest::Test
   def test_numerotation_paragraphes_autre_format
     return if focus?
     tester_numerotation_par_paragraphes_avec({
-      format_numero: 'first-last', 
-      no_num_empty: true, num_only_if_num: true,
+      pagination_format: 'first-last', 
+      no_num_if_empty: true, num_only_if_num: true,
       numpag_ifno_numpar: true
     })
     page(4).not.has_text("-/-").below(100)

@@ -34,7 +34,6 @@
 :tdm:
   # Distance du numéro de page avec la marge droite
   :dist_num_from_rmargin: 0
-:num_page_style: num_parags
 :faux_titre: true # pour l'essai de la méthode
 :page_de_garde: true
 :footer:
