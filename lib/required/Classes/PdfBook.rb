@@ -90,17 +90,7 @@ class PdfBook
   # --- Paths Methods ---
 
   def text_file
-    @text_file ||= begin
-      filepath = nil
-      ['.pfb.md', 'md','txt','text'].each do |ext|
-        ['text','texte','content','contenu'].each do |affixe|
-          pth = File.join(folder, "#{affixe}.#{ext}")
-          filepath = pth and break if File.exist?(pth)
-        end
-        break unless filepath.nil?
-      end
-      filepath
-    end
+    @text_file ||= inputfile.path
   end
 
   def pdf_path
