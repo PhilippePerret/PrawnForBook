@@ -7,15 +7,18 @@ class PageIndex
   # Méthode principale construisant la page
   # 
   def build(pdf)
-    spy "-> Construction de l'index".jaune
+    spy "-> Construction de la page d'index".jaune
     # 
     # S'il n'y a aucun mot indexé, on s'en retourne tout de suite
     # 
     return if table_index.empty?
     # 
     # La clé à utiliser pour la page ou le paragraphe
+    #   - page        On utilise le numéro de page
+    #   - paragraph   On utilise le numéro de paragraphe
+    #   - hybrid      On utilise un numéro "page-paragraphe"
     # 
-    key_num = pdfbook.page_number? ? :page : :paragraph
+    key_num = recipe.references_key
     # 
     # Le titre de la page d'index
     # 

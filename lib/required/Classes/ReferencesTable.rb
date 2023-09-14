@@ -32,7 +32,7 @@ class ReferencesTable
   # 
   # @param ref_id {String} IDentifiant de la référence
   # @param ref_data {Hash} Données de la référence, contient
-  #         {:page, :paragraph}
+  #         {:page, :paragraph, :hybrid}
   # 
   def add(ref_id, ref_data)
     return if second_turn
@@ -96,7 +96,7 @@ class ReferencesTable
     ref_id = ref_id.to_sym
     ref = table[ref_id] || begin
       set_un_appel_sans_reference
-      {page:"xx", paragraph:'xxx'}
+      {page:"xx", paragraph:'xxx', hybrid:'xx-xxx'}
       return "(( ->(#{ref_id}) ))" # -- pour essayer que la seconde fois il soit corrigé
     end
     call_to(ref)
@@ -106,8 +106,12 @@ class ReferencesTable
   ##
   # Enregistrement des la liste des références
   # 
-  # Rappel : cette table enregistrée ne sert que pour les références
-  # croisées. Pour un livre, elles sont recalculées chaque fois.
+  # @rappel 
+  # 
+  #   Cette table enregistrée dans un fichier ne sert que pour les
+  #   références croisées. Pour un livre, elles sont recalculées 
+  #   chaque fois.
+  # 
   def save
     File.write(path, table.to_yaml)
   end
@@ -120,8 +124,14 @@ class ReferencesTable
   #   Les références croisées utilisent une autre méthode.
   # 
   def call_to(ref)
-    ref = pdfbook.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
-    return ref
+    case pdfbook.recipe.page_num_type
+    when 'pages'
+      "page #{ref[:page]}"
+    when 'parags'
+      ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}"
+    when 'hybrid'
+      ref[:hybrid]
+    end
   end
 
   # --- Predicate Methods ---

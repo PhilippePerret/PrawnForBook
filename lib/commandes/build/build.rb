@@ -149,10 +149,11 @@ class PdfBook
     # On définit la clé à utiliser (numéro de page ou numéro de
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
     # ment : leurs occurrences)
+    #   - page        On utilise le numéro de page
+    #   - paragraph   On utilise le numéro de paragraphe
+    #   - hybrid      On utilise un numéro "page-paragraphe"
     # 
-    # TODO: Tenir compte du format :hybrid
-    # 
-    Bibliography.page_or_paragraph_key = page_number? ? :page : :paragraph
+    Bibliography.page_or_paragraph_key = recipe.references_key
 
     #
     # Pour consigner les informations sur les pages, à commencer

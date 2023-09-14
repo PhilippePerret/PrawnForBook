@@ -15,12 +15,11 @@ class PdfBook
   
   # --- Predicate Methods (shortcuts) ---
 
-  def skip_page_creation?   ;recette.skip_page_creation?  end
-  def page_de_garde?        ;recette.page_de_garde?       end
-  def page_faux_titre?      ;recette.page_faux_titre?     end
-  def page_de_titre?        ;recette.page_de_titre?       end
-  def page_infos?           ;recette.page_infos?          end
-  def page_number?          ;recette.page_number?         end
+  def skip_page_creation?   ;recipe.skip_page_creation?  end
+  def page_de_garde?        ;recipe.page_de_garde?       end
+  def page_faux_titre?      ;recipe.page_faux_titre?     end
+  def page_de_titre?        ;recipe.page_de_titre?       end
+  def page_infos?           ;recipe.page_infos?          end
 
   # --- Configuration Pdf Methods ---
 

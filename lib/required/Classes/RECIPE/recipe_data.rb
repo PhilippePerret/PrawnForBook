@@ -118,6 +118,16 @@ class Recipe
 
   # -- Paragraphes --
 
+  def references_key
+    @references_key ||= begin
+      case page_num_type
+      when 'hybrid' then :hybrid
+      when 'pages'  then :page
+      when 'parags' then :paragraph
+      end
+    end
+  end
+
   # Type de numérotation (des pages et de tout)
   #   - 'pages'     Par page (normal)
   #   - 'parags'    Par paragraphe. Tous les paragraphes sont numérotés et le pied de page contient le numéro du premier et dernier paragraphe de la page

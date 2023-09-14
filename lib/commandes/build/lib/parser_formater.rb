@@ -256,13 +256,24 @@ private
     numero_par = context[:paragraph].numero
     first_page = context[:paragraph].first_page
     str = str.gsub(/index:(.+?)(\b)/) do
-      dmot = {mot: $1.freeze, page: first_page, paragraph:numero_par}
+      dmot = {
+        mot:  $1.freeze, 
+        page: first_page, 
+        paragraph:numero_par,
+        hybrid: "#{first_page}-#{numero_par}"
+      }
       pdfbook.page_index.add(dmot)
       dmot[:mot] + $2
     end
     str = str.gsub(/index\((.+?)\)/) do
       mot, canon = $1.freeze.split('|')
-      dmot = {mot: mot, canon: canon, page: first_page, paragraph: numero_par}
+      dmot = {
+        mot:        mot, 
+        canon:      canon, 
+        page:       first_page, 
+        paragraph:  numero_par,
+        hybrid:     "#{first_page}-#{numero_par}"
+      }
       pdfbook.page_index.add(dmot)
       dmot[:mot]
     end
@@ -309,7 +320,11 @@ private
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
         spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
-        pdfbook.table_references.add(cible, {page:first_page, paragraph:numero_par})
+        pdfbook.table_references.add(cible, **{
+          page:       first_page, 
+          paragraph:  numero_par,
+          hybrid:     "#{first_page}-#{numero_par}"
+        })
         ''
       end
       # 
@@ -369,7 +384,11 @@ private
         # 
         # Ajout de cette occurrence
         # 
-        bibitem.add_occurrence({page: first_page, paragraph: parag_num})
+        bibitem.add_occurrence({
+          page:       first_page, 
+          paragraph:  parag_num,
+          hybrid:     "#{first_page}-#{parag_num}"
+        })
         #
         # Formatage de l'élément bibliographique
         # (propre ou simplement le :title)

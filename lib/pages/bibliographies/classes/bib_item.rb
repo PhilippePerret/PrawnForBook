@@ -16,14 +16,24 @@ class BibItem
   #   Il n'existe pas forcément au moment de son identification. Ça
   #   peut être l'identifiant utilisé dans le texte, qui n'existe pas
   # 
-  # @param [Prawn4book::Bibliography] biblio L'instance de la bibliographie contenant l'item.
-  # @param [String] bibitem_id
+  # @param biblio [Prawn4book::Bibliography]
+  # 
+  #   Instance de la bibliographie contenant l'item.
+  # 
+  # @param bibitem_id [String]
+  # 
+  #   Identifiant de l'item bibliographique
+  # 
+  # @param data [Hash]
+  # 
+  #   Quand les données viennent d'un fichier unique contenant 
+  #   toutes les données.
   # 
   def initialize(biblio, bibitem_id, data = nil)
     @biblio       = biblio
     @id           = bibitem_id
+    @data         = data
     @occurrences  = []
-    @data         = data # quand fichier unique contenant toutes les données
   end
 
   # --- Public Methods ---
@@ -50,7 +60,7 @@ class BibItem
   #
   def formated(context, actual)
     if biblio.custom_formating_method?
-      str = biblio.send(biblio.custom_format_method, self, context, actual)
+      biblio.send(biblio.custom_format_method, self, context, actual)
     else
       actual || title
     end
@@ -63,6 +73,12 @@ class BibItem
   def method_missing(methode, *args, &block)
     if data.key?(methode)
       data[methode]
+    elsif biblio.respond_to?(methode)
+      if args
+        biblio.send(methode, *args)
+      else
+        biblio.send(methode)
+      end
     else
       raise NoMethodError.new(methode, args, &block)
     end
@@ -87,6 +103,10 @@ class BibItem
       # spy "   (ajouté à sa bibliographie)".gris
       biblio.add_item(self)
     end
+    #
+    # Si la propriété :hybrid n'est pas donnée, on la crée
+    # 
+    doccurrence.key?(:hybrid) || doccurrence.merge!(hybrid: "#{doccurrence[:page]}-#{doccurrence[:paragraph]}")
     # 
     # Ajouter cette occurrence
     # 
@@ -145,7 +165,14 @@ class BibItem
     ref = ref_to(cible_id) || begin
       raise PrawnBuildingError.new(ERRORS[:references][:cross_ref_unfound] % [cible_id, self.id])
     end
-    str = PdfBook.current.page_number? ? "page #{ref[:page]}" : (ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}")
+    str = case pdfbook.recipe.num_page_format
+    when 'parags'
+      ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}"
+    when 'pages'
+      "page #{ref[:page]}"
+    when 'hybrid'
+      ref[:hybrid]
+    end
     return "#{str} de <i>#{title}</i>"
   end
 
@@ -276,8 +303,14 @@ class BibItem
 
     # @return [Symbol] :page ou :paragraph en fonction du type de
     # numérotation.
+    # 
+    # @note
+    # 
+    #   Dans le mode hybride (page+paragraphe), page_number? retourne
+    #   true puisqu'il faut écrire le numéro de page en pagination
+    # 
     def key_numerotation
-      @key_numerotation ||= recipe.page_number? ? :page : :paragraph
+      @key_numerotation ||= recipe.references_key
     end
 
 end #/class BibItem

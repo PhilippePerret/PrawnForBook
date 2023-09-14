@@ -169,7 +169,11 @@ class << self
   # croisée
   # 
   def add_occurrence_book(book, paragraph)
-    add_occurrence_to(book.recipe.biblio_book_identifiant.to_s, book, {page: paragraph.first_page, paragraph: paragraph.numero})
+    add_occurrence_to(book.recipe.biblio_book_identifiant.to_s, book, **{
+      page:       paragraph.first_page, 
+      paragraph:  paragraph.numero,
+      hybrid:     "#{paragraph.first_page}-#{paragraph.numero}"
+    })
   end
 
   ##
