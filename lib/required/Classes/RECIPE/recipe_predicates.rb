@@ -36,10 +36,11 @@ class Recipe
 
   # --- Numérotation des pages et des paragraphes ---
 
-  # @return true s'il faut numéroté les pages (avec l'indice de page
-  # ou l'incide de paragraphe suivant la valeur de page_num_type)
+  # @return true s'il faut mettre le numéro des pages (et seulement
+  # le numéro des pages). C'est-à-dire en format de pagination normal
+  # ou hybride
   def page_number?
-    :TRUE == @numeroterpage ||= true_or_false(format_page[:numerotation] == 'pages')
+    :TRUE == @numeroterpage ||= true_or_false(['pages','hybrid'].include?(page_num_type))
   end
 
   # @return true s'il faut numéroter les paragraphes

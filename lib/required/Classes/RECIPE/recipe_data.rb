@@ -101,6 +101,11 @@ class Recipe
     @pagination_format      ||= format_page[:pagination_format]
   end
 
+  def pagination_font_n_style
+    @pagination_font_n_style ||= begin
+      "#{pagination_font_name}/#{pagination_font_style}"
+    end
+  end
   def pagination_font_name
     @pagination_font_name   ||= format_page[:num_font_name]
   end

@@ -17,8 +17,11 @@ class << self
   # +hf_id+
   # 
   # @note
-  #   Comme l'utilisateur peut les définir à la main, on s'assure de
-  #   pouvoir les trouver, avec l'identifiant symbolique ou string
+  #   - "hf" pour "headfoot" et "id" pour "identifiant". Il s'agit donc
+  #     de l'identifiant du "headfoot" qui définit l'entête et le 
+  #     pied de page.
+  #   - Comme l'utilisateur peut les définir à la main, on s'assure de
+  #     pouvoir les trouver, avec l'identifiant symbolique ou string
   # 
   def get(hf_id)
     data[hf_id.to_s] || data[hf_id.to_sym] || raise("L'headfooter d'identifiant #{hf_id.inspect} est inconnu…")
@@ -80,10 +83,30 @@ end #/ << self
     spy "   * Construction pages #{side.inspect}".jaune
     pdf.repeat(side, **{dynamic: true}) do
       numero = pdf.page_number
+      #
+      # Si la page courante ne se trouve pas dans le rang des pages
+      # concernées par l'head-foot, on passe à la suivante.
+      # 
       next unless page_in_range?(numero)
+      #
+      # Sinon, on prend les données de la page
+      # 
       bpage = get_data_page(numero)  # instance BookData
       if bpage 
+        #
+        # Définition de la méthode à utiliser en fonction du côté
+        # de la page (even ou odd). "procedure_[even|odd]_page" va
+        # retourner une procédure pour écrire ce qu'il faut là où il
+        # le faut.
+        # 
+        # @noter que c'est une méthode qu'on appelle pour définir
+        # cette méthode.
+        # 
         procedure = self.send("procedure_#{side}_page".to_sym)
+        #
+        # Appel de la méthode avec les données de la page courante
+        # pour écrire ce qu'il faut sur cette page précisément.
+        # 
         procedure.call(bpage)
         spy "Page #{numero} traitée".vert
       else
@@ -99,54 +122,91 @@ end #/ << self
     @procedure_odd_page ||=  procedure_any_page(pd_left, pd_center, pd_right, :odd)
   end
 
+  # Fabrication de la procédure d'écriture de l'entête et du pied
+  # de page qui sera appliqué à chaque page.
+  # 
   def procedure_any_page(dleft, dcenter, dright, side)
     # 
-    # Procédure (vide) pour mettre les autres
+    # Procédure (vide) pour mettre les autres code
     # 
     proce = Proc.new { |bpage| bpage }
     # 
     # On ajoute tous les tiers nécessaires
     # 
+    # @rappel
+    #   Une entête et un pied de page sont définis par leur tiers,
+    #   à gauche, à droite et au centre de la page.
+    # 
+
+    #
+    # La dimension par défaut est toujours d'un tiers
+    # 
+    w = tiers
+
     if dleft
+      #
+      # Si l'entête ou le pied de page définit une partie à gauche
+      # 
       dleft.merge!(align: :left) unless dleft.key?(:align)
-      w = tiers
-      unless dcenter
-        w += tiers 
-        w += tiers unless dright
-      end
+      #
+      # Affinement de la taille en fonction de la présence des autres
+      # éléments
+      # 
+      w += tiers unless dcenter
+      w += tiers unless dright
       dleft.merge!(width: w)
+      #
+      # Procédure de construction de ce tiers en particulier
+      # 
       procleft = Proc.new { |bpage|
         build_tiers(bpage, [0, top], dleft)
       }
       proce = (proce << procleft)
     end
+
     if dcenter
+      #
+      # Si l'entête ou le pied de page définit une partie centrale
+      # 
       dcenter.merge!(align: :center) unless dcenter.key?(:align)
-      w   = tiers
-      lf  = tiers
-      unless dleft || dright
-        w += 2 * tiers
-        lf = 0
-      end
+      #
+      # Décalage à gauche du tiers (pour être au centre s'il y a 
+      # d'autres tiers)
+      # 
+      lf  = dleft ? tiers : 0
+      #
+      # Affinement de la taille suivant la présence des autres tiers
+      # 
+      w  += tiers unless dleft
+      w  += tiers unless dright
       dcenter.merge!(width: w)
+      #
+      # Finalisation de la procédure et ajout à la procédure générale
+      # 
       proccenter = Proc.new { |bpage|
-        build_tiers(bpage, [tiers, top], dcenter)
+        build_tiers(bpage, [lf, top], dcenter)
       }
       proce = (proce << proccenter)
     end
     if dright
+      # 
+      # Si l'entête ou le pied de page définit une partie à droite
+      # 
       dright.merge!(align: :right) unless dright.key?(:align)
-      w   = tiers
-      lf  = 2 * tiers
-      unless dcenter
-        w += tiers
-        lf -= tiers
-        unless dleft
-          w += tiers 
-          lf -= tiers
-        end
-      end
+      #
+      # On affine la largeur en fonction de la présence ou non des
+      # autres tiers
+      # 
+      w   = (dcenter ? dleft ? 1 : 2 : dleft ? 2 : 3) * tiers
       dright.merge!(width: w)
+      #
+      # On affine la position à gauche en fonction des autres tiers
+      # 
+      lf  = (dcenter||dleft ? dcenter ? 2 : 1 : 0) * tiers
+      #
+      # Fabrication du bout de procédure et ajout à la procédure
+      # principale.
+      # 
       procright = Proc.new { |bpage|
         build_tiers(bpage, [lf, top], dright)
       }
@@ -156,53 +216,79 @@ end #/ << self
   end
 
   ##
-  # Méthode qui dessine véritablement le tiers du headfooter
+  # === Écriture du tiers +dtiers+ de l'entête
+  #     ou du pied de page dans la page +bpage ===
   # 
   # @return [BookPage] La page (pour l'addition des procédures)
   # 
-  # @param [Prawn4book::HeadersFooters::BookPage] bpage
-  # @param [Paire] at Position du tiers
-  # @param [Hash]  Données du tiers, à commencer par {:content}
+  # @param bpage [Prawn4book::HeadersFooters::BookPage]
+  # 
+  #   Instance de page du livre.
+  # 
+  # @param at [Paire]
+  # 
+  #   Position du tiers
+  # 
+  # @param dtiers [Hash]  
+  # 
+  #   Données du tiers, à commencer par {:content}
+  # 
   def build_tiers(bpage, at, dtiers)
     if at == [0,0]
       # at[1] = -15
     end
     props = common_tiers_props.merge({
-      at:at, 
-      align: dtiers[:align], 
-      width: dtiers[:width]},
-      overflow: :expand,
-      height: 20
+      at:         at, 
+      align:      dtiers[:align], 
+      width:      dtiers[:width]},
+      overflow:   :expand,
+      height:     20
       )
     # 
     # Le contenu textuel
+    # ------------------
+    # Il dépend de sa classe.
     # 
-    content = case dtiers[:content]
-    when String       then get_content_as_custom_text(dtiers[:content])
-    when Numeric      then dtiers[:content].to_s
-    when Symbol       then bpage.send(dtiers[:content])
-    when Proc, Method then dtiers[:content].call(bpage)
-    end.to_s # peut être vide
-    content = case dtiers[:casse]
-    when :all_caps then content.upcase 
-    when :all_min  then content.downcase
-    else content
-    end
+    # @note
+    #   Lorsque dtiers[:content] est un symbol, c'est une méthode
+    #   de la page (BookPage) qui sera appelée pour retourner le
+    #   contenu. 
+    #   C'est le cas typique pour un numéro de page : 
+    #   dtiers[:content] est alors égal à :numéro, c'est donc la 
+    #   méthode BookPage#numero qui est appelée.
     # 
-    # La fonte à appliquer
+    content = 
+        case dtiers[:content]
+        when String       then get_content_as_custom_text(dtiers[:content])
+        when Numeric      then dtiers[:content].to_s
+        when Symbol
+          # p.e. :numero
+          bpage.send(dtiers[:content])
+        when Proc, Method then dtiers[:content].call(bpage)
+        end.to_s # peut être vide
+    content = 
+        case dtiers[:casse]
+        when :all_caps then content.upcase 
+        when :all_min  then content.downcase
+        else content
+        end
+    # 
+    # Fonte à appliquer
     # 
     lafonte = fonte(dtiers)
+    #
+    # Alignement du contenu
+    # 
     props_text = {align: props.delete(:align)}
+    #
+    # Écriture proprement dite
+    # 
     pdf.update do
       font(lafonte) do
         # bounding_box(at, **{width:props.delete(:width), height:})
         bounding_box( props.delete(:at), **props) do
           text(content, **props_text)
         end
-        # bounding_box( [bounds.left, bounds.bottom - 30], **{width: bounds.width, height: 30}) do
-        #   # text_box(content, **props)
-        #   text content
-        # end
       end
     end
     # 
@@ -229,24 +315,31 @@ end #/ << self
   def common_tiers_props
     @common_tiers_props ||= begin
       spy "#{'Calcul de la hauteur'.jaune} : #{height.inspect}".bleu
-      {height: height, width: tiers, size: font_size, overflow: :expand}
+      {height: height, size: font_size}
     end
   end
 
-  # @prop [Float] Retourne le nombre de points-post-script pour le
-  # document courant, pour un tiers de page.
+  # @prop [Float] Taille d'un tiers de page (en points-post-script)
+  # 
   def tiers
     @tiers ||= (pdf.bounds.width.to_f / 3).round(6)
   end
 
+  # Définition de la fonte à utiliser
+  # 
+  # Soit elle est définie explicitement par ce headfoot, soit elle
+  # est prise dans la recette
+  # 
   def fonte(dtiers = {})
-    fontnstyle = dtiers[:font_n_style] || 'Helvetica/italic'
+    fontnstyle = dtiers[:font_n_style] || book.recipe.pagination_font_n_style
     fname, fstyle = fontnstyle.split('/')
     fstyle = fstyle.to_sym
     Fonte.new(fname, **{style:fstyle, size: font_size})
   end
+
+  # @return Taille de la fonte pour ce head-foot
   def font_size(dtiers = {})
-    dtiers[:size] || @font_size ||= (size || 10)
+    dtiers[:size] || @font_size ||= book.recipe.pagination_font_size
   end
 
 private

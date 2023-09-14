@@ -46,6 +46,8 @@ class FatalPrawForBookError < StandardError
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],
       1002  => Prawn4book::ERRORS[:parsing][:unknown_method],
       1100  => Prawn4book::ERRORS[:modules][:runtime_error],
+      # -- Modules utilisateurs personnalisés --
+      5000  => Prawn4book::ERRORS[:user_modules][:runtime_error],
     }
     @errors_by_num[err_id]
   end

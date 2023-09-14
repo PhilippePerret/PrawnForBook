@@ -94,6 +94,17 @@ ERRORS = {
       %{backtrace}
       ERR
   },
+
+  user_modules: {
+    runtime_error: <<~ERR,
+      Une erreur s'est produite dans un module propre :
+        %{err}
+      Contexte:
+        %{context}
+      Trace:
+        %{trace}
+      ERR
+  },
   
   # --- Aide ---
 

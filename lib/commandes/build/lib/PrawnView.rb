@@ -104,7 +104,6 @@ class PrawnView
     # 
     if page_number.even? && pdfbook.recipe.hybrid_numerotation?
       PdfBook::AnyParagraph.reset_numero
-      dbg "Remise du dernier numéro de paragraphe à #{PdfBook::AnyParagraph.last_numero}".orange
     end
 
     spy "<- Nouvelle page initiée avec succès".vert

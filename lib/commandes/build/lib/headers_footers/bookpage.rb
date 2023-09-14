@@ -10,11 +10,14 @@ class HeadersFooters
 class BookPage
 
   class << self
+    #
+    # Pour indiquer explicitement s'il faut ou non une pagination sur
+    # cette page.
+    # 
+    def set_numero_page(value); @withnumeropage = value end
+    # - Méthode interrogée par toutes les instances -
     def numero_page?
-      @withnumeropage == true
-    end
-    def set_numero_page(value)
-      @withnumeropage = value
+      @withnumeropage === true
     end
   end
 
@@ -43,10 +46,16 @@ class BookPage
   # - Helpers Methods -
   # 
   # Méthodes qui peuvent être utilisées dans le contenu d'un tiers
-  # de header/footer pour le remplir
+  # de header/footer pour le remplir. Les données du tiers sont 
+  # alors mises à dtiers[:content] = :<méthode de BookPage>
+
 
   # @return [String] Le vrai numéro de page, en fonction du type de
   # numérotation (par numéro de page ou numérotation de paragraph)
+  # 
+  # @note
+  #   En cas de numérotation "hybride", c'est le numéro de page qui
+  #   est marqué.
   # 
   # @api public
   def numero
@@ -106,6 +115,7 @@ class BookPage
   end
 
   # - Volatile Data -
+
 
   def numero_paragraphs
     @numero_paragraphs ||= begin
