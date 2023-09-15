@@ -23,6 +23,7 @@ module ParserFormaterClass
   # +context+ et la renvoie corrigée
   # 
   # @param [String] str La chaine de caractère à traiter
+  # 
   # @param [Hash]   context   Le contexte (et notamment le paragraph, les styles, etc.)
   # 
   # @return [String|Nil] la chaine de caractère corrigée ou nil si le texte a été traité avant.
