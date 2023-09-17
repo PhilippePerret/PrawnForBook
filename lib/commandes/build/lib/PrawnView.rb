@@ -100,7 +100,8 @@ class PrawnView
 
     # 
     # Si l'on est en mode pagination hybride (hybrid), il faut 
-    # réinitialiser les numéros de paragraphe
+    # réinitialiser les numéros de paragraphe à chaque nouvelle
+    # double page.
     # 
     if page_number.even? && pdfbook.recipe.hybrid_numerotation?
       PdfBook::AnyParagraph.reset_numero

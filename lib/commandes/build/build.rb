@@ -60,7 +60,7 @@ class PdfBook
     Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
 
     #
-    # On doit parser le texte avant de voir si le livre est
+    # On doit parser le texte avant pour voir si le livre est
     # conforme
     # 
     spy "-> PARSE DU TEXTE".bleu
@@ -103,6 +103,11 @@ class PdfBook
 
       table_references.second_turn = true
       PdfBook::AnyParagraph.init_second_turn
+      #
+      # Construction finale du livre
+      # (mais elle peut se faire à la première passe s'il n'y a
+      #  pas de références arrières)
+      # 
       ok_book = build_pdf_book
     end
 
@@ -218,8 +223,9 @@ class PdfBook
     #
     # - PAGES SUPPLÉMENTAIRES -
     # 
-    # Note : sauf la page d'index s'appelle directement dans le
-    # texte par la marque '(( index ))'
+    # @note
+    #   Sauf la page d'index qui s'appelle directement dans le
+    #   texte par la marque '(( index ))'
     # 
     # Écriture des pages supplémentaires obtenues par le 
     # parser, if any
@@ -253,7 +259,9 @@ class PdfBook
     # 
     pdf.build_headers_and_footers(self, pdf)
 
-
+    #
+    # Affichage du rapport final
+    # 
     if defined?(ParserParagraphModule) && ParserParagraphModule.respond_to?(:report)
       ParserParagraphModule.report
     end
@@ -268,7 +276,10 @@ class PdfBook
     # 
     pdf.draw_margins if display_margins?
 
-    
+    #
+    # Enregistrement du code du livre dans son fichier pour produire
+    # le document PDF final.
+    # 
     pdf.save_as(pdf_path)
 
     #

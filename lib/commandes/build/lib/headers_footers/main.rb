@@ -29,15 +29,17 @@ class HeadersFooters
   def build
     #
     # On ne fait rien s'il ne faut pas placer de header/footer.
+    # 
     # @note
     #   Par défaut, il y a toujours au moins un pied de page avec le
-    #   numéro du paragraphe ou de la page. Pour qu'il n'y ait pas
-    #   de données, il faut que l'utilisateur l'ait explicitement
-    #   stipulé.
+    #   numéro de la page. Pour qu'il n'y ait pas de données, il faut 
+    #   que l'utilisateur l'ait explicitement stipulé.
     # 
     data? || return
     # 
     # On donne les données Headfooters à la class Headfooter
+    # 
+    # @pourquoi ?
     # 
     Headfooter.data = headfooters
     # 
@@ -67,8 +69,16 @@ class HeadersFooters
 
   ##
   # Prépare la propriété publique @data_pages de cette disposition
-  # Elle contiendra en clé le numéro de page et en valeur l'instance
-  # BookPage
+  # 
+  # @notes
+  # 
+  #   * Elle contient en clé le numéro de la page et en valeur 
+  #     l'instance BookPage
+  # 
+  #   * Cette méthode permet de gérer aussi le fait qu'une grande
+  #     table, qui tient sur plusieurs pages, ne génère pas de 
+  #     nouvelle page (start_new_page) et que ces autres pages ne
+  #     sont donc pas numérotées
   # 
   def prepare_data_pages
     # 
@@ -83,9 +93,23 @@ class HeadersFooters
     # Table qui contiendra toutes les données (-> @data_pages)
     # 
     tbl = {}
+    #
+    # Pour s'assurer que toutes les pages sont traitées
     # 
-    # Boucle sur chaque page du livre (relevées pendant la 
-    # construction)
+    continous_numero = 0
+    #
+    # Pour mettre les numéros de pages qu'il faudra ajouter
+    # à book.pages
+    # INUTILE, APPAREMMENT
+    # 
+    added_pages_numeros = []
+    # 
+    # Boucle sur chaque page du livre
+    # 
+    # @notes 
+    # 
+    #   * Elles ont été relevées pendant la construction du livre
+    #     dans la méthode 
     # 
     # spy "book.pages = #{book.pages.pretty_inspect}"
     # exit
@@ -95,6 +119,56 @@ class HeadersFooters
       # malencontreusement dans les données de page
       # 
       next if not(dpage_init.is_a?(Hash))
+      #
+      # Quelque fois il n'y a pas de numéro de page 
+      # (pourquoi ? Ça serait bien de le savoir)
+      # 
+      next if !page_num
+      #
+      # Le numéro continue attendu
+      # 
+      continous_numero += 1
+
+      # puts "Traitement de la page #{page_num}".bleu
+
+      if page_num > continous_numero
+        #
+        # = PROBLÈME DE PAGES MANQUANTES =
+        #   (cf. pourquoi dans l'explication de la méthode)
+        # 
+        # On doit créer les pages de +continous_numero+ jusqu'à
+        # page_num - 1 en s'inspirant de la page de numéro
+        # <continous_numero - 1>
+        #
+        # puts "Problème de page manquante (#{continous_numero})".rouge
+        page_reference = tbl[continous_numero-1]
+        dpage_ref = page_reference.data
+        #
+        # On modifie les données de la page de référence pour que 
+        # son numéro de page soit inscrit (si nécessaire)
+        # 
+        page_reference.data.merge!({
+          content_length: 1000, 
+          first_par: 1          
+        })
+
+        #
+        # On ajoute toutes les pages manquantes
+        # 
+        for i in (continous_numero...page_num) do
+          dpage = {}
+            .merge(dpage_ref)
+            .merge({
+              num_page: i,
+              # content_length: 1000, 
+              # first_par: 1
+            }) 
+          # puts "\ndpage = #{dpage.pretty_inspect}".bleu
+          tbl.merge!(i => BookPage.new(book, pdf, dpage))
+          continous_numero += 1
+          # added_pages_numeros << i.freeze
+        end
+      end
 
       dpage = dpage_init.dup
       # spy "dpage = #{dpage.inspect}".gris
@@ -141,6 +215,15 @@ class HeadersFooters
 
       tbl.merge!(page_num => BookPage.new(book, pdf, dpage))
     end
+
+    # #
+    # # Ajouter les pages manquantes (p.e. les tables s'étirant sur
+    # # plusieurs pages)
+    # # ÇA NE SERT À RIEN, VISIBLEMENT
+    # added_pages_numeros.each do |i|
+    #   book.add_page(i)
+    # end
+
 
     @data_pages = tbl
   end
