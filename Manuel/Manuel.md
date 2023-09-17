@@ -22,13 +22,14 @@ Les grandes forces de ***PRAWN-FOR-BOOK*** sont donc :
 
 * production simple d’un document PDF valide, professionnel, prêt pour l’imprimerie,
 * gestion cohérente de toute une collection de livres,
-* mise en forme du texte dans ses moindre détails (feuilles de style, modules complexes — experts — de formatage),
+* mise en forme du texte dans ses moindres détails (feuilles de style, modules complexes — experts — de formatage),
 * gestion des références internes (renvois, références à une page ou un paragraphes, etc.),
 * gestion des références croisées (références à la page d’un autre livre)
 * gestion d’un index, 
 * gestion d’autant de bibliographies que l’on veut,
 * gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…),
-* gestion puissante de n’importe quelle information au fil du texte.
+* gestion puissante de n’importe quelle information au fil du texte ou sous forme de rapport,
+* extension infinie des capacités… (pour les experts)
 
 ### Commande principale
 
@@ -743,7 +744,8 @@ Un paragraphe de texte normal.
 									donnant en valeur une table qui contient en clé l'indice 1-start de
 									la colonne est en valeur la dimension. Par exemple :
 									{ column_widths: {2 => '20%'} }
-:width 						Largeur de la table (par défaut adaptée au contenu)
+:width 						Largeur de la table (par défaut adaptée au contenu — mais il vaut mieux 
+									la spécifier explicitement) [1]
 :header						Si true, la première rangée est considérée comme une entête.
 :position					Pour positionner la table. Valeur
 									:left (positionner à gauche), :right (positionner à droite) :center
@@ -778,6 +780,10 @@ Un paragraphe de texte normal.
 									* :min_font_size 	Taille minimale quand on "shrink" le texte pour qu'il
 																tienne dans la cellule.
 ~~~
+
+> **[1]**
+>
+> Afin de ne pas être confronté au problème de taille qui ne correspond pas au contenu dans les tables, il est bon de préciser explicitement la largeur de la table attendu. On peut s’appuyer évidemment sur `pdf.bounds.width` qui contient la largeur de page utilisable (donc la largeur totale de la page à laquelle a été retiré les marges).
 
 ##### Valeurs en pourcentage
 
@@ -2928,7 +2934,7 @@ publishing:
 >
 > 
 
-<a name="recette-fonts"></a>
+<a name="recette-fonts"></a><a name="fontes"></a>
 
 #### fonts (données des polices)
 
@@ -2938,7 +2944,7 @@ publishing:
 #<fonts>
 fonts:
 	fontName: # le nom de la police cf/ [1]
-		monstyle: 		"/path/to/font.ttf" # Style cf. [2]
+		monstyle: 		"/path/to/font.ttf" # Style cf. [2][3]
 		autrestyle: 	"/path/to/font-autrestyle"
 		bold: 				"/path/to/bold.ttf" # [2]
 		italic:	 			"/path/to/italic.ttf" # [2]
@@ -2962,17 +2968,21 @@ fonts:
 > **[2]**
 >
 > Comme on le voit ci-dessus, on peut utiliser n’importe quel nom de style, pourvu qu’il soit associé à un fichier `ttf` existant. Cependant, certains noms de styles sont importants pour gérer correctement les balises de formatages HTML de type `<i>` ou `<b>`. Pour `<i>`, il faut définir le style `italic:` et pour `<b>` il faut définir le style `:bold`.
+>
+> **[3]**
+>
+> Pour trouver le chemin d’accès à une police quelconque, voir la [procédure décrite en annexe](#path-to-police).
 
 ##### Dossiers des fontes
 
-On peut définir les dossiers des fontes par variables pour y faire référence plus facilement. Mais notez que cette utilisation fonctionne seulement pour une définition des polices « à la main ». Pour les définir avec l’assistant, il faut définir les dossiers dans la constante **`DATA_FONTS_FOLDERS`** du fichier `./lib/commandes/assistant/assistants/fontes.rb`.
+On peut définir les dossiers des fontes par variables pour y faire référence plus facilement. Mais notez que cette utilisation fonctionne seulement pour une définition des polices « à la main ». [Expert] Pour les définir avec l’assistant, il faut mettre les mains dans le cambouis (dossier de l’application) et définir les dossiers dans la constante **`DATA_FONTS_FOLDERS`** du fichier `./lib/commandes/assistant/assistants/fontes.rb`.
 
 ~~~yaml
 # ...
 # Une variable pour simplifier
-dossier_fonts: &dosfonts "/Users/philippeperret/Library/Fonts"
+dossier_fonts: &dosfonts "/Users/phil/Library/Fonts"
 fonts_system:  &sysfonts "/System/Library/Fonts"
-prawn_fonts: &pfbfonts "/Users/philippeperret/Programmes/Prawn4book/resources/fonts" 
+prawn_fonts: &pfbfonts "/Users/phil/Programmes/Prawn4book/resources/fonts" 
 
 # Définition des fontes (note : ce sont celles par défaut quand on
 # utilise les templates)
@@ -2994,7 +3004,9 @@ fonts:
 #</fontes>
 ~~~
 
-> L’ordre des fonts ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
+> L’**ordre de définition des fontes** ci-dessous peut être défini avec soin, car si certains éléments du livre ne définissent pas leur fonte, cette fonte sera choisie parmi les fontes ci-dessus. Pour des textes importants (comme les index, la table des matières, etc.) c’est la première fonte qui sera choisie tandis que pour des textes mineurs (numéros de paragraphes, entête et pied de page, etc.), c’est la seconde qui sera choisie.
+
+---
 
 <a name="biblios-data-in-recipe"></a>
 
@@ -3595,6 +3607,36 @@ Pour ne pas afficher les espaces insécables dans Sublime Text :
   ~~~
 
 * enregistrer.
+
+---
+
+<a name="path-to-police"></a>
+
+## Trouver le chemin vers une police
+
+Sur Mac, pour obtenir facilement le chemin vers une police, on peut utiliser cette procédure :
+
+* Ouvrir la fenêtre des polices dans n’importe quelle application (souvent en jouant `⌘ t`,
+
+* dans le petit menu général (en haut à gauche), choisir « Gérer les polices »,
+
+  => Cela ouvre l’application 
+
+* Ouvrir spotlight (`⌘[Espace]`) et taper « Li »,
+
+* choisir d’ouvrir l’application « Livre des polices »,
+
+* trouver la police voulue,
+
+* ouvrir le menu contextuel en cliquant sur la police (`⌃[clic sur police]`),
+
+* choisir l’item de menu « Afficher dans le Finder »
+
+* dans le Finder, ouvrir le menu contextuel en cliquant sur le fichier de la police (`⌃[clic sur fichier]`), 
+
+* presser la touche `⌥` et choisir l’item de menu « Copier \<nom de la police> en tant que nom de chemin »,
+
+* le chemin d’accès au fichier de la police est placé dans le presse-papier, il suffit de le coller dans la recette du livre.
 
 ---
 
