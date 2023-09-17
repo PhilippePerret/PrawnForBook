@@ -71,7 +71,7 @@ class PrawnView
   ##
   # - NOUVELLE PAGE -
   # 
-  # Méthode appelée quand on passe à une nouvelle page, de façon
+  # Méthode appelée pour passer à une nouvelle page, de façon
   # volontaire ou naturelle.
   # 
   def start_new_page(options = {})
@@ -89,9 +89,9 @@ class PrawnView
     end
     #
     # Ajouter une page dans la donnée @pages du book
-    # 
-    pdfbook.add_page(page_number)
-    spy "Nouvelle page créée (page #{page_number} ajoutée à @pages)".jaune
+    # NON : maintenant, c'est fait dans on_page_create
+    # pdfbook.add_page(page_number)
+    # spy "Nouvelle page créée (page #{page_number} ajoutée à @pages)".jaune
     # 
     # On replace toujours le curseur en haut de la page
     # 

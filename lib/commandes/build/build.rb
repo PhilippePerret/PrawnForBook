@@ -5,6 +5,46 @@
   et du texte fourni.
 
 =end
+require 'prawn/table'
+# module DrawWrapperModule
+  class Prawn::Document
+    
+    def add_content_length_to_current_page(len)
+      @pdfbook ||= Prawn4book::PdfBook.current
+      @pdfbook.add_page(page_number) unless @pdfbook.pages[page_number]
+      @pdfbook.pages[page_number][:content_length] += len
+    end
+
+    alias_method :__real_text, :text
+    def text(str, **params)
+      # puts "Je dois écrire “#{str}” dans la page #{page_number}"
+      add_content_length_to_current_page(str.to_s.length)
+      __real_text(str, **params)
+    end
+    alias_method :__real_draw_text, :draw_text
+    def draw_text(str, **params)
+      add_content_length_to_current_page(str.to_s.length)
+      __real_draw_text(str, **params)
+    end
+    alias_method :__real_image, :image
+    def image(ipath, **params)
+      add_content_length_to_current_page(100)
+      __real_image(ipath, **params)
+    end
+    # TODO IDEM AVEC : text_box, formatted_text,
+    # formatted_text_box,
+  end
+
+  class Prawn::Table::Cell::Text
+    alias_method :__real_draw_content, :draw_content
+    def draw_content #(lines, **params, &block)
+      # puts "On ajoute #{content.length} caractères dans la table : #{content.inspect}".bleu
+      @pdf.add_content_length_to_current_page(content.length)
+      __real_draw_content
+      # super
+    end
+  end #/class Prawn::Table
+# # end
 module Prawn4book
 class Command
   #
@@ -72,7 +112,6 @@ class PdfBook
     # éléments requis
     # 
     conforme? || return
-
 
     # 
     # = PREMIÈRE PASSE =
@@ -143,10 +182,22 @@ class PdfBook
     # 
     PrawnView::Error.reset
 
+    my = self
+
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #    
     pdf = PrawnView.new(self, pdf_config)
+
+    pdf.on_page_create do
+      # puts "Nouvelle page créée : #{pdf.page_number}".orange
+      my.add_page(pdf.page_number)
+    end
+
+    # pdf.before_render do
+    #   puts "Je dois rendre quelque chose"
+    # end
+
     # Pour pouvoir l'atteindre partout
     Metric.pdf = pdf
     
@@ -219,6 +270,10 @@ class PdfBook
     # cf. modules/pdfbook/generate_builder/paragraphes.rb
     # 
     pdf.print_paragraphs(inputfile.paragraphes)
+
+    # ESSAI
+    # page = pdf.page
+    # puts "page ##{page.number}: #{page.xobjects}"
 
     #
     # - PAGES SUPPLÉMENTAIRES -
@@ -324,7 +379,6 @@ class PdfBook
     # - Modules d'helpers -
     # 
     custom_helper_paths.each { |m| require(m) }
-
 
     #
     # On les distribue

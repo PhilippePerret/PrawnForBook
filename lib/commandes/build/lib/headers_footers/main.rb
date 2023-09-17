@@ -220,15 +220,6 @@ class HeadersFooters
       tbl.merge!(page_num => BookPage.new(book, pdf, dpage))
     end
 
-    # #
-    # # Ajouter les pages manquantes (p.e. les tables s'étirant sur
-    # # plusieurs pages)
-    # # ÇA NE SERT À RIEN, VISIBLEMENT
-    # added_pages_numeros.each do |i|
-    #   book.add_page(i)
-    # end
-
-
     @data_pages = tbl
   end
 

@@ -1,5 +1,6 @@
 module Prawn4book
 class Pages
+  PAGE_FAKED_LENGTH = 500000
 class Bibliography
 
   # = main =
@@ -46,6 +47,24 @@ class Bibliography
     # Les options à appliquer
     # 
     options = {inline_format: true, leading: leading}
+    #
+    # Page de départ
+    # 
+    page_number_at_start = pdf.page_number
+    if book.pages[page_number_at_start].nil?
+      # puts "La page du lexique n'est pas connue.".rouge
+      book.add_page(page_number_at_start) # impossible, normalement
+    end
+    if book.pages[page_number_at_start][:content_length] == 0
+      # On met toujours une valeur, car si le texte est écrit 
+      # directement dans le livre, on ne peut pas connaitre la
+      # longueur de texte ajouté.
+      # -- valeur fictive --
+      book.pages[page_number_at_start][:content_length] = PAGE_FAKED_LENGTH
+    end
+    if book.pages[page_number_at_start][:first_par].nil?
+      book.pages[page_number_at_start][:first_par] = 1
+    end
     # 
     # On écrit tous les items de cette bibliographie
     # 
@@ -72,7 +91,16 @@ class Bibliography
         raise FatalPrawForBookError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
       end
       unless str.nil?
+        #
+        # Si le texte n'a pas été écrit directement dans le 
+        # livre
+        # 
         pdf.text(str, **options)
+        if  book.pages[page_number_at_start][:content_length] == PAGE_FAKED_LENGTH
+          # -- valeur fictive retirée --
+          book.pages[page_number_at_start][:content_length] = 0
+        end
+        book.pages[page_number_at_start][:content_length] += str.length
         pdf.move_down(4)
       end
     end

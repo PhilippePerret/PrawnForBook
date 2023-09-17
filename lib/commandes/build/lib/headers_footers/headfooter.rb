@@ -88,6 +88,7 @@ end #/ << self
       # concernées par l'head-foot, on passe à la suivante.
       # 
       next unless page_in_range?(numero)
+
       #
       # Sinon, on prend les données de la page
       # 
