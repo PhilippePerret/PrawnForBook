@@ -78,7 +78,9 @@ class HeadersFooters
   #   * Cette méthode permet de gérer aussi le fait qu'une grande
   #     table, qui tient sur plusieurs pages, ne génère pas de 
   #     nouvelle page (start_new_page) et que ces autres pages ne
-  #     sont donc pas numérotées
+  #     sont donc pas numérotées.
+  #     Le problème a été réglé (bug #99) en traitant les pages
+  #     ajoutées par une méthode d'helper ou de formator.
   # 
   def prepare_data_pages
     # 
@@ -102,7 +104,7 @@ class HeadersFooters
     # à book.pages
     # INUTILE, APPAREMMENT
     # 
-    added_pages_numeros = []
+    # added_pages_numeros = []
     # 
     # Boucle sur chaque page du livre
     # 
@@ -135,12 +137,14 @@ class HeadersFooters
         #
         # = PROBLÈME DE PAGES MANQUANTES =
         #   (cf. pourquoi dans l'explication de la méthode)
+        #   (cf. aussi pourquoi le problème semble avoir été
+        #    résolu)
         # 
         # On doit créer les pages de +continous_numero+ jusqu'à
         # page_num - 1 en s'inspirant de la page de numéro
         # <continous_numero - 1>
         #
-        # puts "Problème de page manquante (#{continous_numero})".rouge
+        # puts "Problème de page(s) manquante(s) (de #{continous_numero} à #{page_num - 1})".rouge
         page_reference = tbl[continous_numero-1]
         dpage_ref = page_reference.data
         #

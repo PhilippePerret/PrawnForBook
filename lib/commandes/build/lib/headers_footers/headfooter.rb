@@ -109,7 +109,7 @@ end #/ << self
         # 
         procedure.call(bpage)
         spy "Page #{numero} traitée".vert
-        puts "Page #{numero} traitée".vert
+        # puts "Page #{numero} traitée".vert
       else
         add_erreur("Impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.")
         spy "Minor error : impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.".orange
@@ -259,7 +259,6 @@ end #/ << self
     #   dtiers[:content] est alors égal à :numéro, c'est donc la 
     #   méthode BookPage#numero qui est appelée.
     # 
-    puts "dtiers[:content] = #{dtiers[:content].inspect}".bleu
     content = 
         case dtiers[:content]
         when String       then get_content_as_custom_text(dtiers[:content])
@@ -286,7 +285,7 @@ end #/ << self
     #
     # Écriture proprement dite
     # 
-    puts "content : #{content}".bleu
+    # puts "content : #{content}".bleu
     pdf.update do
       font(lafonte) do
         # bounding_box(at, **{width:props.delete(:width), height:})
