@@ -423,7 +423,7 @@ private
       if self.respond_to?(method_name)
         str = self.send(method_name, str, context)
       else
-        raise FatalPrawForBookError.new(1000, **{meth: method_name})
+        raise FatalPrawnForBookError.new(1000, **{meth: method_name})
       end
     end
 

@@ -290,7 +290,7 @@ class NTextParagraph < AnyParagraph
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e
-      raise FatalPrawForBookError.new(100, {
+      raise FatalPrawnForBookError.new(100, {
         text:text.inspect, 
         err: e.message, 
         backtrace:(debug? ? e.backtrace.join("\n") : '')
@@ -320,7 +320,7 @@ class NTextParagraph < AnyParagraph
         raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
       end
     else
-      raise FatalPrawForBookError.new(200, **{mname: method_name})
+      raise FatalPrawnForBookError.new(200, **{mname: method_name})
     end
   end
 

@@ -47,7 +47,7 @@ class Bibliography
         method_name = "#{id}_in_text".to_sym
         if self.methods.include?(method_name) # true ou false
           nombre_parametres = self.method(method_name).parameters.count
-          nombre_parametres == 3 || raise(FatalPrawForBookError.new(730, {method_name: method_name}))
+          nombre_parametres == 3 || raise(FatalPrawnForBookError.new(730, {method_name: method_name}))
           method_name
         end
       end
@@ -71,7 +71,7 @@ class Bibliography
         method_name = "biblio_#{id}".to_sym
         if self.methods.include?(method_name) # true ou false
           nombre_parametres = self.method(method_name).parameters.count
-          nombre_parametres == 2 || raise(FatalPrawForBookError.new(731, {method_name: method_name, nb_args: "#{nombre_parametres}#{' seul'if nombre_parametres == 1} argument#{'s' if nombre_parametres > 1}"}))
+          nombre_parametres == 2 || raise(FatalPrawnForBookError.new(731, {method_name: method_name, nb_args: "#{nombre_parametres}#{' seul'if nombre_parametres == 1} argument#{'s' if nombre_parametres > 1}"}))
           method_name
         end
       end
@@ -171,7 +171,7 @@ class Bibliography
   def folder
     @folder ||= begin
       pth = data[:path] || begin
-        raise FatalPrawForBookError.new(711, {prefix:ERRORS[:biblio][:biblio_malformed] % {tag:id.to_s}, tag:id.to_s})
+        raise FatalPrawnForBookError.new(711, {prefix:ERRORS[:biblio][:biblio_malformed] % {tag:id.to_s}, tag:id.to_s})
       end
       pth_ini = data[:path].freeze
       # 
@@ -203,9 +203,9 @@ class Bibliography
   end
   def check_if_well_defined
     prefix_err = ERRORS[:biblio][:biblio_malformed] % {tag: tag}
-    data.key?(:title)   || raise(FatalPrawForBookError.new(710, **{prefix: prefix_err, tag: tag}))
-    data.key?(:path)    || raise(FatalPrawForBookError.new(711, **{prefix: prefix_err, tag: tag}))
-    File.exist?(folder) || raise(FatalPrawForBookError.new(712, **{prefix: prefix_err, tag: tag, path:data[:path]}))
+    data.key?(:title)   || raise(FatalPrawnForBookError.new(710, **{prefix: prefix_err, tag: tag}))
+    data.key?(:path)    || raise(FatalPrawnForBookError.new(711, **{prefix: prefix_err, tag: tag}))
+    File.exist?(folder) || raise(FatalPrawnForBookError.new(712, **{prefix: prefix_err, tag: tag, path:data[:path]}))
   end
 
   # - Data Methods -

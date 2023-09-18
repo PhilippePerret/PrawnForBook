@@ -110,7 +110,7 @@ class NTable < AnyParagraph
         pdf.table(lines, table_style, &code_block)
       end
     rescue Prawn::Errors::CannotFit => e
-      raise FatalPrawForBookError.new(3000, {err: e.message})
+      raise FatalPrawnForBookError.new(3000, {err: e.message})
     end
 
     # - Réglage de l'espace après la table -

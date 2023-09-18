@@ -5,7 +5,7 @@ class PrawnBuildingError < StandardError; end
 class PrawnFatalError < StandardError; end
 
 # Pour produire une erreur fatale par son numéro d'erreur
-class FatalPrawForBookError < StandardError
+class FatalPrawnForBookError < StandardError
   def initialize(err_id, temp_data = nil)
     err_msg = build_message(err_id, temp_data)
     super(err_msg)

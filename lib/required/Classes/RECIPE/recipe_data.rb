@@ -235,7 +235,7 @@ class Recipe
 
   # ne pas confondre avec la clé :book_format de la cette
   def format_book 
-    @format_book        ||= DATA[:book_format][:book] || raise(FatalPrawForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
+    @format_book        ||= DATA[:book_format][:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
   end
 
   def format_titles

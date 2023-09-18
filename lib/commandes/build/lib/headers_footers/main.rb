@@ -146,7 +146,7 @@ class HeadersFooters
         # 
         # NON, MAINTENANT C'EST UNE VRAI ERREUR FATALE
         # 
-        raise FatalPrawForBookError.new("Il manque une définition de page, pour une raison inconnue… Je ne peux pas construire ce livre.")
+        raise FatalPrawnForBookError.new("Il manque une définition de page, pour une raison inconnue… Je ne peux pas construire ce livre.")
         # #
         # # puts "Problème de page(s) manquante(s) (de #{continous_numero} à #{page_num - 1})".rouge
         # page_reference = tbl[continous_numero-1]

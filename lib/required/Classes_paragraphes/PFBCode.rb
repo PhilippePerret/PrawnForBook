@@ -67,7 +67,7 @@ class PFBCode < AnyParagraph
       # Pour le moment, on considère que ça ne peut être qu'une cible
       treate_as_cible_references(pdf, pdfbook)
     when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
-      raise FatalPrawForBookError.new(2000, {code: raw_code})
+      raise FatalPrawnForBookError.new(2000, {code: raw_code})
     when 'line'
       pdf.update do
         text " "
@@ -80,7 +80,7 @@ class PFBCode < AnyParagraph
       params  = $2.freeze
       traite_as_methode_with_params(pdf, methode, params)
     else
-      raise FatalPrawForBookError.new(1001, {code:raw_code, page: pdf.page_number})
+      raise FatalPrawnForBookError.new(1001, {code:raw_code, page: pdf.page_number})
     end
   end
 
@@ -181,10 +181,10 @@ class PFBCode < AnyParagraph
       end
     rescue Exception => e
       if e.message == 'méthode inconnue'
-        raise FatalPrawForBookError.new(1002, {code:raw_code, meth: methode})
+        raise FatalPrawnForBookError.new(1002, {code:raw_code, meth: methode})
       else
         # Méthode mal implémentée
-        raise FatalPrawForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
+        raise FatalPrawnForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
       end
     end
 

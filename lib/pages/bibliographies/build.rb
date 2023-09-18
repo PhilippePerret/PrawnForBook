@@ -88,7 +88,7 @@ class Bibliography
         # La méthode peut retourner nil si le code a été écrit 
         # directement dans le document pdf.
       rescue Exception => e
-        raise FatalPrawForBookError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
+        raise FatalPrawnForBookError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
       end
       unless str.nil?
         #
