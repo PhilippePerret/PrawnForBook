@@ -50,6 +50,21 @@ require 'prawn/table'
       add_content_length_to_current_page(str.to_s.length)
       __real_draw_text(str, **params)
     end
+    alias_method :__real_formatted_text, :formatted_text
+    def formatted_text(str, **params)
+      add_content_length_to_current_page(str.to_s.length)
+      __real_formatted_text(str, **params)
+    end
+    alias_method :__real_formatted_text_box, :formatted_text_box
+    def formatted_text_box(str, **params)
+      add_content_length_to_current_page(str.to_s.length)
+      __real_formatted_text_box(str, **params)
+    end
+    alias_method :__real_text_box, :text_box
+    def text_box(str, **params)
+      add_content_length_to_current_page(str.to_s.length)
+      __real_text_box(str, **params)
+    end
     alias_method :__real_image, :image
     def image(ipath, **params)
       add_content_length_to_current_page(100)
