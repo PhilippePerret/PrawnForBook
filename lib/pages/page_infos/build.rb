@@ -25,12 +25,11 @@ class PageInfos
     @infos_to_print = get_infos_to_print
     # 
     # On commence par se placer sur la bonne page
+    # (une belle page seule)
     # 
     pdf.update do
       nombre_blanches = page_number.even? ? 3 : 2
-      nombre_blanches.times {
-        start_new_page  
-      }
+      nombre_blanches.times { start_new_page }
     end
     # 
     # Pour appel dans pdf
@@ -46,7 +45,7 @@ class PageInfos
     end
 
     #
-    # Si on est en mode "réparti" (toutes les informations réparties
+    # Si on est en mode "distribué" (toutes les informations réparties
     # sur la page) alors il faut calculer les choses
     # 
     if mode_distributed?
@@ -146,12 +145,15 @@ class PageInfos
     @interstice_height
   end
 
+  # Méthode qui réparti les informations de la page sur la page en
+  # mode "distribué"
+  # 
   def dispose_element_on_surface(pdf)
     #
     # Surface sur laquelle pourront se mettre les informations si
     # on doit les répartir.
     # 
-    surface_height = recipe.book_height
+    surface_height = pdf.bounds.height
     surface_height -= 40    # pour laisser encore de l'air au-dessus
     # 
     # Hauteur prise par un label
@@ -212,20 +214,20 @@ class PageInfos
   def get_infos_to_print
     ary = []
     [:name, :url, :adresse, :mail].each do |prop|
-      if publisher[prop]
+      if publishing[prop]
         value = if prop == :adresse
-            publisher[prop].split("\\n").join(LINEAR_DELIMITOR)
+            publishing[prop].split("\\n").join(LINEAR_DELIMITOR)
           else
-            publisher[prop]
+            publishing[prop]
           end
         ary << {label:nil, value: value, no_space: true}
       end
     end
-    if publisher[:siret]
-      ary << {label:nil, value: "SIRET : #{publisher[:siret]}", no_space: true}
+    if publishing[:siret]
+      ary << {label:nil, value: "SIRET : #{publishing[:siret]}", no_space: true}
     end
     ary[-1].merge!(no_space: false)
-    ary << {label: 'Contact', value:publisher[:contact]} if publisher[:contact]
+    ary << {label: 'Contact', value:publishing[:contact]} if publishing[:contact]
     ary << {value: "Dépôt légal : #{page_infos[:depot_legal]}"} if page_infos[:depot_legal]
     ary << {value:"ISBN : #{isbn}"} if isbn
     ary << :delimitor
@@ -323,8 +325,8 @@ class PageInfos
     @page_infos ||= recipe.page_infos
   end
 
-  def publisher
-    @publisher ||= recipe.publishing
+  def publishing
+    @publishing ||= recipe.publishing
   end
 
 

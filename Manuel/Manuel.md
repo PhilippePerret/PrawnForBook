@@ -3259,6 +3259,13 @@ page_infos:
   	name: "Imprimerie de l'Ouest"
   	lieu: "Ours sur Orge"
 #</page_infos>
+#<publishing> [3]
+publishing:
+	name: 		"<nom de la Maison d'éditions>"
+	adresse: 	"numéro rue\nCode postal ville"
+	mail:    	"<adresse mail principale>"
+	url: 			"https://url.de.la.maison.fr"
+#</publishing>
 ```
 
 > **[1]**
@@ -3272,6 +3279,10 @@ page_infos:
 > ‘distribute’ 		Toutes les informations sont « distribuées » régulièrement sur la page
 > ‘top’ 					Toutes les informations sont placées au-dessus de la page
 > ‘bottom’	 		Toutes les informations sont placées en bas de la page
+>
+> **[3]**
+>
+> La page d’infos se sert aussi des informations de la maison d’édition.
 
 #### page_index (données d’’affichage de la page d’index)
 
