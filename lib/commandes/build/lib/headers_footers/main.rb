@@ -221,6 +221,15 @@ class HeadersFooters
         current_titles_per_level.merge!({3 => dpage[:title3]})
       end
 
+      #
+      # On essaie de passer cette page si elle n'a pas de contenu
+      # (note : on ne le fera qu'ici pour relever les titres 
+      #  courants)
+      next if dpage[:content_length] == 0 || dpage[:first_par].nil?
+
+      #
+      # On crée l'instance pour la page
+      # 
       tbl.merge!(page_num => BookPage.new(book, pdf, dpage))
     end
 

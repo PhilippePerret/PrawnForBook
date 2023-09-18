@@ -97,7 +97,7 @@ end #/ << self
       # Sinon, on prend les données de la page
       # 
       bpage = get_data_page(numero)  # instance BookData
-      if bpage 
+      if bpage
         #
         # Définition de la méthode à utiliser en fonction du côté
         # de la page (even ou odd). "procedure_[even|odd]_page" va
@@ -116,8 +116,11 @@ end #/ << self
         spy "Page #{numero} traitée".vert
         # puts "Page #{numero} traitée".vert
       else
-        add_erreur("Impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.")
-        spy "Minor error : impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.".orange
+        # add_erreur("Impossible d'obtenir la page ##{numero.inspect}… Je ne peux pas traiter ses headers/footers.")
+        # spy "Minor error : impossible d'obtenir la page #{numero.inspect}… Je ne peux pas traiter ses headers/footers.".orange
+        # Il ne s'agit plus d'une erreur maintenant, mais d'une page
+        # qui est "sautée" parce qu'elle n'a pas de contenu et ne doit
+        # donc pas être entêtée.
       end
     end
   end

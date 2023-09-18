@@ -146,7 +146,7 @@ class AnyParagraph
 
   def self.paragraph_numero_color(strength)
     @@paragraph_numero_color ||= begin
-      (((100 - strength) * 255 / 100).to_s(16).upcase.rjust(2,'0') * 3 ).tap { |n| add_notice("Couleur : #{n}") }
+      (((100 - strength) * 255 / 100).to_s(16).upcase.rjust(2,'0') * 3 )#.tap { |n| add_notice("Couleur : #{n}") }
       # => p.e. "030303" ou "CCCCCC"
     end
   end

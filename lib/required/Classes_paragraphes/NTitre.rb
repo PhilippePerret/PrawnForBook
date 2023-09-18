@@ -127,7 +127,7 @@ class NTitre < AnyParagraph
       # 
       # Écriture du titre
       # 
-      text( ftext, **my.text_params.merge(size:titre.size, leading:leading))
+      text(ftext, **my.text_params.merge(size:titre.size, leading:leading))
       spy "Cursor après écriture titre : #{cursor.inspect}".bleu
 
       #

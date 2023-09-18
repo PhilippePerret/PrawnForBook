@@ -39,29 +39,36 @@ require 'prawn/table'
       @pdfbook.pages[page_number][:content_length] += len
     end
 
+    # #text utilise forcément formatted_text, donc c'est seulement
+    # dans la seconde méthode qu'on regarde s'il faut ajouter du
+    # contenu. Mais on garde quand même ce wrapper, au cas où, pour
+    # l'avenir.
     alias_method :__real_text, :text
     def text(str, **params)
-      # puts "Je dois écrire “#{str}” dans la page #{page_number}"
-      add_content_length_to_current_page(str.to_s.length) unless params.delete(:is_title)
       __real_text(str, **params)
     end
+
     alias_method :__real_draw_text, :draw_text
     def draw_text(str, **params)
+      # puts "-> draw_text".bleu
       add_content_length_to_current_page(str.to_s.length)
       __real_draw_text(str, **params)
     end
     alias_method :__real_formatted_text, :formatted_text
     def formatted_text(str, **params)
-      add_content_length_to_current_page(str.to_s.length)
+      # puts "-> formatted_text".bleu
+      add_content_length_to_current_page(str.to_s.length) unless params.delete(:is_title)
       __real_formatted_text(str, **params)
     end
     alias_method :__real_formatted_text_box, :formatted_text_box
     def formatted_text_box(str, **params)
+      # puts "-> formatted_text_box".bleu
       add_content_length_to_current_page(str.to_s.length)
       __real_formatted_text_box(str, **params)
     end
     alias_method :__real_text_box, :text_box
     def text_box(str, **params)
+      # puts "-> text_box".bleu
       add_content_length_to_current_page(str.to_s.length)
       __real_text_box(str, **params)
     end
