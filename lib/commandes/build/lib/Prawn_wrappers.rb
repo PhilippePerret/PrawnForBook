@@ -37,6 +37,7 @@ require 'prawn/table'
       @pdfbook ||= Prawn4book::PdfBook.current
       @pdfbook.add_page(page_number) unless @pdfbook.pages[page_number]
       @pdfbook.pages[page_number][:content_length] += len
+      @pdfbook.pages[page_number][:first_par] = 1 # sinon n'imprime pas le numéro
     end
 
     # #text utilise forcément formatted_text, donc c'est seulement
