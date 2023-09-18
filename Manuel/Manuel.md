@@ -3217,12 +3217,17 @@ page_de_titre:
 		author: 2 		# nombre de lignes avant le nom de l'auteur
 	logo: [1]
 		height: 10 		# Hauteur du logo
+	paginate: false # [2]
 #</page_de_titre>
 ~~~
 
 > **[1]**
 >
 > Le chemin d’accès au logo est défini dans [les informations sur la maison d’édition]().
+>
+> **[2]**
+>
+> Par défaut, toutes les pages spéciales (titre, garde, faux-titre, etc.) ne sont pas numérotées (comme dans un « vrai » livre. Mais si pour une raison ou une autre, on veut les numéroter, il suffit de mettre cette propriété à `true` (pour chaque page à numéroter).
 
  <a name="recette-page-infos"></a>
 
@@ -3258,6 +3263,7 @@ page_infos:
   printing:
   	name: "Imprimerie de l'Ouest"
   	lieu: "Ours sur Orge"
+  paginate: false # [4]
 #</page_infos>
 #<publishing> [3]
 publishing:
@@ -3283,6 +3289,12 @@ publishing:
 > **[3]**
 >
 > La page d’infos se sert aussi des informations de la maison d’édition.
+>
+> **[4]**
+>
+> Par défaut, toutes les pages spéciales (titre, garde, faux-titre, etc.) ne sont pas numérotées (comme dans un « vrai » livre. Mais si pour une raison ou une autre, on veut les numéroter, il suffit de mettre cette propriété à `true` (pour chaque page à numéroter).
+
+---
 
 #### page_index (données d’’affichage de la page d’index)
 
