@@ -146,16 +146,19 @@ book_format:
 # --- PAGES INSÉRÉES ---
 #<inserted_pages>
 inserted_pages:
-  page_de_garde:  true
+  page_de_garde:
+    paginate: false
   faux_titre:     false
   page_de_titre:  true
   page_infos:     true
+
 #</inserted_pages>
 
 #
 # --- PAGE DE TITRE ---
 #<page_de_titre>
 page_de_titre:
+  paginate: false
   fonts:
     title:              *default_font1
     subtitle:           *default_font1
@@ -219,6 +222,7 @@ table_of_content:
 #
 #<page_infos>
 page_infos:
+  paginate: false
   conception:
     patro:      null
     mail:       null

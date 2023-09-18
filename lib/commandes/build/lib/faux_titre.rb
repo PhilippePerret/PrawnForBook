@@ -11,7 +11,9 @@ class PrawnView
     # 
     dfauxtitre = pdfbook.recipe[:faux_titre]
     dfauxtitre = {
-      font: pdfbook.first_font, size: 24
+      font:       pdfbook.first_font, 
+      size:       24,
+      paginate:   false
     } if dfauxtitre === true
 
     #
@@ -20,9 +22,17 @@ class PrawnView
     start_new_page
 
     #
+    # On indique qu'il ne faudra pas numéroter cette page, sauf
+    # indication contraire dans la recette
+    # 
+    unless dfauxtitre[:paginate] == true
+      pdfbook.pages_without_pagination << page_number
+    end
+
+    #
     # Mise en forme voulue
     # 
-    font dfauxtitre[:font], size: dfauxtitre[:size]
+    font(dfauxtitre[:font], size: dfauxtitre[:size])
 
     #
     # Calcul de la taille du titre pour le placer correctement

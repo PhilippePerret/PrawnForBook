@@ -29,6 +29,12 @@ class PdfBook
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
 
+  # [ARRAY] Liste des numéros de pages qui ne doivent pas être
+  # numérotées même si elles ont du contenu (par défaut par exemple,
+  # la page de faux-titre, la page d'infos du livre, mais n'importe
+  # quelle page peut être sans numérotation — cf. le manuel)
+  attr_reader :pages_without_pagination
+
   def generate_pdf_book
     spy "Génération du livre #{ensured_title.inspect}".bleu
     # 
@@ -149,6 +155,15 @@ class PdfBook
     #    
     pdf = PrawnView.new(self, pdf_config)
 
+    #
+    # Pour mettre les pages qu'il faut garder sans numéro
+    # 
+    @pages_without_pagination = []
+
+    #
+    # Méthode appelée automatiquement à chaque création de page
+    # dans le livre.
+    # 
     pdf.on_page_create do
       # puts "Nouvelle page créée : #{pdf.page_number}".orange
       my.add_page(pdf.page_number)
@@ -159,6 +174,8 @@ class PdfBook
     # end
 
     # Pour pouvoir l'atteindre partout
+    # note : je ne suis pas sûr de m'en servir. J'utilise plutôt
+    # PdfBook.current et en restant extrêmement prudent.
     Metric.pdf = pdf
     
     # 

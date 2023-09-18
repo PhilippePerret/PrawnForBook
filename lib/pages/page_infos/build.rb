@@ -36,6 +36,15 @@ class PageInfos
     # Pour appel dans pdf
     # 
     me = self
+
+    #
+    # Sauf indication contraire, on ne pagine pas la page
+    # des informations du livre
+    # 
+    unless paginate?
+      PdfBook.current.pages_without_pagination << pdf.page_number
+    end
+
     #
     # Si on est en mode "réparti" (toutes les informations réparties
     # sur la page) alors il faut calculer les choses
@@ -238,7 +247,6 @@ class PageInfos
 
   # --- Helpers --- #
 
-
   def render_as_label(pdf, label)
     if label_color
       original_color = pdf.fill_color
@@ -390,6 +398,10 @@ class PageInfos
       missing_keys = (page_infos_missing_keys + publishing_missing_keys).join("\n")
       raise FatalPrawForBookError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
     end
+  end
+
+  def paginate?
+    page_infos[:paginate] === true
   end
 
   def mode_distributed?

@@ -102,7 +102,7 @@ class HeadersFooters
     #
     # Pour mettre les numéros de pages qu'il faudra ajouter
     # à book.pages
-    # INUTILE, APPAREMMENT
+    # PLUS MAINTENANT. TOUTES LES PAGES DOIVENT AVOIR ÉTÉ CRÉÉES
     # 
     # added_pages_numeros = []
     # 
@@ -143,35 +143,39 @@ class HeadersFooters
         # On doit créer les pages de +continous_numero+ jusqu'à
         # page_num - 1 en s'inspirant de la page de numéro
         # <continous_numero - 1>
-        #
-        # puts "Problème de page(s) manquante(s) (de #{continous_numero} à #{page_num - 1})".rouge
-        page_reference = tbl[continous_numero-1]
-        dpage_ref = page_reference.data
-        #
-        # On modifie les données de la page de référence pour que 
-        # son numéro de page soit inscrit (si nécessaire)
         # 
-        page_reference.data.merge!({
-          content_length: 1000, 
-          first_par: 1          
-        })
+        # NON, MAINTENANT C'EST UNE VRAI ERREUR FATALE
+        # 
+        raise FatalPrawForBookError.new("Il manque une définition de page, pour une raison inconnue… Je ne peux pas construire ce livre.")
+        # #
+        # # puts "Problème de page(s) manquante(s) (de #{continous_numero} à #{page_num - 1})".rouge
+        # page_reference = tbl[continous_numero-1]
+        # dpage_ref = page_reference.data
+        # #
+        # # On modifie les données de la page de référence pour que 
+        # # son numéro de page soit inscrit (si nécessaire)
+        # # 
+        # page_reference.data.merge!({
+        #   content_length: 1000, 
+        #   first_par: 1          
+        # })
 
-        #
-        # On ajoute toutes les pages manquantes
-        # 
-        for i in (continous_numero...page_num) do
-          dpage = {}
-            .merge(dpage_ref)
-            .merge({
-              num_page: i,
-              # content_length: 1000, 
-              # first_par: 1
-            }) 
-          # puts "\ndpage = #{dpage.pretty_inspect}".bleu
-          tbl.merge!(i => BookPage.new(book, pdf, dpage))
-          continous_numero += 1
-          # added_pages_numeros << i.freeze
-        end
+        # #
+        # # On ajoute toutes les pages manquantes
+        # # 
+        # for i in (continous_numero...page_num) do
+        #   dpage = {}
+        #     .merge(dpage_ref)
+        #     .merge({
+        #       num_page: i,
+        #       # content_length: 1000, 
+        #       # first_par: 1
+        #     }) 
+        #   # puts "\ndpage = #{dpage.pretty_inspect}".bleu
+        #   tbl.merge!(i => BookPage.new(book, pdf, dpage))
+        #   continous_numero += 1
+        #   # added_pages_numeros << i.freeze
+        # end
       end
 
       dpage = dpage_init.dup

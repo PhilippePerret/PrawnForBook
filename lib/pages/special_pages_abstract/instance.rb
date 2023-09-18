@@ -60,13 +60,13 @@ class SpecialPage
   def thing
     @thing ||= begin
       if File.exist?(book_recipe_path)
-        Prawn4book::PdfBook.new(folder)
+        PdfBook.current || PdfBook.new(folder)
       elsif File.exist?(collection_recipe_path)
-        Prawn4book::Collection.new(folder)
+        Collection.new(folder)
       else
         # Si aucun fichier recette n'est défini, on considère que
         # c'est d'un livre dont il s'agit.
-        Prawn4book::PdfBook.new(folder)
+        PdfBook.new(folder)
       end
     end
   end

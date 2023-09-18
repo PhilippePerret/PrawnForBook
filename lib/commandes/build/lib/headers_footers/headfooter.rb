@@ -90,6 +90,10 @@ end #/ << self
       next unless page_in_range?(numero)
 
       #
+      # Si la page se trouve dans les pages à exclure
+      next if book.pages_without_pagination.include?(numero)
+
+      #
       # Sinon, on prend les données de la page
       # 
       bpage = get_data_page(numero)  # instance BookData

@@ -2,13 +2,16 @@ module Prawn4book
 class Pages
 class PageDeTitre
 
+  attr_reader :book
+
   # = main =
   #
   # Méthode principale permettant de construire la page
   # 
   def build(pdf)
     spy "\n\n-> Construction de la page de titre".jaune
-    book = pdf.pdfbook
+    @book = pdf.pdfbook
+    my = self
 
     #
     # Les données de fontes
@@ -22,6 +25,14 @@ class PageDeTitre
       # 
       start_new_page
 
+      #
+      # On indique qu'il ne faudra pas numéroter cette page, sauf
+      # indication contraire dans la recette
+      # 
+      unless my.paginate?
+        pdfbook.pages_without_pagination << page_number
+      end
+
       # 
       # Calculer la position des éléments en fonction de
       # la hauteur de page disponible
@@ -34,12 +45,12 @@ class PageDeTitre
       # LA COLLECTION se place sur la deuxième ligne à partir du
       # haut.
       # 
-      if book.in_collection?
+      if pdfbook.in_collection?
         # spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}".jaune
         # spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}".jaune
         font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
         move_cursor_to(bounds.top - line_height)
-        text( book.collection.name, **{align: :center})
+        text( pdfbook.collection.name, **{align: :center})
       end
 
       #
@@ -48,15 +59,15 @@ class PageDeTitre
       #
       font(dtitre[:fonts][:title], size: dtitre[:sizes][:title])
       move_cursor_to(bounds.top - height / 3)
-      text( book.title , **{align: :center})
+      text( pdfbook.title , **{align: :center})
 
       #
       # S'il y a un SOUS-TITRE, on le place
       # 
-      if book.subtitle
+      if pdfbook.subtitle
         # old_line_height = line_height.dup
         font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
-        subtitle = book.subtitle.split('\\n').compact
+        subtitle = pdfbook.subtitle.split('\\n').compact
         # 
         # Ajout des parenthèses
         # 
@@ -75,12 +86,12 @@ class PageDeTitre
       # 
       move_down(line_height) # une de plus
       font(dtitre[:fonts][:author], size: dtitre[:sizes][:author])
-      text book.auteurs, **{align: :center}
+      text pdfbook.auteurs, **{align: :center}
 
       #
       # La MAISON D'ÉDITION
       # 
-      publisher = book.recipe.publishing
+      publisher = pdfbook.recipe.publishing
       logo      = publisher[:logo_path] 
       # --- logo ---
       logo_height = dtitre[:logo][:height]
@@ -95,7 +106,7 @@ class PageDeTitre
       text publisher[:name], **{align: :center}
 
       if logo
-        logo_full_path = File.join(book.folder, logo)
+        logo_full_path = File.join(pdfbook.folder, logo)
         spy "logo_full_path = #{logo_full_path.inspect}"
         image(logo_full_path, {height: logo_height.mm, position: :center})
       end
@@ -111,8 +122,13 @@ class PageDeTitre
   end
 
   # - Predicate methods -
+
   def logo?
     :TRUE == @withlogo ||= true_or_false(publisher.logo? && logo)
+  end
+
+  def paginate?
+    book.recipe.page_de_titre[:paginate] == true
   end
 
   # - shortcuts -

@@ -133,6 +133,10 @@ class SpecialPage
     @tag_name ||= self.class.name.to_s.split('::').last.decamelize
   end
 
+  # ATTENTION : ici +thing+ n'est pas le livre qui est vraiment
+  # en cours de fabrication… Utiliser PdfBook.current si on doit
+  # faire appel à lui (ou mieux : refactoriser ce code pour qu'il
+  # soit correct…)
   def book?
     :TRUE == @isbook ||= true_or_false(thing.instance_of?(Prawn4book::PdfBook))
   end
