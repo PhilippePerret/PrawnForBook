@@ -34,6 +34,7 @@ class NTitre < AnyParagraph
   # 
   def print(pdf)
     titre = self
+    my    = self
 
     spy "Traitement du titre #{self.inspect}…".bleu
 
@@ -126,7 +127,7 @@ class NTitre < AnyParagraph
       # 
       # Écriture du titre
       # 
-      text ftext, align: :left, size: titre.size, leading: leading, inline_format: true
+      text( ftext, **my.text_params.merge(size:titre.size, leading:leading))
       spy "Cursor après écriture titre : #{cursor.inspect}".bleu
 
       #
@@ -147,7 +148,20 @@ class NTitre < AnyParagraph
     num = pdf.previous_text_paragraph ? pdf.previous_text_paragraph.numero : 0
     in_tdm? && pdf.tdm.add_title(self, pdf.page_number, num + 1)
   end
+  # /print
 
+  # @return [Hash] Les paramètres pour la méthode PrawnView#text
+  # 
+  # @note
+  # 
+  #   La propriété :is_title a été ajoutée pour ne pas ajouté
+  #   de longueur de contenu quand c'est un titre qui est 
+  #   ajouté.
+  #   Cf. les wrappers Prawn créés.
+  # 
+  def text_params
+    @text_params ||= {is_title: true, align: :left, inline_format: true}.freeze
+  end
 
   # --- Data Methods ---
 
