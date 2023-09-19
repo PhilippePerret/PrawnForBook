@@ -90,7 +90,7 @@ book_format:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
       style:          *default_style2
-      size:           20
+      size:           24
       lines_before:   0
       lines_after:    10
       leading:        0
@@ -100,7 +100,7 @@ book_format:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
       style:          *default_style2
-      size:           18
+      size:           22
       lines_before:   7
       lines_after:    5
       leading:        0
@@ -110,7 +110,7 @@ book_format:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
       style:          *default_style2
-      size:           16
+      size:           18
       lines_before:   6
       lines_after:    4
       leading:        0

@@ -627,6 +627,8 @@ Le titre se définit comme en [markdown](https://fr.wikipedia.org/wiki/Markdown)
 etc.
 ~~~
 
+> Pour voir comment insérer un titre dans un helper, cf. [Insertion d’’un titre par un helper](#insert-title-in-helper).
+
 <a name="paragraph-image"></a>
 
 #### IMAGES
@@ -2620,6 +2622,30 @@ end
 ~~~
 
 … qui va appliquer la police Arial, les styles gras et italique et la taille 40 au texte.
+
+<a name="insert-title-in-helper"></a>
+
+##### Insertion d'un titre par un helper
+
+Pour insérer un titre de façon programmatique par le biais d’un helper, utiliser la formule suivante :
+
+~~~ruby
+def _mon_helper # voir ci-dessus pour le nom
+  
+  # Définition du titre
+  titre = Prawn4book::PdfBook.NTitre.new(pdfbook, {level: <niveau du titre>, text: "<titre>"})
+  # Écrire dans le livre
+  pdf.start_new_page
+  titre.print(pdf)
+  
+end
+~~~
+
+> Note : on peut souvent obtenir `pdfbook` par `pdf.pdfbook`. En dernier recours, si vraiment il n’est pas accessible, on peut utiliser `Prawn4book::PdfBook.current`.
+
+
+
+---
 
 <a name="police-proportionnelle"></a>
 

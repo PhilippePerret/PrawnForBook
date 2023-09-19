@@ -58,7 +58,8 @@ require 'prawn/table'
     alias_method :__real_formatted_text, :formatted_text
     def formatted_text(str, **params)
       # puts "-> formatted_text".bleu
-      add_content_length_to_current_page(str.to_s.length) unless params.delete(:is_title)
+      is_titre = params.delete(:is_title)
+      add_content_length_to_current_page(str.to_s.length) unless is_titre
       __real_formatted_text(str, **params)
     end
     alias_method :__real_formatted_text_box, :formatted_text_box

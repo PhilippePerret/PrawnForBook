@@ -182,10 +182,18 @@ class NTitre < AnyParagraph
   def lines_after
     @lines_after ||= self.class.lines_after(level)
   end
+  # Définition manuelle
+  def lines_after=(value)
+    @lines_after = value
+  end
 
   # @prop {Integer} Espace avec le texte précédent
   def lines_before
     @lines_before ||= self.class.lines_before(level)
+  end
+  # Définition manuelle
+  def lines_before=(value)
+    @lines_before = value
   end
 
   # --- Predicate Methods ---
