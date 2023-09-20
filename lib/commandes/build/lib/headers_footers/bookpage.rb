@@ -23,7 +23,9 @@ class BookPage
     # @return true s'il faut paginer le livre (de façon générale)
     # Si false, aucun numéro de page n'est jamais ajouté
     def pagination?
-      PdfBook.current.recipe.book_format[:numeration] != nil
+      :TRUE == @bookhaspagination ||= begin
+        true_or_false(PdfBook.current.recipe.book_format[:page][:numerotation] != nil)#.tap { |value| puts "pagination? est #{value.inspect}".orange }
+      end
     end
   end
 

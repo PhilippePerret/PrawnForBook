@@ -28,6 +28,7 @@ module Prawn
   class Table
 
     alias :original_start_new_page? :start_new_page?
+    
     def start_new_page?(cell, offset, ref_bounds)
       # Ici, on pourrait ajouter les contraintes sur les rangées
       # Mais comment le faire ?
@@ -40,15 +41,15 @@ module Prawn
           # On répète pour autant de rangées qu'on cherche
           # 
           # extra_h = 0
-          extra_h = 0
+          # extra_h = 0
           (cell.keep_with_next + 1).times do |i|
-            extra_h += cells.rows(cell.row + i).height
+            offset -= cells.rows(cell.row + i).height
           end
           # puts "Il faudrait pouvoir avoir #{extra_h} (offset = #{offset})"
           # puts "ref_bounds.absolute_bottom = #{ref_bounds.absolute_bottom.inspect}"
           # puts "pdf.cursor = #{@pdf.cursor}"
           # exit 1
-          offset -= extra_h #+ 5 # Je ne sais pas pourquoi le "+5"
+          # offset -= extra_h #+ 5 # Je ne sais pas pourquoi le "+5"
         end
       end
       # exit 1
