@@ -1,0 +1,8 @@
+#<book_format>
+book_format:
+  book:
+    height: 200
+    width: 400
+  page:
+    numerotation: null
+#</book_format>

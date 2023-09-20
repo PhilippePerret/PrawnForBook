@@ -1,0 +1,5 @@
+---
+name: "Test de l'option 'keep_with_next' avec plusieurs lignes"
+description: |
+  On peut obliger plusieurs lignes à rester ensemble même si on
+  arrive en bas de page.
