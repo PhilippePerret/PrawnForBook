@@ -315,6 +315,7 @@ end #/ << self
   # @return [String] Le texte à écrire dans le headfooter
   # 
   # @param [String] str Le texte original tel que défini dans la recette
+  # 
   def get_content_as_custom_text(str)
     if str.match?(/#\{/)
       return eval('"' + str + '"')

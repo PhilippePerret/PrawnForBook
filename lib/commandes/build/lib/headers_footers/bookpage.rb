@@ -19,6 +19,12 @@ class BookPage
     def numero_page?
       @withnumeropage === true
     end
+
+    # @return true s'il faut paginer le livre (de façon générale)
+    # Si false, aucun numéro de page n'est jamais ajouté
+    def pagination?
+      PdfBook.current.recipe.book_format[:numeration] != nil
+    end
   end
 
   attr_reader :book, :pdf
@@ -60,6 +66,8 @@ class BookPage
   # @api public
   def numero
     if no_num_if_empty? && empty?
+      ''
+    elsif self.class.pagination? === false
       ''
     else
       (self.class.numero_page? ? num_page : numero_paragraphs).to_s
