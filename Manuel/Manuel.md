@@ -274,6 +274,8 @@ Une des grandes fonctionnalités de *Prawn-for-book* est de permettre de paginer
 
   > La numérotation des paragraphes peut être très pratique aussi quand on veut recevoir des commentaires précis — et localisés — sur son roman ou tout autre livre. Vous pouvez l’utiliser pour le PDF que vous remettez à vos lecteurs et lectrices.
 
+> Noter que le mode hybride de numérotation permet de combiner les deux types afin de ne pas atteindre des trop grands numéros de paragraphe. Dans ce cas, la numérotation des paragraphes recommence à 1 à chaque double page, et la pagination des pages se fait par le numéro de la page. La référence devient quelque chose comme `<numéro page>-<indice paragaphe dans page>`.
+
 Pour se faire, on règle la valeur de la propriété **`book_format:page:numerotation`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont `pages`  (numérotation des pages) ou `parags` ([numérotation des paragraphes](#numerotation-paragraphes)).
 
 > Modifier la valeur directement dans le fichier recette du livre ou de la collection nécessite une certaine habitude. Il est préférable, pour tous les réglages, de passer par les assistants. Ici, il suffit de jouer <console>pfb assistant</console> et de choisir “Assistant format du livre”, puis de renseigner la propriété “Numérotation”.
@@ -286,6 +288,10 @@ Cette valeur influence de nombreux éléments du livre, dont :
 * les marques de [références](#references)
 
 Pour savoir comment placer et formater les numéros de pages, cf. [Headers et Footers](#headers-footers).
+
+#### Suppression de la pagination
+
+Pour supprimer tout numéro de page dans tout le livre, mettre `book_format > page > numerotation` à `none` dans la recette.
 
 ---
 

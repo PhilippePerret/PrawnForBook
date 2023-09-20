@@ -17,8 +17,8 @@ require 'test_helper'
 # Pour ne lancer que les tests ci-dessous
 # 
 # INCLUDES = ['simple_table']
-# INCLUDES = /cross_/
-INCLUDES = nil unless defined?(INCLUDES)
+INCLUDES = /keep_with_next/
+# INCLUDES = nil unless defined?(INCLUDES)
 # 
 # Tests à exclure (nom du dossier)
 # EXCLUDES = /^references/

@@ -37,11 +37,15 @@ Dans ce dossier (du livre), il faut mettre :
 * le fichier `data-test.yaml` qui contiendra les [données du test](#data-test),
 * optionnellement le fichier `recipe.yaml` si des recettes sont à ajuster, mais ce fichier n'est pas nécessaire puisque le livre se trouve dans une collection.
 
+<a name="test-the-test"></a>
+
 ### Tester le test…
 
 Pour voir ce que le test va donner, ou régler certaines choses, se souvenir qu’un dossier de test est un livre comme les autres. On peut donc ouvrir un Terminal à son dossier et lancer la commande `pfb build` pour construire le livre.
 
+### Timeout
 
+La construction du livre doit se faire dans un temps très court (pour éviter d'avoir des tests qui prennent trop de temps en attendant une construction qui échoue). S'assurer que le livre peut se construire en le lançant au préalable (voir [Tester le test](#test-the-test)) pour s'assurer qu'il ne contient pas d'erreurs.
 
 <a name="data-test"></a>
 

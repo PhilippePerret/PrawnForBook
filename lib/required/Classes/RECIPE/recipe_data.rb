@@ -279,7 +279,7 @@ class Recipe
 
   def bibliographies
     @bibliographies ||= begin
-      DEFAULT_BIBLIOGRAPHIES.deep_merge(DATA[:bibliographies])
+      DEFAULT_BIBLIOGRAPHIES.deep_merge(DATA[:bibliographies]||{})
     end
   end
 
