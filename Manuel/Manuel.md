@@ -849,7 +849,7 @@ Les attributs des styles peuvent être :
 
 > On peut aussi utiliser toutes les [définitions attributs des cellules](#cell-attributes).
 
-##### Fusion de cellules
+##### Fusion de cellules (spans)
 
 Pour fusionner des cellules, on utilise **`colspan`** et **`rowspan`** comme en HTML. Mais dans ce cas, il faut définir la cellule avec une table (`Hash`) dont la propriété `:content` définira le contenu textuel.
 
@@ -866,6 +866,44 @@ Ci-dessous une table avec des cellules fusionnées.
 ~~~
 
 > Noter que si les [valeurs implicites](#implicite-values-in-table) sont utilisées et que des colspans ou rowspan aussi, il est extrêmement prudent de définir aussi `:col_count` pour définir explicitement le nombre de colonnes dans la table, afin que les calculs des valeurs implicites puissent se faire correctement.
+
+##### Contrainte « keep with next » sur les rangées
+
+On peut très facilement ajouter des contraintes sur les rangées en utilisant l’option `keep_with_next` (que j’aiajoutée dans Prawn-table). Par exemple, si on a la table :
+
+~~~markdown
+| A1 | B1 | C1 |
+| A2 | B2 | C2 |
+| A3 | B3 | C3 |
+| A4 | B4 | C4 |
+| A5 | B5 | C5 |
+~~~
+
+… et qu’on veut que les rangée #2 et #3 soient toujours ensemble, même si la rangée 3 passe sur la page suivante (quand la table est imprimée en bas de la page par exemple), alors on utilise :
+
+~~~markdown
+| A1 | B1 | C1 |
+| {content:"A2", keep_with_next:true} | B2 | C2 |
+| A3 | B3 | C3 |
+| A4 | B4 | C4 |
+| A5 | B5 | C5 |
+~~~
+
+De cette manière, même si la rangée #2 pouvait tenir dans le bas de la page, à partir du moment où la rangée #3 passe sur la page suivante, la rangée #2 la suit.
+
+On peut faire la même chose avec autant de rangées que l'on veut (attention de ne pas en lier trop, il ne faut jamais que ça dépasse la hauteur de la page). Par exemple, si on veut que la rangée #2 soit toujours liée aux rangées #3 et #4, alors on utilise :
+
+~~~markdown
+| A1 | B1 | C1 |
+| {content:"A2", keep_with_next:2} | B2 | C2 |
+| A3 | B3 | C3 |
+| A4 | B4 | C4 |
+| A5 | B5 | C5 |
+~~~
+
+> Note : `keep_with_next: 2` signifie alors « conserver cette rangée avec les deux suivantes ».
+
+Dans ce cas, dès que la rangée #4 passera sur la page suivante, les rangées #2 et #3 la suivront.
 
 ##### Quelques exemples concrets
 
