@@ -37,7 +37,7 @@ TERMS = {
   A_procedure: "Une procédure",
   Property_key: 'Clé de propriété',
   publisher:    'éditeur/édition',
-  publishing:   'maison d’édition',
+  publisher:   'maison d’édition',
   recipe_options: 'options (pagination, etc.)',
   required: 'requis',
   requise: 'requise',
@@ -100,7 +100,7 @@ PROMPTS = {
   }, # / :recipe
 
   # --- Maison d'édition ---
-  publishing: {
+  publisher: {
     ask_move_logo: "Copier un logo existant déjà ?",
     ask_for_logo_original_path: "Chemin d'accès complet au logo à copier",
   },

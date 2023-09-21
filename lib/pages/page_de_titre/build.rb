@@ -91,7 +91,7 @@ class PageDeTitre
       #
       # La MAISON D'ÉDITION
       # 
-      publisher = pdfbook.recipe.publishing
+      publisher = pdfbook.recipe.publisher
       logo      = publisher[:logo_path] 
       # --- logo ---
       logo_height = dtitre[:logo][:height]

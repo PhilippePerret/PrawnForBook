@@ -23,12 +23,12 @@ class AbstractRecipe
     book_auteurs:       [:book_data, :auteurs],
     isbn:               [:book_data, :isbn],
     # -- Éditeur --
-    publisher_name:     [:publishing, :name],
-    publisher_contact:  [:publishing, :contact],
-    publisher_mail:     [:publishing, :mail],
-    publisher_siret:    [:publishing, :siret],
-    publisher_url:      [:publishing, :url],
-    logo:               [:publishing, :logo_path],
+    publisher_name:     [:publisher, :name],
+    publisher_contact:  [:publisher, :contact],
+    publisher_mail:     [:publisher, :mail],
+    publisher_siret:    [:publisher, :siret],
+    publisher_url:      [:publisher, :url],
+    logo:               [:publisher, :logo_path],
     logo_height:        [:page_de_titre, :logo, :height],
     # -- Format du livre --
     leading:      [:book_format, :text, :leading],
@@ -163,7 +163,7 @@ def build_with(props, **options)
   # @note
   #   Le fichier original se trouve toujours dans le dossier 'images'
   #   du dossier
-  logo_path = props[:publishing] && props[:publishing][:logo_path]
+  logo_path = props[:publisher] && props[:publisher][:logo_path]
   if logo_path
     self.class.copy_logo_to(File.join(book.folder, logo_path))
   end

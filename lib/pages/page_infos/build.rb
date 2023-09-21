@@ -214,20 +214,20 @@ class PageInfos
   def get_infos_to_print
     ary = []
     [:name, :url, :adresse, :mail].each do |prop|
-      if publishing[prop]
+      if publisher[prop]
         value = if prop == :adresse
-            publishing[prop].split("\\n").join(LINEAR_DELIMITOR)
+            publisher[prop].split("\\n").join(LINEAR_DELIMITOR)
           else
-            publishing[prop]
+            publisher[prop]
           end
         ary << {label:nil, value: value, no_space: true}
       end
     end
-    if publishing[:siret]
-      ary << {label:nil, value: "SIRET : #{publishing[:siret]}", no_space: true}
+    if publisher[:siret]
+      ary << {label:nil, value: "SIRET : #{publisher[:siret]}", no_space: true}
     end
     ary[-1].merge!(no_space: false)
-    ary << {label: 'Contact', value:publishing[:contact]} if publishing[:contact]
+    ary << {label: 'Contact', value:publisher[:contact]} if publisher[:contact]
     ary << {value: "Dépôt légal : #{page_infos[:depot_legal]}"} if page_infos[:depot_legal]
     ary << {value:"ISBN : #{isbn}"} if isbn
     ary << :delimitor
@@ -325,8 +325,8 @@ class PageInfos
     @page_infos ||= recipe.page_infos
   end
 
-  def publishing
-    @publishing ||= recipe.publishing
+  def publisher
+    @publisher ||= recipe.publisher
   end
 
 
@@ -377,26 +377,26 @@ class PageInfos
   # 
   def infos_valides_or_raises
     infs = page_infos
-    publ = owner.recipe.publishing
+    publ = owner.recipe.publisher
     # 
     # Les données qu'on doit trouver pour pouvoir établir la 
     # page d'informations
     # 
     missing_functions = []
     page_infos_missing_keys = []
-    publishing_missing_keys = []
+    publisher_missing_keys = []
     [
       [ infs[:conception][:patro]   ,'le concepteur/rédacteur', "  conception:\n    patro: ..."],
       [ infs[:cover][:patro]        ,'le concepteur de la couverture', "  cover:\n    patro: ..."],
       [ infs[:correction][:patro]   ,'la correctrice', "  correction:\n    patro: ..."],
       [ infs[:mise_en_page][:patro] ,'le metteur en page', "  mise_en_page:\n    patro: ..."],
       [ infs[:printing][:name]      ,'l’imprimerie', "  printing:\n    name: ..." ],
-      [ publ[:name]                  ,'la maison d’édition', nil, "#<publishing>\npublishing:\n  name: ...\n#</publishing>"],
-    ].each do |value, fonction, page_infos_keys, publishing_keys|
+      [ publ[:name]                  ,'la maison d’édition', nil, "#<publisher>\npublisher:\n  name: ...\n#</publisher>"],
+    ].each do |value, fonction, page_infos_keys, publisher_keys|
       value || begin
         missing_functions.push(fonction)
         page_infos_missing_keys << page_infos_keys if page_infos_keys
-        publishing_missing_keys << publishing_keys if publishing_keys
+        publisher_missing_keys << publisher_keys if publisher_keys
       end
     end
     missing_functions.empty? || begin
@@ -404,7 +404,7 @@ class PageInfos
         page_infos_missing_keys.unshift("#<page_infos>\npage_infos:")
         page_infos_missing_keys << "#</page_infos>"
       end
-      missing_keys = (page_infos_missing_keys + publishing_missing_keys).join("\n")
+      missing_keys = (page_infos_missing_keys + publisher_missing_keys).join("\n")
       raise FatalPrawnForBookError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
     end
   end

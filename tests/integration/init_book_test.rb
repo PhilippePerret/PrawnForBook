@@ -54,7 +54,7 @@ class InitBookTestor < Minitest::Test
         auteurs:  'Philippe Perret',
         isbn:     '546-5-12598-24-7',
       },
-      publishing: {
+      publisher: {
           name: 'Icare éditions',
           adresse: '295 impasse des Fauvettes\\\\n13400 Aubagne',
           site: 'https://www.icare-editions.fr',
@@ -258,8 +258,8 @@ class InitBookTestor < Minitest::Test
 
 
     if doit # true pour entrer la maision d'édition
-      IR.goto(:publishing)
-      dd = book_data[:publishing]
+      IR.goto(:publisher)
+      dd = book_data[:publisher]
       [:name, :adresse, :site, :logo_path, :siret, :mail, :contact
       ].each do |prop|
         tosa << [:RET, dd[prop], :RET]
@@ -267,7 +267,7 @@ class InitBookTestor < Minitest::Test
       tosa << :RET # enregsitrer
 
       # --- Vérification ---
-      checker_recipe.has_data(dd, :publishing)
+      checker_recipe.has_data(dd, :publisher)
     end
 
     # --- Information de dernière page ---

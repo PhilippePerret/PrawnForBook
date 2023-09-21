@@ -41,10 +41,10 @@ page_data:
   auteurs:    null
   isbn:       null
 #</page_data>
-#<publishing>
-publishing:
+#<publisher>
+publisher:
   logo_path:    null
-#</publishing>
+#</publisher>
 #
 # --- FORMAT DU LIVRE ---
 #<book_format>

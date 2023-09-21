@@ -36,8 +36,8 @@ end #/Command
       traite_with_assistant('bibliographies')
     when 'head', 'entête', 'entete','header','headers','footer','footers','pied-de-page'
       traite_with_assistant('headers_footers')
-    when 'pub', 'me', 'publishing', 'publisher', 'éditeur', 'édition'
-      traite_with_assistant('publishing')
+    when 'pub', 'me', 'publisher', 'publisher', 'éditeur', 'édition'
+      traite_with_assistant('publisher')
     when 'data', 'données'
       traite_as_page_speciale('book_data')
     when 'format', 'formatage', 'aspect'

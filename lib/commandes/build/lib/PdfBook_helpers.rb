@@ -26,7 +26,7 @@ class PdfBook
   # L'édition
   # 
   def publisher
-    @publisher ||= Editor.new(recette.publishing) if recette.publishing
+    @publisher ||= Editor.new(recette.publisher) if recette.publisher
   end
 end #/class PdfBook
 

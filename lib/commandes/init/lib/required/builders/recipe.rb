@@ -144,9 +144,9 @@ class InitedThing
     Prawn4book::Assistant.assistant_biblios(owner)
   end
 
-  def define_and_set_values_for_publishing
-    require_assistant('publishing')
-    Prawn4book::Assistant.assistant_publishing(owner)
+  def define_and_set_values_for_publisher
+    require_assistant('publisher')
+    Prawn4book::Assistant.assistant_publisher(owner)
   end
 
   def define_and_set_values_for_headers_and_footers

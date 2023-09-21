@@ -1,6 +1,6 @@
 # Todo
 
-* Changer tous les "publishing" en "publisher" 
+* Changer tous les "publisher" en "publisher" 
 * Utiliser une instance BookPage depuis le départ, pas un hash. Ça sera une instance Prawn4book::BookPage à ne pas confondre avec l'instance Prawn4book::HeadersFooters::BookPage (qui pourra être remplacé par cette instance, by the way)
 
 * Utiliser plutôt le hachage pour comparer deux documents (j'attends la réponse de pointlessone pour savoir quelle meilleure méthode utiliser)

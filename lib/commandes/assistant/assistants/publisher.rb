@@ -2,11 +2,11 @@ require 'lib/modules/tty_facilitators'
 module Prawn4book
 class Assistant
   # --- Point d'entrée pour l'assistant à la maison d'édition ---
-  def self.assistant_publishing(owner, options = nil)
-    AssistantPublishing.new(owner).define_publishing(options)
+  def self.assistant_publisher(owner, options = nil)
+    AssistantPublisher.new(owner).define_publisher(options)
   end
 
-class AssistantPublishing
+class AssistantPublisher
   include TTYFacilitators
 
   attr_reader :owner
@@ -14,10 +14,10 @@ class AssistantPublishing
     @owner = owner
   end
 
-  def define_publishing(options = nil)
-    dpublishing = owner.recipe.publishing
-    if tty_define_object_with_data(DATA_PUBLISHING, dpublishing || {})
-      owner.recipe.insert_bloc_data('publishing', dpublishing)
+  def define_publisher(options = nil)
+    dpublisher = owner.recipe.publisher
+    if tty_define_object_with_data(DATA_PUBLISHING, dpublisher || {})
+      owner.recipe.insert_bloc_data('publisher', dpublisher)
     end
   end
 
@@ -27,32 +27,32 @@ class AssistantPublishing
     return value
   end
 
-  def logo_exist?(value, dpublishing)
+  def logo_exist?(value, dpublisher)
     return true if value.nil? || value.empty? || value == '---'
     logo_path = File.join(owner.folder, value)
     return true if File.exist?(logo_path)
-    puts (ERRORS[:publishing][:logo_unfound] % logo_path).rouge
-    if Q.yes?(PROMPTS[:publishing][:ask_move_logo].jaune)
+    puts (ERRORS[:publisher][:logo_unfound] % logo_path).rouge
+    if Q.yes?(PROMPTS[:publisher][:ask_move_logo].jaune)
       err = nil
       while true
         # - S'il y a un message d'erreur -
         puts err.rouge unless err.nil?
         # - Attendre le chemin d'accès -
         begin
-          logo_original = Q.ask("#{PROMPTS[:publishing][:ask_for_logo_original_path]} : ".jaune)
+          logo_original = Q.ask("#{PROMPTS[:publisher][:ask_for_logo_original_path]} : ".jaune)
         rescue TTY::Reader::InputInterrupt
           return false
         end
         if logo_original && File.exist?(logo_original)
           if File.extname(logo_original) != File.extname(logo_path)
-            err = ERRORS[:publishing][:logo_not_same_extname]
+            err = ERRORS[:publisher][:logo_not_same_extname]
           else
             mkdir(File.dirname(logo_path))
             FileUtils.cp(logo_original, logo_path)
             return true
           end
         end
-        err = ERRORS[:publishing][:logo_unfound] % logo_original
+        err = ERRORS[:publisher][:logo_unfound] % logo_original
         logo_original = nil
       end
     else
@@ -70,6 +70,6 @@ DATA_PUBLISHING = [
   {name:'Mail de contact'                 , value: :contact},
 ]
 
-end #/class AssistantPublishing
+end #/class AssistantPublisher
 end #/class Assistant
 end #/module Prawn4book

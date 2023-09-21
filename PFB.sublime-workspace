@@ -13,7 +13,7 @@
 			],
 			[
 				"Assis",
-				"AssistantPublishing"
+				"AssistantPublisher"
 			],
 			[
 				"p",
@@ -848,7 +848,7 @@
 		"/Users/philippeperret/Programmes/Prawn4book/tests/essais/book_essais/recipe.yaml",
 		"/Users/philippeperret/Programmes/Prawn4book/tests/lib/classes/TRecipe.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/tests/lib/recipe_helpers.rb",
-		"/Users/philippeperret/Programmes/Prawn4book/lib/commandes/assistant/lib/assistant_publishing.rb",
+		"/Users/philippeperret/Programmes/Prawn4book/lib/commandes/assistant/lib/assistant_publisher.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/pages/book_data/data.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/commandes/assistant/lib/assistant_fontes.rb",
 		"/Users/philippeperret/Programmes/Prawn4book/lib/pages/special_pages_abstract/data.rb",

@@ -2964,13 +2964,13 @@ Par défaut, les titres (leur première ligne, s’ils tiennent sur plusieurs li
 
 <a name="info-publisher"></a>
 
-#### publishing (données de la maison d’édition)
+#### publisher (données de la maison d’édition)
 
 ~~~yaml
 # in recipe.yaml/collection_recipe.yaml
 
-#<publishing>
-publishing:
+#<publisher>
+publisher:
 	name:    		"Nom édition" # p.e. "Icare Éditions"
 	adresse: 		"Numéro Rue\nCode postal Ville\nPays
 	url:     		"https://site-des-editions.com"
@@ -2979,7 +2979,7 @@ publishing:
 	mail:       "info@editions.com"    # mail principal
 	contact: 		"contact@editions.com" # mail de contact
 	[2]
-#</publishing>
+#</publisher>
 ~~~
 
 > **[1]**
@@ -2988,10 +2988,10 @@ publishing:
 >
 > **[2]**
 >
-> On peut tout à fait ajouter toutes les informations supplémentaires que l’on voudra, le nom de l’éditeur par exemple. On pourra y faire référence ensuite, dans le livre, à l’aide de `recipe.publishing[<key>]`. Par exemple :
+> On peut tout à fait ajouter toutes les informations supplémentaires que l’on voudra, le nom de l’éditeur par exemple. On pourra y faire référence ensuite, dans le livre, à l’aide de `recipe.publisher[<key>]`. Par exemple :
 >
 > ~~~yaml
-> publishing:
+> publisher:
 > 	# ...
 > 	# publisher: Gaston GALLIMARD
 > ~~~
@@ -2999,7 +2999,7 @@ publishing:
 > Dans le texte, on pourra y faire référence par :
 >
 > ~~~pfb-md
-> Le plus connu des éditeurs est sans doute #{recipe.publishing[:publisher]} créateur de la célèbre maison d'éditions de même nom.
+> Le plus connu des éditeurs est sans doute #{recipe.publisher[:publisher]} créateur de la célèbre maison d'éditions de même nom.
 > ~~~
 >
 > 
@@ -3335,13 +3335,13 @@ page_infos:
   	lieu: "Ours sur Orge"
   paginate: false # [4]
 #</page_infos>
-#<publishing> [3]
-publishing:
+#<publisher> [3]
+publisher:
 	name: 		"<nom de la Maison d'éditions>"
 	adresse: 	"numéro rue\nCode postal ville"
 	mail:    	"<adresse mail principale>"
 	url: 			"https://url.de.la.maison.fr"
-#</publishing>
+#</publisher>
 ```
 
 > **[1]**

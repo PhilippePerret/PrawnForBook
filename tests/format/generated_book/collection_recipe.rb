@@ -7,8 +7,8 @@ class Recipe < AbstractRecipe
     # -- Données de la collection --
     name:             [:collection_data, :name],
     # -- Éditeur --
-    publisher_name:   [:publishing, :name],
-    logo:             [:publishing, :logo_path],
+    publisher_name:   [:publisher, :name],
+    logo:             [:publisher, :logo_path],
     # -- Imprimerie --
     imprimerie:       [:page_infos, :printing, :name],
     imprimerie_ville: [:page_infos, :printing, :lieu],

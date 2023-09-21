@@ -52,8 +52,8 @@
 #<inserted_pages>
 :inserted_pages: {}
 #</inserted_pages>
-#<publishing>
-:publishing:
+#<publisher>
+:publisher:
   :name: Icare éditions
   :adresse: 295 impasse des Fauvettes\n13400 Aubagne
   :site: https://www.icare-editions.fr
@@ -61,7 +61,7 @@
   :siret: '123365457895'
   :mail: editions@icare-editions.fr
   :contact: contact@icare-editions.fr
-#</publishing>
+#</publisher>
 #<page_infos>
 :page_infos:
   :conception:

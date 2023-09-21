@@ -56,11 +56,11 @@ class Recipe
   # -- Éditeur --
 
   def logo_defined?
-    not(publishing[:logo_path].nil?)    
+    not(publisher[:logo_path].nil?)    
   end
   def logo_path
     @logo_path ||= begin
-      rp = publishing[:logo_path]
+      rp = publisher[:logo_path]
       if rp
         File.exist?(rp) || begin
           rp = File.join(owner.folder, rp)
@@ -285,8 +285,8 @@ class Recipe
   def book_data
     @book_data          ||= DATA[:book_data]
   end
-  def publishing
-    @publishing         ||= DATA[:publishing]
+  def publisher
+    @publisher         ||= DATA[:publisher]
   end
 
   def inserted_pages
