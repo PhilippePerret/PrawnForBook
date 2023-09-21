@@ -27,6 +27,9 @@ class FatalPrawnForBookError < StandardError
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Recette(s) ---
       499   => Prawn4book::ERRORS[:recipe][:missing_even_default_data],
+      800   => Prawn4book::ERRORS[:recipe][:book_data][:require_title],
+      801   => Prawn4book::ERRORS[:recipe][:book_data][:require_author],
+      802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
       # -- Tables --

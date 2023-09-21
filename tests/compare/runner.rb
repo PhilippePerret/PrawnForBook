@@ -166,6 +166,12 @@ class TestPerCompare
   # @return true si le livre actual.pdf correspond exactement au
   # livre expected.pdf
   def as_expected?
+    # require 'digest/md5'
+    # expected_sha = Digest::MD5.hexdigest(File.read(expected_book))
+    # puts "expected_sha = #{expected_sha.inspect}"
+    # actual_sha = Digest::MD5.hexdigest(File.read(actual_book))
+    # puts "actual_sha = #{actual_sha.inspect}"
+    # return expected_sha == actual_sha
     FileUtils.identical?(expected_book, actual_book)
   end
 

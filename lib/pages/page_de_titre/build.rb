@@ -86,7 +86,7 @@ class PageDeTitre
       # 
       move_down(line_height) # une de plus
       font(dtitre[:fonts][:author], size: dtitre[:sizes][:author])
-      text pdfbook.auteurs, **{align: :center}
+      text pdfbook.auteurs.titleize, **{align: :center}
 
       #
       # La MAISON D'ÉDITION

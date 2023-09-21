@@ -35,23 +35,25 @@ require 'pdf/checker'
 
 
 require_relative '../lib/required/Divers/constants'
-require_relative '../lib/required/utils/Spy'
-RUN_SPY = true
-if RUN_SPY
-  CLI.options.merge!(spy: true)
-  spy "Initiation du Terminal d'espionnage…".bleu 
-else
-  puts "Mettre RUN_SPY à true dans test_helper.rb pour utiliser l'espion".jaune
-end
+require_relative 'lib/produce_module'
 
-module Minitest
-  class Test
-    def new_tosa
-      return OSATest.new({
-        app:'Terminal',
-        delay: 0.5,
-        window_bounds: [0,0,1200,800]
-      })
-    end
-  end #/class Test
-end #/module Minitest
+# require_relative '../lib/required/utils/Spy'
+# RUN_SPY = true
+# if RUN_SPY
+#   CLI.options.merge!(spy: true)
+#   spy "Initiation du Terminal d'espionnage…".bleu 
+# else
+#   puts "Mettre RUN_SPY à true dans test_helper.rb pour utiliser l'espion".jaune
+# end
+
+# module Minitest
+#   class Test
+#     def new_tosa
+#       return OSATest.new({
+#         app:'Terminal',
+#         delay: 0.5,
+#         window_bounds: [0,0,1200,800]
+#       })
+#     end
+#   end #/class Test
+# end #/module Minitest

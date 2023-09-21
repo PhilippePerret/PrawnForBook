@@ -359,9 +359,16 @@ class PageInfos
     mails  = mails.to_s.match?(',') ?
                 mails.split(',').map{|n|n.strip} : [mails]
     people.map.with_index do |patro, idx|
+      patro = human_for_patro(patro)
       patro = "#{patro}#{LINEAR_DELIMITOR}(#{mails[idx]})" unless mails[idx].nil?
       patro
     end.pretty_join    
+  end
+
+  # Méthode qui transforme "Philippe PERRET" en "Philippe Perret"
+  #
+  def human_for_patro(patro)
+    patro.titleize
   end
 
   ##

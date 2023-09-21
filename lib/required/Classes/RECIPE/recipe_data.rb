@@ -11,7 +11,7 @@ class Recipe
   # 
   DATA = {}
 
-  attr_reader :owner # le pdfbook, normalement
+  attr_reader :owner # le pdfbook, normalement (ou la collection ?)
 
   def initialize(owner)
     @owner = owner
@@ -44,7 +44,7 @@ class Recipe
     @subtitle     ||= book_data[:subtitle]&.gsub(/\\n/, "\n")
   end
   def auteurs
-    @auteurs      ||= book_data[:auteurs]
+    @auteurs      ||= book_data[:auteurs]||book_data[:auteur]||book_data[:authors]||book_data[:author]
   end
   def isbn
     @isbn         ||= book_data[:isbn]
@@ -53,6 +53,22 @@ class Recipe
     @depot_legal  ||= book_data[:depot_legal]
   end
 
+  # -- Éditeur --
+
+  def logo_defined?
+    not(publishing[:logo_path].nil?)    
+  end
+  def logo_path
+    @logo_path ||= begin
+      rp = publishing[:logo_path]
+      if rp
+        File.exist?(rp) || begin
+          rp = File.join(owner.folder, rp)
+        end
+        rp
+      end
+    end
+  end
 
   # -- Pages --
 
@@ -321,7 +337,7 @@ class Recipe
 
     def get_data_in_recipe(recipe_path)
       return unless File.exist?(recipe_path)
-      DATA.deep_merge!(YAML.load_file(recipe_path, **options_yaml))
+      DATA.deep_merge!(YAML.load_file(recipe_path, **options_yaml)||{})
     end
 
     def options_yaml

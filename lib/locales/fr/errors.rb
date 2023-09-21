@@ -181,6 +181,43 @@ ERRORS = {
       défaut… Vous n'avez plus qu'à recharger l'application…
       ERR
     main_folder_not_defined: "La propriété :main_folder n'est pas définie, dans la recette…",
+
+    # -- Recette > Données du livre --
+
+    book_data: {
+      require_title: <<~ERR,
+        Pour pouvoir faire la page de titre, le TITRE DU LIVRE est requis.
+        L'ajouter dans la recette (recipe.yaml) à l'aide de :
+
+        #<book_data>
+        book_data:
+          title: "<le titre du livre>"
+        #</book_data>
+        ERR
+      require_author: <<~ERR,
+        Pour pouvoir faire la page de titre, l'AUTEUR DU LIVRE est requis.
+        L'ajouter dans la recette (recipe.yaml) à l'aide de :
+
+        #<book_data>
+        book_data:
+          author: "<Prénom NOM>"
+        #</book_data>
+
+        S'il y plusieurs auteurs, les séparer par une virgule et bien
+        mettre leur nom en capitales. Par exemple :
+
+          author: Philippe PERRET, Marion MICHEL
+
+        Clés alternatives : auteur, auteurs, authors
+        ERR
+      unfound_logo: <<~ERR,
+        Impossible de faire la page de titre, le logo est introuvable
+        à l'adresse %{path}
+        ERR
+    },
+    
+    # -- Recette > Page infos --
+
     page_infos: {
       require_info: <<~ERR,
         Je ne suis pas en mesure de produire la page d'information de fin

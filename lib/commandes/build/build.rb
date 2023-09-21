@@ -529,15 +529,17 @@ class PdfBook
     # 
     if recipe.page_de_titre?
       spy "La page de titre est démandée".jaune
-      not(titre.nil?)     || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, le titre du livre est requis."))
-      not(auteurs.nil?)   || raise(PrawnBuildingError.new("Pour pouvoir faire la page de titre, l'auteur du livre est requis."))
-      if logo_defined?
-        logo_exists? ||raise(PrawnBuildingError.new("Impossible de faire la page de titre, le logo est introuvable."))
+      not(titre.nil?)     || raise(FatalPrawnForBookError.new(800))
+      not(auteurs.nil?)   || raise(FatalPrawnForBookError.new(801))
+      unless logo_defined? == logo_exists?
+         raise(FatalPrawnForBookError.new(802, {path: recipe.logo_path}))
       end
     else
       spy "La page de titre N'EST PAS démandée".jaune
     end
 
+  rescue FatalPrawnForBookError => e
+    raise e
   rescue PrawnBuildingError => e
     formated_error(e)
     spy "👎 Le livre n'est pas conforme.".rouge
@@ -558,11 +560,11 @@ class PdfBook
     # 
     # @api private
     def logo_defined?
-      not(recipe.publishing[:logo_path].nil?)
+      recipe.logo_defined?
     end
 
     def logo_exists?
-      File.exist?(File.join(folder,recipe.publishing[:logo_path]))
+      logo_defined? && File.exist?(recipe.logo_path)
     end
 
 end #/class PdfBook
