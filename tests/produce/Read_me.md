@@ -1,5 +1,25 @@
 # Test "produce"
 
+Les tests "produce" fonctionnent en comparant un document PDF produit avec le document attendu.
+
+## Aide rapide
+
+Pour lancer tous les tests "produce" :
+
+~~~
+rake test_p
+~~~
+
+Pour filtrer les tests "produce" :
+
+~~~
+rake test_produce TEST=/bout_de_nom/
+~~~
+
+> Tous les dossiers et tous les fichiers qui contiendront "bout_de_nom" dans leur nom seront joués.
+
+## Description
+
 J'appelle "Tests produce" les tests qui fonctionnent en comparant un document PDF produit avec le document attendu (pas le hash).
 
 ## Création d'un nouveau test "produce"

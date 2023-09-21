@@ -341,7 +341,7 @@ class Recipe
     end
 
     def options_yaml
-      @options_yaml ||= {symbolize_names:true, aliases: true, permitted_classes: [Date, Symbol]}.freeze
+      @options_yaml ||= {symbolize_names:true, aliases: true, permitted_classes: [Date, Symbol, TrueClass, FalseClass]}.freeze
     end
 
 

@@ -135,7 +135,7 @@ class PdfBook
   #   PrawnView hérite de Prawn::View (comme conseillé par le code de Prawn.
   # 
   def build_pdf_book
-    clear unless debug?
+    clear unless debug? || ENV['TEST']
     
     # 
     # Détruire le fichier PDF final s'il existe déjà

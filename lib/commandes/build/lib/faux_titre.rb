@@ -9,7 +9,7 @@ class PrawnView
     # 
     # Les données pour le faux-titre
     # 
-    dfauxtitre = pdfbook.recipe[:faux_titre]
+    dfauxtitre = pdfbook.recipe.inserted_pages[:faux_titre]
     dfauxtitre = {
       font:       pdfbook.first_font, 
       size:       24,
