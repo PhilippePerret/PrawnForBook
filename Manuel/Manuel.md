@@ -774,7 +774,7 @@ Un paragraphe de texte normal.
 									* :border_lines => Le style de lignes. Soit une valeur seule, parmi
 									  :solid, :dotted ou :dashed soit un Array de 4 valeurs pour définir 
 									  dans l'ordre : ligne haut, droit, bas et gauche.
-									* :font 			La fonte à utiliser
+									* :font 			La fonte à utiliser (son nom)
 									* :font_style Le style
 									* :size 			La taille de police
 									* :align  		L'alignement, parmi les valeurs traditionnelles 
@@ -869,7 +869,11 @@ Ci-dessous une table avec des cellules fusionnées.
 
 ##### Contrainte « keep with next » sur les rangées
 
-On peut très facilement ajouter des contraintes sur les rangées en utilisant l’option `keep_with_next` (que j’aiajoutée dans Prawn-table). Par exemple, si on a la table :
+On peut très facilement ajouter des contraintes sur les rangées en utilisant l’option `keep_with_next` (que j’aiajoutée dans Prawn-table). 
+
+> Noter qu’il y a une [autre manière de garder des rangées ensemble](#keep-with-next-per-table).
+
+Par exemple, si on a la table :
 
 ~~~markdown
 | A1 | B1 | C1 |
@@ -932,7 +936,46 @@ Une table avec des bords verticaux
 | A2 | B2 | C2 |
 ~~~
 
- <a name="style-table"></a>
+<a name="keep-with-next-per-table"></a>
+
+##### Autre manière de garder des rangées ensemble
+
+Une autre façon de garder des rangées ensemble, plus facile à appliquer dans certains cas, consiste en fait à faire un table par rangées d'information à conserver ensemble, au lieu de faire tous des rangées dans la même table.
+
+Imaginons un cas concret : on doit faire le « scénier » d’un film. Ce scénier comporte les informations pour chaque scène. Pour chaque scène, on trouve une première ligne avec l’intitulé (lieu, effet, décor, numéro), une seconde ligne (rangée) qui contient le synopsis de la scène et une troisième ligne (rangée) avec les informations temporelles. On veut que ces trois rangées soient toujours conservées ensemble, qu’on n’ait jamais, par exemple, un intitulé tout seul en bas de page avec le synopsis en début de page suivante.
+
+Pour ce faire, au lieu de faire une seule table contenant toutes les rangées, on fait une table par scène. Et l’’on teste la hauteur de la scène et la hauteur du curseur pour savoir si on doit passer à la page suivante.
+
+Par exemple :
+
+~~~ruby
+scenes_lines.each do |scene_lines|
+  #
+  # On prépare la table (make_table) sans l'écrire dans
+  # le livre.
+  #
+  table = pdf.make_table(scene_lines, **aspect)
+  if pdf.cursor - table.height < 0
+    #
+    # Si on dépassait (virtuellemen seulement car en 
+    # vrai la table serait découpée) la marge bas en 
+    # ajoutant cette table, alors on passe à la page
+    # suivante.
+    #
+    pdf.start_new_page
+  end
+  #
+  # On peut dessiner la table là
+  #
+  table.draw 
+end
+~~~
+
+
+
+---
+
+<a name="style-table"></a>
 
 ##### Définir un STYLE DE TABLE
 
@@ -1090,11 +1133,11 @@ module TableFormaterModule
 end
 ~~~
 
-> #### Note 1
+> **Note 1**
 >
 > Grâce à ces possibilités, on peut faire une utilisation très puissante des tables, avec par exemple des données injectées depuis des fichiers de données externes. Voir par exemple l’utilisation avec les paradigmes de Field augmentés.
 >
-> #### Note 2
+> **Note 2**
 >
 > On ne peut pas régler les `colspan` et `rowspan` dans le bloc de code. Si on doit le faire au niveau de la définition de la table, il faut le faire en travaillant sur les lignes, comme [cela est expliqué ici](#col-et-row-span-in-table-class)
 
@@ -1221,7 +1264,7 @@ Les données `table_data` de la table contiennent deux données, une pour défin
 ~~~ruby
 table_data = {
   pfbcode: <instance Prawn4book::PdfBook::PFBCode>,
-  lines:   <liste Arraydes lignes>
+  lines:   <liste Array des lignes>
 }
 ~~~
 
@@ -1238,11 +1281,11 @@ pfbcode = Prawn4book::PdfBook::PFBCode.new(pdf.pdfbook, "(( {col_count:3, column
 > ~~~ruby
 > lines = <<~LINES % data_template
 > 	|      | %{v1} | %{v2} |
->     | %{x} |       |       |
+>      | %{x} |       |       |
 > 	LINES
 > 
 > table_data = {
->   lines: lines.split("\n")
+>     lines: lines.split("\n")
 > }
 > ~~~
 
@@ -1260,7 +1303,7 @@ pfbcode = Prawn4book::PdfBook::PFBCode.new(pdf.pdfbook, "(( {col_count:3, column
 > ~~~
 >
 
-Noter que pour fonctionner, il faut que la méthode reçoive `pdf`, comme c’est le cas des mises en forme de bibliographie.
+Noter que pour fonctionner, il faut que la méthode qui doit construire la table reçoive `pdf`, comme c’est le cas des mises en forme de bibliographie.
 
 <a name="style-paragraphe-par-table"></a>
 
@@ -1284,7 +1327,7 @@ module ParserFormaterClass
     pdf = context[:pdf]
     pdfbook = pdf.pdfbook
 
-		# Nous demandons l'écriture du numéro de paragraph car le
+		# Nous demandons l'écriture du numéro de paragraph si le
     # livre fonctionne en numérotant les paragraphes
 		context[:paragraph].print_paragraph_number(pdf)
     
@@ -1294,12 +1337,18 @@ module ParserFormaterClass
     
     # Puis nous définissons la table
     data_table = {
-      pfbcode: Prawn4book::PdfBook::PFBCode.new(pdfbook, "(( #{aspect.inspect} ))")
+      pfbcode: Prawn4book::PdfBook::PFBCode.new(pdfbook, "(( #{aspect.inspect} ))"),
       lines: ["| | #{str} |"]
       }
     table = Prawn4book::PdfBook::NTable.new(pdfbook, **data_table)
     
     # Nous imprimons le synopsis, tout près du texte précédent
+    # no_space: true indique qu'il ne faut laisser aucun espace entre
+    # le texte (avant et après) et la table.
+    # numerotation:false indique qu'il ne faut pas numéroter la table
+    # (cette numérotation s'est fait ci-dessus en numérotant plutôt le
+    # paragraphe (faire l'essai des deux pour voir ce qui est préférable
+    # par rapport à la mise en forme.
     table.print(pdf, **{numerotation:false, no_space: true})
   end
 
@@ -2164,6 +2213,8 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 
 La section précédente parlait de la mise en forme de la bibliographie elle-même, souvent placée à la fin du livre. On peut également définir comme l’item apparaitra dans le texte lui-même de façon très fine et très complexe.
 
+> Noter que ce formatage n’est pas obligatoire. Si la méthode n’existe pas, le texte restera tel quel.
+
 On le fait grâce à la méthode **`<tag biblio>_in_text`** dans le fichier `formater.rb` :
 
 ~~~ruby
@@ -2182,7 +2233,7 @@ module BibliographyFormaterModule
   #										character_spacing: -1}) alors ce sont tous les mots du
   # 									paragraphe qui seront modifiés.
   # @param [String] actual  Optionnellement, le mot à écrire (par exemple le
-  # 												mot au pluriel.
+  # 												mot au pluriel) défini dans la balise.
   #
   # @return [String] Le texte à afficher
   def film_in_text(instance, context, actual)
@@ -3395,9 +3446,9 @@ page_index:
 
 \[Expert] On peut créer des modules personnalisés qui vont permettre des traitements particuliers.
 
-C’est nécessaire par exemple pour réinitialiser des valeurs lorsqu’un « deuxième tour » est nécessaire pour traiter toutes les références. Dans ce cas, il peut être nécessaire d’appeler une méthode de réinitialisation propre au livre, ou à la collection, pour remettre les compteurs à zéro. Dans le cas contraire, on prend le risque de se retrouver avec des doublons.
+C’est nécessaire par exemple pour réinitialiser des valeurs lorsqu’un « deuxième tour » est nécessaire pour traiter toutes les références. Dans ce cas, il peut être nécessaire d’appeler une méthode de réinitialisation propre au livre, ou à la collection, pour remettre les compteurs à zéro. Dans le cas contraire, on prend le risque de se retrouver avec des doublons quand il y a deux passes pour produire le livre (ce qui arrive en cas de référence arrière).
 
-Cette méthode de réinitialisation s’appelle `Prawn4book.reset`.
+Cette méthode de réinitialisation peut s’appeler `Prawn4book.reset`.
 
 On doit la définir dans un fichier **`prawn4book.rb`** à la racine de la collection ou du livre (si les deux fichiers existent, ils seront chargés).
 
@@ -3406,21 +3457,17 @@ Dans ce fichier, on écrit :
 ~~~ruby
 # in ./prawn4book.rb
 module Prawn4book
-  def self.reset(first_turn) # [1]
-    @is_first_turn = first_turn
+  def self.reset
+    if Prawn4book.first_turn?
+      # Ce qu'il faut faire au premier tour
+    elsif Prawn4book.second_turn?
+      # Ce qu'il faut faire en cas de second tour
+    end
     # ... Tout ce qu'il faut faire au début de chaque tour 
     # ... d'impression du livre.
   end
-  
-  # Pour pouvoir faire n'importe où dans le programme :
-  # 		Prawn4book.first_turn?
-  def self.first_turn?
-    @is_first_turn === true
-  end
-end
+en
 ~~~
-
-> **[1]** +first_turn+ est à true lorsque c’est le premier tour et à false au deuxième tour (@rappel : un deuxième tour est exécuté lorsque des références arrières ont été trouvés et qu’il faut faire le livre en deux temps).
 
 Dans ce fichier, on pourrait imaginer, par exemple, charger des parseurs et des formateurs si on ne veut pas utiliser les fichiers par défaut. Par exemple :
 
@@ -3514,6 +3561,28 @@ bonjour = ARGV[2]
 <a name="annexe"></a>
 
 ## Annexe
+
+<a name="passes"></a>
+
+### Passes de construction sur le livre
+
+En cas de référence arrière — c’est-à-dire une référence à un élément se trouvant après l’appel de référence, donc non encore défini au cours de la fabrication du PDF — il faut procéder à deux tours pour fabriquer le livre.
+
+Pour savoir dans quel tour on se trouve, on peut utiliser :
+
+~~~ruby
+Prawn4book.first_turn?
+# true si c'est le premier tour
+~~~
+
+et :
+
+~~~ruby
+Prawn4book.second_turn?
+# true si c'est le second tour
+~~~
+
+
 
 <a name="sous-commandes"></a>
 

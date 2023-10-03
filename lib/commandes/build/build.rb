@@ -6,6 +6,17 @@
 
 =end
 module Prawn4book
+
+  def self.first_turn?
+    @@turn == 1
+  end
+  def self.second_turn?
+    @@turn == 2
+  end
+  def self.turn=(value)
+    @@turn = value
+  end
+
 class Command
   #
   # Méthode appelée quand on doit construire le livre (`pfb build')
@@ -45,6 +56,7 @@ class PdfBook
     # 
     # --- INITIALISATIONS ---
     # 
+    Prawn4book.turn = 1
 
     # - Bibliographies -
     require 'lib/pages/bibliographies'
@@ -100,6 +112,12 @@ class PdfBook
     # une passe pour les appliquer.
     # 
     if table_references.has_one_appel_sans_reference?
+
+      #
+      # Pour Prawn4book.second_turn?
+      # 
+      Prawn4book.turn = 2
+      
       #
       # S'il existe une méthode de reset propre au livre ou à la 
       # collection, on l'invoque

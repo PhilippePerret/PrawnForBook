@@ -58,11 +58,24 @@ class NTable < AnyParagraph
   def print(pdf, **options)
     @pdf = pdf
 
+    # puts "options = #{options.inspect}".jaune
+    # debugit = options.empty?
+    debugit = false
+
     #
     # Définir le numéro du paragraphe ici, pour que
     # le format :hybrid (n° page + n° paragraphe) fonctionne
     # 
-    @numero = AnyParagraph.get_next_numero
+    # @numero = 
+    #   unless options[:numerotation] == false
+    #     AnyParagraph.get_next_numero
+    #   else
+    #     AnyParagraph.get_current_numero
+    #   end
+
+    @numero = AnyParagraph.get_current_numero
+
+    puts "1".jaune if debugit
 
     #
     # Check value. Ici, on va calculer les valeurs implicites
@@ -74,11 +87,15 @@ class NTable < AnyParagraph
     # 
     calc_implicite_values(pdf)
 
+    puts "2".jaune if debugit
+
     # 
     # Application de la fonte par défaut
     # (utile par exemple si la table est placée après un titre)
     # 
     pdf.font(Fonte.default_fonte)
+
+    puts "3".jaune if debugit
 
     # - Réglage de l'espace avant la table -
     if options.key?(:space_before)
@@ -88,6 +105,8 @@ class NTable < AnyParagraph
     end
     pdf.move_cursor_to_next_reference_line
 
+    puts "4".jaune if debugit
+    
     #
     # Écriture du numéro du paragraphe
     # 
@@ -95,11 +114,15 @@ class NTable < AnyParagraph
       print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
     end
 
+    puts "5".jaune if debugit
+    
     #
     # On remet les textes originaux
     # 
     @lines = self.class.desafeize_lines(lines) unless lines.nil?
 
+    puts "6".jaune if debugit
+    
     #
     # --- ÉCRITURE DE LA TABLE ---
     # 
@@ -113,12 +136,19 @@ class NTable < AnyParagraph
       raise FatalPrawnForBookError.new(3000, {err: e.message})
     end
 
+    puts "7".jaune if debugit
+    
+
     # - Réglage de l'espace après la table -
     if options.key?(:space_after)
       pdf.move_down(options[:space_after])
     elsif not(options[:no_space] == true)
       pdf.move_down(2 * pdf.line_height)
     end
+
+    puts "8".jaune if debugit
+    
+
   end
 
   # --- Predicate Methods ---
