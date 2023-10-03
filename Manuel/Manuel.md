@@ -1514,7 +1514,22 @@ Ces paragraphes-codes peuvent aussi définir du code personnalisé. Ils peuvent 
 
   Voir les [exemples d’appel à une méthode générale](#exemples-methode-paragraphe-code).
 
+<a name="message-when-building"></a>
 
+#### Messages en cours de fabrication
+
+On peut utiliser deux paragraphes-code spéciaux pour envoyer des messages en sortie (en fin de fabrication) depuis le texte. Il suffit d’utiliser :
+
+~~~markdown
+Un paragraphe de texte.
+(( notice(Le texte qui sera écrit comme une notification) ))
+Un autre paragraphe de texte.
+(( erreur(Une erreur trouvée ici) ))
+Un autre paragraphe de texte.
+~~~
+
+> Noter que les guillemets ne sont pas nécessaires, avec des méthodes. Si vous en mettez, ils apparaitront dans le message en sortie.
+> Bien entendu, ces messages ne seront pas imprimés dans le livre.
 
 ---
 

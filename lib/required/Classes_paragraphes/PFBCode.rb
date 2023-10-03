@@ -62,6 +62,10 @@ class PFBCode < AnyParagraph
       pdfbook.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_bibliography(pdf)
+    when /^notice\((.+?)\)$/.freeze
+      add_notice($1)
+    when /^(?:erreur|error)\((.+?)\)$/.freeze
+      add_erreur($1)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Une cible de référence (ou un lien) seule sur une ligne
       # Pour le moment, on considère que ça ne peut être qu'une cible
