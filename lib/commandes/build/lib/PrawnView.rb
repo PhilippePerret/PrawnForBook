@@ -157,7 +157,7 @@ class PrawnView
     when NilClass
       super
     when String, Symbol
-      super
+      super #(fonte, **params)
     when Hash
       super(fonte.delete(:name)||fonte.delete(:font), **fonte)
     when Prawn4book::Fonte
@@ -194,6 +194,11 @@ class PrawnView
   def define_required_fonts(fontes)
     return if fontes.nil? || fontes.empty?
     fontes.each do |fontname, fontdata|
+      # On en profite pour vérifier l'existence
+      fontdata.each do |style, fspath|
+        File.exist?(fspath) || raise("La police #{fspath} est introuvable…")
+      end
+      logif("Famille de police installée : #{fontname.inspect}\n#{fontdata.inspect}")
       font_families.update(fontname.to_s => fontdata)
     end
   end

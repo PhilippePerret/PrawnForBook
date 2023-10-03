@@ -19,6 +19,13 @@ define: &default1_font_n_style "Times-Roman/"
 define: &default2_font_n_style "Helvetica/"
 define: &default3_font_n_style "Helvetica/Bold"
 
+#<fonts>
+# fonts:
+#   Helvetica:
+#     normal: "/System/Library/Fonts/Helvetica.ttc"
+#     bold:   "/System/Library/Fonts/HelveticaNeue.ttc"
+#</fonts>
+
 # --- Données du livre ---
 # (elles sont propres à chaque livre mais sont mises ici pour
 #  que des données existent même sans que rien n'ait été fourni)

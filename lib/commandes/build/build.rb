@@ -170,7 +170,7 @@ class PdfBook
 
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
-    #    
+    #
     pdf = PrawnView.new(self, pdf_config)
 
     #
@@ -217,7 +217,10 @@ class PdfBook
     # 
     # Empacketage
     # 
+    # pdf.font_families.clear # pour checker parfois les polices chargées
     pdf.define_required_fonts(book_fonts)
+    # puts "pdf.font_families: #{pdf.font_families.inspect}".bleu
+    # exit 1
 
     #
     # Y a-t-il une DERNIÈRE PAGE définie en options de commande
@@ -231,6 +234,11 @@ class PdfBook
     # définitions de marge, etc.)
     # 
     pdf.start_new_page if skip_page_creation?
+
+    font_name, font_style = recipe.default_font_n_style.split('/')
+    pdf.font(font_name, **{
+      size: recipe.default_font_size,
+      font_style: font_style})
 
     #
     # Initier la table des matières (je préfère faire mon 
