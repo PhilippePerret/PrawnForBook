@@ -33,6 +33,7 @@ module Prawn4book
     def export_text(str)
       return if str == last_str # [1]
       return if str == ' '
+      return if str.numeric? # un numéro de page
       exportator << epure(str)
       #
       # Pour ne pas écrire deux fois le même texte (par exemple une
@@ -61,7 +62,16 @@ module Prawn4book
     end
 
     def add(str)
-      ref.puts str
+      # Méthode à utiliser en fonction du début (début de phrase ou
+      # cours de phrase)
+      begin
+        car = str.match?(/^[A-ZÉÀ]/) ? "\n" : " "
+      rescue Encoding::CompatibilityError => e
+        # TODO Régler le problème d'encodate
+        car = "\n"
+      end
+      str = "#{car}#{str}"
+      ref.write str
     end
     alias :<< :add
 
@@ -94,9 +104,9 @@ module Prawn
           # de texte exporté
           # @rappel : ce module n'est chargé qu'en cas d'export du
           # texte.
-          if @content.length > 0
-            Prawn4book.exported_book.export_text(@content)
-          end
+          # if @content.length > 0
+          #   Prawn4book.exported_book.export_text(@content)
+          # end
           # -- Dans tous les cas, on utilise la méthode originale
           #    pour écrire le texte ---
           # real_text_box(extra_options)
@@ -105,4 +115,39 @@ module Prawn
       end #/class Text
     end #/class Cell
   end #/class Table
+
+  module Text
+
+    alias :read_draw_text! :draw_text!
+    def draw_text!(text, options)
+      # puts "Je dois écrire depuis draw_text!: #{text.inspect}".jaune
+      # exit 100
+      Prawn4book.exported_book.export_text(text)
+      read_draw_text!(text, options)
+    end
+
+    # alias :real_text_box :text_box
+    # def text_box(string, options = {})
+    #   puts "Je dois écrire: #{string.inspect}".jaune
+    #   exit 100
+    #   real_text_box(string, options = {})
+    # end
+
+    # alias :real_formatted_text :formatted_text
+    # def formatted_text(array, options = {})
+    #   puts "Je dois écrire: #{array.inspect}".jaune
+    #   exit 100
+    #   real_formatted_text(array, options)
+    # end
+
+    # module Formatted
+    #   alias :real_formatted_text_box :formatted_text_box
+    #   def formatted_text_box(array, options = {})
+    #     puts "Je dois écrire: #{array.inspect}".jaune
+    #     exit 100
+    #     real_formatted_text_box(array, options)
+    #   end
+    # end #/module Prawn::Text::Formatted
+    # 
+  end #/module Text
 end #/module Prawn

@@ -202,11 +202,6 @@ class NTextParagraph < AnyParagraph
         # 
         pa.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number? && not(no_num)
 
-        #
-        # S'il faut exporter le texte
-        # 
-        pa.book.export_text(pa.text) if pa.book.export_text?
-
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
 

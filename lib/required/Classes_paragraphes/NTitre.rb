@@ -75,15 +75,6 @@ class NTitre < AnyParagraph
     ftext = titre.text
 
     #
-    # S'il faut exporter le texte simple
-    # 
-    if book.export_text?
-      mgtop = "\n"*(6-level)
-      mgbot = "\n"
-      mgbot << "\n"*(3-level) if level < 4
-      book.export_text("#{mgtop}#{'#'*level} #{ftext.upcase}#{mgbot}") 
-    end
-    #
     # Nombre de lignes avant
     # 
     # Si le paragraphe précédent était un titre, on n'applique pas
