@@ -9,7 +9,11 @@ Prawn::Fonts::AFM.hide_m17n_warning = true
 
 require 'clir'
 CLI.set_options_table({
-  e: :edition, c: :cursor, g: :grid})
+  e: :edition, 
+  c: :cursor, 
+  g: :grid,
+  t: :export_text, # pfb build -t
+})
 
 #
 # Pour insérer des svg dans les documents

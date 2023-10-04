@@ -1,5 +1,17 @@
 require_relative '../Classes/Prawn4book'
 
+
+# Nom de l'application dans laquelle ouvrir le texte seul pour
+# le corriger
+# @rappel
+#   On sort ce texte en utilisant 'pfb build -t'
+#   (c'est l'option "-t" qui demande, en même temps que la 
+#    construction du livre, l'export de l'intégralité de son
+#    texte)
+# 
+CORRECTOR_NAME = "Antidote 11"
+
+
 # --- Chemins d'accès ---
 LIB_FOLDER      = File.dirname(File.dirname(__dir__)).freeze
 APP_FOLDER      = File.dirname(LIB_FOLDER)

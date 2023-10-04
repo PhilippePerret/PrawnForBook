@@ -177,6 +177,7 @@ class AnyParagraph
   attr_reader :pdf
 
   attr_reader :pdfbook
+  alias :book :pdfbook
 
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page

@@ -53,6 +53,21 @@ class PdfBook
     # 
     @current_titles = {}
 
+    #
+    # Si c'est "juste" un export du texte, il faut charger le
+    # module qui s'en charge
+    # 
+    if export_text?
+      spy "Exportation du texte seulement (option -t)"
+      require 'lib/modules/Exportator'
+      #
+      # On doit indiquer le livre en court d'exportation, car
+      # les méthodes surclassées de Prawn doivent y avoir accès,
+      # comme par exemple la méthode écrivant dans une cellule de
+      # table (cf. le module Exportator.rb)
+      Prawn4book.exported_book = self
+    end
+
     # 
     # --- INITIALISATIONS ---
     # 
@@ -111,7 +126,7 @@ class PdfBook
     # Si des appels de références avant ont été trouvées, on refait
     # une passe pour les appliquer.
     # 
-    if table_references.has_one_appel_sans_reference?
+    if not(export_text?) && table_references.has_one_appel_sans_reference?
 
       #
       # Pour Prawn4book.second_turn?
@@ -139,6 +154,24 @@ class PdfBook
     # 
     open_book if CLI.option(:open) && ok_book
 
+    #
+    # Si l'export de texte était demandé, on demande s'il faut
+    # l'ouvrir dans Antidote (entendu que lorsque l'export est
+    # demandé, c'est souvent pour le corriger)
+    # 
+    if export_text?
+      if Q.yes?("Voulez-vous ouvrir le texte dans Antidote ?".jaune)
+        `open -a "#{CORRECTOR_NAME}" "#{exportator.path}"`
+      end
+    end
+  end
+  #/generate_pdf_book
+
+  # @return true s'il faut exporter le texte (par exemple pour une
+  # correction dans Antidote)
+  # C'est avec l'option -t (pfb build -t) qu'on obtient cet export.
+  def export_text?
+    :TRUE == @exportonlytext ||= true_or_false(CLI.option(:export_text))
   end
 
   ##
@@ -185,6 +218,7 @@ class PdfBook
     pdf.on_page_create do
       # puts "Nouvelle page créée : #{pdf.page_number}".orange
       my.add_page(pdf.page_number)
+      export_text("\n#{'-'*30}\n\n") if export_text?
     end
 
     # pdf.before_render do

@@ -143,7 +143,22 @@ Pour créer une collection :
 > 				|____ dossier_ressources
 > ~~~
 >
-> 
+
+
+
+---
+
+<a name="exporter-texte"></a>
+
+## Exporter le texte (pour correction)
+
+Pour pouvoir corriger le texte avec des outils comme [Antidote](https://www.antidote.info/fr/), il vaut mieux l'exporter plutôt que de le lire dans le PDF. L'opération est simplissime, il suffit d'ajouter l'option `-t` (ou `-only_text`) lors de la fabrication du livre :
+
+~~~bash
+cd path/to/book/folder
+pfb build -t
+~~~
+
 
 ---
 
