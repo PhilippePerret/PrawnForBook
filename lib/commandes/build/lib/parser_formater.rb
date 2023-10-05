@@ -15,7 +15,7 @@ module ParserFormaterClass
   # Ce module contient les MÉTHODES DE CLASSE qui vont être ajoutées
   # à Prawn4book::PdfBook::AnyParagraph
   # 
-
+  
   ##
   # = main =
   # 
@@ -449,6 +449,18 @@ private
   #
   # === SOUS-SOUS MÉTHODES ===
   # 
+  
+  #
+  # Les items de liste
+  # (attention ! cette méthode ne doit être appelée qu'extérieurement
+  #  au traitement __parse normal)
+  # 
+  def self.__traite_liste_item(str, item_format = '<li>%s</li>'.freeze)
+    str = str.gsub(REG_LIST_ITEM) {
+      item_format % $1.strip
+    }
+  end
+  REG_LIST_ITEM = /^\* (.+?)$/.freeze
 
   def self.__traite_bold(str)
     str = str.gsub(REG_BOLD) do
@@ -466,7 +478,7 @@ private
         .gsub(REG_START,  '*'.freeze)
   end
   REG_ETOILE    = /\\\*/.freeze
-  REG_ITALIC    = /\*(.+?)\*/.freeze
+  REG_ITALIC    = /\*([^ ].+?)\*/.freeze
   SPAN_ITALIC   = '<em>\1</em>'.freeze
   REG_START     = /mmSTARmm/.freeze
 

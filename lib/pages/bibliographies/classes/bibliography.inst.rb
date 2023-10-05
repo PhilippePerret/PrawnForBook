@@ -64,6 +64,20 @@ class Bibliography
     :TRUE == @hasformatmethodforbiblio ||= true_or_false(not(custom_format_method_for_biblio.nil?))
   end
 
+  # Retourne la méthode à appeler avant toute construction de
+  # bibliographie de fin d'ouvrage ou nil si elle n'existe pas
+  def method_pre_building
+    @method_pre_building ||= begin
+      method_name = "biblio_pre_building_#{id}".to_sym
+      if self.respond_to?(method_name)
+        method_name
+      else
+        puts "La méthode #{method_name.inspect} est inconnue"
+        nil
+      end
+    end
+  end
+
   def custom_format_method_for_biblio
     @custom_format_method_for_biblio ||= begin
       if BibliographyFormaterModule
@@ -102,7 +116,6 @@ class Bibliography
   # 
   def add_item(bibitem)
     key = bibitem.id.to_s.downcase
-    # puts "Ajout item biblio : #{bibitem.id.inspect} avec la clé #{key}"
     @items.merge!(key => bibitem)
   end
 
@@ -156,7 +169,7 @@ class Bibliography
   def exist?(bibitem_id)
     #
     # On s'assure d'abord que la bibliographie elle-même
-    # est bien formatée
+    # est bien définie
     # 
     return false if not(well_defined?)
     bibitem = get(bibitem_id)

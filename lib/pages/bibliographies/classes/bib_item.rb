@@ -121,9 +121,11 @@ class BibItem
   # @api public
   # 
   def occurences_pretty_list
+    return nil if @occurrences.count == 0
     unite = TERMS[key_numerotation]
     unite = "#{unite}s" if @occurrences.count > 1
-    "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
+    # "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
+    "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
   end
 
   # --- Predicate Methods ---
@@ -142,7 +144,7 @@ class BibItem
     if biblio.one_file?
       biblio.items.key?(id)
     else
-      File.exist?(path)
+      File.exist?(path) || File.exist?(path_txt)
     end
   end
 
@@ -270,7 +272,14 @@ class BibItem
   def data
   @data ||= begin
       case biblio.item_data_format.to_s
-      when 'yaml' then YAML.load_file(path, **{aliases:true, symbolize_names:true})
+      when 'yaml' then
+        if File.exist?(path_txt)
+          # Si le fichier plus simple txt existe, on le préfère
+          get_data_in_txt_file(path_txt)
+        else
+          # Sinon ça doit être un fichier .yaml normal
+          YAML.load_file(path, **{aliases:true, symbolize_names:true})
+        end
       when 'json' then JSON.parse(File.read(path))
       else fatal_error(ERRORS[:biblio][:bad_format_bibitem] % biblio.item_data_format.to_s)
       end
@@ -292,6 +301,34 @@ class BibItem
       end
       rf
     end
+  end
+
+  def path_txt
+    @path_txt ||= begin
+      rf = nil
+      id_min = id.dup.to_s.downcase
+      id_plein = id.dup.to_s.gsub(/ /,'_')
+      id_plein_min = id_min.dup.to_s.gsub(/ /,'_')
+      rf_temp = File.join(biblio.folder, "%{idt}.txt").freeze
+      [id, id_min, id_plein, id_plein_min].each do |idt|
+        rf = rf_temp % {idt: idt}
+        break if File.exist?(rf)
+      end
+      rf
+    end
+  end
+
+  # Les données peuvent être aussi placées dans un simple fichier
+  # texte. Dans ce cas, la première ligne est le :title, la suite
+  # (pour le moment *toute* la suite) est la description.
+  # 
+  def get_data_in_txt_file(path_txt)
+    puts "On prend la fiche dans #{File.basename(path_txt)}"
+    lines = File.read(path_txt).split("\n")
+    {
+      title: lines.shift,
+      description: lines.join("\n").strip
+    }
   end
 
   # @shortcut vers la recette

@@ -1699,12 +1699,12 @@ Dans le code ruby, donc pour tout ce relève des *formaters*, on ajoute un saut 
 
 ### Insertion d’un texte externe
 
-On peut insérer un autre fichier `pfb.md` (ou autre…) dans le texte `texte.pfb.md` d’un livre Prawn. Pour ce faire, il suffit d’utiliser la commande **`include:`** suivie du chemin relatif ou absolu du fichier.
+On peut insérer un autre fichier `pfb.md` (ou autre…) dans le texte `texte.pfb.md` d’un livre Prawn. Pour ce faire, il suffit d’utiliser la commande **`include`** suivie du chemin relatif ou absolu du fichier.
 
 Par exemple, si le dossier du livre contient un dossier `textes` et un fichier texte `introduction.pfb.md` contenant le texte de l’introduction, on peut l’insérer dans le livre à l’endroit voulu à l’aide de :
 
 ```
-(( include: textes/introduction ))
+(( include textes/introduction ))
 ```
 
 Noter que ci-dessus aucune extension de fichier n’a été nécessaire. Elle n’est utile que s’il existe plusieurs fichiers de même affixe (nom sans l’extension) dans le dossier. Dans le cas contraire, **Prawn-for-book** recherche le fichier dont il est question.
@@ -2245,6 +2245,27 @@ Noter également qu’on n’indique pas, ici, les pages/paragraphes où sont ci
 <partie définie par biblio_tag> : <liste des pages/paragraphes séparés par des virgules>.
 ~~~
 
+##### Appel d’une méthode pré-construction
+
+Avant la construction proprement dite de la bibliographie en fin d'ouvrage, on peut appeler une méthode (qui va par exemple affiner les items.
+
+Cette méthode doit être définie de cette manière dans un fichier chargé (par exemple formater.rb :
+
+~~~ruby
+# Dans formater.rb
+module Prawn4book
+class Bibliography
+
+  def biblio_pre_building_<id biblio>
+    # ... opérations ...
+  end  
+
+end #/class Bibliography
+end #/module Prawn4book
+~~~
+
+> C'est donc une méthode de la bibliographie elle-même, donc qui a accès à toutes ses données et toutes ses méthodes.
+
 ##### Mise en forme de l’item de bibliographie dans le texte
 
 La section précédente parlait de la mise en forme de la bibliographie elle-même, souvent placée à la fin du livre. On peut également définir comme l’item apparaitra dans le texte lui-même de façon très fine et très complexe.
@@ -2369,7 +2390,7 @@ La référence sera tout simplement supprimée du texte (attention de ne pas lai
 
 #### Références croisées
 
-Pour une *référence croisée*, c’est-à-dire la référence à un autre livre, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant. Elle peut ressembler à :
+Pour une *référence croisée à un autre livre*, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant. Elle peut ressembler à :
 
 ~~~text
 Rendez-vous sur la (( ->(IDLIVRE:id_ref_uniq) )).
@@ -2764,7 +2785,7 @@ Pour insérer un titre de façon programmatique par le biais d’un helper, util
 def _mon_helper # voir ci-dessus pour le nom
   
   # Définition du titre
-  titre = Prawn4book::PdfBook.NTitre.new(pdfbook, {level: <niveau du titre>, text: "<titre>"})
+  titre = Prawn4book::PdfBook::NTitre.new(pdfbook, {level: <niveau du titre>, text: "<titre>"})
   # Écrire dans le livre
   pdf.start_new_page
   titre.print(pdf)
@@ -3888,6 +3909,8 @@ Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text*
 <a name="bloc-text-with-prawn"></a>
 
 ### Blocs de texte avec Prawn
+
+???
 
 
 

@@ -222,7 +222,7 @@ class InputTextFile
     File.read(filepath).split("\n").map do |par|
       par.strip
     end.reject do |par|
-      par.empty? # SURTOUT PAS : LES TITRES par.start_with?('# ')
+      par.empty?
     end.reject do |par|
       if par.match?(/^<\!\-\-.+\-\->$/)
         true
@@ -243,8 +243,18 @@ class InputTextFile
   # 
   def paragraphes_of_included_file(fpath)
     fpath = search_included_file_from(fpath)
-    return good_paragraphes_in(fpath)
+    parags = []
+    good_paragraphes_in(fpath).each do |parag|
+      if parag.match?(REG_INCLUDE_FILE)
+        pth = parag.match(REG_INCLUDE_FILE)[:path]
+        parags += paragraphes_of_included_file(pth)
+      else
+        parags << parag
+      end
+    end
+    return parags
   end
+  REG_INCLUDE_FILE = /^\(\( include (?<path>.+) \)\)$/.freeze
 
   def search_included_file_from(fpath)
     fpath = fpath.strip

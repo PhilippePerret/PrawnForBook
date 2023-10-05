@@ -26,6 +26,15 @@ class Bibliography
       else
         Prawn4book::Bibliography.method(:default_formate_method)
       end
+
+    #
+    # Si une méthode est à appeler avant de commencer, il faut
+    # l'appeler
+    # 
+    if biblio.method_pre_building
+      biblio.send(biblio.method_pre_building)
+    end
+
     # 
     # Inscription du TITRE DE LA BIBLIOGRAPHIE
     # 
