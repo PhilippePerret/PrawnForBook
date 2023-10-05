@@ -11,6 +11,18 @@ require_relative '../Classes/Prawn4book'
 # 
 CORRECTOR_NAME = "Antidote 11"
 
+#
+# Dossier définissant les snippets pour le livre courant
+# 
+# @rappel
+# 
+#   On utilise la commande 'pfb install' dans le dossier du livre
+#   pour "installe" prawn-for-book et, notamment, mettre les
+#   snippets s'il y en a.
+# 
+SUBL_SNIPPETS_FOLDER = "/Users/philippeperret/Library/Application Support/Sublime Text/Packages/Prawn4Book/Snippet"
+
+
 
 # --- Chemins d'accès ---
 LIB_FOLDER      = File.dirname(File.dirname(__dir__)).freeze

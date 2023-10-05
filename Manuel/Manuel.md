@@ -216,7 +216,7 @@ On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 
 <a name="texte-livre"></a>
 
-## Rédaction du texte du livre
+## Aides à la rédaction du texte du livre
 
 On peut travailler le texte du livre dans n’importe quel éditeur simple. [Sublime Text](https://www.sublimetext.com) est mon premier choix pour le moment. Notamment parce qu’il offre tous les avantages des éditeurs de code, à commencer par l’édition puissante et la colorisation syntaxique. Il suffit, **avec le plugin PrawnForBook**, que le texte se termine par **`.pfb.txt`** ou **`.pfb.md`** pour que Sublime Text applique le format *Prawn4Book*.
 
@@ -226,7 +226,13 @@ Ce package est défini dans le dossier package `Prawn4Book` de Sublime Text. On 
 
 <console>pfb open package-st</console>
 
+> Note : le dossier s’ouvre dans le dossier courant si un dossier est déjà ouvert dans Sublime Text
+>
 > Voir en annexe comment [modifier l’aspect du texte dans Sublime Text](#modify-aspect-in-sublime-text)
+
+### Snippets
+
+On peut utiliser des snippets qui permettent de simplifier grandement la frappe de noms récurrents. Voir en annexes la [Gestion des snippets dans Sublime Text](#gestion-snippets).
 
 <a name="aspect-livre"></a>
 
@@ -3727,11 +3733,32 @@ Si vous utilisez le package sublime-text “Prawn-for-book”, vous disposez des
 | `<!`      | `<!-- $ -->` |
 | `((`      | `(( $ ))`    |
 
-<a name="custom-snippets"></a>
+<a name="custom-snippets"></a><a name="gestion-snippets"></a>
 
-#### Snippets personnalisés
+#### Snippets personnalisés par livre/collection
 
-Pour le moment, il n’existe pas de moyens simples et programmatique et créer des snippets. Mais si vous êtes à l’aise avec **Sublime Text**, vous pouvez en créer de nouveau dans le fichier 
+Les snippets d’un livre ou de toute une collection doivent être placés dans un dossier `snippets` à la racine du livre ou de la collection.
+
+Pour les installer dans Sublime Text, il suffit de taper la commande (dans le dossier du livre) :
+
+<commande>pfb install</commande>
+
+Les snippets sont automatiquement créés, en demandant ce qu’il faut faire des snippets déjà présents (correspondant peut-être à un autre livre.
+
+##### Snippet Sublime Text
+
+Pour rappel, un snippet dans Sublime Text est un fichier qui porte l’’extension `.sublime-snippet` et qui définit le code : 
+
+~~~xml
+<!-- Dans <nom>.sublime-snippe -->
+<snippet>
+	<content><![CDATA[Ici_le_texte_de_remplacement]]></content>
+	<tabTrigger>_le_trigger_</tabTrigger>
+	<scope>source.pfb</scope>
+</snippet>
+~~~
+
+
 
 <a name="convert-dimension"></a>
 
