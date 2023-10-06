@@ -56,6 +56,13 @@ class PdfBook
   end 
 
   ##
+  # Pour gérer les notes dans le livre
+  # 
+  def notes_manager
+    @notes_manager ||= Prawn4book::PdfBook::NotesManager.new(self)    
+  end
+
+  ##
   # Pour gérer l'index du livre
   # 
   def page_index

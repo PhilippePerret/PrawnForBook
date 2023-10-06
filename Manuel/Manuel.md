@@ -2175,7 +2175,7 @@ La source des données (le dossier) est indiquée dans le fichier recette du liv
 
 Ci-dessus, la source est indiquée de façon relative, par rapport au dossier du livre ou de la collection, mais elle peut être aussi indiquée de façon absolue si elle se trouve à un autre endroit (ce qui serait déconseillé en cas de déplacement des dossiers).
 
-Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML` et `JSON`.  Ces données doivent produire une table où l’on trouvera en clé l’identifiant de l’élément et en valeur ses propriétés, qui seront utilisées pour la bibliographie. Par exemple, pour un fichier `films.yaml` qui contiendrait les données des films :
+Pour le moment, *Prawn-for-book* ne gère que les données au format `YAML` (et `TEXT`) et `JSON`.  Ces données doivent produire une table où l’on trouvera en clé l’identifiant de l’élément et en valeur ses propriétés, qui seront utilisées pour la bibliographie. Par exemple, pour un fichier `films.yaml` qui contiendrait les données des films :
 
 ~~~yaml
 # in data/films/titanic.yaml
@@ -2195,6 +2195,35 @@ realisateur: Lars VON TRIER
 ~~~
 
 **NOTE IMPORTANTE** : toute donnée bibliographique doit avoir une propriété `:title` ou la propriété définie par `:main_key` dans la définition de la bibliographie, qui sera écrite dans le texte à la place de la balise. Note : mais ce comportement peut être surclassé en implémentant la méthode `FormaterBibliographieModule::<id biblio>_in_text(data)` qui reçoit la table des données de l’élément tel qu’il est enregistré dans sa fiche.
+
+**Le format TXT** peut être une alternative au format `YAML` lorsque la donnée ne contient qu’un titre (`:title)`et une description (`:description`). Dans ce cas, le titre est le texte placé sur la première ligne (et la première ligne seulement) et la description correspond à tout le reste.
+
+> Ce format a été inauguré pour palier le fait des limitations du heredoc en yaml.
+
+Par exemple, le fichier :
+
+~~~txt
+1 Mon titre
+2
+3 Ici la description.
+4 Mais elle pourrait tout aussi bien être collée juste sous 
+  le titre.
+~~~
+
+Donnera :
+
+~~~ruby
+{
+  title: "Mon titre",
+  description: <<~EOT
+	  Ici la description.
+		Mais elle pourrait tout aussi bien être collée juste sous 
+		le titre.
+	  EOT
+}
+~~~
+
+
 
 Voir ensuite dans [la partie mise en forme](#mise-en-forme-biblio) la façon d’utiliser ces données.
 

@@ -46,6 +46,11 @@ class PrawnView
       STDOUT.write green_point
 
       #
+      # Faut-il fermer des notes ?
+      # 
+      pdfbook.notes_manager.check_if_end_of_notes(self)
+
+      #
       # Si c'est un texte, on consigne le paragraphe dans sa page
       #
       if paragraphe.paragraph?

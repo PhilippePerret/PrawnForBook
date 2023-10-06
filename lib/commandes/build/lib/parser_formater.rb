@@ -22,7 +22,10 @@ module ParserFormaterClass
   # Méthode principale qui parse la chaine +str+ dans le context
   # +context+ et la renvoie corrigée
   # 
-  # @param [String] str La chaine de caractère à traiter
+  # @param [String] str La chaine de caractère à traiter, qui peut
+  #     être aussi bien un texte complet (une description de 
+  #     bibliographie) qu'un simple paragraphe en passant par le
+  #     contenu d'une cellule de table.
   # 
   # @param [Hash]   context   Le contexte (et notamment le paragraph, les styles, etc.)
   # 
@@ -54,7 +57,8 @@ module ParserFormaterClass
 
     #
     # Si une méthode de "pré-parsing" existe, on l'appelle. Elle
-    # peut être définie pour chaque livre/collection
+    # peut être définie pour chaque livre/collection dans :
+    # Prawn4book::PdfBook::AnyParagraph#pre_parse
     #
     if respond_to?(:pre_parse)
       str = pre_parse(str, context)
@@ -84,12 +88,12 @@ module ParserFormaterClass
     str = __traite_mots_indexed_in(str, context)
 
     #
-    # Traitement des références externes
+    # Traitement des références croisées externes
     # 
     str = __traite_cross_references_in(str, context)
 
     #
-    # Traitement des références internes
+    # Traitement des références croisées internes
     # 
     str = __traite_references_in(str, context)
 
@@ -97,6 +101,11 @@ module ParserFormaterClass
     # Traitement des marques bibliograghiques
     # 
     str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
+
+    #
+    # Traitement des notes
+    # 
+    str = __traite_notes_in(str, context)
 
     #
     # Si des formatages propres existent 
@@ -142,7 +151,13 @@ class AnyParagraph
 
 
   # (ne pas mettre en cache : les tests foirent, sinon)
-  def self.pdfbook; PdfBook.current end
+  def self.pdfbook; @@_pdfbook ||= PdfBook.current end
+  def self.pdfbook=(value) # pour les tests
+    @@_pdfbook = value 
+  end
+  class << self
+    alias :book :pdfbook
+  end #/<< self
 
   def formate_per_nature(pdf)
     return unless paragraph?
@@ -398,6 +413,34 @@ private
       end
     end
   end
+
+  ##
+  # @private
+  # 
+  # Traitement des notes
+  # 
+  def self.__traite_notes_in(str, context)
+    #
+    # Traitement d'une marque de note (appel)
+    # 
+    str = str.gsub(REG_NOTE_MARK) {
+      index_note = $1.to_i.freeze
+      book.notes_manager.add(index_note)
+      " <sup>#{index_note}</sup>"
+    }
+    #
+    # Traitement de la note
+    # 
+    str = str.gsub(REG_NOTE_DEF) {
+      index_note = $1.to_i.freeze
+      note       = $2.freeze
+      book.notes_manager.treate(index_note, note, context)
+    }
+
+    return str
+  end
+  REG_NOTE_MARK = /(?!^)\^([0-9]+?)/.freeze
+  REG_NOTE_DEF  = /^\^([0-9]+?) (.+?)$/.freeze
 
   ##
   # @private

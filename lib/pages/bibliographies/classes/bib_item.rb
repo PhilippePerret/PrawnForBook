@@ -323,7 +323,6 @@ class BibItem
   # (pour le moment *toute* la suite) est la description.
   # 
   def get_data_in_txt_file(path_txt)
-    puts "On prend la fiche dans #{File.basename(path_txt)}"
     lines = File.read(path_txt).split("\n")
     {
       title: lines.shift,
