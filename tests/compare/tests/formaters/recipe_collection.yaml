@@ -21,10 +21,10 @@
 #<fonts>
 fonts:
   Times:
-    regular: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Roman-01.ttf"
-    bold: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Bold-02.ttf"
-    italic: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-Italic-03.ttf"
-    bold_italic: "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/ECRITURE/Fonts/Times/Times-BoldItalic-04.ttf"
+    regular: "/System/Library/Fonts/Supplemental/Times New Roman.ttf"
+    bold: "/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf"
+    italic: "/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf"
+    bold_italic: "/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf"
 #   Geneva:
 #     :regular: "/System/Library/Fonts/Geneva.ttf"
 #     :bold: "/System/Library/Fonts/Supplemental/Verdana Bold.ttf"

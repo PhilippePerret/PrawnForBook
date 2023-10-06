@@ -395,7 +395,7 @@ str_corriged = Prawn4book::PdfBook::AnyParagraph.__parse(<string>, <context>)
 
 <a name="paragraph-text"></a>
 
-#### PARAGRAPHES DE TEXTE
+#### TEXTE (Paragraphes)
 
 Le paragraphe de texte se définit simplement en l'écrivant dans le fichier `.pfb.md`.
 ~~~
@@ -491,7 +491,7 @@ Les propriétés qu’on peut définir sont les suivantes :
 | **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
 | **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
 
-**AJUSTEMENT DU PARAGRAPHE**
+##### Ajustement du paragraphe
 
 Une propriété particulièrement utile pour de l’impression professionnelle concerne l’espacement entre les mots qui permet d’éviter les mots seuls en fin de paragraphes par exemple. Supprimer deux ou trois mots sur la dernière ligne peut permettre par exemple de faire remonter un titre de façon élégante.
 
@@ -533,7 +533,7 @@ Bien entendu, cette commande ne se place dans le texte du livre que lorsque le P
 
 <a name="style-extrait-with-helper"></a>
 
-**STYLISATION D’UN EXTRAIT DU PARAGRAPHE PAR HELPER [Expert]**
+##### Stylisation d’un extrait du paragraphe par helper [Expert]
 
 [Expert] On peut créer une méthode ruby pour mettre en forme (ou tout autre chose) en la définissant en helper. Par exemple, si je veux mettre dans une forme spéciale des horloges, je peux utiliser :
 
@@ -563,7 +563,7 @@ end
 
 <a name="style-parag-balise"></a>
 
-**STYLISATION DU PARAGRAPHE PAR BALISE INITIALE**
+##### Stylisation du paragraphe par balise initiale
 
 Un paragraphe de texte peut également commencer par une *balise* , qu’on appelle ici **class-tag**, qui va déterminer son apparence, son *style* comme dans une feuille de styles. Ces balises peuvent être [communes (propres à l’’application)](#styles-paragraphes-communs) ou [personnalisées](#styles-paragraphes-personnels).
 
@@ -640,6 +640,39 @@ Il existe deux manières de le faire :
 | **dict::entry::** [TODO] | Entrée de dictionnaire                              |          |
 | **dict::text::** [TODO]  | Description de l’entrée, le texte suivant l’entrée. |          |
 |                          |                                                     |          |
+
+##### Notes de page
+
+> D’ores et déjà, mentionnons que pour le moment, les notes de bas de page ne sont pas gérés. On peut mettre les notes en cours de texte (ce que nous recommandons) ou en fait d’ouvrage.
+
+Une marque de note s’indique avec `^X` ou « x » est l’indice de la note.
+
+Par exemple :
+
+~~~markdown
+Je pose une note sur ce paragraphe^4.
+~~~
+
+On définit ensuite la note à l’endroit où elle doit être écrite (donc à la fin du livre si on la veut à la fin du livre).
+
+On peut avoir par exemple, pour que les notes soient placées après la liste :
+
+~~~markdown
+C'est une liste de besoins :
+* Premier besoin^1,
+* Deuxième besoin^2,
+* Troisième besoin^3.
+^1 Seulement si on est à l'extérieur.
+^2 Seulement si l'âge requis
+^3 Dans tous les cas
+Et un autre paragraphe en dessous de tout ça.
+~~~
+
+Ce code produira :
+
+<img src="/Users/philippeperret/Programmes/Prawn4book/Manuel/images/notes.png" alt="notes" style="zoom: 67%;" />
+
+---
 
 <a name="paragraph-titre"></a>
 

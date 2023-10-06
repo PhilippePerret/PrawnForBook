@@ -32,7 +32,6 @@ class PdfBook
     def add(index_note)
       @current_items << index_note
       @items.merge!(index_note => Note.new(self, index_note))
-      @flux_opened = true
     end
 
     # Pour traiter la note d'indice +indice+
@@ -43,7 +42,7 @@ class PdfBook
       # Si la note est la première des notes non encore marquées,
       # alors il faut amorcer le bloc avec une ligne.
       # 
-      if @current_items[0] == indice_note
+      if not(@flux_opened)
         pdf.update do
           move_down(5)
           stroke do
@@ -54,6 +53,7 @@ class PdfBook
         end
         pdf.move_cursor_to_next_reference_line
       end
+      @flux_opened = true
 
       # 
       # On retire cette note des notes courante
@@ -68,27 +68,27 @@ class PdfBook
     # Méthode appelée après chaque écriture de texte pour voir
     # si c'est une fin de notes
     def check_if_end_of_notes(pdf)
-      return unless @flux_opened
+      return if has_current_notes?
+      return if not(@flux_opened)
+
       #
       # Si la note est la dernière des notes non encore marquées,
       # alors il faut clore le bloc de notes (sauf si on est assez
       # bas)
       # 
-      if empty?
-        pdf.update do
-          move_down(5)
-          # puts "cursor : #{cursor.inspect}"
-          if cursor < pdf.bounds.height - 20
-            stroke do
-              stroke_color(LINE_COLOR)
-              line [0, cursor], [pdf.bounds.width, cursor]
-            end
-            move_down(10)
-            # move_cursor_to_next_reference_line
+      pdf.update do
+        move_down(5)
+        # puts "cursor : #{cursor.inspect}"
+        if cursor < pdf.bounds.height - 20
+          stroke do
+            stroke_color(LINE_COLOR)
+            line [0, cursor], [pdf.bounds.width, cursor]
           end
+          move_down(10)
+          # move_cursor_to_next_reference_line
         end
-        @flux_opened = false
       end
+      @flux_opened = false
     end
 
     # -- Predicate Methods --
