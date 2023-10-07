@@ -464,7 +464,16 @@ private
     class_tags.each do |class_tag|
       method_name = "formate_#{class_tag}".to_sym
       if self.respond_to?(method_name)
-        str = self.send(method_name, str, context)
+        # C'est une méthode utilisateur, on la protège
+        begin
+          str = self.send(method_name, str, context)
+        rescue Exception => e
+          raise FatalPrawnForBookError.new(5000, **{
+            meth: method_name, err: e.message, context: "Classe tag “#{class_tag}”",
+            trace: FatalPrawnForBookError.backtracize(e),
+            module: FatalPrawnForBookError.get_last_script(e)
+          })
+        end
       else
         raise FatalPrawnForBookError.new(1000, **{meth: method_name})
       end

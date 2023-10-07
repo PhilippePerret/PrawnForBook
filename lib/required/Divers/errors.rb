@@ -1,3 +1,5 @@
+module Prawn4book
+
 # Pour déclencher une erreur de recette
 class RecipeError < StandardError
 end
@@ -16,6 +18,50 @@ class FatalPrawnForBookError < StandardError
     err = err % temp_data unless temp_data.nil?
     err = "[#{err_id}] #{err}"
     return err
+  end
+
+  # Réduit le backtrace pour :
+  #   - n'afficher que les 5 derniers lieux
+  #   - réduire les chemins d'accès (en distinguant bien les
+  #     module personnalisés des modules de PrawnForBook)
+  def self.backtracize(err)
+    err.backtrace[0..4].collect do |b| 
+      b.sub(/#{APP_FOLDER}/.freeze, '<pfb>')
+        .sub(/#{folder_for_backtrace}/.freeze, origine_for_backtrace)      
+    end.join("\n  ")
+  end
+
+  # @return [String] Le dossier à considérer pour réduire les
+  # chemin d'accès concernant les modules de la collection ou
+  # du livre.
+  def self.folder_for_backtrace
+    @@folder_for_backtrace ||= if book.in_collection?
+        book.collection.folder
+      else
+        book.folder
+      end
+  end
+  # @return [String] '<collection>' ou '<book>' pour indiquer
+  # d'où vient le(s) module(s) ayant généré l'erreur.
+  def self.origine_for_backtrace
+    @@origine_for_backtrace ||= if book.in_collection?
+      '<collection>'
+    else
+      '<book>'
+    end
+  end
+
+  # @return [String] Le nom du module (fichier) ayant généré
+  # l'erreur en dernier. C'est normalement le module utilisateur
+  # comme formater.rb ou helpers.rb
+  def self.get_last_script(err)
+    pth, numline, meth = err.backtrace.first.split(':')
+    File.basename(pth)
+  end
+
+  # Le livre courant
+  def self.book
+    @@book ||= Prawn4book::PdfBook.current
   end
 
   def error_by_num(err_id)
@@ -56,3 +102,5 @@ class FatalPrawnForBookError < StandardError
   end
 
 end
+
+end #/module Prawn4book

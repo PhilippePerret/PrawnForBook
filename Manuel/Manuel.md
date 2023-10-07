@@ -3940,6 +3940,14 @@ Sur Mac, pour obtenir facilement le chemin vers une police, on peut utiliser cet
 
 * le chemin d’accès au fichier de la police est placé dans le presse-papier, il suffit de le coller dans la recette du livre.
 
+### Transformer .otf en .ttf
+
+Il existe une commande toute simple : `otf2ttf`.
+
+* se placer dans le dossier contenant la police `.otf`
+* jouer la commande `otf2tt mapolice.otf`
+* done!
+
 ---
 
 ## Package Sublime Text

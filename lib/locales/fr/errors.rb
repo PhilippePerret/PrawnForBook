@@ -97,7 +97,8 @@ ERRORS = {
 
   user_modules: {
     runtime_error: <<~ERR,
-      Une erreur s'est produite dans un module propre :
+      Une erreur s'est produite dans la méthode %{meth} d’un de vos
+      modules propres (%{module}) :
         %{err}
       Contexte:
         %{context}
