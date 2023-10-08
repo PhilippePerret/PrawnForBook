@@ -192,6 +192,8 @@ class Recipe
       (format_text[:default_font_n_style]||format_text[:default_font_and_style])#.tap {|n| puts(n); exit 100 }
     end
   end
+  alias :default_font_and_style :default_font_n_style
+
   def default_font_name
     @default_font_name          ||= format_text[:default_font]
   end

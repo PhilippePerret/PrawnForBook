@@ -49,7 +49,8 @@ class BibItem
   # Soit une méthode propre est définie, soit on utilise la donnée
   # :title qui doit toujours exister pour une carte de donnée d'un
   # item de bibliographie (sauf, justement, si une méthode propre
-  # est définie)
+  # est définie avec :main_key dans la recette du livre/de la 
+  # collection)
   # 
   # @note
   #   On ne le met pas en cache, car l'affichage peut dépendre de
@@ -146,6 +147,10 @@ class BibItem
     else
       File.exist?(path) || File.exist?(path_txt)
     end
+  end
+
+  def exists_or_raises
+    exist? || raise(FatalPrawnForBookError.new(714, **{id: id}))
   end
 
   # --- Méthode pour cross-reference (quand Bibliography::Livres) ---

@@ -26,8 +26,11 @@ ERRORS = {
   # --- FABRICATION DU LIVRE ---
 
   building: {
+    require_pdf: "Il faut toujours le livre en construction pour pouvoir calculer le leading",
+    require_line_height: "Un leading n'a de sens que par rapport à une hauteur de ligne.",
     too_much_errors_on_properties: "Trop d'erreurs rencontrées sur la propriété '%s'. Réglez le problème avant de reprendre la fabrication du livre.",
     unfound_included_file: "Le fichier à inclure '%s' est introuvable (même dans le dossier du livre ou de la collection).",
+    book_not_built: "Malheureusement le book PDF ne semble pas avoir été produit.",
   },
 
   # --- Parsing ---
@@ -330,6 +333,11 @@ ERRORS = {
     bib_item_unknown: "Impossible de trouver l'item %s dans la bibliographie '%s'…",
     
     bibitem: {
+      undefined: <<~ERR,
+        L'item de bibliographie "%{id}" est introuvable (ni en fichier
+        .txt, ni en fichier .yaml ni en fichier .json).
+        Il doit être créé.
+        ERR
       requires_title: <<~ERR,
         Problème avec l'élément bibliographique  `%{id}' 
         de la bibliothèque : `%{tag}'

@@ -239,7 +239,7 @@ module PrawnCustomBuilderModule # ce nom est absolument à respecter
 
       text "Recherche progressive du leading, centième par centième."
       text "Cette recherche permet de trouver la valeur leading qui est nécessaire pour que les lignes du texte courant soient sur les lignes de références."
-      lead = font2leading('Garamond', 11, :regular, 12)
+      lead = font2leading(Fonte.new(name:'Garamond', size:11, style: :regular), 12)
       font 'Garamond', size:11
       text "Hauteur de A size:11 leading: #{lead} pour faire 12"
       text "Démonstration sur un long texte :"
@@ -251,7 +251,7 @@ module PrawnCustomBuilderModule # ce nom est absolument à respecter
       text "----------"
 
       font_size = 18
-      lead = font2leading('Garamond', font_size, :regular, 12)
+      lead = font2leading(Fonte.new(name:'Garamond', size:font_size, style: :regular), 12)
       font 'Garamond', size:11
       text "Hauteur de A size:font_size leading:#{round(lead)} pour faire 12"
       text "Démonstration sur un long texte :"

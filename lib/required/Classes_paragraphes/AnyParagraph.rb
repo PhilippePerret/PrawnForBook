@@ -87,7 +87,16 @@ class AnyParagraph
   ##
   # Impression du numéro de paragraphe en regard du paragraphe
   # 
-  def print_paragraph_number(pdf)
+  # @param pdf [Prawn::View] Le pdf en construction
+  # 
+  # @param options [Hash] Options pour l'affichage du numéro
+  # 
+  #   :voffset    Décalage vertical (pour mettre le numéro plus haut ou plus bas)
+  #               Note : c'est une utilisation surtout lorsque le numéro est "forcé"
+  #   :hoffset    Décalage horizontal du numéro.
+  #               idem.
+  # 
+  def print_paragraph_number(pdf, **options)
 
     num = numero.to_s
     
@@ -95,6 +104,16 @@ class AnyParagraph
     # Pour l'intérieur de pdf.update
     # 
     me = self
+
+
+    # -- Hauteur pour le numéro --
+    # (peut-être rectifié localement par options[:voffset])
+    # 
+    num_top = me.class.diff_height_num_parag_and_parag(pdf)
+    if options && options[:voffset]
+      num_top += options[:voffset]
+    end
+
 
     pdf.update do
 
@@ -116,6 +135,10 @@ class AnyParagraph
             - (parag_number_width + me.distance_from_text)
           end
 
+        if options && options[:hoffset]
+          span_pos_num += options[:hoffset]
+        end
+
         @span_number_width ||= 1.cm
 
         spy "Numéro #{num} appliqué au paragraphe".orange
@@ -123,7 +146,7 @@ class AnyParagraph
         spy "    position: #{span_pos_num.inspect}".orange
 
         float {
-          move_down(me.class.diff_height_num_parag_and_parag(pdf))
+          move_down(num_top)
           span(@span_number_width, position: span_pos_num) do
             text "#{num}", color: me.parag_numero_color
           end

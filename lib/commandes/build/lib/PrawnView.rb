@@ -82,16 +82,6 @@ class PrawnView
     new_options = {margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options)
     # spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
     super(new_options)
-    @table_reference_grid || begin
-      spy "Définition du leading par défaut"
-      define_default_leading
-      spy "=> leading = #{default_leading}".bleu
-    end
-    #
-    # Ajouter une page dans la donnée @pages du book
-    # NON : maintenant, c'est fait dans on_page_create
-    # pdfbook.add_page(page_number)
-    # spy "Nouvelle page créée (page #{page_number} ajoutée à @pages)".jaune
     # 
     # On replace toujours le curseur en haut de la page
     # 
@@ -122,7 +112,7 @@ class PrawnView
   def draw_margins
     stroke_color(88,0,58,28)
     line_width(0.3)
-    if CLI.params[:grid]
+    if CLI.options[:grid]
       pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
       kpages = (pfirst..plast)
     else

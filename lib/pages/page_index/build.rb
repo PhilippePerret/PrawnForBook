@@ -83,18 +83,33 @@ class PageIndex
   end
 
   def canon_fonte
-    @canon_fonte ||= Fonte.new(canon_fontstyle, **{size: canon_font_size})
+    @canon_fonte ||= Fonte.new(
+      name:   canon_font_name, 
+      style:  canon_font_style, 
+      size:   canon_font_size,
+      hname:  "Canon"
+      )
   end
   def number_fonte
     @number_fonte ||= begin
       if canon_fontstyle == number_fontstyle && canon_font_size == number_font_size
         canon_fonte
       else
-        Fonte.new(number_fontstyle, **{size:number_font_size})
+        Fonte.new(
+          name:   number_font_name, 
+          style:  number_font_style, 
+          size:   number_font_size, 
+          hname:  "Numéro pour pagination"})
       end
     end
   end
 
+  def canon_font_name
+    @canon_font_name ||= canon_fontstyle.split('/')[0]
+  end
+  def canon_font_style
+    @canon_font_style ||= canon_fontstyle.split('/')[1]
+  end
   def canon_fontstyle
     @canon_fontstyle ||= recipe.index_canon_font_n_style
   end
@@ -102,6 +117,12 @@ class PageIndex
     @canon_font_size ||= recipe.index_canon_font_size
   end
 
+  def number_font_name
+    @number_font_name ||= number_fontstyle.split('/')[0]
+  end
+  def number_font_style
+    @number_font_style ||= number_fontstyle.split('/')[1]
+  end
   def number_fontstyle
     @number_font_name ||= recipe.index_number_font_n_style
   end

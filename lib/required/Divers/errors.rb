@@ -87,6 +87,7 @@ class FatalPrawnForBookError < StandardError
       711   => Prawn4book::ERRORS[:biblio][:malformation][:path_undefined],
       712   => Prawn4book::ERRORS[:biblio][:malformation][:path_unfound],
       713   => Prawn4book::ERRORS[:biblio][:bibitem][:requires_title],
+      714   => Prawn4book::ERRORS[:biblio][:bibitem][:undefined],
       730   => Prawn4book::ERRORS[:biblio][:bibitem][:bad_arguments_count],
       731   => Prawn4book::ERRORS[:biblio][:bibitem][:bad_arguments_count_biblio],
       740   => Prawn4book::ERRORS[:biblio][:custom_format_method_error],

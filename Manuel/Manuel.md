@@ -279,25 +279,47 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 > Noter qu’il y a toujours un fond perdu de 10 post-script points autour de la page. Je crois qu’on ne peut pas le modifier.
 
 ---
+<a name="reference-grid"></a>
 
+### Grille de référence
+
+La ***grille de référence*** est une “grille” abstraite (mais qu’on peut afficher) sur laquelle viennent s’inscrire toutes les lignes du texte du livre (qu’on appelle les **lignes de référence**). Dans un livre imprimé digne de ce nom, cette grille permet d’avoir les lignes alignées entre la page droite et la page gauche, mais aussi alignées par transparence, afin qu’une ligne d’une feuille précédente ou suivante n’apparaisse pas (trop). 
+
+Dans *Prawn-for-book* on règle cette grille de référence grâce au paramètres **`:line_height`** qui se définit dans le [format du livre (ou de la collection)](#book-format).
+
+On peut demander l’affichage de la grille de référence au moment de la conception du livre (par exemple pour compter le nombre de lignes à laisser entre deux éléments) en utilisant l’option :
+
+~~~
+pfb build -grid
+~~~
+
+La grille de référence étant calculée pour chaque page en fonction de la hauteur de ligne (`line_height`) on peut la modifier localement en modifiant ce `line_height`.
+
+---
 <a name="pagination"></a>
 
 ### Pagination
 
-| <span style="width:200px;display:inline-block;"> </span> | Recette                 | propriété         | valeurs possibles |
-| -------------------------------------------------------- | ----------------------- | ----------------- | ----------------- |
-|                                                          | **`book_format:page:`** | **:numerotation** | pages/parags      |
+| <span style="width:200px;display:inline-block;"> </span> | Recette                 | propriété         | valeurs possibles   |
+| -------------------------------------------------------- | ----------------------- | ----------------- | ------------------- |
+|                                                          | **`book_format:page:`** | **:numerotation** | pages/parags/hybrid |
 
-Une des grandes fonctionnalités de *Prawn-for-book* est de permettre de paginer de deux manières : 
+Une des grandes fonctionnalités de *Prawn-for-book* est de permettre de paginer de trois manières : 
 
-* à l’aide des numéros de pages (pagination traditionnelle),
-* à l’aide des numéros de paragraphes (pagination “technique” permettant de faire référence à un paragraphe précis, par son numéro/indice).
+* à l’aide des **numéros de pages** (pagination traditionnelle),
+* à l’aide des **numéros de paragraphes** (pagination “technique” permettant de faire référence à un paragraphe précis, par son numéro/indice).
 
   > La numérotation des paragraphes peut être très pratique aussi quand on veut recevoir des commentaires précis — et localisés — sur son roman ou tout autre livre. Vous pouvez l’utiliser pour le PDF que vous remettez à vos lecteurs et lectrices.
+  
+* à l’aide des **pages et numéro de paragraphes**. (format dit « hybride »)
 
-> Noter que le mode hybride de numérotation permet de combiner les deux types afin de ne pas atteindre des trop grands numéros de paragraphe. Dans ce cas, la numérotation des paragraphes recommence à 1 à chaque double page, et la pagination des pages se fait par le numéro de la page. La référence devient quelque chose comme `<numéro page>-<indice paragaphe dans page>`.
+  > En cas de document volumineux, les numéros de paragraphe seuls peuvent se révéler dispendieux. On arrive à des numéros astronomiques qui prennent trop de place dans la marge et faire ressembler les pieds de page à des valeurs de pi… Dans ce cas, ce format hybride est très pratique : les pages sont numérotées normalement, et chaque paragraphe est numéroté mais en repartant à 0 toutes les deux pages. De cette manière, on peut faire référence à un paragraphe très précis à l’aide de `<numéro page>-<numéro paragraphe>`.
 
-Pour se faire, on règle la valeur de la propriété **`book_format:page:numerotation`** dans la [recette du livre ou de la collection][]. Les deux valeurs possibles sont `pages`  (numérotation des pages) ou `parags` ([numérotation des paragraphes](#numerotation-paragraphes)).
+Pour se faire, on règle la valeur de la propriété **`book_format:page:numerotation`** dans la [recette du livre ou de la collection][]. Les trois valeurs possibles sont :
+
+* `pages`  (numérotation des pages) 
+*  `parags` ([numérotation des paragraphes](#numerotation-paragraphes)) (documents courts),
+* `hybrid` (numérotation en page-paragraphe).
 
 > Modifier la valeur directement dans le fichier recette du livre ou de la collection nécessite une certaine habitude. Il est préférable, pour tous les réglages, de passer par les assistants. Ici, il suffit de jouer <console>pfb assistant</console> et de choisir “Assistant format du livre”, puis de renseigner la propriété “Numérotation”.
 
@@ -1629,15 +1651,13 @@ book_format:
 
 Noter ci-dessus qu’on peut également demander à ce que [la numérotation des pages](#pagination) se fasse sur la base des paragraphes et non pas des pages (pour une recherche encore plus rapide).
 
-**Non numérotation des tables**
+##### Non numérotation des tables
 
 Si les [tables sont utilisées pour la mise en forme des bibliographies](#item-biblio-par-table), on peut demander de ne pas mettre la numération en utilisant :
 
 ~~~ruby
 table.print(pdf, **{numerotation: false})
 ~~~
-
-
 
 <a name="comments"></a>
 
@@ -2651,7 +2671,7 @@ def balise_parser(str)
 end
 ~~~
 
-### Message de notification
+#### Message de notification
 
 Comme pour la [gestion des erreurs](#gestion-erreurs), on peut produire des messages « notice » à la fin du processus de fabrication du livre à l’aide de la méthode **`add_notice(msg, **options)`**.
 
@@ -2857,7 +2877,45 @@ end
 
 > Note : on peut souvent obtenir `pdfbook` par `pdf.pdfbook`. En dernier recours, si vraiment il n’est pas accessible, on peut utiliser `Prawn4book::PdfBook.current`.
 
+<a name="force-numerotation"></a>
 
+##### Forcer la numérotation
+
+Au contraire, lorsque c'est un module (helper) qui s'occupe entièrement de l'impression de l'objet textuel et que la méthode retourne `nil`, la numérotation n'est pas incrustée. Pour l'avoir quand même, il faut ajouter la ligne suivante à l'endroit où la numérotation doit s'inscrire.
+
+> Évidemment, cette fonction n'est à utiliser que si l'on a demandé la numérotation des paragraphes, avec le [format hybride](pagination).
+
+~~~ruby
+def formate_methode(str, context)
+	pdf = context[:pdf]
+	paragraph = context[:paragraph]
+	
+	# --> Inscrire le numéro du paragraph <--
+	paragraph.print_paragraph_number(pdf)
+	
+	pdf.text "Le texte qui doit être écrit ici."
+	
+	return nil
+~~~
+
+On peut **ajuster la position du numéro** avec un second paramètre qui peut définir `:hoffset` (décalage horizontal) et `:voffset` (décalage vertical). C'est surtout le dernier qui devrait être utilisé, lorsque par exemple le texte doit être placé plus bas.
+
+Par exemple :
+
+~~~ruby
+def formate_methode(str, context)
+	pdf = context[:pdf]
+	paragraph = context[:paragraph]
+	
+	# -- Inscrire le numéro du paragraph 
+	#    bien calé avec le texte --
+	paragraph.print_paragraph_number(pdf, **{voffset: 10})
+	
+	pdf.move_down(10)
+	pdf.text "Le texte qui doit être écrit ici."
+	
+	return nil
+~~~
 
 ---
 
@@ -3860,23 +3918,7 @@ Mais le plus simple reste quand même d’utiliser :
 2.3.cm
 ~~~
 
-
-
-<a name="reference-grid"></a>
-
-### Grille de référence
-
-La ***grille de référence*** est une “grille” abstraite (mais qu’on peut afficher) sur laquelle viennent s’inscrire toutes les lignes du texte du livre (qu’on appelle les **lignes de référence**). Dans un livre imprimé digne de ce nom, cette grille permet d’avoir les lignes alignées entre la page droite et la page gauche, mais aussi alignées par transparence, afin qu’une ligne d’une feuille précédente ou suivante n’apparaisse pas (trop). 
-
-Dans *Prawn-for-book* on règle cette grille de référence grâce au paramètres **`:line_height`** qui se définit dans le [format du livre (ou de la collection)](#book-format).
-
-On peut demander l’affichage de la grille de référence au moment de la conception du livre (par exemple pour compter le nombre de lignes à laisser entre deux éléments) en utilisant l’option :
-
-~~~
-pfb build -grid
-~~~
-
-
+---
 
 <a name="points-pdf"></a>
 

@@ -5,6 +5,15 @@ MESSAGES = {
   cancel: 'Abandon…',
   define_default_values_for: "Définition des valeurs par défaut pour %s…",
 
+  # --- Fabrication --- #
+
+  building: {
+
+    success: <<~EOT,
+      Le book PDF a été produit avec succès !
+      #{'(dans %{path})'.gris}
+      EOT
+  },
 
   # --- Table des matières --- #
 

@@ -103,21 +103,11 @@ module ParserFormaterClass
     str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
 
     #
-    # Traitement des notes
-    # 
-    str = __traite_notes_in(str, context)
-
-    #
     # Si des formatages propres existent 
     # 
     if Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?
       str = ParserParagraphModule.paragraph_parser(str, context[:pdf])
     end
-
-    #
-    # Traitement des class-tags
-    # 
-    str = __traite_class_tags_in(str, context) || return # quand nil
 
     #
     # Si une méthode de parsing propre existe, on l'appelle
@@ -127,6 +117,15 @@ module ParserFormaterClass
       str = parse(str, context)
     end
 
+    #
+    # Traitement des class-tags
+    # 
+    str = __traite_class_tags_in(str, context) || return # quand nil
+
+    #
+    # Traitement des notes
+    # 
+    str = __traite_notes_in(str, context) || return # quand nil
 
     return str
   end
@@ -419,6 +418,10 @@ private
   # 
   # Traitement des notes
   # 
+  # Comme les class_tags, les notes sont écrites directement par
+  # cette méthode (car le leading doit changer). Donc elle renvoie
+  # nil pour dire de ne pas écrire le texte.
+  # 
   def self.__traite_notes_in(str, context)
     #
     # Traitement d'une marque de note (appel)
@@ -437,7 +440,10 @@ private
       book.notes_manager.treate(index_note, note, context)
     }
 
+    
     return str
+
+    return nil
   end
   REG_NOTE_MARK = /(?!^)\^([0-9]+?)/.freeze
   REG_NOTE_DEF  = /^\^([0-9]+?) (.+?)$/.freeze

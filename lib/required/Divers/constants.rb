@@ -51,6 +51,8 @@ File.exist?(LOCALISATION_FOLDER) || begin
   exit 100
 end
 Dir["#{LOCALISATION_FOLDER}/**/*.rb"].each{|m|require(m)}
+# => Prawn4book::MESSAGES
+# => Prawn4book::ERRORS
 
 #
 # Pour les select tty-prompt

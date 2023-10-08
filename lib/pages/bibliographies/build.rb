@@ -49,8 +49,8 @@ class Bibliography
     # 
     # Calcul du leading à utiliser
     # 
-    bib_font = Fonte.new(font_name, **{size:font_size, style: font_style})
-    leading = pdf.font2leading(bib_font, font_size, pdf.line_height)
+    bib_font  = Fonte.new(name:font_name, size:font_size, style: font_style)
+    leading   = bib_font.leading(pdf, pdf.line_height)
     # leading = 0
     # 
     # Les options à appliquer

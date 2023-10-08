@@ -225,11 +225,6 @@ class PdfBook
     #   puts "Je dois rendre quelque chose"
     # end
 
-    # Pour pouvoir l'atteindre partout
-    # note : je ne suis pas sûr de m'en servir. J'utilise plutôt
-    # PdfBook.current et en restant extrêmement prudent.
-    Metric.pdf = pdf
-    
     # 
     # On définit la clé à utiliser (numéro de page ou numéro de
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
@@ -269,10 +264,28 @@ class PdfBook
     # 
     pdf.start_new_page if skip_page_creation?
 
+    #
+    # Grille de référence
+    # 
+    # Définir la grille de référence revient à définir le
+    # leading par défaut.
+    # 
+    # @note
+    # 
+    #   On ne peut faire ça que si une première page existe.
+    # 
+    default_fonte = Fonte.new(
+      name:   recipe.default_font_name,
+      style:  recipe.default_font_style,
+      size:   recipe.default_font_size,
+      hname:  'Police (style et size) par défaut'
+    )
+    Fonte.default = default_fonte
+    pdf.define_default_leading(default_fonte, recipe.line_height)
+
+
     font_name, font_style = recipe.default_font_n_style.split('/')
-    pdf.font(font_name, **{
-      size: recipe.default_font_size,
-      font_style: font_style})
+    pdf.font(Fonte.default)
 
     #
     # Initier la table des matières (je préfère faire mon 
@@ -380,12 +393,11 @@ class PdfBook
     PrawnView::Error.report_building_errors
 
     if File.exist?(pdf_path)
-      puts "\nLe book PDF a été produit avec succès !".vert
-      puts "(in #{pdf_path})".gris
+      puts "\n#{MESSAGES[:building][:success] % {path: pdf_path}}".vert
       puts "\n"
       return true
     else
-      puts "Malheureusement le book PDF ne semble pas avoir été produit.".rouge
+      puts ERRORS[:building][:book_not_built].rouge
       return false
     end
   end
@@ -452,7 +464,7 @@ class PdfBook
   end
 
   def display_reference_grid?
-    CLI.option(:display_grid)
+    CLI.option(:display_grid) || CLI.option(:grid)
   end
   def display_margins?
     CLI.option(:display_margins)

@@ -60,9 +60,25 @@ class PdfBook
       # 
       @current_items.shift
 
-      fs = book.recipe.default_font_size - 2
-      "<sup>#{indice_note}</sup> <font size=\"#{fs}\">#{note}</font>"
+      r = book.recipe
 
+      fs = r.default_font_size - 2
+      leading = pdf.font2leading(
+        Fonte.new(
+          name:r.default_font_name, 
+          style:r.default_font_style, 
+          size:fs), 
+        r.line_height
+      )
+      leading -= 0.4 # Pour le caler de façon optimale, mais est-ce
+      # que ça fonctionnera pour toutes les polices ???………
+      s = "<sup>#{indice_note}</sup> #{note}"
+      pdf.move_cursor_to_next_reference_line
+      pdf.move_down(1)
+      context[:paragraph].print_paragraph_number(pdf, **{voffset:-1})
+      pdf.text(s, **{leading:leading, inline_format:true, size: fs})
+
+      return nil
     end
 
     # Méthode appelée après chaque écriture de texte pour voir

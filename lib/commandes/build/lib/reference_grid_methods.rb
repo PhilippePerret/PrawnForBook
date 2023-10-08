@@ -1,6 +1,14 @@
 module Prawn4book
 class PrawnView
 
+  # - raccourci -
+  def line_height
+    @line_height ||= pdfbook.recipe.line_height
+  end
+
+  def leading
+    @leading ||= default_leading
+  end
 
   ##
   # Méthode qui définit le leading par défaut en fonction de :
@@ -15,16 +23,36 @@ class PrawnView
   #   on doit le faire en réglant la valeur :leading des options de
   #   la méthode utilisée ('text' par exemple).
   # 
-  def define_default_leading(font = nil, size = nil, lheight = nil)
-    fonte   = Fonte.default_fonte
-    size    ||= Fonte.default_size
-    lheight ||= line_height
-    self.default_leading = font2leading(fonte, size, lheight)
+  # TODO : Il faut pouvoir modifier la grille sur plusieurs pages
+  # 
+  def define_default_leading(fonte, line_height)
+    self.default_leading = font2leading(fonte, line_height)
     spy "default_leading mis à #{self.default_leading.inspect}".bleu
   end
 
   ##
-  # Quel que soit la position actuel du curseur, on le place sur la
+  # @input  Reçoit la fonte concernée (*) et
+  #         Reçoit la hauteur de ligne voulue
+  # 
+  # @output Return le leading à appliquer par rapport à la police et
+  #         la taille voulue.
+  # 
+  # Cette méthode est utilisée non seulement en tout début de 
+  # construction pour pouvoir connaitre le leading par défaut à 
+  # appliquer au livre, mais aussi chaque fois qu'on change de fonte
+  # ou de taille, pour connaitre le leading à appliquer localement.
+  # 
+  # @param [Prawn4book::Fonte] La fonte à prendre en considération
+  # 
+  #   Maintenant, on passe forcément par une instance Fonte, pour
+  #   obliger à utiliser cette classe très pratique.
+  # 
+  def font2leading(fonte, hline)
+    fonte.leading(self, hline)
+  end
+
+  ##
+  # Quel que soit la position actuelle du curseur, on le place sur la
   # prochaine ligne de référence (grille de référence pour aligner
   # toutes les lignes de texte)
   # 
@@ -74,16 +102,17 @@ class PrawnView
 
   # Méthode appelée quand on doit dessiner la grille de base
   # dans le document.
+  # 
   def draw_reference_grids
     # 
     # Définit le leading à appliquer en fonction de la hauteur de
     # ligne à obtenir, par rapport à la fonte courante.
     # 
-    define_default_leading
+    define_default_leading(Fonte.default, line_height)
     # 
     # Définition de la fonte à utiliser
     # 
-    font(default_font_and_style, size: default_font_size)
+    font(Fonte.default)
     # 
     # Aspect des lignes (bleues et fines)
     # 
@@ -105,6 +134,14 @@ class PrawnView
     # référence.
     # 
     repeat kpages do
+      #
+      # Si la grille de référence change à cette page, il faut la
+      # changer
+      # 
+
+      # 
+      # Imprimer la grille de référence
+      # 
       print_reference_grid
     end
     # 
@@ -139,66 +176,28 @@ class PrawnView
           text round(h + 20).to_s
         end
       }
-      stroke_horizontal_line(0, bounds.width, at: h)
+      # stroke_horizontal_line(0, bounds.width, at: h)
+      stroke_horizontal_line(-100, bounds.width + 100, at: h)
     end
-  end
-
-  ##
-  # @input  Reçoit la fonte concernée (*) et
-  #         Reçoit la hauteur de ligne voulue
-  # @output Return le leading à appliquer
-  # 
-  # Note : ne pas oublier d'indiquer la fonte en sortant de cette
-  # méthode jusqu'à (TODO) je sache remettre l'ancienne fonte en la
-  # prenant à l'entrée dans la méthode
-  # 
-  # @param [Prawn4book::Fonte|String] L'instance fonte
-  def font2leading(fonte, size, hline, **options)
-    if debug?
-      spy "Fonte   = #{fonte.inspect} (#{fonte.name.inspect}/#{fonte.style.inspect})"
-      spy "Size    = #{size.inspect}"
-      spy "hline   = #{hline.inspect}"
-      spy "options = #{options.inspect}"
-      spy "Leading = #{leading.inspect}"
-    end
-    incleading = nil
-    font(fonte.name, **{size: size, style:fonte.style})
-    font(fonte) do
-    # font(fonte.name, **{size: size, style:fonte.style}) do
-      h = height_of("A", leading:leading, size: size)
-      spy "h = #{h.inspect}"
-      if (h - hline).abs > (h - 2*hline).abs
-        options.merge!(:greater => true) unless options.key?(:greater)
-      end
-      incleading = leading.dup
-      if h > hline && not(options[:greater] == true)
-        while h > hline
-          h = height_of("A", leading: incleading -= 0.01, size: size)
-        end
-      else
-        while h % hline > 0.01
-          h = height_of("A", leading: incleading += 0.01, size: size)
-        end
-      end
-    end
-    return incleading
   end
 
   def default_font_name
-    @default_font_name ||= config[:default_font_name]
-  end
-
-  def default_font_size
-    @default_font_size ||= Metric.default_font_size
+    @default_font_name ||= default_font_and_style.split('/')[0]
   end
 
   def default_font_style
-    @default_font_style ||= config[:default_font_style]
+    @default_font_style ||= default_font_and_style.split('/')[1].to_sym
   end
 
-  # - shortcut -
-  def leading     ; pdfbook.recette.text_leading  end
-  def line_height ; pdfbook.recette.line_height   end
+  def default_font_and_style
+    @default_font_and_style ||= pdfbook.recipe.default_font_and_style
+  end
+
+  def default_font_size
+    @default_font_size ||= pdfbook.recipe.default_font_size
+    # @default_font_size ||= Metric.default_font_size
+  end
+
 
 end #/class PrawnView
 end #/module Prawn4book

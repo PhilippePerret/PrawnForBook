@@ -6,16 +6,97 @@
 
   Permet de centraliser tout ce qui concerne les fontes.
 
-  Avoir des instances permet de faire 'fonte.font', 'fonte.size', 
-  etc.
+  Avoir des instances permet de faire 'fonte.name', 'fonte.size', 
+  etc. et surtout de ne pas avoir à détailler chaque fois le nom,
+  le style, la taille et même le leading de chaque fonte.
 
 =end
 module Prawn4book
 class Fonte
+
+####################       INSTANCE      ###################
+
+attr_reader :name, :style, :size
+attr_reader :hname
+
+public
+
+def initialize(name:, style:, size:, hname: '')
+  @name   = name
+  @style  = style.to_sym
+  @size   = size
+  @hname  = hname # a human name
+end
+
+def leading(pdf, line_height)
+  pdf         ||= raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
+  line_height ||= raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
+  calc_leading(pdf, line_height)
+end
+
+def calc_leading(pdf, lheight)
+  incleading  = nil
+  is_greater  = false
+  pdf.font(name, **{size: size, style: style}) do
+    h = pdf.height_of('A', **{leading: book_leading, size: size})
+    if (h - lheight).abs > (h - 2 * lheight).abs
+      is_greater = true
+    end
+    incleading = book_leading.dup
+    if h > lheight && not(is_greater)
+      while h > lheight
+        h = pdf.height_of("A", leading: incleading -= 0.01, size: size)
+      end
+    else
+      while h % lheight > 0.01
+        h = pdf.height_of("A", leading: incleading += 0.01, size: size)
+      end
+    end
+  end
+  return incleading
+end
+
+def book_leading
+  @book_leading ||= book.recipe.text_leading
+end
+
+def book
+  @book ||= PdfBook.current
+end
+
+def inspect
+  @inspect ||= begin
+    d = []
+    d << hname if hname
+    d << name
+    d << style
+    d << size
+    d.join('/')
+  end
+end
+
+# @return [Hash] la table des valeurs pour le second argument de
+# Prawn::Document#font
+def params
+  @params ||= {style: style, size: size}
+end
+
+
+
+
 ####################       CLASSE      ###################
 class << self
 
   public
+
+  # Fonte [Prawn4book::Fonte] par défaut, définie par la recette
+  # du livre.
+  # Pour pouvoir utiliser n'importe où : <<< Fonte.default >>>
+  # 
+  # Elle est définie au début de la construction du livre.
+  # 
+  attr_accessor :default
+
 
   # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
   # de titre +level+
@@ -53,18 +134,19 @@ class << self
   # 
   # @api public
   def default_fonte
-    @default_fonte ||= begin
-      if book && recipe.default_font_n_style
-        font_name, font_style = recipe.default_font_n_style.split('/')
-        font_style = font_style.to_sym
-        new(font_name, **{style: font_style, size:default_size})
-      elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
-        datafirst = recipe.fonts_data.values.first
-          new(recipe.fonts_data.keys.first.to_s, **{style: datafirst.keys.first, size: default_size})
-      else
-        default_fonte_times
-      end
-    end
+    default
+    # @default_fonte ||= begin
+    #   if book && recipe.default_font_n_style
+    #     font_name, font_style = recipe.default_font_n_style.split('/')
+    #     font_style = font_style.to_sym
+    #     new(name:font_name, style: font_style, size:default_size)
+    #   elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
+    #     datafirst = recipe.fonts_data.values.first
+    #       new(name:recipe.fonts_data.keys.first.to_s, style: datafirst.keys.first, size: default_size)
+    #   else
+    #     default_fonte_times
+    #   end
+    # end
   end
 
   def default_size
@@ -123,7 +205,7 @@ class << self
   def fontes
     @fontes ||= begin
       all_fonts_data.map do |font_name, data_font|
-        new(font_name, data_font) 
+        new(name:font_name, size:data_font[:size], style: data_font[:style]) 
       end
     end
   end
@@ -177,7 +259,7 @@ class << self
       else
         ["Helvetica", :bold, size]
       end
-    new(font_name, **{style:font_style, size:font_size})
+    new(name:font_name, style:font_style, size:font_size, hname: "Fonte de titre ##{level}")
   end
 
   # Pour les tests
@@ -206,33 +288,5 @@ class << self
 end #/<< self Fonte
 ###################       INSTANCE      ###################
 
-attr_reader :name, :style, :size
-attr_reader :hname
-
-public
-
-def initialize(font_name, data)
-  @data   = data
-  @name   = font_name
-  @style  = data[:style]
-  @style = @style.to_sym unless @style.nil?
-  @size   = data[:size]
-  @hname  = data[:hname] # a human name
-end
-
-def inspect
-  @inspect ||= begin
-    d = [name]
-    d << style if style
-    d << "#{size}pt"  if size
-    d.join('/')
-  end
-end
-
-# @return [Hash] la table des valeurs pour le second argument de
-# Prawn::Document#font
-def params
-  @params ||= {style: style, size: size}
-end
 end #/class Fonte
 end #/module Prawn4book

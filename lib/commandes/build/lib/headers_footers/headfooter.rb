@@ -346,7 +346,7 @@ end #/ << self
     fontnstyle = dtiers[:font_n_style] || book.recipe.pagination_font_n_style
     fname, fstyle = fontnstyle.split('/')
     fstyle = fstyle.to_sym
-    Fonte.new(fname, **{style:fstyle, size: font_size})
+    Fonte.new(name:fname, style:fstyle, size:font_size)
   end
 
   # @return Taille de la fonte pour ce head-foot

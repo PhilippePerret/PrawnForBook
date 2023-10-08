@@ -123,6 +123,8 @@ class PFBCode < AnyParagraph
           objet = Prawn4book.send(objet)
         elsif PrawnHelpersMethods.respond_to?(objet)
           objet = PrawnHelpersMethods.send(objet)
+        else
+          raise "Aucun objet ne répond à #{methode.inspect}…"
         end
         # 
         # Cet objet connait-il la méthode +methode+ ?
@@ -260,11 +262,19 @@ class PFBCode < AnyParagraph
   end
 
   # --- Predicate Methods ---
+
   def paragraph?  ; false end
   def pfbcode?    ; true  end
 
   def for_next_paragraph?
     @is_for_next_paragraph === true
+  end
+
+  def line_height(new_height, **dfonte)
+    pdf.define_default_leading(
+      Fonte.new(name:dfonte[:fname], style:dfonte[:fstyle], size:dfonte[:fsize]),
+      new_height
+    )
   end
 
   REG_METHODE_WITH_ARGS = /^([a-zA-Z0-9_.]+)(?:\((.*?)\))?$/.freeze
