@@ -44,16 +44,26 @@ class NTitre < AnyParagraph
     # recette, pour ce titre. Ou si c'est sur une belle page que le
     # titre doit être affiché.
     # 
-    if next_page? || belle_page?
+    if alone? || next_page? || belle_page?
       spy "Nouvelle page".bleu
-      pdf.start_new_page 
+      pdf.start_new_page
     end
-    # 
-    # Si le titre doit être affiché sur une belle page, et qu'on se
-    # trouve sur une page paire, il faut encore passer à la page
-    # suivante.
-    # 
-    if belle_page? && pdf.page_number.even?
+
+    if alone? && pdf.page_number.odd?
+      #
+      # Si le titre doit être seul, il doit être seul non seulement
+      # sur sa page mais sur la double page. Donc, si après avoir dé-
+      # placé le curseur sur la page suivante, on se trouve sur une
+      # belle page, alors il faut passer deux pages
+      # 
+      2.times { pdf.start_new_page }
+
+    elsif belle_page? && pdf.page_number.even?
+      # 
+      # Si le titre doit être affiché sur une belle page, et qu'on se
+      # trouve sur une page paire, il faut encore passer à la page
+      # suivante.
+      # 
       spy "Nouvelle page pour se trouver sur une belle page".bleu
       pdf.start_new_page
     end
@@ -140,6 +150,12 @@ class NTitre < AnyParagraph
       else
         spy "Pas de lignes après le titre".gris
       end
+
+    end #/pdf
+
+    if alone?
+      spy "Nouvelle page pour se trouver seul sur la page".bleu
+      pdf.start_new_page
     end
 
     # 
@@ -204,6 +220,9 @@ class NTitre < AnyParagraph
     @writeit_in_tdm
   end
 
+  def alone?
+    :TRUE == @alone ||= true_or_false(self.class.alone?(level))
+  end
   def next_page?
     :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
   end
@@ -256,12 +275,16 @@ class NTitre < AnyParagraph
     get_data(:leading, level)
   end
 
+  def self.alone?(level)
+    get_data(:alone, level) === true
+  end
+
   def self.next_page?(level)
-    level == 1 && get_data(:next_page, level) === true
+    alone?(level) || get_data(:next_page, level) === true
   end
 
   def self.belle_page?(level)
-    level == 1 && get_data(:belle_page, level) === true
+    get_data(:belle_page, level) === true
   end
 
   ##

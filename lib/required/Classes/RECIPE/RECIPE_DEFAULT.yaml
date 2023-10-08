@@ -102,6 +102,7 @@ book_format:
       leading:        0
       next_page:      true
       belle_page:     true
+      alone:          true
     level2:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
@@ -112,6 +113,7 @@ book_format:
       leading:        0
       next_page:      false
       belle_page:     false
+      alone:          false
     level3:
       font_n_style:   *default2_font_n_style
       font:           *default_font2

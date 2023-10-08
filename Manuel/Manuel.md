@@ -356,6 +356,10 @@ etc. si nécessaire.
 
 Pour la mise en forme des titres dans le livre, voir [la définition des titres dans la recette du livre](#data-titles).
 
+#### Grand titre seul sur une page
+
+Pour qu’un titre (souvent celui de premier niveau) se retrouve seul sur une page (et même seul sur la double page), on règle son paramètre `:alone` à `true` dans la [recette du livre ou de la collection][].
+
 #### Grand titre sur une belle page
 
 Pour qu'un grand titre se retrouve toujours sur une belle page (ie la page impaire, à gauche), on doit mettre sa propriété `:belle_page` à `true` dans la [recette du livre ou de la collection][].
@@ -3159,6 +3163,7 @@ titles:
 	level1:
 		next_page:     true 	# sur nouvelle page ?
 		belle_page:    false 	# toujours sur belle page ?
+		alone: 					true  # seul sur double page ?
 		:font_n_style: "LaFonte/lestyle"
 		:size: 					30
 		:lines_before: 	0 		# cf. [1] [3]
