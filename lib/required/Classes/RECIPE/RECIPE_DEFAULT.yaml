@@ -79,7 +79,6 @@ book_format:
     no_headers_footers:         false
     skip_page_creation:         true
   text:
-    default_font_n_style:   *default1_font_n_style
     default_font:             *default_font1
     default_style:            *default_style1
     default_size:             12

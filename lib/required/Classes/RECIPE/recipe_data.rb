@@ -195,13 +195,25 @@ class Recipe
   alias :default_font_and_style :default_font_n_style
 
   def default_font_name
-    @default_font_name          ||= format_text[:default_font]
+    @default_font_name ||= begin
+      if default_font_n_style
+        default_font_n_style.split('/')[0]
+      else
+        format_text[:default_font]
+      end
+    end
   end
   def default_font_size
     @default_font_size          ||= format_text[:default_size]
   end
   def default_font_style
-    @default_font_style         ||= format_text[:default_style]
+    @default_font_style ||= begin
+      if default_font_n_style
+        default_font_n_style.split('/')[1].to_sym
+      else
+        format_text[:default_style]
+      end
+    end
   end
 
   # --- Page d'index ---

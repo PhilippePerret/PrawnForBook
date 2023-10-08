@@ -244,12 +244,9 @@ class PdfBook
     # 
     # = FONTS =
     # 
-    # Empacketage
+    # Empacketage de toutes les fontes dans le document PDF.
     # 
-    # pdf.font_families.clear # pour checker parfois les polices chargées
     pdf.define_required_fonts(book_fonts)
-    # puts "pdf.font_families: #{pdf.font_families.inspect}".bleu
-    # exit 1
 
     #
     # Y a-t-il une DERNIÈRE PAGE définie en options de commande
@@ -284,7 +281,7 @@ class PdfBook
     pdf.define_default_leading(default_fonte, recipe.line_height)
 
 
-    font_name, font_style = recipe.default_font_n_style.split('/')
+    # Application de la fonte par défaut
     pdf.font(Fonte.default)
 
     #
