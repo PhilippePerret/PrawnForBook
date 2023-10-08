@@ -101,8 +101,13 @@ class PrawnView
   end
 
   def move_cursor_to_top_of_the_page
-    move_cursor_to bounds.top # - line_height
-    # spy "bounds.top = #{bounds.top.inspect}".bleu
+    move_cursor_to(bounds.top) # - line_height
+    move_cursor_to_next_reference_line
+    # if page_number > 137
+    #   puts "\nLine Height : #{line_height}"
+    #   puts "Placement en haut (#{bounds.top})".jaune
+    #   puts "Placement sur ligne de référence : #{cursor}".bleu
+    # end
     spy "Curseur placé tout en haut (à #{round(cursor)})".bleu
   end
 

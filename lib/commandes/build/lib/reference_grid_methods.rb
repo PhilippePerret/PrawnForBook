@@ -26,7 +26,23 @@ class PrawnView
   # TODO : Il faut pouvoir modifier la grille sur plusieurs pages
   # 
   def define_default_leading(fonte, line_height)
+    #
+    # Ici, je tente quelque chose : je pars du principe qu'on ne
+    # passe par cette méthode que lorsqu'on change la grille de
+    # référence en changeant la hauteur de ligne. Donc, ici, en plus
+    # du calcul, on mémorise la page courante pour savoir qu'il y a
+    # eu ce changement de grille de référence. 
+    # Puis, au moment de dessiner la grille de référence (option 
+    # -grid) on regardera dans la définition de la grille de référence
+    # dans pdf.leadings.
+    # 
     self.default_leading = font2leading(fonte, line_height)
+    # (re)définir les valeurs
+    @leading      = default_leading
+    @line_height  = line_height
+    # -- Mémoriser ce leading --
+    @leadings ||= {}
+    @leadings.merge!(page_number => {page: page_number, fonte: fonte, line_height: line_height})
     spy "default_leading mis à #{self.default_leading.inspect}".bleu
   end
 
@@ -50,6 +66,7 @@ class PrawnView
   def font2leading(fonte, hline)
     fonte.leading(self, hline)
   end
+
 
   ##
   # Quel que soit la position actuelle du curseur, on le place sur la
@@ -80,22 +97,22 @@ class PrawnView
     absolute_line_ref = bounds.top - new_dist_from_top
     line_ref          = absolute_line_ref + font.ascender
 
-    spy "[calcul line ref]".bleu
-    msg_spy = <<~TEXT
-      cursor départ : #{cursor.inspect}
-      Distance depuis le haut efficace = #{cur_dist_from_top}
-      Indice ligne référence courante = #{cur_num_ref_line}
-      (line_height = #{line_height})
-      Indice nouvelle ligne référence = #{new_num_ref_line}
-      Nouvelle distance depuis le haut efficace = #{new_dist_from_top}
-      Absolute Line Ref (sans la fonte) = #{absolute_line_ref}
-      line_ref = #{line_ref}
-      Font courante : #{font.inspect}
-      ascender : #{font.ascender}
-      descender: #{font.descender}
-    TEXT
-    spy msg_spy
-    spy "[/calcul line ref]".bleu
+    # spy "[calcul line ref]".bleu
+    # msg_spy = <<~TEXT
+    #   cursor départ : #{cursor.inspect}
+    #   Distance depuis le haut efficace = #{cur_dist_from_top}
+    #   Indice ligne référence courante = #{cur_num_ref_line}
+    #   (line_height = #{line_height})
+    #   Indice nouvelle ligne référence = #{new_num_ref_line}
+    #   Nouvelle distance depuis le haut efficace = #{new_dist_from_top}
+    #   Absolute Line Ref (sans la fonte) = #{absolute_line_ref}
+    #   line_ref = #{line_ref}
+    #   Font courante : #{font.inspect}
+    #   ascender : #{font.ascender}
+    #   descender: #{font.descender}
+    # TEXT
+    # spy msg_spy
+    # spy "[/calcul line ref]".bleu
 
     return line_ref    
   end
@@ -108,18 +125,13 @@ class PrawnView
     # Définit le leading à appliquer en fonction de la hauteur de
     # ligne à obtenir, par rapport à la fonte courante.
     # 
-    define_default_leading(Fonte.default, line_height)
+    # define_default_leading(Fonte.default, line_height)
     # 
     # Définition de la fonte à utiliser
     # 
-    font(Fonte.default)
+    # font(Fonte.default)
     # 
-    # Aspect des lignes (bleues et fines)
-    # 
-    stroke_color 51, 0, 0, 3  # bleu ciel
-    fill_color 51, 0, 0, 3    # bleu ciel
-    line_width(0.1)
-    # 
+
     # La grille peut n'être inscrite que sur quelques pages, 
     # définies par le paramètre 'grid=start-end' en ligne de commande
     # 
@@ -129,32 +141,38 @@ class PrawnView
     else
       kpages = :all
     end
+
     # 
     # Boucle sur toutes les pages voulues pour écrire la grille de
     # référence.
     # 
-    repeat kpages do
+    repeat kpages, **{dynamic: true} do
       #
       # Si la grille de référence change à cette page, il faut la
       # changer
       # 
-
+      if @leadings.key?(page_number)
+        data_leading = @leadings[page_number]
+        @line_height = data_leading[:line_height]
+        spy "Line Height à #{line_height} à partir de page #{page_number.inspect}".jaune
+      end
       # 
       # Imprimer la grille de référence
       # 
       print_reference_grid
     end
-    # 
-    # On remet la couleur initiale pour retourner en noir
-    # 
-    stroke_color  0, 0, 0, 100
-    fill_color    0, 0, 0, 100
   end
 
   # Pour dessiner la grille de référence sur toutes les pages ou 
   # seulement les pages choisies.
   # Option : -display_grid
   def print_reference_grid
+    # 
+    # Aspect des lignes (bleues et fines)
+    # 
+    stroke_color 51, 0, 0, 3  # bleu ciel
+    fill_color 51, 0, 0, 3    # bleu ciel
+    line_width(0.1)
     #
     # On commence toujours en haut
     # 
@@ -179,6 +197,11 @@ class PrawnView
       # stroke_horizontal_line(0, bounds.width, at: h)
       stroke_horizontal_line(-100, bounds.width + 100, at: h)
     end
+    # 
+    # On remet la couleur initiale pour retourner en noir
+    # 
+    stroke_color  0, 0, 0, 100
+    fill_color    0, 0, 0, 100
   end
 
   def default_font_name

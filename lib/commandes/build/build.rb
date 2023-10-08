@@ -219,6 +219,7 @@ class PdfBook
       # puts "Nouvelle page créée : #{pdf.page_number}".orange
       my.add_page(pdf.page_number)
       export_text("\n#{'-'*30}\n\n") if export_text?
+      pdf.move_cursor_to_top_of_the_page
     end
 
     # pdf.before_render do

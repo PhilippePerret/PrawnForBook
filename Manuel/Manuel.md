@@ -293,7 +293,24 @@ On peut demander l’affichage de la grille de référence au moment de la conce
 pfb build -grid
 ~~~
 
-La grille de référence étant calculée pour chaque page en fonction de la hauteur de ligne (`line_height`) on peut la modifier localement en modifiant ce `line_height`.
+#### Modifier la grille de référence [Expert]
+
+Pour modifier localement (sur quelques pages) la grille de référence, il faut appeler dans un module grâce à la méthode `Prawn4book::PrawnView#define_default_leading` qui attend comme paramètre la fonte utilisée (pour calculer le *leading*) et la nouvelle hauteur de ligne.
+
+> Il ne faut pas abuser de ce changement de grille qui risque de déstabiliser tout l'aspect. On peut le réserver à l'annexe, quand on utilise un affichage plus réduit.
+
+~~~ruby
+def ma_partie_avec_autre_grille(pdf)
+	mafonte = Prawn4book::Fonte.new(name:"MaFonte", style: :normal, size:9, hname:"Ma belle fonte")
+	pdf.define_default_leading(mafonte, 10)
+	#
+	# À partir d'ici et de maintenant, tous les 
+	# pdf.move_cursor_to_next_reference_line placeront le curseur sur la
+	# ligne de la nouvelle grille.
+end
+~~~
+
+> Si on ajoute l'option `-grid` à la commande de construction on pourra voir la nouvelle grille à partir de l'endroit voulu.
 
 ---
 <a name="pagination"></a>
@@ -517,7 +534,7 @@ Les propriétés qu’on peut définir sont les suivantes :
 | **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
 | **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
 
-##### Ajustement du paragraphe
+##### Traitement des mots seuls en bas de paragraphe
 
 Une propriété particulièrement utile pour de l’impression professionnelle concerne l’espacement entre les mots qui permet d’éviter les mots seuls en fin de paragraphes par exemple. Supprimer deux ou trois mots sur la dernière ligne peut permettre par exemple de faire remonter un titre de façon élégante.
 
@@ -595,7 +612,7 @@ Un paragraphe de texte peut également commencer par une *balise* , qu’on appe
 
 <a name="styles-paragraphes-personnels"></a>
 
-**Personnalisation des paragraphes texte (style de paragraphe personnalisés) [Expert]**
+##### Personnalisation des paragraphes texte (style de paragraphe personnalisés) [Expert]
 
 Les *styles de paragraphes personnalisés* doivent être identifiés par une *balise* qui sera placée au début du paragraphe à stylisé. Par exemple, si ma balise est `gros`, cela donnera : 
 
@@ -655,8 +672,85 @@ Il existe deux manières de le faire :
   end
   ~~~
 
+<a name="hoffset-paragraph"></a>
+
+##### Décalage du paragraphe dans la page [Expert]
+
+Dans les modules d’helpers, on peut facilement décaler le paragraphe dans la page à l’’aide de `Prawn::PrawnView#span`.
+
+> Noter que **le grand avantage par rapport à l’utilisation des tables** est la gestion de la grille de référence. Alors qu’avec les tables il faut rectifier la position du texte pour qu’il vienne se poser sur les lignes, avec `span`, le texte est posé naturellement sur les lignes de référence.
+
+Par exemple, pour décaler le texte de 20 points-ps vers la gauche :
+
+~~~ruby
+def formate_deplacement(pdf)
+  
+  pdf.span(pdf.bounds.width - 20, position: 20) do # [1][2]
+    text <<~EOT.gsub(/\n/,' ')
+    	Le texte à écrire, qui sera décalé vers la gauche
+    	de 20 points post-script.
+    	EOT
+  end
+end
+~~~
+
+> Le grand avantage de `span` sur `text_box` ou `draw_text` c’est que le « cursor » le suit, donc si on écrit une suite, elle se mettra toujours bien après le texte.
+>
+> **[1]**
+>
+> Le premier argument définit la largeur du span. Se servir de `pdf.bounds.width` qui donne la largeur (utile) de la page.
+>
+> **[2]**
+>
+> Le second argument est un hash qui peut définir `:position` la position horizontale du span. Les valeur `:left`, `:center` etc. sont possibles, mais une valeur en points-posts-script est plus précise.
+
+Une **utilisation encore plus experte du `span`** permettrait de profiter de l'avantage des tables sans passer par les tables (et donc en gérant naturellement les lignes de référence pour le texte) en jouant avec le `float` pour ne pas déplacer le curseur. Une utilisation pourrait ressembler à :
+
+~~~ruby
+
+def formate_double_colonne_separated(pdf)
+
+	pdf.float do
+		span(100, position: :left) do
+			text "Un texte qui sera placé à gauche de la hauteur \
+				courante, sur 100"
+		end
+	end
+	pdf.span(pdf.bounds.width - 120, position: 120)
+		text "Un text placé à droite de la page et celui-là fera \
+		bouger le curseur pour qu'il se retrouve bien en dessous \
+		et permette de continuer naturellement."
+	end
+end
+
+~~~
 
 
+
+Un exemple classique pour faire des listes, avec le texte bien aligné après la marque d’item (la même chose pourrait être obtenue avec une indentation négative du premier paragraphe :
+
+~~~ruby
+def formate_listitem(pdf)
+  pdf.float do
+    pdf.span(7, position: :left) do
+      pdf.text '–'
+    end
+  end
+  pdf.span(pdf.bounds.width - 8, position: 8) do
+    pdf.text <<~EOT.gsub(/\n/,' ')
+      J'essaie un très long texte qui devra passer à
+      la ligne pour voir si c'est vraiment OK comme
+      ça ou si ça possera problème.
+      EOT
+  end
+end
+~~~
+
+
+
+
+
+---
 <a name="styles-paragraphes-communs"></a>
 
 **Styles paragraphes texte commun**
@@ -785,6 +879,10 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 ### TABLES
 
 Les tables sont certainement le meilleur moyen de formater des paragraphes de façon particulière sans trop de complexité/difficulté. Par exemple, si l’on désire une boite de cadre avec un fond de couleur particulière, utiliser une table se révèle beaucoup plus pratique et flexible que toute autre solution qui utiliserait les propriétés des `bounding_box`(es) de `Prawn`, par exemple.
+
+> <font color="red"><b>Mais</b></font> : il faut tout de suite être informé que les lignes de référence sur lesquelles le texte doit se poser pour un livre à l’impression professionnelle seront plus difficilement gérées, voir rédhibitoire si la table contient de nombreuses rangées (> 3). Dans ce cas, il faut souvent ajouter des `pdf.move_up` ou `pdf.move_down`, avant la table, pour ajuster les valeurs.
+>
+> Il vaut mieux, dans ce cas, faire appel au [déplacement du texte dans la page](#hoffset-paragraph) qui permet, pour un moindre effort (mais en mode expert de ruby et de Prawn), de placer correctement le texte tout en conservant une gestion naturelle des lignes de référence.
 
 Notez que dans ce cas, une table se réduit très souvent à définir une classe de table et mettre le texte entre traits droits, de cette manière :
 
