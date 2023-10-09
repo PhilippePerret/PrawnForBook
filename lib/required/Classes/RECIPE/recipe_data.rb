@@ -158,7 +158,7 @@ class Recipe
     @parag_num_font_size    ||= format_text[:parag_num_size]
   end
   def parag_num_font_style
-    nil
+    @parag_num_font_style    ||= format_text[:parag_num_style]
   end
   def parag_num_vadjust
     @parag_num_vadjust      ||= format_text[:parag_num_vadjust]

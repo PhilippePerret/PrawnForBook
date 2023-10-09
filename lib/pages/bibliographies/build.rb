@@ -43,15 +43,10 @@ class Bibliography
     # 
     # Application de la fonte
     # 
-    font_props = {size: font_size}
-    font_props.merge!(style: font_style) if font_style
-    pdf.font(font_name, **font_props)
-    # 
-    # Calcul du leading à utiliser
-    # 
     bib_font  = Fonte.new(name:font_name, size:font_size, style: font_style)
-    leading   = bib_font.leading(pdf, pdf.line_height)
-    # leading = 0
+    pdf.font(bib_font)
+    # - Calcul du leading à utiliser -
+    leading   = bib_font.leading(pdf)
     # 
     # Les options à appliquer
     # 

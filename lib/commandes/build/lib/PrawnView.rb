@@ -43,6 +43,8 @@ class PrawnView
   def initialize(pdfbook, config)
     @pdfbook  = pdfbook
     @config   = config
+    # Pour consigner les fontes utilisées
+    @fonts = {}
   end
 
   def document
@@ -156,12 +158,27 @@ class PrawnView
   #   - Avec un Hash qui contient les paramètres et en plus la pro-
   #     priété :name (ou :font) définissant le nom de la fonte
   # 
+  # @return Cette méthode, sans argument, retourne aussi la fonte 
+  # courante, pour le calcul de la prochaine ligne de référence par
+  # exemple.
+  # 
+  # NOTE TODO Cette méthode est appelée à outrance, par exemple, 
+  # quand on numérote les paragraphes. Dans cette situation, la version
+  # actuelle crée à chaque fois des instances de la même fonte… Ça 
+  # peut être vraiment lourd…
+  # Ce qu'il faudrait, c'est instancier d'abord les fontes utiles,
+  # par exemple, dans ce cas, la fonte pour la police et la fonte pour
+  # les numéros, et prendre la même instance. Déjà, on gagnerait en
+  # évitant de calculer le leading chaque fois.
+  # Dans un premier temps, on va créer une table de polices @fonts
+  # qui va posséder en identifiant '<name><style><size>' et en 
+  # valeur l'instance de la police, qu'on ne créera que si elle 
+  # n'existe pas.
   def font(fonte = nil, params = nil)
 
     case fonte
     when NilClass
-      super
-      return
+      return super
     when String, Symbol
       data_font = params.dup.merge({name:fonte})
       super #(fonte, **params)
@@ -173,24 +190,64 @@ class PrawnView
       data_font = fonte.params.dup.merge!(name: fonte.name)
       super(fonte.name, **fonte.params)
     else
-      puts "fonte = #{fonte}".rouge
-      puts "params = #{params.inspect}".rouge
       raise ERRORS[:fonts][:invalid_font_params]
     end
 
-    puts "data_font = #{data_font.inspect}"
-    new_fonte = Fonte.new(data_font)
-
-    # Si la fonte est différente de la fonte courante, on le dit
-    # et on calcule son leading
-    if @current_fonte && new_fonte != @current_fonte
-      puts "\nLa fonte #{new_fonte.inspect} est différente de la fonte courante\n#{@current_fonte.inspect}"
+    # puts "data_font = #{data_font.inspect}"
+    data_font.key?(:style) || begin
+      raise "Les données de fonte #{data_font.inspect} doivent définir le :style"
+    rescue Exception => e
+      puts e.message.rouge
+      puts e.backtrace.join("\n").rouge
+      exit
     end
 
-    # On met cette nouvelle font en font courante
-    @current_fonte = new_fonte
+
+    # - Clé de consignation de la fonte -
+    key_font = "#{data_font[:name]}:#{data_font[:style]}:#{data_font[:size]}"
+
+    
+    if @fonts.key?(key_font)
+      thefont = @fonts[key_font]
+    else
+      thefont = Fonte.new(data_font)
+      thefont.leading = calc_leading_of(thefont, line_height)
+      @fonts.merge!(key_font => thefont)
+    end
+
+    # On met cette nouvelle font en fonte courante
+    @current_fonte = thefont
 
   end
+
+  # Calcul 
+  def calc_leading_of(fonte, lheight)
+    size = fonte.size
+    styl = fonte.style
+    h = height_of('A', **{leading: book_leading, size: size, style:styl})
+    if (h - lheight).abs > (h - 2 * lheight).abs
+      is_greater = true
+    end
+    incleading = book_leading.dup
+    if h > lheight && not(is_greater)
+      while h > lheight
+        h = height_of("A", leading: incleading -= 0.01, size: size, style:styl)
+      end
+    else
+      while h % lheight > 0.01
+        h = height_of("A", leading: incleading += 0.01, size: size, style:styl)
+      end
+    end
+    return incleading
+  end
+
+def book_leading
+  @book_leading ||= book.recipe.text_leading
+end
+
+def book
+  @book ||= PdfBook.current
+end
 
 
   # @helper

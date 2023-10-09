@@ -40,13 +40,18 @@ end
 #   config courante.
 # 
 def leading(pdf = nil, line_height = nil)
-  if pdf.nil?
-    @leading || raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
-  else
-    pdf         || raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
-    line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
-    @leading = calc_leading(pdf, line_height)
+  @leading ||= begin
+    if pdf.nil?
+      raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
+    else
+      pdf         || raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
+      line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
+      pdf.calc_leading_of(self, line_height)
+    end
   end
+end
+def leading=(value)
+  @leading = value
 end
 
 # Pour comparer deux fontes
@@ -73,28 +78,6 @@ end
 
 
 private
-
-def calc_leading(pdf, lheight)
-  incleading  = nil
-  is_greater  = false
-  pdf.font(name, **{size: size, style: style}) do
-    h = pdf.height_of('A', **{leading: book_leading, size: size})
-    if (h - lheight).abs > (h - 2 * lheight).abs
-      is_greater = true
-    end
-    incleading = book_leading.dup
-    if h > lheight && not(is_greater)
-      while h > lheight
-        h = pdf.height_of("A", leading: incleading -= 0.01, size: size)
-      end
-    else
-      while h % lheight > 0.01
-        h = pdf.height_of("A", leading: incleading += 0.01, size: size)
-      end
-    end
-  end
-  return incleading
-end
 
 def book_leading
   @book_leading ||= book.recipe.text_leading

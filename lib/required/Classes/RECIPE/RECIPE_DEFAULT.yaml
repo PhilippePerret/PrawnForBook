@@ -90,6 +90,7 @@ book_format:
     parag_num_dist_from_text: 5
     parag_num_font:           *default_font2
     parag_num_size:           8
+    parag_num_style:          *default_style2
     parag_num_strength:       75
   titles:
     level1:

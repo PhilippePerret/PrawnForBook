@@ -120,7 +120,12 @@ class AnyParagraph
       # 
       # Fonte spécifique pour cette numérotation
       # 
-      font(me.recipe.parag_num_font_name, size: me.recipe.parag_num_font_size) do
+      num_fonte = Fonte.new(
+        name:   me.recipe.parag_num_font_name,
+        size:   me.recipe.parag_num_font_size,
+        style:  me.recipe.parag_num_font_style
+      )
+      font(num_fonte) do
       
         # 
         # Calcul de la position du numéro de paragraphe en fonction du
@@ -184,7 +189,12 @@ class AnyParagraph
       # pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
         parag_height = pdf.height_of("Mot")
       end
-      pdf.font(recipe.parag_num_font_name, **{size:recipe.parag_num_font_size}) do
+      parnum_font = Fonte.new(
+        name:  recipe.parag_num_font_name,
+        style: recipe.parag_num_font_style,
+        size:  recipe.parag_num_font_size
+      )
+      pdf.font(parnum_font) do
         numer_height = pdf.height_of("194")
       end
       diff = (parag_height - numer_height).round(3)

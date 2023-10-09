@@ -32,7 +32,12 @@ class PrawnView
     #
     # Mise en forme voulue
     # 
-    font(dfauxtitre[:font], size: dfauxtitre[:size])
+    fauxtitre_font = Fonte.new(
+      name:   dfauxtitre[:font],
+      size:   dfauxtitre[:size],
+      style:  dfauxtitre[:style]
+    )
+    font(fauxtitre_font)
 
     #
     # Calcul de la taille du titre pour le placer correctement
