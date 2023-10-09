@@ -245,10 +245,16 @@ ERRORS = {
 
   # --- Fontes ---
 
-  fontes: {
-    font_argument_nil: "Les paramètres de #font doivent être définis (font-name et font-properties, Hash ou Prawn4book::Fonte)",
+  fonts: {
     invalid_font_params: "Les paramètres pour #font sont invalides (soit les paramètres traditionnels — font-name, {font-params} — soit un Hash contenant {:name, :size, :style}, soit une instance Prawn4book::Fonte).",
-
+    font_argument_nil: "Les paramètres de #font doivent être définis (font-name et font-properties, Hash ou Prawn4book::Fonte)",
+    leading_must_be_calculated: <<~EOT,
+      Il est impératif de calculer le leading d'une police avant de l'appeler
+      sans argument.
+      Il faut calculer le leading de la police :
+      '%{name}' (%{pms})
+      On le calcule à l'aide de <fonte>.leading(<pdf>,<line_height>).
+      EOT
   },
 
   # --- Maison d'éditions ---
@@ -261,6 +267,7 @@ ERRORS = {
   # --- Bibliographie --- #
 
   biblio: {
+    unfound: 'Impossible de trouver la bibliographie de tag %{bib}',
     custom_format_method_error: <<~ERR,
       Une erreur a été levée par votre méthode BibliographyFormaterModule#%{method}
       (qui doit être définie dans le module formater.rb)

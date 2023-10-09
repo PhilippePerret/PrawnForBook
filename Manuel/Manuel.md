@@ -293,6 +293,10 @@ On peut demander l’affichage de la grille de référence au moment de la conce
 pfb build -grid
 ~~~
 
+#### Toujours aligner les textes sur la grille de référence
+
+[Avant de documenter cette partie, voir si ça ne pourrait pas être fait automatiquement : à chaque changement de police/size — en fait, on calculerait — on calcule le leading]
+
 #### Modifier la grille de référence [Expert]
 
 Pour modifier localement (sur quelques pages) la grille de référence, il faut appeler dans un module grâce à la méthode `Prawn4book::PrawnView#define_default_leading` qui attend comme paramètre la fonte utilisée (pour calculer le *leading*) et la nouvelle hauteur de ligne.
@@ -3600,23 +3604,31 @@ ou de l’index :
 
 #<page_de_titre>
 page_de_titre:
-	fonts: 
-		title: 			"Police/style"   	# police pour le titre du livre
-		subtitle 		"Police/style"  	# police pour le sous-titre du livre
-		author: 		"Police/style"   	# police pour l'auteur
-		publisher: 	"Police/style"	 	# police pour l'éditeur
-		collection_title: null    		# police pour le nom de la collection
-	sizes:
-		title: 18 # taille pour le titre du livre
-		subtitle: 11 # taille pour le sous-titre
-		author: 15 # taille pour l'auteur
-		publisher: 12 # taille pour l'éditeur
-		collection_title: 12 # taille pour l'éditeur
-	spaces_before:
+	title:
+		name: <nom police>
+		size: <taille>
+		style: <style>
+	subtitle:
+		name: <nom police>
+		size: <taille>
+		style: <style>
+	author:
+		name: <nom police>
+		size: <taille>
+		style: <style>
+	collection_title:
+		name: <nom police>
+		size: <taille>
+		style: <style>
+	publisher:
+		name: <nom police>
+		size: <taille>
+		style: <style>
+	spaces_before: 	# [3]
 		title: 4 			# nombre de lignes avant le titre
 		subtitle: 1 	# nombre de lignes avant le sous-titre
 		author: 2 		# nombre de lignes avant le nom de l'auteur
-	logo: [1]
+	logo: 					# [1]
 		height: 10 		# Hauteur du logo
 	paginate: false # [2]
 #</page_de_titre>
@@ -3629,6 +3641,10 @@ page_de_titre:
 > **[2]**
 >
 > Par défaut, toutes les pages spéciales (titre, garde, faux-titre, etc.) ne sont pas numérotées (comme dans un « vrai » livre. Mais si pour une raison ou une autre, on veut les numéroter, il suffit de mettre cette propriété à `true` (pour chaque page à numéroter).
+>
+> **[3]**
+>
+> Il est impératif de ne pas mettre cette donnée `spaces_before` dans les tables précédentes (par type d’information) car ces tables servent à instancier la fonte (`Prawn4book::Fonte.new(...)`) et la méthode `#instantiate` n’a besoin que de `:name`, `:size` et `:style`. 
 
  <a name="recette-page-infos"></a>
 

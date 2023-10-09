@@ -166,18 +166,28 @@ inserted_pages:
 #<page_de_titre>
 page_de_titre:
   paginate: false
-  fonts:
-    title:              *default_font1
-    subtitle:           *default_font1
-    author:             *default_font1
-    publisher:          *default_font1
-    collection_title:   *default_font1
-  sizes:
-    title:              18
-    subtitle:           11
-    author:             15
-    publisher:          12
-    collection_title:   12
+  title:
+    name: *default_font1
+    size: 18
+    style: *default_style1
+  subtitle:
+    name: *default_font1
+    size: 11
+    style: *default_style1
+  author: 
+    name: *default_font1
+    size: 15
+    style: *default_style1
+  collection_title: 
+    name: *default_font1
+    size: 12
+    style: *default_style1
+  publisher:
+    name: *default_font1
+    size: 12
+    style: *default_style1
+  # Ne pas mettre cette données dans les hash ci-dessus, car
+  # ces hashes servent à initialiser la fonte.
   spaces_before:
     title:              4
     subtitle:           1

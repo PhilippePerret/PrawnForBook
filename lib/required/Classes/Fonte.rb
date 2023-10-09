@@ -28,11 +28,51 @@ def initialize(name:, style:, size:, hname: '')
   @hname  = hname # a human name
 end
 
-def leading(pdf, line_height)
-  pdf         ||= raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
-  line_height ||= raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
-  calc_leading(pdf, line_height)
+# Leading à utiliser en fonction de la fonte et de la hauteur de
+# ligne courante. Sans argument, on retourne le leading qui a dû être
+# calculé avant. Avec les arguments, on le calcule.
+# 
+# @note
+#   On pourrait aussi n'envoyer que +pdf+ et récupérer son 
+#   @line_height, mais je préfère quand même garder la possibilité
+#   qu'on puisse calculer une valeur sans que ce soit la valeur 
+#   appliquée, par exemple pour faire un calcul en dehors de la 
+#   config courante.
+# 
+def leading(pdf = nil, line_height = nil)
+  if pdf.nil?
+    @leading || raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
+  else
+    pdf         || raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
+    line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
+    @leading = calc_leading(pdf, line_height)
+  end
 end
+
+# Pour comparer deux fontes
+def !=(of)
+  self.name != of.name || self.style != of.style || self.size != of.size
+end
+
+def inspect
+  @inspect ||= begin
+    d = []
+    d << hname if hname
+    d << name
+    d << style
+    d << size
+    d.join('/')
+  end
+end
+
+# @return [Hash] la table des valeurs pour le second argument de
+# Prawn::Document#font
+def params
+  @params ||= {style: style, size: size}
+end
+
+
+private
 
 def calc_leading(pdf, lheight)
   incleading  = nil
@@ -63,24 +103,6 @@ end
 def book
   @book ||= PdfBook.current
 end
-
-def inspect
-  @inspect ||= begin
-    d = []
-    d << hname if hname
-    d << name
-    d << style
-    d << size
-    d.join('/')
-  end
-end
-
-# @return [Hash] la table des valeurs pour le second argument de
-# Prawn::Document#font
-def params
-  @params ||= {style: style, size: size}
-end
-
 
 
 

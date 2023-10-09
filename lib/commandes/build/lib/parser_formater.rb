@@ -376,7 +376,7 @@ private
       bib_tag = $1.freeze
       item_av, item_ap = $2.freeze.split('|')
 
-      biblio = Prawn4book::Bibliography.get(bib_tag) || raise("Impossible de trouver la bibliographie de tag #{bib_tag.inspect}")
+      biblio = Prawn4book::Bibliography.get(bib_tag) || raise(FatalPrawnForBookError.new(700, {bib: bib_tag.inspect}))
       canon, actual = 
         if (bibitem = biblio.exist?(item_av))
           [item_av, item_ap]

@@ -140,32 +140,56 @@ class PrawnView
   end
 
 
-  # Surclassement de la méthode Prawn::Document#font permettant de
-  # définir la fonte courante.
+  # = Définition de la police courante =
+  # 
+  # Cette méthode surclasse la méthode Prawn::Document#font qui 
+  # permet de définir la fonte courante.
+  # 
   # Il existe maintenant 3 façons différentes de définir la fonte :
   # 
-  # - normalement, c'est-à-dire avec le nom [String] en premier 
-  #   argument et les autres paramètres en second argument.
-  # - Avec un Hash qui contient les paramètres et en plus la propriété
-  #   :name (ou :font) définissant le nom de la fonte
-  # - Avec une instance Prawn4book::Fonte (utilisation privilégiée
-  #   dans l'application)
+  #   - La méthode privilégiée consiste à définir une 
+  #     [Prawn4book::Fonte] à l'aide de Fonte.new(name:, style:, 
+  #     size:, hname:) et de la donner comme premier argument de cet-
+  #     te méthode.
+  #   - La méthode "normale", c'est-à-dire avec le nom [String] en 
+  #     premier argument et les autres paramètres en second argument.
+  #   - Avec un Hash qui contient les paramètres et en plus la pro-
+  #     priété :name (ou :font) définissant le nom de la fonte
   # 
   def font(fonte = nil, params = nil)
+
     case fonte
     when NilClass
       super
+      return
     when String, Symbol
+      data_font = params.dup.merge({name:fonte})
       super #(fonte, **params)
     when Hash
-      super(fonte.delete(:name)||fonte.delete(:font), **fonte)
+      data_font = fonte.dup
+      data_font.merge!(name: fonte.delete(:font)) if fonte.key?(:font)
+      super(data_font[:name], **fonte)
     when Prawn4book::Fonte
+      data_font = fonte.params.dup.merge!(name: fonte.name)
       super(fonte.name, **fonte.params)
     else
       puts "fonte = #{fonte}".rouge
       puts "params = #{params.inspect}".rouge
-      raise ERRORS[:fontes][:invalid_font_params]
+      raise ERRORS[:fonts][:invalid_font_params]
     end
+
+    puts "data_font = #{data_font.inspect}"
+    new_fonte = Fonte.new(data_font)
+
+    # Si la fonte est différente de la fonte courante, on le dit
+    # et on calcule son leading
+    if @current_fonte && new_fonte != @current_fonte
+      puts "\nLa fonte #{new_fonte.inspect} est différente de la fonte courante\n#{@current_fonte.inspect}"
+    end
+
+    # On met cette nouvelle font en font courante
+    @current_fonte = new_fonte
+
   end
 
 

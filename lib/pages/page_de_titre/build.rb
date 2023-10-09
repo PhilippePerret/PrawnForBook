@@ -46,9 +46,8 @@ class PageDeTitre
       # haut.
       # 
       if pdfbook.in_collection?
-        # spy "Font pour collection : #{dtitre[:fonts][:collection_title].inspect}".jaune
-        # spy "Size pour collection : #{dtitre[:sizes][:collection_title].inspect}".jaune
-        font(dtitre[:fonts][:collection_title], size: dtitre[:sizes][:collection_title])
+        font_coll_title = Fonte.new(dtitre[:collection_title])
+        font(font_coll_title)
         move_cursor_to(bounds.top - line_height)
         text( pdfbook.collection.name, **{align: :center})
       end
@@ -57,7 +56,8 @@ class PageDeTitre
       # Le TITRE DU LIVRE
       # (se place à un tiers)
       #
-      font(dtitre[:fonts][:title], size: dtitre[:sizes][:title])
+      font_title = Fonte.new(dtitre[:title])
+      font(font_title)
       move_cursor_to(bounds.top - height / 3)
       text( pdfbook.title , **{align: :center})
 
@@ -66,7 +66,8 @@ class PageDeTitre
       # 
       if pdfbook.subtitle
         # old_line_height = line_height.dup
-        font(dtitre[:fonts][:subtitle], size: dtitre[:sizes][:subtitle])
+        font_subtitle = Fonte.new(dtitre[:subtitle])
+        font(font_subtitle)
         subtitle = pdfbook.subtitle.split('\\n').compact
         # 
         # Ajout des parenthèses
@@ -85,7 +86,8 @@ class PageDeTitre
       # Les ou les AUTEURS 
       # 
       move_down(line_height) # une de plus
-      font(dtitre[:fonts][:author], size: dtitre[:sizes][:author])
+      font_auteur = Fonte.new(dtitre[:author])
+      font(font_auteur)
       text pdfbook.auteurs.titleize, **{align: :center}
 
       #
@@ -102,7 +104,8 @@ class PageDeTitre
       end
       move_cursor_to(pub_top)
       spy "publisher: #{publisher.inspect}"
-      font(dtitre[:fonts][:publisher], size: dtitre[:sizes][:publisher])
+      font_publisher = Fonte.new(dtitre[:publisher])
+      font(font_publisher)
       text publisher[:name], **{align: :center}
 
       if logo

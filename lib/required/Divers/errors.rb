@@ -64,6 +64,7 @@ class FatalPrawnForBookError < StandardError
     @@book ||= Prawn4book::PdfBook.current
   end
 
+  # Numéros d'erreurs à utiliser avec FatalPrawnForBookError.new(<num err>, <data>)
   def error_by_num(err_id)
     @errors_by_num ||= {
       # -- Base --
@@ -78,11 +79,10 @@ class FatalPrawnForBookError < StandardError
       802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
-      # -- Tables --
-      3000  => Prawn4book::ERRORS[:table][:can_not_fit],
-      # -- Références --
-      2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
+      # -- Fontes --
+      650   => Prawn4book::ERRORS[:fonts][:leading_must_be_calculated],
       # -- Bibliographies --
+      700   => Prawn4book::ERRORS[:biblio][:unfound],
       710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],
       711   => Prawn4book::ERRORS[:biblio][:malformation][:path_undefined],
       712   => Prawn4book::ERRORS[:biblio][:malformation][:path_unfound],
@@ -96,6 +96,10 @@ class FatalPrawnForBookError < StandardError
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],
       1002  => Prawn4book::ERRORS[:parsing][:unknown_method],
       1100  => Prawn4book::ERRORS[:modules][:runtime_error],
+      # -- Références --
+      2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
+      # -- Tables --
+      3000  => Prawn4book::ERRORS[:table][:can_not_fit],
       # -- Modules utilisateurs personnalisés --
       5000  => Prawn4book::ERRORS[:user_modules][:runtime_error],
     }
