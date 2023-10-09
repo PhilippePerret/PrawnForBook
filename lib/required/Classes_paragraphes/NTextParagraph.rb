@@ -141,7 +141,7 @@ class NTextParagraph < AnyParagraph
     # Préformatage par nature de paragraphe
     # 
     # Typiquement, c'est ici qu'on ajoute un "- " au début des items
-    # de liste
+    # de liste (encore le cas ?)
     # 
     formate_per_nature(pdf)
 
@@ -169,11 +169,22 @@ class NTextParagraph < AnyParagraph
     ###########################
     begin
       pdf.update do
-        options = {
+
+        # 
+        # = Leading à appliquer à la fonte =
+        # 
+        # Je ne sais pas pourquoi je ne peux pas déplacer ce truc
+        # ailleurs et encore moins dans la fonte elle-même (voir 
+        # la méthode @leading de Fonte, qui contient le code que 
+        # j'aimerais utiliser mais qui ne fonctionne pas)
+        default_leading(0)
+        curleading = calc_leading_of(current_fonte, line_height)
+
+        options = current_fonte.params.merge({
           inline_format:  true,
           align:          pa.text_align,
-          size:           pa.font_size
-        }
+          leading:        curleading,
+        })
 
         if pa.kerning?
           options.merge!(kerning: pa.kerning)
@@ -190,12 +201,6 @@ class NTextParagraph < AnyParagraph
         # Placement sur la première ligne de référence suivante
         # 
         move_cursor_to_next_reference_line unless cursor_positionned
-
-        # 
-        # Maintenant que nous sommes positionnés et que toutes les
-        # options sont définis, on peut formater le texte final
-        # 
-        # self.current_options = options
 
         #
         # Écriture du numéro du paragraphe
@@ -216,8 +221,13 @@ class NTextParagraph < AnyParagraph
           # - dans un text box -
           # 
           span(wbox, **span_options) do
+            # puts "\nOptions pour écrire #{pa.text} : #{options.inspect}".jaune
+            @nombrefois ||= 0
+            @nombrefois += 1
+            @nombrefois < 20 || exit
             text(pa.text, **options)
           end
+
         else
 
           # 
@@ -227,7 +237,7 @@ class NTextParagraph < AnyParagraph
           # 
           # Hauteur que prendra le texte
           # 
-          final_height = height_of(pa.text)
+          final_height = height_of(pa.text, **options)
 
           # 
           # Le paragraphe tient-il sur deux pages ?
@@ -257,9 +267,9 @@ class NTextParagraph < AnyParagraph
             box_height = cursor + line_height
             # spy "Taille box = #{box_height}".rouge
             other_options = {
-              width:  bounds.width,
-              height: box_height,
-              at:     [0, cursor],
+              width:    bounds.width,
+              height:   box_height,
+              at:       [0, cursor],
               overflow: :truncate
             }.merge(options)
             excedant = text_box(pa.text, **other_options)
@@ -275,7 +285,10 @@ class NTextParagraph < AnyParagraph
           # ------------------------------
           # L'écriture véritable du texte
           # ------------------------------
+          
+          # puts "options: #{options.inspect} (line_height: #{line_height})".bleu
           text(rest_text, **options)
+        
         end
 
         if mg_bot && mg_bot > 0

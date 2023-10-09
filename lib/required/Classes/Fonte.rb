@@ -26,6 +26,7 @@ def initialize(name:, style:, size:, hname: '')
   @style  = style.to_sym
   @size   = size
   @hname  = hname # a human name
+  @leadings = {}
 end
 
 # Leading à utiliser en fonction de la fonte et de la hauteur de
@@ -39,20 +40,19 @@ end
 #   appliquée, par exemple pour faire un calcul en dehors de la 
 #   config courante.
 # 
-def leading(pdf = nil, line_height = nil)
-  @leading ||= begin
-    if pdf.nil?
-      raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
-    else
-      pdf         || raise(PrawnFatalError.new(ERRORS[:building][:require_pdf]))
-      line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
-      pdf.calc_leading_of(self, line_height)
-    end
+def leading(pdf, lineheight)
+  @leadings[lineheight] ||= begin
+    pdf         || raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
+    line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
+    # - par prudence -
+    pdf.default_leading(0)
+    # - Calcul -
+    lineheight - pdf.height_of('H', **params.merge!(font:self.name))
   end
 end
-def leading=(value)
-  @leading = value
-end
+# def leading=(value)
+#   @leading = value
+# end
 
 # Pour comparer deux fontes
 def !=(of)

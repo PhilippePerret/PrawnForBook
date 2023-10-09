@@ -120,12 +120,7 @@ class AnyParagraph
       # 
       # Fonte spécifique pour cette numérotation
       # 
-      num_fonte = Fonte.new(
-        name:   me.recipe.parag_num_font_name,
-        size:   me.recipe.parag_num_font_size,
-        style:  me.recipe.parag_num_font_style
-      )
-      font(num_fonte) do
+      font(me.class.parag_num_fonte) do
       
         # 
         # Calcul de la position du numéro de paragraphe en fonction du
@@ -153,11 +148,23 @@ class AnyParagraph
         float {
           move_down(num_top)
           span(@span_number_width, position: span_pos_num) do
-            text "#{num}", color: me.parag_numero_color
+            text "#{num}", **{color: me.parag_numero_color}
           end
         }
       end #/font
     end    
+  end
+
+  # @return la Fonte spécifique pour les paragraphes
+  def self.parag_num_fonte
+    @@parag_num_fonte ||= begin
+      r = Prawn4book::PdfBook.current.recipe
+      Fonte.new(
+        name:   r.parag_num_font_name,
+        size:   r.parag_num_font_size,
+        style:  r.parag_num_font_style
+      )
+    end
   end
 
   def distance_from_text 

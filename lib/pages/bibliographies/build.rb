@@ -46,11 +46,12 @@ class Bibliography
     bib_font  = Fonte.new(name:font_name, size:font_size, style: font_style)
     pdf.font(bib_font)
     # - Calcul du leading à utiliser -
-    leading   = bib_font.leading(pdf)
+    leading   = bib_font.leading(pdf, pdf.line_height)
     # 
     # Les options à appliquer
     # 
     options = {inline_format: true, leading: leading}
+    puts "\noptions pour biblio : #{options.inspect}".bleu
     #
     # Page de départ
     # 

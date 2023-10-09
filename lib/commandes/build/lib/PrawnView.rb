@@ -40,6 +40,10 @@ class PrawnView
   # sa taille, lorsqu'on traite des polices proportionnelles)
   attr_accessor :current_options
 
+  # La [Prawn4book::Fonte] courante
+  # 
+  attr_reader :current_fonte
+
   def initialize(pdfbook, config)
     @pdfbook  = pdfbook
     @config   = config
@@ -175,79 +179,63 @@ class PrawnView
   # valeur l'instance de la police, qu'on ne créera que si elle 
   # n'existe pas.
   def font(fonte = nil, params = nil)
-
+    thefont   = nil
+    data_font = nil
     case fonte
     when NilClass
       return super
+    when Prawn4book::Fonte
+      thefont = fonte
     when String, Symbol
       data_font = params.dup.merge({name:fonte})
-      super #(fonte, **params)
     when Hash
       data_font = fonte.dup
       data_font.merge!(name: fonte.delete(:font)) if fonte.key?(:font)
-      super(data_font[:name], **fonte)
-    when Prawn4book::Fonte
-      data_font = fonte.params.dup.merge!(name: fonte.name)
-      super(fonte.name, **fonte.params)
     else
       raise ERRORS[:fonts][:invalid_font_params]
     end
 
-    # puts "data_font = #{data_font.inspect}"
-    data_font.key?(:style) || begin
-      raise "Les données de fonte #{data_font.inspect} doivent définir le :style"
-    rescue Exception => e
-      puts e.message.rouge
-      puts e.backtrace.join("\n").rouge
-      exit
+    unless data_font.nil?
+      data_font.key?(:style) || begin
+        raise "Les données de fonte #{data_font.inspect} doivent définir le :style"
+      rescue Exception => e
+        puts e.message.rouge
+        puts e.backtrace[0..4].join("\n").rouge
+        exit
+      end
+
+      # - Clé de consignation de la fonte -
+      key_font = "#{data_font[:name]}:#{data_font[:style]}:#{data_font[:size]}"
+
+      
+      if @fonts.key?(key_font)
+        thefont = @fonts[key_font]
+      else
+        thefont = Fonte.new(data_font)
+        @fonts.merge!(key_font => thefont)
+      end
     end
 
-
-    # - Clé de consignation de la fonte -
-    key_font = "#{data_font[:name]}:#{data_font[:style]}:#{data_font[:size]}"
-
-    
-    if @fonts.key?(key_font)
-      thefont = @fonts[key_font]
-    else
-      thefont = Fonte.new(data_font)
-      thefont.leading = calc_leading_of(thefont, line_height)
-      @fonts.merge!(key_font => thefont)
-    end
-
-    # On met cette nouvelle font en fonte courante
+    # On met la fonte en fonte courante
     @current_fonte = thefont
+    super(thefont.name, thefont.params)
 
   end
 
-  # Calcul 
-  def calc_leading_of(fonte, lheight)
-    size = fonte.size
-    styl = fonte.style
-    h = height_of('A', **{leading: book_leading, size: size, style:styl})
-    if (h - lheight).abs > (h - 2 * lheight).abs
-      is_greater = true
-    end
-    incleading = book_leading.dup
-    if h > lheight && not(is_greater)
-      while h > lheight
-        h = height_of("A", leading: incleading -= 0.01, size: size, style:styl)
-      end
-    else
-      while h % lheight > 0.01
-        h = height_of("A", leading: incleading += 0.01, size: size, style:styl)
-      end
-    end
-    return incleading
+  # Calcul du leading pour la fonte +fonte+ en considérant une
+  # hauteur de ligne de +lineheight+
+  def calc_leading_of(fonte, lineheight)
+    opts = {font: fonte.name, size:fonte.size, style:fonte.style}
+    return lineheight - self.height_of('H', **opts)
   end
 
-def book_leading
-  @book_leading ||= book.recipe.text_leading
-end
+  def book_leading
+    @book_leading ||= book.recipe.text_leading
+  end
 
-def book
-  @book ||= PdfBook.current
-end
+  def book
+    @book ||= PdfBook.current
+  end
 
 
   # @helper

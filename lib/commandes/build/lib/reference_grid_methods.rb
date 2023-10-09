@@ -160,12 +160,16 @@ class PrawnView
     #
     # On commence toujours en haut
     # 
-    h = bounds.top.dup # - line_height
+    h = bounds.top.dup #
     while h > 0
       # 
       # Prochaine position (définition de l'écartement entre les lignes)
       # 
       h -= line_height
+      # puts "Position : #{h.inspect}"
+      #
+      # Si on atteint le bas, on s'arrête
+      # 
       break if h < 0
       # 
       # Écriture de la position top
