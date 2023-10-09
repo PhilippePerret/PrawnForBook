@@ -40,6 +40,7 @@ class PrawnView
     # (re)définir les valeurs
     @leading      = default_leading
     @line_height  = line_height
+
     # -- Mémoriser ce leading --
     @leadings ||= {}
     @leadings.merge!(page_number => {page: page_number, fonte: fonte, line_height: line_height})
@@ -90,29 +91,12 @@ class PrawnView
   # 
   def calc_ref_line
 
-    cur_dist_from_top = bounds.top - cursor
+    cur_dist_from_top = bounds.top - cursor # la bonne
     cur_num_ref_line  = (cur_dist_from_top / line_height).floor
     new_num_ref_line  = cur_num_ref_line + 1
     new_dist_from_top = new_num_ref_line * line_height
     absolute_line_ref = bounds.top - new_dist_from_top
     line_ref          = absolute_line_ref + font.ascender
-
-    # spy "[calcul line ref]".bleu
-    # msg_spy = <<~TEXT
-    #   cursor départ : #{cursor.inspect}
-    #   Distance depuis le haut efficace = #{cur_dist_from_top}
-    #   Indice ligne référence courante = #{cur_num_ref_line}
-    #   (line_height = #{line_height})
-    #   Indice nouvelle ligne référence = #{new_num_ref_line}
-    #   Nouvelle distance depuis le haut efficace = #{new_dist_from_top}
-    #   Absolute Line Ref (sans la fonte) = #{absolute_line_ref}
-    #   line_ref = #{line_ref}
-    #   Font courante : #{font.inspect}
-    #   ascender : #{font.ascender}
-    #   descender: #{font.descender}
-    # TEXT
-    # spy msg_spy
-    # spy "[/calcul line ref]".bleu
 
     return line_ref    
   end

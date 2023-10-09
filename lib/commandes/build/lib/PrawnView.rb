@@ -82,8 +82,10 @@ class PrawnView
     new_options = {margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options)
     # spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
     super(new_options)
+    
     # 
     # On replace toujours le curseur en haut de la page
+    # (ÇA NE SERT À RIEN…)
     # 
     spy "-> déplacement du curseur en haut de la page…".bleu
     move_cursor_to_top_of_the_page
@@ -100,9 +102,11 @@ class PrawnView
     spy "<- Nouvelle page initiée avec succès".vert
   end
 
+  # En fait, j'ai découvert que cette méthode ne servait strictement
+  # à rien, la nouvelle page ne tient absolument pas compte de ça.
   def move_cursor_to_top_of_the_page
-    move_cursor_to(bounds.top) # - line_height
-    move_cursor_to_next_reference_line
+    # move_cursor_to(bounds.top) # - line_height
+    # move_cursor_to_next_reference_line
     # if page_number > 137
     #   puts "\nLine Height : #{line_height}"
     #   puts "Placement en haut (#{bounds.top})".jaune

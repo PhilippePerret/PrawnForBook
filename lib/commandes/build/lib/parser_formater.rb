@@ -439,11 +439,9 @@ private
       note       = $2.freeze
       book.notes_manager.treate(index_note, note, context)
     }
-
     
     return str
 
-    return nil
   end
   REG_NOTE_MARK = /(?!^)\^([0-9]+?)/.freeze
   REG_NOTE_DEF  = /^\^([0-9]+?) (.+?)$/.freeze
