@@ -308,11 +308,15 @@ def mon_helper(pdf)
 	mafonte = Prawn4book::Fonte.new(name:'Garamond', size:13, \
 		style: :normal)
 	leading = pdf.calc_leading_for(mafonte, 15)
+  # ou pdf.leading_for
 	
 	options = {leading: leading}
 	pdf.update do
 		font(mafonte) do
+      move_cursor_to_next_reference_line
 			text "Mon texte qui sera bien leadé", **options
+      # Note : il faudrait que le texte soit plus long pour qu'on puisse
+      # bien voir le leading employé, entre chaque ligne.
 		end
 	end
 end
