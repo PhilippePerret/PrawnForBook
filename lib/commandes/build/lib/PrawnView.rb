@@ -222,12 +222,26 @@ class PrawnView
 
   end
 
+  #
   # Calcul du leading pour la fonte +fonte+ en considérant une
   # hauteur de ligne de +lineheight+
-  def calc_leading_of(fonte, lineheight)
-    opts = {font: fonte.name, size:fonte.size, style:fonte.style}
-    return lineheight - self.height_of('H', **opts)
+  # 
+  def calc_leading_for(fonte, lineheight)
+    begin
+      opts = {size:fonte.size, style:fonte.style, leading:0}
+      font(fonte) do
+        return lineheight - self.height_of('H', **opts)
+      end
+    rescue Exception => e
+      # On passe ici par exemple quand la police n'existe pas
+      puts <<~EOT.rouge
+        Erreur en calculant le leading pour #{fonte.inspect}
+        Erreur : #{e.message}
+        EOT
+      exit
+    end
   end
+  alias :leading_for :calc_leading_for
 
   def book_leading
     @book_leading ||= book.recipe.text_leading

@@ -177,8 +177,7 @@ class NTextParagraph < AnyParagraph
         # ailleurs et encore moins dans la fonte elle-même (voir 
         # la méthode @leading de Fonte, qui contient le code que 
         # j'aimerais utiliser mais qui ne fonctionne pas)
-        default_leading(0)
-        curleading = calc_leading_of(current_fonte, line_height)
+        curleading = calc_leading_for(current_fonte, line_height)
 
         options = current_fonte.params.merge({
           inline_format:  true,

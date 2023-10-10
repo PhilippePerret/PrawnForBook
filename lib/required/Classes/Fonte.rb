@@ -45,14 +45,14 @@ def leading(pdf, lineheight)
     pdf         || raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
     line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
     # - par prudence -
+    cur_default_leading = pdf.default_leading
     pdf.default_leading(0)
     # - Calcul -
-    lineheight - pdf.height_of('H', **params.merge!(font:self.name))
+    ld = lineheight - pdf.height_of('H', **params.merge!(font:self.name))
+    pdf.default_leading(cur_default_leading)
+    ld
   end
 end
-# def leading=(value)
-#   @leading = value
-# end
 
 # Pour comparer deux fontes
 def !=(of)

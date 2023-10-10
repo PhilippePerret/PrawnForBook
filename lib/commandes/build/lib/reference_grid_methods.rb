@@ -23,7 +23,6 @@ class PrawnView
   #   on doit le faire en réglant la valeur :leading des options de
   #   la méthode utilisée ('text' par exemple).
   # 
-  # TODO : Il faut pouvoir modifier la grille sur plusieurs pages
   # 
   def define_default_leading(fonte, line_height)
     #
@@ -36,7 +35,7 @@ class PrawnView
     # -grid) on regardera dans la définition de la grille de référence
     # dans pdf.leadings.
     # 
-    self.default_leading = font2leading(fonte, line_height)
+    self.default_leading = calc_leading_for(fonte, line_height)
     # (re)définir les valeurs
     @leading      = default_leading
     @line_height  = line_height

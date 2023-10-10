@@ -295,26 +295,61 @@ pfb build -grid
 
 #### Toujours aligner les textes sur la grille de référence
 
-[Avant de documenter cette partie, voir si ça ne pourrait pas être fait automatiquement : à chaque changement de police/size — en fait, on calculerait — on calcule le leading]
+Si l’on utilise **des tailles de police différentes** ou que l'on joue sur des **hauteurs de ligne différentes** pour modifier la grille de référence, il faut ajuster le `leading` pour que les textes tombent toujours bien sur les lignes de la grille de référence.
 
-#### Modifier la grille de référence [Expert]
+> Rappel : pour afficher la grille de référence, ajouter l'option `-grid` à la commande de construction du livre (ne pas oublier de l'enlever pour la version finale…)
 
-Pour modifier localement (sur quelques pages) la grille de référence, il faut appeler dans un module grâce à la méthode `Prawn4book::PrawnView#define_default_leading` qui attend comme paramètre la fonte utilisée (pour calculer le *leading*) et la nouvelle hauteur de ligne.
+Pour ce faire, on calcule ce leading à l'aide de la méthode `pdf.calc_leading_for(<fonte>, <hauteur ligne>)` et on ajoute le `leading` à l'inscription des textes.
 
-> Il ne faut pas abuser de ce changement de grille qui risque de déstabiliser tout l'aspect. On peut le réserver à l'annexe, quand on utilise un affichage plus réduit.
+Par exemple, dans un helper qui reçoit `pdf`, le `Prawn4book::PrawnView` du livre en construction :
 
 ~~~ruby
-def ma_partie_avec_autre_grille(pdf)
-	mafonte = Prawn4book::Fonte.new(name:"MaFonte", style: :normal, size:9, hname:"Ma belle fonte")
-	pdf.define_default_leading(mafonte, 10)
-	#
-	# À partir d'ici et de maintenant, tous les 
-	# pdf.move_cursor_to_next_reference_line placeront le curseur sur la
-	# ligne de la nouvelle grille.
+def mon_helper(pdf)
+	mafonte = Prawn4book::Fonte.new(name:'Garamond', size:13, \
+		style: :normal)
+	leading = pdf.calc_leading_for(mafonte, 15)
+	
+	options = {leading: leading}
+	pdf.update do
+		font(mafonte) do
+			text "Mon texte qui sera bien leadé", **options
+		end
+	end
 end
 ~~~
 
-> Si on ajoute l'option `-grid` à la commande de construction on pourra voir la nouvelle grille à partir de l'endroit voulu.
+#### Modifier la grille de référence [Expert]
+
+Pour modifier localement (sur quelques pages) la grille de référence, il y a deux méthodes : 
+
+* **dans le texte du livre**, utiliser :
+
+	~~~markdown
+	(( line_height(<line height>, {fname:<font name>, fsize:<font size>, \
+			fstyle: <font style>}) ))
+	
+	Par exemple :
+	
+	(( line_height(10, {fname:"Garamond", fsize:9, fstyle: :normal}) ))
+	
+	~~~
+* **dans le code d’’un helper**, utiliser `pdf.define_default_leading(<fonte>, <line_height>)`.
+
+  ~~~ruby
+  def ma_partie_avec_autre_grille(pdf)
+    mafonte = Prawn4book::Fonte.new(name:"MaFonte", style: :normal, size:9, hname:"Ma belle fonte")
+    pdf.define_default_leading(mafonte, 10)
+    #
+    # À partir d'ici et de maintenant, tous les 
+    # pdf.move_cursor_to_next_reference_line placeront le curseur sur la
+    # ligne de la nouvelle grille.
+  end
+  ~~~
+
+> Il ne faut pas abuser de ce changement de grille qui risque de déstabiliser tout l'aspect. On peut le réserver à l'annexe, quand on utilise un affichage plus réduit.
+
+
+> Ajouter l'option `-grid` à la commande de construction on pourra voir la nouvelle grille à partir de l'endroit voulu (`pfb build -grid`.
 
 ---
 <a name="pagination"></a>

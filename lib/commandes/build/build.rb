@@ -276,7 +276,7 @@ class PdfBook
       name:   recipe.default_font_name,
       style:  recipe.default_font_style,
       size:   recipe.default_font_size,
-      hname:  'Police (style et size) par défaut'
+      hname:  'Fonte par défaut'
     )
     Fonte.default = default_fonte
     pdf.define_default_leading(default_fonte, recipe.line_height)

@@ -95,16 +95,8 @@ class PageInfos
     # On doit se placer assez haut pour tout écrire
     # 
     nombre_lignes = @infos_to_print.count + 4
-    original_default_leading = pdf.default_leading
-    pdf.default_leading = 0
     hauteur_ligne = pdf.height_of(@infos_to_print.first[:value])
-    pdf.default_leading = original_default_leading
     top_cursor    = nombre_lignes * hauteur_ligne
-    spy "Calcul du positionnement du début des informations…".jaune
-    spy "(default_leading initial : #{original_default_leading})".gris
-    spy "Hauteur ligne d'information   : #{hauteur_ligne}".bleu
-    spy "Nombre de lignes (4 ajoutées) : #{nombre_lignes}".bleu
-    spy "Placement du curseur          : #{top_cursor}".bleu
     pdf.move_cursor_to(top_cursor)
     # 
     # Boucle sur toutes les informations à imprimer, depuis l'endroit

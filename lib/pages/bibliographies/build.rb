@@ -51,7 +51,6 @@ class Bibliography
     # Les options à appliquer
     # 
     options = {inline_format: true, leading: leading}
-    puts "\noptions pour biblio : #{options.inspect}".bleu
     #
     # Page de départ
     # 
