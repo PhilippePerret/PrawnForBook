@@ -118,6 +118,9 @@ MINI_AIDE = <<-TEXT
     Manuel PDF
     Ajouter '-dev' pour ouvrir la version markdown.
 
+#{'pfb install'.jaune}
+    Pour installer ou définir les snippets dans Sublime Text
+
 #{'pfb script'.jaune}
     Pour jouer un script (natif ou propre au livre/à la collection)
     On peut utiliser 
