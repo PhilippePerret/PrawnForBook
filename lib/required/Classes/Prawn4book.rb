@@ -1,6 +1,12 @@
+require_relative '../Divers/constants'
+
 module Prawn4book
 
-  VERSION = '1.0.0'
+  NAME = 'Prawn-For-Book'
+  
+  VERSION = begin
+    File.read(File.join(APP_FOLDER,'VERSION'))
+  end
       
   def self.run
     begin

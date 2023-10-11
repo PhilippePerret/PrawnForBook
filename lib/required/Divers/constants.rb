@@ -1,6 +1,3 @@
-require_relative '../Classes/Prawn4book'
-
-
 # Nom de l'application dans laquelle ouvrir le texte seul pour
 # le corriger
 # @rappel
@@ -39,9 +36,10 @@ COMMAND_NAME = 'pfb'
 
 # @constantes
 # Chemins d'accès au manuel utilisateur
-USER_MANUAL_PATH = File.join(APP_FOLDER,'Manuel','Manuel.pdf')
+USER_MANUAL_PATH    = File.join(APP_FOLDER,'Manuel','Manuel.pdf')
 USER_MANUAL_MD_PATH = File.join(APP_FOLDER,'Manuel','Manuel.md')
-PRAWN_MANUEL_PATH = "/Users/philippeperret/Library/Mobile Documents/com~apple~CloudDocs/_AIDES_/Prawn/Official_manual.pdf"
+PRAWN_MANUEL_PATH   = File.join(APP_FOLDER,'Manuel','Prawn_manual.pdf')
+PRAWN_TABLE_MANUAL  = File.join(APP_FOLDER,'Manuel','Prawn_Table_manual.pdf')
 
 # --- Chargement de toutes les locales ---
 LANG = CLI.params[:lang] || 'fr'

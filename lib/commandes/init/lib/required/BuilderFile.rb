@@ -56,8 +56,7 @@ class BuilderFile < SimpleDelegator
 
   # Les variables se trouvent dans des %{...}
   def define_file_variables
-    puts "-> define_file_variables".jaune
-    sleep 1
+    sleep 0.3
     code = File.read(build_fpath)
     return if not(code.match?(REG_VARIABLE))
     code = code.gsub(REG_VARIABLE) do

@@ -20,8 +20,27 @@ class InitedThing
     },
     book_isbn: {
       value:nil, hname: "#{TERMS[:ISBN]} #{TERMS[:book_data]}", type:String, default:'null'
+    },
+    collection_name: {
+      value: nil
+    },
+    collection_editor: {
+      value: nil
     }
   }
+
+  # 
+  # Les data minimales quand on ne veut pas passer par les assistants
+  # 
+  DATA_MINI_COLLECTION = [
+    {q:'Titre de la collection',  k: :collection_name,    t: :string, required: true},
+    {q:'Directeur de collection', k: :collection_editor,  t: :string, required: true},
+  ]
+
+  DATA_MINI_BOOK = [
+    {q: 'Titre du livre', k: :book_title,  t: :string, required: true},
+    {q:'Auteur du livre', k: :book_author, t: :string, required: true},
+  ]
 
   # = main =
   # 
@@ -93,7 +112,15 @@ class InitedThing
         #  puisqu'elle l'est petit à petit)
         # 
         return false
-      when :finir, :later
+      when :later
+        #
+        # L'utilisateur veut définir les valeurs plus tard. Il faut
+        # quand même lui demander les données minimales pour faire
+        # le fichier recette
+        # 
+        define_data_mini
+        return true
+      when :finir
         # 
         # Pour en finir avec la définition du livre/de la collection
         # @note
@@ -210,6 +237,29 @@ class InitedThing
     recipe.insert_bloc_data('inserted_pages', cur_data)
   end
 
+
+  def define_data_mini
+    clear
+    puts "Il nous faut quand même des informations minimales".bleu
+    values = ask_for_or_default(book? ? DATA_MINI_BOOK : DATA_MINI_COLLECTION)
+    values.merge!(app_data)
+    values.merge!({
+      main_folder: folder
+    })
+    template_path = File.join(Prawn4book::templates_folder, "recipe_#{'collection_' unless book?}mini.yaml") 
+    File.write(recipe_path, File.read(template_path) % values)
+    # 
+    # On met les valeurs aussi dans BOOK_DATA, pour la suite
+    # 
+    [
+      :book_title, :book_author, 
+      :collection_name, :collection_editor,
+    ].each do |key|
+      BOOK_DATA[key][:value]  = values[key]
+    end
+
+  end
+
   # --- Generic Methods ---
 
   ##
@@ -285,14 +335,17 @@ class InitedThing
       return false if reponse == false
     end
     unless File.exist?(recipe_path)
-      minimal_data = {
-        app_name:     'prawn-for-book', 
-        app_version:  Prawn4book::VERSION,
-        created_at:   Time.now.jj_mm_aaaa
-      }
-      File.write(recipe_path, minimal_data.to_yaml)
+      File.write(recipe_path, app_data.to_yaml)
     end
     return true
+  end
+
+  def app_data
+    @app_data ||= {
+      app_name:     Prawn4book::NAME, 
+      app_version:  Prawn4book::VERSION,
+      created_at:   Time.now.strftime('%Y-%m-%d')
+    }
   end
 
   def confirm_create_recipe

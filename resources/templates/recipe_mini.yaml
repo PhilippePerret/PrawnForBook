@@ -1,0 +1,41 @@
+---
+#<app>
+app:
+  name:     %{app_name}
+  version:  %{app_version}
+#</app>
+# --- Infos sur le livre ---
+#<book_data>
+book_data:
+  created_at:    %{created_at}
+  book_title:    %{book_title}
+  book_subtitle: null
+  book_id:       null
+  auteurs:       %{book_author}
+  isbn:          null
+  publisher:
+    name:    null
+    adresse: null
+    site:      null
+    logo:      null
+    siret:     null
+    mail:      null
+    contact:   null
+#</book_data>
+main_folder: %{main_folder}
+text_path: true # true = texte.md ou texte.txt dans ce dossier
+infos:
+  display:     false
+  depot_bnf:   null
+  cover:       null
+  mep:         null
+  conception:  null
+  corrections: null
+  printer:     null
+
+#<inserted_pages>
+inserted_pages:
+  faux_titre: true
+  page_infos: false
+#</inserted_pages>
+

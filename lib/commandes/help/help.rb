@@ -7,6 +7,8 @@ class Command
       when 'manuel', 'manual', 'aide' then :open_user_manuel
       when 'manuel-prawn', 'prawn-manual', 'prawn-manuel'
         :open_prawn_manual
+      when 'manuel-prawn-table'
+        :open_prawn_table_manual
       else 
         # Note : les assistants passent aussi par ici
         # cf. ci-dessous
@@ -85,6 +87,9 @@ end #/Command
     end
   end
 
+  def self.open_prawn_table_manual
+    `open "#{PRAWN_TABLE_MANUAL}"`
+  end
 
 # @constant
 # Aide minimum qui s'affiche lorsque l'on met la

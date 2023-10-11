@@ -1,0 +1,38 @@
+---
+#<app>
+app:
+  name:     %{app_name}
+  version:  %{app_version}
+#</app>
+# --- Infos sur le livre ---
+#<collection_data>
+collection_data:
+  created_at:     %{created_at}
+  name:           %{book_title}
+  editor:         %{collection_editor}
+  publisher:
+    name:       null
+    adresse:    null
+    site:       null
+    logo:       null
+    siret:      null
+    mail:       null
+    contact:    null
+#</collection_data>
+main_folder:   %{main_folder}
+text_path: true
+infos:
+  display:     false
+  depot_bnf:   null
+  cover:       null
+  mep:         null
+  conception:  null
+  corrections: null
+  printer:     null
+
+#<inserted_pages>
+inserted_pages:
+  faux_titre: true
+  page_infos: false
+#</inserted_pages>
+

@@ -1,0 +1,42 @@
+---
+#<app>
+app:
+  name:     Prawn-For-Book
+  version:  1.1.0
+
+#</app>
+# --- Infos sur le livre ---
+#<book_data>
+book_data:
+  created_at:    2023-10-11
+  book_title:    Mon beau livre
+  book_subtitle: null
+  book_id:       null
+  auteurs:       Me MIMI
+  isbn:          null
+  publisher:
+    name:    null
+    adresse: null
+    site:      null
+    logo:      null
+    siret:     null
+    mail:      null
+    contact:   null
+#</book_data>
+main_folder: /Users/philippeperret/Programmes/Prawn4book/tmp/essais/pouressai
+text_path: true # true = texte.md ou texte.txt dans ce dossier
+infos:
+  display:     false
+  depot_bnf:   null
+  cover:       null
+  mep:         null
+  conception:  null
+  corrections: null
+  printer:     null
+
+#<inserted_pages>
+inserted_pages:
+  faux_titre: true
+  page_infos: false
+#</inserted_pages>
+
