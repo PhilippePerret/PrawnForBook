@@ -2,13 +2,13 @@
 
 # --- Infos sur le livre ---
 #<book_data>
-:book_title: %{thing_title}
+:book_title: %{book_title}
 :book_subtitle: |
-  %{subtitle}
+  %{book_subtitle}
 :collection: true     # true => dans une collection
-:book_id: %{thing_title}
-:auteurs: %{auteurs}
-:isbn:    %{isbn}
+:book_id: %{book_title}
+:auteurs: %{book_author}
+:isbn:    %{book_isbn}
 :publisher:
   :name:  "%{publisher_name}"
   :adresse: |

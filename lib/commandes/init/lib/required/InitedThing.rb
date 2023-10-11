@@ -33,43 +33,30 @@ class InitedThing
     # Fabrication des fichiers de base
     # 
     build_base_files    || return
+    #
+    # Confirmation/message final
+    # 
     confirmation_finale || return
   end
 
   def build_base_files
-    BuilderFile.new(self).build('texte.pfb.md') if book?
+    if book?
+      BuilderFile.new(self).build('texte.pfb.md') 
+      BuilderFile.new(self).build('Notes.md')
+    end
     BuilderFile.new(self).build('parser.rb')
     BuilderFile.new(self).build('formater.rb')
     BuilderFile.new(self).build('helpers.rb')
+    BuilderFile.new(self).build('snippets/exemple_snippet.sublime-snippet')
+
   end
 
   def confirmation_finale
-    puts "
-    À présent, vous pouvez :
-
-    1) rejoindre le dossier du livre avec 'cd #{File.basename(folder)}'
-
-    2) jouer ces commandes :
-    
-    #{'pfb open -e'.jaune}
-        pour ouvrir le dossier dans l'éditeur et modifier la
-        recette, les méthodes ou le texte
-
-    #{'pfb build -open'.jaune}
-        pour produire la première version du livre en PDF 
-        prêt à l'impression (et l'ouvrir pour le lire).
-        (vous pouvez même commencer directement par là pour
-        vous faire une idée...)
-
-    #{'pfb assistant'.jaune}
-        pour entrer toutes les données de façon assistée.
-        
-    ".bleu
-    
+    puts MESSAGES[:assistant][:confirmation_init] % {folder: File.basename(folder)}
   end
 
   def ask_for_open_folder
-    if Q.yes?("Dois-je ouvrir le dossier #{of_the_thing} dans l’éditeur ?".jaune)
+    if Q.yes?((PROMPTS[:Open_in_editor] % {folder:of_the_thing}).jaune)
       `subl -n "#{folder}"`
     end    
   end
@@ -79,53 +66,4 @@ class InitedThing
   end
 
 end #/class InitedThing
-
-class InitedBook < InitedThing
-  def thing; "book" end
-  def the_thing;"le livre" end
-  def a_thing;"un livre" end
-  def of_the_thing;"du livre" end
-  def collection?; false end
-  def book?; true end
-
-  # @return true si le livre est dans une collection
-  def in_collection?
-    File.exist?(File.join(File.dirname(folder),'recipe_collection.yaml'))
-  end
-
-  # @return le path à un fichier de la collection (si le livre
-  # appartient à une collection)
-  def collection_file(filename)
-    in_collection? && File.join(folder_collection, filename)
-  end
-  
-  # @prop Dossier de la collection (si le livre appartient à une
-  # collection)
-  def folder_collection
-    @folder_collection ||= begin
-      in_collection? && File.dirname(folder)
-    end
-  end
-  def recipe_name
-    @recipe_name ||= 'recipe.yaml' 
-  end
-end
-
-# 
-# Pour une collection
-# 
-class InitedCollection < InitedThing
-  def thing; "collection" end
-  def the_thing; "la collection" end
-  def a_thing; "une collection" end
-  def of_the_thing;"de la collection" end
-  def collection?; true end
-  def book?; false end
-  def in_collection?; false end
-  
-  def recipe_name
-    @recipe_name ||= 'recipe_collection.yaml' 
-  end
-end
-
 end #/module Prawn4book

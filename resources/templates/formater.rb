@@ -26,7 +26,7 @@ module BibliographyFormaterModule
 
   # # Par exemple, pour une bibliographie de balise 'film'
   # def biblio_film(film)
-  #   '%{title.upcase} de %{writers}, %{year}' % film.data
+  #   '% {title.upcase} de % {writers}, % {year}' % film.data
   # end
 
 end

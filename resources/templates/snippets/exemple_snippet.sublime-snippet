@@ -1,0 +1,11 @@
+<!-- 
+	Exemple de snippet
+	------------------
+	Lorsque l'on jouera 'Trig[TAB]' dans le texte du livre,
+	le texte "Texte de remplacement" sera inséré. 
+ -->
+<snippet>
+	<content><![CDATA[Texte de remplacement]]></content>
+	<tabTrigger>Trig</tabTrigger>
+	<scope>source.pfb</scope>
+</snippet>

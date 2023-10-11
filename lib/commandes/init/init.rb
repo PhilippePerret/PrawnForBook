@@ -18,11 +18,16 @@ class << self
   # l'assistant, mais il n'est pas tout à fait à jour.
   # 
   # @param cdata {Hash|Nil} Les données qui peuvent permettre de
-  # définir des premières chose sur le livre dont il faut définir ou
+  # définir des premières choses sur le livre dont il faut définir ou
   # redéfinir la recette.
   # 
   def init_new_book_or_collection(cdata = nil, force = false)
     clear
+
+    # - essai -
+    # InitedThing.new(nil,'mon/dossier').confirmation_finale
+    # return
+
     thing = choose_what
     this_thing = thing == :book ? 'ce livre' : 'cette collection'
     thing_name = Q.ask("Nom du dossier de #{this_thing} :".jaune) || return
@@ -45,7 +50,7 @@ class << self
   end
 
   def choose_what
-    Q.select("Que dois-je initier ?".jaune) do |q|
+    Q.select("Que dois-je initier dans ce dossier ?".jaune) do |q|
       q.choice 'Un livre', :book
       q.choice 'Une collection', :collection
       q.choice 'Renoncer', nil

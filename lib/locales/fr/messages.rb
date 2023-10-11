@@ -85,6 +85,34 @@ MESSAGES = {
 
     require_book_folder: "Cet assistant doit être appelé depuis le dossier d'un livre.",
 
+    confirmation_init: <<~EOT.bleu,
+      À présent, vous pouvez :
+
+      1) rejoindre le dossier du livre avec 'cd %{folder}'
+
+      2) jouer ces commandes :
+      
+      #{'pfb open -e'.jaune}
+          #{'pour'.bleu_} ouvrir le dossier dans l'éditeur et modifier la
+          recette, les méthodes ou le texte
+
+      #{'pfb build -open'.jaune}
+          #{'pour'.bleu_} produire la première version du livre en PDF 
+          prêt à l'impression (et l'ouvrir pour le lire).
+          (vous pouvez même commencer directement par là pour
+          vous faire une idée...)
+
+      #{'pfb assistant'.jaune}
+          #{'pour'.bleu_} entrer toutes les données de façon assistée.
+      
+      #{'pfb install'.jaune}
+          #{'pour'.bleu_} définir les snippets utilisables à la rédaction 
+          du livre.
+
+      #{''.bleu_}Vous pouvez également définir des SNIPPETS dans le dossier du
+      même nom.
+      EOT
+
   }, #/assistant
 
 

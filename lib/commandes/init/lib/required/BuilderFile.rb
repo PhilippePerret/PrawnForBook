@@ -38,6 +38,11 @@ class BuilderFile < SimpleDelegator
     # 
     create_build_file
 
+    #
+    # Régler les variables éventuelles
+    # 
+    define_file_variables if File.exist?(build_fpath)
+
     # 
     # Confirmer la création ou produire l'erreur
     # 
@@ -45,8 +50,31 @@ class BuilderFile < SimpleDelegator
   end
 
   def create_build_file
-    FileUtils.cp(template_for(build_fname), build_fpath)    
+    FileUtils.mkdir_p(File.dirname(build_fpath))
+    FileUtils.cp(template_for(build_fname), build_fpath)
   end
+
+  # Les variables se trouvent dans des %{...}
+  def define_file_variables
+    puts "-> define_file_variables".jaune
+    sleep 1
+    code = File.read(build_fpath)
+    return if not(code.match?(REG_VARIABLE))
+    code = code.gsub(REG_VARIABLE) do
+      key = $1.to_sym.freeze
+      BOOK_DATA.key?(key) || raise("Erreur systémique : la clé #{key} est inconnue des BOOK_DATA…")
+      data_key = BOOK_DATA[key]
+      data_key[:value] ||= begin
+        value = Q.ask("Valeur pour : #{data_key[:hname]} ?".jaune)
+        value = nil if value.to_s.strip.empty?
+        value ||= data_key[:default]
+      end
+      data_key[:value] # inscription dans le code
+    end
+    File.write(build_fpath, code)
+  end
+  REG_VARIABLE = /\%\{(.+?)\}/.freeze
+
 
   def confirm_create_build_file
     if File.exist?(build_fpath)

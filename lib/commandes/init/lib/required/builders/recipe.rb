@@ -4,6 +4,25 @@ class InitedThing
   require 'lib/required/utils/methods'
   include UtilsMethods
 
+  #
+  # Les variables qu'on peut trouver dans les fichiers templates et
+  # qu'on doit remplacer (en demandant si nécessaire leur valeur)
+  # 
+  BOOK_DATA = {
+    book_title: {
+      value: nil, hname: "#{TERMS[:Title]} #{TERMS[:book_data]}", type: String
+    },
+    book_author: {
+      value: nil, hname: "#{TERMS[:Authors]} #{TERMS[:book_data]}", type: String
+    },
+    book_subtitle:{
+      value:nil, hname: "#{TERMS[:Subtitle]} #{TERMS[:book_data]}", type:String
+    },
+    book_isbn: {
+      value:nil, hname: "#{TERMS[:ISBN]} #{TERMS[:book_data]}", type:String, default:'null'
+    }
+  }
+
   # = main =
   # 
   # CRÉATION DE LA RECETTE (livre ou collection)
@@ -47,6 +66,7 @@ class InitedThing
       @table_choix2index.merge!(dchoix[:value] => idx)
       dchoix.merge(defined: false)
     }
+    choices.unshift({name: Prawn4book::PROMPTS[:DefineLater].bleu , value: :later})
     choices.unshift(CHOIX_FINIR)
     choices.push(CHOIX_ABANDON)
 
@@ -73,7 +93,7 @@ class InitedThing
         #  puisqu'elle l'est petit à petit)
         # 
         return false
-      when :finir
+      when :finir, :later
         # 
         # Pour en finir avec la définition du livre/de la collection
         # @note
