@@ -23,6 +23,12 @@ ERRORS = {
   
   invalid_data: "La donnée %s de value %s est invalide.", 
 
+  # --- LE LIVRE ---
+
+  book: {
+    not_in_collection: 'Le livre « %{title} » n’appartient pas à une collection.',
+  },
+
   # --- FABRICATION DU LIVRE ---
 
   building: {
@@ -110,6 +116,14 @@ ERRORS = {
       ERR
   },
   
+  # --- COMMANDES ---
+
+  commands: {
+    open: {
+      dont_know_how_to: 'Je ne sais pas comment ouvrir %{ca}.'
+    },
+  },
+
   # --- Aide ---
 
   help: {

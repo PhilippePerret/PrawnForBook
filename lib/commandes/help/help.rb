@@ -139,10 +139,8 @@ MINI_AIDE = <<-TEXT
     courant.
 
 #{'pfb open'.jaune}
-    Ouvrir le fichier PDF du livre courant.
-
-#{'pfb open -e'.jaune}
-    Ouvrir le fichier texte du livre courant dans l'éditeur de texte (Sublime Text).
+    Ouvrir un élément quelconque, dossier du livre, de la collection,
+    manuel de Prawn-for-book, manuel de Prawn etc.
 
 #{'pfb aide fontes'.jaune}
     Assistant en ligne pour produire la donnée :fonts du 

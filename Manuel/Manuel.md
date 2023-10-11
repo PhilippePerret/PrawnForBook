@@ -188,6 +188,8 @@ Pour produire le fichier PDF qui servira à l'impression du livre, jouer la comm
 Pour ouvrir le document PDF à la fin de la fabrication, ajouter l'option `-open` à la commande `build`.
 <console>pfb build -open</console>
 
+> Il est également possible d’utiliser la commande <console>pfb open</console> et de choisir d’ouvrir le livre.
+
 ### Options de fabrication (travail du livre)
 
 Certaines options de la commande `build` permettent de définir les attributs du livre plus facilement (les marges, la grille de référence, etc.).
@@ -211,6 +213,21 @@ On peut ouvrir le PDF du livre dans Aperçu à l’aide de la commande :
 <console>pfb open book</console>
 
 > Note : on doit se trouver dans le dossier du livre.
+
+>  Il est également possible d’utiliser la commande <console>pfb open</console> et de choisir d’ouvrir le livre.
+
+---
+
+## Ouverture  d’un élément quelconque
+
+La commande <console>pfb open</console> permet d’ouvrir un grand nombre d’éléments, parmi lesquels :
+
+* le dossier d’un livre dans l’IDE ou dans le Finder,
+* le dossier d’une collection dans l’IDE ou dans le Finder
+* le package Sublime Text,
+* le manuel de Praw-for-Book, de Prawn ou de Prawn-Table,
+* le livre PDF,
+* etc.
 
 ---
 

@@ -69,14 +69,15 @@ class FatalPrawnForBookError < StandardError
     @errors_by_num ||= {
       # -- Base --
       1     => Prawn4book::ERRORS[:app][:require_a_book_or_collection],
+      # -- Book --
+      10    => Prawn4book::ERRORS[:book][:not_in_collection],
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
-      # -- Recette(s) ---
+      # -- Commandes (divers) --
+      300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
+      # -- Recette (voir aussi en 800) ---
       499   => Prawn4book::ERRORS[:recipe][:missing_even_default_data],
-      800   => Prawn4book::ERRORS[:recipe][:book_data][:require_title],
-      801   => Prawn4book::ERRORS[:recipe][:book_data][:require_author],
-      802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
       500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
       610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
       # -- Fontes --
@@ -91,6 +92,10 @@ class FatalPrawnForBookError < StandardError
       730   => Prawn4book::ERRORS[:biblio][:bibitem][:bad_arguments_count],
       731   => Prawn4book::ERRORS[:biblio][:bibitem][:bad_arguments_count_biblio],
       740   => Prawn4book::ERRORS[:biblio][:custom_format_method_error],
+      # -- Recette(s) ---
+      800   => Prawn4book::ERRORS[:recipe][:book_data][:require_title],
+      801   => Prawn4book::ERRORS[:recipe][:book_data][:require_author],
+      802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],

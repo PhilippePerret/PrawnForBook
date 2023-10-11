@@ -1,1 +1,1 @@
-# Notes sur le livre *Mon beau livre*
+# Notes sur le livre *Mon Beau Livre*
