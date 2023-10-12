@@ -107,6 +107,10 @@ class FatalPrawnForBookError < StandardError
       3000  => Prawn4book::ERRORS[:table][:can_not_fit],
       # -- Modules utilisateurs personnalisés --
       5000  => Prawn4book::ERRORS[:user_modules][:runtime_error],
+      5001  => Prawn4book::ERRORS[:user_modules][:unknown_objet],
+      5002  => Prawn4book::ERRORS[:user_modules][:unknown_method],
+      5003  => Prawn4book::ERRORS[:user_modules][:wrong_arguments_count],
+
     }
     @errors_by_num[err_id]
   end

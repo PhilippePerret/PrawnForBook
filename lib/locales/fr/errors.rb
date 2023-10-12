@@ -114,6 +114,25 @@ ERRORS = {
       Trace:
         %{trace}
       ERR
+    unknown_objet: <<~ERR,
+      Impossible d'exécuter '%{m}' car l'objet (ou la classe) défini 
+      par '%{o}' est inconnu de nos services…
+      Essayé en tant que :
+        Prawn4book::PdfBook::PFBCode.%{o}
+        Prawn4book::PdfBook::AnyParagraph.%{o}
+        Prawn4book.%{o}
+        PrawnHelpersMethods.%{o}
+        Class %{o}
+      ERR
+    unknown_method: <<~ERR,
+      Impossible d'exécuter '%{mi}' car la méthode #%{m} est
+      inconnue de %{o}.
+      Implémenter %{o}#%{m} si nécessaire.
+      ERR
+    wrong_arguments_count: <<~ERR,
+      La méthode '%{mi}' attend %{n} arguments. C'est un nombre
+      impossible. Elle devrait recevoir entre 0 et %{max} arguments.
+      ERR
   },
   
   # --- COMMANDES ---

@@ -1731,11 +1731,32 @@ Ces paragraphes-codes peuvent aussi définir du code personnalisé. Ils peuvent 
 
   Utiliser le module `ParserFormaterClass` dans `parser.rb` pour le définir.
 
-* le paragraphe code qui écrit un texte dans le livre,
+* le code-paragraphe qui écrit lui-même un texte dans le livre,
 
   Utiliser le module `ParserFormaterClass` dans `parser.rb` pour le définir.
+* le code-paragraphe qui fait appel à une méthode de classe définie dans le livre. Par exemple :
 
-* le paragraphe code qui ne produit aucun texte mais reçoit une donnée utile pour la suite.
+  ~~~markdown
+  C'est un paragraphe de texte.
+  (( MaClass.ma_methode(param1) ))
+  ~~~
+
+  Cette classe et cette méthode peuvent être définie n’importe où, mais dans le module `Prawn4book` (je ne crois même pas que ce soit nécessaire…). Par exemple :
+
+  ~~~ruby
+  module Prawn4book
+    class MaClass
+      def self.ma_methode(param1, pdf, book)
+        # ... le travail ici ...
+        pdf.text "blablabal"
+      end
+    end
+  end
+  ~~~
+
+  > La méthode peut recevoir autant d’arguments que l’on veut. Ci-dessus, elle pourrait par exemple ne recevoir que `param1`, ou seulement `param1` et `pdf`. C’est son nombre de paramètres qui détermine le nombre d’arguments envoyés.
+
+* le code-paragraphe code qui ne produit aucun texte mais reçoit une donnée utile pour la suite.
 
   Utiliser le module `Prawn4book` dans `prawn4book.rb` pour le définir en tant que méthode de classe.
 

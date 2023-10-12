@@ -106,6 +106,8 @@ class PFBCode < AnyParagraph
     # -- Exposer (pour les méthodes) --
     @pdf      = pdf
     @pdfbook  = pdfbook
+    # -- Pour l'erreur --
+    methode_ini = methode.dup.freeze
     #
     # Numéro de page au départ
     # 
@@ -123,8 +125,10 @@ class PFBCode < AnyParagraph
           objet = Prawn4book.send(objet)
         elsif PrawnHelpersMethods.respond_to?(objet)
           objet = PrawnHelpersMethods.send(objet)
+        elsif defined?(eval(objet.to_s))
+          objet = eval(objet.to_s)
         else
-          raise "Aucun objet ne répond à #{methode.inspect}…"
+          raise FatalPrawnForBookError.new(5001, {o: objet.to_s, m: methode_ini})
         end
         # 
         # Cet objet connait-il la méthode +methode+ ?
@@ -144,10 +148,10 @@ class PFBCode < AnyParagraph
             params << self
             objet.send(methode, *params)
           else
-            raise "Nombre de paramètres incorrects."
+            raise FatalPrawnForBookError.new(5003, {n:params_count, max:params_count+2, c: methode_ini})
           end
         else
-          raise 'méthode inconnue'
+          raise FatalPrawnForBookError.new(5002, {o: objet.to_s, m:methode, c: methode_ini})
         end
         return
       end
