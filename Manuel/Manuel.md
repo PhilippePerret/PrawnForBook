@@ -3935,6 +3935,43 @@ bonjour = ARGV[2]
 
 ## Annexe
 
+### Gestion des erreurs
+
+On peut définir de nouvelles erreurs fatales grâce à la méthode :
+
+~~~ruby
+Prawn4book::FatalPrawnForBookError.add_errors(...)
+~~~
+
+Cette méthode attend soit deux arguments lorsqu'il n'y a qu'une seule erreur à définir :
+
+~~~ruby
+Prawn4book::FatalPrawnForBookError.add_errors(err_num, err_message)
+~~~
+
+… soit une table pour en définir plusieurs d'un coup :
+
+~~~ruby
+Prawn4book::FatalPrawnForBookError.add_errors({
+		err_num => err_message,
+		err_num2 => err_message2,
+		err_num3 => err_message3,
+		etc.
+	})
+~~~
+
+Le numéro de l'erreur doit obligatoirement se situer entre 20 000 et 30 000, sinon une erreur fatale est levé.
+
+Pour utiliser cette erreur, il suffit d'utiliser le code :
+
+~~~ruby
+raise FatalPrawnForBookError.new(<err_num>, {<temp values>})
+~~~
+
+> Les « temp values » sont définies normalement, dans des `%{...}`
+
+---
+
 <a name="passes"></a>
 
 ### Passes de construction sur le livre

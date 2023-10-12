@@ -189,6 +189,8 @@ class PFBCode < AnyParagraph
       else
         raise 'méthode inconnue'
       end
+    rescue FatalPrawnForBookError => e
+      raise e
     rescue Exception => e
       if e.message == 'méthode inconnue'
         raise FatalPrawnForBookError.new(1002, {code:raw_code, meth: methode})

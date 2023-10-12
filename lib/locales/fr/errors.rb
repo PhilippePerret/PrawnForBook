@@ -13,6 +13,14 @@ ERRORS = {
       ERR
   },
 
+  errors: {
+    bad_custom_errid: <<~ERR,
+      Le numéro d'erreur %{n} n'est pas valide. Il est déjà utilisé.
+      Par mesure de prudence, il vaut mieux utiliser les numéros 
+      de 20 000 à 30 000 (avouez qu'il y a de quoi faire…).
+      ERR
+  },
+
   unfound_folder: "Le dossier '%s' est introuvable…",
   prawn_manual_unfound: "Le manuel de Prawn est introuvable. Il vous faut définir son chemin d'accès dans le fichier ./lib/constants.rb dans la constante PRAWN_MANUEL_PATH.",
 
@@ -125,12 +133,12 @@ ERRORS = {
         Class %{o}
       ERR
     unknown_method: <<~ERR,
-      Impossible d'exécuter '%{mi}' car la méthode #%{m} est
+      Impossible d'exécuter '%{c}' car la méthode #%{m} est
       inconnue de %{o}.
       Implémenter %{o}#%{m} si nécessaire.
       ERR
     wrong_arguments_count: <<~ERR,
-      La méthode '%{mi}' attend %{n} arguments. C'est un nombre
+      La méthode '%{c}' attend %{n} arguments. C'est un nombre
       impossible. Elle devrait recevoir entre 0 et %{max} arguments.
       ERR
   },

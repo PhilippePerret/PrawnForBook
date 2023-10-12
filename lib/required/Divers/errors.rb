@@ -14,7 +14,7 @@ class FatalPrawnForBookError < StandardError
   end
 
   def build_message(err_id, temp_data)
-    err = error_by_num(err_id)
+    err = self.class.error_by_num(err_id)
     err = err % temp_data unless temp_data.nil?
     err = "[#{err_id}] #{err}"
     return err
@@ -65,10 +65,11 @@ class FatalPrawnForBookError < StandardError
   end
 
   # Numéros d'erreurs à utiliser avec FatalPrawnForBookError.new(<num err>, <data>)
-  def error_by_num(err_id)
-    @errors_by_num ||= {
+  def self.error_by_num(err_id)
+    @@error_by_num ||= {
       # -- Base --
       1     => Prawn4book::ERRORS[:app][:require_a_book_or_collection],
+      2     => Prawn4book::ERRORS[:errors][:bad_custom_errid],
       # -- Book --
       10    => Prawn4book::ERRORS[:book][:not_in_collection],
       # -- Paragraphes --
@@ -110,9 +111,28 @@ class FatalPrawnForBookError < StandardError
       5001  => Prawn4book::ERRORS[:user_modules][:unknown_objet],
       5002  => Prawn4book::ERRORS[:user_modules][:unknown_method],
       5003  => Prawn4book::ERRORS[:user_modules][:wrong_arguments_count],
-
+      # 
+      # 20 000 à 30 000 : réservés au livre/collection
     }
-    @errors_by_num[err_id]
+    @@error_by_num[err_id]
+  end
+
+  # Pour ajouter des erreurs, soit avec un Hash, soit une seule 
+  # erreur.
+  def self.add_errors(key, message = nil)
+    if not(key.is_a?(Hash))
+      key = {key => message}
+    end
+    key.each do |k, msg|
+      if error_by_num(k) 
+        raise new(2, {n: k.to_s})
+      else
+        @@error_by_num.merge!(k => msg)
+      end
+    end
+  end
+  class << self
+    alias :add_error :add_errors
   end
 
 end
