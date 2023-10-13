@@ -7,4 +7,8 @@ class TemplateTest < Minitest::Test
     assert_silent { produce_book('books/simples/titres') }
   end
 
+  def test_document_printer
+    assert_silent { produce_book('books/printer') }
+  end
+  
 end

@@ -711,6 +711,11 @@ Il existe deux manières de le faire :
   end
   ~~~
   
+  > Pour mettre en forme, on dispose plusieurs outils dont :
+  >
+  > * [les tables](#tables)
+  > * [les Printer](#printer).
+  
 * la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. 
 
   > Noter qu’on peut aussi [utiliser la puissance des tables](#table-pour-paragraphes) pour mettre en forme de façon très précise les paragraphes.
@@ -930,6 +935,89 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 | width_space | Quantité d’espace horizontal que l’image doit couvrir, en pourcentage. `100%` signifie que l’image doit couvrir toute la largeur de la page même les marges. | Pourcentage                |
 | TODO        |                                                              |                            |
 
+---
+
+<a name="printer"></a>
+
+### PRINTER [Expert]
+
+Les *Printers* (*Imprimantes*, prononcer « prinneteur ») sont des outils pratiques pour mettre en forme le texte et ont l'avantage de mieux gérer les [grilles de référence][] que les [tables](#tables). Ils nécessitent une connaissance du langage [Ruby](https://www.ruby-lang.org/fr/). Ils permettent principalement d’afficher des données, sur plusieurs colonnes.
+
+~~~ruby
+# On commence par instancier un nouveau printer
+# en lui transmettant le Prawn4book::PrawnView du
+# livre en construction.
+printer = Prawn4book::Printer.new(pdf)
+# On écrit un titre
+printer.title("Mon titre d'imprimante")
+# On écrit une ligne qui va commencer par un tiret
+printer.list_item("C'est comme un item de liste")
+# On peut choisir autre chose qu'un tiret
+printer.list_item("C'est un autre item de liste", **{bullet: :hyphen}) # [1]
+~~~
+
+> **[1]**
+> 
+> Voir les différents [types de puces](#bullet-types).
+
+
+
+Une imprimante fonctionne à l’aide de « taquets de tabulation », de « tab stops » en anglais, qui permettent de défini la largeur des « colonnes virtuelles » qui seront utilisées. Elles ont une valeur par défaut mais on peut les redéfinir à l’aide de la commande `tabs` ou de la données `tabs` à l’instanciation :
+
+~~~ruby
+# Définition des taquets de tabulation à l'instanciation
+pr = Printer.new(pdf, **{tabs: [100, nil, 50]})
+
+# Définition par la méthode
+pr = Printer.new(pdf)
+pr.tabs = [100, nil, 50]
+~~~
+
+> On peut visualiser les colonnes en ajoutant l'option `setup` à true :
+> ~~~ruby
+> pr = Printer.new(pdf, **{setup: true})
+> ~~~
+> (qu'il faut bien sûr retirer ensuite pour ne pas imprimer les fonds de colonnes virtuelles)
+
+<a name="printer-line-types"></a>
+
+#### Types de lignes
+
+Une façon de bien voir comment seront affichées les données consiste à utiliser des `x` pour désigner les colonnes remplies et leur largeur, des `x` pour séparer ces colonnes et des `b` pour indiquer qu'il faut une puce (« bullet » en anglais).
+
+> Par défaut, un *Printer* possède trois colonnes virtuelles, dont la première, étroite, permet d’afficher une puce.
+
+Lorsque la méthode commence par `b`, c'est qu'une puce doit être utilisée. Si on veut par exemple une puce et un texte qui s'étire sur toutes les « colonnes virtuelles », on utilise : 
+
+~~~ruby
+printer.title("Un titre plus gros que le reste")
+printer.bxx("Mon item sur 2 colonnes avec une puce")
+printer.bx("La même chose, peu importe le nombre de colonnes")
+printer._x("Sur toutes les colonnes sauf la première, sans puce")
+# Ci-dessus, c'est en fait un paragraphe décalé vers la droite
+printer.bx_("Mon item sur 1 colonnes avec puce, la troisième vide", **{bullet: :square})
+printer.bx_x(["Premier après puce", "Deuxième sur les deux dernières"])
+printer._x_x(["Première sans puce", "Deuxième"])
+# Ci-dessus, c'est une ligne appelée "label-value", qui permet de 
+# présenter un label et sa valeur.taniagoonette@gmail.com
+~~~
+
+> Bien noter que `_` ne signifie pas de laisser une colonne vide, mais d'utiliser deux colonnes. Pour une colonne vide, il faut envoyer la valeur « espace insécable ».
+
+<a name="bullet-types"></a>
+
+#### Type de puce
+
+~~~
+Tiret  				:hyphen
+Puce ronde  	:bullet
+Puce carrée 	:square
+Doigt pointé  :finger
+Losange 			:losange
+Custom puce 	path/to/puce/personnalisées.jpg
+Ou le caractère lui-même, par exemple {bullet: '---'}
+~~~
+
 
 
 ---
@@ -938,11 +1026,11 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 
 ### TABLES
 
-Les tables sont certainement le meilleur moyen de formater des paragraphes de façon particulière sans trop de complexité/difficulté. Par exemple, si l’on désire une boite de cadre avec un fond de couleur particulière, utiliser une table se révèle beaucoup plus pratique et flexible que toute autre solution qui utiliserait les propriétés des `bounding_box`(es) de `Prawn`, par exemple.
+Les tables sont un excellent moyen de formater des paragraphes de façon particulière sans trop de complexité/difficulté. Par exemple, si l’on désire une boite de cadre avec un fond de couleur particulière, utiliser une table se révèle beaucoup plus pratique et flexible que toute autre solution qui utiliserait les propriétés des `bounding_box`(es) de `Prawn`, par exemple.
 
 > <font color="red"><b>Mais</b></font> : il faut tout de suite être informé que les lignes de référence sur lesquelles le texte doit se poser pour un livre à l’impression professionnelle seront plus difficilement gérées, voir rédhibitoire si la table contient de nombreuses rangées (> 3). Dans ce cas, il faut souvent ajouter des `pdf.move_up` ou `pdf.move_down`, avant la table, pour ajuster les valeurs.
 >
-> Il vaut mieux, dans ce cas, faire appel au [déplacement du texte dans la page](#hoffset-paragraph) qui permet, pour un moindre effort (mais en mode expert de ruby et de Prawn), de placer correctement le texte tout en conservant une gestion naturelle des lignes de référence.
+> Il vaut mieux, dans ce cas, faire appel au [déplacement du texte dans la page](#hoffset-paragraph) qui permet, pour un moindre effort (mais en mode expert de ruby et de Prawn), de placer correctement le texte tout en conservant une gestion naturelle des lignes de référence ou, en mieux, d’un [Printer](#printer).
 
 Notez que dans ce cas, une table se réduit très souvent à définir une classe de table et mettre le texte entre traits droits, de cette manière :
 
@@ -3321,7 +3409,7 @@ book_format:
 >
 > **[4]**
 >
-> **`line_height`** est un paramètre particulièrement important puisqu’il détermine la [grille de référence](#reference-grid) du livre qui permet d’aligner toutes les lignes, comme dans tout livre imprimé digne de ce nom.
+> **`line_height`** est un paramètre particulièrement important puisqu’il détermine la [grille de référence][] du livre qui permet d’aligner toutes les lignes, comme dans tout livre imprimé digne de ce nom.
 >
 > **[5]**
 >
@@ -4265,3 +4353,5 @@ Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text*
 [recette du livre ou de la collection]: #recipe
 [points-pdf]: #points-pdf
 [fichier `helper.rb`]: 
+[grille de référence]: #reference-grid
+[grilles de référence]: #reference-grid

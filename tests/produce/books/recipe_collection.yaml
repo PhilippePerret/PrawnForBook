@@ -1,4 +1,10 @@
 ---
+#<collection_data>
+collection_data:
+  name: "La collection"
+  editor: "Le Directeur de collection"
+#</collection_data>
+
 #<book_format>
 # book_format:
 #   book:

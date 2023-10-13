@@ -21,6 +21,10 @@ task :test_p do
   class PdfNotMatchError < StandardError; end
 
   files_list = Dir.glob("#{__dir__}/tests/produce/{collections,books}/**/recipe.{yml,yaml}")
+  filtre = ENV['TEST']
+  if filtre
+    files_list.select! { |pth| pth.match?(filtre) }
+  end
   clear
   ENV['TEST'] = "true"
   puts "Nombre de livres à fabriquer : #{files_list.count}".bleu

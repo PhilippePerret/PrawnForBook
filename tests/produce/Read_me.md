@@ -13,7 +13,7 @@ rake test_p
 Pour filtrer les tests "produce" :
 
 ~~~
-rake test_produce TEST=/bout_de_nom/
+rake test_p TEST=/bout_de_nom/
 ~~~
 
 > Tous les dossiers et tous les fichiers qui contiendront "bout_de_nom" dans leur nom seront joués.
@@ -44,6 +44,8 @@ J'appelle "Tests produce" les tests qui fonctionnent en comparant un document PD
       assert_silent { produce_book("books/to/my/new/book", **{keep:true}) }
     end
   ~~~
+
+  > On peut mettre ce code dans un fichier test déjà initié, par exemple `produce/exemple_test.rb`.
 
 * lancer le test une première fois
 

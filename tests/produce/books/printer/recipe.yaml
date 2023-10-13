@@ -1,0 +1,8 @@
+---
+#<book_data>
+book_data:
+  title: "Pour essai du printer"
+  auteur: "Philippe PERRET"
+#</book_data>
+test:
+  hash_ruby: "a67d3c2343d5ee9efa64b6713c225a68d8abe7e68d6df48047ce22704def4d530fd3c891cef36d55774639f9753f44c7bbf22eee4c0293255ad1835156315358"

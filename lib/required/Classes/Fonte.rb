@@ -29,6 +29,28 @@ def initialize(name:, style:, size:, hname: '')
   @leadings = {}
 end
 
+def reset
+  @leadings = {}
+end
+
+# -- Méthodes pour forcer des changements --
+def name=(value)
+  @name = value
+  reset
+end
+def size=(value)
+  @size = value
+  reset
+end
+def style=(value)
+  @style = value
+  reset
+end
+def hname=(value)
+  @hname = value
+  reset
+end
+
 # Leading à utiliser en fonction de la fonte et de la hauteur de
 # ligne courante. Sans argument, on retourne le leading qui a dû être
 # calculé avant. Avec les arguments, on le calcule.
@@ -102,6 +124,11 @@ class << self
   # 
   attr_accessor :default
 
+  # Pour retourner une copie de la fonte par défaut (pour ne pas la
+  # toucher)
+  def dup_default
+    new(name:default.name, size:default.size, style:default.style)
+  end
 
   # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
   # de titre +level+
