@@ -6,7 +6,32 @@
 module Prawn4book
 class Printer
 
+  # --- CLASS Prawn4book::Printer --- #
+
   class << self
+
+    # -- Registration --
+
+    # Enregistrer un Printer
+    # 
+    def register(printer, name)
+      printer.is_a?(Printer) || raise("Il faut fournir un Printer en premier argument !")
+      @printers ||= {}
+      if @printers[name]
+        raise "Le printer de nom #{name.inspect} existe déjà !"
+      end
+      @printers.merge!(name => printer)
+    end
+
+    # Récupérer un Printer registré
+    # 
+    def get(name)
+      @printers ||= {}
+      @printers[name] || raise("Le printer #{name.inspect} est inconnu.")
+    end
+
+    # -- Définition des fontes --
+
     def valueFonte
       @value_fonte ||= Fonte.default
     end
@@ -26,6 +51,9 @@ class Printer
       @title_fonte = value
     end
   end #/<< self
+
+
+  # --- INSTANCE Prawn4book::Printer --- #
 
   attr_reader :pdf, :options
 
@@ -57,10 +85,13 @@ class Printer
   def bx(content, **suboptions)
     me = my = self
     myclass = my.class
-    fonte   = suboptions[:font] || Fonte.dup_default
+    # -- Fonte à utiliser --
     if suboptions[:size]
+      fonte = suboptions[:font] || Fonte.dup(valueFonte) || Fonte.dup_default
       # -- Modification de la taille de la police --
       fonte.size = suboptions[:size]
+    else
+      fonte = suboptions[:font] || valueFonte || Fonte.default
     end
     puce = get_bullet_from(suboptions[:bullet])
     pdf.update do
@@ -68,7 +99,11 @@ class Printer
       move_cursor_to_next_reference_line
       float do
         font(fonte) do
-          text(puce, **{inline_format: true})
+          if puce.is_a?(Proc) # quand image
+            puce.call
+          else
+            text(puce, **{inline_format: true})
+          end
         end
       end
       span(bounds.width - my.bulcol_width, position: my.bulcol_width) do
@@ -105,57 +140,97 @@ class Printer
     me = my = self
     myclass = me.class
     # - Police à utiliser -
-    fontValue   = suboptions[:value_fonte] || options[:value_fonte] || myclass.valueFonte
-    labelFonte  = suboptions[:label_fonte] || options[:label_fonte] || myclass.labelFonte
+    fontValue = suboptions[:value_fonte] || options[:value_fonte] || valueFonte
+    fontLabel = suboptions[:label_fonte] || options[:label_fonte] || labelFonte
     # - Inscription -
     # TODO: En fait, il faudrait regarder quelle est la plus longue
     # valeur, entre le label et le value, et mettre la plus courte
     # dans le float.
 
-
     puce = get_bullet_from(suboptions[:bullet])
-    procBullet = Proc.new do |pdf|
-      pdf.text(puce, **{inline_format: true})
-    end
-
-    procValue = Proc.new do |pdf|
-      pdf.span(pdf.bounds.width - (my.labcol_width+my.bulcol_width), position: my.labcol_width + my.bulcol_width) do
-        pdf.font(fontValue) do
-          leading = pdf.leading_for(fontValue, pdf.line_height)
-          pdf.text(value, **{inline_format:true, leading: leading})
-        end
-      end
-    end
-
-    procLabel = Proc.new do |pdf|
-      pdf.span(my.labcol_width, position: my.bulcol_width) do
-        pdf.font(labelFonte) do
-          leading = pdf.leading_for(labelFonte, pdf.line_height)
-          pdf.text(label, **{inline_format:true, leading: leading})
-        end
-      end
-    end
 
     pdf.update do
+      # -- On se place sur la prochaine ligne de référence --
       move_cursor_to_next_reference_line
+      # -- On mémorise la position actuelle du curseur --
       current_cursor = cursor.freeze
-      # if label.length > value.length
-        # - Quand le label est plus long que la valeur -
-        # float { procBullet.call(self); procValue.call(self) }
-        procBullet.call(self)
-        move_cursor_to(current_cursor)
-        procValue.call(self)
-        move_cursor_to(current_cursor)
-        procLabel.call(self)
-      # else
-      #   procBullet.call(self); procLabel.call(self) }
-      #   procValue.call(self)
-      # end
-    end
-  end
+      
+      # -- Dans tous les cas, on écrit la puce, même si elle est vide
+      float do
+        if puce.is_a?(Proc) # image
+          puce.call
+        else
+          text(puce, **{inline_format: true})
+        end
+      end
 
-  def separator
-    pdf.move_down(pdf.line_height) # tout simplement
+      # -- LE LABEL (en prenant sa hauteur) --
+      label_height = nil
+      span(my.labcol_width, position: my.bulcol_width) do
+        font(fontLabel) do
+          leading = leading_for(fontLabel, line_height)
+          text(label, **{inline_format:true, leading: leading})
+          label_height = height_of(label, **{inline_format:true, leading:leading})
+        end
+      end
+
+      # -- LA VALEUR (en prenant sa hauteur) --
+      move_cursor_to(current_cursor)
+      value_height = nil
+      span(bounds.width - (my.labcol_width+my.bulcol_width), position: my.labcol_width + my.bulcol_width) do
+        font(fontValue) do
+          leading = leading_for(fontValue, line_height)
+          text(value, **{inline_format:true, leading: leading})
+          value_height = height_of(value, **{inline_format:true, leading:leading})
+        end
+      end
+
+      # -- On se déplace au plus bas --
+      height = [label_height,value_height].max
+      move_cursor_to(current_cursor - height)
+
+    end#/pdf.update
+  end
+  #/ bx_x
+
+  def separator(**params)
+    # -- Defaultize parameters --
+    params.key?(:color)     || params.merge!(color: '555555')
+    params.key?(:thickness) || params.merge!(thickness: 0.3)
+    if params.key?(:width)
+      w = params[:width]
+      if w.is_a?(String) && w.end_with?('%')
+        w = (w[0...-1].to_f / 100).to_f * pdf.bounds.width
+      end
+      if w.is_a?(Numeric)
+        lf = (pdf.bounds.width - w) / 2
+        params.merge!({right: lf + w})
+        params.merge!(left: lf) unless params[:left]
+      else
+        raise "Je ne sais pas comment traiter la largeur #{w.inspect}. Il faut soit un nombre (<= #{pdf.bounds.width}) soit un pourcentage (<= '100%')."
+      end
+    else
+      params.merge!(right: pdf.bounds.width)
+      params.merge!(left: 0) unless params.key?(:left)
+    end
+    # -- Draw the separator --
+    pdf.update do
+      # -- Récupération des valeurs actuelles --
+      context_color     = stroke_color
+      context_thickness = self.line_width
+      # -- Affectation des nouvelles valeurs --
+      self.line_width = params[:thickness]
+      stroke_color params[:color]
+      # -- Dessin de la ligne --
+      move_down(line_height / 3)
+      stroke do 
+        horizontal_line(params[:left], params[:right])
+      end
+      move_down(2 * line_height / 3)
+      # -- Réaffection des anciennes valeurs --
+      stroke_color(context_color)
+      self.line_width(context_thickness)
+    end
   end
 
 
@@ -171,6 +246,27 @@ class Printer
 
   # -- Data --
 
+  # Retourne la largeur de la colonne d'index +idx+
+  def tab(idx)
+    options[:tabs][idx]
+  end
+
+  # @return [Numeric] La largeur de la colonne d'index +idx+ 
+  # (0-start)
+  def col_width(idx)
+    options[:tabs][idx]    
+  end
+
+  def titleFonte
+    @titleFonte || self.class.titleFonte
+  end
+  def labelFonte
+    @labelFonte || self.class.labelFonte
+  end
+  def valueFonte
+    @valueFonte || self.class.valueFonte
+  end
+
   # @return La puce à utiliser
   def bullet
     options[:bullet]
@@ -182,10 +278,11 @@ class Printer
   # qui définit chaque valeur : [20, 50, 200]
   # Soit avec un Hash qui ne définit que certaines colonnes :
   # {1 => 150, 3 => 20}
+  # (noter qu'en clé, c'est l'indice 1-start de la colonne) 
   def tabs=(values)
     if values.is_a?(Hash)
       values.each do |col, width|
-        options[:tabs][col] = width
+        options[:tabs][col - 1] = width
       end
     else
       options.merge!(tabs: values)
@@ -196,6 +293,13 @@ class Printer
     options.merge!(setup: value)
   end
 
+  def titleFonte=(value); @titleFonte = value end
+  def labelFonte=(value); @labelFonte = value end
+  def valueFonte=(value); @valueFonte = value end
+
+  def book
+    pdf.pdfbook
+  end
 
   private
 
@@ -207,7 +311,17 @@ class Printer
       when :losange then '<font name="PictoPhil">L</font>'
       when :empty_losange then '<font name="PictoPhil">M</font>'
       when :finger  then '☞'
-      else value
+      else
+        if value.match?(/(png|jpg|jpeg|tiff|svg)$/i.freeze)
+          # - Une image personnalisée -
+          img_path = book.existing_path(value)
+          Proc.new do 
+            pdf.image(img_path, **{width: col_width(0) - 2})
+          end
+        else
+          # - tel quel -
+          value
+        end
       end      
     end
 

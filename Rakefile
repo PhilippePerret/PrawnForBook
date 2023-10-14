@@ -35,8 +35,7 @@ task :test_p do
       produce_book(book_rpath)
       puts "\r👍 Le livre #{book_rpath} est conforme à ce qui est attendu".vert
     rescue PdfNotMatchError => e
-      puts "\r👎 Problème avec le livre #{book_rpath}".rouge
-      puts " "*20 + "\n"
+      puts "\r👎 Problème avec le livre #{book_rpath}#{" "*20}\n".rouge
       puts e.message.rouge
     rescue Exception => e
       puts " "*20 + "\n"

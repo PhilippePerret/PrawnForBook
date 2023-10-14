@@ -130,6 +130,12 @@ class << self
     new(name:default.name, size:default.size, style:default.style)
   end
 
+  # Pour dupliquer une police quelconque
+  # 
+  def dup(fonte)
+    new(name:fonte.name.dup, size:fonte.size.dup, style: fonte.style.dup)
+  end
+
   # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
   # de titre +level+
   def title(level)

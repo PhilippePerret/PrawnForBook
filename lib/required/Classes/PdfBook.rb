@@ -32,6 +32,33 @@ class PdfBook
   # --- Helpers Methods ---
 
 
+  # --- Usefull Methods ---
+
+  # @api
+  # 
+  # Retourne le chemin d'accès complet quand on fournit +rpath+ qui
+  # peut être :
+  #   - un chemin d'accès déjà complet
+  #   - un chemin d'accès relatif à la collection (si collection)
+  #   - un chemin d'accès relatif au livre
+  # 
+  def existing_path(rpath)
+    rpath = File.expand_path(rpath)
+    return rpath if File.exist?(rpath)
+    if in_collection? && (fpath = exist?([collection.folder, rpath]))
+      return fpath
+    elsif (fpath = exist?([folder,rpath]))
+      return fpath
+    else
+      nil
+    end
+  end
+
+  def exist?(args)
+    f = File.join(*args)
+    return f if File.exist?(f)
+  end
+
   # --- Objects Methods ---
 
   def font_or_default(font_name)

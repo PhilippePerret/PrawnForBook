@@ -971,6 +971,10 @@ pr = Printer.new(pdf, **{tabs: [100, nil, 50]})
 # Définition par la méthode
 pr = Printer.new(pdf)
 pr.tabs = [100, nil, 50]
+
+# Ou :
+
+pr.tabs = {1 => 100, 3 => 50}
 ~~~
 
 > On peut visualiser les colonnes en ajoutant l'option `setup` à true :
@@ -985,7 +989,7 @@ pr.tabs = [100, nil, 50]
 
 Une façon de bien voir comment seront affichées les données consiste à utiliser des `x` pour désigner les colonnes remplies et leur largeur, des `x` pour séparer ces colonnes et des `b` pour indiquer qu'il faut une puce (« bullet » en anglais).
 
-> Par défaut, un *Printer* possède trois colonnes virtuelles, dont la première, étroite, permet d’afficher une puce.
+> Pour le moment, un *Printer* possède seulement trois colonnes virtuelles, dont la première, étroite, permet d’afficher une puce. À l’avenir on pourra imaginer en avoir plus.
 
 Lorsque la méthode commence par `b`, c'est qu'une puce doit être utilisée. Si on veut par exemple une puce et un texte qui s'étire sur toutes les « colonnes virtuelles », on utilise : 
 
@@ -1004,6 +1008,46 @@ printer._x_x(["Première sans puce", "Deuxième"])
 
 > Bien noter que `_` ne signifie pas de laisser une colonne vide, mais d'utiliser deux colonnes. Pour une colonne vide, il faut envoyer la valeur « espace insécable ».
 
+##### Ligne de séparation
+
+Pour ajouter une ligne de séparation entre des données, on peut utiliser : 
+
+~~~ruby
+printer.separator
+
+# On peut ajouter la taille verticale et horizontale et la couleur  :
+
+printer.separator(width: '50%', thickness: 4, color: 'EEEEEE'}) 
+~~~
+
+> Noter que la ligne de séparation est toujours centrée par défaut. On peut néanmoins la déplacer en définissant le paramètre `:left` (déconseillé esthétiquement)
+
+#### Déterminer les polices et tailles
+
+On peut définir les polices et les tailles à utiliser à l’aide des méthodes :
+
+~~~ruby
+printer.titleFonte = <fonte complète pour les titres>
+printer.labelFonte = <fonte pour le libellé (deuxième colonne)>
+printer.valueFonte = <font pour la valeur (3e colonne)>
+~~~
+
+Par exemple :
+
+~~~ruby
+printer.titleFonte = Fonte.new(name:'Garamond', style: :normal, size: 13)
+~~~
+
+>  Noter que cette définition n’affecte que  le « printer » courant. Pour affecter tous les printers du livre par défaut, il faut affecter les valeurs de classe, et donc utiliser :
+>
+> ~~~ruby
+> Prawn4book::Printer.titleFonte = <fonte>
+> Prawn4book::Printer.labelFonte = <fonte>
+> Prawn4book::Printer.valueFonte = <fonte>
+> ~~~
+>
+> 
+
 <a name="bullet-types"></a>
 
 #### Type de puce
@@ -1016,6 +1060,34 @@ Doigt pointé  :finger
 Losange 			:losange
 Custom puce 	path/to/puce/personnalisées.jpg
 Ou le caractère lui-même, par exemple {bullet: '---'}
+~~~
+
+#### Numérotation des rangées
+
+> Note : nous disons « rangée » ici mais rappelons que le *Printer* n’est pas une table.
+
+Les rangées (lignes) sont numérotées par défaut si la [pagination](#pagination) est ‘hybride’ ou par paragraphe. On peut désactiver cette numérotation (et ne numéroter que la « table » imprimée par le *Printer* en l’initialisant avec `numerotation: false` :
+
+~~~ruby
+printer = Prawn4book::Printer.new(pdf, {numerotation:false})
+~~~
+
+#### Enregistrement (registration) d’un Printer
+
+L’intéressant dans les *Printers*, c’est qu’on peut les registrer afin d’y faire appel à plusieurs endroits du livre, en gardant une cohérence parfaite d’affichage. 
+
+Pour **enregistrer un Printer** : 
+
+~~~ruby
+Printer.register(printer, '<name>')
+~~~
+
+> Si le nom est déjà utilisé pour un autre Printer, une erreur sera levée.
+
+Pour **récupérer le Printer registré** :
+
+~~~ruby
+printer = Printer.get('<name>')
 ~~~
 
 

@@ -11,3 +11,11 @@ collection_data:
 #     # width: 400
 #     # height: 600
 #</book_format>
+
+#<fonts>
+fonts:
+  Arial:
+    italic: "resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"
+  Avenir:
+    regular: "resources/fonts/Avenir Font/Avenir Next Condensed.ttf"
+#</fonts>
