@@ -87,12 +87,6 @@ class NTextParagraph < AnyParagraph
     # 
     @text = @text_ini
 
-    #
-    # Définir le numéro du paragraphe ici, pour que
-    # le format :hybrid (n° page + n° paragraphe) fonctionne
-    # 
-    @numero = AnyParagraph.get_next_numero
-    # dbg "@numero = #{@numero.inspect}".bleu
 
     #
     # Quelques traitements communs, comme la retenue du numéro de

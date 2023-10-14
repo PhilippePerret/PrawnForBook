@@ -45,12 +45,13 @@ module Prawn4book
     pr.title("Printer avec d'autres fontes customisées")
 
 
-    pr = Printer.new(pdf)
+    pr = Printer.new(pdf, **{numerotation: false})
     pr.titre("Printer pour correction des textes")
+    pr._x("*(Les paragraphes de ce printer ne sont pas numérotés)*")
     pr._x_x(["4 + 4 font", "\#{4 + 4}"])
     pr._x_x(["Italique MD", "*Italic*"])
-    pr._x_x(["Gras MD", "**Italic**"])
-    pr._x_x(["Souligné MD", "__Italic__"])
+    pr._x_x(["Gras MD", "**bold**"])
+    pr._x_x(["Souligné MD", "__Underline__"])
 
     imprime_gros_tableau
 
@@ -61,6 +62,7 @@ module Prawn4book
   # 
   def self.imprime_gros_tableau
     pr = Printer.get('gros_tableau')
+    pr.titre("Un Printer registré")
     pr._x_x(["Produit", "BON"])
     pr._x_x(["Réservé", "BAD"])
   end

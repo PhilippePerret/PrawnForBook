@@ -93,7 +93,11 @@ class Printer
     else
       fonte = suboptions[:font] || valueFonte || Fonte.default
     end
+    # -- La puce à utiliser --
     puce = get_bullet_from(suboptions[:bullet])
+    # -- Le contenu (corrigé) --
+    content = formated_content(content)
+    # -- Impression de tout ça --
     pdf.update do
       start_new_page if cursor < 20
       move_cursor_to_next_reference_line
@@ -106,6 +110,12 @@ class Printer
           end
         end
       end
+
+      # -- Inscription (si nécessaire) du numéro de paragraphe --
+      if my.paragraph_number?
+        my.paragraph.print_paragraph_number(self)
+      end
+
       span(bounds.width - my.bulcol_width, position: my.bulcol_width) do
         font(fonte) do 
           leading = leading_for(fonte, line_height)
@@ -134,21 +144,24 @@ class Printer
   def _x_x(values, **suboptions)
     bx_x(values, suboptions.merge!(bullet:' ' ))
   end
+
+  DEL_VALUES = 'X^xXx^X'.freeze
   def bx_x(values, **suboptions)
     values.is_a?(Array) || raise("On doit donner un Array à Printer#_x_x")
-    label, value = values
     me = my = self
     myclass = me.class
     # - Police à utiliser -
     fontValue = suboptions[:value_fonte] || options[:value_fonte] || valueFonte
     fontLabel = suboptions[:label_fonte] || options[:label_fonte] || labelFonte
-    # - Inscription -
-    # TODO: En fait, il faudrait regarder quelle est la plus longue
-    # valeur, entre le label et le value, et mettre la plus courte
-    # dans le float.
 
+    # - La puce à utiliser (ou pas) -
     puce = get_bullet_from(suboptions[:bullet])
-
+    # - Correction du texte -
+    values = formated_content(values.join(DEL_VALUES)).split(DEL_VALUES)
+    # TODO Plus tard, on fonctionnera par colonne car il pourra y en
+    # avoir un nombre aléatoire
+    label, value = values
+    # - Inscription -
     pdf.update do
       # -- On se place sur la prochaine ligne de référence --
       move_cursor_to_next_reference_line
@@ -164,29 +177,36 @@ class Printer
         end
       end
 
+      # -- Inscription (si nécessaire) du numéro de paragraphe --
+      if my.paragraph_number?
+        my.paragraph.print_paragraph_number(self)
+      end
+
+      # -- Liste des hauteurs --
+      heights = []
+
       # -- LE LABEL (en prenant sa hauteur) --
-      label_height = nil
+      move_cursor_to(current_cursor)
       span(my.labcol_width, position: my.bulcol_width) do
         font(fontLabel) do
           leading = leading_for(fontLabel, line_height)
           text(label, **{inline_format:true, leading: leading})
-          label_height = height_of(label, **{inline_format:true, leading:leading})
+          heights << height_of(label, **{inline_format:true, leading:leading})
         end
       end
 
       # -- LA VALEUR (en prenant sa hauteur) --
       move_cursor_to(current_cursor)
-      value_height = nil
       span(bounds.width - (my.labcol_width+my.bulcol_width), position: my.labcol_width + my.bulcol_width) do
         font(fontValue) do
           leading = leading_for(fontValue, line_height)
           text(value, **{inline_format:true, leading: leading})
-          value_height = height_of(value, **{inline_format:true, leading:leading})
+          heights << height_of(value, **{inline_format:true, leading:leading})
         end
       end
 
       # -- On se déplace au plus bas --
-      height = [label_height,value_height].max
+      height = heights.max
       move_cursor_to(current_cursor - height)
 
     end#/pdf.update
@@ -297,12 +317,40 @@ class Printer
   def labelFonte=(value); @labelFonte = value end
   def valueFonte=(value); @valueFonte = value end
 
+  # [PdfBook::NTextParagraph] Paragraphe du texte (pour la correction
+  # ainsi que le numéro de paragraphe)
+  def paragraph
+    @paragraph
+  end
+
   def book
     pdf.pdfbook
   end
 
+
+  # @return true s'il faut numéroter toutes les rangée
+  def paragraph_number?
+    return false if @options[:numerotation] === false
+    book.recipe.paragraph_number?
+  end
+
   private
 
+
+    # Formate le contenu à inscrire (c'est un ligne complète en
+    # général, avec les colonnes rassemblées quand il y en a 
+    # plusieurs)
+    # Pour le corriger on doit le transformer en paragraphe, ce qui
+    # permettra en plus de le numéroter si nécessaire
+    # 
+    def formated_content(content)
+      @paragraph = PdfBook::NTextParagraph.new(book, **{text: content})
+      @paragraph.prepare_and_formate_text(pdf)
+      @paragraph.text
+    end
+
+    # @return [String|Proc] la puce à utiliser (c'est une procédure
+    # si c'est une image personnalisée)
     def get_bullet_from(value)
       case value
       when NilClass, :hyphen, :tiret then '–'

@@ -67,6 +67,27 @@ class AnyParagraph
   # dans chaque class les traitements particuliers.
   # 
   def print(pdf)
+
+    # -- Comme son nom d'indique --
+    # 
+    # @note
+    #   Le traitement a été sorti pour pouvoir être utilisé par
+    #   des méthodes personnalisées (à commencer par le Printer)
+    # 
+    prepare_and_formate_text(pdf)
+
+  end
+
+  def prepare_and_formate_text(pdf)
+    #
+    # Définir le numéro du paragraphe ici, pour que
+    # le format :hybrid (n° page + n° paragraphe) fonctionne
+    # 
+    if @data[:type] == 'paragraph'
+      @numero = AnyParagraph.get_next_numero
+      # dbg "@numero = #{@numero.inspect}".bleu
+    end
+
     # 
     # Indication de la première page du paragraphe (titre, images,
     # etc.)
@@ -80,7 +101,6 @@ class AnyParagraph
       context = { pdf: pdf, paragraph:self }
       @text = self.class.__parse(text, context)
     end
-
   end
 
 

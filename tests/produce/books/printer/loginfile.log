@@ -1,0 +1,104 @@
+--- 2023 10 14 19:00:58 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 19:00:58 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 19:00:58 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 19:25:49 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 19:25:49 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 19:25:49 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 19:34:56 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 19:34:56 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 19:34:56 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 19:36:33 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 19:36:33 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 19:36:33 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 19:36:33 Values initiales : ["Le label", "la valeur"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Le label", "la valeur"]
+--- 2023 10 14 19:36:33 Values initiales : ["Un label avec puce suffisamment long pour qu'il passe à la ligne.", "Une valeur suffisamment longue pour qu'elle passe elle aussi à la ligne."]
+--- 2023 10 14 19:36:33 Values corrigées : ["Un label avec puce suffisamment long pour qu'il passe à la ligne.", "Une valeur suffisamment longue pour qu'elle passe elle aussi à la ligne."]
+--- 2023 10 14 19:36:33 Values initiales : ["Un label sans puce suffisamment long pour qu'il passe à la ligne.", "Une valeur suffisamment longue pour qu'elle passe elle aussi à la ligne."]
+--- 2023 10 14 19:36:33 Values corrigées : ["Un label sans puce suffisamment long pour qu'il passe à la ligne.", "Une valeur suffisamment longue pour qu'elle passe elle aussi à la ligne."]
+--- 2023 10 14 19:36:33 Values initiales : ["Le label", "la valeur"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Le label", "la valeur"]
+--- 2023 10 14 19:36:33 Values initiales : ["4 + 4 font", "\#{4 + 4}"]
+--- 2023 10 14 19:36:33 Values corrigées : ["4 + 4 font", "8"]
+--- 2023 10 14 19:36:33 Values initiales : ["Italique MD", "*Italic*"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Italique MD", "<em>Italic</em>"]
+--- 2023 10 14 19:36:33 Values initiales : ["Gras MD", "**Italic**"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Gras MD", "<b>Italic</b>"]
+--- 2023 10 14 19:36:33 Values initiales : ["Souligné MD", "__Italic__"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Souligné MD_^_X_^<u>_Italic</u>"]
+--- 2023 10 14 19:36:33 Values initiales : ["Produit", "BON"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Produit", "BON"]
+--- 2023 10 14 19:36:33 Values initiales : ["Réservé", "BAD"]
+--- 2023 10 14 19:36:33 Values corrigées : ["Réservé", "BAD"]
+--- 2023 10 14 19:43:07 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 19:43:07 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 19:43:07 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:06:52 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:06:52 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:06:52 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:07:06 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:07:06 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:07:06 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:07:17 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:07:17 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:07:17 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:11:07 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:11:07 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:11:07 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:14:56 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:14:56 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:14:56 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:17:37 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:17:37 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:17:37 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:24:07 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:24:07 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:24:07 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:24:27 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:24:27 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:24:27 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
+--- 2023 10 14 20:24:49 Famille de police installée : :PictoPhil
+{:normal=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/PictoPhil/Pictophil-Regular.otf"}
+--- 2023 10 14 20:24:49 Famille de police installée : :Arial
+{:italic=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf"}
+--- 2023 10 14 20:24:49 Famille de police installée : :Avenir
+{:regular=>"/Users/philippeperret/Programmes/Prawn4book/resources/fonts/Avenir Font/Avenir Next Condensed.ttf"}
