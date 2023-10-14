@@ -977,7 +977,10 @@ pr.tabs = [100, nil, 50]
 pr.tabs = {1 => 100, 3 => 50}
 ~~~
 
+> **[1]**  Une valeur `nil` est calculée en fonction de la largeur. Il faut une seule valeur nulle dans la liste.
+>
 > On peut visualiser les colonnes en ajoutant l'option `setup` à true :
+>
 > ~~~ruby
 > pr = Printer.new(pdf, **{setup: true})
 > ~~~
