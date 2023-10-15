@@ -461,7 +461,7 @@ Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il so
 
 <a name="paragraphes"></a>
 
-### Les paragraphes
+### LES PARAGRAPHES (TOUS TYPES)
 
 <a name="definition-paragraphe"></a>
 
@@ -477,6 +477,24 @@ L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atom
 * les [Titres](#paragraph-titre),
 * les [Images](#paragraph-image),
 * les [Pfb-codes](#paragraph-code).
+
+#### Référence au paragraphe [Expert]
+
+Dans les annexes, on a souvent besoin de faire référence à une partie du livre, c’est en général le numéro de page. *Prawn-for-book* permettant d’utiliser [trois sortes de pagination](#pagination), une méthode permet d’obtenir la référence au paragraphe sans s’en soucier :
+
+~~~ruby
+<paragraph>.reference
+# => "pg. 29" 		si pagination par page
+#    "par. 5623" 	si pagination par numéro de paragraphe
+#    "pg. 29-7"   si pagination hybride
+
+<paragraph>.reference(false)
+# => "29" 		si pagination par page
+#    "5623" 	si pagination par numéro de paragraphe
+#    "29-7"   si pagination hybride
+~~~
+
+
 
 #### Évaluation du texte du paragraphe (interprétation des variables)
 

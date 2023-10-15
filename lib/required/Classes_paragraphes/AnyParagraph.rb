@@ -248,6 +248,26 @@ class AnyParagraph
     @pdfbook = pdfbook
   end
 
+  # @return La référence au paragraphe en fonction de la pagination
+  # choisie. Si on est en mode 'page', seul le numéro de la première
+  # page du paragraphe est retourné. Si on est en mode 'parags', seul
+  # le numéro du paragraphe est retourné. Si on est en mode 'hybrid',
+  # c'est le page-paragraphe qui est retourné
+  # 
+  # @param [Bool] prefix  Si true on retourne la référence avec un
+  # préfix adéquant. Sinon, on retourne seulement la référence (le 
+  # numéro de page, de paragraphe ou le numéro hybride)
+  # 
+  def reference(prefix = true)
+    @reference ||= begin
+      case book.recipe.page_num_type
+      when 'hybrid'   then "#{'pg. '  if prefix}#{first_page}-#{numero}"
+      when 'pages'    then "#{'page ' if prefix}#{first_page}"
+      when 'parags'   then "#{'par. ' if prefix}#{numero}"
+      end
+    end
+  end
+
   # --- Predicate Methods ---
 
   def titre?    ; false end

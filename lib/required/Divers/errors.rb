@@ -8,6 +8,15 @@ class PrawnFatalError < StandardError; end
 
 # Pour produire une erreur fatale par son numéro d'erreur
 class FatalPrawnForBookError < StandardError
+
+  # Pour ajouter du contexte (c'est-à-dire mieux savoir où se 
+  # déclenche et surtout "pour quoi" se déclenche une erreur)
+  # 
+  def self.context=(value)
+    @@context = value
+  end
+  def self.context; @@context end
+
   def initialize(err_id, temp_data = nil)
     err_msg = build_message(err_id, temp_data)
     super(err_msg)
@@ -17,6 +26,9 @@ class FatalPrawnForBookError < StandardError
     err = self.class.error_by_num(err_id)
     err = err % temp_data unless temp_data.nil?
     err = "[#{err_id}] #{err}"
+    if self.class.context
+      err = "#{err}\nContext:\n-------\n#{self.class.context}"
+    end
     return err
   end
 
