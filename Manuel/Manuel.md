@@ -2365,7 +2365,7 @@ Elle s’inscrit dans le livre à l’endroit où est placé dans le texte un :
 
 **ATTENTION** : La construction de la table des matières n’ajoute pas automatiquement de nouvelles pages si la table déborde de la page qui lui est réservée (**FAUX***)  (tout simplement parce qu’’alors tous les numéros de pages seraient obsolètes…). Si la table des matières tient sur plusieurs pages, il faut donc ajouter autant de [marques de nouvelles pages](#mark-new-pages) que voulus.
 
-> *En fait, elle le fait maintenant, mais si la pagination après, ça n’est pas trop grave ? Non, en fait, il faudrait que soit calculé dans le premier tour le nombre de page pour la table des matières et qu’elle soit inscrite ensuite. Noter que si la tdm est inscrite à la fin du livre, il n’y a plus de problème.
+> *En fait, elle le fait maintenant, mais si la pagination après, ça n’est pas trop grave ? Non, en fait, il faudrait que soit calculé dans le premier tour le nombre de pages pour la table des matières et qu’elle soit inscrite ensuite. Noter que si la tdm est inscrite à la fin du livre, il n’y a plus de problème.
 
 Voir la partie [Tous les types de pages](#all-types-pages) qui définit la recette du livre.
 

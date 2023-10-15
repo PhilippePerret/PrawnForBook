@@ -12,10 +12,12 @@ class FatalPrawnForBookError < StandardError
   # Pour ajouter du contexte (c'est-à-dire mieux savoir où se 
   # déclenche et surtout "pour quoi" se déclenche une erreur)
   # 
+  @@context = nil
+
   def self.context=(value)
     @@context = value
   end
-  def self.context; @@context end
+  def self.context; @@context || '' end
 
   def initialize(err_id, temp_data = nil)
     err_msg = build_message(err_id, temp_data)

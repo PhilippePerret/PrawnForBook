@@ -32,11 +32,15 @@ class PrawnView
     #
     # Mise en forme voulue
     # 
-    fauxtitre_font = Fonte.new(
-      name:   dfauxtitre[:font],
-      size:   dfauxtitre[:size],
-      style:  dfauxtitre[:style]
-    )
+    if dfauxtitre[:font].is_a?(Prawn4book::Fonte)
+      fauxtitre_font = dfauxtitre[:font]
+    else
+      fauxtitre_font = Fonte.new(
+        name:   dfauxtitre[:font],
+        size:   dfauxtitre[:size],
+        style:  dfauxtitre[:style]
+      )
+    end
     font(fauxtitre_font)
 
     #
