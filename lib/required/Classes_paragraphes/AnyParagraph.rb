@@ -22,6 +22,7 @@ class AnyParagraph
   #   images, qui pourraient être aussi numérotées)
   def self.reset
     reset_numero
+    @numparagisstopped = false
   end
   @@last_numero = 0
   def self.reset_numero
@@ -61,6 +62,15 @@ class AnyParagraph
     @@custom_paragraph_parser_exists = value
   end
 
+  def self.numerotation_paragraphs_stopped?
+    @numparagisstopped
+  end
+  def self.stop_numerotation_paragraphs
+    @numparagisstopped = true
+  end
+  def self.restart_numerotation_paragraphs
+    @numparagisstopped = false
+  end
 
   #
   # Attention : ça n'est QUE le début commun de l'impression. Voir
@@ -83,7 +93,7 @@ class AnyParagraph
     # Définir le numéro du paragraphe ici, pour que
     # le format :hybrid (n° page + n° paragraphe) fonctionne
     # 
-    if @data[:type] == 'paragraph'
+    if @data[:type] == 'paragraph' && not(AnyParagraph.numerotation_paragraphs_stopped?)
       @numero = AnyParagraph.get_next_numero
       # dbg "@numero = #{@numero.inspect}".bleu
     end
@@ -116,7 +126,14 @@ class AnyParagraph
   #   :hoffset    Décalage horizontal du numéro.
   #               idem.
   # 
+  # @note
+  # 
+  #   Sauf si la numérotation a été arrêtée à l'aide de :
+  #     (( stop_numeration_paragraphs ))
+  # 
   def print_paragraph_number(pdf, **options)
+
+    return if AnyParagraph.numerotation_paragraphs_stopped?
 
     num = numero.to_s
     

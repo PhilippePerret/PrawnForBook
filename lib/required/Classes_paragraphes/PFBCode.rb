@@ -57,6 +57,10 @@ class PFBCode < AnyParagraph
       end
     when 'tdm', 'toc', 'table_des_matieres','table_of_contents','table_of_content'
       pdf.init_table_of_contents
+    when 'stop_numerotation_paragraphs'
+      AnyParagraph.stop_numerotation_paragraphs
+    when 'restart_numerotation_paragraphs'
+      AnyParagraph.restart_numerotation_paragraphs
     when 'index'
       pdfbook.page_index.build(pdf)
       pdfbook.pages[pdf.page_number][:content_length] += 100

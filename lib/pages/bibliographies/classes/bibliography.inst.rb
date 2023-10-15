@@ -19,7 +19,7 @@ class Bibliography
     self.class.add_biblio(self)
     @as_one_file = not(File.directory?(folder)) && folder.end_with?('.yaml')
     @asfolderofcard = not(@as_one_file)
-    load_items_from_file if one_file? && data_file_exist? # pour ne pas être obligé de chargé quand la bibliographie n'est pas définie
+    load_items_from_file if one_file? && data_file_exist? # pour ne pas être obligé de charger quand la bibliographie n'est pas définie
   end
 
   ##
@@ -72,7 +72,6 @@ class Bibliography
       if self.respond_to?(method_name)
         method_name
       else
-        puts "La méthode #{method_name.inspect} est inconnue"
         nil
       end
     end
@@ -172,8 +171,7 @@ class Bibliography
     # est bien définie
     # 
     return false if not(well_defined?)
-    bibitem = get(bibitem_id)
-    return bibitem # nil si inexistant
+    return get(bibitem_id)  # nil si inexistant
   end
 
   def par_fiche?

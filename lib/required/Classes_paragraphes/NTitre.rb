@@ -75,6 +75,14 @@ class NTitre < AnyParagraph
     super
 
     #
+    # Si le titre a un niveau de 0* il faut s'arrêter là
+    # 
+    # *Cela arrive par exemple avec les titres de bibliographie qui
+    # doivent toujours être définis mais pas toujours affichés.
+    # 
+    return if level == 0
+
+    #
     # Application de la fonte
     # 
     pdf.font(titre.fonte)
@@ -104,6 +112,7 @@ class NTitre < AnyParagraph
     # Nombre de lignes après
     # 
     linesAfter  = self.lines_after
+
 
     pdf.update do
 
@@ -272,18 +281,22 @@ class NTitre < AnyParagraph
   end
 
   def self.leading(level)
+    return nil if level < 1
     get_data(:leading, level)
   end
 
   def self.alone?(level)
+    return false if level < 1
     get_data(:alone, level) === true
   end
 
   def self.next_page?(level)
+    return false if level < 1
     alone?(level) || get_data(:next_page, level) === true
   end
 
   def self.belle_page?(level)
+    return false if level < 1
     get_data(:belle_page, level) === true
   end
 

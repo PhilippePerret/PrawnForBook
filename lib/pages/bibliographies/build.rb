@@ -116,7 +116,7 @@ end #/class Pages
 class Bibliography
   def self.default_formate_method(bibitem, pdf)
     spy "Je dois imprimer l'item #{bibitem.title} avec la méthode par défaut des bibliographies.".jaune
-    "#{bibitem.title} : #{bibitem.occurences_pretty_list}."
+    "#{bibitem.title} : #{bibitem.occurrences_pretty_list}."
   end
 end
 end #/module Prawn4book

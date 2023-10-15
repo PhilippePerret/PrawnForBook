@@ -41,7 +41,8 @@ class BibItem
   ##
   # Formatage de l'élément bibliographique DANS LE TEXTE
   # Pour le formatage de l'élément dans la bibliographie, voir
-  # la méthode ???
+  # la méthode biblio_<biblio id> qui doit être définie pour le livre
+  # ou la collection.
   # 
   # @return [String] l'item de bibliographie formaté pour le 
   # texte. 
@@ -54,7 +55,7 @@ class BibItem
   # 
   # @note
   #   On ne le met pas en cache, car l'affichage peut dépendre de
-  #   beaucoupu de choses, et notamment du +context+.
+  #   beaucoup de choses, et notamment du +context+.
   # 
   # @param [Hash] context   Contexte d'écriture, notamment le paragraphe (donc la page, le numéro de paragraphe, la police courante, etc.)
   # @param [String] actual  Le texte explicite peut-être fourni. Dans ce cas, c'est lui qu'on met en forme.
@@ -118,15 +119,31 @@ class BibItem
 
   # @return [String] Une liste pour le livre des occurrences de l'item
   # bibliographique courant.
+  # 
+  # #occurrences_pretty_list 
+  #   retourne une liste qui se termine par "et" au lieu de 
+  #   la virgule
+  #
+  # #occurrences_list
+  #   retourne une liste où toutes les occurrences sont séparées
+  #   par ', '
   #
   # @api public
   # 
-  def occurences_pretty_list
+  def occurrences_pretty_list
+    occurrences_list(true)
+  end
+
+  def occurrences_list(pretty = false)
     return nil if @occurrences.count == 0
     unite = TERMS[key_numerotation]
     unite = "#{unite}s" if @occurrences.count > 1
     # "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
-    "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
+    if pretty
+      "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
+    else
+      "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.join(', ')}"
+    end
   end
 
   # --- Predicate Methods ---
@@ -270,7 +287,7 @@ class BibItem
   end
 
   def temp_data
-    data.merge(occ_list: occurences_pretty_list)
+    data.merge(occ_list: occurrences_pretty_list)
   end
 
   # @return [Hash] Table de données de l'item bibliographique

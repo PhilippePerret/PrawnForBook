@@ -295,7 +295,7 @@ class PrawnView
         end
         File.exist?(fspath) || raise("La police #{fspath} est introuvable…")
       end
-      logif("Famille de police installée : #{fontname.inspect}\n#{fontdata.inspect}")
+      # logif("Famille de police installée : #{fontname.inspect}\n#{fontdata.inspect}")
       font_families.update(fontname.to_s => fontdata)
     end
   end

@@ -2023,6 +2023,30 @@ Si les [tables sont utilisées pour la mise en forme des bibliographies](#item-b
 table.print(pdf, **{numerotation: false})
 ~~~
 
+
+
+##### Interruption de la numération des paragraphes
+
+On peut suspendre à tout moment la numérotation des paragraphes avec la balise-code :
+
+~~~markdown
+(( stop_numerotation_paragraphs ))
+~~~
+
+##### Reprise de la numération des paragraphes
+
+Si la numérotation des paragraphes a été suspendue à l’aide de la balise-code précédente, cette numérotation peut être reprise à tout moment à l’aide de :
+
+~~~markdown
+(( restart_numerotation_paragraphs ))
+~~~
+
+
+
+
+
+---
+
 <a name="comments"></a>
 
 ### Commentaires dans le texte
@@ -2494,7 +2518,7 @@ Pour plus de détail, cf. [la page de la bibliographie](#page-biblio)
 
 ##### Le titre de la bibliographie
 
-Ce titre est celui qui apparaitra sur la page de bibliographie du livre. Il doit être défini entièrement, par exemple “Liste des films cités” ou “Liste des livres utiles”.
+Ce titre est celui qui apparaitra sur la page de bibliographie du livre (sauf si son niveau de titre est 0). Il doit être défini entièrement, par exemple “Liste des films cités” ou “Liste des livres utiles”.
 
 Il est défini par la propriété `:title` dans la recette du livre ou de la collection.
 
@@ -2518,6 +2542,19 @@ Par défaut, ce titre sera d’un niveau 1, c’est-à-dire d’un niveau grand 
       :title: Liste des films cités
       :title_level: 3
 ~~~
+
+Si le niveau de titre est `0`, le titre n’est pas affiché, c’est à votre charge de l’indiquer.
+
+~~~yaml
+# in recipe.yaml
+# ...
+:bibliographies:
+	:biblios:
+    film:
+      :title: Un titre pas affiché
+      :title_level: 0
+~~~
+
 
 <a name="biblio-path"></a>
 
