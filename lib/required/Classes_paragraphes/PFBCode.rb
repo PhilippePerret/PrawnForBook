@@ -187,7 +187,8 @@ class PFBCode < AnyParagraph
         elsif params_count == params.count
           Prawn4book.send(methode, *params)
         else
-          params.unshift(pdf)
+          params.unshift(pdf)       if params_count > params.count
+          params.insert(1, pdfbook) if params_count > params.count
           Prawn4book.send(methode, *params)
         end
       else

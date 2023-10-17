@@ -13,8 +13,18 @@ module Prawn4book
   def self.second_turn?
     @@turn == 2
   end
+  def self.third_turn?
+    @@turn == 3
+  end
   def self.turn=(value)
     @@turn = value
+  end
+
+  def self.requires_third_turn
+    @@third_turn = true
+  end
+  def self.require_third_turn?
+    @@third_turn === true
   end
 
 class Command
@@ -120,8 +130,9 @@ class PdfBook
     # 
     table_references.save if table_references.any?
 
-    # 
-    # = DEUXIÈME PASSE =
+    # ======================
+    # === DEUXIÈME PASSE ===
+    # ======================
     # 
     # Si des appels de références avant ont été trouvées, on refait
     # une passe pour les appliquer.
@@ -147,6 +158,44 @@ class PdfBook
       #  pas de références arrières)
       # 
       ok_book = build_pdf_book
+
+
+      if Prawn4book.require_third_turn?
+
+        # =======================
+        # === TROISIÈME PASSE ===
+        # =======================
+        # 
+        # Pour le moment, elle n'est requise qu'à la construction
+        # du scénodico (Livre "Dictionnaire de la Narration")
+        # 
+
+        #
+        # Pour Prawn4book.third_turn?
+        # 
+        Prawn4book.turn = 3
+      
+        #
+        # S'il existe une méthode de reset propre au livre ou à la 
+        # collection, on l'invoque
+        # 
+        Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
+
+        table_references.second_turn = false
+
+        if PdfBook::AnyParagraph.respond_to?(:init_third_turn)
+          PdfBook::AnyParagraph.init_third_turn
+        end
+
+        #
+        # Construction finale du livre
+        # (mais elle peut se faire à la première passe s'il n'y a
+        #  pas de références arrières)
+        # 
+        ok_book = build_pdf_book
+
+      end #/ fin troisième tour
+
     end
 
     #
