@@ -102,7 +102,7 @@ class NTable < AnyParagraph
     elsif not(options[:no_space] == true)
       pdf.move_down(pdf.line_height)
     end
-    pdf.move_cursor_to_next_reference_line
+    pdf.move_to_next_line
 
     puts "4".jaune if debugit
     

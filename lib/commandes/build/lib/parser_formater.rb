@@ -163,7 +163,7 @@ class AnyParagraph
     pa = self
     pdf.update do 
       if pa.list_item?
-        move_cursor_to_next_reference_line
+        move_to_next_line
         float { text '– ' }
       end
     end

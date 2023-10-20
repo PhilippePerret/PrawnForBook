@@ -39,6 +39,13 @@ class InputTextFile
   # tous les paragraphes du fichier sont instanciés, même les 
   # paragraphe vide (Prawn4book::PdfBook::EmptyPar)
   # 
+  # @note
+  # 
+  #   Attention, pour le moment, cette liste ne contient que les 
+  #   paragraphes du fichier source, pas ceux des fichiers éventuel-
+  #   lement inclus (qui ont eux aussi cette propriété, puisque ce 
+  #   sont eux aussi des InputTextFile)
+  # 
   def paragraphes
     @paragraphes
   end
@@ -48,6 +55,11 @@ class InputTextFile
   # Méthode principale qui procède à la lecture du fichier et à 
   # l'écriture des paragraphes dans le document +pdf+.
   # 
+  #######################################
+  ###  READ AND PRINT ALL PARAGRAPHS  ###
+  #######################################
+  # 
+  # 
   def parse_and_write(pdf)
     PdfBook::NTextParagraph.reset
     @paragraphes = []
@@ -56,13 +68,16 @@ class InputTextFile
         # -- Fichier inclus --
         InputTextFile.new(book, included_file_path(par_str.match(REG_INCLUSION)[:code])).parse_and_write(pdf)
       else
-        # -- Paragraphe normal --
+        # -- (Whatever) Paragraphe --
         par = AnyParagraph.instantiate(book, par_str, idx, self)
         @paragraphes << par
-        # par.print(pdf)
+        ###########################################
+        ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###
+        ###########################################
+        par.print(pdf)
       end
     end
-    puts "#{@paragraphes.count} paragraphes instanciés et imprimés.".bleu
+    puts "[#{affixe}] #{@paragraphes.count} paragraphes instanciés et imprimés.".bleu
   end
 
 

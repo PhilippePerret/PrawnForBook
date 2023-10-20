@@ -67,7 +67,7 @@ class PageIndex
       end
       dcanon.merge!(items: new_items)
     end.each do |canon, dcanon|
-      pdf.move_cursor_to_next_reference_line
+      pdf.move_to_next_line
       if diff_font_canon_and_number
         pdf.formatted_text [
           {text: canon, font: canon_fonte},

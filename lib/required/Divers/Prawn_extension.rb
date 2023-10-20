@@ -24,6 +24,57 @@ module PrawnTableCellTextExtension
   end
 end
 
+
+module Prawn
+module Text
+
+  # # Méthode #text surclassée pour que le leading soit toujours
+  # # appliqué en fonction de la hauteur de ligne courante (grille de
+  # # référence).
+  # # 
+  # alias :real_text :text
+  # def text(str, **options)
+  #   options.merge!(leading: current_leading)
+  #   real_text(str, **options)
+  # end
+
+  # Surclassement de la méthode originale pour traiter l'option
+  # :dry_run
+  def text_box(string, options = {})
+    options = options.dup
+    options[:document] = self
+
+    # --AJOUT--
+    dry_run = options.delete(:dry_run)
+    # --/AJOUT--
+
+    box =
+      if options[:inline_format]
+        p = options.delete(:inline_format)
+        p = [] unless p.is_a?(Array)
+        array = text_formatter.format(string, *p)
+        Text::Formatted::Box.new(array, options)
+      else
+        Text::Box.new(string, options)
+      end
+
+    # --REMPLACEMENT--
+    if dry_run
+      exceed = box.render(dry_run: dry_run)
+      [exceed, box]
+    else
+      box.render
+    end
+    # --/REMPLACEMENT--
+    # --REMPLACÉ--
+    # box.render
+    # --/REMPLACÉ--
+  end
+
+end #/module Text
+end #/module Prawn
+
+
 module Prawn
   class Table
 

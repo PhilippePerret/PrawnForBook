@@ -33,6 +33,10 @@ class NTitre < AnyParagraph
   # Méthode principale qui écrit le titre dans la page
   # 
   def print(pdf)
+
+    logif "TITRE NON IMPRIMÉS (#{text})"
+    return
+
     titre = self
     my    = self
 
@@ -131,7 +135,7 @@ class NTitre < AnyParagraph
       # On déplace le curseur sur la prochaine ligne
       # de base
       # 
-      move_cursor_to_next_reference_line
+      move_to_next_line
 
       #
       # Si c'est un titre (ou pas…) et qu'il va manger sur la

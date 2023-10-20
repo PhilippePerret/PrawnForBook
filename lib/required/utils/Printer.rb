@@ -72,7 +72,7 @@ class Printer
     pdf.update do
       move_down(20)
       font(titleFonte) do
-        move_cursor_to_next_reference_line
+        move_to_next_line
         leading = leading_for(titleFonte, line_height)
         text(titre, **{inline_format: true})
       end
@@ -100,7 +100,7 @@ class Printer
     # -- Impression de tout ça --
     pdf.update do
       start_new_page if cursor < 20
-      move_cursor_to_next_reference_line
+      move_to_next_line
       float do
         font(fonte) do
           if puce.is_a?(Proc) # quand image
@@ -164,7 +164,7 @@ class Printer
     # - Inscription -
     pdf.update do
       # -- On se place sur la prochaine ligne de référence --
-      move_cursor_to_next_reference_line
+      move_to_next_line
       # -- On mémorise la position actuelle du curseur --
       current_cursor = cursor.freeze
       

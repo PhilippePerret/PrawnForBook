@@ -37,10 +37,6 @@ class Command
 end #/Command
 class PdfBook
 
-  # Pour exposer les données des pages (à commencer par les
-  # paragraphes et les longueurs de texte)
-  attr_reader :pages
-
   # Pour exposer les titres courants par niveau en cours
   # de fabrication (pour alimenter la données pages et 
   # permettre ensuite le traitement des pieds de page et
@@ -49,12 +45,6 @@ class PdfBook
 
   # @prop Instance {Prawn4book::PdfHelpers}
   attr_reader :pdfhelpers
-
-  # [ARRAY] Liste des numéros de pages qui ne doivent pas être
-  # numérotées même si elles ont du contenu (par défaut par exemple,
-  # la page de faux-titre, la page d'infos du livre, mais n'importe
-  # quelle page peut être sans numérotation — cf. le manuel)
-  attr_reader :pages_without_pagination
 
   def generate_pdf_book
     # 
@@ -250,16 +240,10 @@ class PdfBook
     pdf = PrawnView.new(self, pdf_config)
 
     #
-    # Pour mettre les pages qu'il faut garder sans numéro
-    # 
-    @pages_without_pagination = []
-
-    #
     # Méthode appelée automatiquement à chaque création de page
     # dans le livre.
     # 
     pdf.on_page_create do
-      # puts "Nouvelle page créée : #{pdf.page_number}".orange
       my.add_page(pdf.page_number)
       export_text("\n#{'-'*30}\n\n") if export_text?
     end
@@ -273,15 +257,6 @@ class PdfBook
     #   - hybrid      On utilise un numéro "page-paragraphe"
     # 
     Bibliography.page_or_paragraph_key = recipe.references_key
-
-    #
-    # Pour consigner les informations sur les pages, à commencer
-    # par les paragraphes (numéros) s'ils sont numérotés
-    # 
-    # TODO : Faire plutôt une class Prawn4book::PdfBook::Page qui
-    # gère les pages
-    # 
-    @pages = {}
 
     # 
     # = FONTS =
@@ -320,7 +295,7 @@ class PdfBook
       hname:  'Fonte par défaut'
     )
     Fonte.default = default_fonte
-    pdf.define_default_leading(default_fonte, recipe.line_height)
+    # pdf.define_default_leading(default_fonte, recipe.line_height)
 
 
     # Application de la fonte par défaut
@@ -507,34 +482,40 @@ class PdfBook
     CLI.option(:display_margins)
   end
 
-
-  # --- Titles Methods ---
   
-  # Donnée de page par défaut
+  # Ajoute la page de numéro +num_page+ au PdfBook
   # 
-  # Il s'agit des données qui servent à consigner les premiers et
-  # derniers paragraphes de chaque page, ainsi que le titre courant
-  # 
-  DEFAULT_DATA_PAGE = {
-    first_par:nil, last_par: nil,
-    content_length: 0,
-    title1: '', title2:'', title3:'', title4:'', title5:'', title6:''}
-
   def add_page(num_page)
     #
     # On met les valeurs par défaut dans la donnée de page
     # 
-    pages.merge!(num_page => DEFAULT_DATA_PAGE.dup)
+    data_page = {number: num_page}.merge(DEFAULT_DATA_PAGE)
+
     #
     # On lui donne tous les titres courants
     # 
-    current_titles.each do |ktitre, titre|
-      pages.merge!(
-        ktitre => titre,
-        ktitre.upcase => (titre && titre.upcase)
-      )
+    # @note
+    #   Ces titres pourront être changés en cours de route (est-ce
+    #   bien raisonnable, entendu que c'est toujours le premier titre
+    #   qui doit être utilisé — pour les entêtes par exemple.)
+    # 
+    current_titles.each do |level, titre|
+      data_page[:titres].merge!( level => [])
+      data_page[:titres][level] << titre
     end
+
+    pages << data_page
   end
+
+  # Donnée de page par défaut
+  # 
+  DEFAULT_DATA_PAGE = {
+    first_par:      nil, 
+    last_par:       nil,
+    content_length: 0,
+    titres: {}
+  }
+
 
   # Lorsqu'un paragraphe (NTextParagraph|NTitre) est créé, on 
   # renseigne la ou les pages sur lesquels il se trouve.
@@ -602,24 +583,23 @@ class PdfBook
   #                 titre. Noter qu'elle a été ajoutée à @pages à
   #                 l'écriture du paragraphe.
   def set_current_title(parag, num_page)
-    ktitre = "title#{parag.level}".to_sym
-    @current_titles.merge!(ktitre => parag.text)
+    @current_titles.merge!(parag.level => parag.text)
     # 
-    # S'il faut créer cette nouvelle page
+    # Ajouter ce titre à la page de numéro +num_page+
     # 
-    pages[num_page] || add_page(num_page)
-    pages[num_page].merge!(
-      ktitre => parag.text,
-      ktitre.upcase => parag.text.upcase
-    )
+    # @note
+    #   On crée la page si elle n'existe pas.
+    # 
+    page = pages[num_page] || add_page(num_page)
+    page.add_titre(parag.level, parag.text)
+
     # 
     # Tous les titres de niveau suivant doivent être
-    # ré-initialisés
+    # ré-initialisés (remis à rien)
     # 
     ((parag.level + 1)..6).each do |level|
       ktit = "title#{level}".to_sym
-      @current_titles.merge!(ktit => nil)
-      pages[num_page].merge!(ktit => "")
+      @current_titles.merge!(level => nil)
     end
 
   end

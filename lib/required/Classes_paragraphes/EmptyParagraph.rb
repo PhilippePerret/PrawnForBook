@@ -20,7 +20,7 @@ class EmptyParagraph < AnyParagraph
     @text = text
   end
 
-  def print
+  def print(pdf)
     # On ne fait rien
   end
 

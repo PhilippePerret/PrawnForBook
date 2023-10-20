@@ -330,7 +330,7 @@ def mon_helper(pdf)
 	options = {leading: leading}
 	pdf.update do
 		font(mafonte) do
-      move_cursor_to_next_reference_line
+      move_to_next_line
 			text "Mon texte qui sera bien leadé", **options
       # Note : il faudrait que le texte soit plus long pour qu'on puisse
       # bien voir le leading employé, entre chaque ligne.
@@ -362,7 +362,7 @@ Pour modifier localement (sur quelques pages) la grille de référence, il y a d
     pdf.define_default_leading(mafonte, 10)
     #
     # À partir d'ici et de maintenant, tous les 
-    # pdf.move_cursor_to_next_reference_line placeront le curseur sur la
+    # pdf.move_to_next_line placeront le curseur sur la
     # ligne de la nouvelle grille.
   end
   ~~~

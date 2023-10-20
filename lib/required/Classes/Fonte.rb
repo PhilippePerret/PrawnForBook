@@ -97,6 +97,7 @@ end
 def params
   @params ||= {style: style, size: size}
 end
+alias :options :params
 
 
 private

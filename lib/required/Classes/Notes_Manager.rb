@@ -51,7 +51,7 @@ class PdfBook
           end
           move_down(5)
         end
-        pdf.move_cursor_to_next_reference_line
+        pdf.move_to_next_line
       end
       @flux_opened = true
 
@@ -73,7 +73,7 @@ class PdfBook
       leading -= 0.4 # Pour le caler de façon optimale, mais est-ce
       # que ça fonctionnera pour toutes les polices ???………
       s = "<sup>#{indice_note}</sup> #{note}"
-      pdf.move_cursor_to_next_reference_line
+      pdf.move_to_next_line
       pdf.move_down(1)
       context[:paragraph].print_paragraph_number(pdf, **{voffset:-1})
       pdf.text(s, **{leading:leading, inline_format:true, size: fs})
@@ -101,7 +101,7 @@ class PdfBook
             line [0, cursor], [pdf.bounds.width, cursor]
           end
           move_down(10)
-          # move_cursor_to_next_reference_line
+          # move_to_next_line
         end
       end
       @flux_opened = false

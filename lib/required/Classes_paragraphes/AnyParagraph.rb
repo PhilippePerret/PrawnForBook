@@ -2,41 +2,34 @@ module Prawn4book
 class PdfBook
 class AnyParagraph
 
-  # Liste des balises de style de paragraphe
-  attr_accessor :class_tags
-
-  # [Hash] Table des spécifications finales pour l'impression du
-  # paragraphe (quel qu'il soit)
-  # Permet par exemple de consigner :size ou :font_size pour la 
-  # taille courante de police (qui peut être définie par pfbcode, le
-  # code qui précède le paragraphe.
-  # @OBSOLÈTE Doit être remplacé par la propriété @style
-  attr_accessor :final_specs
-
   #
   # Attention : ça n'est QUE le début commun de l'impression. Voir
   # dans chaque class les traitements particuliers.
   # 
   def print(pdf)
+    
+    return
 
     # -- Comme son nom d'indique --
-    # 
-    # @note
-    #   Le traitement a été sorti pour pouvoir être utilisé par
-    #   des méthodes personnalisées (à commencer par le Printer)
     # 
     prepare_and_formate_text(pdf)
 
   end
 
+
+  # Préparation du paragraphe
+  # 
+  # @note
+  #   Le traitement a été sorti pour pouvoir être utilisé par
+  #   des méthodes personnalisées (à commencer par le Printer)
+  # 
   def prepare_and_formate_text(pdf)
     #
     # Définir le numéro du paragraphe ici, pour que
     # le format :hybrid (n° page + n° paragraphe) fonctionne
     # 
-    if type == 'paragraph' && not(AnyParagraph.numerotation_paragraphs_stopped?)
+    if paragraph? && not(AnyParagraph.numerotation_paragraphs_stopped?)
       @numero = AnyParagraph.get_next_numero
-      # dbg "@numero = #{@numero.inspect}".bleu
     end
 
     # 
@@ -151,6 +144,9 @@ class AnyParagraph
   attr_accessor :first_page
   attr_accessor :last_page
   attr_accessor :page_numero
+
+  # Liste des balises de style de paragraphe
+  attr_accessor :class_tags
 
   # Index absolu du paragraphe dans le texte source. Il est donc
   # très facile de faire référence à ce paragraphe à l'aide de

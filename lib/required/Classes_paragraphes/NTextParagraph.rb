@@ -3,6 +3,8 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
+  THIEF_LINE_LENGTH = 7
+
   attr_reader :text
   attr_reader :raw_text
   attr_reader :numero
@@ -24,6 +26,13 @@ class NTextParagraph < AnyParagraph
   # liste
   # 
   def pre_parse_text_paragraph
+
+
+    # TODO : Voir et remettre ce qui est nécessaire
+    return
+
+
+
     @is_citation    = raw_text.match?(REG_CITATION)
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
     # En cas de citation ou d'item de liste, on retire la marque
@@ -131,14 +140,10 @@ class NTextParagraph < AnyParagraph
     # 
     formate_per_nature(pdf)
 
-    #
-    # On inscrit enfin le texte
+    # 
+    # FONTE (name, taille et style)
     # 
     pdf.update do
-
-      # 
-      # FONTE (name, taille et style)
-      # 
       begin
         spy "Application de la fonte : #{Fonte.default_fonte.inspect}"
         font(Fonte.default_fonte)
@@ -156,125 +161,148 @@ class NTextParagraph < AnyParagraph
     begin
       pdf.update do
 
-        # 
-        # = Leading à appliquer à la fonte =
-        # 
-        # Je ne sais pas pourquoi je ne peux pas déplacer ce truc
-        # ailleurs et encore moins dans la fonte elle-même (voir 
-        # la méthode @leading de Fonte, qui contient le code que 
-        # j'aimerais utiliser mais qui ne fonctionne pas)
-        curleading = calc_leading_for(current_fonte, line_height)
 
-        options = current_fonte.params.merge({
-          inline_format:  true,
-          align:          pa.text_align,
-          leading:        curleading,
-        })
+        par_options = {
+          inline_format:true, 
+          overflow: :truncate, 
+          single_line:true, 
+          dry_run:true, 
+          width: bounds.width, # modifiable
+          align: :justify
+        }.freeze
 
-        if pa.kerning?
-          options.merge!(kerning: pa.kerning)
+
+        move_to_next_line # unless cursor_positionned
+
+
+        # Pile pour mettre les lignes à écrire du paragraphe
+        # 
+        # Les lignes ne seront placées qu'à la fin, une fois que l'on
+        # sait s'il y a des orphelines, des veuves, des lignes de
+        # voleur et des paragraphes à conserver ensemble
+        # 
+        paragraphe_stack = [] # pour mettre les box avant de les rendre
+      
+        # Tant qu'il reste du texte, on boucle pour faire des lignes
+        str = text.dup
+        while str.length > 0
+
+          # Il faudra mettre la ligne sur la prochaine page s'il ne
+          # reste pas assez de place
+          # 
+          this_line_on_next_page = cursor - line_height < 0
+          if this_line_on_next_page
+            puts "La ligne #{str.inspect} sur la page suivante"
+          end
+          
+          # Fabrication du text-box
+          # ------------------------
+          # C'est une méthode que j'ai surclassée pour qu'elle 
+          # puisse fonctionner avec :dry_run et en même temps retour-
+          # ner l'excédant de texte et le box.
+          # 
+          #   Le :dry_run à true empêche d'écrire le paragraphe
+          # 
+          # +rest+ contient le texte restant (Array) ou une liste
+          # null
+          # +box+ est 
+          rest, box = text_box(str, **par_options.merge(at: [0, cursor]))
+
+          #
+          # S'il reste quelque chose, mais que c'est trop court, il faut
+          # jouer sur le kerning du texte courant pour faire remonter le
+          # texte ou faire descendre un mot
+          # @note TODO Il faut pouvoir régler la longueur de mot minimum
+          # 
+          has_thief_line = rest.count > 0 && rest.first[:text].length <= THIEF_LINE_LENGTH
+          if has_thief_line
+            treate_thief_line_in(pdf, stf, **par_options)
+          end
+
+          has_no_rest = rest.count == 0
+
+
+          if this_line_on_next_page || cursor == bounds.height
+            #
+            # Si le curseur est trop bas
+            # 
+
+            this_line_is_last_line = has_no_rest
+
+            #
+            # Si c'est la dernière ligne, pour qu'elle ne soit pas
+            # veuve, il faut récupérer la dernière du stack pour l'ajouter
+            # ensuite.
+            # @note : il y a encore un problème ici (ou pour l'orpheline)
+            # 
+            if this_line_is_last_line && paragraphe_stack.count > 0
+
+              start_new_page
+              lines_down(1)
+
+              dernier = paragraphe_stack.pop
+              dernier.instance_variable_set('@at', [0, bounds.height])
+              lines_kept = [dernier]
+              box.instance_variable_set('@at', [0, bounds.height - line_height])
+            
+            else
+            
+              lines_kept = []
+            
+            end
+
+            while rbox = paragraphe_stack.shift
+              # Je place un 'move_down' pour la suite, mais le rbox se
+              # placerait bien de toutes façons puisqu'il contient son
+              # @at qui définit sa position.
+              rbox.render 
+              move_down(line_height)
+            end
+
+            # 
+            # On met les/la ligne(s) éventuellement récupérée(s) pour ne
+            # pas avoir de veuve
+            # 
+            paragraphe_stack += lines_kept
+
+          else
+            #
+            # Passage à la ligne suivante
+            # 
+            move_down(line_height) # Sans rien toucher d'autre, ça doit être une ligne de référence
+          
+          end
+
+          if cursor < 0
+            start_new_page
+            move_to_line(1)
+          end        
+        
+          # 
+          # On met la ligne (c'est forcément une ligne) dans le tampon
+          # du paragraphe.
+          # 
+          # La ligne de voleur a été éventuellement traitée avant.
+          # 
+          paragraphe_stack << box
+
+          break if has_no_rest
+
+          str = rest[0][:text]
+
         end
-        if pa.character_spacing?
-          options.merge!(character_spacing: pa.character_spacing)
-        end
-
-        if pa.margin_top && pa.margin_top > 0
-          move_down(pa.margin_top)
-        end
-
-        # 
-        # Placement sur la première ligne de référence suivante
-        # 
-        move_cursor_to_next_reference_line unless cursor_positionned
-
-        #
-        # Écriture du numéro du paragraphe
-        # 
-        pa.print_paragraph_number(pdf) if book.recipe.paragraph_number? && not(no_num)
+        # /loop tant qu'il reste du texte (while str.length > 0)
 
         # options.merge!(indent_paragraphs: textIndent) if textIndent
-        if mg_left > 0
 
-          #
-          # Écriture du paragraphe dans une boite
-          # (quand la marge gauche est fixée)
-          # 
-          
-          wbox = bounds.width - (mg_left + mg_right)
-          span_options = {position: mg_left}
-          #
-          # - dans un text box -
-          # 
-          span(wbox, **span_options) do
-            text(pa.text, **options)
-          end
-
-        else
-
-          # 
-          # Écriture du paragraphe dans le flux (texte normal)
-          # 
-
-          # 
-          # Hauteur que prendra le texte
-          # 
-          final_height = height_of(pa.text, **options)
-
-          # 
-          # Le paragraphe tient-il sur deux pages ?
-          # 
-          chevauchement = (cursor - final_height) < 0
-
-          # --- Écriture ---
-          # 
-          # Le bout de texte qui sera vraiment écrit (une partie peut
-          # être écrite sur la page précédente)
-          # 
-          rest_text = nil
-
-          if chevauchement
-            # 
-            # On passe ici quand le texte est trop long et qu'il va
-            # passer sur la page suivante. Malheureusement, en utilisant
-            # le comportement par défaut, le texte sur la page suivante
-            # n'est pas posé sur les lignes de référence. Il faut donc
-            # que je place un bounding_box pour placer la part de
-            # texte possible, puis on passe à la page suivante et on
-            # se place sur la place suivante.
-            # 
-            # height_diff = final_height - cursor
-            # spy "Texte trop long (de #{height_diff}) : <<< #{parag.text} >>>".rouge
-            # spy "margin bottom: #{parag.margin_bottom}"
-            box_height = cursor + line_height
-            # spy "Taille box = #{box_height}".rouge
-            other_options = {
-              width:    bounds.width,
-              height:   box_height,
-              at:       [0, cursor],
-              overflow: :truncate
-            }.merge(options)
-            excedant = text_box(pa.text, **other_options)
-            # spy "Excédant de texte : #{excedant.pretty_inspect}".rouge
-            start_new_page
-            move_cursor_to_next_reference_line
-            rest_text = excedant.map {|h| h[:text] }.join('')
-          else
-            rest_text = pa.text
-          end
-          # spy "rest_text = #{rest_text.inspect}"
-          # spy "(pour #{rest_text.inspect}, options = #{options.inspect}"
-          # ------------------------------
-          # L'écriture véritable du texte
-          # ------------------------------
-          
-          # puts "options: #{options.inspect} (line_height: #{line_height})".bleu
-          text(rest_text, **options)
-        
+        # 
+        # On peut écrire les lignes du paragraphe
+        # 
+        while rbox = paragraphe_stack.shift
+          rbox.render
+          move_down(line_height) # voir la note plus haut
         end
 
-        if mg_bot && mg_bot > 0
-          move_down(mg_bot)
-        end
 
       end #/pdf
 
@@ -289,12 +317,36 @@ class NTextParagraph < AnyParagraph
     end
 
     # 
-    # On prend la dernière page du paragraphe, c'est celle sur 
-    # laquelle on se trouve maintenant
+    # On prend la dernière page du paragraphe, c'est toujours celle
+    # sur laquelle on se trouve maintenant
     # 
     self.last_page = pdf.page_number
 
   end
+
+  # 
+  # Pour calculer le character spacing, on fonctionne ne plus en
+  # plus fin : dès qu'un c-s fait supprimer la ligne de voleurs
+  # on prend le précédent et on affine avec une division plus
+  # fine
+  def treate_thief_line_in(pdf, rest, **options)
+    cs = nil # character-spacing
+    snap = 0.1
+    last_cs = 0
+    while snap > 0.000001
+      cs = last_cs
+      rest = [1]
+      while rest.count > 0
+        cs += snap
+        rest, box = pdf.text_box(str, **par_options.merge(at:[0,cursor], kerning:true, character_spacing: -cs))
+        break if rest.count == 0
+        last_cs = cs.dup
+      end
+      snap = snap / 10 # cran : 0.001 -> 0.0001
+    end
+    return cs
+  end
+
 
   def indent
     @indent ||= book.recipe.text_indent

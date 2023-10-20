@@ -14,10 +14,10 @@ class PdfBook
     @folder = folder
   end
 
-  # TODO Mettre à un endroit plus logique
-  def sous_titre  ; recette.subtitle  end
-  alias :subtitle :sous_titre
-  def auteurs     ; recette.auteurs   end
+  # # TODO Mettre à un endroit plus logique
+  # def sous_titre  ; recette.subtitle  end
+  # alias :subtitle :sous_titre
+  # def auteurs     ; recette.auteurs   end
 
 
   # Pour ouvrir le livre dans Aperçu, en double pages
@@ -29,14 +29,12 @@ class PdfBook
     end
   end
 
-  # --- Helpers Methods ---
-
-
   # --- Usefull Methods ---
 
   # @api
   # 
-  # Retourne le chemin d'accès complet quand on fournit +rpath+ qui
+  # Retourne le chemin d'accès complet à un fichier appartenant au
+  # livre ou à la collection du livre quand on fournit +rpath+ qui
   # peut être :
   #   - un chemin d'accès déjà complet
   #   - un chemin d'accès relatif à la collection (si collection)
@@ -63,6 +61,13 @@ class PdfBook
 
   def font_or_default(font_name)
     fontes.key?(font_name) ? font_name : second_font  
+  end
+
+  ##
+  # Instance pour gérer les pages
+  # 
+  def pages(pdf = nil)
+    @pages ||= PageManager.new(self, pdf)
   end
 
   ##

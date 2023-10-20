@@ -81,7 +81,7 @@ class Bibliography
       ### - Écriture des items - ###
       ###                        ###
       ##############################
-      pdf.move_cursor_to_next_reference_line
+      pdf.move_to_next_line
       # str = Prawn4book::Bibliography.send(formate_method, bibitem)
       begin
         #
