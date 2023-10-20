@@ -1,0 +1,1 @@
+Ce fichier texte se trouve dans le dossier du livre “Simple” mais il est utilisé par le fichier “Inclusion” qui teste les inclusions de texte par un fichier. Autant dire qu’il ne doit pas être modifié à la légère.

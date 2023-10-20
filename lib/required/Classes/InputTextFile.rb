@@ -28,6 +28,7 @@ class InputTextFile
   def initialize(book, patharg)
     @book = book
     @path = define_path_from_arg(patharg)
+    puts "@path = #{@path.inspect}"
   end
 
 
@@ -123,11 +124,13 @@ private
   # du livre.
   # 
   def define_path_from_arg(patharg)
-    return patharg if patharg.is_a?(String) && File.exist?(patharg)
+    if patharg.is_a?(String) && File.exist?(patharg)
+      return File.expand_path(patharg)
+    end
     case patharg
     when TrueClass, NilClass
       ['txt', 'md'].each do |e|
-        tpath = File.join(book.folder,"texte.pfb.#{e}")
+        tpath = File.expand_path(File.join(book.folder,"texte.pfb.#{e}"))
         return tpath if File.exist?(tpath)
       end
     end

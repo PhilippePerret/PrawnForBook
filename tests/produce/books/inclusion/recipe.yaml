@@ -1,0 +1,5 @@
+#<book_data>
+book_data:
+  title: "Livre avec inclusion"
+  author: 'Auteur'
+#</book_data>
