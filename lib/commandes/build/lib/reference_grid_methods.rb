@@ -3,7 +3,7 @@ class PrawnView
 
   # - raccourci -
   def line_height
-    @line_height ||= pdfbook.recipe.line_height
+    @line_height ||= book.recipe.line_height
   end
 
   def leading
@@ -104,91 +104,50 @@ class PrawnView
   # dans le document.
   # 
   def draw_reference_grids
-    # 
-    # Définit le leading à appliquer en fonction de la hauteur de
-    # ligne à obtenir, par rapport à la fonte courante.
-    # 
-    # define_default_leading(Fonte.default, line_height)
-    # 
-    # Définition de la fonte à utiliser
-    # 
-    # font(Fonte.default)
-    # 
+    
 
-    # La grille peut n'être inscrite que sur quelques pages, 
-    # définies par le paramètre 'grid=start-end' en ligne de commande
-    # 
-    if CLI.params[:grid]
-      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
-      kpages = (pfirst..plast)
-    else
-      kpages = :all
-    end
+    # -- Couleur et épaisseur --
+    stroke_color 51, 0, 0, 3  # bleu ciel
+    fill_color 51, 0, 0, 3    # bleu ciel
+    line_width(0.1)
 
-    # 
-    # Boucle sur toutes les pages voulues pour écrire la grille de
-    # référence.
-    # 
-    repeat kpages, **{dynamic: true} do
-      #
-      # Si la grille de référence change à cette page, il faut la
-      # changer
-      # 
+    # -- Dessin de la grille de référence sur les pages concernées --
+    repeat gridded_pages, **{dynamic: true} do
+      # -- Changement de hauteur de ligne --
       if @leadings.key?(page_number)
         data_leading = @leadings[page_number]
         @line_height = data_leading[:line_height]
         spy "Line Height à #{line_height} à partir de page #{page_number.inspect}".jaune
       end
-      # 
-      # Imprimer la grille de référence
-      # 
+      # -- Impression de la grille de référence --
       print_reference_grid
+    end
+
+    # -- Noir et Blanc --
+    stroke_color  0, 0, 0, 100
+    fill_color    0, 0, 0, 100
+
+  end
+  # /#draw_reference_grids
+
+  # Dessine les lignes de référence sur la page courante
+  # 
+  def print_reference_grid
+    h = bounds.top.dup
+    while h > 0
+      h -= line_height
+      break if h < 0
+      stroke_horizontal_line(-100, bounds.width + 100, at: h)
     end
   end
 
-  # Pour dessiner la grille de référence sur toutes les pages ou 
-  # seulement les pages choisies.
-  # Option : -display_grid
-  def print_reference_grid
-    # 
-    # Aspect des lignes (bleues et fines)
-    # 
-    stroke_color 51, 0, 0, 3  # bleu ciel
-    fill_color 51, 0, 0, 3    # bleu ciel
-    line_width(0.1)
-    #
-    # On commence toujours en haut
-    # 
-    h = bounds.top.dup #
-    while h > 0
-      # 
-      # Prochaine position (définition de l'écartement entre les lignes)
-      # 
-      h -= line_height
-      # puts "Position : #{h.inspect}"
-      #
-      # Si on atteint le bas, on s'arrête
-      # 
-      break if h < 0
-      # 
-      # Écriture de la position top
-      # 
-      float {
-        move_cursor_to(h + 4)
-        # spy "[Grille référence] Cursor à #{cursor.inspect}".bleu_clair
-        span(40, position: bounds.left - 20) do
-          font pdfbook.second_font, size:6
-          text round(h + 20).to_s
-        end
-      }
-      # stroke_horizontal_line(0, bounds.width, at: h)
-      stroke_horizontal_line(-100, bounds.width + 100, at: h)
-    end
-    # 
-    # On remet la couleur initiale pour retourner en noir
-    # 
-    stroke_color  0, 0, 0, 100
-    fill_color    0, 0, 0, 100
+  # Retourne les pages concernées par l'impression de la grille de 
+  # référence
+  # (:all si toutes)
+  def gridded_pages
+    return :all if CLI.params[:grid].nil?
+    pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
+    (pfirst..plast)
   end
 
   def default_font_name
@@ -200,11 +159,11 @@ class PrawnView
   end
 
   def default_font_and_style
-    @default_font_and_style ||= pdfbook.recipe.default_font_and_style
+    @default_font_and_style ||= book.recipe.default_font_and_style
   end
 
   def default_font_size
-    @default_font_size ||= pdfbook.recipe.default_font_size
+    @default_font_size ||= book.recipe.default_font_size
     # @default_font_size ||= Metric.default_font_size
   end
 

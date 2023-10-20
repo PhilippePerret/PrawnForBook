@@ -101,13 +101,9 @@ end
 
 private
 
-def book_leading
-  @book_leading ||= book.recipe.text_leading
-end
-
-def book
-  @book ||= PdfBook.current
-end
+  def book
+    @book ||= PdfBook.current
+  end
 
 
 

@@ -31,7 +31,7 @@ class SpecialPage
   def initialize(path)
     real_path =
       case path
-      when Prawn4book::PrawnView  then path.pdfbook.folder
+      when Prawn4book::PrawnView  then path.book.folder
       when Prawn4book::PdfBook    then path.folder
       when String                 then path
       else raise "Je ne sais pas comment transformer #{path.inspect}::#{path.class} en path:String…"

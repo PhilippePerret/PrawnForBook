@@ -21,8 +21,7 @@ class PrawnView
   end
 
   # @prop Instance {Prawn4book::PdfBook}
-  attr_reader :pdfbook
-  alias :book :pdfbook
+  attr_reader :book
 
   attr_reader :config
 
@@ -45,16 +44,15 @@ class PrawnView
   # 
   attr_reader :current_fonte
 
-  def initialize(pdfbook, config)
-    @pdfbook  = pdfbook
-    @config   = config
+  def initialize(book, config)
+    @book   = book
+    @config = config
     # Pour consigner les fontes utilisées
     @fonts = {}
   end
 
   def document
     @document ||= begin
-      # spy "Config pour initialiser Prawn::Document :\n#{config.pretty_inspect}".jaune
       Prawn::RectifiedDocument.new(config)
     end
   end
@@ -91,35 +89,15 @@ class PrawnView
     super(new_options)
     
     # 
-    # On replace toujours le curseur en haut de la page
-    # (ÇA NE SERT À RIEN…)
-    # 
-    spy "-> déplacement du curseur en haut de la page…".bleu
-    move_cursor_to_top_of_the_page
-
-    # 
     # Si l'on est en mode pagination hybride (hybrid), il faut 
     # réinitialiser les numéros de paragraphe à chaque nouvelle
     # double page.
     # 
-    if page_number.even? && pdfbook.recipe.hybrid_numerotation?
+    if page_number.even? && book.recipe.hybrid_numerotation?
       PdfBook::AnyParagraph.reset_numero
     end
 
     spy "<- Nouvelle page initiée avec succès".vert
-  end
-
-  # En fait, j'ai découvert que cette méthode ne servait strictement
-  # à rien, la nouvelle page ne tient absolument pas compte de ça.
-  def move_cursor_to_top_of_the_page
-    # move_cursor_to(bounds.top) # - line_height
-    # move_cursor_to_next_reference_line
-    # if page_number > 137
-    #   puts "\nLine Height : #{line_height}"
-    #   puts "Placement en haut (#{bounds.top})".jaune
-    #   puts "Placement sur ligne de référence : #{cursor}".bleu
-    # end
-    spy "Curseur placé tout en haut (à #{round(cursor)})".bleu
   end
 
   # Pour dessiner les marges sur toutes les pages (ou seulement
@@ -244,24 +222,19 @@ class PrawnView
   end
   alias :leading_for :calc_leading_for
 
-  def book_leading
-    @book_leading ||= book.recipe.text_leading
-  end
-
   def book
     @book ||= PdfBook.current
   end
 
-
   # @helper
   def add_cursor_position(str)
-    "<font size=\"8\" name=\"#{pdfbook.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
+    "<font size=\"8\" name=\"#{book.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
   end
 
   # --- Predicate Methods ---
 
   # def paragraph_number?
-  #   :TRUE == @hasparagnum ||= true_or_false(pdfbook.recette.paragraph_number?)
+  #   :TRUE == @hasparagnum ||= true_or_false(book.recette.paragraph_number?)
   # end
 
   # @predicate True si c'est une belle page (aka page droite)

@@ -55,14 +55,14 @@ class PrawnView
     # 
     # Recette pour la table des matières
     # 
-    tdata = pdfbook.recipe.table_of_content
+    tdata = book.recipe.table_of_content
     # 
     # Instancier un titre pour la table des matières
     # 
     unless tdata[:no_title] || tdata[:title].nil? || tdata[:title] == '---'
-      titre = PdfBook::NTitre.new(pdfbook, **{text:tdata[:title], level:tdata[:title_level]})
+      titre = PdfBook::NTitre.new(book, **{text:tdata[:title], level:tdata[:title_level]})
       titre.print(self)
-      pdfbook.pages[page_number][:content_length] = 100 # arbitrairement juste pour savoir qu'il y aura du contenu dans cette page
+      book.pages[page_number][:content_length] = 100 # arbitrairement juste pour savoir qu'il y aura du contenu dans cette page
     end
     # 
     # On mémorise le numéro de page de la table des matières

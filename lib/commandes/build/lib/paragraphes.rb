@@ -48,13 +48,13 @@ class PrawnView
       #
       # Faut-il fermer des notes ?
       # 
-      pdfbook.notes_manager.check_if_end_of_notes(self)
+      book.notes_manager.check_if_end_of_notes(self)
 
       #
       # Si c'est un texte, on consigne le paragraphe dans sa page
       #
       if paragraphe.paragraph?
-        pdfbook.set_paragraphs_in_pages(paragraphe)
+        book.set_paragraphs_in_pages(paragraphe)
       end
 
       #
@@ -71,7 +71,7 @@ class PrawnView
       #   nouvelles pages.
       # 
       if paragraphe.titre?
-        pdfbook.set_current_title(paragraphe, page_number)
+        book.set_current_title(paragraphe, page_number)
       end
 
       # 

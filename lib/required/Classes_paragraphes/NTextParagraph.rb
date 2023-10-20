@@ -7,8 +7,8 @@ class NTextParagraph < AnyParagraph
   attr_reader :text
   attr_reader :numero
 
-  def initialize(pdfbook,data)
-    super(pdfbook)
+  def initialize(book,data)
+    super(book)
     @data   = data.merge!(type: 'paragraph')
     # @numero = AnyParagraph.get_next_numero
     # dbg "@numero = #{@numero.inspect}".bleu
@@ -152,7 +152,7 @@ class NTextParagraph < AnyParagraph
         font(Fonte.default_fonte)
       rescue Prawn::Errors::UnknownFont
         spy "--- fonte inconnue ---"
-        spy "Fontes : #{pdfbook.recipe.get(:fonts).inspect}"
+        spy "Fontes : #{book.recipe.get(:fonts).inspect}"
         raise
       end
     end
@@ -198,7 +198,7 @@ class NTextParagraph < AnyParagraph
         #
         # Écriture du numéro du paragraphe
         # 
-        pa.print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number? && not(no_num)
+        pa.print_paragraph_number(pdf) if book.recipe.paragraph_number? && not(no_num)
 
         # options.merge!(indent_paragraphs: textIndent) if textIndent
         if mg_left > 0
@@ -214,10 +214,6 @@ class NTextParagraph < AnyParagraph
           # - dans un text box -
           # 
           span(wbox, **span_options) do
-            # puts "\nOptions pour écrire #{pa.text} : #{options.inspect}".jaune
-            @nombrefois ||= 0
-            @nombrefois += 1
-            @nombrefois < 20 || exit
             text(pa.text, **options)
           end
 
@@ -246,7 +242,7 @@ class NTextParagraph < AnyParagraph
 
           if chevauchement
             # 
-            # On passe ici quand le texte est trop et qu'il va
+            # On passe ici quand le texte est trop long et qu'il va
             # passer sur la page suivante. Malheureusement, en utilisant
             # le comportement par défaut, le texte sur la page suivante
             # n'est pas posé sur les lignes de référence. Il faut donc

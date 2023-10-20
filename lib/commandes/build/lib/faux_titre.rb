@@ -5,13 +5,13 @@ class PrawnView
     #
     # Le titre du livre
     # 
-    titre = pdfbook.titre
+    titre = book.titre
     # 
     # Les données pour le faux-titre
     # 
-    dfauxtitre = pdfbook.recipe.inserted_pages[:faux_titre]
+    dfauxtitre = book.recipe.inserted_pages[:faux_titre]
     dfauxtitre = {
-      font:       pdfbook.first_font, 
+      font:       book.first_font, 
       size:       24,
       paginate:   false
     } if dfauxtitre === true
@@ -26,7 +26,7 @@ class PrawnView
     # indication contraire dans la recette
     # 
     unless dfauxtitre[:paginate] == true
-      pdfbook.pages_without_pagination << page_number
+      book.pages_without_pagination << page_number
     end
 
     #

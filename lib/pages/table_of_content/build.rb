@@ -31,7 +31,6 @@ class TableOfContent
     # On se rend sur la page voulue
     # 
     pdf.go_to_page(tdm.page_number)
-    pdf.move_cursor_to_top_of_the_page
     spy "On rejoint la page #{tdm.page_number} pour écrire la TdM".jaune
     pdf.move_down(recipe_tdm[:lines_before] * tdm_line_height)
     #

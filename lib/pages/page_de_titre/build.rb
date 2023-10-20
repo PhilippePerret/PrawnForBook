@@ -10,7 +10,7 @@ class PageDeTitre
   # 
   def build(pdf)
     spy "\n\n-> Construction de la page de titre".jaune
-    @book = pdf.pdfbook
+    @book = pdf.book
     my = self
 
     #
@@ -30,7 +30,7 @@ class PageDeTitre
       # indication contraire dans la recette
       # 
       unless my.paginate?
-        pdfbook.pages_without_pagination << page_number
+        book.pages_without_pagination << page_number
       end
 
       # 
@@ -45,11 +45,11 @@ class PageDeTitre
       # LA COLLECTION se place sur la deuxième ligne à partir du
       # haut.
       # 
-      if pdfbook.in_collection?
+      if book.in_collection?
         font_coll_title = Fonte.new(dtitre[:collection_title])
         font(font_coll_title)
         move_cursor_to(bounds.top - line_height)
-        text( pdfbook.collection.name, **{align: :center})
+        text( book.collection.name, **{align: :center})
       end
 
       #
@@ -59,16 +59,16 @@ class PageDeTitre
       font_title = Fonte.new(dtitre[:title])
       font(font_title)
       move_cursor_to(bounds.top - height / 3)
-      text( pdfbook.title , **{align: :center})
+      text( book.title , **{align: :center})
 
       #
       # S'il y a un SOUS-TITRE, on le place
       # 
-      if pdfbook.subtitle
+      if book.subtitle
         # old_line_height = line_height.dup
         font_subtitle = Fonte.new(dtitre[:subtitle])
         font(font_subtitle)
-        subtitle = pdfbook.subtitle.split('\\n').compact
+        subtitle = book.subtitle.split('\\n').compact
         # 
         # Ajout des parenthèses
         # 
@@ -88,12 +88,12 @@ class PageDeTitre
       move_down(line_height) # une de plus
       font_auteur = Fonte.new(dtitre[:author])
       font(font_auteur)
-      text pdfbook.auteurs.titleize, **{align: :center}
+      text book.auteurs.titleize, **{align: :center}
 
       #
       # La MAISON D'ÉDITION
       # 
-      publisher = pdfbook.recipe.publisher
+      publisher = book.recipe.publisher
       logo      = publisher[:logo_path] 
       # --- logo ---
       logo_height = dtitre[:logo][:height]
@@ -109,7 +109,7 @@ class PageDeTitre
       text publisher[:name], **{align: :center}
 
       if logo
-        logo_full_path = File.join(pdfbook.folder, logo)
+        logo_full_path = File.join(book.folder, logo)
         spy "logo_full_path = #{logo_full_path.inspect}"
         image(logo_full_path, {height: logo_height.mm, position: :center})
       end
