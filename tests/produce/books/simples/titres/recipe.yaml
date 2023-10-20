@@ -1,9 +1,0 @@
----
-#<book_data>
-book_data:
-  title: "Livre simple avec titres"
-  author: "Philippe PERRET"
-#</book_data>
-
-test:
-  hash_ruby: "518772ef62a07974e1091dd7bc2e874fbc8ba88202021ff38a0864255d609526bfd1d04d6921007f74005b8c6ef5d10ee2a83fb2dd167dc2504b71edb8cae756"

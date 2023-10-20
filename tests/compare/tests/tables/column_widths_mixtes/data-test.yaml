@@ -1,6 +1,0 @@
----
-name: "Table avec largeurs colonnes explicites ou %"
-resume: |
-  Une table où sont définies par pourcentage et par valeur 
-  explicites les largeurs de colonnes.
-  (avec une valeur pour chaque colonne)

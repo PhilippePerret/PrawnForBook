@@ -1,4 +1,0 @@
-# with fonts
-:should_contain ::: "Bonjour tout le monde !"
-
-:should_have_font ::: "Garamond"

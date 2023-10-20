@@ -1,5 +1,0 @@
----
-name: "Test de l'option 'keep_with_next'"
-description: |
-  On peut obliger deux lignes à rester ensemble même si on
-  arrive en bas de page.

@@ -1,5 +1,0 @@
----
-name: Table avec 1 largeur de colonne explicite
-resume: |
-  Une table où est définie explicitement la largeur des colonnes.
-  (avec une valeur unique pour toutes les colonnes)

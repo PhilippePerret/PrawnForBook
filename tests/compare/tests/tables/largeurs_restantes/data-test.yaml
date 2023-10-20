@@ -1,6 +1,0 @@
----
-name: Calcul automatique de largeur restante
-resume: |
-  Quand on ne définit pas une largeur de colonne, elle prend
-  automatiquement la largeur restante en fonction de la largeur
-  totale.

@@ -1,5 +1,0 @@
----
-name: "Simple table"
-resume: |
-  Une table simple définie par des "|" est affichée
-  normalement, avec toutes ses rangées.

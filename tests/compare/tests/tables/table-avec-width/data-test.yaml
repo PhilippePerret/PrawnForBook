@@ -1,5 +1,0 @@
----
-name: "Dimension explicite de table"
-description: |
-  Table qui définit dans son paragraphe précédent sa largeur,
-  par une valeur explicite (en ps-point).
