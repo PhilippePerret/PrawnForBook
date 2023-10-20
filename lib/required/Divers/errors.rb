@@ -86,6 +86,8 @@ class FatalPrawnForBookError < StandardError
       2     => Prawn4book::ERRORS[:errors][:bad_custom_errid],
       # -- Book --
       10    => Prawn4book::ERRORS[:book][:not_in_collection],
+      # -- Fichier texte --
+      50    => Prawn4book::ERRORS[:textfile][:unfound_text_file],
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],

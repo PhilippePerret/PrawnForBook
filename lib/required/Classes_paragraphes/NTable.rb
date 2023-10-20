@@ -29,19 +29,18 @@ class NTable < AnyParagraph
   end
 
   attr_accessor :page_numero
-  attr_reader :data
 
   attr_reader :numero
   alias :number :numero
 
   attr_reader :pdf
-  attr_reader :book
 
-  def initialize(pdfbook, data)
-    super(pdfbook)
-    @book = pdfbook
-    # @numero = AnyParagraph.get_next_numero
-    @data = data.merge!(type: 'table')
+  attr_reader :raw_lines
+
+  def initialize(book:, raw_lines:, pindex:)
+    super(book, pindex)
+    @type       = 'table'
+    @raw_lines  = raw_lines
   end
 
 
@@ -111,7 +110,7 @@ class NTable < AnyParagraph
     # Écriture du numéro du paragraphe
     # 
     unless options[:numerotation] == false
-      print_paragraph_number(pdf) if pdfbook.recipe.paragraph_number?
+      print_paragraph_number(pdf) if book.recipe.paragraph_number?
     end
 
     puts "5".jaune if debugit
@@ -336,8 +335,6 @@ class NTable < AnyParagraph
 
   # --- Data Methods ---
 
-  def raw_lines  ; @raw_lines   ||= data[:lines]   end
-
   ##
   # Méthode qui reçoit une table avec des valeurs pouvant définir
   # un pourcentage (p.e. {width:'100%'}) et remplaçant ce pourcentage
@@ -419,6 +416,9 @@ class NTable < AnyParagraph
     @page_width ||= pdf.bounds.width.freeze
   end
 
+  def add_line(raw_string)
+    @raw_lines << raw_string
+  end
 
 REG_IMAGE_IN_CELL = /^IMAGE\[(.+?)(?:\|(.+?))\]$/
 

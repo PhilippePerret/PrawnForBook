@@ -186,7 +186,12 @@ ERRORS = {
     }
   },
   
-  unfound_text_file: "Le fichier texte %s est introuvable…",
+  textfile: {
+    unfound_text_file: <<~EOT,
+      Le fichier texte définit par %{p} 
+      est introuvable…
+      EOT
+  },
   unknown_pfbcode:  <<~ERR,
     Je ne sais pas traiter le code '%{code}' (page %{page})…
 
@@ -296,7 +301,7 @@ ERRORS = {
       '%{name}' (%{pms})
       On le calcule à l'aide de <fonte>.leading(<pdf>,<line_height>).
       EOT
-    require_style: <<~EOT
+    require_style: <<~EOT,
       Le style (:style) est requis dans la définition d'une fonte. Il doit
       être ajouté à la donnée : %{dfont}
       EOT

@@ -13,65 +13,6 @@ class AnyParagraph
   # @OBSOLÈTE Doit être remplacé par la propriété @style
   attr_accessor :final_specs
 
-  # Méthodes utiles pour la numérotation
-  # 
-  # @note
-  #   Elles sont mises ici, dans AnyParagraph, mais ne servent pour
-  #   le moment que pour le NTextParagraph et le NTable (mais à 
-  #   l'avenir, on peut imaginer qu'elles servent aussi pour les
-  #   images, qui pourraient être aussi numérotées)
-  def self.reset
-    reset_numero
-    @numparagisstopped = false
-  end
-  @@last_numero = 0
-  def self.reset_numero
-    @@last_numero = 0
-  end
-  def self.init_first_turn
-    reset
-  end
-  def self.init_second_turn
-    reset
-  end
-  def self.get_next_numero
-    @@last_numero += 1
-  end
-  def self.get_current_numero
-    @@last_numero
-  end
-  # @return [Integer] le dernier numéro de paragraphe (utilisé par
-  # les titres pour connaitre le numéro de leur premier paragraphe)
-  # @note
-  #   Inauguré pour les références internes, pour que ça fonctionne
-  #   avec le titre et une numérotation des paragraphes.
-  def self.last_numero
-    @@last_numero
-  end
-
-
-  # @return true si un parseur de paragraphe customisé est utilisé
-  # (il existe quand un fichier parser.rb, propre au film et/ou à la
-  #  collection définit la méthode ParserParagraphModule::paragraph_parser
-  #  donc self.paragraph_parser dans le module ParserParagraphModule
-  #  cf. le manuel pour le détail)
-  def self.has_custom_paragraph_parser?
-    @@custom_paragraph_parser_exists == true
-  end
-  def self.custom_paragraph_parser_exists=(value)
-    @@custom_paragraph_parser_exists = value
-  end
-
-  def self.numerotation_paragraphs_stopped?
-    @numparagisstopped
-  end
-  def self.stop_numerotation_paragraphs
-    @numparagisstopped = true
-  end
-  def self.restart_numerotation_paragraphs
-    @numparagisstopped = false
-  end
-
   #
   # Attention : ça n'est QUE le début commun de l'impression. Voir
   # dans chaque class les traitements particuliers.
@@ -93,7 +34,7 @@ class AnyParagraph
     # Définir le numéro du paragraphe ici, pour que
     # le format :hybrid (n° page + n° paragraphe) fonctionne
     # 
-    if @data[:type] == 'paragraph' && not(AnyParagraph.numerotation_paragraphs_stopped?)
+    if type == 'paragraph' && not(AnyParagraph.numerotation_paragraphs_stopped?)
       @numero = AnyParagraph.get_next_numero
       # dbg "@numero = #{@numero.inspect}".bleu
     end
@@ -192,18 +133,6 @@ class AnyParagraph
     end    
   end
 
-  # @return la Fonte spécifique pour les paragraphes
-  def self.parag_num_fonte
-    @@parag_num_fonte ||= begin
-      r = Prawn4book::PdfBook.current.recipe
-      Fonte.new(
-        name:   r.parag_num_font_name,
-        size:   r.parag_num_font_size,
-        style:  r.parag_num_font_style
-      )
-    end
-  end
-
   def distance_from_text 
     @distance_from_text ||= book.recipe.parag_num_distance_from_text
   end
@@ -214,55 +143,25 @@ class AnyParagraph
     end
   end
 
-  # --- Print Data Methods --- #
-
-  def self.paragraph_numero_color(strength)
-    @@paragraph_numero_color ||= begin
-      (((100 - strength) * 255 / 100).to_s(16).upcase.rjust(2,'0') * 3 )#.tap { |n| add_notice("Couleur : #{n}") }
-      # => p.e. "030303" ou "CCCCCC"
-    end
-  end
-
-
-  def self.diff_height_num_parag_and_parag(pdf)
-    @@diff_height_num_parag_and_parag ||= begin
-      recipe = pdf.pdfbook.recipe
-      parag_height = nil
-      numer_height = nil
-      pdf.font(Prawn4book::Fonte.default_fonte) do
-      # pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
-        parag_height = pdf.height_of("Mot")
-      end
-      parnum_font = Fonte.new(
-        name:  recipe.parag_num_font_name,
-        style: recipe.parag_num_font_style,
-        size:  recipe.parag_num_font_size
-      )
-      pdf.font(parnum_font) do
-        numer_height = pdf.height_of("194")
-      end
-      diff = (parag_height - numer_height).round(3)
-      spy "Calcul de la différence entre fonte normale et numéro de paragraphe\n".jaune +
-        "    parag_height = #{parag_height.inspect}\n".bleu +
-        "    numer_height = #{numer_height.inspect}\n".bleu +
-        "    diff         = #{diff.inspect}".bleu +
-        "    Rectifié à   = #{diff - 1}".bleu
-      diff - recipe.parag_num_vadjust
-    end
-  end
-
   attr_reader :pdf
 
-  attr_reader :pdfbook
-  alias :book :pdfbook
+  attr_reader :book
 
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
   attr_accessor :last_page
   attr_accessor :page_numero
 
-  def initialize(pdfbook)
-    @pdfbook = pdfbook
+  # Index absolu du paragraphe dans le texte source. Il est donc
+  # très facile de faire référence à ce paragraphe à l'aide de
+  # ce pindex ("Le #{pindex}e paragraphe contient une erreur")
+  attr_reader :pindex
+
+  attr_reader :type
+
+  def initialize(book, pindex)
+    @book   = book
+    @pindex = pindex
   end
 
   # @return La référence au paragraphe en fonction de la pagination
@@ -397,7 +296,6 @@ class AnyParagraph
     end
   end
 
-
   # --- Volatile Data ---
 
   ##
@@ -428,7 +326,7 @@ class AnyParagraph
   # --- Raccourcis ---
 
   # @shortcut
-  def recipe; @recipe || pdfbook.recipe end
+  def recipe; @recipe || book.recipe end
 
 
   private

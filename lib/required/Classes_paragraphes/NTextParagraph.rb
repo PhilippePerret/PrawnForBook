@@ -3,17 +3,16 @@ module Prawn4book
 class PdfBook
 class NTextParagraph < AnyParagraph
 
-  attr_reader :data
   attr_reader :text
+  attr_reader :raw_text
   attr_reader :numero
 
-  def initialize(book,data)
-    super(book)
-    @data   = data.merge!(type: 'paragraph')
-    # @numero = AnyParagraph.get_next_numero
-    # dbg "@numero = #{@numero.inspect}".bleu
+  def initialize(book:, raw_text:, pindex:)
+    super(book, pindex)
+    @type = 'paragraph'
+    @raw_text = raw_text
     #
-    # On regarde tout de suite la nature du paragraphe (table ? item
+    # On regarde tout de suite la nature du paragraphe (item
     # de liste ? citation ? etc. pour pouvoir faire un pré-traitement
     # de son texte et pré-définir ses styles)
     pre_parse_text_paragraph
@@ -25,18 +24,14 @@ class NTextParagraph < AnyParagraph
   # liste
   # 
   def pre_parse_text_paragraph
-    @text = data[:text] || data[:raw_line]
-
-    @is_citation    = text.match?(REG_CITATION)
-    @is_list_item   = text.match?(REG_LIST_ITEM)
-    @is_table_line  = text.match?(REG_TABLE_LINE)
-    #
+    @is_citation    = raw_text.match?(REG_CITATION)
+    @is_list_item   = raw_text.match?(REG_LIST_ITEM)
     # En cas de citation ou d'item de liste, on retire la marque
     # de début du paragraphe ("> " ou "* ")
-    @text = text[1..-1].strip if citation? || list_item?
+    @text = raw_text[1..-1].strip if citation? || list_item?
 
     recup = {}
-    tx = self.class.__get_class_tags_in(text, recup)
+    tx = NTextParagraph.__get_class_tags_in(raw_text, recup)
     self.class_tags = recup[:class_tags]
     @text = tx
     
@@ -55,13 +50,10 @@ class NTextParagraph < AnyParagraph
       # rien à faire
     end
 
-    @text_ini = @text
-
   end #/pre_parse_text_paragraph
 
   REG_CITATION    = /^> .+$/.freeze
   REG_LIST_ITEM   = /^\* .+$/.freeze
-  REG_TABLE_LINE  = /^\|/.freeze 
 
   
   # --- Printing Methods ---

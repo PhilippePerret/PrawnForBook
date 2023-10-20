@@ -916,7 +916,7 @@ L'image gardera de l'air avant ce texte, même s'il est collé dans le texte.
 
 Une image qui sera réduite de moitié.
 
-IMAGE[images/red.jpg|width:50%]
+IMAGE[images/red.jpg|width:50%;legend:"Ma belle image";]
 ~~~
 
 ##### Images SVG

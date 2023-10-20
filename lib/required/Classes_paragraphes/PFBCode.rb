@@ -16,9 +16,10 @@ class PFBCode < AnyParagraph
   attr_reader :numero
 
 
-  def initialize(pdfbook, raw_code)
-    super(pdfbook)
-    @raw_code = raw_code[3..-3].strip
+  def initialize(book:, raw_code:, pindex:)
+    super(book, pindex)
+    @type     = 'pfbcode'
+    @raw_code = raw_code
     @parag_style = {}
     #
     # On met toujours le numéro, ça peut servir à diverses méthodes
@@ -62,8 +63,8 @@ class PFBCode < AnyParagraph
     when 'restart_numerotation_paragraphs'
       AnyParagraph.restart_numerotation_paragraphs
     when 'index'
-      pdfbook.page_index.build(pdf)
-      pdfbook.pages[pdf.page_number][:content_length] += 100
+      book.page_index.build(pdf)
+      book.pages[pdf.page_number][:content_length] += 100
     when /^biblio/
       treate_as_bibliography(pdf)
     when /^notice\((.+?)\)$/.freeze
@@ -73,7 +74,7 @@ class PFBCode < AnyParagraph
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Une cible de référence (ou un lien) seule sur une ligne
       # Pour le moment, on considère que ça ne peut être qu'une cible
-      treate_as_cible_references(pdf, pdfbook)
+      treate_as_cible_references(pdf, book)
     when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
       raise FatalPrawnForBookError.new(2000, {code: raw_code})
     when 'line'
@@ -109,7 +110,7 @@ class PFBCode < AnyParagraph
   def traite_as_methode_with_params(pdf, methode, params)
     # -- Exposer (pour les méthodes) --
     @pdf      = pdf
-    @pdfbook  = pdfbook
+    @book  = book
     # -- Pour l'erreur --
     methode_ini = methode.dup.freeze
     #
@@ -172,7 +173,7 @@ class PFBCode < AnyParagraph
         parameters_count = PrawnHelpersMethods.method(methode).parameters.count
         str = 
           case parameters_count
-          when 2 then PrawnHelpersMethods.send(methode,pdf,pdfbook)
+          when 2 then PrawnHelpersMethods.send(methode,pdf,book)
           when 1 then PrawnHelpersMethods.send(methode,pdf)
           when 0 then PrawnHelpersMethods.send(methode)
           end
@@ -188,7 +189,7 @@ class PFBCode < AnyParagraph
           Prawn4book.send(methode, *params)
         else
           params.unshift(pdf)       if params_count > params.count
-          params.insert(1, pdfbook) if params_count > params.count
+          params.insert(1, book) if params_count > params.count
           Prawn4book.send(methode, *params)
         end
       else
@@ -214,10 +215,10 @@ class PFBCode < AnyParagraph
     # On considère toujours que du contenu a été ajouté sur la
     # page courante :
     # 
-    # unless pdfbook.pages[page_number_at_start]
-    #   pdfbook.add_page(page_number_at_start)
+    # unless book.pages[page_number_at_start]
+    #   book.add_page(page_number_at_start)
     # end
-    # pdfbook.pages[page_number_at_start][:content_length] += 100
+    # book.pages[page_number_at_start][:content_length] += 100
 
     #
     # Si plusieurs pages ont été créées, on part du principe que
@@ -228,8 +229,8 @@ class PFBCode < AnyParagraph
     #   # puts "la page : #{page_number_at_start}".orange
     #   # puts "jusqu'à la page : #{page_number_at_end}".orange
     #   for ipage in (page_number_at_start+1..page_number_at_end) do
-    #     pdfbook.add_page(ipage)
-    #     pdfbook.pages[ipage][:content_length] += 1000
+    #     book.add_page(ipage)
+    #     book.pages[ipage][:content_length] += 1000
     #   end
     # end
   end
@@ -254,16 +255,16 @@ class PFBCode < AnyParagraph
   #   - prendre la bibliographie instanciée
   #   - l'imprimer dans le livre
   def treate_as_bibliography(pdf)
-    Bibliography.print(raw_code.match(/^biblio.*?\((.+?)\)$/)[1], pdfbook, pdf)
+    Bibliography.print(raw_code.match(/^biblio.*?\((.+?)\)$/)[1], book, pdf)
   end
 
   #
   # Noter qu'on ne passe ici que lorsque la balise de référence 
   # "occupe" toute la ligne (lorsqu'il n'y a pas d'autre texte). Ça
   # arrive surtout lorsque c'est une cible qu'il faut définir.
-  def treate_as_cible_references(pdf, pdfbook)
+  def treate_as_cible_references(pdf, book)
     cible  = raw_code[3...-1]
-    pdfbook.table_references.add(cible, {page:first_page, paragraph:numero})
+    book.table_references.add(cible, {page:first_page, paragraph:numero})
   end
 
   # Pour pouvoir obtenir une valeur de style "inline" en faisant

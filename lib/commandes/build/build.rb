@@ -57,7 +57,6 @@ class PdfBook
   attr_reader :pages_without_pagination
 
   def generate_pdf_book
-    spy "Génération du livre #{ensured_title.inspect}".bleu
     # 
     # Initialiser le suivi des titres par niveau
     # 
@@ -68,21 +67,22 @@ class PdfBook
     # module qui s'en charge
     # 
     if export_text?
-      spy "Exportation du texte seulement (option -t)"
       require 'lib/modules/Exportator'
-      #
-      # On doit indiquer le livre en court d'exportation, car
-      # les méthodes surclassées de Prawn doivent y avoir accès,
-      # comme par exemple la méthode écrivant dans une cellule de
-      # table (cf. le module Exportator.rb)
       Prawn4book.exported_book = self
     end
+
+    #
+    # Le livre doit être conforme, c'est-à-dire posséder tous les 
+    # éléments requis en fonction de la définition de la recette
+    # (dans la version 2, LINE, on ne teste plus le contenu avant
+    # de voir la conformité)
+    # 
+    conforme? || return
 
     # 
     # --- INITIALISATIONS ---
     # 
     Prawn4book.turn = 1
-
     # - Bibliographies -
     require 'lib/pages/bibliographies'
     Bibliography.init
@@ -103,18 +103,12 @@ class PdfBook
     Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
 
     #
-    # On doit parser le texte avant pour voir si le livre est
-    # conforme
+    # === CONSTRUCTION DU LIVRE ===
     # 
-    spy "-> PARSE DU TEXTE".bleu
-    inputfile.parse
-    spy "<- /PARSE DU TEXTE".bleu
+    build_pdf_book
 
-    #
-    # Le livre doit être conforme, c'est-à-dire posséder les 
-    # éléments requis
-    # 
-    conforme? || return
+    # On s'arrête ici pour le moment
+    return 
 
     # 
     # = PREMIÈRE PASSE =
@@ -270,10 +264,6 @@ class PdfBook
       export_text("\n#{'-'*30}\n\n") if export_text?
     end
 
-    # pdf.before_render do
-    #   puts "Je dois rendre quelque chose"
-    # end
-
     # 
     # On définit la clé à utiliser (numéro de page ou numéro de
     # paragraphe) pour les éléments de bibliographie (plus exacte- 
@@ -287,6 +277,9 @@ class PdfBook
     #
     # Pour consigner les informations sur les pages, à commencer
     # par les paragraphes (numéros) s'ils sont numérotés
+    # 
+    # TODO : Faire plutôt une class Prawn4book::PdfBook::Page qui
+    # gère les pages
     # 
     @pages = {}
 
@@ -365,11 +358,9 @@ class PdfBook
     # 
     # cf. modules/pdfbook/generate_builder/paragraphes.rb
     # 
-    pdf.print_paragraphs(inputfile.paragraphes)
+    # pdf.print_paragraphs(inputfile.paragraphes)
 
-    # ESSAI
-    # page = pdf.page
-    # puts "page ##{page.number}: #{page.xobjects}"
+    inputfile.parse_and_write(pdf)
 
     #
     # - PAGES SUPPLÉMENTAIRES -
@@ -639,23 +630,13 @@ class PdfBook
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
   def conforme?
-    # 
-    # Si la page de titre est demandée, il faut s'assurer que les
-    # informations minimales sont fournies (titre et auteur) et que
-    # s'il faut un logo, son path est défini et renvoie à un fichier
-    # existant.
-    # 
     if recipe.page_de_titre?
-      spy "La page de titre est démandée".jaune
       not(titre.nil?)     || raise(FatalPrawnForBookError.new(800))
       not(auteurs.nil?)   || raise(FatalPrawnForBookError.new(801))
       unless logo_defined? == logo_exists?
          raise(FatalPrawnForBookError.new(802, {path: recipe.logo_path}))
       end
-    else
-      spy "La page de titre N'EST PAS démandée".jaune
     end
-
   rescue FatalPrawnForBookError => e
     raise e
   rescue PrawnBuildingError => e

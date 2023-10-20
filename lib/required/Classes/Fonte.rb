@@ -145,7 +145,7 @@ class << self
     # Les données doivent être valides
     dfont.key?(:style) || raise(FatalPrawnForBookError.new(651, {dfont: data_font}))
 
-    thefont = new(data_font)
+    thefont = new(dfont)
     @fonts.merge!(key_font => thefont)
 
     return thefont

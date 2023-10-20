@@ -4,13 +4,32 @@ module Prawn4book
 class PdfBook
 class NImage < AnyParagraph
 
-  attr_reader :data
-  attr_accessor :page_numero
+  # @public
+  # 
+  # Méthode qui parse le code contenu à l'intérieur d'un IMAGE[...]
+  # dans le fichier source.
+  # @note : ce code doit se trouve seul sur une ligne
+  # 
+  # @param dimg [String] Intérieur de IMAGE[...]
+  # 
+  # @return [Hash] Les données pour l'image
+  def self.parse(dimg)
+    case dimg
+    when /^\{(.+)\}$/.freeze
+      eval($1)
+    when /\|/.freeze
+      path, props = dimg.split('|').map {|s| s.strip }
+      h = props.split(';').each { |p| k, v = p.split(':'); h.merge!(k.to_sym => v) }
+      h.merge!(path: path)
+    else
+      {path: dim}
+    end
+  end
 
-  def initialize(pdfbook, data)
-    super(pdfbook)
-    dispatch_style(data[:style]) if data.key?(:style)
-    @data = data.merge!(type: 'image')
+  def initialize(book:, data_str:, pindex:)
+    super(book, pindex)
+    @type = 'image'
+    @data = NImage.parse(data_str)
   end
 
 
@@ -94,13 +113,6 @@ class NImage < AnyParagraph
   end #/print
 
   # --- Functional Methods ---
-
-  def dispatch_style(style)
-    style.split(';').each do |propval|
-      prop, val = propval.split(':').map{|n|n.strip}
-      self.instance_variable_set("@#{prop}", val)
-    end
-  end
 
   def pourcent_to_real_value(value, pdf)
     # 

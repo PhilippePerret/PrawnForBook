@@ -12,12 +12,12 @@ class NTitre < AnyParagraph
   #  titres ne sont pas numérotés)
   attr_accessor :numero
 
-  attr_reader :data
 
-  def initialize(pdfbook, data)
-    super(pdfbook)
-    @data = data.merge!(type: 'titre')
-    @numero = (1 + AnyParagraph.last_numero).freeze
+  def initialize(book:, titre:, level:, pindex:)
+    super(book, pindex)
+    @type   = 'titre'
+    @text   = titre
+    @level  = level
     check_inscription_in_tdm
   end
 
@@ -258,7 +258,7 @@ class NTitre < AnyParagraph
     # Pour définir si on doit inscrire le titre dans la table
     # des matières
     def check_inscription_in_tdm
-      txt = data[:text]
+      txt = text.dup
       @writeit_in_tdm = not(txt.match?(/\{no[_\-]tdm\}/i))
       txt = txt.gsub(/\{no[_-]tdm\}/,'').strip unless @writeit_in_tdm
       @text = txt
