@@ -26,9 +26,8 @@ class InputTextFile
   #                 SINON   => le chemin d'accès complet
   #
   def initialize(book, patharg)
-    @book  = book
-    puts "Instancié avec #{patharg.inspect}"
-    @path  = define_path_from_arg(patharg)
+    @book = book
+    @path = define_path_from_arg(patharg)
   end
 
 

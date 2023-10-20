@@ -31,6 +31,9 @@ class << self
   #   l'instance NTable à la première ligne, puis renvoie NIL en
   #   ajoutant la ligne à l'instance de table initiée.
   # 
+  #   Les inclusions de fichiers sont traités en amont, donc ici il
+  #   ne devrait plus y avoir aucune balise d'inclusion.
+  # 
   def instantiate(book, string, indice, file)
 
     # Si une table est en cours de traitement et que +string+ n'est
