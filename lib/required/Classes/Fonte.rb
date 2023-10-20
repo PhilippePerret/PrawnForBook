@@ -120,6 +120,38 @@ class << self
   # 
   attr_accessor :default
 
+
+  # @return la fonte dont les données sont +dfont+
+  # 
+  # @param dfont [Hash]
+  #   @option :name   [String]  Nom de la fonte
+  #   @option :style  |Symbol]  Style de la fonte (tel que défini dans la recette)
+  #   @option :size   [Numeric] Taille de la fonte (chaque taille possède sa propre instance)
+  # 
+  def get_or_instanciate(dfont)
+
+    @fonts ||= {}
+
+    # - Clé de consignation de la fonte -
+    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}"
+
+    return @fonts[key_font] if @fonts.key?(key_font)
+
+    #
+    # La fonte n'existe pas encore, il faut l'instancier et la
+    # consigner.
+    # 
+
+    # Les données doivent être valides
+    dfont.key?(:style) || raise(FatalPrawnForBookError.new(651, {dfont: data_font}))
+
+    thefont = new(data_font)
+    @fonts.merge!(key_font => thefont)
+
+    return thefont
+  end
+
+
   # Pour retourner une copie de la fonte par défaut (pour ne pas la
   # toucher)
   def dup_default
@@ -131,6 +163,11 @@ class << self
   def dup(fonte)
     new(name:fonte.name.dup, size:fonte.size.dup, style: fonte.style.dup)
   end
+
+
+
+
+
 
   # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
   # de titre +level+

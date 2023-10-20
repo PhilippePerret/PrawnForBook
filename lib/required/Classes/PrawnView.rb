@@ -5,21 +5,6 @@ module Prawn4book
 class PrawnView
   include Prawn::View
 
-  @@table_errors_properties = {}
-  def self.add_error_on_property(prop_name)
-    unless @@table_errors_properties.key?(prop_name)
-      @@table_errors_properties.merge!(prop_name => 0)
-    end
-    @@table_errors_properties[prop_name] += 1
-    if @@table_errors_properties[prop_name] > 5
-      raise PrawnFatalError.new(ERRORS[:building][:too_much_errors_on_properties] % prop_name)      
-    end
-  end
-
-  def self.add_cursor_position?
-    :TRUE == @@addcurpos ||= true_or_false(CLI.option(:cursor))
-  end
-
   # @prop Instance {Prawn4book::PdfBook}
   attr_reader :book
 
@@ -35,29 +20,43 @@ class PrawnView
   # la table des matières finales
   attr_accessor :tdm
 
-  # Les options courantes au moment où le paragraphe est
-  # écrit (notamment pour connaitre la fonte et particulièrement
-  # sa taille, lorsqu'on traite des polices proportionnelles)
-  attr_accessor :current_options
-
   # La [Prawn4book::Fonte] courante
   # 
   attr_reader :current_fonte
 
+
+  # Instanciation d'un document Prawn::Document
+  # -------------------------------------------
+  # (en fait un Prawn::View)
+  # 
+  # @param book [Prawn4book::PdfBook] 
+  #   
+  #     Le livre en cours de traitement
+  # 
+  # @param config [Hash] 
+  # 
+  #     Table de configuration définissant le format de page, les 
+  #     marges, etc. Toutes ces données sont prises dans la recette
+  #     du livre.
+  # 
   def initialize(book, config)
     @book   = book
     @config = config
-    # Pour consigner les fontes utilisées
-    @fonts = {}
+    # @fonts  = {}
   end
 
+  # Prawn::View en a besoin pour "synchroniser" avec Prawn::Document
+  # Dans Prawn::RectifiedDocument se trouvent des surclassement de
+  # méthodes
   def document
     @document ||= begin
       Prawn::RectifiedDocument.new(config)
     end
   end
 
-  # --- Margins Methods ---
+
+  # --- MARGINS METHODS ---
+
 
   def odd_margins
     @odd_margins ||= [top_mg, int_mg, bot_mg, ext_mg]
@@ -67,9 +66,73 @@ class PrawnView
   end
 
   def top_mg; @top_mg ||= config[:top_margin] end
-  def bot_mg; @bot_mg ||= config[:bot_margin] + 20 end
+  def bot_mg; @bot_mg ||= config[:bot_margin] end
   def ext_mg; @ext_mg ||= config[:ext_margin] end
   def int_mg; @int_mg ||= config[:int_margin] end
+
+
+  # --- LINES METHODS ---
+
+
+  # Déplace le curseur sur la ligne de référence +x+
+  # 
+  # @param [Integer] x Indice 1-start de la ligne
+  # @return l'indice 1-start de la ligne sur laquelle on se trouve
+  # maintenant.
+  # 
+  # @note
+  # 
+  #   Quand il est question de "ligne" ici, il s'agit de façon 
+  #   absolu des lignes de référence telles que définies par la 
+  #   donnée line_height courante (qui peut être propre au livre 
+  #   entier ou à une page — dans l'annexe par exemple)
+  # 
+  def move_to_line(x)
+    # Top ligne
+    # ---------
+    next_line_top  = (x - 1) * line_height
+    # Déplacement du curseur
+    move_cursor_to(bounds.height - next_line_top + ascender)
+    return x
+  end
+
+  def move_to_first_line
+    move_to_line(1)
+  end
+
+  # Déplacement du curseur à la prochaine ligne de référence
+  def move_to_next_line
+    # Ligne courante
+    # --------------
+    # C'est la distance entre la position actuelle du curseur et le
+    # haut de la page (marge considérée), divisée par la hauteur de
+    # ligne. On l'arrondit à la valeur plancher
+    current_line      = ((bounds.height - cursor).to_f / line_height).ceil
+
+    move_to_line(current_line + 1)
+  end
+
+  # @ascender
+  # 
+  # Il permet de savoir de combien on doit remonter la ligne pour
+  # qu'en fonction de sa taille, elle soit posée sur la ligne de
+  # référence.
+  # 
+  # Sa valeur est changée dès que la fonte est modifiée pour le
+  # document (avec la méthode #font refactorisée pour Prawn-for-book.
+  # 
+  def ascender
+    @ascender
+  end
+
+  def current_leading
+    line_height - height_of('X')
+  end
+
+  def lines_down(x)
+    move_cursor_to(x * line_height + ascender)
+  end
+
 
   # --- Builing General Methods ---
 
@@ -80,9 +143,9 @@ class PrawnView
   # volontaire ou naturelle.
   # 
   def start_new_page(options = {})
-    spy "-> Départ de nouvelle page…".bleu
     # 
-    # Réglage des marges de la prochaine page
+    # Réglage des marges de la prochaine page (suivant que c'est une
+    # belle page ou une fausse page)
     # 
     new_options = {margin: (page_number.odd? ? odd_margins  : even_margins)}.merge(options)
     # spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
@@ -97,31 +160,6 @@ class PrawnView
       PdfBook::AnyParagraph.reset_numero
     end
 
-    spy "<- Nouvelle page initiée avec succès".vert
-  end
-
-  # Pour dessiner les marges sur toutes les pages (ou seulement
-  # celles choisies)
-  # Option : -display_margins
-  def draw_margins
-    stroke_color(88,0,58,28)
-    line_width(0.3)
-    if CLI.options[:grid]
-      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
-      kpages = (pfirst..plast)
-    else
-      kpages = :all
-    end
-    repeat kpages do
-      print_margins
-    end
-    stroke_color 0,0,0,100
-  end
-  def print_margins
-    stroke_horizontal_line(0, bounds.width, at: bounds.top)
-    stroke_horizontal_line(0, bounds.width, at: bounds.bottom)
-    stroke_vertical_line(0, bounds.top, at: bounds.left)
-    stroke_vertical_line(0, bounds.top, at: bounds.right)
   end
 
 
@@ -141,28 +179,14 @@ class PrawnView
   #   - Avec un Hash qui contient les paramètres et en plus la pro-
   #     priété :name (ou :font) définissant le nom de la fonte
   # 
-  # @return Cette méthode, sans argument, retourne aussi la fonte 
-  # courante, pour le calcul de la prochaine ligne de référence par
-  # exemple.
+  # @return La fonte Prawn courante (note : ce n'est pas l'instance 
+  # Prawn4book::Fonte)
   # 
-  # NOTE TODO Cette méthode est appelée à outrance, par exemple, 
-  # quand on numérote les paragraphes. Dans cette situation, la version
-  # actuelle crée à chaque fois des instances de la même fonte… Ça 
-  # peut être vraiment lourd…
-  # Ce qu'il faudrait, c'est instancier d'abord les fontes utiles,
-  # par exemple, dans ce cas, la fonte pour la police et la fonte pour
-  # les numéros, et prendre la même instance. Déjà, on gagnerait en
-  # évitant de calculer le leading chaque fois.
-  # Dans un premier temps, on va créer une table de polices @fonts
-  # qui va posséder en identifiant '<name><style><size>' et en 
-  # valeur l'instance de la police, qu'on ne créera que si elle 
-  # n'existe pas.
   def font(fonte = nil, params = nil)
+    return super if fonte.nil?
     thefont   = nil
     data_font = nil
     case fonte
-    when NilClass
-      return super
     when Prawn4book::Fonte
       thefont = fonte
     when String, Symbol
@@ -174,31 +198,23 @@ class PrawnView
       raise ERRORS[:fonts][:invalid_font_params]
     end
 
-    unless data_font.nil?
-      data_font.key?(:style) || begin
-        raise "Les données de fonte #{data_font.inspect} doivent définir le :style"
-      rescue Exception => e
-        puts e.message.rouge
-        puts e.backtrace[0..4].join("\n").rouge
-        exit
-      end
-
-      # - Clé de consignation de la fonte -
-      key_font = "#{data_font[:name]}:#{data_font[:style]}:#{data_font[:size]}"
-
-      
-      if @fonts.key?(key_font)
-        thefont = @fonts[key_font]
-      else
-        thefont = Fonte.new(data_font)
-        @fonts.merge!(key_font => thefont)
-      end
+    # Si des données de fonte sont définies, il faut peut-être 
+    # instancier une nouvelle fonte.
+    # @note data_font est nil seulement lorsque c'est une Prawn::Fonte
+    # qui est transmise à la méthode courante.
+    # 
+    if data_font
+      thefont = Prawn4book::Fonte.get_or_instanciate(data_font)      
     end
 
-    # On met la fonte en fonte courante
-    @current_fonte = thefont
-    super(thefont.name, thefont.params)
+    @current_font = super(thefont.name, thefont.params)
 
+    # L'ascender courant, qui permet de savoir de combien on doit
+    # décaler le texte verticalement pour qu'il repose exactement sur
+    # une ligne de référence.
+    @ascender = @current_font.ascender
+
+    return @current_font
   end
 
   #
@@ -222,14 +238,7 @@ class PrawnView
   end
   alias :leading_for :calc_leading_for
 
-  def book
-    @book ||= PdfBook.current
-  end
 
-  # @helper
-  def add_cursor_position(str)
-    "<font size=\"8\" name=\"#{book.second_font}\" color=\"grey\">[#{round(cursor)}]</font> #{str}"
-  end
 
   # --- Predicate Methods ---
 
