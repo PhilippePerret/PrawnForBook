@@ -56,9 +56,10 @@ class Page
   attr_reader :titres
 
   def initialize(dpage)
-    @data     = dpage
-    @number   = dpage[:number]
-    @titres   = dpage[:titres]
+    @data           = dpage
+    @number         = dpage[:number]
+    @titres         = dpage[:titres]
+    @has_pagination = true
   end
 
   def add_titre(level, titre_str)
@@ -68,6 +69,14 @@ class Page
 
   def no_content?
     data[:content_length] == 0 || data[:first_par].nil?
+  end
+
+  def no_pagination?
+    @has_pagination === false
+  end
+
+  def pagination=(value)
+    @has_pagination = value
   end
 
   def [](key)

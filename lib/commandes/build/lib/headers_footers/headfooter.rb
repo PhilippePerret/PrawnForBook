@@ -91,7 +91,7 @@ end #/ << self
 
       #
       # Si la page se trouve dans les pages à exclure
-      next if book.pages.without_pagination.include?(numero)
+      next if book.pages[numero].no_pagination?
 
       #
       # Sinon, on prend les données de la page

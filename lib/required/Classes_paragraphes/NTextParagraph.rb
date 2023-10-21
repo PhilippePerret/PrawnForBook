@@ -184,6 +184,7 @@ class NTextParagraph < AnyParagraph
         # lignes (box) du paragraphe.
         str = par.text.dup
         while str.length > 0
+          
           # Fabrication du text-box
           # ------------------------
           # text_box est une méthode surclassée pour qu'elle fonc-

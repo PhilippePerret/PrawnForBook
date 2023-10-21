@@ -14,3 +14,9 @@ book_format:
   text:
     line_height: 24
 #</book_format>
+
+#<publisher>
+publisher:
+  name: Icare Éditions
+  logo_path: logo.png
+#</publisher>

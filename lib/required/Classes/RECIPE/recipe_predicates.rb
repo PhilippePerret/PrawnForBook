@@ -72,7 +72,7 @@ class Recipe
   end
 
   def logo_exists?
-    logo_defined? && File.exist?(recipe.logo_path)
+    logo_defined? && File.exist?(logo_path)
   end
 
   # --- Entêtes et pieds de page ---
