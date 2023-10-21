@@ -27,6 +27,13 @@ end
 
 module Prawn
 module Text
+  module Formatted
+    class Box
+      def at=(coor)
+        @at = coor
+      end
+    end #/class Box
+  end #/module Formatted
 
   # # Méthode #text surclassée pour que le leading soit toujours
   # # appliqué en fonction de la hauteur de ligne courante (grille de
@@ -37,6 +44,10 @@ module Text
   #   options.merge!(leading: current_leading)
   #   real_text(str, **options)
   # end
+
+  def at=(coor)
+    @at = coor
+  end
 
   # Surclassement de la méthode originale pour traiter l'option
   # :dry_run

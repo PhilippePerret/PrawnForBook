@@ -90,8 +90,6 @@ class NTextParagraph < AnyParagraph
     # 
     @text = raw_text.dup
 
-    puts "  @text = #{@text.inspect}".jaune
-
     #
     # Quelques traitements communs, comme la retenue du numéro de
     # la page ou le préformatage pour les éléments textuels.
@@ -148,8 +146,10 @@ class NTextParagraph < AnyParagraph
     # 
     pdf.update do
       begin
-        spy "Application de la fonte : #{Fonte.default_fonte.inspect}"
-        font(Fonte.default_fonte)
+        if current_fonte && Fonte.default_fonte != current_fonte
+          spy "Application de la fonte : #{Fonte.default_fonte.inspect}"
+          font(Fonte.default_fonte)
+        end
       rescue Prawn::Errors::UnknownFont
         spy "--- fonte inconnue ---"
         spy "Fontes : #{book.recipe.get(:fonts).inspect}"
@@ -157,10 +157,20 @@ class NTextParagraph < AnyParagraph
       end
     end
 
+    spy "Écriture de « #{text} »"
       
     ###########################
     #  ÉCRITURE DU PARAGRAPHE #
     ###########################
+    # 
+    # Principe :
+    # 
+    # On établit d'abord la liste des lignes qu'on aura à écrire, en
+    # résolvant les lignes de voleur (il ne doit plus y en avoir).
+    # 
+    # Ensuite, une fois qu'on a toutes les lignes (sous forme de box),
+    # on peut les écrire.
+    # 
     begin
       pdf.update do
 
@@ -183,106 +193,62 @@ class NTextParagraph < AnyParagraph
         # 
         paragraphe_stack = [] # pour mettre les box avant de les rendre
       
-        # Tant qu'il reste du texte, on boucle pour faire des lignes
+        # Tant qu'il reste du texte, on boucle pour faire toutes les
+        # lignes (box) du paragraphe.
         str = par.text.dup
         while str.length > 0
-
-          # Il faudra mettre la ligne sur la prochaine page s'il ne
-          # reste pas assez de place
-          # 
-          this_line_on_next_page = cursor - line_height < 0
-          if this_line_on_next_page
-            puts "La ligne #{str.inspect} sur la page suivante"
-          end
-          
           # Fabrication du text-box
           # ------------------------
-          # C'est une méthode que j'ai surclassée pour qu'elle 
-          # puisse fonctionner avec :dry_run et en même temps retour-
-          # ner l'excédant de texte et le box.
+          # text_box est une méthode surclassée pour qu'elle fonc-
+          # tionne avec :dry_run (donc qu'elle n'imprime pas le para-
+          # graphe et qu'elle retourne en même temps l'excédant, dé-
+          # signé par +rest+ ci-dessous le box [Text::Formatted::Box
+          # ou Text::Box s'il n'y a pas de formatage.
           # 
-          #   Le :dry_run à true empêche d'écrire le paragraphe
+          # +rest+  [Array<Hash>] Le texte restant ou une liste vide.
+          # +box+   [Text::Formatted::Box|Text::Box]
           # 
-          # +rest+ contient le texte restant (Array) ou une liste
-          # null
-          # +box+ est 
-          rest, box = text_box(str, **par_options.merge(at: [0, cursor]))
+          # @note
+          # 
+          #   On se place toujours tout en haut de la page pour 
+          #   qu'aucun calcul de passage à la page suivante ne vienne
+          #   perturber la vérification. Noter que quel que soit la 
+          #   longueur du paragraphe, il sera traité en entier puis-
+          #   qu'on fonctionne toujours ligne à ligne ici.
+          # 
+          rest, box = text_box(str, **par_options.merge(at: [0, bounds.height]))
+
+          # spy "rest = #{rest.inspect}"
 
           #
           # S'il reste quelque chose, mais que c'est trop court, il faut
           # jouer sur le kerning du texte courant pour faire remonter le
-          # texte ou faire descendre un mot
+          # texte ou faire descendre un mot.
+          # 
+          # Donc, ici, on va calculer le character_spacing nécessaire,
+          # et on va corriger +box+ pour qu'il intègre le reste. Après
+          # cette opération, +rest+ doit être vide.
+          # 
           # @note TODO Il faut pouvoir régler la longueur de mot minimum
+          #   C'est-à-dire la valeur du THIEF_LINE_LENGTH ci-dessous
+          #   et il faut pouvoir le modifier à la volée dans le texte
           # 
           has_thief_line = rest.count > 0 && rest.first[:text].length <= THIEF_LINE_LENGTH
           if has_thief_line
-            treate_thief_line_in(pdf, stf, **par_options)
+            cs = treate_thief_line_in(pdf, stf, **par_options)
+            rest, box = text_box(
+              str, 
+              # TODO Pouvoir régler ce "0" (et la largeur du box)
+              **par_options.merge(at: [0, cursor], kerning:true, character_spacing:-cs)
+            )
+            rest.count == 0 || raise("Il ne devrait rester plus rien.")
           end
 
           has_no_rest = rest.count == 0
 
-
-          if this_line_on_next_page || cursor == bounds.height
-            #
-            # Si le curseur est trop bas
-            # 
-
-            this_line_is_last_line = has_no_rest
-
-            #
-            # Si c'est la dernière ligne, pour qu'elle ne soit pas
-            # veuve, il faut récupérer la dernière du stack pour l'ajouter
-            # ensuite.
-            # @note : il y a encore un problème ici (ou pour l'orpheline)
-            # 
-            if this_line_is_last_line && paragraphe_stack.count > 0
-
-              start_new_page
-              lines_down(1)
-
-              dernier = paragraphe_stack.pop
-              dernier.instance_variable_set('@at', [0, bounds.height])
-              lines_kept = [dernier]
-              box.instance_variable_set('@at', [0, bounds.height - line_height])
-            
-            else
-            
-              lines_kept = []
-            
-            end
-
-            while rbox = paragraphe_stack.shift
-              # Je place un 'move_down' pour la suite, mais le rbox se
-              # placerait bien de toutes façons puisqu'il contient son
-              # @at qui définit sa position.
-              rbox.render 
-              move_down(line_height)
-            end
-
-            # 
-            # On met les/la ligne(s) éventuellement récupérée(s) pour ne
-            # pas avoir de veuve
-            # 
-            paragraphe_stack += lines_kept
-
-          else
-            #
-            # Passage à la ligne suivante
-            # 
-            move_down(line_height) # Sans rien toucher d'autre, ça doit être une ligne de référence
-          
-          end
-
-          if cursor < 0
-            start_new_page
-            move_to_line(1)
-          end        
-        
           # 
-          # On met la ligne (c'est forcément une ligne) dans le tampon
-          # du paragraphe.
-          # 
-          # La ligne de voleur a été éventuellement traitée avant.
+          # On met toujours la ligne (c'est forcément une ligne) dans 
+          # le tampon de ligne du paragraphe.
           # 
           paragraphe_stack << box
 
@@ -293,18 +259,53 @@ class NTextParagraph < AnyParagraph
         end
         # /loop tant qu'il reste du texte (while str.length > 0)
 
-        # options.merge!(indent_paragraphs: textIndent) if textIndent
 
+        # À partir d'ici, on a dans le tampon de lignes toutes les
+        # lignes du paragraphe à écrire.
+        spy "Nombre lignes-box à écrire : #{paragraphe_stack.count}"
+
+        # Faut-il passer à la page suivante pour écrire le premier
+        # paragraphe ?
+        first_line_on_next_page = cursor - line_height < 0
+
+        start_new_page if first_line_on_next_page
+
+        # On boucle sur toutes les lignes pour les écrire
+        # À chaque ligne écrite il faut déplacer le curseur sur la 
+        # ligne suivante.
         # 
-        # On peut écrire les lignes du paragraphe
-        # 
-        puts "  #{paragraphe_stack.count} lignes à écrire".bleu
-        # sleep 2
-        while rbox = paragraphe_stack.shift
-          rbox.render
-          move_down(line_height) # voir la note plus haut
+        # is_first_line pour savoir si c'est la première et gérer les
+        # orphelines.
+        is_first_line = true
+        while boxline = paragraphe_stack.shift
+
+          # Nombre de lignes restantes
+          nombre_restantes = paragraphe_stack.count
+
+          is_penultimate_line = nombre_restantes == 1
+
+          if is_first_line && (nombre_restantes > 0) &&  cursor - 2 * line_height < 0
+            # => Orpheline
+            # => Passer tout de suite à la page suivante
+            start_new_page
+          elsif is_penultimate_line && cursor - 2 * line_height < 0
+            # => La suivante serait une Veuve
+            # => Passer tout de suite à la page suivante pour que
+            #    la ligne suivante ne soit pas seule.
+            start_new_page
+          end
+          boxline.at = [0, cursor] # TODO: CE "0" EST À RÉGLER
+
+          ##############################
+          ### IMPRESSION DE LA LIGNE ###
+          ##############################
+          boxline.render
+
+          # -- On se place sur la ligne suivante --
+          move_to_next_line
+
+          is_first_line = false
         end
-
 
       end #/pdf
 
@@ -312,7 +313,7 @@ class NTextParagraph < AnyParagraph
       raise e
     rescue Exception => e
       raise FatalPrawnForBookError.new(100, {
-        text:text.inspect, 
+        text:raw_text.inspect, 
         err: e.message, 
         backtrace:(debug? ? e.backtrace.join("\n") : '')
       })

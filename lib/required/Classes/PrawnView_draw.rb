@@ -9,7 +9,6 @@ class PrawnView
   # celles choisies)
   # Option : -display_margins
   def draw_margins
-    stroke_color(88,0,58,28)
     line_width(0.3)
     if CLI.params[:pages]
       pfirst, plast = CLI.params[:pages].split('-').map {|n|n.to_i}
@@ -18,12 +17,13 @@ class PrawnView
       kpages = :all
     end
     repeat kpages, **{dynamic:true} do
+      stroke_color(88,0,58,28)
       stroke_horizontal_line(bounds.left, bounds.width, at: bounds.top)
       stroke_horizontal_line(bounds.left, bounds.width, at: bounds.bottom)
       stroke_vertical_line(bounds.left, bounds.top, at: bounds.left)
       stroke_vertical_line(bounds.left, bounds.top, at: bounds.right)
+      stroke_color 0,0,0,100
     end
-    stroke_color 0,0,0,100
   end
 
 
@@ -32,13 +32,13 @@ class PrawnView
   # 
   def draw_reference_grids
     
-    # -- Couleur et épaisseur --
-    stroke_color(51, 0, 0, 3)  # bleu ciel
-    fill_color(51, 0, 0, 3)    # bleu ciel
-    line_width(0.1)
 
     # -- Dessin de la grille de référence sur les pages concernées --
     repeat gridded_pages, **{dynamic: true} do
+      # -- Couleur et épaisseur --
+      stroke_color(51, 0, 0, 3)  # bleu ciel
+      fill_color(51, 0, 0, 3)    # bleu ciel
+      line_width(0.1)
       # -- Changement de hauteur de ligne --
       if leadings.key?(page_number)
         data_leading = leadings[page_number]
@@ -54,11 +54,13 @@ class PrawnView
         stroke_horizontal_line(-100, bounds.width + 100, at: h)
       end
 
+      # -- Remettre les couleurs --
+      # -- Noir et Blanc --
+      stroke_color(0, 0, 0, 100)
+      fill_color(0, 0, 0, 100)
+  
     end
 
-    # -- Noir et Blanc --
-    stroke_color(0, 0, 0, 100)
-    fill_color(0, 0, 0, 100)
 
   end
   # /#draw_reference_grids
