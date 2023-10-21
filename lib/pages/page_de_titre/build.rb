@@ -26,6 +26,11 @@ class PageDeTitre
       start_new_page
 
       #
+      # Toujours sur une belle page
+      # 
+      start_new_page if not(belle_page?)
+
+      #
       # On indique qu'il ne faudra pas numéroter cette page, sauf
       # indication contraire dans la recette
       # 
