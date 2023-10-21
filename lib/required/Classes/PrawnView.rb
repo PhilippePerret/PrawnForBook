@@ -155,6 +155,10 @@ class PrawnView
     # spy "Nouvelle page avec option : #{new_options.inspect}".bleu, true
     super(new_options)
     
+    # Si une fonte est définie (c'est-à-dire si on n'en est pas au
+    # tout début) On se place sur la première ligne
+    move_to_first_line if font
+
     # 
     # Si l'on est en mode pagination hybride (hybrid), il faut 
     # réinitialiser les numéros de paragraphe à chaque nouvelle

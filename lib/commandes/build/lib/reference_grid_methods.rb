@@ -25,7 +25,8 @@ class PrawnView
   def move_to_line(x)
     # Top ligne
     # ---------
-    next_line_top  = (x - 1) * line_height
+    # next_line_top  = (x - 1) * line_height
+    next_line_top  = x * line_height
     # Déplacement du curseur
     move_cursor_to(bounds.height - next_line_top + ascender)
     return x
@@ -57,7 +58,7 @@ class PrawnView
   # document (avec la méthode #font refactorisée pour Prawn-for-book.
   # 
   def ascender
-    @ascender
+    @ascender || font.ascender
   end
 
   alias :real_font :font

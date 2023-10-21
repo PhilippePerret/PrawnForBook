@@ -6,27 +6,6 @@
 
 =end
 module Prawn4book
-
-  def self.first_turn?
-    @@turn == 1
-  end
-  def self.second_turn?
-    @@turn == 2
-  end
-  def self.third_turn?
-    @@turn == 3
-  end
-  def self.turn=(value)
-    @@turn = value
-  end
-
-  def self.requires_third_turn
-    @@third_turn = true
-  end
-  def self.require_third_turn?
-    @@third_turn === true
-  end
-
 class Command
   #
   # Méthode appelée quand on doit construire le livre (`pfb build')
@@ -262,6 +241,14 @@ class PdfBook
     # Empacketage de toutes les fontes dans le document PDF.
     # 
     pdf.embed_fontes(book_fonts)
+    # - Par défaut -
+    default_fonte = Fonte.new(
+      name:   recipe.default_font_name,
+      style:  recipe.default_font_style,
+      size:   recipe.default_font_size,
+      hname:  'Fonte par défaut'
+    )
+    Fonte.default = default_fonte
 
     # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
@@ -274,17 +261,10 @@ class PdfBook
     # Fonte par défaut
     # ----------------
     # 
-    #   On ne peut faire ça que si une première page existe, non il
+    #   On ne peut faire ça que si une première page existe, donc il
     #   faut impérativement que ce code se situe après avoir 
     #   démarré la première page.
     # 
-    default_fonte = Fonte.new(
-      name:   recipe.default_font_name,
-      style:  recipe.default_font_style,
-      size:   recipe.default_font_size,
-      hname:  'Fonte par défaut'
-    )
-    Fonte.default = default_fonte
     # -- Application --
     pdf.font(Fonte.default)
 

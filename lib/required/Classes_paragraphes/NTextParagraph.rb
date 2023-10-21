@@ -75,6 +75,8 @@ class NTextParagraph < AnyParagraph
   # 
   def print(pdf)
 
+    puts "-> print de NTextParagraph".jaune
+
     #
     # Pour repartir du texte initial, même lorsqu'un second tour est
     # nécessaire pour traiter les références croisées.
@@ -86,8 +88,9 @@ class NTextParagraph < AnyParagraph
     #   retrouve(rait) donc avec un @text qui ne commencerait plus 
     #   par '* ' et qui ne serait donc plus un item de liste…
     # 
-    @text = @text_ini
+    @text = raw_text.dup
 
+    puts "  @text = #{@text.inspect}".jaune
 
     #
     # Quelques traitements communs, comme la retenue du numéro de
@@ -130,7 +133,7 @@ class NTextParagraph < AnyParagraph
     #
     # Pour invoquer cette instance dans le pdf.update
     # 
-    pa = self
+    par = self
 
     #
     # Préformatage par nature de paragraphe
@@ -172,9 +175,6 @@ class NTextParagraph < AnyParagraph
         }.freeze
 
 
-        move_to_next_line # unless cursor_positionned
-
-
         # Pile pour mettre les lignes à écrire du paragraphe
         # 
         # Les lignes ne seront placées qu'à la fin, une fois que l'on
@@ -184,7 +184,7 @@ class NTextParagraph < AnyParagraph
         paragraphe_stack = [] # pour mettre les box avant de les rendre
       
         # Tant qu'il reste du texte, on boucle pour faire des lignes
-        str = text.dup
+        str = par.text.dup
         while str.length > 0
 
           # Il faudra mettre la ligne sur la prochaine page s'il ne
@@ -298,6 +298,8 @@ class NTextParagraph < AnyParagraph
         # 
         # On peut écrire les lignes du paragraphe
         # 
+        puts "  #{paragraphe_stack.count} lignes à écrire".bleu
+        # sleep 2
         while rbox = paragraphe_stack.shift
           rbox.render
           move_down(line_height) # voir la note plus haut
@@ -379,6 +381,7 @@ class NTextParagraph < AnyParagraph
   end
 
   # Constructeur propre
+  # TODO : Comme c'est une méthode utilisateur, il faut la protéger
   def own_builder(pdf)
     send(@own_builder_method, self, pdf)
   end

@@ -315,7 +315,7 @@ class AnyParagraph
     style.merge!(table)
   end
 
-  def pfbcode ; @pfbcode ||= data[:pfbcode] end
+  def pfbcode ; @pfbcode end
 
   def length  ; @length ||= (text||'').length     end
 

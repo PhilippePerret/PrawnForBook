@@ -37,8 +37,8 @@ class PrawnView
   def draw_reference_grids
     
     # -- Couleur et épaisseur --
-    stroke_color 51, 0, 0, 3  # bleu ciel
-    fill_color 51, 0, 0, 3    # bleu ciel
+    stroke_color(51, 0, 0, 3)  # bleu ciel
+    fill_color(51, 0, 0, 3)    # bleu ciel
     line_width(0.1)
 
     # -- Dessin de la grille de référence sur les pages concernées --
@@ -49,27 +49,23 @@ class PrawnView
         @line_height = data_leading[:line_height]
         spy "Line Height à #{line_height} à partir de page #{page_number.inspect}".jaune
       end
+
       # -- Impression de la grille de référence --
-      print_reference_grid
+      h = bounds.top.dup
+      while h > 0
+        h -= line_height
+        break if h < 0
+        stroke_horizontal_line(-100, bounds.width + 100, at: h)
+      end
+
     end
 
     # -- Noir et Blanc --
-    stroke_color  0, 0, 0, 100
-    fill_color    0, 0, 0, 100
+    stroke_color(0, 0, 0, 100)
+    fill_color(0, 0, 0, 100)
 
   end
   # /#draw_reference_grids
-
-  # Dessine les lignes de référence sur la page courante
-  # 
-  def print_reference_grid
-    h = bounds.top.dup
-    while h > 0
-      h -= line_height
-      break if h < 0
-      stroke_horizontal_line(-100, bounds.width + 100, at: h)
-    end
-  end
 
   # Retourne les pages concernées par l'impression de la grille de 
   # référence

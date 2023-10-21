@@ -10,6 +10,7 @@ book_data:
 book_format:
   page:
     show_grid: true
+    show_margins: true
   text:
     line_height: 24
 #</book_format>
