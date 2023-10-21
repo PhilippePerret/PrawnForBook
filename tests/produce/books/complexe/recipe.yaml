@@ -1,0 +1,15 @@
+---
+#<data_book>
+data_book:
+  title: "Livre complexe"
+  author: "Philippe PERRET"
+  subtitle: "présentant de nombreux cas d’impressions."
+#</data_book>
+
+#<book_format>
+book_format:
+  page:
+    show_grid: true
+  text:
+    line_height: 24
+#</book_format>

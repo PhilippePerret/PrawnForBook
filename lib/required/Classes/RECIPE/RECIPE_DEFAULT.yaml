@@ -81,6 +81,8 @@ book_format:
     num_page_if_no_num_parag:   true
     no_headers_footers:         false
     skip_page_creation:         true
+    show_grid:                  false
+    show_margins:               false
   text:
     default_font:             *default_font1
     default_style:            *default_style1

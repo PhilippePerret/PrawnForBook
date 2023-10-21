@@ -295,6 +295,18 @@ Ce qui signifie que le haut et le bas du texte sont calculés en fonction des ma
 
 > Noter qu’il y a toujours un fond perdu de 10 post-script points autour de la page. Je crois qu’on ne peut pas le modifier.
 
+On peut afficher les marges pendant toute la conception du livre en définissant dans le fichier recette :
+
+~~~yaml
+book_format:
+	page:
+		show_margin: true # false par défaut
+~~~
+
+Ponctuellement, on peut le demander par la ligne de commande :
+
+<commande>pfb build -display_margins</commande>
+
 ---
 <a name="reference-grid"></a>
 
@@ -309,6 +321,16 @@ On peut demander l’affichage de la grille de référence au moment de la conce
 ~~~
 pfb build -grid
 ~~~
+
+Pendant la conception du livre, on peut aussi définir dans la recette que cette grille doit être définie :
+
+~~~yaml
+book_format:
+	page:
+		show_grid: true # false par défaut
+~~~
+
+
 
 #### Toujours aligner les textes sur la grille de référence
 
@@ -3513,6 +3535,8 @@ book_format:
 		num_page_if_no_num_parag: true # cf. [2]
 		no_headers_footers: false # self-explanatory
 		skip_page_creation: true # cf. [3]
+		show_grid: false # cf. [6]
+		show_margins: false # cf. [7]
 	text:
 		default_font_and_style: "Helvetica/normal"
 		default_size: 11.2
@@ -3544,6 +3568,14 @@ book_format:
 > **[5]**
 >
 > Ajustement de la position du numéro de paragraphe (si c’est une numérotation par paragraphe). D’abord verticalement, puis horizontalement en distance par rapport au texte.
+>
+> **[6]**
+>
+> Si true, la grille de référence est affichée. On peut le faire aussi avec la commande, en ajoutant l’option `-grid`
+>
+> **[7]**
+>
+> Si `true`, les marges sont dessinées à titre d’essai (`false` par défaut). Correspond à l’’option `-display_margins`.
 
 ---
 

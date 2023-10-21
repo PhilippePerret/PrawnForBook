@@ -255,6 +255,7 @@ class PrawnView
     page_number.odd?
   end
 
+  
   # --- Doc Definition Methods ---
 
   ##

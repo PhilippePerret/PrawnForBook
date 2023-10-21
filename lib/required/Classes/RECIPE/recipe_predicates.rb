@@ -66,7 +66,7 @@ class Recipe
   end
 
   # --- Logo de la maison d'édition ---
-  
+
   def logo_defined?
     not(publisher[:logo_path].nil?)    
   end
@@ -88,6 +88,13 @@ class Recipe
     :TRUE == @numerotertdm ||= true_or_false(table_of_content[:numeroter])
   end
 
+  def show_grid?
+    format_page[:show_grid] || CLI.option(:grid)
+  end
+
+  def show_margins?
+    format_page[:show_margins] || CLI.option(:display_margins)
+  end
 
 end #/class Recipe
 end #/module Prawn4book

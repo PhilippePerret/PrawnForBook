@@ -343,12 +343,12 @@ class PdfBook
       # ===========================
       # -   GRILLE DE RÉFÉRENCE   -
       # ===========================
-      draw_reference_grids if display_reference_grid?
+      draw_reference_grids if my.recipe.show_grid?
 
       # =========================
       # -   DESSIN DES MARGES   -
       # =========================
-      pdf.draw_margins if display_margins?
+      draw_margins if my.recipe.show_margins?
 
       #
       # Enregistrement du code du livre dans son fichier pour produire
