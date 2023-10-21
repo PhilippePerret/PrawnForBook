@@ -10,6 +10,12 @@ class PrawnView
     @leading ||= default_leading
   end
 
+  # Mis provisoirement pour garder en mémoire les leadings par
+  # page (mais normalement, avec la version 2 LINE, on n'a plus 
+  # besoin du leading)
+  def leadings
+    @leadings ||= {}
+  end
 
   # Déplace le curseur sur la ligne +x+
   # 

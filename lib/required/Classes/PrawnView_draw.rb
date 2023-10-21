@@ -36,7 +36,6 @@ class PrawnView
   # 
   def draw_reference_grids
     
-
     # -- Couleur et épaisseur --
     stroke_color 51, 0, 0, 3  # bleu ciel
     fill_color 51, 0, 0, 3    # bleu ciel
@@ -45,8 +44,8 @@ class PrawnView
     # -- Dessin de la grille de référence sur les pages concernées --
     repeat gridded_pages, **{dynamic: true} do
       # -- Changement de hauteur de ligne --
-      if @leadings.key?(page_number)
-        data_leading = @leadings[page_number]
+      if leadings.key?(page_number)
+        data_leading = leadings[page_number]
         @line_height = data_leading[:line_height]
         spy "Line Height à #{line_height} à partir de page #{page_number.inspect}".jaune
       end

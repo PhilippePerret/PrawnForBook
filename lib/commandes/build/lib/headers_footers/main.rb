@@ -115,122 +115,55 @@ class HeadersFooters
     # 
     # spy "book.pages = #{book.pages.pretty_inspect}"
     # exit
-    book.pages.each do |page_num, dpage_init|
-      # 
-      # Quelquefois, pour le moment, des titres peuvent se glisser
-      # malencontreusement dans les données de page
-      # 
-      next if not(dpage_init.is_a?(Hash))
-      #
-      # Quelque fois il n'y a pas de numéro de page 
-      # (pourquoi ? Ça serait bien de le savoir)
-      # 
-      next if !page_num
+    # book.pages.each do |page_num, dpage_init|
+    book.pages.each do |page|
       #
       # Le numéro continue attendu
       # 
       continous_numero += 1
 
-      # puts "Traitement de la page #{page_num}".bleu
+      raise "Numéro de page ne correspond pas" if page.number != continous_numero
 
-      if page_num > continous_numero
-        #
-        # = PROBLÈME DE PAGES MANQUANTES =
-        #   (cf. pourquoi dans l'explication de la méthode)
-        #   (cf. aussi pourquoi le problème semble avoir été
-        #    résolu)
-        # 
-        # On doit créer les pages de +continous_numero+ jusqu'à
-        # page_num - 1 en s'inspirant de la page de numéro
-        # <continous_numero - 1>
-        # 
-        # NON, MAINTENANT C'EST UNE VRAI ERREUR FATALE
-        # 
-        raise FatalPrawnForBookError.new("Il manque une définition de page, pour une raison inconnue… Je ne peux pas construire ce livre.")
-        # #
-        # # puts "Problème de page(s) manquante(s) (de #{continous_numero} à #{page_num - 1})".rouge
-        # page_reference = tbl[continous_numero-1]
-        # dpage_ref = page_reference.data
-        # #
-        # # On modifie les données de la page de référence pour que 
-        # # son numéro de page soit inscrit (si nécessaire)
-        # # 
-        # page_reference.data.merge!({
-        #   content_length: 1000, 
-        #   first_par: 1          
-        # })
-
-        # #
-        # # On ajoute toutes les pages manquantes
-        # # 
-        # for i in (continous_numero...page_num) do
-        #   dpage = {}
-        #     .merge(dpage_ref)
-        #     .merge({
-        #       num_page: i,
-        #       # content_length: 1000, 
-        #       # first_par: 1
-        #     }) 
-        #   # puts "\ndpage = #{dpage.pretty_inspect}".bleu
-        #   tbl.merge!(i => BookPage.new(book, pdf, dpage))
-        #   continous_numero += 1
-        #   # added_pages_numeros << i.freeze
-        # end
-      end
-
-      dpage = dpage_init.dup
-      # spy "dpage = #{dpage.inspect}".gris
-      (4..7).each do |niv|
-        dpage.delete(:"title#{niv}") if dpage.key?(:"title#{niv}")
-      end
-      (1..3).each do |niv|
-        kniv = :"title#{niv}"
-        dpage[kniv] = nil if dpage[kniv] == ''
-      end
-
-      # 
-      # Quelques données ajoutées 
-      # 
-      dpage.merge!(num_page: page_num) # pas :numero (utilisé comme helper)
       #
       # Traitement du titre de niveau 1
       # 
-      if dpage[:title1].nil?
-        dpage.merge!(current_title1: current_titles_per_level[1])
+      if page.data[:titres][1].nil?
+        page.data[:titres].merge!(current_title1: current_titles_per_level[1])
       else
         current_titles_per_level.merge!({
-          1 => dpage[:title1], 2 => nil, 3 => nil
+          1 => page.data[:titres][1], 2 => nil, 3 => nil
         })
       end
       #
       # Traitement du titre de niveau 2
       # 
-      if dpage[:title2].nil?
-        dpage.merge!(current_title2: current_titles_per_level[2])
+      if page.data[:titres][2].nil?
+        page.data[:titres].merge!(current_title2: current_titles_per_level[2])
       else
         current_titles_per_level.merge!({
-          2 => dpage[:title2], 3 => nil
+          2 => page.data[:titres][2], 3 => nil
         })
       end
       #
       # Traitement du titre de niveau 3
       # 
-      if dpage[:title3].nil?
-        dpage.merge!(current_title3: current_titles_per_level[3])
+      if page.data[:titres][3].nil?
+        page.data[:titres].merge!(current_title3: current_titles_per_level[3])
       else
-        current_titles_per_level.merge!({3 => dpage[:title3]})
+        current_titles_per_level.merge!({3 => page.data[:titres][3]})
       end
 
       #
       # On essaie de passer cette page si elle n'a pas de contenu
       # (note : on ne le fera qu'ici pour relever les titres 
       #  courants)
-      next if dpage[:content_length] == 0 || dpage[:first_par].nil?
+      next if page.no_content?
 
       #
       # On crée l'instance pour la page
-      # 
-      tbl.merge!(page_num => BookPage.new(book, pdf, dpage))
+      # TODO : Il faudrait fonctionner avec la même instance 
+      # PdfBook::Page, ne pas avoir à en créer une nouvelle.
+      tbl.merge!(page.number => BookPage.new(book, pdf, page.data))
     end
 
     @data_pages = tbl

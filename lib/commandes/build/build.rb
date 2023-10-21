@@ -213,7 +213,7 @@ class PdfBook
   # 
   def build_pdf_book
     clear unless debug? || ENV['TEST']
-    my = self
+    my = me = self
     
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
@@ -354,7 +354,7 @@ class PdfBook
       # Enregistrement du code du livre dans son fichier pour produire
       # le document PDF final.
       # 
-      save_as(pdf_path)
+      save_as(my.pdf_path)
 
     end #/pdf
 
@@ -569,8 +569,8 @@ class PdfBook
   # instancier les bibliographies qui sont définies.
   def conforme?
     if recipe.page_de_titre?
-      not(titre.nil?)     || raise(FatalPrawnForBookError.new(800))
-      not(auteurs.nil?)   || raise(FatalPrawnForBookError.new(801))
+      not(recipe.title.nil?)     || raise(FatalPrawnForBookError.new(800))
+      not(recipe.authors.nil?)   || raise(FatalPrawnForBookError.new(801))
       unless recipe.logo_defined? == recipe.logo_exists?
          raise(FatalPrawnForBookError.new(802, {path: recipe.logo_path}))
       end

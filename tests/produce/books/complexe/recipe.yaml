@@ -1,10 +1,10 @@
 ---
-#<data_book>
-data_book:
+#<book_data>
+book_data:
   title: "Livre complexe"
   author: "Philippe PERRET"
   subtitle: "présentant de nombreux cas d’impressions."
-#</data_book>
+#</book_data>
 
 #<book_format>
 book_format:

@@ -1,6 +1,6 @@
 ---
 :book_title:   Livre d'aspect et de test
-:auteurs:      ['Philippe PERRET']
+:auteurs:      'Philippe PERRET'
 :book_id:      mon_livre
 :main_folder: "/Users/philippeperret/Programmes/Prawn4book/tests/essais/books/mon_livre"
 :text_path:   true

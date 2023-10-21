@@ -38,13 +38,13 @@ class Recipe
     @book_id      ||= book_data[:id]
   end
   def title
-    @title        ||= book_data[:title]
+    @title        ||= book_data[:title]||book_data[:titre]
   end
   def subtitle
-    @subtitle     ||= book_data[:subtitle]&.gsub(/\\n/, "\n")
+    @subtitle     ||= (book_data[:subtitle]||book_data[:sous_titre])&.gsub(/\\n/, "\n")
   end
-  def auteurs
-    @auteurs      ||= book_data[:auteurs]||book_data[:auteur]||book_data[:authors]||book_data[:author]
+  def authors
+    @authors      ||= book_data[:auteurs]||book_data[:auteur]||book_data[:authors]||book_data[:author]
   end
   def isbn
     @isbn         ||= book_data[:isbn]

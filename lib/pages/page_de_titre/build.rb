@@ -30,7 +30,7 @@ class PageDeTitre
       # indication contraire dans la recette
       # 
       unless my.paginate?
-        book.pages_without_pagination << page_number
+        book.pages.without_pagination << page_number
       end
 
       # 
@@ -88,7 +88,7 @@ class PageDeTitre
       move_down(line_height) # une de plus
       font_auteur = Fonte.new(dtitre[:author])
       font(font_auteur)
-      text book.auteurs.titleize, **{align: :center}
+      text book.recipe.authors.titleize, **{align: :center}
 
       #
       # La MAISON D'ÉDITION
@@ -133,14 +133,6 @@ class PageDeTitre
   def paginate?
     book.recipe.page_de_titre[:paginate] == true
   end
-
-  # - shortcuts -
-  def book_title    ; @book_titre ||= book.titre end
-  def publisher     ; @publisher ||= book.publisher end
-  def book_subtitle ; @book_subtitle ||= book.formated_sous_titre end
-  def authors       ; @authors ||= book.formated_auteurs end
-  def logo          ; @logo ||= book.publisher.logo end
-
 
 end #/class PageDeTitre
 end #/class Pages

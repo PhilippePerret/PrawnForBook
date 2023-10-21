@@ -34,10 +34,12 @@ require 'prawn/table'
 class Prawn::Document
   
   def add_content_length_to_current_page(len)
-    @pdfbook ||= Prawn4book::PdfBook.current
-    @pdfbook.add_page(page_number) unless @pdfbook.pages[page_number]
-    @pdfbook.pages[page_number][:content_length] += len
-    @pdfbook.pages[page_number][:first_par] = 1 # sinon n'imprime pas le numéro
+    @book ||= Prawn4book::PdfBook.current
+    page = @book.pages[page_number] || begin
+      @book.add_page(page_number)
+    end
+    page[:content_length] += len
+    page[:first_par] = 1 # sinon n'imprime pas le numéro
   end
 
   # #text utilise forcément formatted_text, donc c'est seulement

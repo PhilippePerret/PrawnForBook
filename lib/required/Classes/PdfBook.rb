@@ -14,12 +14,6 @@ class PdfBook
     @folder = folder
   end
 
-  # # TODO Mettre à un endroit plus logique
-  # def sous_titre  ; recette.subtitle  end
-  # alias :subtitle :sous_titre
-  # def auteurs     ; recette.auteurs   end
-
-
   # Pour ouvrir le livre dans Aperçu, en double pages
   def open_book
     if File.exist?(pdf_path)
@@ -124,6 +118,16 @@ class PdfBook
 
   def has_text?
     File.exist?(text_file)
+  end
+
+  # --- Data Methods ---
+
+  def title
+    @title ||= recipe.title
+  end
+
+  def subtitle
+    @subtitle ||= recipe.subtitle
   end
 
   # --- Paths Methods ---

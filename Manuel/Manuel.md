@@ -3492,7 +3492,7 @@ book_data:
 	title: "Titre du livre"
 	subtitle: "Sous-titre\nSur plusieurs\nLignes"
 	id: "identifiant_livre" # utile
-	auteurs: ["Prénom NOM", "Prénom DE NOM"]
+	auteurs: "Prénom NOM, Prénom DE NOM"
 	isbn: "128-9-25648-635-8"
 #</book_data>
 ~~~

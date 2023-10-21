@@ -19,7 +19,7 @@ class PdfBook
   # 
   def formated_auteurs
     @formated_auteurs ||= begin
-      (recette[:auteurs]||['Auteur BOOK']).pretty_join
+      recette.authors.split(',').map{|n|n.strip.titleize}.pretty_join
     end
   end
 

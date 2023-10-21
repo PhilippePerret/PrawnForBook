@@ -158,7 +158,7 @@ class BookPage
 
   # - Data -
 
-  def num_page        ; @num_page       ||= data[:num_page]       end
+  def num_page        ; @num_page       ||= data[:number]         end
   def first_par       ; @first_par      ||= data[:first_par]      end
   def last_par        ; @last_par       ||= data[:last_par]       end
   def content_length  ; @content_length ||= data[:content_length].to_i end
