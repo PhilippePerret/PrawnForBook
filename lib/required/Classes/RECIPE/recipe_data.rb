@@ -55,9 +55,6 @@ class Recipe
 
   # -- Éditeur --
 
-  def logo_defined?
-    not(publisher[:logo_path].nil?)    
-  end
   def logo_path
     @logo_path ||= begin
       rp = publisher[:logo_path]

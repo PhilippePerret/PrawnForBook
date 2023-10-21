@@ -4,8 +4,8 @@ class PrawnView
   # Méthode principale qui invoque la construction des entêtes et
   #  pieds de page sur tout le livre
   # 
-  def build_headers_and_footers(book, pdf)
-    HeadersFooters.new(book, pdf).build
+  def build_headers_and_footers(book)
+    HeadersFooters.new(book, self).build
   end
 end #/class PrawnView
 

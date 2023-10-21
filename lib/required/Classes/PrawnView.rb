@@ -10,10 +10,14 @@ class PrawnView
 
   attr_reader :config
 
-  # Dernière page à imprimer (page du pdf), définie
-  # en options de la ligne de commande (pour le moment)
-  attr_accessor :last_page
-  attr_accessor :first_page
+  # Première et dernière page à imprimer
+  # (définis en option)
+  def first_page
+    @first_page ||= (fp = CLI.options[:first]) ? fp.to_i : 1
+  end    
+  def last_page
+    @last_page ||= (lp = CLI.options[:last]) ? lp.to_i : 100000 
+  end
 
   # L'instance PdfBook::Tdm qui gère la table des
   # matière. Permettra d'ajouter les titres pour construire
@@ -256,7 +260,7 @@ class PrawnView
   ##
   # Définition des polices requises (à empaqueter dans le PDF)
   # 
-  def define_required_fonts(fontes)
+  def embed_fontes(fontes)
     return if fontes.nil? || fontes.empty?
     fontes.each do |fontname, fontdata|
       # On en profite pour vérifier l'existence

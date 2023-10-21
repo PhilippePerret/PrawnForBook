@@ -65,6 +65,16 @@ class Recipe
     :TRUE == @numpagifnonumpar ||= true_or_false(format_page[:num_page_if_no_num_parag])
   end
 
+  # --- Logo de la maison d'édition ---
+  
+  def logo_defined?
+    not(publisher[:logo_path].nil?)    
+  end
+
+  def logo_exists?
+    logo_defined? && File.exist?(recipe.logo_path)
+  end
+
   # --- Entêtes et pieds de page ---
 
   def no_headers_footers?

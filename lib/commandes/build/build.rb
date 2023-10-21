@@ -43,7 +43,7 @@ class PdfBook
   # entêtes)
   attr_reader :current_titles
 
-  # @prop Instance {Prawn4book::PdfHelpers}
+  # @prop Instance {PdfHelpers}
   attr_reader :pdfhelpers
 
   def generate_pdf_book
@@ -94,19 +94,12 @@ class PdfBook
 
     #
     # === CONSTRUCTION DU LIVRE ===
+    #     (PREMIÈRE PASSE/TURN)
     # 
-    build_pdf_book
+    ok_book = build_pdf_book
 
     # On s'arrête ici pour le moment
     return 
-
-    # 
-    # = PREMIÈRE PASSE =
-    # 
-    # Pour récupérer les références (if any)
-    # (il y en aura 2 si des références avant sont trouvées)
-    # 
-    ok_book = build_pdf_book
 
     # 
     # Si des références ont été trouvées, on actualise le fichier
@@ -220,7 +213,13 @@ class PdfBook
   # 
   def build_pdf_book
     clear unless debug? || ENV['TEST']
+    my = self
     
+    #
+    # Avec Prawn::View au lieu d'étendre Prawn::Document
+    #
+    pdf = PrawnView.new(self, pdf_config)
+
     # 
     # Détruire le fichier PDF final s'il existe déjà
     # (note : il existe toujours si c'est un deuxième tour)
@@ -232,16 +231,16 @@ class PdfBook
     # 
     PrawnView::Error.reset
 
-    my = self
-
     #
-    # Avec Prawn::View au lieu d'étendre Prawn::Document
-    #
-    pdf = PrawnView.new(self, pdf_config)
+    # Initier la table des matières (je préfère faire mon 
+    # instance plutôt que d'utiliser l'outline de Prawn)
+    # 
+    tdm = Tdm.new(self, pdf)
+    pdf.tdm = tdm
 
     #
     # Méthode appelée automatiquement à chaque création de page
-    # dans le livre.
+    # dans le livre, qu'elle soit automatique ou forcée.
     # 
     pdf.on_page_create do
       my.add_page(pdf.page_number)
@@ -258,18 +257,11 @@ class PdfBook
     # 
     Bibliography.page_or_paragraph_key = recipe.references_key
 
-    # 
     # = FONTS =
     # 
     # Empacketage de toutes les fontes dans le document PDF.
     # 
-    pdf.define_required_fonts(book_fonts)
-
-    #
-    # Y a-t-il une DERNIÈRE PAGE définie en options de commande
-    # Si oui, on ne doit construire le livre que juste que là
-    # 
-    pdf.last_page   = CLI.options[:last] ? CLI.options[:last].to_i : 100000
+    pdf.embed_fontes(book_fonts)
 
     # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
@@ -279,14 +271,12 @@ class PdfBook
     pdf.start_new_page if skip_page_creation?
 
     #
-    # Grille de référence
+    # Fonte par défaut
+    # ----------------
     # 
-    # Définir la grille de référence revient à définir le
-    # leading par défaut.
-    # 
-    # @note
-    # 
-    #   On ne peut faire ça que si une première page existe.
+    #   On ne peut faire ça que si une première page existe, non il
+    #   faut impérativement que ce code se situe après avoir 
+    #   démarré la première page.
     # 
     default_fonte = Fonte.new(
       name:   recipe.default_font_name,
@@ -295,46 +285,27 @@ class PdfBook
       hname:  'Fonte par défaut'
     )
     Fonte.default = default_fonte
-    # pdf.define_default_leading(default_fonte, recipe.line_height)
-
-
-    # Application de la fonte par défaut
+    # -- Application --
     pdf.font(Fonte.default)
 
-    #
-    # Initier la table des matières (je préfère faire mon 
-    # instance plutôt que d'utiliser l'outline de Prawn)
-    # 
-    spy "Instanciation de la table des matières".gris
-    tdm = Prawn4book::Tdm.new(self, pdf)
-    pdf.tdm = tdm
 
-    #
-    # - Premières pages -
-    # 
-    
-    pdf.start_new_page      if page_de_garde?   # && pdf.first_page < 2 [1]
-    pdf.build_faux_titre    if page_faux_titre? # && pdf.first_page < 3
-    pdf.build_page_de_titre if page_de_titre?   # && pdf.first_page < 4
-    #
-    # [1] En reprenant le programme, pdf.first_page n'est plus 
-    #     défini. La seule méthode first_page qui existe est 
-    #     celle de la disposition des entêtes et pieds de page
-    #
+    # =======================
+    # -   PREMIÈRES PAGES   -
+    # =======================
+    #     
+    pdf.start_new_page      if page_de_garde?   && pdf.first_page < 2
+    pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 3
+    pdf.build_page_de_titre if page_de_titre?   && pdf.first_page < 4
     
     # Toujours commencer sur la BELLE PAGE
     # 
     pdf.start_new_page if pdf.page_number.even?
 
-    # 
+
     # ========================
     # - TOUS LES PARAGRAPHES -
     # ========================
     # 
-    # cf. modules/pdfbook/generate_builder/paragraphes.rb
-    # 
-    # pdf.print_paragraphs(inputfile.paragraphes)
-
     inputfile.parse_and_write(pdf)
 
     #
@@ -352,29 +323,40 @@ class PdfBook
       __custom_builder(pdf)
     end
 
-    # 
-    # - PAGE INFOS -
-    # 
-    if page_infos?
-      if pdf.last_page > pdf.page_number
-        pdf.build_page_infos
-      else
-        spy "Ce n'est pas la dernière page, on n'écrit donc pas la page d'infos.".rouge
-      end
-    end
+    pdf.update do 
+      
+      # ==================
+      # -   PAGE INFOS   -
+      # ==================
+      build_page_infos if my.page_infos? && last_page > page_number
 
-    # 
-    # - TABLE DES MATIÈRES -
-    # 
-    pdf.build_table_of_contents
+      # ==========================
+      # -   TABLE DES MATIÈRES   -
+      # ==========================
+      build_table_of_contents
 
-    #
-    # = ENTETE & PIED DE PAGE =
-    # 
-    # Écriture des numéros de page ou numéros de paragraphes
-    # En bas de toutes les pages qui le nécessitent.
-    # 
-    pdf.build_headers_and_footers(self, pdf)
+      # ===========================
+      # -  ENTETE & PIED DE PAGE  -
+      # ===========================
+      build_headers_and_footers(me)
+
+      # ===========================
+      # -   GRILLE DE RÉFÉRENCE   -
+      # ===========================
+      draw_reference_grids if display_reference_grid?
+
+      # =========================
+      # -   DESSIN DES MARGES   -
+      # =========================
+      pdf.draw_margins if display_margins?
+
+      #
+      # Enregistrement du code du livre dans son fichier pour produire
+      # le document PDF final.
+      # 
+      save_as(pdf_path)
+
+    end #/pdf
 
     #
     # Affichage du rapport final
@@ -382,22 +364,6 @@ class PdfBook
     if defined?(ParserParagraphModule) && ParserParagraphModule.respond_to?(:report)
       ParserParagraphModule.report
     end
-
-    # Avec l'option -g/--grid on peut demander l'affichage de la 
-    # grille de référence
-    #
-    pdf.draw_reference_grids if display_reference_grid?
-
-    # 
-    # Avec l'option --display_margins, on affiche les marges
-    # 
-    pdf.draw_margins if display_margins?
-
-    #
-    # Enregistrement du code du livre dans son fichier pour produire
-    # le document PDF final.
-    # 
-    pdf.save_as(pdf_path)
 
     #
     # Afficher les erreurs mineures si on en a rencontrées
@@ -446,15 +412,15 @@ class PdfBook
     # 
     if defined?(PrawnHelpersMethods)
       spy "Inclusion du module PrawnHelpersMethods dans PdfBook::AnyParagraph".bleu
-      Prawn4book::PdfBook::AnyParagraph.include(PrawnHelpersMethods)
+      PdfBook::AnyParagraph.include(PrawnHelpersMethods)
     end
     if defined?(ParserFormater)
       spy "Inclusion du module ParserFormater dans PdfBook::AnyParagraph".bleu
-      Prawn4book::PdfBook::AnyParagraph.include(ParserFormater)
+      PdfBook::AnyParagraph.include(ParserFormater)
     end
     if defined?(ParserFormaterClass)
       spy "Extension du module ParserFormaterClass dans PdfBook::AnyParagraph".bleu
-      Prawn4book::PdfBook::AnyParagraph.extend(ParserFormaterClass)
+      PdfBook::AnyParagraph.extend(ParserFormaterClass)
     end
 
     if defined?(PdfBookFormatageModule)
@@ -470,19 +436,11 @@ class PdfBook
       NTable.extend(TableFormaterModule)
     end
 
-    Prawn4book::PdfBook::AnyParagraph.custom_paragraph_parser_exists = 
+    PdfBook::AnyParagraph.custom_paragraph_parser_exists = 
       defined?(ParserParagraphModule) && ParserParagraphModule.respond_to?(:paragraph_parser)
 
   end
 
-  def display_reference_grid?
-    CLI.option(:display_grid) || CLI.option(:grid)
-  end
-  def display_margins?
-    CLI.option(:display_margins)
-  end
-
-  
   # Ajoute la page de numéro +num_page+ au PdfBook
   # 
   def add_page(num_page)
@@ -613,7 +571,7 @@ class PdfBook
     if recipe.page_de_titre?
       not(titre.nil?)     || raise(FatalPrawnForBookError.new(800))
       not(auteurs.nil?)   || raise(FatalPrawnForBookError.new(801))
-      unless logo_defined? == logo_exists?
+      unless recipe.logo_defined? == recipe.logo_exists?
          raise(FatalPrawnForBookError.new(802, {path: recipe.logo_path}))
       end
     end
@@ -631,20 +589,6 @@ class PdfBook
     spy "👍 Le livre est conforme".vert
     return true
   end
-
-  private
-
-    # @return [Boolean] true si le logo est défini pour le livre ou
-    # la collection
-    # 
-    # @api private
-    def logo_defined?
-      recipe.logo_defined?
-    end
-
-    def logo_exists?
-      logo_defined? && File.exist?(recipe.logo_path)
-    end
 
 end #/class PdfBook
 end #/module Prawn4book

@@ -67,7 +67,7 @@ class PdfBook
   # Instance pour gérer les pages
   # 
   def pages(pdf = nil)
-    @pages ||= PageManager.new(self, pdf)
+    @pages ||= PdfBook::PageManager.new(self, pdf)
   end
 
   ##
@@ -91,7 +91,7 @@ class PdfBook
   # Pour gérer les notes dans le livre
   # 
   def notes_manager
-    @notes_manager ||= Prawn4book::PdfBook::NotesManager.new(self)    
+    @notes_manager ||= PdfBook::NotesManager.new(self)    
   end
 
   ##
