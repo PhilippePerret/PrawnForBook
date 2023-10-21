@@ -11,24 +11,20 @@ class PrawnView
   def draw_margins
     stroke_color(88,0,58,28)
     line_width(0.3)
-    if CLI.options[:grid]
-      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
+    if CLI.params[:pages]
+      pfirst, plast = CLI.params[:pages].split('-').map {|n|n.to_i}
       kpages = (pfirst..plast)
     else
       kpages = :all
     end
-    repeat kpages do
-      print_margins
+    repeat kpages, **{dynamic:true} do
+      stroke_horizontal_line(bounds.left, bounds.width, at: bounds.top)
+      stroke_horizontal_line(bounds.left, bounds.width, at: bounds.bottom)
+      stroke_vertical_line(bounds.left, bounds.top, at: bounds.left)
+      stroke_vertical_line(bounds.left, bounds.top, at: bounds.right)
     end
     stroke_color 0,0,0,100
   end
-  def print_margins
-    stroke_horizontal_line(0, bounds.width, at: bounds.top)
-    stroke_horizontal_line(0, bounds.width, at: bounds.bottom)
-    stroke_vertical_line(0, bounds.top, at: bounds.left)
-    stroke_vertical_line(0, bounds.top, at: bounds.right)
-  end
-
 
 
   # Méthode appelée quand on doit dessiner la grille de base
