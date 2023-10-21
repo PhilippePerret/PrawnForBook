@@ -77,6 +77,8 @@ class NTextParagraph < AnyParagraph
 
     puts "-> print de NTextParagraph".jaune
 
+    @pdf = pdf
+
     #
     # Pour repartir du texte initial, même lorsqu'un second tour est
     # nécessaire pour traiter les références croisées.
@@ -317,8 +319,8 @@ class NTextParagraph < AnyParagraph
       overflow: :truncate, 
       single_line:true, 
       dry_run:true,
-      at:    [margin_left, pdf.bounds.height],
-      width: width || bounds.width,
+      at:    [margin_left, @pdf.bounds.height],
+      width: width || @pdf.bounds.width,
       align: :justify
     }.freeze
   end

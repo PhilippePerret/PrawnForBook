@@ -266,19 +266,19 @@ class AnyParagraph
    @margin_right = mg
   end
 
-  def kerning?
-    not(kerning.nil?)
-  end
-  def kerning
-    style[:kerning]
-  end
+  # def kerning?
+  #   not(kerning.nil?)
+  # end
+  # def kerning
+  #   style[:kerning]
+  # end
 
-  def character_spacing?
-    not(character_spacing.nil?)
-  end
-  def character_spacing
-    style[:character_spacing]
-  end
+  # def character_spacing?
+  #   not(character_spacing.nil?)
+  # end
+  # def character_spacing
+  #   style[:character_spacing]
+  # end
 
   def width
     @width ||= style[:width] || begin
