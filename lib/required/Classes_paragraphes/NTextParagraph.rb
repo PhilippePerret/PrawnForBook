@@ -122,16 +122,12 @@ class NTextParagraph < AnyParagraph
       return 
     end
 
-    mg_left   = margin_left
-    mg_bot    = margin_bottom  || nil # ...
-    mg_right  = margin_right
     no_num    = style[:no_num] || false
-    cursor_positionned = style[:cursor_positionned] || false
 
     #
     # Pour invoquer cette instance dans le pdf.update
     # 
-    par = self
+    par = my = self
 
     #
     # Préformatage par nature de paragraphe
@@ -174,17 +170,6 @@ class NTextParagraph < AnyParagraph
     begin
       pdf.update do
 
-
-        par_options = {
-          inline_format:true, 
-          overflow: :truncate, 
-          single_line:true, 
-          dry_run:true, 
-          width: bounds.width, # modifiable
-          align: :justify
-        }.freeze
-
-
         # Pile pour mettre les lignes à écrire du paragraphe
         # 
         # Les lignes ne seront placées qu'à la fin, une fois que l'on
@@ -216,7 +201,7 @@ class NTextParagraph < AnyParagraph
           #   longueur du paragraphe, il sera traité en entier puis-
           #   qu'on fonctionne toujours ligne à ligne ici.
           # 
-          rest, box = text_box(str, **par_options.merge(at: [0, bounds.height]))
+          rest, box = text_box(str, **par.dry_options)
 
           # spy "rest = #{rest.inspect}"
 
@@ -235,11 +220,10 @@ class NTextParagraph < AnyParagraph
           # 
           has_thief_line = rest.count > 0 && rest.first[:text].length <= THIEF_LINE_LENGTH
           if has_thief_line
-            cs = treate_thief_line_in(pdf, stf, **par_options)
+            cs = treate_thief_line_in(pdf, stf, **par.dry_options)
             rest, box = text_box(
               str, 
-              # TODO Pouvoir régler ce "0" (et la largeur du box)
-              **par_options.merge(at: [0, cursor], kerning:true, character_spacing:-cs)
+              **par.dry_options.merge(kerning:true, character_spacing:-cs)
             )
             rest.count == 0 || raise("Il ne devrait rester plus rien.")
           end
@@ -325,7 +309,20 @@ class NTextParagraph < AnyParagraph
     # 
     self.last_page = pdf.page_number
 
+  end #/print
+
+  def dry_options
+    @dry_options ||= {
+      inline_format:true, 
+      overflow: :truncate, 
+      single_line:true, 
+      dry_run:true,
+      at:    [margin_left, pdf.bounds.height],
+      width: width || bounds.width,
+      align: :justify
+    }.freeze
   end
+
 
   # 
   # Pour calculer le character spacing, on fonctionne ne plus en
