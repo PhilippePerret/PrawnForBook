@@ -33,6 +33,8 @@ module ParserFormaterClass
   # 
   def __parse(str, context)
 
+    pdf = context[:pdf]
+
     # spy "ParserFormaterClass#__parse avec le texte : #{str.inspect}".orange
     # spy "Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser? = #{Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?.inspect}".orange
 
@@ -47,7 +49,7 @@ module ParserFormaterClass
     #
     # La taille actuelle de la fonte
     # 
-    context[:font_size] ||= context[:size] || (context[:pdf] && context[:pdf].current_options && context[:pdf].current_options[:font_size]) || context[:paragraph].font_size
+    context[:font_size] ||= Prawn4book::Fonte.current.size
 
     #
     # Est-ce un texte avec un class-tags ?
@@ -59,6 +61,10 @@ module ParserFormaterClass
     # Si une méthode de "pré-parsing" existe, on l'appelle. Elle
     # peut être définie pour chaque livre/collection dans :
     # Prawn4book::PdfBook::AnyParagraph#pre_parse
+    # 
+    # Définie pour AnyParagraph, elle est utilisable par tous les
+    # types de paragraphe (titre, table, pfbcode, etc.). Sinon, on
+    # peut l'implémenter pour une classe particulière.
     #
     if respond_to?(:pre_parse)
       str = pre_parse(str, context)
@@ -80,7 +86,7 @@ module ParserFormaterClass
     # Traitement du code in-line pseudo-markdown
     # 
     str = __traite_markdown_inline_in(str, context)
-    # spy "str après format markdown inline : #{text.inspect}".orange
+    spy "str après format markdown inline : #{str.inspect}".orange
 
     #
     # Traitement des mots indexés

@@ -30,8 +30,7 @@ class PdfBook
   #   https://prawnpdf.org/api-docs/2.3.0/Prawn/Document.html#generate-class_method
   #   (chercher VALID_OPTIONS)
   def pdf_config
-    @pdf_config ||= begin
-      {
+    @pdf_config ||= {
         # Options qu'on trouve dans [1]
         skip_page_creation: skip_page_creation?,
         page_size:          recipe.page_size, # p.e. "a4"
@@ -56,7 +55,6 @@ class PdfBook
       }.tap do |h|
         spy "options pour #generate : #{h.pretty_inspect}"
       end
-    end
   end
 
   # Fontes utilisées dans le boucle (définies dans le fichier de

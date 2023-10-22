@@ -25,6 +25,7 @@ Un paragraphe dans la police normale, mais avec des *textes en italiques*, des *
 
 # Bogues à corriger / implémenter
 
+* Les notes ont des paragraphes numérotés. Ne le faire que si l’option est demandée
 
 # Réflexions
 ## Gestion des lignes complexes

@@ -113,6 +113,10 @@ class << self
 
   public
 
+  # La fonte courante (c'est toujours dans Prawn::View::font qu'elle
+  # est définie)
+  attr_accessor :current
+  
   # Fonte [Prawn4book::Fonte] par défaut, définie par la recette
   # du livre.
   # Pour pouvoir utiliser n'importe où : <<< Fonte.default >>>

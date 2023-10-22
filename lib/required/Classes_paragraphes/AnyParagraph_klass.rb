@@ -168,7 +168,7 @@ class << self
 
   def diff_height_num_parag_and_parag(pdf)
     @diff_height_num_parag_and_parag ||= begin
-      recipe = pdf.pdfbook.recipe
+      recipe = pdf.book.recipe
       parag_height = nil
       numer_height = nil
       pdf.font(Prawn4book::Fonte.default_fonte) do
@@ -184,6 +184,7 @@ class << self
         numer_height = pdf.height_of("194")
       end
       diff = (parag_height - numer_height).round(3)
+      diff - recipe.parag_num_vadjust
       diff - recipe.parag_num_vadjust
     end
   end

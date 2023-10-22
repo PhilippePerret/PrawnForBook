@@ -7,8 +7,6 @@ class AnyParagraph
   # dans chaque class les traitements particuliers.
   # 
   def print(pdf)
-    
-    return
 
     # -- Comme son nom d'indique --
     # 
@@ -43,7 +41,7 @@ class AnyParagraph
       # Formatage général
       # 
       context = { pdf: pdf, paragraph:self }
-      @text = self.class.__parse(text, context)
+      @text = AnyParagraph.__parse(text, context)
     end
   end
 

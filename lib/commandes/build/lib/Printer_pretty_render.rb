@@ -255,6 +255,8 @@ class << self
   # Et on retourne le stack de paragraphes
   def treate_thief_line_in_par(pdf, str, **options)
 
+    my = me = self
+
     # La nouvelle pile des paragraphes récolté, quand le character-
     # spacing sera appliqué au paragraphe.
     paragraphes_stack = []
@@ -307,7 +309,7 @@ class << self
         snap = snap / 10 # cran, p.e. 0.001 -> 0.0001
       end
 
-      spy "CS trouvé pour le paragraphe #{str[0..60]} […] : #{cs}".bleu
+      spy "CS trouvé pour le paragraphe « #{str[0..60]} […] » : #{cs}".bleu
 
       # Découpage du paragraphe en ligne (sans avoir plus rien à 
       # surveiller puisque la ligne de voleur a été remontée)
@@ -315,19 +317,67 @@ class << self
 
       options = options.merge!(kerning: true, character_spacing: cs)
 
+      options[:at][1] = pdf.bounds.top
+
+      spy "Options avant stack paragraphe : #{options.inspect}".bleu
+
       # Ramassage de tous les paragraphes
       # 
       while str.length > 0
+        spy "- str traité : #{str.inspect}".bleu
         rest, box = text_box(str, **options)
+        spy "rest : #{rest.inspect}".jaune
         paragraphes_stack << box
         break if rest.count == 0
-        str = rest[0][:text]
+        str = my.recompose_from_rest(rest)
+        spy "rest reconstitué : #{str.inspect}"
       end #/while
+
+      spy "Nombre de lignes dans la pile : #{paragraphes_stack.count}".bleu
 
     end #/pdf.update
   
     return paragraphes_stack
   end #/ #treate_thief_line_in_par
+
+
+  # Reçoit le "reste" d'une opération de text_box sur une partie du
+  # texte et recompose le texte initial.
+  # 
+  # 1)  C'est dommage d'avoir à faire ça mais heureusement, ça n'ar-
+  #     rive que lorsqu'on a une ligne de voleur
+  # 
+  # 2)  C'est l'opération inverse de Prawn::Text::Formatted:: \
+  #     Parser.format(str, []) qui prend le str et le transforme
+  # 
+  # Propriétés d'un fragment dont je ne tiens pas compte :
+  #   :local, :link, :anchor, :character_spacing
+  def recompose_from_rest(rest)
+    rest.map do |fragment|
+      t  = fragment[:text]
+      font    = fragment[:font]
+      size    = fragment[:size]
+      color   = fragment[:color]
+      fragment[:styles].each do |sty|
+        t = case sty
+        when :italic      then "<em>#{t}</em>"
+        when :bold        then "<b>#{t}</b>"
+        when :underline   then "<u>#{t}</u>"
+        when :superscript then "<sup>#{t}</sup>"
+        when :subscript   then "<sub>#{t}</sub>"
+        else t
+        end
+      end
+      font_props = []
+      font_props << {name: font}    if font
+      font_props << {size: size}    if size
+      font_props << {color: color}  if color
+      unless font_props.empty?
+        t = "<font#{font_props.map{|k,v| " #{k}=\"#{v}\""}}>#{t}</font>"
+      end
+      t # pour le map
+    end.join('')
+  end
 
 
   def defaultize_options(options, pdf)

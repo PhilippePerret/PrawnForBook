@@ -156,7 +156,11 @@ class NTitre < AnyParagraph
     # 
     # Ajout du titre à la table des matières
     # 
-    num = pdf.previous_text_paragraph ? pdf.previous_text_paragraph.numero : 0
+    # @note @todo
+    #   Je ne comprends pas vraiment pourquoi je ne fais pas un 
+    #   nouveau numéro.
+    # 
+    num = AnyParagraph.get_current_numero
     in_tdm? && pdf.tdm.add_title(self, pdf.page_number, num + 1)
   
   end

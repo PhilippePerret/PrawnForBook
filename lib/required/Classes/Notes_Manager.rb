@@ -67,10 +67,9 @@ class PdfBook
         Fonte.new(
           name:r.default_font_name, 
           style:r.default_font_style, 
-          size:fs), 
-        r.line_height
+          size:fs)
       )
-      leading -= 0.4 # Pour le caler de façon optimale, mais est-ce
+      # leading -= 0.4 # Pour le caler de façon optimale, mais est-ce
       # que ça fonctionnera pour toutes les polices ???………
       s = "<sup>#{indice_note}</sup> #{note}"
       pdf.move_to_next_line

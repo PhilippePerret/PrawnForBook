@@ -137,8 +137,16 @@ class PrawnView
     move_cursor_to(x * line_height + ascender)
   end
 
+  def font2leading(fonte)
+    curfonte = Prawn4book::Fonte.current
+    ld = nil
+    font(fonte) { ld = line_height - height_of('X') }
+    font(curfonte)
+    return ld
+  end
 
   # --- Builing General Methods ---
+
 
   ##
   # - NOUVELLE PAGE -
@@ -221,6 +229,13 @@ class PrawnView
     # souvent, d'où l'importance de conserver les instances Fonte
     # 
     return if current_font && thefont == current_font
+
+    # Pour avoir aussi la fonte courante dans Fonte
+    # 
+    # @noter que la classe ici est Prawn4book::Fonte alors que la
+    # fonte de @current_font est une instance Prawn::Document::Fonte
+    # (ou quelque chose comme ça)
+    Prawn4book::Fonte.current = thefont
     
     begin
         @current_font = super(thefont.name, thefont.params)
