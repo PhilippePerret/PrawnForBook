@@ -23,6 +23,7 @@ Un paragraphe dans la police normale, mais avec des *textes en italiques*, des *
 # Choses à corriger / implémenter
 * Le faux-titre doit être sur une belle page
 * Les lignes de la page de faux-titre doivent se poser sur les lignes de référence
+* Par défaut, les pages doivent être numérotée
 
 # Réflexions
 ## Gestion des lignes complexes

@@ -2,6 +2,10 @@
 # Class Prawn4book::Printer
 # -------------------------
 # Cf. le manuel
+# Le contenu de ce module est utilisé seulement par l'utilisateur
+# pour appliquer des formats particuliers. Voir le fichier 
+# Printer_pretty_render pour la méthode générique permettant d'impri-
+# mer sans veuve, sans orpheline et sans lignes de voleur.
 # 
 module Prawn4book
 class Printer

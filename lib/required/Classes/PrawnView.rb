@@ -26,7 +26,7 @@ class PrawnView
 
   # La [Prawn4book::Fonte] courante
   # 
-  attr_reader :current_fonte
+  attr_reader :current_font
 
 
   # Instanciation d'un document Prawn::Document
@@ -195,7 +195,7 @@ class PrawnView
     thefont   = nil
     data_font = nil
     case fonte
-    when Prawn4book::Fonte
+    when Fonte
       thefont = fonte
     when String, Symbol
       data_font = params.dup.merge({name:fonte})
@@ -212,10 +212,23 @@ class PrawnView
     # qui est transmise à la méthode courante.
     # 
     if data_font
-      thefont = Prawn4book::Fonte.get_or_instanciate(data_font)      
+      thefont = Fonte.get_or_instanciate(data_font)      
     end
 
-    @current_font = super(thefont.name, thefont.params)
+    # On applique la fonte seulement si elle a changé
+    # 
+    # @noter que c'est une opération qui doit être fait extrêmement
+    # souvent, d'où l'importance de conserver les instances Fonte
+    # 
+    return if current_font && thefont == current_font
+    
+    begin
+        @current_font = super(thefont.name, thefont.params)
+    rescue Prawn::Errors::UnknownFont
+      spy "--- fonte inconnue ---"
+      spy "Fontes : #{book.recipe.get(:fonts).inspect}"
+      raise
+    end
 
     # L'ascender courant, qui permet de savoir de combien on doit
     # décaler le texte verticalement pour qu'il repose exactement sur
@@ -291,13 +304,13 @@ class PrawnView
     end
   end
 
-  def current_font_size
-    fsize = 
-    if current_options
-      current_options[:size] || current_options[:font_size]
-    end
-    return fsize || font.options[:size]
-  end
+  # def current_font_size
+  #   fsize = 
+  #   if current_options
+  #     current_options[:size] || current_options[:font_size]
+  #   end
+  #   return fsize || font.options[:size]
+  # end
 
 end #/PrawnView
 end #/module Prawn4book
