@@ -128,6 +128,7 @@ class NImage < AnyParagraph
 
   # --- Predicate Methods ---
 
+  def image?    ; true end
   def paragraph?; false end
 
   def svg?

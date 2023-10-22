@@ -29,7 +29,7 @@ class EmptyParagraph < AnyParagraph
   end
 
   def paragraph?; false end
-  def emptypar?;  true  end
+  def empty_paragraph?; true end
   def sometext? ; false end
   alias :some_text? :sometext?
   def titre?    ; false end

@@ -152,6 +152,7 @@ class NTable < AnyParagraph
 
   # --- Predicate Methods ---
 
+  def table?    ; true end
   def paragraph?; false end
   def sometext? ; true end # seulement ceux qui contiennent du texte
   alias :some_text? :sometext?

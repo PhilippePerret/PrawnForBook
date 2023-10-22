@@ -1,6 +1,9 @@
 # Complexité testée
+
+## Présentation
 Ce livre doit permettre de tester énormément de choses dans le détail. Grâce à l’affichage (par la recette) de la grille de référence, on peut voir dans le livre produit le résultat. Il va y avoir beaucoup de changements de fontes et de tailles (elles sont toutes définies dans le fichier recette).
 
+## Premiers tests
 (( {font:"Helvetica", style: :italic, size: 21} ))
 Ce texte est écrit dans la police “Helvetica” en taille 21 et style italique (c’est une ligne de pfbcode qui le détermine juste au-dessus). Elle doit juste s’adapter aux lignes de références qui sont placées dans cette partie (par défaut) avec une hauteur de ligne de 24 points.
 
@@ -22,11 +25,6 @@ Un paragraphe dans la police normale, mais avec des *textes en italiques*, des *
 
 # Bogues à corriger / implémenter
 
-* Pour éviter d’avoir une ligne aux caractères trops serrés, il faut appliquer le `character_spacing` à tout le paragraphe (et donc le calculer par rapport à tout le paragraphe, pas seulement par rapport à la ligne) — la différence est notable quand on a des gros caractères
-* Le faux-titre doit être sur une belle page
-* Les lignes de la page de faux-titre doivent se poser sur les lignes de référence
-* Par défaut, les pages doivent être numérotée
-* Quand changement de fonte, la première ligne est mal placée (je pense qu’elle se place comme pour la fonte précédente.
 
 # Réflexions
 ## Gestion des lignes complexes

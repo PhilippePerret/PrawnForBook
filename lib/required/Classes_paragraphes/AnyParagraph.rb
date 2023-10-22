@@ -140,6 +140,8 @@ class AnyParagraph
 
   attr_reader :book
 
+  attr_reader :text
+
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
   attr_accessor :last_page
@@ -183,11 +185,15 @@ class AnyParagraph
   # --- Predicate Methods ---
 
   def titre?    ; false end
+  def paragraph?; false end
   def sometext? ; false end # surclassé par les filles
   alias :some_text? :sometext?
   def pfbcode?  ; false end
   def citation? ; false end
-  def list_item?; false end 
+  def list_item?; false end
+  def empty_paragraph?; false end
+  def image?    ; false end
+  def table?    ; false end
 
   # Sera mis à true pour les paragraphes qui ne doivent pas être
   # imprimés, par exemple les paragraphes qui définissent des 
@@ -296,6 +302,27 @@ class AnyParagraph
   # 
   def add_style(table)
     styles.merge!(table)
+  end
+
+  # @return le premier paragraphe imprimé précédent (donc en 
+  # excluant les lignes vides)
+  # 
+  # @note
+  #   Cette méthode a été inauguré pour les titres, pour savoir si
+  #   un titre suit un autre titre
+  # 
+  def prev_printed_paragraph
+    @prev_printed_paragraph ||= begin
+      pidx  = pindex.dup
+      ppp   = nil
+      while pidx > 0
+        pidx -= 1
+        ppp   = book.inputfile.paragraphes[pidx]
+        break unless ppp.empty_paragraph?
+        ppp = nil
+      end
+      ppp
+    end
   end
 
   # @return [PdfBook::PFBCode|ClassNil] S'il existe, le paragraphe
