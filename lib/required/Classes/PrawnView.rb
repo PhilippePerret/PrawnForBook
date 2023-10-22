@@ -234,6 +234,7 @@ class PrawnView
     # décaler le texte verticalement pour qu'il repose exactement sur
     # une ligne de référence.
     @ascender = @current_font.ascender
+    move_to_closest_line
 
     return @current_font
   end

@@ -204,20 +204,26 @@ class AnyParagraph
   # --- Méthodes d'aspect et de positionnement ---
 
   def font_size
-    @font_size ||= style[:font_size] || recipe.default_font_size
+    @font_size ||= begin
+      styles[:font_size] || recipe.default_font_size
+    end
   end
 
   def font_family
-    @font_family ||= style[:font_family] || recipe.default_font_family
+    @font_family ||= begin
+      styles[:font_family] || recipe.default_font_name
+    end
   end
 
   def font_style
-    @font_style ||= style[:font_style] || recipe.default_font_style
+    @font_style ||= begin
+      styles[:font_style] || recipe.default_font_style
+    end
   end
 
   # - Alignement du texte -
   def text_align
-    @text_align || style[:align] ||style[:text_align] || :justify 
+    @text_align || styles[:align] || styles[:text_align] || :justify 
   end
   def text_align=(value); @text_align = value     end
   alias :alignment :text_align
@@ -225,71 +231,51 @@ class AnyParagraph
 
   # - Marge haute du paragraphe (en nombre de lignes) -
   def margin_top
-    @margin_top ||= style[:margin_top] || 0 
+    @margin_top ||= styles[:margin_top]  || 0 
   end
-  def margin_top=(value); @margin_top = value end
+  def margin_top=(t)
+    @margin_top = real_value_for(t) 
+  end
 
   # - Marge basse du paragraphe (en nombre de lignes) -
   def margin_bottom
-    @margin_bottom ||= style[:margin_bottom] || 0 
+    @margin_bottom ||= styles[:margin_bottom] || 0 
   end
 
   def margin_left
-    @margin_left ||= style[:margin_left] || begin
-      ml = margin_left_raw
-      if ml
-        if ml.is_a?(String) && ml.end_with?('%')
-          ml = pourcentage_to_pdfpoints(ml, pdf.bounds.width)
-        end
-      end
-      ml || 0
-    end
+    @margin_left ||= styles[:margin_left] || 0
   end
   def margin_left=(ml)
-    if ml.is_a?(String) && ml.end_with?('%')
-      ml = pourcentage_to_pdfpoints(ml, pdf.bounds.width)
-    end
-    @margin_left = ml
+    @margin_left = real_value_for(ml)
   end
 
   def margin_left_raw
-    @margin_left_raw ||= pfbcode && pfbcode[:margin_left]
+    @margin_left_raw ||= styles[:margin_left]
   end
 
   def margin_right
-    @margin_right ||= style[:margin_right] || 0
+    @margin_right ||= styles[:margin_right] || 0
   end
   def margin_right=(mg)
-    if mg.is_a?(String) && mg.end_with?('%')
-      mg = pourcentage_to_pdfpoints(mg, pdf.bounds.width)
-    end
-   @margin_right = mg
+   @margin_right = real_value_for(mg)
   end
 
-  # def kerning?
-  #   not(kerning.nil?)
-  # end
-  # def kerning
-  #   style[:kerning]
-  # end
+  def kerning?
+    not(kerning.nil?)
+  end
+  def kerning
+    styles[:kerning]
+  end
 
-  # def character_spacing?
-  #   not(character_spacing.nil?)
-  # end
-  # def character_spacing
-  #   style[:character_spacing]
-  # end
+  def character_spacing?
+    not(character_spacing.nil?)
+  end
+  def character_spacing
+    styles[:character_spacing]
+  end
 
   def width
-    @width ||= style[:width] || begin
-      w = pfbcode && pfbcode[:width]
-      if w
-        if w.is_a?(String) && w.end_with?('%')
-          w = pourcentage_to_pdfpoints(w, pdf.bounds.width)
-        end
-      end
-      w
-    end
+    @width ||= styles[:width]
   end
 
   # --- Volatile Data ---
@@ -298,28 +284,32 @@ class AnyParagraph
   # Style précis du paragraphe
   # 
   # Est censé contenir tout ce qu'il faut savoir sur le paragraphe
-  # à commencer par les styles définis par le pfbcode (paragraphe
+  # à commencer par les styles définis par le prev_pfbcode (paragraphe
   # précédent)
   # 
-  def style
-    @style ||= begin
-      sty = {}
-      sty.merge!(pfbcode.parag_style) if pfbcode 
-      sty
-    end
-  end
-  ##
-  # Pour ajouter du style à la volée
-  # 
-  def add_style(table)
-    style.merge!(table)
+  def styles
+    @styles ||= get_and_calc_styles
   end
 
-  def pfbcode ; @pfbcode end
+  # Pour ajouter du style à la volée
+  # (par exemple quand c'est un item de liste ou une citation)
+  # 
+  def add_style(table)
+    styles.merge!(table)
+  end
+
+  # @return [PdfBook::PFBCode|ClassNil] S'il existe, le paragraphe
+  # de code qui précède le paragraphe courant.
+  def prev_pfbcode
+    @prev_pfbcode ||= begin
+      if book.inputfile.paragraphes[pindex - 1].pfbcode?
+        book.inputfile.paragraphes[pindex - 1] 
+      end
+    end
+  end
 
   def length  ; @length ||= (text||'').length     end
 
-  # --- Raccourcis ---
 
   # @shortcut
   def recipe; @recipe || book.recipe end
@@ -328,6 +318,43 @@ class AnyParagraph
   private
 
   # --- Calcul Methods --- #
+
+    def get_and_calc_styles
+      sty = {}
+      if prev_pfbcode
+        prev_pfbcode.next_parag_style.each do |k, v|
+          k = case k
+              when :font    then :font_family
+              when :size    then :font_size
+              when :style   then :font_style
+              when :left    then :margin_left
+              when :right   then :margin_right
+              when :top     then :margin_top
+              when :bottom  then :margin_bottom
+              else k
+              end
+          sty.merge!(k => real_value_for(v))
+        end
+      end
+      return sty
+    end
+
+    # Traite la valeur +value+ qu'elle soit une valeur numérique ou
+    # une valeur exprimée en pourcentage, comme dans les styles.
+    # 
+    def real_value_for(value)
+      if value.is_a?(Symbol)
+        return value
+      elsif value.is_a?(Numeric)
+        return value
+      elsif value.is_a?(String) && value.numeric?
+        return value.to_i
+      elsif value.match?(/\%$/)
+        pourcentage_to_pdfpoints(value)
+      else
+        value
+      end
+    end
 
     ##
     # Reçoit une valeur par exemple en pourcentage ("50%") et 

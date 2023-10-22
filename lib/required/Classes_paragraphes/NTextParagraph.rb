@@ -48,9 +48,9 @@ class NTextParagraph < AnyParagraph
     # 
     if citation?
       @text = "<i>#{@text}</i>"
-      add_style({font_size: font_size + 1, margin_left: 1.cm, margin_right: 1.cm, margin_top: 0.5.cm, margin_bottom: 0.5.cm, no_num:true})
+      add_style({size: font_size + 1, left: 1.cm, right: 1.cm, top: 0.5.cm, bottom: 0.5.cm, no_num:true})
     elsif list_item?
-      add_style({margin_left:3.mm, no_num: true, cursor_positionned: true})
+      add_style({left:3.mm, no_num: true})
     elsif table_line?
       # rien à faire
     elsif tagged_line?
@@ -118,7 +118,7 @@ class NTextParagraph < AnyParagraph
       return 
     end
 
-    no_num = style[:no_num] || false
+    no_num = styles[:no_num] || false
 
     #
     # Pour invoquer cette instance dans le pdf.update
@@ -170,10 +170,16 @@ class NTextParagraph < AnyParagraph
 
   # La fonte pour la paragraphe
   # 
-  # Elle peut être redéfinie par un pfbcode avant le paragraphe
+  # Elle peut être définie par un pfbcode avant le paragraphe
   # 
   def fonte
-    @fonte || Fonte.default_fonte
+    @fonte ||= begin
+      if styles[:font_family] || styles[:font_size] || styles[:font_style]
+        Fonte.new(name:font_family, size:font_size, style:font_style)
+      else
+        Fonte.default_fonte
+      end
+    end
   end
 
   def indent

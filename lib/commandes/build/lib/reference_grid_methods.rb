@@ -90,21 +90,21 @@ class PrawnView
     @ascender || font.ascender
   end
 
-  alias :real_font :font
-  # Définit la fonte ou récupère la fonte courante
-  def font(font_name = nil, **font_options)
-    return @current_font if font_name.nil?
-    case font_name
-    when String
-      font_name     = font_name
-      font_options  = font_options
-    when Prawn4book::Fonte
-      font_options  = font_name.options.merge(font_options)
-      font_name     = font_name.name
-    end
-    @current_font = real_font(font_name, **font_options)
-    @ascender = @current_font.ascender
-  end
+  # alias :real_font :font
+  # # Définit la fonte ou récupère la fonte courante
+  # def font(font_name = nil, **font_options)
+  #   return @current_font if font_name.nil?
+  #   case font_name
+  #   when String
+  #     font_name     = font_name
+  #     font_options  = font_options
+  #   when Prawn4book::Fonte
+  #     font_options  = font_name.options.merge(font_options)
+  #     font_name     = font_name.name
+  #   end
+  #   @current_font = real_font(font_name, **font_options)
+  #   @ascender = @current_font.ascender
+  # end
 
   def current_leading
     line_height - height_of('X')

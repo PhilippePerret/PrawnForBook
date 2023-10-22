@@ -20,11 +20,13 @@ L’application met en forme le texte, dans ses moindres détails et ses moindre
 
 Les grandes forces de ***PRAWN-FOR-BOOK*** sont donc :
 
-* production simple d’un document PDF valide, professionnel, prêt pour l’imprimerie,
+* production simple d’un document PDF valide, professionnel, prêt pour l’imprimerie, et notamment :
+  * gestion automatique des veuves et des orphelines,
+  * gestion automatique des lignes de voleur.
+
 * gestion cohérente de toute une collection de livres,
 * mise en forme du texte dans ses moindres détails (feuilles de style, modules complexes — experts — de formatage),
-* gestion des références internes (renvois, références à une page ou un paragraphes, etc.),
-* gestion des références croisées (références à la page d’un autre livre)
+* gestion des références croisées (+ les références à la page d’un autre livre)
 * gestion d’un index, 
 * gestion d’autant de bibliographies que l’on veut,
 * gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…),
@@ -600,6 +602,11 @@ On peut, à la base, changer par exemple la taille du texte pour ce paragraphe a
 ~~~text
 (( {font_size:22} ))
 Ce paragraphe aura une taille de 22 pour la police courante.
+
+Ce paragraphe aura la taille par défaut.
+
+(( {size: 22} ))
+Ce paragraphe aura aussi une taille de 22 points.
 ~~~
 
 La propriété `font_family` permet de changer de fonte (à nouveau il faut que cette [fonte soit accessible](#fontes)).
@@ -607,6 +614,13 @@ La propriété `font_family` permet de changer de fonte (à nouveau il faut que 
 ~~~text
 (( {font_family: "Arial"} ))
 Ce paragraphe sera en Arial, dans la taille par défaut de la police par défaut.
+
+Ce paragraphe sera dans la police par défaut.
+
+(( {font: "Arial", size: 23} ))
+Ce paragraphe sera en Arial, 23 points. Mais pas le paragraphe suivant.
+
+Paragraphe avec police par défaut.
 ~~~
 
 On peut mettre plusieurs propriétés en les séparant par des virgules :
@@ -622,16 +636,16 @@ Les propriétés qu’on peut définir sont les suivantes :
 
 | <span style="display:inline-block;width:200px;">Propriété</span> | <span style="display:inline-block;width:300px;">Description</span> | <span style="display:inline-block;width:250px;">Valeurs</span> |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **font_family**                                              | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
-| **font_size**                                                | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
-| **font_style**                                               | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
+| **font_family** / **font**                                   | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
+| **font_size** / **size**                                     | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
+| **font_style** / **style**                                   | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
 | **kerning**                                                  | Éloignement des lettres                                      | Entier ou flottant. P.e. `kernel:2`                          |
 | **word_space**                                               | Espacement entre les mots                                    | Entier ou flottant. P.e. `word_space: 1.6`                   |
 | **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
 | **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
 | **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |
 | **margin_left**                                              | Distance de la marge gauche                                  | Idem                                                         |
-| **width**                                                    | Largeur de l’image (si c’est une image)                      | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
+| **width**                                                    | Largeur de l’image (si c’est une image) ou largeur du texte. | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
 | **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
 
 ##### Traitement des mots seuls en bas de paragraphe

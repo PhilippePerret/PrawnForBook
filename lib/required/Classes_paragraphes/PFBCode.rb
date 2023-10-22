@@ -3,13 +3,15 @@ module Prawn4book
 class PdfBook
 class PFBCode < AnyParagraph
 
+  REG_NEXT_PARAG_STYLE = /^\{.+?\}$/.freeze
+
   attr_reader :raw_code
 
   # {Hash} Contenant la définition qui doit affecter le paragraphe
   # suivant (cette instance a été mise dans la propriété :pfbcode
   # du paragraphe)
   # p.e. {font_size: 42}
-  attr_reader :parag_style
+  attr_reader :next_parag_style
 
   # Certains paragraphes de code doivent utiliser la propriété
   # @numero (par exemple les codes qui sont des cibles de référence)
@@ -18,9 +20,9 @@ class PFBCode < AnyParagraph
 
   def initialize(book:, raw_code:, pindex:)
     super(book, pindex)
-    @type     = 'pfbcode'
-    @raw_code = raw_code
-    @parag_style = {}
+    @type             = 'pfbcode'
+    @raw_code         = raw_code
+    @next_parag_style = {}
     #
     # On met toujours le numéro, ça peut servir à diverses méthodes
     # utilisateur
@@ -31,19 +33,17 @@ class PFBCode < AnyParagraph
     # Traitement immédiat de certains type de paragraphe
     # 
     case @raw_code.strip
-    when /^\{.+?\}$/
+    when REG_NEXT_PARAG_STYLE
       treat_as_next_parag_code 
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       
     end
   end
 
+
   def print(pdf)
+    return if not_printed?
     case raw_code
-    when /^\{.+?\}$/
-      # Rien à faire de ce paragraphe puisque c'est une définition
-      # du style, position, etc. du paragraphe suivant.
-      spy "Parag_style = #{parag_style.inspect}"
     when 'new_page', 'nouvelle_page', 'saut_de_page'
       pdf.start_new_page
     when 'new_even_page', 'nouvelle_page_paire'
@@ -237,12 +237,12 @@ class PFBCode < AnyParagraph
 
   ##
   # Traitement d'un code qui doit affecter le paragraphe
-  # suivant.
+  # suivant. Se présente sous la forme : '(( {...} ))'
   # 
   def treat_as_next_parag_code
     @is_for_next_paragraph = true
     @isnotprinted = true # pour ne pas l'imprimer
-    @parag_style = eval(raw_code)
+    @next_parag_style = eval(raw_code)
   end
 
   # --- Formatage Methods ---
@@ -270,7 +270,7 @@ class PFBCode < AnyParagraph
   # Pour pouvoir obtenir une valeur de style "inline" en faisant
   # simplement 'pfbcode[:width]' (depuis un paragraphe)
   def [](key)
-    parag_style[key]
+    next_parag_style[key]
   end
 
   # --- Predicate Methods ---
@@ -283,7 +283,7 @@ class PFBCode < AnyParagraph
   end
 
   def line_height(new_height, **dfonte)
-    pdf.define_default_leading(
+    pdf.define_default_leading( # je l'ai supprimé je crois
       Fonte.new(name:dfonte[:fname], style:dfonte[:fstyle], size:dfonte[:fsize]),
       new_height
     )

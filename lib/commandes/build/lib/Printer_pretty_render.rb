@@ -71,17 +71,13 @@ class << self
   #       car l'écriture se fait ligne par ligne (c'est cher mais
   #       c'est précis).
   # 
-  def pretty_render(
-      owner:    ,
-      pdf:      , 
-      text:     ,
-      fonte:    ,
-      options:  
-    )
+  def pretty_render(owner:, pdf:, text:, fonte:, options:)
+
+    my = self
 
     options = defaultize_options(options.dup, pdf)
 
-    # Le décalage horiztontal du texte à écrire
+    # Le décalage horizontal du texte à écrire
     # 
     left = options[:at][0]
 
@@ -138,23 +134,39 @@ class << self
           # S'il reste quelque chose, mais que c'est trop court, il faut
           # jouer sur le kerning du texte courant pour faire remonter le
           # texte ou faire descendre un mot.
+          # (<= "Ligne de voleur")
           # 
-          # Donc, ici, on va calculer le character_spacing nécessaire,
-          # et on va corriger +box+ pour qu'il intègre le reste. Après
-          # cette opération, +rest+ doit être vide.
+          # Donc, ici, on va calculer le character_spacing nécessaire.
           # 
           # @note TODO Il faut pouvoir régler la longueur de mot minimum
           #   C'est-à-dire la valeur du THIEF_LINE_LENGTH ci-dessous
           #   et il faut pouvoir le modifier à la volée dans le texte
           # 
+          # Noter que ça survient avec l'avant-dernière ligne, la 
+          # ligne de voleur est donc la dernière, la suivante, qui
+          # se trouve pour le moment dans rest.
+          # 
+          # Mais pour que la réduction des espaces ne s'applique pas
+          # seulement à l'avant-dernière ligne (qui deviendra la 
+          # dernière), ce qui serait visible, surtout avec un gros
+          # caracter, il faut l'appliquer à tout le paragraphe, donc
+          # recommencer le calcul complet. C'est ce que fait la 
+          # méthode #treate_thief_line_in_par qui retourne la nouvelle
+          # liste de paragraphes (pile) et passe à la suite.
+          # 
           has_thief_line = rest.count > 0 && rest.first[:text].length <= THIEF_LINE_LENGTH
+          
           if has_thief_line
-            cs = treate_thief_line_in(pdf, stf, **options)
-            rest, box = text_box(
-              str, 
-              **options.merge(kerning:true, character_spacing:-cs)
-            )
-            rest.count == 0 || raise("Il ne devrait rester plus rien.")
+            #
+            # <= Ligne de voleur détectée
+            # => Il faut reprendre tout le paragraphe
+            # 
+            paragraphe_stack = my.treate_thief_line_in_par(pdf, text.dup, **options)
+
+            # On peut s'arrêter là avec la nouvelle pile de 
+            # paragraphes.
+            break
+
           end
 
           has_no_rest = rest.count == 0
@@ -173,9 +185,10 @@ class << self
         # /loop tant qu'il reste du texte (while str.length > 0)
 
 
+        # --------------------------------------------------------
         # À partir d'ici, on a dans le tampon de lignes toutes les
         # lignes du paragraphe à écrire.
-        spy "Nombre lignes-box à écrire : #{paragraphe_stack.count}"
+        # --------------------------------------------------------
 
         # Faut-il passer à la page suivante pour écrire le premier
         # paragraphe ?
@@ -234,28 +247,87 @@ class << self
     
   end #/pretty_render
 
-  # 
-  # Pour calculer le character spacing, on fonctionne ne plus en
-  # plus fin : dès qu'un c-s fait supprimer la ligne de voleurs
-  # on prend le précédent et on affine avec une division plus
-  # fine
-  def treate_thief_line_in(pdf, rest, **options)
-    cs = nil # character-spacing
-    snap = 0.1
-    last_cs = 0
-    while snap > 0.000001
-      cs = last_cs
-      rest = [1]
-      while rest.count > 0
-        cs += snap
-        rest, box = pdf.text_box(str, **par_options.merge(at:[0,cursor], kerning:true, character_spacing: -cs))
-        break if rest.count == 0
-        last_cs = cs.dup
+
+  ##
+  # Contrairement à la méthode suivante, ici, on traite la ligne de
+  # voleur avec tout le paragraphe, pas seulement avec la ligne qui
+  # précède la ligne de voleur.
+  # Et on retourne le stack de paragraphes
+  def treate_thief_line_in_par(pdf, str, **options)
+
+    # La nouvelle pile des paragraphes récolté, quand le character-
+    # spacing sera appliqué au paragraphe.
+    paragraphes_stack = []
+
+    snap    = 0.01
+    last_cs = 0.0 # pour revenir toujours au cs précédent qui a "dépassé"
+    cs      = 0.0 # pour l'exposer ("cs" pour "Character Spacing")
+
+    #
+    # Préparer +opts+ pour recevoir les options qui vont être utiles
+    # pour l'opération.
+    # 
+    opts = {
+      at:                 options[:at], 
+      width:              options[:width], 
+      align:              options[:align],
+      kerning:            true,
+      character_spacing:  0,
+      inline_format:      options[:inline_format],
+    }
+
+    pdf.update do
+
+      # Transformation du paragraphe en segment suivant le
+      # formatage.
+      ary = Prawn::Text::Formatted::Parser.format(str, [])
+
+      # Hauteur actuelle du paragraphe, sans kerning
+      normal_height = height_of_formatted(ary, **opts)
+
+      curr_height = normal_height.dup
+      while snap > 0.0000001
+        cs = last_cs # [1]
+        while true
+          cs += snap
+          opts.merge!(character_spacing:-cs)
+          ######################
+          ### HAUTEUR TESTÉE ###
+          ######################
+          curr_height = height_of_formatted(ary, **opts)
+          # Si la nouvelle hauteur est inférieure à la hauteur 
+          # sans kerning, c'est qu'on a réussi à remonter la ligne
+          # de voleur.
+          break if curr_height < normal_height
+          # Sinon, on continuen, en mémorisant le cs actuel (pour le
+          # reprendre et affiner quand on aura dépassé — cf. plus
+          # haut en [1])
+          last_cs = cs.dup
+        end
+        snap = snap / 10 # cran, p.e. 0.001 -> 0.0001
       end
-      snap = snap / 10 # cran : 0.001 -> 0.0001
-    end
-    return cs
-  end
+
+      spy "CS trouvé pour le paragraphe #{str[0..60]} […] : #{cs}".bleu
+
+      # Découpage du paragraphe en ligne (sans avoir plus rien à 
+      # surveiller puisque la ligne de voleur a été remontée)
+
+
+      options = options.merge!(kerning: true, character_spacing: cs)
+
+      # Ramassage de tous les paragraphes
+      # 
+      while str.length > 0
+        rest, box = text_box(str, **options)
+        paragraphes_stack << box
+        break if rest.count == 0
+        str = rest[0][:text]
+      end #/while
+
+    end #/pdf.update
+  
+    return paragraphes_stack
+  end #/ #treate_thief_line_in_par
 
 
   def defaultize_options(options, pdf)
