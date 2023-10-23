@@ -31,6 +31,10 @@ module ParserFormaterClass
   # 
   # @return [String|Nil] la chaine de caractère corrigée ou nil si le texte a été traité avant.
   # 
+  # 
+  # TODO : changer le nom de cette méthode parce qu'elle fait plus de
+  # formatage que de parsing…
+  # 
   def __parse(str, context)
 
     pdf = context[:pdf]
@@ -264,6 +268,10 @@ private
     # Les exposants
     # 
     str = __traite_superscript(str)
+    #
+    # Les codes en backsticks
+    # 
+    str = __traite_backsticks(str)
 
     return str
   end
@@ -564,6 +572,15 @@ private
   end
   REG_EXPOSANT = /([0-9XVIC])\^(er|re|e)/.freeze
   SPAN_EXPOSANT = '%s<sup>%s</sup>'.freeze
+
+  def self.__traite_backsticks(str)
+    return str unless str.match?('`')
+    str = str.gsub(REG_BACKSTICKS) do
+      SPAN_BACKSTICKS % [$1.freeze]
+    end  
+  end
+  REG_BACKSTICKS  = /`(.+?)`/.freeze
+  SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
 
 end #/class AnyParagraph

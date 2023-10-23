@@ -151,7 +151,6 @@ class DebugInOtherTerm
     def memorize_debug_term
       now = Time.now
       line = "#{term}\t#{now.day}\t#{now.month}\t#{logging}"
-      puts "Enregistrement de la ligne : #{line.inspect}" if debug?
       File.write(path, line)      
     end
 

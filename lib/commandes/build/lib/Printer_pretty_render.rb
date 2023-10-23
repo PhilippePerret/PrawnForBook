@@ -179,7 +179,7 @@ class << self
 
           break if has_no_rest
 
-          str = rest[0][:text]
+          str = my.recompose_from_rest(rest)
 
         end
         # /loop tant qu'il reste du texte (while str.length > 0)
@@ -346,12 +346,19 @@ class << self
   # 
   # 1)  C'est dommage d'avoir à faire ça mais heureusement, ça n'ar-
   #     rive que lorsqu'on a une ligne de voleur
+  #     FAUX : ça arrive pour chaque paragraphe…
   # 
   # 2)  C'est l'opération inverse de Prawn::Text::Formatted:: \
   #     Parser.format(str, []) qui prend le str et le transforme
   # 
+  # SOLUTION
+  #   Une solution pour régler ça serait de ne traiter par ligne que
+  #   les textes qui dépasserait de la page pour aller sur la page
+  #   suivante…
+  # 
   # Propriétés d'un fragment dont je ne tiens pas compte :
   #   :local, :link, :anchor, :character_spacing
+  # 
   def recompose_from_rest(rest)
     rest.map do |fragment|
       t  = fragment[:text]
@@ -368,16 +375,18 @@ class << self
         else t
         end
       end
-      font_props = []
-      font_props << {name: font}    if font
-      font_props << {size: size}    if size
-      font_props << {color: color}  if color
+      font_props = {}
+      font_props.merge!(name: font)    if font
+      font_props.merge!(size: size)    if size
+      font_props.merge!(color: color)  if color
       unless font_props.empty?
-        t = "<font#{font_props.map{|k,v| " #{k}=\"#{v}\""}}>#{t}</font>"
+        props = font_props.map { |k,v| "#{k}=\"#{v}\""}.join(' ')
+        t = FONT_TAG % {props: props, str: t}
       end
       t # pour le map
     end.join('')
   end
+  FONT_TAG = '<font %{props}>%{str}</font>'.freeze
 
 
   def defaultize_options(options, pdf)

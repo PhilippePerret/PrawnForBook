@@ -275,7 +275,7 @@ class NTitre < AnyParagraph
   def next_if_title
     @next_if_title ||= begin
       pidx  = pindex.dup
-      while nextpar = book.inputfile.paragraphes[pidx += 1]
+      while nextpar = book.paragraphes[pidx += 1]
         if nextpar.paragraph? || nextpar.image? || nextpar.table?
           nextpar = nil 
           break 

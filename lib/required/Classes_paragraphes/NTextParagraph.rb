@@ -29,8 +29,6 @@ class NTextParagraph < AnyParagraph
     # TODO : Voir et remettre ce qui est nécessaire
     return
 
-
-
     @is_citation    = raw_text.match?(REG_CITATION)
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
     # En cas de citation ou d'item de liste, on retire la marque
@@ -61,6 +59,7 @@ class NTextParagraph < AnyParagraph
 
   REG_CITATION    = /^> .+$/.freeze
   REG_LIST_ITEM   = /^\* .+$/.freeze
+  REG_NOTE_PAGE   = /^\^[0-9+] /.freeze
 
   
   # --- Printing Methods ---

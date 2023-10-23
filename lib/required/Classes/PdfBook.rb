@@ -11,17 +11,55 @@ class PdfBook
   # 
   # @param [String] folder Path to folder book.
   def initialize(folder)
-    @folder = folder
+    @folder     = folder
   end
 
-  # Pour ouvrir le livre dans Aperçu, en double pages
-  def open_book
-    if File.exist?(pdf_path)
-      `osascript "#{APP_FOLDER}/resources/bin/open_book.scpt" "#{pdf_path}"`
-    else
-      puts "Il faut produire le livre, avant de pouvoir le lire ! (jouer `prawn-for-book build')".rouge
+  def reset
+    # Pour mettre absolument tous les paragraphs rencontrés (même
+    # les lignes vides)
+    @paragraphes = []
+  end
+
+
+  # --- Building Methods ---
+
+  # = main =
+  # 
+  # @api
+  # 
+  # Méthode principale qui reçoit le +paragraph_str+ d'une +source
+  # qui peut être le fichier texte.pfb.md (avant tout), un fichier
+  # inclus ou une méthode d'utilisateur, qui l'instancie et l'injecte
+  # dans le livre en construction.
+  # 
+  # @question
+  # Ne passerait-on pas par un "Injector" pour gérer les styles qui
+  # dépendent du paragraphe suivant. Typiquement : la fin de notes de
+  # page, qui doivent dessiner un trait.
+  # Pour le moment, je le traite ici, mais si ça devient conséquent,
+  # il faudra que je l'isole dans un Injector.
+  # 
+  def inject(pdf, paragraph_str, idx, source = 'user_method')
+    # - Instanciation du paragraphe -
+    par = AnyParagraph.instantiate(self, paragraph_str, idx, source)
+    
+    # - Pré-traitement en fonction du bloc courant (if any) -
+    if @current_bloc == :notes_page && not(par.note_page?)
+      
+
+    ###########################################
+    ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###
+    ###########################################
+    par.print(pdf)
+    # - Ajout à la liste des paragraphes -
+    @paragraphes << par
+
+    # - Post-traitement en fonction du bloc éventuel -
+    if par.note_page?
+      @current_bloc = :notes_page
     end
   end
+
 
   # --- Usefull Methods ---
 
@@ -46,6 +84,18 @@ class PdfBook
     end
   end
 
+  # @api
+  # Pour ouvrir le livre dans Aperçu, en double pages
+  def open_book
+    if File.exist?(pdf_path)
+      `osascript "#{APP_FOLDER}/resources/bin/open_book.scpt" "#{pdf_path}"`
+    else
+      puts "Il faut produire le livre, avant de pouvoir le lire ! (jouer `prawn-for-book build')".rouge
+    end
+  end
+
+  # --- Predicate Methods ---
+
   def exist?(args)
     f = File.join(*args)
     return f if File.exist?(f)
@@ -53,9 +103,29 @@ class PdfBook
 
   # --- Objects Methods ---
 
-  def font_or_default(font_name)
-    fontes.key?(font_name) ? font_name : second_font  
+  # @prop [Array<AnyParagraph>] Paragraphes
+  # 
+  # Tous les paragraphes du texte, instanciés. Noter que dans la
+  # nouvelle version de l'application (version 2 LINE), absolument
+  # tous les paragraphes du fichier sont instanciés, même les 
+  # paragraphe vide (Prawn4book::PdfBook::EmptyPar). De même que tous
+  # les paragraphes produits par les méthodes, sauf exception (quand
+  # l'utilisateur ne passe pas par les méthodes d'injection)
+  # 
+  # @note
+  # 
+  #   Attention, pour le moment, cette liste ne contient que les 
+  #   paragraphes du fichier source, pas ceux des fichiers éventuel-
+  #   lement inclus (qui ont eux aussi cette propriété, puisque ce 
+  #   sont eux aussi des InputTextFile)
+  # 
+  def paragraphes
+    @paragraphes
   end
+
+  # def font_or_default(font_name)
+  #   fontes.key?(font_name) ? font_name : second_font  
+  # end
 
   ##
   # Instance pour gérer les pages

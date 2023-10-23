@@ -20,3 +20,6 @@ publisher:
   name: Icare Éditions
   logo_path: logo.png
 #</publisher>
+
+test:
+  hash_ruby: "d12740f9caaa0506c5b8b9fc786f8b0185611c34c2e38c65eff62e59dbcc11af1e987840b34f1797b493e13a9560406c4cd6513e6dff3d849336a89b2df464fb"

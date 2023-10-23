@@ -315,7 +315,7 @@ class AnyParagraph
       ppp   = nil
       while pidx > 0
         pidx -= 1
-        ppp   = book.inputfile.paragraphes[pidx]
+        ppp   = book.paragraphes[pidx]
         break unless ppp.empty_paragraph?
         ppp = nil
       end
@@ -327,8 +327,8 @@ class AnyParagraph
   # de code qui précède le paragraphe courant.
   def prev_pfbcode
     @prev_pfbcode ||= begin
-      if book.inputfile.paragraphes[pindex - 1].pfbcode?
-        book.inputfile.paragraphes[pindex - 1] 
+      if book.paragraphes[pindex - 1].pfbcode?
+        book.paragraphes[pindex - 1] 
       end
     end
   end

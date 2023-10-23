@@ -1,6 +1,10 @@
 module Prawn4book
 class PrawnView
 
+  # Toutes les méthodes de Prawn::Document (en fait Prawn::View) qui
+  # permettent de gérer la grille de référence, c'est-à-dire les 
+  # lignes sur lesquelles se posent les textes.
+
   # - raccourci -
   def line_height
     @line_height ||= book.recipe.line_height

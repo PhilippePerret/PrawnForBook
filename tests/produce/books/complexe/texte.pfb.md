@@ -25,6 +25,7 @@ Un paragraphe dans la police normale, mais avec des *textes en italiques*, des *
 
 # Bogues à corriger / implémenter
 
+* Les notes doivent être placées plus haut
 * Les notes ont des paragraphes numérotés. Ne le faire que si l’option est demandée
 
 # Réflexions
@@ -37,3 +38,9 @@ Comment gérer les lignes complexes (les lignes qui ne sont pas simples…), à 
 * un hauteur (cursor)
 et qui calcule et imprime le texte. L’essai sera concluant si on parvient à imprimer une table (mais une fausse table) avec quatre colonnes de tailles différentes par exemple dont les cellules contiennent des textes assez longs, avec des fontes différentes, et des lignes (des lignes ajoutées par dessin, donc, puisque qu’on n’utiliserait pas les vraies).
 Il faudrait cependant que les vraies tables puissent être utilisées, qui zapperaient l’alignement sur la grille de référence [Peut-être que l’utilisation actuelle fonctionnerait].
+
+## Traitement per paragraphe suivant
+Dans le nouveau système, où les lignes sont directement injectées dans le livre, on ne peut plus faire de traitement en fonction de la ligne suivant. Typiquement, si on a des notes, on ne peut plus ajouter la ligne de fin à la dernière note s’il n’y a plus de notes après.
+Deux solutins sont possibles :
+* Indiquer qu’un bloc de note est en route (dans l’injecteur `Injector` qu’on pour instancier) et, lorsqu’on rencontre un paragraphe qui n’est plus une note, le fermer. Inconvénient(s) : ça oblige à suivre des trucs tout le temps (`if block_notes? ....`)
+* Pour lire le paragraphe suivant. Pas si simple, même pour les fichiers (qui sont lus avec la méthode `readlines` (qui pourrait être remplacées par `gets`) et encore moins évident avec les méthodes utilisateurs.
