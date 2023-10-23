@@ -25,22 +25,19 @@ class NTextParagraph < AnyParagraph
   # 
   def pre_parse_text_paragraph
 
-
     @is_note_page   = raw_text.match?(REG_NOTE_PAGE)
     @is_citation    = raw_text.match?(REG_CITATION)
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
 
-    # TODO : Voir et remettre ce qui est nécessaire
-    return
 
     # En cas de citation ou d'item de liste, on retire la marque
     # de début du paragraphe ("> " ou "* ")
-    @text = raw_text[1..-1].strip if citation? || list_item?
+    @raw_text = raw_text[1..-1].strip if citation? || list_item?
 
     recup = {}
     tx = NTextParagraph.__get_class_tags_in(raw_text, recup)
     self.class_tags = recup[:class_tags]
-    @text = tx
+    @raw_text = tx
     
     # 
     # Pré-définition des styles en fonction de la nature du paragra-
@@ -49,12 +46,6 @@ class NTextParagraph < AnyParagraph
     if citation?
       @text = "<i>#{@text}</i>"
       add_style({size: font_size + 1, left: 1.cm, right: 1.cm, top: 0.5.cm, bottom: 0.5.cm, no_num:true})
-    elsif list_item?
-      add_style({left:3.mm, no_num: true})
-    elsif table_line?
-      # rien à faire
-    elsif tagged_line?
-      # rien à faire
     end
 
   end #/pre_parse_text_paragraph
@@ -126,16 +117,16 @@ class NTextParagraph < AnyParagraph
     # 
     par = my = self
 
-    #
-    # Préformatage par nature de paragraphe
-    # 
-    # Typiquement, c'est ici qu'on ajoute un "- " au début des items
-    # de liste (encore le cas ?)
-    # 
-    # TODO : Normalement, ça devrait disparaitre ou être traité 
-    # autrement.
-    # 
-    formate_per_nature(pdf)
+    # - Une puce pour les items de liste -
+    if list_item?
+      left =  3.5.mm
+      dry_options.merge!({
+        puce:   {content:'–'},
+        at:     [left, nil],
+        width:  pdf.bounds.width - left,
+        no_num: true,
+      })
+    end
 
     ###########################
     #  ÉCRITURE DU PARAGRAPHE #
@@ -164,9 +155,9 @@ class NTextParagraph < AnyParagraph
       inline_format:true, 
       overflow: :truncate, 
       at:    [margin_left, nil],
-      width: width || @pdf.bounds.width,
+      width: width || (@pdf.bounds.width - margin_left),
       align: :justify
-    }.freeze
+    }
   end
 
   # La fonte pour la paragraphe

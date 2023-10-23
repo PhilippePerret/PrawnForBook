@@ -64,6 +64,14 @@ class << self
   # @param options [Hash]
   # 
   #   Table des options telles qu'envoyé à pdf.box_text.
+  #   En plus des options régulière, propres à Prawn on peut trouver
+  #   aussi :
+  #   :puce     qui définit une puce (typiquement utilisé pour les
+  #             paragraphe qui sont des items de liste). C'est soit
+  #             un caractère seul, soit une table définissant :
+  #             {:content, :vadjust, :hadjust} pour définir le conte-
+  #             nu l'ajustement vertical et horizontal.
+  #   :no_num   Si true, on ne doit pas marquer de numéro de paragraphe
   # 
   #   @notes
   #     - Il sera ajouté 'dry_run:true' et 'single_line:true' pour
@@ -71,7 +79,7 @@ class << self
   #       car l'écriture se fait ligne par ligne (c'est cher mais
   #       c'est précis).
   # 
-  def pretty_render(owner:, pdf:, text:, fonte:, options:)
+  def pretty_render(pdf:, text:, options:, owner: nil, fonte: nil)
 
     my = self
 
@@ -79,7 +87,18 @@ class << self
 
     # Le décalage horizontal du texte à écrire
     # 
-    left = options[:at][0]
+    left  = options[:at][0] || 0
+
+    # TODO Ça devrait être fait dans #defaultize_options
+    options.merge!(width: pdf.bounds.width - left)
+
+
+    # Y a-t-il une puce ?
+    puce = options[:puce]
+
+    # - Faut-il se passer du numéro de paragraphe ? -
+    # TODO
+    no_num = options[:no_num] === true # || pas par recette
 
     # On établit d'abord la liste des lignes qu'on aura à écrire, en
     # résolvant les lignes de voleur (il ne doit plus y en avoir).
@@ -90,7 +109,7 @@ class << self
     begin
       pdf.update do
 
-        font(fonte)
+        font(fonte) if fonte
 
         # Pile (stack) pour mettre les lignes à écrire du paragraphe
         # 
@@ -128,7 +147,7 @@ class << self
           # 
           rest, box = text_box(str, **options)
 
-          # spy "rest = #{rest.inspect}"
+          # spy "rest = #{rest}"
 
           #
           # S'il reste quelque chose, mais que c'est trop court, il faut
@@ -220,12 +239,20 @@ class << self
             #    la ligne suivante ne soit pas seule.
             start_new_page
           end
-          boxline.at = [left, cursor] # TODO: CE "0" EST À RÉGLER
+          boxline.at = [left, cursor]
 
           ##############################
           ### IMPRESSION DE LA LIGNE ###
           ##############################
           boxline.render
+
+          # Pour le moment, on gère ça ici, mais on pourrait essayer
+          # de le généraliser (voir pour les livres avec les notes)
+          if is_first_line && puce
+            float do 
+              text_box(puce[:content], **{inline_format:true, at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
+            end
+          end
 
           # -- On se place sur la ligne suivante --
           move_to_next_line
@@ -319,21 +346,14 @@ class << self
 
       options[:at][1] = pdf.bounds.top
 
-      spy "Options avant stack paragraphe : #{options.inspect}".bleu
-
       # Ramassage de tous les paragraphes
       # 
       while str.length > 0
-        spy "- str traité : #{str.inspect}".bleu
         rest, box = text_box(str, **options)
-        spy "rest : #{rest.inspect}".jaune
         paragraphes_stack << box
         break if rest.count == 0
         str = my.recompose_from_rest(rest)
-        spy "rest reconstitué : #{str.inspect}"
       end #/while
-
-      spy "Nombre de lignes dans la pile : #{paragraphes_stack.count}".bleu
 
     end #/pdf.update
   
@@ -396,7 +416,18 @@ class << self
     # Par défaut, la largeur de la page
     # (je préfère le dire explicitement)
     unless options.key?(:width)
-      options.merge!(width: pdf.bounds.width)
+      lf = options[:left] || options[:margin_left]
+      lf ||= begin
+        options[:at][0] if options[:at]
+      end
+      lf ||= 0
+      options.merge!(width: pdf.bounds.width - lf)
+    end
+
+    if options.key?(:left) || options.key?(:margin_left)
+      spy "options[:left] = #{options[:left].inspect}"
+      spy "options[:margin_left] = #{options[:margin_left].inspect}"
+      spy "options[:width] = #{options[:width].inspect}"
     end
 
     # Par défaut, placé à gauche et tout en haut ()
@@ -407,6 +438,13 @@ class << self
       # pour ne pas avoir de changement de page inopportun 
       # pendant le calcul
       options[:at][1] = pdf.bounds.height
+    end
+
+    # - Puce -
+    # Il faut que ce soit une table définissant :content, :vadjust
+    # et :hadjuste
+    if options.key?(:puce)
+      options[:puce] = {content: options[:puce]} if options[:puce].is_a?(String)
     end
 
     return options

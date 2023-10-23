@@ -15,6 +15,11 @@ Un paragraphe dans la police normale, mais avec des *textes en italiques*, des *
 ^^ Et le commentaire sur la note “deuxième” qui doit être bien numérotée en deuxième justement.
 Un paragraphe juste en dessous de la note pour voir s’il serait bien placé sous le trait et non pas dessus ce qui serait inélégant.
 
+# Paragraphes avec formatage personnalisé
+simplenote::Un premier paragraphe de style “simplenote” qui se caractérise par une puce “pictophil” (lettre “n”) placée au bon endroit en décalant le texte qui sera toujours bien placé.
+simplenote::Une autre simple note pour voir si les caractères qui ne s’affichent pas vont s’afficher cette fois avec une ligne inférieure (en fait le problème vient de `.otf`).
+notedocu::Une note pour de la documentation.
+
 # Tests restant à faire
 
 * Traitement du formatage pseudo-markdown
@@ -24,13 +29,20 @@ Un paragraphe juste en dessous de la note pour voir s’il serait bien placé so
 * La modification du THIEF_LINE_WIDTH à la volée, pour pouvoir modifier localement la longueur d’une ligne de voleur. On doit pouvoir aussi le faire dans la recette (autre test ?)
 * Penser à ajouter la définition de l’aspect des notes dans la recette (manuel). Ajouter les valeurs par défaut dans RECIPE DEFAULT.
 * Ajouter la page d’infos, avec toutes les infos (l’idée est qu’il y ait plus d’infos que de lignes, pour voir comment on va s’y prendre => doubler les lignes et mettre les caractères plus petits pour s’adapter.
+  * Utiliser les § (caplock §) pour désigner le numéro du paragraphe dans la numérotation hybride.
 
 # Bogues à corriger / implémenter
 
-* Les notes doivent être placées plus haut
-* Les notes ont des paragraphes numérotés. Ne le faire que si l’option est demandée
+* Le tiret des items de list doivent avoir la fonte du texte (voir le premier qui prend la fonte du titre)
+* Plus grave, les tirets d’item de liste ne doivent être mis que lorsque l’on sait où va se retrouver le paragraphe. S’il doit passer à la ligne, le tiret doit lui aussi passer à la ligne
+* La largeur de l’item de liste doit être amputée du décalage left (pour le moment, il est normalement réglé (avec `margin-left`, mais le programme n’en tient aucun compte)
+
 
 # Réflexions
+
+## Second tour
+Pour le second tour, on n’a absolument pas besoin de repartir du texte. On va plutôt repartir de tous les paragraphes, et modifier les références puisque normalement c’est la seule chose qui nécessite ce second tour (on a un troisième tour avec les définitions du scénodico, mais c’est un tout autre problème qui sera résolu).
+
 ## Gestion des lignes complexes
 Comment gérer les lignes complexes (les lignes qui ne sont pas simples…), à commencer par les items de liste. Mais on peut imaginer que les tables en sont aussi. Il faut vraiment parvenir à “sortir” le traitement par ligne. Par exemple en ayant un constructeur (Printer ?) à qui on envoie :
 * un texte,
@@ -41,8 +53,6 @@ Comment gérer les lignes complexes (les lignes qui ne sont pas simples…), à 
 et qui calcule et imprime le texte. L’essai sera concluant si on parvient à imprimer une table (mais une fausse table) avec quatre colonnes de tailles différentes par exemple dont les cellules contiennent des textes assez longs, avec des fontes différentes, et des lignes (des lignes ajoutées par dessin, donc, puisque qu’on n’utiliserait pas les vraies).
 Il faudrait cependant que les vraies tables puissent être utilisées, qui zapperaient l’alignement sur la grille de référence [Peut-être que l’utilisation actuelle fonctionnerait].
 
-## Traitement per paragraphe suivant
-Dans le nouveau système, où les lignes sont directement injectées dans le livre, on ne peut plus faire de traitement en fonction de la ligne suivant. Typiquement, si on a des notes, on ne peut plus ajouter la ligne de fin à la dernière note s’il n’y a plus de notes après.
-Deux solutins sont possibles :
-* Indiquer qu’un bloc de note est en route (dans l’injecteur `Injector` qu’on pour instancier) et, lorsqu’on rencontre un paragraphe qui n’est plus une note, le fermer. Inconvénient(s) : ça oblige à suivre des trucs tout le temps (`if block_notes? ...`)
-* Pour lire le paragraphe suivant. Pas si simple, même pour les fichiers (qui sont lus avec la méthode `readlines` (qui pourrait être remplacées par `gets`) et encore moins évident avec les méthodes utilisateurs.
+## Traitement des “lettrines”
+J’appelle “puce” le tiret ou la puce qu’on trouve au début d’une ligne, mais aussi tout autre caractère à placer devant une ligne de texte qui sera mise en retrait gauche, comme par exemple toutes les notes (notereal, simplenote, etc.) qu’on utilise pour l’analyse de film.
+Ce traitement doit être proposé de base, avec une option particulière qu’on appellera :puce dans les options à envoyer à Printer.pretty_render

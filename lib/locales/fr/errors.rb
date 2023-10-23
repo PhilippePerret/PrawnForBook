@@ -64,7 +64,7 @@ ERRORS = {
       du fichier formater.rb du livre ou de la collection.
       # in ./formater.rb
       module ParserFormaterClass
-        def %{meth}
+        def %{meth}(pdf, context)
           # ... définir le code ici
         end
       end
@@ -79,7 +79,7 @@ ERRORS = {
 
       # in ./formater.rb
       module ParserFormaterClass
-        def %{meth}(...)
+        def %{meth}(pdf, context, ...)
           # ... traitement ...
         end
       end

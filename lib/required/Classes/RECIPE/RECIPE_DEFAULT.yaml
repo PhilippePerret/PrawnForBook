@@ -22,8 +22,9 @@ define: &default3_font_n_style "Helvetica/Bold"
 #<fonts>
 fonts:
   PictoPhil:
-    # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
-    normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
+    normal: 'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
+    # FONCTIONNE MAL AVEC LES .OTF
+    # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
 #   Helvetica:
 #     normal: "/System/Library/Fonts/Helvetica.ttc"
 #     bold:   "/System/Library/Fonts/HelveticaNeue.ttc"

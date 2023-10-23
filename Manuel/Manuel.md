@@ -336,11 +336,9 @@ book_format:
 
 #### Toujours aligner les textes sur la grille de référence
 
-Si l’on utilise **des tailles de police différentes** ou que l'on joue sur des **hauteurs de ligne différentes** pour modifier la grille de référence, il faut ajuster le `leading` pour que les textes tombent toujours bien sur les lignes de la grille de référence.
-
 > Rappel : pour afficher la grille de référence, ajouter l'option `-grid` à la commande de construction du livre (ne pas oublier de l'enlever pour la version finale…)
 
-Pour ce faire, on calcule ce leading à l'aide de la méthode `pdf.calc_leading_for(<fonte>, <hauteur ligne>)` et on ajoute le `leading` à l'inscription des textes.
+Si l’on utilise la méthode générique [**`Printer.pretty_render`**](#printer-pretty-render) il est inutile de se soucier des lignes de référence (ni des veuves, des orphelines ou des lignes de voleur puis tout est pris en charge automatiquement).
 
 Par exemple, dans un helper qui reçoit `pdf`, le `Prawn4book::PrawnView` du livre en construction :
 
@@ -348,18 +346,14 @@ Par exemple, dans un helper qui reçoit `pdf`, le `Prawn4book::PrawnView` du liv
 def mon_helper(pdf)
 	mafonte = Prawn4book::Fonte.new(name:'Garamond', size:13, \
 		style: :normal)
-	leading = pdf.calc_leading_for(mafonte, 15)
-  # ou pdf.leading_for
-	
-	options = {leading: leading}
-	pdf.update do
-		font(mafonte) do
-      move_to_next_line
-			text "Mon texte qui sera bien leadé", **options
-      # Note : il faudrait que le texte soit plus long pour qu'on puisse
-      # bien voir le leading employé, entre chaque ligne.
-		end
-	end
+
+	Printer.pretty_render(
+		pdf: pdf, 
+		fonte:mafonte, 
+		text: "Mon texte qui sera bien leadé",
+		options: {left: 20},
+		owner:nil,
+	)
 end
 ~~~
 
@@ -382,9 +376,7 @@ Pour modifier localement (sur quelques pages) la grille de référence, il y a d
 
   ~~~ruby
   def ma_partie_avec_autre_grille(pdf)
-    mafonte = Prawn4book::Fonte.new(name:"MaFonte", style: :normal, size:9, hname:"Ma belle fonte")
-    pdf.define_default_leading(mafonte, 10)
-    #
+  	pdf.line_height = 22 # nouvelle grille, tous les 22 points
     # À partir d'ici et de maintenant, tous les 
     # pdf.move_to_next_line placeront le curseur sur la
     # ligne de la nouvelle grille.
@@ -392,9 +384,7 @@ Pour modifier localement (sur quelques pages) la grille de référence, il y a d
   ~~~
 
 > Il ne faut pas abuser de ce changement de grille qui risque de déstabiliser tout l'aspect. On peut le réserver à l'annexe, quand on utilise un affichage plus réduit.
-
-
-> Ajouter l'option `-grid` à la commande de construction on pourra voir la nouvelle grille à partir de l'endroit voulu (`pfb build -grid`.
+> On prendra soin également de ne pas le commencer sur une *fausse page* ce qui aurait le regrettable effet d'avoir deux pages en vis-à-vis qui n'auraient pas les mêmes lignes de référence, ce qui peut être affreux, sauf si les hauteurs de ligne sont arithmétiquement proportionnées.
 
 ---
 <a name="pagination"></a>
@@ -650,43 +640,9 @@ Les propriétés qu’on peut définir sont les suivantes :
 
 ##### Traitement des mots seuls en bas de paragraphe
 
-Une propriété particulièrement utile pour de l’impression professionnelle concerne l’espacement entre les mots qui permet d’éviter les mots seuls en fin de paragraphes par exemple. Supprimer deux ou trois mots sur la dernière ligne peut permettre par exemple de faire remonter un titre de façon élégante.
+À partir de la version 2.0, les *lignes de voleur*, tout comme les *orphelines* ou les *veuves* sont automatiquement traitées. 
 
-Pour gérer cette fonctionnalité, on utilise la commande `(( del_last_line ))` (“delete the last line”, “supprimer la dernière ligne”). L’application joue alors elle-même sur l’espacement entre les mots (voire entre les lettres) pour condenser un peu le texte.
-
-**Par mesure de prudence**, pour obtenir un rendu acceptable, n’appliquez jamais cette commande s’il y a trop de mots sur la ligne à supprimer et/ou si le paragraphe est trop cours. Un paragraphe de moins de 4 lignes se met en danger si on lui applique cette commande.
-
-Exemple d’utilisation :
-
-~~~
-(( del_last_line ))
-Ceci  est  un texte  assez long  qui  doit  être  condensé
-pour  que  sa  dernière  ligne  soit supprimée, en  jouant
-sur  les espacements  entre chaque  mot, en les rapprochant
-de  façon discrète  pour  que les trois derniers mots soient
-rayés de la carte.
-~~~
-
-Le paragraphe pouvant avoir plusieurs définitions, on peut utiliser aussi la commande comme propriété :
-
-~~~json
-(( {del_last_line:true, font_size:10.2} ))
-Ceci  est  un texte  assez long  qui  doit  être  condensé
-...
-~~~
-
-
-
-Après traitement, le paragraphe ressemblera à :
-
-~~~
-Ceci est un texte assez long qui doit être condensé pour que
-sa dernière ligne soit supprimée, en jouant sur les espace-
-ments entre chaque mot, en les rapprochant de façon discrète 
-pour que les trois derniers mots soient rayés de la carte.
-~~~
-
-Bien entendu, cette commande ne se place dans le texte du livre que lorsque le PDF a été construit et qu’on a constaté l’état du paragraphe. On ne peut pas le faire au hasard, il faut le faire comme le ferait un metteur en page, sur pièce.
+Dans les formateurs personnalisés (personnels), pour que ce soit le cas, il faut utiliser la méthode [Printer::pretty_render](#printer-pretty-render) pour écrire tout texte.
 
 <a name="style-extrait-with-helper"></a>
 
@@ -767,15 +723,17 @@ Il existe deux manières de le faire :
   
   > Pour mettre en forme, on dispose plusieurs outils dont :
   >
-  > * [les tables](#tables)
+  > * [les tables](#tables) (déconseillées)
   > * [les Printer](#printer).
   
 * la manière complexe, permettant une gestion extrêmement fine de l’affichage, mais nécessitant une connaissance précise de Prawn. 
 
   > Noter qu’on peut aussi [utiliser la puissance des tables](#table-pour-paragraphes) pour mettre en forme de façon très précise les paragraphes.
+  >
+  > Avec la version 2.0, les tables sont plutôt déconseillées (elles ne permettent pas une gestion fine des lignes de voleurs, des veuves ou des orphelines.
 
   La manière complexe consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
-
+  
   ~~~ruby
   module FormaterParagraphModule
     def build_gros_paragraph(par, pdf)
@@ -1029,6 +987,45 @@ Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour l
 <a name="printer"></a>
 
 ### PRINTER [Expert]
+
+<a name="printer-pretty-render"></a>
+
+#### Méthode générique **Printer.pretty_render** [Expert]
+
+Depuis la version 2.0 (LINE), la méthode `Printer.pretty_render`, qui gère les lignes de voleurs, les veuves et les orphelines est la méthode à privilégier pour tous les formateurs personnalisés.
+
+On l'appelle avec :
+
+~~~ruby
+
+def mon_formateur(pdf)
+
+	Prawn4book::Printer.pretty_render(
+		pdf: 			pdf,  		# Le Prawn::Document
+		text: 		string,  	# Le texte à écrire
+		options: 	options,  # Les options Prawn [2]
+		fonte: 		fonte,    # La fonte s'il faut en changer [3]
+		owner: 		self,     # Le "propriétaire" du texte [1]
+	)
+	
+end
+~~~
+
+> **[1]** Par exemple un \[Prawn4book::PdfBook::NTextParagraph]
+> 
+> **[2]** Les options classiques telles que `:inline_forma` ou `:at`
+> Mais on peut aussi définir certaines options particulières comme
+> :puce 	Une puce par `{content: "<signe>", vadjust: 2, hadjust: 4}`
+> 			Penser, en cas de puce à définir :left pour préciser de combien
+> 			le texte devrait être décalé à gauche.
+> 			
+> **[3]** Une instance Prawn4book::Fonte qu'on définit par :
+> `Fonte.new(name:'<nom>', size:<taille>, style: <style symbol>)`
+
+
+---
+
+#### Les Printers
 
 Les *Printers* (*Imprimantes*, prononcer « prinneteur ») sont des outils pratiques pour mettre en forme le texte et ont l'avantage de mieux gérer les [grilles de référence][] que les [tables](#tables). Ils nécessitent une connaissance du langage [Ruby](https://www.ruby-lang.org/fr/). Ils permettent principalement d’afficher des données, sur plusieurs colonnes.
 

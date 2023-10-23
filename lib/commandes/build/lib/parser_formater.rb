@@ -168,17 +168,6 @@ class AnyParagraph
     alias :book :pdfbook
   end #/<< self
 
-  def formate_per_nature(pdf)
-    return unless paragraph?
-    pa = self
-    pdf.update do 
-      if pa.list_item?
-        move_to_next_line
-        float { text '– ' }
-      end
-    end
-  end
-
   ##
   # Pour le debuggage on peut vouloir ajouter la valeur du curseur
   # en début de texte du paragraphe. Pour ce faire, on ajouter
