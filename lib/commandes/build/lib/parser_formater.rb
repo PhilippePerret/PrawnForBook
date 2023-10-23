@@ -441,15 +441,15 @@ private
     # Traitement d'une marque de note (appel)
     # 
     str = str.gsub(REG_NOTE_MARK) {
-      index_note = $1.to_i.freeze
-      book.notes_manager.add(index_note)
+      index_note = $1.freeze
+      index_note = book.notes_manager.add(index_note)
       " <sup>#{index_note}</sup>"
     }
     #
     # Traitement de la note
     # 
     str = str.gsub(REG_NOTE_DEF) {
-      index_note = $1.to_i.freeze
+      index_note = $1.freeze
       note       = $2.freeze
       book.notes_manager.treate(index_note, note, context)
     }
@@ -457,8 +457,8 @@ private
     return str
 
   end
-  REG_NOTE_MARK = /(?!^)\^([0-9]+?)/.freeze
-  REG_NOTE_DEF  = /^\^([0-9]+?) (.+?)$/.freeze
+  REG_NOTE_MARK = /(?!^)\^([0-9\^]+?)/.freeze
+  REG_NOTE_DEF  = /^\^([0-9\^]+?) (.+?)$/.freeze
 
   ##
   # @private

@@ -882,14 +882,22 @@ end
 
 ##### Notes de page
 
-> D’ores et déjà, mentionnons que pour le moment, les notes de bas de page ne sont pas gérés. On peut mettre les notes en cours de texte (ce que nous recommandons) ou en fait d’ouvrage.
+> D’ores et déjà, mentionnons que pour le moment, les notes de bas de page ne sont pas gérés, pour des raisons idéologiques (nous partons du principe que les notes en bas de page sont trop rarement consultés, le lecteur acceptant difficilement de quitter le flux de sa lecture. Nous préférons de loin les « notes de page » qui s’insèrent dans le flux du texte. On peut également mettre les notes en fin d’ouvrage, ce qui a plus de cohérence, quitte à faire.
 
 Une marque de note s’indique avec `^X` ou « x » est l’indice de la note.
 
-Par exemple :
+> Cet indice doit être relatif à la double page et il vaut mieux, pour la clarté, recommencer à 1 à chaque double page.
+>
+> On peut utiliser le signe `^^` pour laisser le soin à l’application de numéroter ces notes (avec l’obligation, dans ce cas, de donner les explications dans le même ordre que l’apparition des notes).
+
+Dans le texte, on note un terme avec :
 
 ~~~markdown
 Je pose une note sur ce paragraphe^4.
+
+ou
+
+Je pose une note sur ce paragraphe^^.
 ~~~
 
 On définit ensuite la note à l’endroit où elle doit être écrite (donc à la fin du livre si on la veut à la fin du livre).
@@ -905,11 +913,38 @@ C'est une liste de besoins :
 ^2 Seulement si l'âge requis
 ^3 Dans tous les cas
 Et un autre paragraphe en dessous de tout ça.
+
+OU 
+
+C'est une liste de besoins :
+* Premier besoin^^,
+* Deuxième besoin^^,
+* Troisième besoin^^.
+^^ Seulement si on est à l'extérieur.
+^^ Seulement si l'âge requis
+^^ Dans tous les cas
+Et un autre paragraphe en dessous de tout ça.
 ~~~
 
 Ce code produira :
 
-<img src="/Users/philippeperret/Programmes/Prawn4book/Manuel/images/notes.png" alt="notes" style="zoom: 67%;" />
+<img src="/Users/philippeperret/Programmes/Prawn4book/Manuel/images/notes.png" alt="notes" style="zoom: 100%;" />
+
+> 1. Noter absolument que dans le deuxième cas, avec des `^^`, il faut absolument que les explications des notes soient dans le même ordre que l'application des notes (comportement naturel, au demeurant).
+> 2. À tout moment, dans une page, si on a utilisé "^^" partout, on peut repartir d'un numéro de note quelconque simplement en numérotant une des notes. Le compteur de note repart automatiquement à ce numéro de note.
+
+Pour définir le style des notes de bas de page, au niveau de fonte, on renseigne dans la recette les propriétés :
+
+~~~yaml
+book_format:
+	text:
+    note_page_font:           '<fonte name>'
+    note_page_size:           10
+    note_page_style:          :italic
+
+~~~
+
+> Par défaut, on utilise la police par défaut du texte, une taille de 2 de moins et le style italique.
 
 ---
 
@@ -3561,6 +3596,10 @@ book_format:
 		parag_num_dist_from_text: 0 # ajustement horizontal
     parag_num_size: 9 # taille de la police pour les numéros de paragraphe
     parag_num_strength: 72 # "force" (opacité) du numéro de paragraphe
+    # - Notes de page -
+    note_page_font:           'Helvetica'
+    note_page_size:           10
+    note_page_style:          :italic
 #</book_format>
 ~~~
 > **[1]** 

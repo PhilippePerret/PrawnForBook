@@ -91,12 +91,17 @@ book_format:
     line_height:              14
     leading:                  0.0
     numerotation:             false
+    # - Numérotation du paragraphe -
     parag_num_vadjust:        1
     parag_num_dist_from_text: 5
     parag_num_font:           *default_font2
     parag_num_size:           8
     parag_num_style:          *default_style2
     parag_num_strength:       75
+    # - Notes de page -
+    note_page_font:           *default_font1
+    note_page_size:           10
+    note_page_style:          :italic
   titles:
     level1:
       font_n_style:   *default2_font_n_style

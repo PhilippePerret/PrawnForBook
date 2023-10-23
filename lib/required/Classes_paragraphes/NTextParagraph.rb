@@ -61,7 +61,7 @@ class NTextParagraph < AnyParagraph
 
   REG_CITATION    = /^> .+$/.freeze
   REG_LIST_ITEM   = /^\* .+$/.freeze
-  REG_NOTE_PAGE   = /^\^[0-9+] /.freeze
+  REG_NOTE_PAGE   = /^\^[0-9+\^] /.freeze
 
   
   # --- Printing Methods ---
@@ -186,21 +186,6 @@ class NTextParagraph < AnyParagraph
   def indent
     @indent ||= book.recipe.text_indent
   end
-
-  # def method_missing(method_name, *args, &block)
-  #   if method_name.to_s.end_with?('=')
-  #     prop_name = method_name.to_s[0..-2].to_sym
-  #     if self.instance_variables.include?(prop_name)
-  #       self.instance_variable_set(prop_name, args)
-  #     else
-  #       puts "instances_variables : #{self.instance_variables.inspect}"
-  #       PrawnView.add_error_on_property(prop_name)
-  #       raise "Le paragraphe ne connait pas la propriété #{prop_name.inspect}."
-  #     end
-  #   else
-  #     raise FatalPrawnForBookError.new(200, **{mname: method_name})
-  #   end
-  # end
 
   def own_builder?
     return false if class_tags.nil?
