@@ -26,11 +26,13 @@ class NTextParagraph < AnyParagraph
   def pre_parse_text_paragraph
 
 
+    @is_note_page   = raw_text.match?(REG_NOTE_PAGE)
+    @is_citation    = raw_text.match?(REG_CITATION)
+    @is_list_item   = raw_text.match?(REG_LIST_ITEM)
+
     # TODO : Voir et remettre ce qui est nécessaire
     return
 
-    @is_citation    = raw_text.match?(REG_CITATION)
-    @is_list_item   = raw_text.match?(REG_LIST_ITEM)
     # En cas de citation ou d'item de liste, on retire la marque
     # de début du paragraphe ("> " ou "* ")
     @text = raw_text[1..-1].strip if citation? || list_item?
@@ -225,6 +227,7 @@ class NTextParagraph < AnyParagraph
   alias :some_text? :sometext?
 
   def citation?     ; @is_citation      end
+  def note_page?    ; @is_note_page     end
   def table_line?   ; @is_table_line    end
   def tagged_line?  ; @is_tagged_line   end
   def list_item?    ; @is_list_item     end

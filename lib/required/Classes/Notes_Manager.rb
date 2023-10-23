@@ -44,14 +44,13 @@ class PdfBook
       # 
       if not(@flux_opened)
         pdf.update do
-          move_down(5)
+          # - Hauteur ajustée -
+          v = cursor - ascender
           stroke do
             stroke_color(LINE_COLOR)
-            line [0, cursor], [pdf.bounds.width, cursor]
+            line [0, v], [pdf.bounds.width, v]
           end
-          move_down(5)
         end
-        pdf.move_to_next_line
       end
       @flux_opened = true
 
@@ -60,65 +59,46 @@ class PdfBook
       # 
       @current_items.shift
 
-      r = book.recipe
-
-      fs = r.default_font_size - 2
-      leading = pdf.font2leading(
-        Fonte.new(
-          name:r.default_font_name, 
-          style:r.default_font_style, 
-          size:fs)
-      )
-      # leading -= 0.4 # Pour le caler de façon optimale, mais est-ce
-      # que ça fonctionnera pour toutes les polices ???………
-      s = "<sup>#{indice_note}</sup> #{note}"
+      # 
+      # -- Écriture de la note --
+      #
+      str   = "<sup>#{indice_note}</sup> #{note}"
       pdf.move_to_next_line
-      pdf.move_down(1)
-      context[:paragraph].print_paragraph_number(pdf, **{voffset:-1})
-      pdf.text(s, **{leading:leading, inline_format:true, size: fs})
+      Printer.pretty_render(
+        owner:    self, 
+        pdf:      pdf, 
+        text:     str, 
+        fonte:    book.recipe.fonte_note_page, 
+        options:  options_note_page)
 
       return nil
     end
 
-    # Méthode appelée après chaque écriture de texte pour voir
-    # si c'est une fin de notes
-    def check_if_end_of_notes(pdf)
-      return if has_current_notes?
-      return if not(@flux_opened)
+    def options_note_page
+      @options_note_page ||= {
+        inline_format: true, 
+        align: :justify
+      }
+    end
 
-      #
-      # Si la note est la dernière des notes non encore marquées,
-      # alors il faut clore le bloc de notes (sauf si on est assez
-      # bas)
-      # 
+    # Méthode appelée après la dernière note écrite
+    # 
+    def end_bloc(pdf)
       pdf.update do
-        move_down(5)
-        # puts "cursor : #{cursor.inspect}"
+        # On n'ajoute une ligne que si l'on ne se retrouve pas en
+        # bas de page.
         if cursor < pdf.bounds.height - 20
+          # - Hauteur réelle -
+          v = cursor - ascender
           stroke do
             stroke_color(LINE_COLOR)
-            line [0, cursor], [pdf.bounds.width, cursor]
+            line [0, v], [pdf.bounds.width, v]
           end
-          move_down(10)
-          # move_to_next_line
+          move_to_next_line
         end
       end
       @flux_opened = false
     end
-
-    # -- Predicate Methods --
-
-    # @return true s'il y a des notes courantes (donc non encore
-    # traitées)
-    def has_current_notes?
-      not(@current_items.empty?)
-    end
-
-    # @return true s'il n'y a plus de notes courantes
-    def empty?
-      not(has_current_notes?)
-    end
-
 
     # 
     # === Class Prawn4book::PdfBook::NotesManager::Note

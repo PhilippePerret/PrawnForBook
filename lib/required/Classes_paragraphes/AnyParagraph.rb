@@ -189,6 +189,7 @@ class AnyParagraph
   def pfbcode?  ; false end
   def citation? ; false end
   def list_item?; false end
+  def note_page?; false end
   def empty_paragraph?; false end
   def image?    ; false end
   def table?    ; false end

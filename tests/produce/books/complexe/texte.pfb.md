@@ -11,7 +11,8 @@ Ce texte est écrit dans la police “Helvetica” en taille 21 et style italiqu
 On poursuit avec un texte en police “Times-Roman” en taille 12 et style romain. De la même manière, ce texte est assez long pour pouvoir se placer sur plusieurs lignes, afin de voir si le traitement par ligne fonctionne correctement et que le texte se place bien et naturellement sur les lignes de référence tracées.
 
 Un paragraphe dans la police normale, mais avec des *textes en italiques*, des **textes en gras** et __des textes soulignés__. Il possède aussi un 1^er exposant et une 1^re ré-utilisation d’exposant ainsi qu’une note^1 qui doit être placée en dessous du paragraphe, dans un style un peu différent.
-^1 C’est le commentaire de la note qui a été placée plus haut, qu’on doit correctement formater en fonction des choix dans le livre de recette {{Cette définition doit être ajoutée}}
+^1 C’est le commentaire de la note qui a été placée plus haut, qu’on doit correctement formater en fonction des choix dans le livre de recette.
+Un paragraphe juste en dessous de la note pour voir s’il serait bien placé sous le trait et non pas dessus ce qui serait inélégant.
 
 # Tests restant à faire
 
@@ -42,5 +43,5 @@ Il faudrait cependant que les vraies tables puissent être utilisées, qui zappe
 ## Traitement per paragraphe suivant
 Dans le nouveau système, où les lignes sont directement injectées dans le livre, on ne peut plus faire de traitement en fonction de la ligne suivant. Typiquement, si on a des notes, on ne peut plus ajouter la ligne de fin à la dernière note s’il n’y a plus de notes après.
 Deux solutins sont possibles :
-* Indiquer qu’un bloc de note est en route (dans l’injecteur `Injector` qu’on pour instancier) et, lorsqu’on rencontre un paragraphe qui n’est plus une note, le fermer. Inconvénient(s) : ça oblige à suivre des trucs tout le temps (`if block_notes? ....`)
+* Indiquer qu’un bloc de note est en route (dans l’injecteur `Injector` qu’on pour instancier) et, lorsqu’on rencontre un paragraphe qui n’est plus une note, le fermer. Inconvénient(s) : ça oblige à suivre des trucs tout le temps (`if block_notes? ...`)
 * Pour lire le paragraphe suivant. Pas si simple, même pour les fichiers (qui sont lus avec la méthode `readlines` (qui pourrait être remplacées par `gets`) et encore moins évident avec les méthodes utilisateurs.

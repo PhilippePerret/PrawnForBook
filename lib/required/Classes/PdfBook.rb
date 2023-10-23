@@ -38,6 +38,9 @@ class PdfBook
   # page, qui doivent dessiner un trait.
   # Pour le moment, je le traite ici, mais si ça devient conséquent,
   # il faudra que je l'isole dans un Injector.
+  # @note
+  # Pour que ça fonctionne de façon optimale, il faut absolument que
+  # tous les paragraphes passent par ici.
   # 
   def inject(pdf, paragraph_str, idx, source = 'user_method')
     # - Instanciation du paragraphe -
@@ -45,7 +48,9 @@ class PdfBook
     
     # - Pré-traitement en fonction du bloc courant (if any) -
     if @current_bloc == :notes_page && not(par.note_page?)
-      
+      notes_manager.end_bloc(pdf)
+      @current_bloc = nil
+    end
 
     ###########################################
     ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###

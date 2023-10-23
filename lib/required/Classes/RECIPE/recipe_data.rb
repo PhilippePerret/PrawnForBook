@@ -4,11 +4,27 @@
 module Prawn4book
 class Recipe
 
+  # --- Fonts Definitions ---
+
+  # La fonte [Prawn4book::Fonte] à utiliser pour les notes de page
+  # @rappel : les notes de page sont des notes comme les notes de bas
+  # de page ou de fin d'ouvrage mais qui s'insèrent au fil du texte,
+  # pour une lecture plus aisée.
+  def fonte_note_page
+    @fonte_note_page ||= begin
+      fname = format_text[:note_page_font]  || default_font_name
+      fsize = format_text[:note_page_size]  || default_font_size - 2
+      fstyl = format_text[:note_page_style] || :italic
+      Fonte.new(name:fname, size:fsize, style:fstyl, hname:'Fonte de note de page')
+    end
+  end
+
+
   #
   # La table dans laquelle seront mises toutes les données récupérées
   # de tous les fichiers recette relevés, même les valeurs par
   # défaut.
-  # 
+  # Encore utilisé ?
   DATA = {}
 
   attr_reader :owner # le pdfbook, normalement (ou la collection ?)

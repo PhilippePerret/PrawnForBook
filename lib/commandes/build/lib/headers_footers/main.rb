@@ -122,7 +122,7 @@ class HeadersFooters
       # 
       continous_numero += 1
 
-      raise "Numéro de page ne correspond pas" if page.number != continous_numero
+      # raise "Numéro de page ne correspond pas" if page.number != continous_numero
 
       #
       # Traitement du titre de niveau 1
