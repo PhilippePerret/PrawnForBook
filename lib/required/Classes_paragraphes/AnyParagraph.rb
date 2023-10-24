@@ -42,6 +42,12 @@ class AnyParagraph
       # 
       context = { pdf: pdf, paragraph:self }
       @text = AnyParagraph.__parse(text, context)
+      # Dans @text doit rester le texte corrigé pour ne plus 
+      # avoir à le reprendre aux différents tours. Seules des références
+      # ultérieures peuvent être encore corrigées devant.
+      # On leur a donné un "ticket de poissonnerie" au premier tour,
+      # pour leur donner une numérotation provisoire et au deuxième
+      # tour, ces variables conservées dans `wanted_references'
     end
   end
 

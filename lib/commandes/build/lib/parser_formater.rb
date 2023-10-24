@@ -90,7 +90,6 @@ module ParserFormaterClass
     # Traitement du code in-line pseudo-markdown
     # 
     str = __traite_markdown_inline_in(str, context)
-    spy "str après format markdown inline : #{str.inspect}".orange
 
     #
     # Traitement des mots indexés
@@ -341,7 +340,7 @@ private
         pdfbook.table_references.add(cible, **{
           page:       first_page, 
           paragraph:  numero_par,
-          hybrid:     "#{first_page}-#{numero_par}"
+          hybrid:     "p. #{first_page} § #{numero_par}"
         })
         ''
       end
@@ -405,7 +404,7 @@ private
         bibitem.add_occurrence({
           page:       first_page, 
           paragraph:  parag_num,
-          hybrid:     "#{first_page}-#{parag_num}"
+          hybrid:     "p. #{first_page} § #{parag_num}"
         })
         #
         # Formatage de l'élément bibliographique

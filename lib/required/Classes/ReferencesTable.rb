@@ -19,7 +19,13 @@ class ReferencesTable
   # 
   def init
     @table = {}
-    @cross_references = {}
+    @cross_references   = {}
+    # - Références non trouvées au premier tour -
+    # En clé : le ticket de poissonnerie attribué pour le texte et
+    # en valeur l'identifiant de la référence qu'on doit retrouver
+    # par <self>.get(ref_id) et qui retourne la référence à coller 
+    # dans le texte.
+    @wanted_references  = {}
   end
 
   ##
@@ -27,8 +33,9 @@ class ReferencesTable
   # du texte (du paragraphe ou autre — titre, cellule de table, etc.)
   # 
   # @note
-  #   Il s'agit uniquement des références internes. Pour les références
-  #   croisées, voir la méthode suivante.
+  #   Il s'agit uniquement des références croisées "internes", c'est
+  #   à dire dans le même livre. Pour les références à d'autres li-
+  #   vres, voir la méthode suivante.
   # 
   # @param ref_id {String} IDentifiant de la référence
   # @param ref_data {Hash} Données de la référence, contient
@@ -80,10 +87,14 @@ class ReferencesTable
   # Au premier tour, si elle n'est pas définie, on indique qu'il
   # faudra recommencer un tour.
   # 
-  # @param ref_id {String} L'ID de la référence. En cas de référence
-  #               croisée, on a "IDBOOK:ref_id"
-  # @param paragraph {NTextParagraph} Instance du paragraphe conte-
-  #               tant l'appel.
+  # @param ref_id [String] 
+  # 
+  #   L'ID de la référence. En cas de référence à un autre livre, 
+  #   on a "IDBOOK:ref_id"
+  # 
+  # @param paragraph [NTextParagraph] 
+  # 
+  #   Instance du paragraphe contetant l'appel.
   # 
   def get(ref_id, paragraph)
     #
@@ -95,9 +106,17 @@ class ReferencesTable
     # 
     ref_id = ref_id.to_sym
     ref = table[ref_id] || begin
+      # - Référence non définie -
+      # On passe ici quand la référence cible n'est pas encore défi-
+      # ni (parce qu'elle se trouve plus loin, peut-être même dans le
+      # paragraphe suivant). Dans ce cas, on prend un "ticket de
+      # poissonnerie" en attendant dans la référence, qu'on remplace-
+      # ra au second tour.
       set_un_appel_sans_reference
-      {page:"xx", paragraph:'xxx', hybrid:'xx-xxx'}
-      return "(( ->(#{ref_id}) ))" # -- pour essayer que la seconde fois il soit corrigé
+      ticket_boucherie = "->_REF_#{@wanted_references.count.to_s.rjust(3,'0')}" 
+      @wanted_references.merge!(ticket_boucherie => ref_id )
+      # {page:"xx", paragraph:'xxx', hybrid:'xx-xxx'}
+      return ticket_boucherie # -- pour le remplacer au second tour
     end
     call_to(ref)
   end
@@ -128,9 +147,9 @@ class ReferencesTable
     when 'pages'
       "page #{ref[:page]}"
     when 'parags'
-      ref[:paragraph] ? "paragraphe #{ref[:paragraph]}" : "page #{ref[:page]}"
+      ref[:paragraph] ? "§ #{ref[:paragraph]}" : "page #{ref[:page]}"
     when 'hybrid'
-      ref[:hybrid]
+      ref[:hybrid] # "p. XXX § XX"
     end
   end
 

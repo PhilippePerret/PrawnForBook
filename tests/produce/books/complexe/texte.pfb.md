@@ -1,7 +1,7 @@
 # Complexité testée
 
 ## Présentation
-Ce livre doit permettre de tester énormément de choses dans le détail. Grâce à l’affichage (par la recette) de la grille de référence, on peut voir dans le livre produit le résultat. Il va y avoir beaucoup de changements de fontes et de tailles (elles sont toutes définies dans le fichier recette).
+Ce livre doit permettre de tester énormément de choses dans le détail. Grâce à l’affichage (par la recette) de la grille de référence(( <-(grille_reference) )), on peut voir dans le livre produit le résultat (cette phrase possède une référence “grille_reference”). Il va y avoir beaucoup de changements de fontes et de tailles (elles sont toutes définies dans le fichier recette). La page de reference_ulterieure est (( ->(reference_ulterieure) ))
 
 ## Premiers tests
 (( {font:"Helvetica", style: :italic, size: 21} ))
@@ -38,22 +38,11 @@ notedocu::Une note pour de la documentation.
 * La largeur de l’item de liste doit être amputée du décalage left (pour le moment, il est normalement réglé (avec `margin-left`, mais le programme n’en tient aucun compte)
 
 # Choses à implémenter
+* Gestion des références (avant et arrière)
 
 # Réflexions
 
 ## Second tour
 Pour le second tour, on n’a absolument pas besoin de repartir du texte. On va plutôt repartir de tous les paragraphes, et modifier les références puisque normalement c’est la seule chose qui nécessite ce second tour (on a un troisième tour avec les définitions du scénodico, mais c’est un tout autre problème qui sera résolu).
-
-## Gestion des lignes complexes
-Comment gérer les lignes complexes (les lignes qui ne sont pas simples…), à commencer par les items de liste. Mais on peut imaginer que les tables en sont aussi. Il faut vraiment parvenir à “sortir” le traitement par ligne. Par exemple en ayant un constructeur (Printer ?) à qui on envoie :
-* un texte,
-* peut-être une fonte générale
-* des paramètres définissant la largeur :width et la position :left,
-* le pdf (Prawn::document)
-* un hauteur (cursor)
-et qui calcule et imprime le texte. L’essai sera concluant si on parvient à imprimer une table (mais une fausse table) avec quatre colonnes de tailles différentes par exemple dont les cellules contiennent des textes assez longs, avec des fontes différentes, et des lignes (des lignes ajoutées par dessin, donc, puisque qu’on n’utiliserait pas les vraies).
-Il faudrait cependant que les vraies tables puissent être utilisées, qui zapperaient l’alignement sur la grille de référence [Peut-être que l’utilisation actuelle fonctionnerait].
-
-## Traitement des “lettrines”
-J’appelle “puce” le tiret ou la puce qu’on trouve au début d’une ligne, mais aussi tout autre caractère à placer devant une ligne de texte qui sera mise en retrait gauche, comme par exemple toutes les notes (notereal, simplenote, etc.) qu’on utilise pour l’analyse de film.
-Ce traitement doit être proposé de base, avec une option particulière qu’on appellera :puce dans les options à envoyer à Printer.pretty_render
+Ici se trouve la référence à reference_ulterieure(( <-(reference_ulterieure) )). La première allusion à “grille de référence” se trouve (( ->(grille_reference) )).
+C’est en fait les corrections faites par `AnyParagraph.__parse` qui sont conservées.
