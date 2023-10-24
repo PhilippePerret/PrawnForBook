@@ -838,6 +838,68 @@ end
 | **dict::text::** [TODO]  | Description de l’entrée, le texte suivant l’entrée. |          |
 |                          |                                                     |          |
 
+---
+
+<a name="items-list"></a>
+
+##### Items de liste
+
+Les items de liste, comme en markdown, s’indiquent avec une astérisque. Mais contrairement à Markdown, ils n’ont pas besoin d’être séparés du reste par un paragraphe vide (à titre de rappel, les paragraphes, bien qu’utilisables, n’ont aucun effet dans *Prawn-for-book*.
+
+Par défaut, ces items de liste sont précédés d’un tiret (demi-quadratin). Mais on peut déterminer d’autres aspects par le biais de la recette, dans la donnée `book_format: text: puce:`. Par défaut, ça peut être un hash définissant `:text`, le contenu textuelle de la puce, par exemple une puce ‘•’, `:vadjust`, l’ajustement vertical en points, `hadjust`, l’ajustement horizontal en points, `:size`, la taille de la police  et `:left`, le décalage gauche du texte.
+
+~~~yaml
+#<book_format>
+book_format:
+	text:
+		puce:
+			text: '•'
+			vadjust: 0
+			hadjust: 2
+			left: 4mm
+			size: 14
+#</book_format>
+~~~
+
+Il existe des valeurs par défaut qu’on peut affecter à `:puce` sans rien définir d’autre. C’es valeurs sont :
+
+~~~
+Tiret  				:hyphen
+							:tiret
+Puce ronde  	:bullet
+Ronde pleine  :black_bullet
+Puce carrée 	:square
+Carrée pleine :black_square
+Doigt pointé  :finger
+Doigt noir 		:black_finger
+Losange 			:losange
+Losange noir  :black_losange
+~~~
+
+Dans la recette, on les utilise :
+
+~~~yaml
+book_format:
+	text:
+		puce: :black_square
+~~~
+
+Ou, pour pouvoir modifier les valeurs par défaut :
+
+~~~yaml
+book_format:
+	text:
+		puce: 
+			text: :black_square
+			vadjust: 2
+			hadjust: 4
+			left: 1cm
+			size: 16
+~~~
+
+
+---
+
 ##### Notes de page
 
 > D’ores et déjà, mentionnons que pour le moment, les notes de bas de page ne sont pas gérés, pour des raisons idéologiques (nous partons du principe que les notes en bas de page sont trop rarement consultés, le lecteur acceptant difficilement de quitter le flux de sa lecture. Nous préférons de loin les « notes de page » qui s’insèrent dans le flux du texte. On peut également mettre les notes en fin d’ouvrage, ce qui a plus de cohérence, quitte à faire.
@@ -1015,7 +1077,7 @@ end
 > 
 > **[2]** Les options classiques telles que `:inline_forma` ou `:at`
 > Mais on peut aussi définir certaines options particulières comme
-> :puce 	Une puce par `{content: "<signe>", vadjust: 2, hadjust: 4}`
+> :puce 	Une puce par `{text: "<signe>", vadjust: 2, hadjust: 4}`
 > 			Penser, en cas de puce à définir :left pour préciser de combien
 > 			le texte devrait être décalé à gauche.
 > 			
@@ -1141,11 +1203,16 @@ printer.titleFonte = Fonte.new(name:'Garamond', style: :normal, size: 13)
 
 #### Type de puce
 
+> Si c'est plutôt des renseignement sur les items de liste que vous cherchez, voyez le chapitre [Items de liste](#items-list).
 ~~~
 Tiret  				:hyphen
+							:tiret
 Puce ronde  	:bullet
+Ronde pleine  :black_bullet
 Puce carrée 	:square
+Carrée pleine :black_square
 Doigt pointé  :finger
+Doigt noir 		:black_finger
 Losange 			:losange
 Custom puce 	path/to/puce/personnalisées.jpg
 Ou le caractère lui-même, par exemple {bullet: '---'}
@@ -3593,6 +3660,16 @@ book_format:
 		parag_num_dist_from_text: 0 # ajustement horizontal
     parag_num_size: 9 # taille de la police pour les numéros de paragraphe
     parag_num_strength: 72 # "force" (opacité) du numéro de paragraphe
+    # - Puces -
+    puce:
+    	text: 		'–' # [8]
+    	size: 		12
+    	vadjust: 	0
+    	hadjust: 	0
+    	left: 		"3.5mm"
+    # la puce peut être simplement définie par :
+    # puce: :hyphen
+    # (avant valeurs par défaut convenables)
     # - Notes de page -
     note_page_font:           'Helvetica'
     note_page_size:           10
@@ -3626,6 +3703,10 @@ book_format:
 > **[7]**
 >
 > Si `true`, les marges sont dessinées à titre d’essai (`false` par défaut). Correspond à l’’option `-display_margins`.
+>
+> **[8]**
+>
+> Voir [Items de liste](#items-list) pour voir les puces par défaut utilisables.
 
 ---
 

@@ -43,10 +43,13 @@ class << self
   # PARAMÈTRES
   # ----------
   # 
-  # @param owner [AnyClass] 
+  # @param owner [AnyClass|Nil] 
   #   
   #   Le propriétaire qui fait la demande, a du +text+ à écrire, la 
-  #   plupart du temps un [PdfBook::NTextParagraph]
+  #   plupart du temps un [PdfBook::NTextParagraph].
+  #   Si nil, c'est un Prawn4book::PdfBook::UserParagraph qui est
+  #   initié.
+  #   NOTE: C'est l'instance qui est retournée.
   # 
   # @param pdf [Prawn4book::PrawnView]
   # 
@@ -69,7 +72,7 @@ class << self
   #   :puce     qui définit une puce (typiquement utilisé pour les
   #             paragraphe qui sont des items de liste). C'est soit
   #             un caractère seul, soit une table définissant :
-  #             {:content, :vadjust, :hadjust} pour définir le conte-
+  #             {:text, :vadjust, :hadjust} pour définir le conte-
   #             nu l'ajustement vertical et horizontal.
   #   :no_num   Si true, on ne doit pas marquer de numéro de paragraphe
   # 
@@ -79,21 +82,22 @@ class << self
   #       car l'écriture se fait ligne par ligne (c'est cher mais
   #       c'est précis).
   # 
+  # @return owner
+  # 
   def pretty_render(pdf:, text:, options:, owner: nil, fonte: nil)
 
     my = self
 
     options = defaultize_options(options.dup, pdf)
 
+    owner ||= PdfBook::UserParagraph.new(text, options.merge(fonte:fonte))
+
     # Le décalage horizontal du texte à écrire
     # 
-    left  = options[:at][0] || 0
+    left  = options[:at][0]
 
-    # TODO Ça devrait être fait dans #defaultize_options
-    options.merge!(width: pdf.bounds.width - left)
-
-
-    # Y a-t-il une puce ?
+    # La puce éventuelle
+    # 
     puce = options[:puce]
 
     # - Faut-il se passer du numéro de paragraphe ? -
@@ -233,11 +237,13 @@ class << self
             # => Orpheline
             # => Passer tout de suite à la page suivante
             start_new_page
+
           elsif is_penultimate_line && cursor - 2 * line_height < 0
             # => La suivante serait une Veuve
             # => Passer tout de suite à la page suivante pour que
             #    la ligne suivante ne soit pas seule.
             start_new_page
+
           end
           boxline.at = [left, cursor]
 
@@ -246,11 +252,10 @@ class << self
           ##############################
           boxline.render
 
-          # Pour le moment, on gère ça ici, mais on pourrait essayer
-          # de le généraliser (voir pour les livres avec les notes)
+          # -- PUCE --
           if is_first_line && puce
             float do 
-              text_box(puce[:content], **{inline_format:true, at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
+              text_box(puce[:text], **{inline_format:true, at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
             end
           end
 
@@ -272,6 +277,7 @@ class << self
       })
     end
     
+    return owner
   end #/pretty_render
 
 
@@ -409,42 +415,54 @@ class << self
   FONT_TAG = '<font %{props}>%{str}</font>'.freeze
 
 
+  # Pour régler toutes les valeurs par défaut dans les options
+  # transmises à pretty_render
+  # 
   def defaultize_options(options, pdf)
-    # Pour pouvoir gérer ligne à ligne
+
+    # Pour pouvoir gérer ligne à ligne, il faut toujours que 
+    # :dry_run et :single_line soit à true
     options.merge!(dry_run: true, single_line: true)
 
-    # Par défaut, la largeur de la page
-    # (je préfère le dire explicitement)
-    unless options.key?(:width)
-      lf = options[:left] || options[:margin_left]
-      lf ||= begin
-        options[:at][0] if options[:at]
-      end
-      lf ||= 0
-      options.merge!(width: pdf.bounds.width - lf)
-    end
+    # On part toujours du principe qu'un paragraphe comporte du
+    # format HTML, même si ça coûte plus cher
+    options.merge!(inline_format: true)
 
-    if options.key?(:left) || options.key?(:margin_left)
-      spy "options[:left] = #{options[:left].inspect}"
-      spy "options[:margin_left] = #{options[:margin_left].inspect}"
-      spy "options[:width] = #{options[:width].inspect}"
+    # Dans tous les cas, il faut que l'on ait les propriétés :
+    # :at, :left, :width
+    left = options[:left] || options.delete(:margin_left)
+    if options[:at]
+      left ||= options[:at][0]
     end
+    left ||= 0
 
-    # Par défaut, placé à gauche et tout en haut ()
-    # (je préfère le dire explicitement)
-    unless options.key?(:at)
-      options.merge!(at: [0, pdf.bounds.height])
-    else
-      # pour ne pas avoir de changement de page inopportun 
-      # pendant le calcul
-      options[:at][1] = pdf.bounds.height
+    right = options.delete(:right) || options.delete(:margin_right)
+    if options[:width]
+      right ||= left + options[:width]
     end
+    right ||= pdf.bounds.width
+
+    width = options[:width]
+    width ||= right - left
+
+    # Ce qu'il va rester dans les options
+    # 
+    # @note
+    #   Par défaut, on met le paragraphe (test) tout au-dessus pour
+    #   qu'on n'ait pas de passage inopportun à la page suivante 
+    #   pendant le calcul.
+    # 
+    options.merge!(
+      at: [left, pdf.bounds.height],
+      width: width
+    )
 
     # - Puce -
+    # 
     # Il faut que ce soit une table définissant :content, :vadjust
     # et :hadjuste
-    if options.key?(:puce)
-      options[:puce] = {content: options[:puce]} if options[:puce].is_a?(String)
+    if options.key?(:puce) && options[:puce].is_a?(String)
+      options[:puce] = {text: options[:puce]}
     end
 
     return options

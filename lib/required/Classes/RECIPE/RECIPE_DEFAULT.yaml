@@ -99,6 +99,11 @@ book_format:
     parag_num_size:           8
     parag_num_style:          *default_style2
     parag_num_strength:       75
+    # - puces -
+    puce:
+      text: '–'
+      vadjust: 1.5
+      hadjust: 0
     # - Notes de page -
     note_page_font:           *default_font1
     note_page_size:           10

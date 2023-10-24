@@ -13,6 +13,7 @@ book_format:
     show_margins: true
   text:
     line_height: 24
+    puce: :hyphen
 #</book_format>
 
 #<publisher>

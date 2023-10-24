@@ -119,9 +119,10 @@ class NTextParagraph < AnyParagraph
 
     # - Une puce pour les items de liste -
     if list_item?
-      left =  3.5.mm
+      dpuce = book.recipe.puce
+      left  = dpuce.delete(:left)
       dry_options.merge!({
-        puce:   {content:'–'},
+        puce:   dpuce,
         at:     [left, nil],
         width:  pdf.bounds.width - left,
         no_num: true,

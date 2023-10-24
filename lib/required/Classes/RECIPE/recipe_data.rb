@@ -23,8 +23,7 @@ class Recipe
   #
   # La table dans laquelle seront mises toutes les données récupérées
   # de tous les fichiers recette relevés, même les valeurs par
-  # défaut.
-  # Encore utilisé ?
+  # défaut. C'est dans cette table que toutes les données sont prises
   DATA = {}
 
   attr_reader :owner # le pdfbook, normalement (ou la collection ?)
@@ -126,6 +125,47 @@ class Recipe
     @bot_margin         ||= format_page[:margins][:bot].proceed_unit
   end
 
+  # -- Puce --
+
+  def puce
+    pu = format_text[:puce]
+    fsize = pu[:size] if pu.is_a?(Hash)
+    fsize ||= '12'
+    pu_default = {text:nil, vadjust: 1, hadjust: 0, left: 3.5.mm, size: 12}
+    
+    if pu.is_a?(Hash)
+      if pu[:text].is_a?(String)
+        pu[:left] = eval(pu[:left]) if pu[:left].is_a?(String)
+        return pu_default.merge(pu) 
+      else
+        pu_default.merge!(pu)
+        pu = pu_default[:text]
+      end
+    end
+
+    lettre = 
+      case pu
+      when :hyphen, :tiret  then '–'
+      when :losange         then PUCE_TEMP % [fsize, 'M']
+      when :black_losange   then PUCE_TEMP % [fsize, 'L']
+      when :square          then PUCE_TEMP % [fsize, 'C']
+      when :black_square    then PUCE_TEMP % [fsize, 'D']
+      when :bullet          then PUCE_TEMP % [fsize, 'A']
+      when :black_bullet    then PUCE_TEMP % [fsize, 'B']
+      when :finger          then PUCE_TEMP % [fsize, 'F']
+      when :black_finger    then PUCE_TEMP % [fsize, 'G']
+      else '–'
+      end
+    data_puce = pu_default.merge(text: lettre)
+    lf = data_puce[:left]
+    data_puce[:left] = eval(lf) if lf.is_a?(String)
+    return data_puce
+  end
+
+  PUCE_TEMP = '<font name="PictoPhil" size="%s">%s</font>'
+
+  # -- Pagination --
+
   def pagination_format
     @pagination_format      ||= format_page[:pagination_format]
   end
@@ -145,7 +185,6 @@ class Recipe
     @pagination_font_style   ||= format_page[:num_font_style]
   end
 
-  # -- Paragraphes --
 
   def references_key
     @references_key ||= begin

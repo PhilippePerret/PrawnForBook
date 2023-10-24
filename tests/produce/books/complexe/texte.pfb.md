@@ -29,7 +29,7 @@ notedocu::Une note pour de la documentation.
 * La modification du THIEF_LINE_WIDTH à la volée, pour pouvoir modifier localement la longueur d’une ligne de voleur. On doit pouvoir aussi le faire dans la recette (autre test ?)
 * Penser à ajouter la définition de l’aspect des notes dans la recette (manuel). Ajouter les valeurs par défaut dans RECIPE DEFAULT.
 * Ajouter la page d’infos, avec toutes les infos (l’idée est qu’il y ait plus d’infos que de lignes, pour voir comment on va s’y prendre => doubler les lignes et mettre les caractères plus petits pour s’adapter.
-  * Utiliser les § (caplock §) pour désigner le numéro du paragraphe dans la numérotation hybride.
+* Utiliser les § (caplock §) pour désigner le numéro du paragraphe dans la numérotation hybride.
 
 # Bogues à corriger / implémenter
 
@@ -37,6 +37,7 @@ notedocu::Une note pour de la documentation.
 * Plus grave, les tirets d’item de liste ne doivent être mis que lorsque l’on sait où va se retrouver le paragraphe. S’il doit passer à la ligne, le tiret doit lui aussi passer à la ligne
 * La largeur de l’item de liste doit être amputée du décalage left (pour le moment, il est normalement réglé (avec `margin-left`, mais le programme n’en tient aucun compte)
 
+# Choses à implémenter
 
 # Réflexions
 

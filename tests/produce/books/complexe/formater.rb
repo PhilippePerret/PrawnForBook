@@ -21,7 +21,7 @@ module ParserFormaterClass
         left: 6.mm, 
         at: [6.mm, context[:pdf].bounds.width], # TODO Faire marcher sans ce :at
         puce: {
-          content: PICTO_NOTE % [lettre],
+          text: PICTO_NOTE % [lettre],
           vadjust: 2, hadjust: 0, align: :left
         }
       },
