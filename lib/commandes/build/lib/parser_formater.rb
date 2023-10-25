@@ -356,7 +356,7 @@ private
       str = str.gsub(REG_APPEL_REFERENCE) do
         appel = $1.freeze
         spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
-        pdfbook.table_references.get(appel, self)
+        pdfbook.table_references.get(appel, context[:paragraph])
       end
     end
 

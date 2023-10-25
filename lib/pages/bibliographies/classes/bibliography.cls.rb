@@ -28,7 +28,7 @@ class << self
       add_biblio(new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
     end
     # init_biblio_livres(pdfbook)
-    prepare
+    prepare(pdfbook)
 
     return pdfbook
   end
@@ -80,13 +80,22 @@ class << self
   #   Elle se fait après que toutes le bibliographies ont été 
   #   instanciées et vérifiées
   # 
-  def prepare
+  def prepare(book)
     # 
     # Définition de l'expression régulière qui va permettre de
     # récupérer tous les items bibliographiques dans les paragraphes
     # 
     self.remove_const('REG_OCCURRENCES') if defined?(REG_OCCURRENCES)
     self.const_set('REG_OCCURRENCES', /(#{biblios.keys.join('|')})\((.+?)\)/)
+    # 
+    # On définit la clé à utiliser (numéro de page ou numéro de
+    # paragraphe) pour les éléments de bibliographie (plus exacte- 
+    # ment : leurs occurrences)
+    #   - page        On utilise le numéro de page
+    #   - paragraph   On utilise le numéro de paragraphe
+    #   - hybrid      On utilise un numéro "page-paragraphe"
+    # 
+    self.page_or_paragraph_key = book.recipe.references_key
   end
 
   # @return true s'il y a des marques bibliographiques (donc des
@@ -175,21 +184,6 @@ class << self
       hybrid:     "#{paragraph.first_page}-#{paragraph.numero}"
     })
   end
-
-  ##
-  # Pour instancier Bibliography::Livres qui est une instance de
-  # bibliographie particulière, puisqu'elle est créée chaque fois,
-  # contrairement aux autres bibliographies qui dépendent des livres
-  # des collections, etc.
-  # 
-  # @note
-  #   Avant, c'est toujours 'livre' pour identifier les livres.
-  #   Maintenant, c'est une donnée qu'on peut régler dans la recette,
-  #   au path [:bibliographies][:book_identifiant]
-  # def init_biblio_livres(pdfbook)
-  #   self.remove_const('Livres') if defined?(Livres)
-  #   self.const_set('Livres', new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
-  # end
 
 end #/<< self Bibliography
 end #/ class Bibliography

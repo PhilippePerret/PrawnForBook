@@ -16,6 +16,10 @@ class Command
 end #/Command
 class PdfBook
 
+  # - raccourcis -
+  def first_turn?; Prawn4book.first_turn? end
+  def second_turn?; Prawn4book.second_turn? end
+
   # Pour exposer les titres courants par niveau en cours
   # de fabrication (pour alimenter la données pages et 
   # permettre ensuite le traitement des pieds de page et
@@ -25,6 +29,9 @@ class PdfBook
   # @prop Instance {PdfHelpers}
   attr_reader :pdfhelpers
 
+  ###############################
+  ### GÉNÉRATION DU LIVRE PDF ###
+  ###############################
   def generate_pdf_book
     # 
     # Initialiser le suivi des titres par niveau
@@ -69,22 +76,20 @@ class PdfBook
     # S'il existe une méthode de reset propre au livre ou à la 
     # collection, on l'invoque
     # 
-    Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
+    if Prawn4book.respond_to?(:reset)
+      Prawn4book.reset(true)
+    end
+
+    #
+    # Pour consigner les erreurs mineures en cours de construction
+    # 
+    PrawnView::Error.reset
 
     #
     # === CONSTRUCTION DU LIVRE ===
     #     (PREMIÈRE PASSE/TURN)
     # 
     ok_book = build_pdf_book
-
-    # On s'arrête ici pour le moment
-    return 
-
-    # 
-    # Si des références ont été trouvées, on actualise le fichier
-    # des références du livre.
-    # 
-    table_references.save if table_references.any?
 
     # ======================
     # === DEUXIÈME PASSE ===
@@ -93,7 +98,7 @@ class PdfBook
     # Si des appels de références avant ont été trouvées, on refait
     # une passe pour les appliquer.
     # 
-    if not(export_text?) && table_references.has_one_appel_sans_reference?
+    if not(export_text?) && table_references.appels_sans_reference?
 
       #
       # Pour Prawn4book.second_turn?
@@ -102,12 +107,11 @@ class PdfBook
       
       #
       # S'il existe une méthode de reset propre au livre ou à la 
-      # collection, on l'invoque
+      # collection, on l'invoque, en indique (+false+) que c'est le
+      # second tour.
       # 
       Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
 
-      table_references.second_turn = true
-      PdfBook::AnyParagraph.init_second_turn
       #
       # Construction finale du livre
       # (mais elle peut se faire à la première passe s'il n'y a
@@ -137,8 +141,6 @@ class PdfBook
         # 
         Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
 
-        table_references.second_turn = false
-
         if PdfBook::AnyParagraph.respond_to?(:init_third_turn)
           PdfBook::AnyParagraph.init_third_turn
         end
@@ -152,7 +154,13 @@ class PdfBook
 
       end #/ fin troisième tour
 
-    end
+    end #/ fin deuxième tour
+
+    # 
+    # Si des références ont été trouvées, on actualise le fichier
+    # des références du livre.
+    # 
+    table_references.save if table_references.any?
 
     #
     # S'il faut ouvrir le livre
@@ -197,6 +205,13 @@ class PdfBook
     #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #
+    # @note
+    #   Il faut l'instancier à chaque tour, sinon les pages seraient
+    #   ajoutées au pdf précédent. Ici, ça ne changera qu'au niveau
+    #   de la table des matières qu'il faudra recommencer. Mais pour
+    #   tout les reste (à commencer par les pages), elles seront 
+    #   conservées telles qu'on les a relevées la première fois.
+    # 
     pdf = PrawnView.new(self, pdf_config)
 
     # 
@@ -204,11 +219,6 @@ class PdfBook
     # (note : il existe toujours si c'est un deuxième tour)
     # 
     File.delete(pdf_path) if File.exist?(pdf_path)
-
-    #
-    # Pour consigner les erreurs mineures en cours de construction
-    # 
-    PrawnView::Error.reset
 
     #
     # Initier la table des matières (je préfère faire mon 
@@ -221,34 +231,34 @@ class PdfBook
     # Méthode appelée automatiquement à chaque création de page
     # dans le livre, qu'elle soit automatique ou forcée.
     # 
-    pdf.on_page_create do
-      my.add_page(pdf.page_number)
-      export_text("\n#{'-'*30}\n\n") if export_text?
+    # Mais on ne fait ça que la première fois (au premier tour). Au
+    # second tour, les informations sur les pages ont été initiées et
+    # n'ont pas besoin d'être reprises.
+    # 
+    if first_turn?
+      pdf.on_page_create do
+        my.add_page(pdf.page_number)
+        export_text("\n#{'-'*30}\n\n") if export_text?
+      end
+    else
+      pdf.on_page_create { }
     end
-
-    # 
-    # On définit la clé à utiliser (numéro de page ou numéro de
-    # paragraphe) pour les éléments de bibliographie (plus exacte- 
-    # ment : leurs occurrences)
-    #   - page        On utilise le numéro de page
-    #   - paragraph   On utilise le numéro de paragraphe
-    #   - hybrid      On utilise un numéro "page-paragraphe"
-    # 
-    Bibliography.page_or_paragraph_key = recipe.references_key
 
     # = FONTS =
     # 
     # Empacketage de toutes les fontes dans le document PDF.
     # 
     pdf.embed_fontes(book_fonts)
-    # - Par défaut -
-    default_fonte = Fonte.new(
-      name:   recipe.default_font_name,
-      style:  recipe.default_font_style,
-      size:   recipe.default_font_size,
-      hname:  'Fonte par défaut'
-    )
-    Fonte.default = default_fonte
+    if first_turn?
+      # - Par défaut -
+      default_fonte = Fonte.new(
+        name:   recipe.default_font_name,
+        style:  recipe.default_font_style,
+        size:   recipe.default_font_size,
+        hname:  'Fonte par défaut'
+      )
+      Fonte.default = default_fonte
+    end
 
     # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
@@ -281,12 +291,15 @@ class PdfBook
     # 
     pdf.start_new_page if pdf.page_number.even?
 
-
     # ========================
     # - TOUS LES PARAGRAPHES -
     # ========================
     # 
-    inputfile.parse_and_write(pdf)
+    if first_turn?
+      inputfile.parse_and_write(pdf)
+    else
+      rewrite_paragraphs(pdf)
+    end
 
     #
     # - PAGES SUPPLÉMENTAIRES -
@@ -360,6 +373,27 @@ class PdfBook
     end
   end
 
+
+  ##
+  # Si un deuxième tour est nécessaire (car des références manquaient
+  # pour les notes), on ne parse plus les paragraphes depuis le 
+  # fichier, on utilise les instances créées lors du premier tour.
+  # Cela permet de ne pas avoir à tout refaire.
+  # 
+  # [1] La seule correction à faire au paragraphe consiste à corriger
+  #     les références à des cibles ultérieures (if any)
+  def rewrite_paragraphs(pdf)
+    paragraphes.each do |paragraphe|
+      next if paragraphe.not_printed?
+      if paragraphe.has_unknown_target?
+        # spy "Cible introuvable".red
+        # exit
+        paragraphe.resolve_targets
+      end
+      print_paragraph(pdf, paragraphe)
+    end
+  end
+
   ##
   # Requiert tous les modules de parsing, formating et helping.
   # 
@@ -424,6 +458,10 @@ class PdfBook
   # Ajoute la page de numéro +num_page+ au PdfBook
   # 
   def add_page(num_page)
+
+    # Au second tour, normalement, on n'a rien à faire ici
+    return if second_turn?
+
     #
     # On met les valeurs par défaut dans la donnée de page
     # 

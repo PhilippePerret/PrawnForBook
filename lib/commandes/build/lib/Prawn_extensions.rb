@@ -34,7 +34,8 @@ require 'prawn/table'
 class Prawn::Document
   
   def add_content_length_to_current_page(len)
-    @book ||= Prawn4book::PdfBook.current
+    return unless Prawn4book.first_turn?
+    @book ||= Prawn4book::PdfBook.ensure_current
     page = @book.pages[page_number] || begin
       @book.add_page(page_number)
     end

@@ -5,13 +5,11 @@ class ReferencesTable
   REG_CIBLE_REFERENCE = /^<\-\((.+?)\)$/.freeze
   REG_LIEN_REFERENCE = /^\->\((.+?)\)$/.freeze
 
-  attr_reader :pdfbook
+  attr_reader :book
   attr_reader :table
 
-  attr_accessor :second_turn
-
-  def initialize(pdfbook)
-    @pdfbook = pdfbook
+  def initialize(book)
+    @book = book
   end
 
   ##
@@ -28,6 +26,16 @@ class ReferencesTable
     @wanted_references  = {}
   end
 
+
+  # -raccourci -
+  def second_turn?
+    Prawn4book.second_turn?
+  end
+
+  def third_turn? # encore possible ?
+    Prawn4book.turn == 3
+  end
+
   ##
   # Ajout d'une référence interne rencontrée au cours du parsing
   # du texte (du paragraphe ou autre — titre, cellule de table, etc.)
@@ -42,7 +50,7 @@ class ReferencesTable
   #         {:page, :paragraph, :hybrid}
   # 
   def add(ref_id, ref_data)
-    return if second_turn
+    return if second_turn?
     ref_id = ref_id.to_sym
     if table.key?(ref_id)
       raise "Reference '#{ref_id}' already exists."
@@ -83,6 +91,7 @@ class ReferencesTable
   # C'est la méthode qui retourne l'appel vers la destination 
   # voulu. Le paragraphe est fourni car, en cas de référence croisée
   # il faut ajouter une entrée dans la bibliographie des livres.
+  # Il sert aussi à gérer les références ultérieures
   # 
   # Au premier tour, si elle n'est pas définie, on indique qu'il
   # faudra recommencer un tour.
@@ -112,10 +121,9 @@ class ReferencesTable
       # paragraphe suivant). Dans ce cas, on prend un "ticket de
       # poissonnerie" en attendant dans la référence, qu'on remplace-
       # ra au second tour.
-      set_un_appel_sans_reference
       ticket_boucherie = "->_REF_#{@wanted_references.count.to_s.rjust(3,'0')}" 
       @wanted_references.merge!(ticket_boucherie => ref_id )
-      # {page:"xx", paragraph:'xxx', hybrid:'xx-xxx'}
+      paragraph.has_unknown_target(ticket_boucherie, ref_id)
       return ticket_boucherie # -- pour le remplacer au second tour
     end
     call_to(ref)
@@ -143,11 +151,11 @@ class ReferencesTable
   #   Les références croisées utilisent une autre méthode.
   # 
   def call_to(ref)
-    case pdfbook.recipe.page_num_type
+    case book.recipe.page_num_type
     when 'pages'
-      "page #{ref[:page]}"
+      "#{ref[:page]}"
     when 'parags'
-      ref[:paragraph] ? "§ #{ref[:paragraph]}" : "page #{ref[:page]}"
+      ref[:paragraph] ? "§ #{ref[:paragraph]}" : "#{ref[:page]}"
     when 'hybrid'
       ref[:hybrid] # "p. XXX § XX"
     end
@@ -165,19 +173,15 @@ class ReferencesTable
   # (cela se produit quand un appel de référence se trouve avant
   # la référence en question — donc sur une page ou un paragraphe 
   # avant)
-  def has_one_appel_sans_reference?
-    :TRUE == @hasoneappelsansref
+  def appels_sans_reference?
+    @wanted_references.any?
   end
-  # Quand on trouve un appel de référence sans référence
-  # définie.
-  def set_un_appel_sans_reference
-    @hasoneappelsansref = :TRUE
-  end
+
 
   # --- Path Methods ---
 
   def path
-    @path ||= File.join(pdfbook.folder,'references.yaml')
+    @path ||= File.join(book.folder,'references.yaml')
   end
 
 end #/class ReferencesTable

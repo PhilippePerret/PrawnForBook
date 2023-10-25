@@ -38,7 +38,8 @@ notedocu::Une note pour de la documentation.
 * La largeur de l’item de liste doit être amputée du décalage left (pour le moment, il est normalement réglé (avec `margin-left`, mais le programme n’en tient aucun compte)
 
 # Choses à implémenter
-* Gestion des références (avant et arrière)
+* Gestion des références (avant et arrière). Pour le moment, les références ultérieures ont été remplacées par un “ticket de poissonnerie”, il faut maintenant faire le second tour, en ne corrigeant plus les textes et en recherchant juste les tickets de poissonnerie pour les remplacer par
+* Marques de références : il faut faire quelque chose de moins impératif, qui permette de faire aussi bien “(page 56)” que “p. 56”. Donc, ici par exemple, ne renvoyer que 56.
 
 # Réflexions
 

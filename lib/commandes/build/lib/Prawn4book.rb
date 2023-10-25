@@ -18,6 +18,7 @@ module Prawn4book
     @@third_turn = true
   end
   def self.require_third_turn?
+    @@third_turn ||= false
     @@third_turn === true
   end
 

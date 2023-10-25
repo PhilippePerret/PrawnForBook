@@ -29,7 +29,6 @@ class NTextParagraph < AnyParagraph
     @is_citation    = raw_text.match?(REG_CITATION)
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
 
-
     # En cas de citation ou d'item de liste, on retire la marque
     # de début du paragraphe ("> " ou "* ")
     @raw_text = raw_text[1..-1].strip if citation? || list_item?
@@ -67,24 +66,18 @@ class NTextParagraph < AnyParagraph
 
     @pdf = pdf
 
-    #
-    # Pour repartir du texte initial, même lorsqu'un second tour est
-    # nécessaire pour traiter les références croisées.
-    # 
-    # @exemple
-    #   Par exemple, si le paragraphe est un item de liste, il 
-    #   commence par '* '. Mais au préformatage, ce '* ' est retiré
-    #   de @text. La deuxième fois qu'on traite l'impression, on se
-    #   retrouve(rait) donc avec un @text qui ne commencerait plus 
-    #   par '* ' et qui ne serait donc plus un item de liste…
-    # 
-    @text = raw_text.dup
 
-    #
-    # Quelques traitements communs, comme la retenue du numéro de
-    # la page ou le préformatage pour les éléments textuels.
-    # 
-    super
+    # Au premier tour, on doit corriger le texte, le préparer 
+    # entièrment (et le mettre dans @text). Au deuxième tour, on n'a
+    # rien à faire
+    if Prawn4book.first_turn?
+      @text = raw_text.dup
+      #
+      # Tous les traitements communs, comme la retenue du numéro de
+      # la page ou le préformatage pour les éléments textuels.
+      # 
+      super
+    end
     
     #
     # Si le paragraphe possède son propre builder, on utilise ce

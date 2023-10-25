@@ -164,6 +164,7 @@ class AnyParagraph
   def initialize(book, pindex)
     @book   = book
     @pindex = pindex
+    @unknown_targets = []
   end
 
   # @return La référence au paragraphe en fonction de la pagination
@@ -199,6 +200,20 @@ class AnyParagraph
   def empty_paragraph?; false end
   def image?    ; false end
   def table?    ; false end
+
+
+  def has_unknown_target?
+    @unknown_targets.any?
+  end
+  def has_unknown_target(ticket, ref_id)
+    @unknown_targets << {ticket: ticket, ref_id: ref_id}
+  end
+
+  def resolve_targets
+    @unknown_targets.each do |dtarget|
+      @text = @text.sub(dtarget[:ticket], book.references.get(dtarget[:ref_id], self))
+    end
+  end
 
   # Sera mis à true pour les paragraphes qui ne doivent pas être
   # imprimés, par exemple les paragraphes qui définissent des 

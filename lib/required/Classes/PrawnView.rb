@@ -46,7 +46,6 @@ class PrawnView
   def initialize(book, config)
     @book   = book
     @config = config
-    # @fonts  = {}
   end
 
   # Prawn::View en a besoin pour "synchroniser" avec Prawn::Document

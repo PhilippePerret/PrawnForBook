@@ -34,7 +34,9 @@ class PageDeTitre
       # On indique qu'il ne faudra pas numéroter cette page, sauf
       # indication contraire dans la recette
       # 
-      book.pages[page_number].pagination = not(my.paginate?)
+      if Prawn4book.first_turn?
+        book.pages[page_number].pagination = not(my.paginate?)
+      end
 
       # 
       # Calculer la position des éléments en fonction de

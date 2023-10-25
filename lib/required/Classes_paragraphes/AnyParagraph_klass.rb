@@ -104,9 +104,6 @@ class << self
   def init_first_turn
     reset
   end
-  def init_second_turn
-    reset
-  end
   def get_next_numero
     @last_numero += 1
   end

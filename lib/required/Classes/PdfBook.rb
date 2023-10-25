@@ -46,21 +46,29 @@ class PdfBook
     # - Instanciation du paragraphe -
     par = AnyParagraph.instantiate(self, paragraph_str, idx, source)
     
-    # - Pré-traitement en fonction du bloc courant (if any) -
-    if @current_bloc == :notes_page && not(par.note_page?)
-      notes_manager.end_bloc(pdf)
-      @current_bloc = nil
-    end
+    # - Ajout à la liste des paragraphes -
+    @paragraphes << par
 
     ###########################################
     ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###
     ###########################################
-    par.print(pdf)
-    # - Ajout à la liste des paragraphes -
-    @paragraphes << par
+    print_paragraph(pdf, par)
 
+  end
+
+  # Impression proprement dite du paragraphe
+  # 
+  # La méthode est aussi bien appelée au premier tour qu'au second
+  def print_paragraph(pdf, paragraphe)
+    # - Pré-traitement en fonction du bloc courant (if any) -
+    if @current_bloc == :notes_page && not(paragraphe.note_page?)
+      notes_manager.end_bloc(pdf)
+      @current_bloc = nil
+    end
+    # --- IMPRESSION ---
+    paragraphe.print(pdf)
     # - Post-traitement en fonction du bloc éventuel -
-    if par.note_page?
+    if paragraphe.note_page?
       @current_bloc = :notes_page
     end
   end
@@ -154,7 +162,8 @@ class PdfBook
         reft.init
       end
     end
-  end 
+  end
+  alias :references :table_references
 
   ##
   # Pour gérer les notes dans le livre

@@ -42,7 +42,10 @@ class PageManager
   # @return [PdfBook::Page] la page de numéro +number+
   # 
   def [](number)
-    @pages[number - 1]
+    @pages[number - 1] || begin
+      raise "Le numéro de page #{number.inspect} est introuvable.\n"+
+      "Pour information, la dernière page porte le numéro #{@pages.count}."
+    end
   end
 
 end #/class PageManager
