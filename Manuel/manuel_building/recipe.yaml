@@ -1,0 +1,18 @@
+---
+#<book_data>
+book_data:
+  title: "Manuel de Prawn-for-book"
+  author: "Philippe PERRET"
+#</book_data>
+
+#<book_format>
+book_format:
+  book:
+    width:  '210mm'
+    height: '297mm'
+    orientation: 'portrait'
+  text:
+    default_font_and_style: 'Numito/light'
+    default_font_size:  11
+    line_height: 18
+#</book_format>

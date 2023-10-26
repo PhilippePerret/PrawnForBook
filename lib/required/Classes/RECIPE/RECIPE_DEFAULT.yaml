@@ -25,6 +25,11 @@ fonts:
     normal: 'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
     # FONCTIONNE MAL AVEC LES .OTF
     # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
+  Numito:
+    light: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
+    bold:  'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
+    italic: 'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
+    bold_italic: 'resources/fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf'
 #   Helvetica:
 #     normal: "/System/Library/Fonts/Helvetica.ttc"
 #     bold:   "/System/Library/Fonts/HelveticaNeue.ttc"
@@ -92,6 +97,8 @@ book_format:
     line_height:              14
     leading:                  0.0
     numerotation:             false
+    # - Guillemets -
+    guillemets:               ['“','”']
     # - Numérotation du paragraphe -
     parag_num_vadjust:        1
     parag_num_dist_from_text: 5

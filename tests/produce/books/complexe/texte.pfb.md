@@ -1,7 +1,8 @@
 # Complexité testée
 
 ## Présentation
-Ce livre doit permettre de tester énormément de choses dans le détail. Grâce à l’affichage (par la recette) de la grille de référence(( <-(grille_reference) )), on peut voir dans le livre produit le résultat (cette phrase possède une référence “grille_reference”). Il va y avoir beaucoup de changements de fontes et de tailles (elles sont toutes définies dans le fichier recette). La page de reference_ulterieure est (( ->(reference_ulterieure) ))
+Ce livre doit permettre de tester énormément de choses dans le détail. Grâce à l’affichage (par la recette) de la grille de référence(( <-(grille_reference) )), on peut voir dans le livre produit le résultat (cette phrase possède une référence “grille_reference”). Il va y avoir beaucoup de changements de fontes et de tailles (elles sont toutes définies dans le fichier recette). La page de reference_ulterieure est la page n°(( ->(reference_ulterieure) ))
+> Noter quand même qu’on ne doit pas créer un gros fichier comme ça avec trop de choses, sinon, il serait difficile de voir où le bât blesse.
 
 ## Premiers tests
 (( {font:"Helvetica", style: :italic, size: 21} ))
@@ -38,12 +39,11 @@ notedocu::Une note pour de la documentation.
 * La largeur de l’item de liste doit être amputée du décalage left (pour le moment, il est normalement réglé (avec `margin-left`, mais le programme n’en tient aucun compte)
 
 # Choses à implémenter
-* Gestion des références (avant et arrière). Pour le moment, les références ultérieures ont été remplacées par un “ticket de poissonnerie”, il faut maintenant faire le second tour, en ne corrigeant plus les textes et en recherchant juste les tickets de poissonnerie pour les remplacer par
-* Marques de références : il faut faire quelque chose de moins impératif, qui permette de faire aussi bien “(page 56)” que “p. 56”. Donc, ici par exemple, ne renvoyer que 56.
+
 
 # Réflexions
 
 ## Second tour
 Pour le second tour, on n’a absolument pas besoin de repartir du texte. On va plutôt repartir de tous les paragraphes, et modifier les références puisque normalement c’est la seule chose qui nécessite ce second tour (on a un troisième tour avec les définitions du scénodico, mais c’est un tout autre problème qui sera résolu).
-Ici se trouve la référence à reference_ulterieure(( <-(reference_ulterieure) )). La première allusion à “grille de référence” se trouve (( ->(grille_reference) )).
+Ici se trouve la référence à reference_ulterieure(( <-(reference_ulterieure) )). La première allusion à “grille de référence” se trouve page n°(( ->(grille_reference) )).
 C’est en fait les corrections faites par `AnyParagraph.__parse` qui sont conservées.

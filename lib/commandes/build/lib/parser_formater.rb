@@ -127,6 +127,13 @@ module ParserFormaterClass
     end
 
     #
+    # Mini-traitements finaux, par exemple les apostrophes et les
+    # guillemets, les espaces insécables avant les ponctuations 
+    # doubles, etc.
+    # 
+    str = __corrections_typographiques(str, context)
+
+    #
     # Traitement des class-tags
     # 
     str = __traite_class_tags_in(str, context) || return # quand nil
@@ -137,6 +144,10 @@ module ParserFormaterClass
     str = __traite_notes_in(str, context) || return # quand nil
 
     return str
+  end
+
+  def recipe
+    @recipe ||= Prawn4book::PdfBook.ensure_current.recipe
   end
 
 end
@@ -448,6 +459,14 @@ private
   REG_NOTE_MARK = /(?!^)\^([0-9\^]+?)/.freeze
   REG_NOTE_DEF  = /^\^([0-9\^]+?) (.+?)$/.freeze
 
+
+  def self.__corrections_typographiques(str, context)
+    str = __traite_apos_and_guils(str, context)
+    str = __traite_ponctuations_doubles(str, context)
+    return str
+  end
+
+
   ##
   # @private
   # 
@@ -570,6 +589,52 @@ private
   REG_BACKSTICKS  = /`(.+?)`/.freeze
   SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
+
+  ##
+  # @private
+  # 
+  # Traitement des ponctuations doubles
+  # 
+  # 
+  def self.__traite_ponctuations_doubles(str, context)
+    str = str.gsub(REG_DLBPONCT) {
+      befo = $1.freeze
+      ponc = $2.freeze
+      befo = '' if befo == ' '
+      "#{befo} #{ponc}"
+    }
+
+    return str
+  end
+  REG_DLBPONCT = /([^ ])([\!\?])/.freeze
+
+  ##
+  # @private
+  # 
+  # Traitement des apostrophes et des guillemets
+  # 
+  # @note
+  #   Normalement, tous les guillemets droits qui viennent de code ou
+  #   de définitions ont été traités avant, on devrait donc pouvoir 
+  #   traiter tous ceux qui restent sans souci.
+  # 
+  #   Les apostrophes (') sont automatiquement remplacés par de vrais
+  #   apostrophes (’).
+  #   Les guillemets sont remplacés par la valeur par défaut ou le
+  #   choix de l'utilisateur. Sont recherchés aussi bien les " que 
+  #   les “ ou les chevrons «
+  #  
+  def self.__traite_apos_and_guils(str, context)
+    str = str.gsub("'", "’")
+
+    str = str.gsub(REG_GUILS, guils_remplacement)
+
+    return str
+  end
+  def self.guils_remplacement
+    @@guils_remplacement ||= "#{recipe.guillemets[0]}\\1#{recipe.guillemets[1]}".freeze
+  end
+  REG_GUILS = /\b["“«][  ]?(.+?)[  ]?[»”"]\b/.freeze
 
 end #/class AnyParagraph
 end #/class PdfBook
