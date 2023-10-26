@@ -305,6 +305,22 @@ ERRORS = {
       Le style (:style) est requis dans la définition d'une fonte. Il doit
       être ajouté à la donnée : %{dfont}
       EOT
+    bad_formatted_data: <<~EOT,
+      Les données %{bad} pour changer de fonte 
+      sont invalides : %{err}
+
+      Il faut utiliser :
+        (( font(name:"<nom>", size:<taille>, style: :<style>) ))
+
+      On peut aussi éventuellement ajouter :hname pour faire référence
+      à la police plus tard :
+
+        (( font(..., hname: 'police12') ))
+        ...
+        ...
+        (( font('police12') ))
+
+      EOT
   },
 
   # --- Maison d'éditions ---

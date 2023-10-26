@@ -160,8 +160,15 @@ class NTextParagraph < AnyParagraph
   # 
   def fonte
     @fonte ||= begin
+      if raw_text.start_with?('Un premier')
+        puts "book.paragraphes = #{book.paragraphes}"
+        puts "prev_pfbcode = #{prev_pfbcode.inspect}"
+        exit
+      end
       if styles[:font_family] || styles[:font_size] || styles[:font_style]
         Fonte.new(name:font_family, size:font_size, style:font_style)
+      elsif prev_pfbcode && prev_pfbcode.font_change?
+        Fonte.current
       else
         Fonte.default_fonte
       end

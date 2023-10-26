@@ -461,7 +461,7 @@ private
 
 
   def self.__corrections_typographiques(str, context)
-    str = __traite_apos_and_guils(str, context)
+    # str = __traite_apos_and_guils(str, context)
     str = __traite_ponctuations_doubles(str, context)
     return str
   end

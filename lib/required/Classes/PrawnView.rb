@@ -44,8 +44,9 @@ class PrawnView
   #     du livre.
   # 
   def initialize(book, config)
-    @book   = book
-    @config = config
+    @book           = book
+    @config         = config
+    @current_fonte  = nil
   end
 
   # Prawn::View en a besoin pour "synchroniser" avec Prawn::Document
@@ -199,6 +200,7 @@ class PrawnView
   # 
   def font(fonte = nil, params = nil)
     return super if fonte.nil?
+
     thefont   = nil
     data_font = nil
     case fonte
@@ -227,7 +229,9 @@ class PrawnView
     # @noter que c'est une opération qui doit être fait extrêmement
     # souvent, d'où l'importance de conserver les instances Fonte
     # 
-    return if current_font && thefont == current_font
+    return if thefont == @current_fonte
+
+    # spy "APPLICATION DE LA FONTE #{fonte.inspect}"
 
     # Pour avoir aussi la fonte courante dans Fonte
     # 
@@ -237,7 +241,8 @@ class PrawnView
     Prawn4book::Fonte.current = thefont
     
     begin
-        @current_font = super(thefont.name, thefont.params)
+        @current_fonte  = thefont
+        @current_font   = super(thefont.name, thefont.params)
     rescue Prawn::Errors::UnknownFont
       spy "--- fonte inconnue ---"
       spy "Fontes : #{book.recipe.get(:fonts).inspect}"
@@ -318,14 +323,6 @@ class PrawnView
       font_families.update(fontname.to_s => fontdata)
     end
   end
-
-  # def current_font_size
-  #   fsize = 
-  #   if current_options
-  #     current_options[:size] || current_options[:font_size]
-  #   end
-  #   return fsize || font.options[:size]
-  # end
 
 end #/PrawnView
 end #/module Prawn4book

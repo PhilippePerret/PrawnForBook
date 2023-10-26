@@ -7,6 +7,8 @@ book_data:
 
 #<book_format>
 book_format:
+  page:
+    show_grid: true
   book:
     width:  '210mm'
     height: '297mm'

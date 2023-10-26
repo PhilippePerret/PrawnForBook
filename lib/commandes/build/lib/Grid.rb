@@ -9,6 +9,9 @@ class PrawnView
   def line_height
     @line_height ||= book.recipe.line_height
   end
+  def line_height=(value)
+    @line_height = value
+  end
 
   def leading
     @leading ||= default_leading

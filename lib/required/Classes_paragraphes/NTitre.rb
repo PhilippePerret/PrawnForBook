@@ -78,7 +78,7 @@ class NTitre < AnyParagraph
     end
 
     #
-    # Quelques traitements communs à tous les textes, comme la
+    # Traitements communs à tous les textes, comme la
     # retenue du numéro de la page ou le préformatage pour les
     # éléments textuels.
     # 
@@ -110,9 +110,16 @@ class NTitre < AnyParagraph
       # Le titre formaté
       ftext = my.text
 
-      # Nombre de ligne avant le titre
-      lines_before = my.lines_before
-      move_down(lines_before * line_height)
+      # Nombre de lignes avant le titre
+      # 
+      # Seulement si le titre n'est pas tout seul en haut
+      # 
+      if cursor + line_height > bounds.top
+        move_to_next_line
+      else
+        lines_before = my.lines_before
+        move_down(lines_before * line_height)
+      end
 
       # Empêcher le titre de "manger" sur la marge haute
       ary = Prawn::Text::Formatted::Parser.format(ftext, [])
@@ -140,7 +147,6 @@ class NTitre < AnyParagraph
       ###########################
       # - IMPRESSION DU TITRE - #
       ###########################
-      #
       text(ftext, **my.text_params.merge(size:my.size, leading:my.leading(self)))
 
       if me.alone?

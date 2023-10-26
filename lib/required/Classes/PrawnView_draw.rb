@@ -31,7 +31,6 @@ class PrawnView
   # dans le document.
   # 
   def draw_reference_grids
-    
 
     # -- Dessin de la grille de référence sur les pages concernées --
     repeat gridded_pages, **{dynamic: true} do
@@ -68,10 +67,16 @@ class PrawnView
   # Retourne les pages concernées par l'impression de la grille de 
   # référence
   # (:all si toutes)
+  # 
+  # C'est important de garder cette donnée en cache, pour la
+  # fabrication auto-produite du manuel d'utilisation.
+  # 
   def gridded_pages
-    return :all if CLI.params[:grid].nil?
-    pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
-    (pfirst..plast)
+    @gridded_pages ||= begin
+      return :all if CLI.params[:grid].nil?
+      pfirst, plast = CLI.params[:grid].split('-').map {|n|n.to_i}
+      (pfirst..plast)
+    end
   end
 
 

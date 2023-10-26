@@ -100,6 +100,7 @@ class FatalPrawnForBookError < StandardError
       # -- Fontes --
       650   => Prawn4book::ERRORS[:fonts][:leading_must_be_calculated],
       651   => Prawn4book::ERRORS[:fonts][:require_style],
+      652   => Prawn4book::ERRORS[:fonts][:bad_formatted_data],
       # -- Bibliographies --
       700   => Prawn4book::ERRORS[:biblio][:unfound],
       710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],

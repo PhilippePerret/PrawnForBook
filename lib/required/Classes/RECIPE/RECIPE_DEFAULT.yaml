@@ -26,6 +26,7 @@ fonts:
     # FONCTIONNE MAL AVEC LES .OTF
     # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
   Numito:
+    normal: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
     light: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
     bold:  'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
     italic: 'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
@@ -146,6 +147,9 @@ book_format:
       lines_before:   4
       lines_after:    2
       leading:        0
+      belle_page:     false
+      next_page:      false
+      alone:          false
     level4:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
@@ -154,6 +158,9 @@ book_format:
       lines_before:   3
       lines_after:    1
       leading:        0
+      next_page:      false
+      belle_page:     false
+      alone:          false
     level5:
       font_n_style:   *default2_font_n_style
       font:           *default_font2
@@ -162,6 +169,9 @@ book_format:
       lines_before:   2
       lines_after:    0
       leading:        0
+      next_page:      false
+      belle_page:     false
+      alone:          false
     level6:
       font_n_style:   *default3_font_n_style
       font:           *default_font2
@@ -170,6 +180,9 @@ book_format:
       lines_before:   1
       lines_after:    0
       leading:        0
+      next_page:      false
+      belle_page:     false
+      alone:          false
 
 
 #</book_format>

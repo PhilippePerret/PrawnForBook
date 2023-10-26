@@ -26,6 +26,7 @@ def initialize(name:, style:, size:, hname: '')
   @style  = style.to_sym
   @size   = size
   @hname  = hname # a human name
+  Fonte.add_by_name(self) if hname != ''
   @leadings = {}
 end
 
@@ -156,6 +157,16 @@ class << self
     return thefont
   end
 
+  # Retourne la police de nom humain +hname+
+  # 
+  def get_by_name(hname)
+    @fonts_by_name[hname]
+  end
+
+  def add_by_name(fonte)
+    @fonts_by_name ||= {}
+    @fonts_by_name.merge!(fonte.hname => fonte)
+  end
 
   # Pour retourner une copie de la fonte par défaut (pour ne pas la
   # toucher)

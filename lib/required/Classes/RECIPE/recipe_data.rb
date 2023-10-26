@@ -185,7 +185,7 @@ class Recipe
   # -- Pagination --
 
   def pagination_format
-    @pagination_format      ||= format_page[:pagination_format]
+    @pagination_format ||= format_page[:pagination_format]
   end
 
   def pagination_font_n_style
@@ -328,20 +328,22 @@ class Recipe
   # 
 
   def format_text
-    @format_text        ||= DATA[:book_format][:text]
+    @format_text        ||= book_format[:text]
   end
 
   def format_page
-    @format_page        ||= DATA[:book_format][:page]
+    @format_page        ||= book_format[:page]
   end
 
-  # ne pas confondre avec la clé :book_format de la cette
+  # ne pas confondre avec la clé :book_format de la recette
+  # Ici, c'est [:book_format][:book], donc un sous-ensemble de
+  # :book_format qui concerne seulement l'aspect du livre.
   def format_book 
-    @format_book        ||= DATA[:book_format][:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
+    @format_book        ||= book_format[:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
   end
 
   def format_titles
-    @format_titles      ||= DATA[:book_format][:titles]
+    @format_titles      ||= book_format[:titles]
   end
 
   # 

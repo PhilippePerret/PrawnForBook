@@ -78,9 +78,10 @@ class PFBCode < AnyParagraph
     when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
       raise FatalPrawnForBookError.new(2000, {code: raw_code})
     when 'line'
-      pdf.update do
-        text " "
-      end
+      # Inscription d'une liste
+      pdf.update { text " " }
+    when /^fonte?\((.+)\)$/.freeze # Changement forcé de fonte
+      force_fonte_change(pdf, %Q[{#{$1.strip}}])
     when REG_METHODE_WITH_ARGS
       #
       # Une méthode appelée entre (( ... )) sur la ligne
@@ -91,6 +92,26 @@ class PFBCode < AnyParagraph
     else
       raise FatalPrawnForBookError.new(1001, {code:raw_code, page: pdf.page_number})
     end
+  end
+
+  def force_fonte_change(pdf, font_data)
+    begin
+      dfont = eval(font_data)
+      fonte =
+      if dfont.is_a?(String)
+        Fonte.get_by_name(dfont) || raise("Fonte introuvable.")
+      else
+        fonte = Fonte.new(name:dfont[:name], size:dfont[:size], style:dfont[:style].to_sym, hname:dfont[:hname])
+      end
+      pdf.font(fonte)
+      @opere_font_change = true
+    rescue Exception => e
+      raise FatalPrawnForBookError.new(652, {bad:font_data.inspect, err:e.message})
+    end
+  end
+
+  def font_change?
+    @opere_font_change === true
   end
 
   def data
@@ -282,11 +303,16 @@ class PFBCode < AnyParagraph
     @is_for_next_paragraph === true
   end
 
-  def line_height(new_height, **dfonte)
-    pdf.define_default_leading( # je l'ai supprimé je crois
-      Fonte.new(name:dfonte[:fname], style:dfonte[:fstyle], size:dfonte[:fsize]),
-      new_height
-    )
+  def line_height(new_height, dfonte = nil)
+    pdf.line_height = new_height
+    if dfonte
+      if dfonte.is_a?(Fonte)
+        fonte = dfonte
+      else
+        fonte = Fonte.new(name:dfonte[:fname], style:dfonte[:fstyle], size:dfonte[:fsize])
+      end
+      pdf.font(fonte)
+    end
   end
 
   REG_METHODE_WITH_ARGS = /^([a-zA-Z0-9_.]+)(?:\((.*?)\))?$/.freeze
