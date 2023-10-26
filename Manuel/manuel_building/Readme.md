@@ -1,6 +1,13 @@
 # Manuel automatique
 
 
+## Todo
+
+* régler le problème de la définition d'une nouvelle fonte sur une ligne, qui doit affecter le paragraphe suivant, mais ce paragraphe suivant n'est pas trouvé, dans la construction automatique.
+  * penser à documenter la fonctionnalité une fois qu'elle marchera
+* Revoir le traitement des guillemets, qui pose problème (il a été désactivé). Le problème se pose avec les guillemets droits. En fait, il ne faudrait jamais les toucher lorsqu'il y a autre chose qu'une espace (sécable ou non) des deux côtés à la fois. Donc, dès qu'il y a une espace, on devrait le considérer comme un guillemet typographique, pas comme un guillemets de délimiteur de string dans un bout de programme ou dans des paramètres.
+
+
 
 <a name="update-manual"></a>
 

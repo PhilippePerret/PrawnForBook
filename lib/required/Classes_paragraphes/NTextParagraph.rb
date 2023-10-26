@@ -161,7 +161,10 @@ class NTextParagraph < AnyParagraph
   def fonte
     @fonte ||= begin
       if raw_text.start_with?('Un premier')
-        puts "book.paragraphes = #{book.paragraphes}"
+        puts "book.paragraphes"
+        book.paragraphes.each do |pa|
+          puts "§ #{pa.pindex} : #{pa.text||pa.class}"
+        end
         puts "prev_pfbcode = #{prev_pfbcode.inspect}"
         exit
       end

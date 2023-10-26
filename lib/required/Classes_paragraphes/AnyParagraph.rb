@@ -154,10 +154,19 @@ class AnyParagraph
   # Liste des balises de style de paragraphe
   attr_accessor :class_tags
 
-  # Index absolu du paragraphe dans le texte source. Il est donc
+  # Index du paragraphe dans le texte source. Il est donc
   # très facile de faire référence à ce paragraphe à l'aide de
   # ce pindex ("Le #{pindex}e paragraphe contient une erreur")
+  # 
+  # @note : pour l'index absolu dans <book>.paragraphes, voir la
+  # propriété suivante.
+  # 
   attr_reader :pindex
+
+  # Index absolu du paragraphe dans <book>.paragraphes.
+  # C'est avec cet index absolu qu'on peut connaitre la nature des
+  # paragraphes avant.
+  attr_accessor :abs_index
 
   attr_reader :type
 
@@ -333,15 +342,17 @@ class AnyParagraph
   # 
   def prev_printed_paragraph
     @prev_printed_paragraph ||= begin
-      pidx  = pindex.dup
-      ppp   = nil
-      while pidx > 0
-        pidx -= 1
-        ppp   = book.paragraphes[pidx]
-        break unless ppp.empty_paragraph?
-        ppp = nil
+      if abs_index
+        pidx  = abs_index.dup
+        ppp   = nil
+        while pidx > 0
+          pidx -= 1
+          ppp   = book.paragraphes[pidx]
+          break unless ppp.empty_paragraph?
+          ppp = nil
+        end
+        ppp
       end
-      ppp
     end
   end
 
@@ -349,8 +360,10 @@ class AnyParagraph
   # de code qui précède le paragraphe courant.
   def prev_pfbcode
     @prev_pfbcode ||= begin
-      if book.paragraphes[pindex - 1].pfbcode?
-        book.paragraphes[pindex - 1] 
+      if abs_index && abs_index > 0
+        if book.paragraphes[abs_index - 1].pfbcode?
+          book.paragraphes[abs_index - 1] 
+        end
       end
     end
   end

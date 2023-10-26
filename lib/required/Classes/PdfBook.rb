@@ -45,10 +45,9 @@ class PdfBook
   def inject(pdf, paragraph_str, idx, source = 'user_method')
     # - Instanciation du paragraphe -
     par = AnyParagraph.instantiate(self, paragraph_str, idx, source)
-    
     # - Ajout à la liste des paragraphes -
+    par.abs_index = @paragraphes.count
     @paragraphes << par
-
     ###########################################
     ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###
     ###########################################
