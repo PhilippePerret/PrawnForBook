@@ -219,13 +219,14 @@ class << self
 
         start_new_page if first_line_on_next_page
 
+        # is_first_line pour savoir si c'est la première ligne 
+        # traitée et gérer les orphelines.
+        is_first_line = true
+
         # On boucle sur toutes les lignes pour les écrire
         # À chaque ligne écrite il faut déplacer le curseur sur la 
         # ligne suivante.
         # 
-        # is_first_line pour savoir si c'est la première et gérer les
-        # orphelines.
-        is_first_line = true
         while boxline = paragraphe_stack.shift
 
           # Nombre de lignes restantes
@@ -245,6 +246,10 @@ class << self
             start_new_page
 
           end
+
+          # Réglage de la position exacte du cursor
+          # move_to_closest_line
+          # correct_cursor_position(boxline.text)
           boxline.at = [left, cursor]
 
           ##############################

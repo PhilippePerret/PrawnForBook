@@ -4,7 +4,7 @@
   Module Spy
   ----------
   Pour débuggage dans une autre fenêtre de Terminal
-  version 0.1.0
+  version 0.2.1
 
   @usages
 
@@ -20,12 +20,13 @@ require 'clir'
 
 def spy(msg, forcer = false)
   if msg == :on
-    @spysrunning = :TRUE
-    spy_in_term("- SPY ACTIVATED -")
+    DebugInOtherTerm.is_stopped= false
+    spy_in_term("--- SPY ON ---")
   elsif msg == :off
-    spy_in_term("- SPY DÉSACTIVATED -")
-    @spysrunning = :FALSE
+    spy_in_term("--- SPY OFF ---")
+    DebugInOtherTerm.is_stopped= true
   else
+    return if spy_stopped? && not(forcer)
     return unless debug? || spy? || forcer
     spy_in_term(msg)
   end
@@ -41,6 +42,10 @@ end
 
 def spy?
   :TRUE == @spysrunning ||= true_or_false(CLI.options[:spy])
+end
+
+def spy_stopped?
+  DebugInOtherTerm.is_stopped === true
 end
 
 #
@@ -69,8 +74,9 @@ class DebugInOtherTerm
   #
   def write(msg)
     begin
-      cmd = "printf '#{msg.gsub(/'/,'’').gsub(/\{/,'\\{')}\n' > #{term}"
-      # puts "Commande spy = #{cmd}"
+      # cmd = "printf '#{msg.gsub(/'/,'’').gsub(/\{/,'\\{')}\n' > #{term}"
+      cmd = "printf -- \"#{msg.gsub(/"/,'“').gsub(/\{/,'\\{')}\n\" > #{term}"
+      # puts "Commande spy = #{cmd}".rouge
       `#{cmd}`
     rescue Exception => e
       `printf "Problème avec #{msg}" > #{term} (erreur : #{e.message}`
@@ -78,6 +84,14 @@ class DebugInOtherTerm
     end
   end
   alias :<< :write
+
+
+  def self.is_stopped=(value)
+    @@is_stopped = value
+  end
+  def self.is_stopped
+    return @@is_stopped ||= false
+  end
 
   def init
     get_data_if_file_exists || begin

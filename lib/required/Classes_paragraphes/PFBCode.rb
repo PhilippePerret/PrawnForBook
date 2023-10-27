@@ -81,7 +81,7 @@ class PFBCode < AnyParagraph
       # Inscription d'une liste
       pdf.update { text " " }
     when /^fonte?\((.+)\)$/.freeze # Changement forcé de fonte
-      force_fonte_change(pdf, %Q[{#{$1.strip}}])
+      force_fonte_change(pdf, $1.strip)
     when REG_METHODE_WITH_ARGS
       #
       # Une méthode appelée entre (( ... )) sur la ligne
@@ -96,13 +96,18 @@ class PFBCode < AnyParagraph
 
   def force_fonte_change(pdf, font_data)
     begin
-      dfont = eval(font_data)
+      dfont =
+        if font_data.match?(/^(['"]).+\1$/)
+          font_data[1...-1]
+        else
+          eval("{#{font_data}}")
+        end
       fonte =
-      if dfont.is_a?(String)
-        Fonte.get_by_name(dfont) || raise("Fonte introuvable.")
-      else
-        fonte = Fonte.new(name:dfont[:name], size:dfont[:size], style:dfont[:style].to_sym, hname:dfont[:hname])
-      end
+        if dfont.is_a?(String)
+          Fonte.get_by_name(dfont) || raise("Fonte introuvable.")
+        else
+          fonte = Fonte.new(name:dfont[:name], size:dfont[:size], style:dfont[:style].to_sym, hname:dfont[:hname])
+        end
       pdf.font(fonte)
       @opere_font_change = true
     rescue Exception => e

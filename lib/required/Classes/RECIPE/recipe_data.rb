@@ -153,7 +153,11 @@ class Recipe
     
     if pu.is_a?(Hash)
       if pu[:text].is_a?(String)
-        pu[:left] = eval(pu[:left]) if pu[:left].is_a?(String)
+        if pu[:left] 
+          pu[:left] = pu[:left].proceed_unit
+        else
+          pu.delete(:left)
+        end
         return pu_default.merge(pu) 
       else
         pu_default.merge!(pu)
@@ -175,8 +179,9 @@ class Recipe
       else '–'
       end
     data_puce = pu_default.merge(text: lettre)
-    lf = data_puce[:left]
-    data_puce[:left] = eval(lf) if lf.is_a?(String)
+    spy("data_puce[:left] avant : #{data_puce[:left].inspect}", true)
+    data_puce[:left] = data_puce[:left].proceed_unit
+    spy("data_puce[:left] après : #{data_puce[:left].inspect}", true)
     return data_puce
   end
 

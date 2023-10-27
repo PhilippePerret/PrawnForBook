@@ -101,6 +101,7 @@ ERRORS = {
   # --- Modules externes (helpers, formaters, etc.) ---
 
   modules: {
+
     runtime_error: <<~ERR,
       Une erreur s'est produite en interprétant le code :
         %{code}
@@ -168,6 +169,18 @@ ERRORS = {
         %{backtrace}
         ERR
     },
+
+    bad_ruby_code: <<~ERR,
+      Impossible d'évaluer le code ruby :
+      <<<
+        %{code}
+      >>>
+      Il a produit l'erreur :
+       %{err}
+      Quatre dernières traces :
+        %{trace}
+      ERR
+
     formate: {
       unknown_method: <<~ERR,
         La méthode #%{mname} est inconnue de l'instance paragraphe.

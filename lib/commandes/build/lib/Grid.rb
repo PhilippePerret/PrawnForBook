@@ -4,6 +4,24 @@ class PrawnView
   # Toutes les méthodes de Prawn::Document (en fait Prawn::View) qui
   # permettent de gérer la grille de référence, c'est-à-dire les 
   # lignes sur lesquelles se posent les textes.
+  # 
+  # Pour bien comprendre le positionnement des textes
+  # -------------------------------------------------
+  # Pour bien positionner un texte, on doit connaitre la ligne de
+  # référence sur laquelle il doit se poser et l'ascender de la 
+  # fonte. Car par défaut, la ligne de référence, qui correspond quand
+  # elle correspond au curseur, est la ligne sous laquelle se posi-
+  # tionne le texte. Il faut donc remonter ce texte pour qu'il se
+  # positionne SUR la ligne de référence et non pas dessous.
+  # 
+  # Donc, pour positionner le texte exactement sur une ligne, il 
+  # faut : connaitre la ligne, y placer le curseur, et remonter de la
+  # valeur de l'ascender de la fonte.
+
+
+  def correct_cursor_position(str)
+
+  end
 
   # - raccourci -
   def line_height
@@ -11,6 +29,7 @@ class PrawnView
   end
   def line_height=(value)
     @line_height = value
+    leadings.merge!(page_number => {line_height: value})
   end
 
   def leading

@@ -90,6 +90,7 @@ class FatalPrawnForBookError < StandardError
       50    => Prawn4book::ERRORS[:textfile][:unfound_text_file],
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
+      101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],

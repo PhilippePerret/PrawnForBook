@@ -74,69 +74,6 @@ class PrawnView
   def ext_mg; @ext_mg ||= config[:ext_margin] end
   def int_mg; @int_mg ||= config[:int_margin] end
 
-
-  # --- LINES METHODS ---
-
-
-  # Déplace le curseur sur la ligne de référence +x+
-  # 
-  # @param [Integer] x Indice 1-start de la ligne
-  # @return l'indice 1-start de la ligne sur laquelle on se trouve
-  # maintenant.
-  # 
-  # @note
-  # 
-  #   Quand il est question de "ligne" ici, il s'agit de façon 
-  #   absolu des lignes de référence telles que définies par la 
-  #   donnée line_height courante (qui peut être propre au livre 
-  #   entier ou à une page — dans l'annexe par exemple)
-  # 
-  def move_to_line(x)
-    # Top ligne
-    # ---------
-    next_line_top  = (x - 1) * line_height
-    # Déplacement du curseur
-    move_cursor_to(bounds.height - next_line_top + ascender)
-    return x
-  end
-
-  def move_to_first_line
-    move_to_line(1)
-  end
-
-  # Déplacement du curseur à la prochaine ligne de référence
-  def move_to_next_line
-    # Ligne courante
-    # --------------
-    # C'est la distance entre la position actuelle du curseur et le
-    # haut de la page (marge considérée), divisée par la hauteur de
-    # ligne. On l'arrondit à la valeur plancher
-    current_line      = ((bounds.height - cursor).to_f / line_height).ceil
-
-    move_to_line(current_line + 1)
-  end
-
-  # @ascender
-  # 
-  # Il permet de savoir de combien on doit remonter la ligne pour
-  # qu'en fonction de sa taille, elle soit posée sur la ligne de
-  # référence.
-  # 
-  # Sa valeur est changée dès que la fonte est modifiée pour le
-  # document (avec la méthode #font refactorisée pour Prawn-for-book.
-  # 
-  def ascender
-    @ascender
-  end
-
-  def current_leading
-    line_height - height_of('X')
-  end
-
-  def lines_down(x)
-    move_cursor_to(x * line_height + ascender)
-  end
-
   def font2leading(fonte)
     curfonte = Prawn4book::Fonte.current
     ld = nil
@@ -144,9 +81,6 @@ class PrawnView
     font(curfonte)
     return ld
   end
-
-  # --- Builing General Methods ---
-
 
   ##
   # - NOUVELLE PAGE -
@@ -224,12 +158,18 @@ class PrawnView
       thefont = Fonte.get_or_instanciate(data_font)      
     end
 
-    # On applique la fonte seulement si elle a changé
+    # On applique la fonte seulement si elle a changé. Sinon,
+    # on s'en retourne aussitôt.
     # 
-    # @noter que c'est une opération qui doit être fait extrêmement
-    # souvent, d'où l'importance de conserver les instances Fonte
+    # @noter que le changement de fonte est une opération qui doit se
+    # faire extrêmement souvent [1], d'où l'importance de conserver 
+    # les instances Fonte, de ne pas les refaire à chaque fois.
+    # [1] À chaque titre, et même à chaque paragraphe si on est en
+    # numérotation de paragraphe.
     # 
-    return if thefont == @current_fonte
+    if thefont == @current_fonte
+      return 
+    end
 
     # spy "APPLICATION DE LA FONTE #{fonte.inspect}"
 

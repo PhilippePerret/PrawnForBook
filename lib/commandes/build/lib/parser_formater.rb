@@ -239,11 +239,19 @@ private
   # 
   def self.__traite_codes_ruby_in(str, context)
     str.gsub(REG_CODE_RUBY) do
-      code = $1.freeze
-      if context[:paragraph]
-        context[:paragraph].instance_eval(code)
-      else
-        eval(code)
+      begin
+        code = $1.freeze
+        if context[:paragraph]
+          context[:paragraph].instance_eval(code)
+        else
+          eval(code)
+        end
+      rescue Exception => e
+        raise FatalPrawnForBookError.new(101,{
+          code: code,
+          err: e.message,
+          trace: e.backtrace[0..3].join("\n  ")
+        })
       end
     end
   end

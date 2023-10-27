@@ -7,22 +7,10 @@ module Prawn4book
   def self.build_features(pdf, book)
 
     # Ordre d'affichage des fonctionnalités
-    %w{
+    require_relative 'Features/_FEATURE_LIST_'
+    # => FEATURE_LIST
 
-      avantages_et_forces
-      le_format_markdown_du_texte
-      le_format_yaml_de_la_recette
-      definir_format_livre
-      definir_police_par_defaut
-      align_on_reference_lines
-      pseudo_format_markdown
-      item_list_avec_puces
-      book_in_collection
-      veuves_orphelines_et_lignes_de_voleur
-      afficher_grille_reference_et_marges
-      liste_exhaustive_features
-
-    }.each do |fname|
+    FEATURE_LIST.each do |fname|
       fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
       if File.exist?(fpath)
         load fpath

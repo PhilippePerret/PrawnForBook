@@ -6,6 +6,7 @@ Prawn4book::Manual::Feature.new do
 
   show_grid   true
   line_height hline
+  new_page_before_texte(true)
 
   description <<~EOT
     De façon naturelle et sans aucune intervention de l'auteur ou du metteur en page, les lignes de texte sont alignées sur une tt(grille de référence) ce qui permet un affichage professionnel.
@@ -18,13 +19,11 @@ Prawn4book::Manual::Feature.new do
   first_font_size = 20
 
   texte <<~EOT
-    (( new_page ))
-    
     (( font(name:"Numito", size:#{first_font_size}, style: :normal) ))
     Un premier paragraphe dans une police de taille #{first_font_size} alors que la hauteur de ligne est réglée ici à #{hline}.
     
     (( font(name:"Numito", size:8, style: :normal) ))
-    Un autre paragraphe dans une police de taille. Lorem #{'ipsum lorem ipsum '*30}
+    Un autre paragraphe dans une police de taille. Lorem #{'ipsum lorem ipsum ' * 60}
     EOT
 
 end

@@ -60,7 +60,6 @@ class PrawnView
   
     end
 
-
   end
   # /#draw_reference_grids
 

@@ -126,8 +126,9 @@ class NTextParagraph < AnyParagraph
     #  ÉCRITURE DU PARAGRAPHE #
     ###########################
     # 
-    # Principe : voir Printer::pretty_render
+    # Voir Printer::pretty_render
     # 
+    spy(:on) if text.start_with?('Un premier')
     Printer.pretty_render(
       owner:    self,
       pdf:      pdf, 
@@ -135,6 +136,7 @@ class NTextParagraph < AnyParagraph
       text:     text,
       options:  dry_options
     )
+    spy(:off) if text.start_with?('Un premier')
 
     # 
     # On prend la dernière page du paragraphe, c'est toujours celle
@@ -160,14 +162,6 @@ class NTextParagraph < AnyParagraph
   # 
   def fonte
     @fonte ||= begin
-      if raw_text.start_with?('Un premier')
-        puts "book.paragraphes"
-        book.paragraphes.each do |pa|
-          puts "§ #{pa.pindex} : #{pa.text||pa.class}"
-        end
-        puts "prev_pfbcode = #{prev_pfbcode.inspect}"
-        exit
-      end
       if styles[:font_family] || styles[:font_size] || styles[:font_style]
         Fonte.new(name:font_family, size:font_size, style:font_style)
       elsif prev_pfbcode && prev_pfbcode.font_change?
