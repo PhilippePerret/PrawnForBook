@@ -469,8 +469,11 @@ private
 
 
   def self.__corrections_typographiques(str, context)
-    # str = __traite_apos_and_guils(str, context)
+    str = __traite_apos_and_guils(str, context)
     str = __traite_ponctuations_doubles(str, context)
+    str = __traite_points_suspensions(str, context)
+    str = __traite_tirets_exergue(str,context)
+    str = str.gsub(REG_ANTESLASHED,'\1')
     return str
   end
 
@@ -611,10 +614,11 @@ private
       befo = '' if befo == ' '
       "#{befo} #{ponc}"
     }
-
     return str
   end
-  REG_DLBPONCT = /([^ ])([\!\?])/.freeze
+  REG_DLBPONCT = /([^ \\])([\!\?])/.freeze
+
+  REG_ANTESLASHED = /\\(.)/.freeze
 
   ##
   # @private
@@ -633,16 +637,38 @@ private
   #   les “ ou les chevrons «
   #  
   def self.__traite_apos_and_guils(str, context)
-    str = str.gsub("'", "’")
-
-    str = str.gsub(REG_GUILS, guils_remplacement)
+    str = str.gsub(REG_APO, '\1’')
+    # 
+    # @note
+    #   [1] Au moment où les guillemets sont remplacés, tous les codes
+    #       ont été évalués, il n'y a donc plus rien à craindre. On 
+    #       laisse simplement tranquille les guillemets précédés par
+    #       un échappement.
+    # 
+    str = str.gsub(REG_GUILS, "\\1#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}")
 
     return str
   end
-  def self.guils_remplacement
-    @@guils_remplacement ||= "#{recipe.guillemets[0]}\\1#{recipe.guillemets[1]}".freeze
+  REG_APO = /(qu|d|j|l|n|m|s|t)'/.freeze
+  # Cf. la @note [1] ci-dessus
+  REG_GUILS = /([^\\])"(.+?)"/.freeze
+
+
+  def self.__traite_points_suspensions(str, context)
+    str = str.gsub('...', '…')
+    return str
   end
-  REG_GUILS = /\b["“«][  ]?(.+?)[  ]?[»”"]\b/.freeze
+
+  def self.__traite_tirets_exergue(str, context)
+    str = str.gsub(REG_TIRET_EXERGUE) {
+      before  = $1.freeze
+      signe   = $2.freeze
+      content = $3.strip.freeze
+      "#{before}#{signe} #{content} #{signe}"
+    }
+    return str
+  end
+  REG_TIRET_EXERGUE = /([^\\])([—–])[ ]?(.+?) ?\2/.freeze
 
 end #/class AnyParagraph
 end #/class PdfBook

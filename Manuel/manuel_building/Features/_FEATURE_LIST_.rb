@@ -3,12 +3,14 @@ module Prawn4book
   FEATURE_LIST = %w{
 
       avantages_et_forces
+      definition_fonte
       le_format_markdown_du_texte
       le_format_yaml_de_la_recette
       definir_format_livre
       definir_police_par_defaut
       align_on_reference_lines
       pseudo_format_markdown
+      guils_et_apos
       puces
       puces/losange
       puces/black_losange
@@ -25,7 +27,7 @@ module Prawn4book
       afficher_grille_reference_et_marges
       change_fonte_for_next_paragraph
       evaluation_code_ruby
-      liste_exhaustive_features
+      _liste_exhaustive_features_
 
     }
 

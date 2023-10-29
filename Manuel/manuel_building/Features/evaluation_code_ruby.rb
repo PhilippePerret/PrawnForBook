@@ -9,6 +9,11 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   sample_texte <<~EOT
+    Une opération simple permet de savoir que 2 + 2 est égal à \#{'#'}{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{'#'}{Time.now.strftime('%d %m %Y')}.
+
+    EOT
+  
+  texte <<~EOT
     Une opération simple permet de savoir que 2 + 2 est égal à \#{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{Time.now.strftime('%d %m %Y')}.
 
     EOT

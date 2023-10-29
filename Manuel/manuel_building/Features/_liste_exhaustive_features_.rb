@@ -6,6 +6,7 @@ Prawn4book::Manual::Feature.new do
   # 
   description <<~EOT.split("\n").join("\n\n")
 
+    * définition de la fonte par défaut
     * colorisation des textes
     * suppression des veuves et des orphelines
     * suppression des lignes de voleur
@@ -16,6 +17,7 @@ Prawn4book::Manual::Feature.new do
     * corrige l'erreur typographique de l'espace avant et après les guillemets droits et courbes
     * corrige l'oubli de l'espace avant les ponctuations doubles
     * corrige l'erreur d'espace avant les ponctuations doubles (pose d'une insécable)
+    * corrige l'absence d'espace insécable à l'intérieur des tirets d'exergue
     * changement de fonte (police) pour le paragraphe suivant [[change_fonte_for_next_paragraph]]
 
     EOT
