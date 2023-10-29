@@ -91,6 +91,7 @@ class FatalPrawnForBookError < StandardError
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
+      102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],

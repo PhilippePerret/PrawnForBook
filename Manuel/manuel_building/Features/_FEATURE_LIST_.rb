@@ -19,6 +19,7 @@ module Prawn4book
       puces/finger
       puces/black_finger
       puces/big_hyphen
+      puces/custom_image
       book_in_collection
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges

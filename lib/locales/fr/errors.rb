@@ -170,6 +170,11 @@ ERRORS = {
         ERR
     },
 
+    unfound_puce_image: <<~ERR,
+      Impossible de trouver l'image de la puce avec le chemin absolu
+      ou relatif : %{path}
+      ERR
+
     bad_ruby_code: <<~ERR,
       Impossible d'évaluer le code ruby :
       <<<

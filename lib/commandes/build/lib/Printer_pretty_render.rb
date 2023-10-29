@@ -261,11 +261,7 @@ class << self
           boxline.render
 
           # -- PUCE --
-          if is_first_line && puce
-            float do 
-              text_box(puce[:text], **{inline_format:true, size: puce[:size], width: puce[:left], at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
-            end
-          end
+          my.print_puce(self, puce) if is_first_line && puce
 
           # -- On se place sur la ligne suivante --
           move_to_next_line
@@ -288,6 +284,40 @@ class << self
     return owner
   end #/pretty_render
 
+  # Écriture de la puce, si nécessaire
+  def print_puce(pdf, puce)
+    puce_options = {
+      at: [ (puce[:hadjust]||0), pdf.cursor + (puce[:vadjust]||0)]
+    }
+    if puce[:text].downcase.match?(REG_IMG_EXTENSION)
+      puce_image_path = book.existing_path(puce[:text]) || raise(FatalPrawnForBookError.new(102, {path:puce[:text]}))
+      pdf.update do
+        image_options = puce_options.merge({
+          position:   :center,
+        })
+        image_options.merge!(height: puce[:height]) if puce[:height]
+        image_options.merge!(width: puce[:size]) if puce[:size]
+        image(puce_image_path, **image_options)
+      end
+    else
+      pdf.update do
+        puce_options.merge!({
+          inline_format: true,
+          size:   puce[:size],
+          width:  puce[:left],
+          at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]
+        })
+        float do
+          text_box(puce[:text], **puce_options) 
+        end
+      end
+    end
+  end
+  REG_IMG_EXTENSION = /\.(png|jpg|jpeg|tiff|svg)$/.freeze
+
+  def book
+    PdfBook.ensure_current
+  end
 
   ##
   # Contrairement à la méthode suivante, ici, on traite la ligne de
