@@ -196,24 +196,6 @@ class AnyParagraph
     end
   end
 
-  # --- Predicate Methods ---
-
-  def titre?    ; false end
-  def paragraph?; false end
-  def sometext? ; false end # surclassé par les filles
-  alias :some_text? :sometext?
-  def pfbcode?  ; false end
-  def citation? ; false end
-  def list_item?; false end
-  def note_page?; false end
-  def empty_paragraph?; false end
-  def image?    ; false end
-  def table?    ; false end
-
-
-  def has_unknown_target?
-    @unknown_targets.any?
-  end
   def has_unknown_target(ticket, ref_id)
     @unknown_targets << {ticket: ticket, ref_id: ref_id}
   end
@@ -222,13 +204,6 @@ class AnyParagraph
     @unknown_targets.each do |dtarget|
       @text = @text.sub(dtarget[:ticket], book.references.get(dtarget[:ref_id], self))
     end
-  end
-
-  # Sera mis à true pour les paragraphes qui ne doivent pas être
-  # imprimés, par exemple les paragraphes qui définissent des 
-  # propriétés pour les paragraphes suivants.
-  def not_printed?
-    @isnotprinted === true
   end
 
   # --- Text Methods ---
@@ -295,16 +270,10 @@ class AnyParagraph
    @margin_right = real_value_for(mg)
   end
 
-  def kerning?
-    not(kerning.nil?)
-  end
   def kerning
     styles[:kerning]
   end
 
-  def character_spacing?
-    not(character_spacing.nil?)
-  end
   def character_spacing
     styles[:character_spacing]
   end
@@ -338,7 +307,8 @@ class AnyParagraph
   # 
   # @note
   #   Cette méthode a été inauguré pour les titres, pour savoir si
-  #   un titre suit un autre titre
+  #   un titre suit un autre titre.
+  #   Voir aussi la méthode predicate previous_is_title?
   # 
   def prev_printed_paragraph
     @prev_printed_paragraph ||= begin

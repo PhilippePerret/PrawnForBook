@@ -2,4 +2,8 @@
 require_relative 'constants'
 require_relative 'Feature'
 
-spy(:off)
+if debug?
+  spy(:off)
+else
+  def spy(*args); end
+end

@@ -147,7 +147,12 @@ class NTitre < AnyParagraph
       ###########################
       # - IMPRESSION DU TITRE - #
       ###########################
-      text(ftext, **my.text_params.merge(size:my.size, leading:my.leading(self)))
+      title_options = my.text_params.merge(
+        size:my.size, 
+        leading:my.leading(self),
+        color: my.color,
+      )
+      text(ftext, **title_options)
 
       if me.alone?
         start_new_page
@@ -202,6 +207,10 @@ class NTitre < AnyParagraph
     @size ||= fonte.size
   end
 
+  def color 
+    @color ||= PdfBook::NTitre.color(level)
+  end
+
   # @prop {Integer} Espace avec le texte suivant
   def lines_after
     @lines_after ||= self.class.lines_after(level)
@@ -229,7 +238,7 @@ class NTitre < AnyParagraph
       0
     elsif not(@lines_before.nil?)
       @lines_before
-    elsif prev_printed_paragraph && prev_printed_paragraph.titre?
+    elsif prev_printed_paragraph && prev_printed_paragraph.title?
       0
     else
       self.class.lines_before(level)
@@ -265,7 +274,8 @@ class NTitre < AnyParagraph
   end
 
   def sometext? ; true  end
-  def titre?    ; true  end
+  def title?    ; true  end
+  def printed?  ; true  end
 
   # --- Data Methods ---
 
@@ -286,7 +296,7 @@ class NTitre < AnyParagraph
           nextpar = nil 
           break 
         end
-        break if nextpar.titre?
+        break if nextpar.title?
       end
       nextpar
     end
@@ -318,6 +328,10 @@ class NTitre < AnyParagraph
     return lbef
   end
 
+  def self.color(level)
+    get_data(:color, level, '000000')
+  end
+
   def self.alone?(level)
     return false if level < 1
     get_data(:alone, level) === true
@@ -341,12 +355,12 @@ class NTitre < AnyParagraph
   #   de la police, puisqu'elle est gérée par Prawn4book::Fonte. On
   #   ne s'en sert plus que pour les lignes avant/après, etc.
   # 
-  def self.get_data(property, niveau)
-    key_niveau = :"level#{niveau}"
-    unless data_titles[key_niveau].key?(property)
-      spy "data_titles[key_niveau] ne connait pas la clé #{property.inspect}. Ne connait que les clés : #{data_titles[key_niveau].keys.inspect}".rouge
+  def self.get_data(property, niveau, default = nil)
+    if data_titles.key?(key_niveau = :"level#{niveau}")
+      return data_titles[key_niveau][property] || default
+    else
+      default
     end
-    return data_titles[key_niveau][property]
   end
 
   def self.data_titles

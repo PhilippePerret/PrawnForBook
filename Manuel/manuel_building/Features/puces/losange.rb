@@ -3,9 +3,10 @@ Prawn4book::Manual::Feature.new do
   # titre "Les puces"
   # SUITE DES PUCES
 
-  description <<~EOT
-    On peut définir une autre puce dans la recette du livre, dans la partie “text” et “book_format”.
+  subtitle "Puce losange"
 
+  description <<~EOT
+    On peut définir une autre puce dans la [[recette du livre]], dans la partie `text:` de `book_format:`.
     EOT
 
   sample_recipe <<~YAML

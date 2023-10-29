@@ -2,6 +2,10 @@
 
 Ce dossier permet de produire le manuel de façon automatique à l’aide de ***Prawn-for-book***.
 
+## Todo
+
+* Poursuivre la démonstration des puces
+
 
 
 ## Tâches de base

@@ -57,10 +57,6 @@ class NTable < AnyParagraph
   def print(pdf, **options)
     @pdf = pdf
 
-    # puts "options = #{options.inspect}".jaune
-    # debugit = options.empty?
-    debugit = false
-
     #
     # Définir le numéro du paragraphe ici, pour que
     # le format :hybrid (n° page + n° paragraphe) fonctionne
@@ -74,8 +70,6 @@ class NTable < AnyParagraph
 
     @numero = AnyParagraph.get_current_numero
 
-    puts "1".jaune if debugit
-
     #
     # Check value. Ici, on va calculer les valeurs implicites
     # 
@@ -86,15 +80,11 @@ class NTable < AnyParagraph
     # 
     calc_implicite_values(pdf)
 
-    puts "2".jaune if debugit
-
     # 
     # Application de la fonte par défaut
     # (utile par exemple si la table est placée après un titre)
     # 
     pdf.font(Fonte.default_fonte)
-
-    puts "3".jaune if debugit
 
     # - Réglage de l'espace avant la table -
     if options.key?(:space_before)
@@ -104,8 +94,6 @@ class NTable < AnyParagraph
     end
     pdf.move_to_next_line
 
-    puts "4".jaune if debugit
-    
     #
     # Écriture du numéro du paragraphe
     # 
@@ -113,15 +101,11 @@ class NTable < AnyParagraph
       print_paragraph_number(pdf) if book.recipe.paragraph_number?
     end
 
-    puts "5".jaune if debugit
-    
     #
     # On remet les textes originaux
     # 
     @lines = self.class.desafeize_lines(lines) unless lines.nil?
 
-    puts "6".jaune if debugit
-    
     #
     # --- ÉCRITURE DE LA TABLE ---
     # 
@@ -135,9 +119,6 @@ class NTable < AnyParagraph
       raise FatalPrawnForBookError.new(3000, {err: e.message})
     end
 
-    puts "7".jaune if debugit
-    
-
     # - Réglage de l'espace après la table -
     if options.key?(:space_after)
       pdf.move_down(options[:space_after])
@@ -145,18 +126,16 @@ class NTable < AnyParagraph
       pdf.move_down(2 * pdf.line_height)
     end
 
-    puts "8".jaune if debugit
-    
-
   end
 
   # --- Predicate Methods ---
 
   def table?    ; true end
   def paragraph?; false end
+  def printed?  ; true  end
   def sometext? ; true end # seulement ceux qui contiennent du texte
   alias :some_text? :sometext?
-  def titre?    ; false  end
+  def title?    ; false  end
 
   # Mis en test pour le moment, pour quand on utilise la méthode
   # #formate_all sur le contenu des cellules, qui travaille normale-

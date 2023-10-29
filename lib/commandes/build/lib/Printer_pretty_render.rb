@@ -72,8 +72,11 @@ class << self
   #   :puce     qui définit une puce (typiquement utilisé pour les
   #             paragraphe qui sont des items de liste). C'est soit
   #             un caractère seul, soit une table définissant :
-  #             {:text, :vadjust, :hadjust} pour définir le conte-
-  #             nu l'ajustement vertical et horizontal.
+  #             :text     Le texte à utiliser pour la puce
+  #             :vadjust  L'ajustement vertical en points
+  #             :hadjust  L'ajustement horizontal en points
+  #             :left     L'écart avec le texte (le déplacement du texte)
+  #             :size     La taille de la puce
   #   :no_num   Si true, on ne doit pas marquer de numéro de paragraphe
   # 
   #   @notes
@@ -260,7 +263,7 @@ class << self
           # -- PUCE --
           if is_first_line && puce
             float do 
-              text_box(puce[:text], **{inline_format:true, at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
+              text_box(puce[:text], **{inline_format:true, size: puce[:size], width: puce[:left], at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]}) 
             end
           end
 

@@ -195,9 +195,9 @@ class NTextParagraph < AnyParagraph
 
   # --- Predicate Methods ---
 
-  def paragraph?; true end
-
-  def sometext? ; true end # seulement ceux qui contiennent du texte
+  def paragraph?; true  end
+  def printed?  ; true  end
+  def sometext? ; true  end # seulement ceux qui contiennent du texte
   alias :some_text? :sometext?
 
   def citation?     ; @is_citation      end

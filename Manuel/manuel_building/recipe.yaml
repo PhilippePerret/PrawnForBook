@@ -17,4 +17,14 @@ book_format:
     default_font_and_style: 'Numito/light'
     default_font_size:  11
     line_height: 18
+  #<titles>
+  titles:
+    level3:
+      color: '0000AA'
+    level4:
+      lines_before: 2
+      lines_after:  0
+      color: '00AA00'
+  #</titles>
 #</book_format>
+

@@ -179,9 +179,7 @@ class Recipe
       else '–'
       end
     data_puce = pu_default.merge(text: lettre)
-    spy("data_puce[:left] avant : #{data_puce[:left].inspect}", true)
     data_puce[:left] = data_puce[:left].proceed_unit
-    spy("data_puce[:left] après : #{data_puce[:left].inspect}", true)
     return data_puce
   end
 
@@ -337,18 +335,18 @@ class Recipe
   end
 
   def format_page
-    @format_page        ||= book_format[:page]
+    @format_page ||= book_format[:page]
   end
 
   # ne pas confondre avec la clé :book_format de la recette
   # Ici, c'est [:book_format][:book], donc un sous-ensemble de
   # :book_format qui concerne seulement l'aspect du livre.
   def format_book 
-    @format_book        ||= book_format[:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
+    @format_book ||= book_format[:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
   end
 
   def format_titles
-    @format_titles      ||= book_format[:titles]
+    @format_titles ||= book_format[:titles]
   end
 
   # 
@@ -356,7 +354,7 @@ class Recipe
   # 
 
   def book_format
-    @book_format        ||= DATA[:book_format]
+    @book_format ||= DATA[:book_format]
   end
 
   def table_of_content

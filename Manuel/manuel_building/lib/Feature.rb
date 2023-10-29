@@ -78,6 +78,10 @@ class Feature
   end
   alias :title :titre
 
+  def subtitle(value = nil)
+    set_or_get(:subtitle, value)
+  end
+
   def description(value = nil)
     set_or_get(:description, value)
   end
@@ -143,12 +147,20 @@ class Feature
 
     if titre
       print_titre
-    else
+    elsif subtitle.nil?
       pdf.move_to_next_line
     end
 
-    print_description   if description
-    eval(code, bind)    if code
+    print_subtitle if subtitle
+
+    if description
+      print_description   
+      pdf.move_to_next_line
+    end
+
+    if code
+      eval(code, bind)
+    end
 
 
     if line_height
@@ -246,7 +258,13 @@ class Feature
   # Méthode pour imprimer le titre
   # 
   def print_titre
-    par = PdfBook::NTitre.new(book:book, level:3, titre: titre, pindex:0)  
+    par = PdfBook::NTitre.new(book:book, level:3, titre: titre, pindex:0)
+    book.paragraphes << par  
+    par.print(pdf)
+  end
+
+  def print_subtitle
+    par = PdfBook::NTitre.new(book:book, level:4, titre: subtitle, pindex:0)  
     par.print(pdf)
   end
 
@@ -254,7 +272,7 @@ class Feature
   # 
   def print_description
     description.split("\n\n").each do |par_str|
-      par = PdfBook::NTextParagraph.new(book:book, raw_text:par_str, pindex: 0)
+      par = PdfBook::NTextParagraph.new(book:book, raw_text:"#{par_str}", pindex: 0)
       par.print(pdf)
     end
   end
@@ -262,7 +280,7 @@ class Feature
   # Pour afficher l'exemple de recette
   # 
   def print_sample_recipe
-    entete = "Dans le fichier recipe.yaml ou recipe_collection.yaml"
+    entete = "Si recipe.yaml ou recipe_collection.yaml contient…"
     str = sample_recipe.dup
     str = str.gsub(' ', '  ').gsub('<','&lt;')
     fontline1 = "(( font(name:'Courier', size:12, style: :normal, hname:'recipe') ))\n"
@@ -277,14 +295,14 @@ class Feature
   # tout échapper pour que ça s'affiche correctement
   # 
   def print_sample_texte
-    entete = "Dans le fichier texte.pfb.md"
+    entete = "Si texte.pfb.md contient…"
     str = sample_texte.dup
     str = str.gsub(/\*/, '\\*').gsub(/_/, '\_')
     __print_texte(str, entete)
   end
 
   def print_texte(str)
-    entete = "Produira dans le livre :"
+    entete = "Le livre final (document PDF) contiendra :"
     __print_texte(str, entete)
   end
 
@@ -293,9 +311,11 @@ class Feature
   # @note
   def __print_texte(str, entete = nil)
     pdf.line_width = 0.3
-    pdf.move_to_next_line
-    unless entete.nil?
-      entete = "<color rgb=\"CCCCCC\">*#{entete}*</color>"
+    if entete.nil?
+      pdf.move_to_next_line
+    else
+      pdf.move_to_next_line if last_is_not_title?
+      entete = "<color rgb=\"999999\">*#{entete}*</color>"
       book.inject(pdf, entete, 0)
     end
     pdf.stroke_horizontal_rule
@@ -328,6 +348,18 @@ class Feature
       end
     end
 
+    # TRUE si le dernier paragraphe (ou autre) écrit n'est pas un
+    # titre.
+    def last_is_not_title?
+      not(last_is_title?)
+    end
+
+    # TRUE si le dernier paragraphe (ou autre) écrit est un titre
+    def last_is_title?
+      if par = book.paragraphes.last
+        par.title?
+      end
+    end
 
     def options_description
       @options_description ||= {

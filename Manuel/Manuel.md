@@ -983,6 +983,10 @@ etc.
 
 > Pour voir comment insérer un titre dans un helper, cf. [Insertion d’’un titre par un helper](#insert-title-in-helper).
 
+Voir aussi la [Mise en page des titres](#data-titles).
+
+---
+
 <a name="paragraph-image"></a>
 
 #### IMAGES
@@ -3724,14 +3728,14 @@ titles:
 		next_page:     true 	# sur nouvelle page ?
 		belle_page:    false 	# toujours sur belle page ?
 		alone: 					true  # seul sur double page ?
-		:font_n_style: "LaFonte/lestyle"
-		:size: 					30
-		:lines_before: 	0 		# cf. [1] [3]
-		:lines_after: 	4			# cf. [1]
-		:leading: 			-2 		# interlignage cf. [2]
-	:level2:
+		font_n_style: "LaFonte/lestyle"
+		size: 					30
+		lines_before: 	0 		# cf. [1] [3]
+		lines_after: 	4			# cf. [1]
+		leading: 			-2 		# interlignage cf. [2]
+	level2:
 		# idem
-	:level3:
+	level3:
 		# idem
 	# etc.
 #</titles>
@@ -3747,7 +3751,7 @@ titles:
 >
 > **[3]**
 >
-> le `:line_before` d’un titre suivant s’annule si le titre précédent en possède déjà un. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
+> le `:lines_before` d’un titre suivant s’annule si le titre précédent possède un `:lines_after`. Si par exemple le titre de niveau 2 possède un `:lines_after` de 4 et que le titre de niveau 3 possède un `:lines_before` de 3, alors les deux valeurs ne s’additionnent pas, la première (le `:lines_after` du titre de niveau 2) annule la seconde (le `:lines_before` du titre de niveau 3).
 >
 > Bien noter que c’est vrai dans tous les cas. Par exemple, si un titre de niveau 1 a son `:lines_after` réglé à 0, un titre de niveau supérieur aura beau avoir son `:lines_before` réglé à 4 ou 6, le titre de niveau supérieur sera “collé” au titre de niveau 1.
 

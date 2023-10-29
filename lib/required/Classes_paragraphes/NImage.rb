@@ -128,8 +128,9 @@ class NImage < AnyParagraph
 
   # --- Predicate Methods ---
 
-  def image?    ; true end
+  def image?    ; true  end
   def paragraph?; false end
+  def printed?  ; true  end
 
   def svg?
     :TRUE == @issvg ||= true_or_false(extname == '.svg')

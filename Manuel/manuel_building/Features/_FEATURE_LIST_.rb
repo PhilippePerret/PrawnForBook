@@ -11,6 +11,14 @@ module Prawn4book
       pseudo_format_markdown
       puces
       puces/losange
+      puces/black_losange
+      puces/square
+      puces/black_square
+      puces/bullet
+      puces/black_bullet
+      puces/finger
+      puces/black_finger
+      puces/big_hyphen
       book_in_collection
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges

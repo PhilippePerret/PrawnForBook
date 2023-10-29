@@ -6,6 +6,7 @@ Prawn4book::Manual::Feature.new do
   # 
   description <<~EOT.split("\n").join("\n\n")
 
+    * colorisation des textes
     * suppression des veuves et des orphelines
     * suppression des lignes de voleur
     * nombreuses sortes de puces et puces personnalisées [[puces]]
