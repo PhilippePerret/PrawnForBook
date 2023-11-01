@@ -14,6 +14,7 @@ class EmptyParagraph < AnyParagraph
   # Les paragraphes vides sont de cette classe.
   # 
 
+
   def initialize(book:, pindex:, text: "")
     super(book, pindex)
     @type = 'empty'
@@ -36,6 +37,12 @@ class EmptyParagraph < AnyParagraph
   def citation? ; false end
   def list_item?; false end
 
+  # @return true si c'est un commentaire
+  def comment?
+    self.is_comment === true
+  end
+  
+  attr_accessor :is_comment
 
 end #/class EmptyParagraph
 end #/class PdfBook

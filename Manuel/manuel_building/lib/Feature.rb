@@ -2,6 +2,12 @@ module Prawn4book
 module Manual
 class Feature
 
+  # Les variables utilisables dans les textes (description, texte, 
+  # sample_texte, etc.)
+  VARIABLES = {
+    '_PFB_' => '**Prawn-For-Book**'
+  }
+
   attr_reader :pdf, :book
 
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
@@ -472,10 +478,16 @@ class Feature
       if value.nil?
         instance_variable_get("@#{key}")
       else
-        value = value.strip if value.is_a?(String)
+        if value.is_a?(String)
+          value = value.strip
+          VARIABLES.each do |k, v|
+            value = value.gsub(k, v)
+          end
+        end
         instance_variable_set("@#{key}", value)
       end
     end
+
 
     # TRUE si le dernier paragraphe (ou autre) écrit n'est pas un
     # titre.

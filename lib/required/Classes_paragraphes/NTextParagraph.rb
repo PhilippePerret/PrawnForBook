@@ -53,7 +53,6 @@ class NTextParagraph < AnyParagraph
   REG_LIST_ITEM   = /^\* .+$/.freeze
   REG_NOTE_PAGE   = /^\^[0-9+\^] /.freeze
 
-  
   # --- Printing Methods ---
 
   ##

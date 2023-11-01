@@ -23,31 +23,75 @@ class PdfBook
 
   # --- Building Methods ---
 
-  # = main =
-  # 
   # @api
+  # 
+  # = main =
   # 
   # Méthode principale qui reçoit le +paragraph_str+ d'une +source
   # qui peut être le fichier texte.pfb.md (avant tout), un fichier
   # inclus ou une méthode d'utilisateur, qui l'instancie et l'injecte
   # dans le livre en construction.
   # 
-  # @question
-  # Ne passerait-on pas par un "Injector" pour gérer les styles qui
-  # dépendent du paragraphe suivant. Typiquement : la fin de notes de
-  # page, qui doivent dessiner un trait.
-  # Pour le moment, je le traite ici, mais si ça devient conséquent,
-  # il faudra que je l'isole dans un Injector.
   # @note
-  # Pour que ça fonctionne de façon optimale, il faut absolument que
-  # tous les paragraphes passent par ici.
+  #   Pour que ça fonctionne de façon optimale, il faut absolument
+  #   que tous les paragraphes passent par ici.
   # 
   def inject(pdf, paragraph_str, idx, source = 'user_method')
+
+    # Une table est en cours de traitement
+    # 
+    # Si +paragraph_str+ n'est plus un élément de table, on met fin
+    # à la table et surtout, on l'imprime.
+    # Si +paragraph_str+ est encore un élément de table, on ajoute
+    # la ligne à la table et on s'en retourne.
+    # 
+    # @note
+    #   Noter qu'avec cet algorithme, s'il y a une table comme 
+    #   dernier élément dans le livre, elle ne sera jamais imprimée
+    #   TODO Régler le problème en fin de parsing.
+    # 
+    if @current_table
+      if paragraph_str.match?(AnyParagraph::REG_TABLE)
+        # On met le paragraphe dans la table et on s'en retourne
+        @current_table.add_line(paragraph_str[1...-1].strip)
+        return
+      else
+        # - On doit imprimer le paragraphe -
+        par = @current_table
+        @current_table = nil 
+      end
+    end
+
+    # Si un commentaire est ouvert (par <!-- sur une ligne)
+    if @current_comment
+      if paragraph_str.match?(AnyParagraph::REG_END_COMMENT)
+        @current_comment.add(paragraph_str[0...-3].strip)
+        @current_comment = nil
+      else
+        @current_comment.add(paragraph_str)
+      end
+      # Dans tous les cas on s'en retourne
+      return
+    end
+
     # - Instanciation du paragraphe -
-    par = AnyParagraph.instantiate(self, paragraph_str, idx, source)
-    # - Ajout à la liste des paragraphes -
+    # (ça a pu être fait avant avec une table)
+
+    par || begin
+      par = AnyParagraph.instance_type_from_string(self, paragraph_str, idx)
+      if par.is_a?(NTable)
+        @current_table = par
+      elsif par.is_a?(EmptyParagraph) && par.comment?
+        @current_comment = par
+      end
+    end
+
+    # Réglage de l'index absolu.
     par.abs_index = @paragraphes.count
+
+    # - Ajout à la liste des paragraphes -
     @paragraphes << par
+
     ###########################################
     ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###
     ###########################################

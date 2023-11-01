@@ -32,6 +32,7 @@ module Prawn4book
       puces/big_hyphen
       puces/custom_image
       book_in_collection
+      tables/tables
       notes_de_page
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges

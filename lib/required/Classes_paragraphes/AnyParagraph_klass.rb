@@ -1,58 +1,23 @@
 module Prawn4book
 class PdfBook
 class AnyParagraph
+
+  REG_TITRE         = /^(\#{1,6}) (.+)$/.freeze
+  REG_IMAGE         = /^IMAGE\[(.+)\]$/.freeze
+  REG_PFBCODE       = /^\(\( (.+) \)\)$/.freeze
+  REG_TABLE         = /^\|(.+)\|$/.freeze
+  REG_COMMENTS      = /^<\!\-\-(.+)\-\-\>$/.freeze
+  REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
+  REG_END_COMMENT   = /(.*)\-\-\>$/.freeze
+
 class << self
 
-
-  # Instanciation du paragraphe à partir de son texte dans le 
-  # fichier texte.
-  # 
-  # @param str [String]
-  # 
-  #     Texte exact, sans modification, tel qu'il apparait dans le
-  #     fichier texte du livre.
-  #     Peut être vide (dans la version 2, même les paragraphes vides
-  #     sont analysés.)
-  # 
-  # @param indice [Integer]
-  # 
-  #     L'indice exact du paragraphe dans le fichier texte source ou
-  #     le fichier inclus.
-  # 
-  # @param file [InputTextFile]
-  # 
-  #     Le fichier dont est extrait le paragraphe.
-  # 
-  # @return L'instance paragraphe instancié
-  # 
-  # @note
-  # 
-  #   Noter le traitement particulier des tables, qui retourne 
-  #   l'instance NTable à la première ligne, puis renvoie NIL en
-  #   ajoutant la ligne à l'instance de table initiée.
-  # 
-  #   Les inclusions de fichiers sont traités en amont, donc ici il
-  #   ne devrait plus y avoir aucune balise d'inclusion.
-  # 
-  def instantiate(book, string, indice, file)
-
-    # Si une table est en cours de traitement et que +string+ n'est
-    # plus un élément de table, on met fin à la table.
-    if @current_table && not(string.match?(REG_TABLE))
-      @current_table = nil 
-    end
-
-    # Si un commentaire est ouvert (par <!-- sur une ligne)
-    if @current_comment
-      if string.match?(REG_END_COMMENT)
-        @current_comment.add(string[0...-3].strip)
-        @current_comment = nil
-      else
-        @current_comment.add(string)
-      end
-      return nil
-    end
-
+  # Reçoit le paragraphe brut et retourne l'instance de paragraphe
+  # corresdondante.
+  # Par exemple, un +string+ commençant par "### " est un titre donc
+  # une instance NTitre. Un string commençant par "| " et terminant
+  # par " |" est une table, etc.
+  def instance_type_from_string(book, string, indice)
     case string
     when "" 
       EmptyParagraph.new(book:book, pindex:indice)
@@ -65,26 +30,15 @@ class << self
     when REG_COMMENTS
       EmptyParagraph.new(book:book, pindex:indice, text:$1.strip)
     when REG_START_COMMENT
-      @current_comment = EmptyParagraph.new(book:book, pindex:indice, text:$1.strip)
-    when REG_TABLE
-      if @current_table
-        @current_table.add_line($1.strip)
-        nil
-      else
-        @current_table = NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
+      EmptyParagraph.new(book:book, pindex:indice, text:$1.strip).tap do |pa|
+        pa.is_comment= true
       end
+    when REG_TABLE
+      NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
     else # sinon un paragraphe
       NTextParagraph.new(book:book, raw_text:string, pindex:indice)
-    end
+    end    
   end
-
-  REG_TITRE   = /^(\#{1,6}) (.+)$/.freeze
-  REG_IMAGE   = /^IMAGE\[(.+)\]$/.freeze
-  REG_PFBCODE = /^\(\( (.+) \)\)$/.freeze
-  REG_TABLE   = /^\|(.+)\|$/.freeze
-  REG_COMMENTS = /^<\!\-\-(.+)\-\-\>$/.freeze
-  REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
-  REG_END_COMMENT   = /(.*)\-\-\>$/.freeze
 
   # Méthodes utiles pour la numérotation
   # 
