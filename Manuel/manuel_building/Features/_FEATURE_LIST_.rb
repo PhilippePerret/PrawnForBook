@@ -4,7 +4,7 @@ module Prawn4book
 
       avantages_et_forces
       definition_fonte
-      format_markdown_du_texte
+      #format_markdown_du_texte
       definition_marges
       format_yaml_de_la_recette
       definir_format_livre

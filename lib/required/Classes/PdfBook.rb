@@ -53,7 +53,7 @@ class PdfBook
     if @current_table
       if paragraph_str.match?(AnyParagraph::REG_TABLE)
         # On met le paragraphe dans la table et on s'en retourne
-        @current_table.add_line(paragraph_str[1...-1].strip)
+        @current_table.add_line(paragraph_str.strip)
         return
       else
         # - On doit imprimer le paragraphe -
@@ -81,6 +81,7 @@ class PdfBook
       par = AnyParagraph.instance_type_from_string(self, paragraph_str, idx)
       if par.is_a?(NTable)
         @current_table = par
+        return
       elsif par.is_a?(EmptyParagraph) && par.comment?
         @current_comment = par
       end
@@ -110,6 +111,7 @@ class PdfBook
     end
     # --- IMPRESSION ---
     paragraphe.print(pdf)
+    STDOUT.write '.'.vert
     # - Post-traitement en fonction du bloc éventuel -
     if paragraphe.note_page?
       @current_bloc = :notes_page

@@ -174,7 +174,7 @@ class NTable < AnyParagraph
         raw_lines.shift()
       end
       raw_lines.map do |rawline|
-        rawline.strip[1...-1].split(/(?!\\)\|/).map do |cell|
+        rawline.split(/(?!\\)\|/).map do |cell|
           # 
           # Évaluation, si la cellule contient une table
           # 
@@ -397,6 +397,7 @@ class NTable < AnyParagraph
   end
 
   def add_line(raw_string)
+    raw_string = raw_string.gsub(/^\|(.+)\|$/, '\1').strip
     @raw_lines << raw_string
   end
 

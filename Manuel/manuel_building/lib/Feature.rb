@@ -89,6 +89,7 @@ class Feature
         saut_page if new_page_before[:sample_texte]
         print_sample_texte
       end
+      pdf.move_to_next_line
       print_texte(texte || sample_texte)
     end
 

@@ -646,14 +646,46 @@ private
     #       ont été évalués, il n'y a donc plus rien à craindre. On 
     #       laisse simplement tranquille les guillemets précédés par
     #       un échappement.
-    # 
-    str = str.gsub(REG_GUILS, "\\1#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}")
+    #       FAUX : il reste les guillemets qu'on trouve dans le code
+    #       html, par exemple les <color rbg="CCFFJJ">...</color>
+    #       Donc, au final, un guillemet droit n'est remplacé que
+    #       si on trouve une espace avant ou une parenthèse, et
+    #       une espace après le deuxième ou un point ou un point
+    #       de suspension ou une parenthèse.
+    #   [2] Il faut aussi uniformiser les guillemets, c'est-à-dire
+    #       que des bons guillemets peuvent avoir été mis dans le 
+    #       texte, par exemple des courbes, mais qu'au final on 
+    #       veuille utiliser les chevrons, ils seront remplacés. On
+    #       par alors de "contre-guillemets"
+    str = str.gsub(REG_GUILS, remp_guillemets)
+
+    # Cf. [2]
+    str = str.gsub(reg_contre_guillemets, remp_contre_guillemets)
 
     return str
   end
+
+  def self.remp_guillemets
+    @remp_guillemets ||= begin
+      "\\1#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}\\3".freeze
+    end
+  end
+
+  def self.reg_contre_guillemets
+    @reg_contre_guillemets ||= begin
+      contre_guils = recipe.guillemets[0][0] == "«" ? ["“","”"] : ["«","»"]
+      /#{contre_guils[0]}[  ]?(.*?)[  ]?#{contre_guils[1]}/.freeze
+    end
+  end
+  def self.remp_contre_guillemets
+    @remp_contre_guillemets ||= begin
+      "#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}".freeze
+    end
+  end
+
   REG_APO = /(qu|d|j|l|n|m|s|t)'/.freeze
   # Cf. la @note [1] ci-dessus
-  REG_GUILS = /([^\\])"(.+?)"/.freeze
+  REG_GUILS = /([\( ])" ?(.*?) ?([\) \.…])"/.freeze
 
 
   def self.__traite_points_suspensions(str, context)

@@ -9,18 +9,18 @@ Prawn4book::Manual::Feature.new do
 
   sample_texte <<~EOT
     La table ci-dessous a été construite aussi en markdown, en utilisant le format : 
-    \| CA1 | CA2 | CA3 | CA4 \|
-    \| CB1 | CB2 | CB3 | CB4 \|
+    \\| CA1 | CA2 | CA3 | CA4 \\|
+    \\| CB1 | CB2 | CB3 | CB4 \\|
     Vous pouvez trouver toutes les informations sur l'utilisation des tables à la page ->(tables).
     EOT
 
   texte <<~EOT
-    | italique | \*...\* | *texte en italique* |
-    | gras | \*\*...\*\* | **texte en gras** |
-    | souligné | \_\_...\_\_ | __texte souligné__ |
-    | exposants | 1\^er | 1^er |
-    |   | 1\^re | 1^re |
-    |   | 2\^e | 2^e |
+    | italique | \\*...\\* | *texte en italique* |
+    | gras | \\*\\*...\\*\\* | **texte en gras** |
+    | souligné | \\__...\\__ | __texte souligné__ |
+    | exposants | 1\\^er | 1^er |
+    |   | 1\\^re | 1^re |
+    |   | 2\\^e | 2^e |
     EOT
 
 end
