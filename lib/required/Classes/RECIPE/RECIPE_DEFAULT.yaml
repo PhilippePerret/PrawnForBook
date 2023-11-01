@@ -71,6 +71,7 @@ book_format:
     height:       203.2mm
     taille:       null # ou "a4"
     orientation:  'portrait'
+    format:       publishing # :pdf 
   page:
     background:                  null
     margins:
@@ -82,7 +83,7 @@ book_format:
     pagination_format:          'first-last'
     no_num_if_empty:            true
     num_font_name:              *default_font2
-    num_font_style:             *default_font1
+    num_font_style:             *default_style1
     num_font_size:              10
     num_only_if_num:            true
     num_page_if_no_num_parag:   true

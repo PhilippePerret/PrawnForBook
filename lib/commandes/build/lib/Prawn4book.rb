@@ -22,5 +22,4 @@ module Prawn4book
     @@third_turn === true
   end
 
-
 end #/module Prawn4book

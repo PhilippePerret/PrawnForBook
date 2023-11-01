@@ -19,6 +19,7 @@ class PdfBook
   # - raccourcis -
   def first_turn?; Prawn4book.first_turn? end
   def second_turn?; Prawn4book.second_turn? end
+  def force_parse_and_write?; Prawn4book.force_parse_and_write? end
 
   # Pour exposer les titres courants par niveau en cours
   # de fabrication (pour alimenter la données pages et 
@@ -65,6 +66,8 @@ class PdfBook
     # - paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
     # - table de références -
+    # (il faut absolument l'initier une seule fois, car sinon, on 
+    #  perdra les références ultérieures)
     table_references.init
 
     #
@@ -213,6 +216,7 @@ class PdfBook
     #   conservées telles qu'on les a relevées la première fois.
     # 
     pdf = PrawnView.new(self, pdf_config)
+    @pdf = pdf
 
     # 
     # Détruire le fichier PDF final s'il existe déjà
@@ -295,11 +299,11 @@ class PdfBook
     # - TOUS LES PARAGRAPHES -
     # ========================
     # 
-    if first_turn?
+    # if first_turn?
       inputfile.parse_and_write(pdf)
-    else
-      rewrite_paragraphs(pdf)
-    end
+    # else
+    #   rewrite_paragraphs(pdf)
+    # end
 
     #
     # - PAGES SUPPLÉMENTAIRES -

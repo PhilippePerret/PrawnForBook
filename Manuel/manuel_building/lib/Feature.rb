@@ -4,6 +4,127 @@ class Feature
 
   attr_reader :pdf, :book
 
+  # == IMPRESSION DE LA FONCTIONNALITÉ ==
+
+  def print_with(pdf, book)
+
+    @pdf  = pdf
+    @book = book
+
+    saut_page if new_page?
+
+    # Mémoriser la première page de cette fonctionnalité
+    first_page_texte = pdf.page_number
+
+    # 
+    # Si une recette est définie, il faut l'enrouler autour du 
+    # code pour pouvoir en tenir compte
+    # 
+    apply_new_state if recipe
+
+    # = GRAND TITRE =
+    if grand_titre
+      saut_page
+      print_grand_titre
+    end
+
+    # = TITRE =
+    if titre
+      saut_page if new_page_before[:title]
+      print_titre
+    elsif subtitle.nil?
+      pdf.move_to_next_line
+    end
+
+    # = SOUS-TITRE =
+    print_subtitle if subtitle
+
+    # = DESCRIPTION =
+    if description
+      saut_page if new_page_before[:description]
+      print_description   
+      pdf.move_to_next_line
+    end
+
+    if margins
+      # - Marges propres à la fonctionnalités -
+      # - Mémorisation des marges actuelles -
+      odd_margins_default   = pdf.odd_margins.freeze
+      even_margins_default  = pdf.even_margins.freeze
+      # - Application des nouvelles marges -
+      pdf.odd_margins   = margins[:odd]
+      pdf.even_margins  = margins[:even]
+    end
+
+    # = CODE =
+    if code
+      saut_page if new_page_before[:code]
+      if code.is_a?(Proc)
+        code.call(pdf)
+      else
+        eval(code, bind)
+      end
+    end
+
+    if line_height
+      cur_line_height = pdf.line_height.freeze
+      pdf.line_height = line_height 
+    end
+
+    # = RECETTE EN EXEMPLE =
+    if sample_recipe
+      saut_page if new_page_before[:recipe]
+      print_sample_recipe
+    end
+
+    if sample_texte || texte
+      saut_page if new_page_before[:texte]
+      if sample_texte
+        saut_page if new_page_before[:sample_texte]
+        print_sample_texte
+      end
+      print_texte(texte || sample_texte)
+    end
+
+    if sample_recipe || sample_texte || texte
+      # Une dernière ligne pour clore
+      pdf.move_to_next_line
+      pdf.stroke_horizontal_rule
+    end
+
+    # # Mémoriser la dernière page de cette fonctionnalité
+    last_page_texte  = pdf.page_number
+
+    if margins
+      # On remet les marges initiales
+      pdf.odd_margins   = odd_margins_default
+      pdf.even_margins  = even_margins_default
+    end
+
+    # Un saut de page à la fin si nécessaire
+    saut_page if new_page_before[:next]
+
+    # Si on doit montrer la grille de référence, on 
+    # ajoute les pages de cette fonctionnalité
+    add_gridded_pages(first_page_texte, last_page_texte) if show_grid?
+
+    # Si on doit montrer les marges, on ajoute les pages
+    # de cette fonctionnalités aux pages de marges à afficher
+    if show_margins?
+      add_marged_pages(first_page_texte, last_page_texte) 
+    end
+
+    # S'il y avait une recette, on remet l'état précédent
+    retriev_previous_state if recipe
+
+    # Si on a modifié la hauteur de ligne, il faut la remettre
+    if line_height
+      pdf.line_height = cur_line_height 
+    end
+
+
+  end #/ #print_with
+
   # DSL
   def initialize(&block)
     # Description de la fonctionnalité
@@ -65,6 +186,12 @@ class Feature
     # mise sur une nouvelle page avec un saut de page à la fin.
     @line_height = nil
 
+    # Pour consigner où mettre des nouvelles pages. Il suffit d'appe-
+    # ler la méthode #new_page_before avec :feature, :texte, :recipe,
+    # :sample_texte, :code, :next (à la fin de la fonctionnalité)
+    # 
+    @new_page_before = {}
+
     if block_given?
       instance_eval(&block)
     end
@@ -72,6 +199,10 @@ class Feature
   end
 
   # --- DSL Pour définir la fonctionnalités ---
+
+  def grand_titre(value = nil)
+    set_or_get(:grand_titre, value)
+  end
 
   def titre(value = nil)
     set_or_get(:titre, value)
@@ -110,21 +241,68 @@ class Feature
     set_or_get(:code, value)
   end
 
-  def new_page_before_texte(value = nil)
-    set_or_get(:new_page_before_texte, value)
+  def margins(value = nil)
+    set_or_get(:margins, value)
   end
 
-  def new_page_before_texte?; new_page_before_texte === true end
-
-  def show_grid(value)
+  def show_grid(value = nil)
+    case value
+    when NilClass then return @show_grid
+    when TrueClass then value = (0..-1)
+    end
     @show_grid = value
   end
-  def show_grid? ; @show_grid === true end
+  def show_grid? ; @show_grid.is_a?(Range) end
 
-  def new_page(value)
+  # @param value [Nil|True|Range]
+  # 
+  #   Soit rien (toutes les pages afficheront les marges)
+  #   Soit true (idem)
+  #   Soit le rang de pages à afficher (par exemple '(1..-2)' signi-
+  #   fiera qu'il faut afficher de la deuxième à l'avant-dernière)
+  #   (0-start)
+  # 
+  def show_margins(value = nil)
+    case value
+    when NilClass
+      return @show_margins
+    when TrueClass
+      value = (0..-1)
+    when Range
+      # garder value
+    end
+    @show_margins = value
+  end
+  def show_margins?
+    @show_margins.is_a?(Range)
+  end
+
+  def new_page(value = true)
     @new_page = value
   end
-  def new_page?; @new_page === true || not(line_height.nil?) end
+  def new_page?
+    @new_page === true || not(line_height.nil?) || new_page_before[:feature]
+  end
+
+  # Pour passer à la nouvelle page avant la chose spécifiée
+  # 
+  # @param what [Symbol]
+  # 
+  # 
+  #   :feature        Avant la fonctionnalité elle-même (= new_page)
+  #   :title          Avant le titre
+  #   :description    Avant la description
+  #   :texte          Avant le texte (interprété)
+  #   :recipe         Avant l'exemple de recette
+  #   :sample_texte   Avant le code du texte
+  #   :code     Avant de jouer le code
+  def new_page_before(what = nil)
+    if what
+      @new_page_before.merge!(what => true)
+    else
+      @new_page_before
+    end
+  end
 
 
   def line_height(value = nil)
@@ -133,78 +311,11 @@ class Feature
 
   # --- Pour imprimer la fonctionnalité ---
 
-  def print_with(pdf, book)
-    @pdf  = pdf
-    @book = book
-
-    pdf.start_new_page if new_page?
-
-    # 
-    # Si une recette est définie, il faut l'enrouler autour du 
-    # code pour pouvoir en tenir compte
-    # 
-    apply_new_state if recipe
-
-    if titre
-      print_titre
-    elsif subtitle.nil?
-      pdf.move_to_next_line
-    end
-
-    print_subtitle if subtitle
-
-    if description
-      print_description   
-      pdf.move_to_next_line
-    end
-
-    if code
-      eval(code, bind)
-    end
-
-
-    if line_height
-      cur_line_height = pdf.line_height.freeze
-      pdf.line_height = line_height 
-    end
-
-    pdf.start_new_page if new_page_before_texte?
-
-    # Mémoriser la première page de cette fonctionnalité
-    first_page_texte = pdf.page_number
-    
-    if sample_recipe
-      print_sample_recipe
-    end
-
-    if sample_texte || texte
-      print_sample_texte if sample_texte
-      print_texte(texte || sample_texte)
-    end
-
-    # Une dernière ligne pour clore
-    pdf.move_to_next_line
-    pdf.stroke_horizontal_rule
-
-    # # Mémoriser la dernière page de cette fonctionnalité
-    last_page_texte  = pdf.page_number
-
-    add_gridded_pages(first_page_texte, last_page_texte) if show_grid?
-
-    # S'il y avait une recette, on remet l'état précédent
-    retriev_previous_state if recipe
-
-    pdf.start_new_page if new_page?
-
-    # Si on a modifié la hauteur de ligne, il faut la remettre
-    if line_height
-      pdf.line_height = cur_line_height 
-    end
-
-
-  end
-
   def bind(); self.binding() end
+
+  def saut_page
+    pdf.start_new_page
+  end
 
   def apply_new_state
     recipe.each do |k, v|
@@ -255,6 +366,14 @@ class Feature
     )
   end
 
+  # Méthode pour imprimer un grand titre
+  # 
+  def print_grand_titre
+    par = PdfBook::NTitre.new(book:book, level:1, titre:grand_titre, pindex:0)
+    book.paragraphes << par  
+    par.print(pdf)
+  end
+
   # Méthode pour imprimer le titre
   # 
   def print_titre
@@ -271,8 +390,9 @@ class Feature
   # Méthode pour imprimer la description
   # 
   def print_description
-    description.split("\n\n").each do |par_str|
-      par = PdfBook::NTextParagraph.new(book:book, raw_text:"#{par_str}", pindex: 0)
+    description.split("\n").each_with_index do |par_str, idx|
+      next if par_str.empty?
+      par = PdfBook::NTextParagraph.new(book:book, raw_text:"#{par_str}", pindex: idx)
       par.print(pdf)
     end
   end
@@ -282,7 +402,10 @@ class Feature
   def print_sample_recipe
     entete = "Si recipe.yaml ou recipe_collection.yaml contient…"
     str = sample_recipe.dup
-    str = str.gsub(' ', '  ').gsub('<','&lt;')
+    str = str.gsub(/\n( +)/){
+      fois = $1.length
+      "\n" + ('  ' * fois)
+    }.gsub('<','&lt;').gsub(/"/,'\\"').gsub('# ', '# ')
     fontline1 = "(( font(name:'Courier', size:12, style: :normal, hname:'recipe') ))\n"
     fontline  = "(( font('recipe') ))\n"
     str = fontline1 + str.split("\n").join("\n#{fontline}")
@@ -297,7 +420,7 @@ class Feature
   def print_sample_texte
     entete = "Si texte.pfb.md contient…"
     str = sample_texte.dup
-    str = str.gsub(/\*/, '\\*').gsub(/_/, '\_')
+    str = str.gsub(/\*/, '\\*').gsub(/_/, '\_').gsub('<','&lt;').gsub(/"/,'\\"')
     __print_texte(str, entete)
   end
 
@@ -325,17 +448,23 @@ class Feature
     end
   end
 
+
   private
 
+    # Pour ajouter des pages à marger, c'est-à-dire où il faut
+    # afficher les marges
+    def add_marged_pages(from_page, to_page)
+      mp = pdf.marged_pages == :all ? [] : pdf.marged_pages.to_a
+      mp += (from_page..to_page).to_a[show_margins]
+      pdf.instance_variable_set('@marged_pages', mp)
+    end
+
     def add_gridded_pages(from_page, to_page)
-      if pdf.gridded_pages == :all
-        gp = []
-      else
-        gp = pdf.gridded_pages.to_a
-      end
-      (from_page..to_page).each do |numpage|
-        gp << numpage
-      end
+      # si gridded_pages est :all, c'est qu'aucune page n'a été 
+      # sélectionnée. On part donc de la liste vide et non pas de
+      # toutes les pages
+      gp = pdf.gridded_pages == :all ? [] : pdf.gridded_pages.to_a
+      gp += (from_page..to_page).to_a[show_grid]
       pdf.instance_variable_set("@gridded_pages", gp)
     end
 
@@ -356,10 +485,9 @@ class Feature
 
     # TRUE si le dernier paragraphe (ou autre) écrit est un titre
     def last_is_title?
-      if par = book.paragraphes.last
-        par.title?
-      end
+      :TRUE == @lastistitle ||= true_or_false(define_if_last_is_title)
     end
+
 
     def options_description
       @options_description ||= {
@@ -370,14 +498,36 @@ class Feature
 
 # === CLASSE ===
 class << self
-
+  def add(feature)
+    @features ||= []
+    @features << feature
+  end
   def last=(feature)
     @last = feature
+    add(feature)
   end
   def last
     @last ||= nil
   end
+
+  def each(&block)
+    (@features||[]).each do |feature|
+      yield feature
+    end
+  end
 end #/<< self
+
+
+private
+
+    # @private
+    def define_if_last_is_title
+      if par = book.paragraphes.last
+        par.title?
+      end
+    end
+
+
 end #/class Feature
 end #/module Manual
 end #/module Prawn4book

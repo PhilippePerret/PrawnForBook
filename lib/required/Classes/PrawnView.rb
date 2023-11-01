@@ -65,9 +65,14 @@ class PrawnView
   def odd_margins
     @odd_margins ||= [top_mg, int_mg, bot_mg, ext_mg]
   end
+  # Pour changer à la volée
+  def odd_margins=(value); @odd_margins = value end
+
   def even_margins
     @even_margins ||= [top_mg, ext_mg, bot_mg, int_mg]
   end
+  # Pour changer à la volée
+  def even_margins=(value); @even_margins = value end
 
   def top_mg; @top_mg ||= config[:top_margin] end
   def bot_mg; @bot_mg ||= config[:bot_margin] end

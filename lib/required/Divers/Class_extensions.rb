@@ -31,6 +31,10 @@ class Integer
 end
 class Float
   def proceed_unit; self  end
+  alias :real_pt2mm :pt2mm
+  def pt2mm
+    real_pt2mm(self)
+  end
 end
 class NilClass
   def proceed_unit; nil   end

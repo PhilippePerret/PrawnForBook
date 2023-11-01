@@ -32,10 +32,6 @@ class ReferencesTable
     Prawn4book.second_turn?
   end
 
-  def third_turn? # encore possible ?
-    Prawn4book.turn == 3
-  end
-
   ##
   # Ajout d'une référence interne rencontrée au cours du parsing
   # du texte (du paragraphe ou autre — titre, cellule de table, etc.)
@@ -53,14 +49,14 @@ class ReferencesTable
     return if second_turn?
     ref_id = ref_id.to_sym
     if table.key?(ref_id)
-      raise "Reference '#{ref_id}' already exists."
+      raise FatalPrawnForBookError.new(2001, {id: ref_id, page: ref_data[:page]})
     else
       table.merge!(ref_id => ref_data)
     end
   end
 
   ##
-  # Traitement d'une référence croisée.
+  # Traitement d'une référence appartenant à un autre livre.
   # 
   # Méthode appelée lors du parse d'un texte (de paragraphe ou autre)
   # lorsqu'une référence croisée est rencontrée. Elle permet en même
@@ -105,7 +101,9 @@ class ReferencesTable
   # 
   #   Instance du paragraphe contetant l'appel.
   # 
-  def get(ref_id, paragraph)
+  def get(ref_id, context = nil)
+    paragraph = context[:paragraph]
+    pdf = context[:pdf]
     #
     # Traitement particulier des références croisées
     # 
@@ -114,19 +112,32 @@ class ReferencesTable
     # Sinon, une référence simple dans le livre
     # 
     ref_id = ref_id.to_sym
-    ref = table[ref_id] || begin
+    if ref = table[ref_id]
+      # - Référence définie -
+      # (2e tour ou référence arrière)
+      call_to(ref)
+    elsif second_turn?
+      raise FatalPrawnForBookError.new(2002, {id: ref_id, targets:table.keys})
+    else
       # - Référence non définie -
-      # On passe ici quand la référence cible n'est pas encore défi-
-      # ni (parce qu'elle se trouve plus loin, peut-être même dans le
-      # paragraphe suivant). Dans ce cas, on prend un "ticket de
-      # poissonnerie" en attendant dans la référence, qu'on remplace-
-      # ra au second tour.
-      ticket_boucherie = "->_REF_#{@wanted_references.count.to_s.rjust(3,'0')}" 
+      # On passe ici quand la référence cible n'est pas encore 
+      # définie (parce qu'elle se trouve plus loin, peut-être même 
+      # dans le paragraphe suivant). Dans ce cas, on prend un "ticket 
+      # de poissonnerie" en attendant dans la référence. Elle prend
+      # la place de la future référence, en faisant une longueur qui
+      # correspond approximativement à la longueur de la référérence
+      # finale en fonction de la pagination utilisée.
+      ticket_boucherie = "#{'x' * ref_default_length}" 
       @wanted_references.merge!(ticket_boucherie => ref_id )
-      paragraph.has_unknown_target(ticket_boucherie, ref_id)
-      return ticket_boucherie # -- pour le remplacer au second tour
+      data_unknown_target = {
+        paragraph:  paragraph,
+        ticket:     ticket_boucherie,
+        ref_id:     ref_id,
+        page:       pdf.page_number,
+      }
+      paragraph.has_unknown_target(data_unknown_target)
+      return ticket_boucherie
     end
-    call_to(ref)
   end
 
 
@@ -143,6 +154,8 @@ class ReferencesTable
     File.write(path, table.to_yaml)
   end
 
+
+
   # --- Helpers Methods ---
 
   # @return [String] la texte qui doit remplacer la balise target 
@@ -158,6 +171,21 @@ class ReferencesTable
       ref[:paragraph] ? "§ #{ref[:paragraph]}" : "#{ref[:page]}"
     when 'hybrid'
       ref[:hybrid] # "p. XXX § XX"
+    end
+  end
+
+  # Longueur par défaut d'une référence (le 'XX' de "Page XX"). Il
+  # est utile lorsqu'on marque provisoirement, au premier tour, la
+  # référence à une cible et qu'il faut, alors, que cette marque cor-
+  # responde à peu près à la longueur qu'aura la référence au second
+  # tour (pour que les numéros de page soient respectées, même s'il y 
+  # a peu de change qu'un décalabe soit notable, mais on ne sait 
+  # jamais…)
+  def ref_default_length
+    case book.recipe.page_num_type
+    when 'pages'      then 3
+    when 'paragraphs' then 5
+    when 'hybrid'     then 10
     end
   end
 

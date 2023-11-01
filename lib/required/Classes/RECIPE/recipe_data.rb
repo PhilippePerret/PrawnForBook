@@ -277,7 +277,7 @@ class Recipe
     end
   end
   def default_font_size
-    @default_font_size          ||= format_text[:default_size]
+    @default_font_size ||= format_text[:default_size]
   end
   def default_font_style
     @default_font_style ||= begin

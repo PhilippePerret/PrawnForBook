@@ -10,17 +10,28 @@ module Prawn4book
     require_relative 'Features/_FEATURE_LIST_'
     # => FEATURE_LIST
 
-    FEATURE_LIST.each do |fname|
-      fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
-      if File.exist?(fpath)
-        load fpath
-        Manual::Feature.last.print_with(pdf, book)
-      else
-        puts "Le fichier feature #{fname.inspect} est à écrire.".orange
+    if first_turn?
+
+      FEATURE_LIST.each do |fname|
+        next if fname.start_with?('#')
+        fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
+        if File.exist?(fpath)
+          load fpath
+          Manual::Feature.last.print_with(pdf, book)
+        else
+          puts "Le fichier feature #{fname.inspect} est à écrire.".orange
+        end
       end
+
+    else
+
+      # = Deuxième Tour =
+      
+      Manual::Feature.each do |feature|
+        feature.print_with(pdf, book)
+      end
+
     end
-
-
   end
 
 end #/module Prawn4book

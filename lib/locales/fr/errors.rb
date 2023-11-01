@@ -485,6 +485,16 @@ ERRORS = {
   # --- Références --- #
 
   references: {
+    target_already_exists: <<~ERR,
+      La référence '<-(%{id})' existe déjà dans le livre…
+      (à la page %{page})
+      ERR
+    target_undefined: <<~ERR,
+      La cible '<-(%{id}) est introuvable dans le livre…
+      Il faut absolument l'ajouter.
+      Pour information, la table des références contient :
+      %{targets}.
+      ERR
     cross_book_undefined: "Le livre d'identifiant '%s' n'est pas défini pour les références croisées…",
     cross_path_undefined: "Aucune path n'est définie pour le livre '%s'…",
     cross_book_unfound: "Le livre d'identifiant '%s' est introuvable au path '%s'…",

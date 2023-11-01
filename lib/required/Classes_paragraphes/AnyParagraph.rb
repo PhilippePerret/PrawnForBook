@@ -42,15 +42,8 @@ class AnyParagraph
       # 
       context = { pdf: pdf, paragraph:self }
       @text = AnyParagraph.__parse(text, context)
-      # Dans @text doit rester le texte corrigé pour ne plus 
-      # avoir à le reprendre aux différents tours. Seules des références
-      # ultérieures peuvent être encore corrigées devant.
-      # On leur a donné un "ticket de poissonnerie" au premier tour,
-      # pour leur donner une numérotation provisoire et au deuxième
-      # tour, ces variables conservées dans `wanted_references'
     end
   end
-
 
   ##
   # Impression du numéro de paragraphe en regard du paragraphe
@@ -196,13 +189,22 @@ class AnyParagraph
     end
   end
 
-  def has_unknown_target(ticket, ref_id)
-    @unknown_targets << {ticket: ticket, ref_id: ref_id}
+  # Enregistre une cible ultérieure
+  # 
+  # @param data_ref [Hash]
+  #   :ticket     Le ticket de boucherie
+  #   :ref_id     ID de la référence (son nom entre les parenthèses)
+  #   :page       Numéro de page
+  #   :y          La position y dans la page
+  #   :x          La position x dans la page (non encore défini)     
+  def has_unknown_target(data_ref)
+    # puts "data_ref = #{data_ref.inspect}".bleu
+    @unknown_targets << data_ref
   end
 
   def resolve_targets
     @unknown_targets.each do |dtarget|
-      @text = @text.sub(dtarget[:ticket], book.references.get(dtarget[:ref_id], self))
+      @text = @text.sub(dtarget[:ticket], book.references.get(dtarget[:ref_id], {paragraph:self, pdf:pdf}))
     end
   end
 

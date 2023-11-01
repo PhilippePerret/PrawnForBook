@@ -43,8 +43,21 @@ class PageManager
   # 
   def [](number)
     @pages[number - 1] || begin
-      raise "Le numéro de page #{number.inspect} est introuvable.\n"+
-      "Pour information, la dernière page porte le numéro #{@pages.count}."
+      # Quand le numéro dépasse le nombre de pages, c'est qu'on est
+      # dans un deuxième tour. On doit signaler une erreur, mais on
+      # essaie quand même de prendre la page correspondante. Par exem-
+      # ple, s'il y a 30 pages et qu'on demande la page 31, ça cor-
+      # respond à la première page, c'est-à-dire la page :
+      #      num-demandé - nombre-pages - 1
+      #   =>     31           - 30      - 1
+      #   => 0
+      # 
+      add_erreur <<~ERR
+        Le numéro de page #{number.inspect} est introuvable.
+        Je rectifie le numéro en fonction du nombre de pages (#{@pages.count}), mais il faudra corriger le problème car les effets indésirables sont imprévisibles.
+        ERR
+      correct_num = number - @pages.count
+      @pages[correct_num]
     end
   end
 

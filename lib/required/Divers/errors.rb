@@ -124,6 +124,8 @@ class FatalPrawnForBookError < StandardError
       1100  => Prawn4book::ERRORS[:modules][:runtime_error],
       # -- Références --
       2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
+      2001  => Prawn4book::ERRORS[:references][:target_already_exists],
+      2002  => Prawn4book::ERRORS[:references][:target_undefined],
       # -- Tables --
       3000  => Prawn4book::ERRORS[:table][:can_not_fit],
       # -- Modules utilisateurs personnalisés --

@@ -6,8 +6,9 @@ Prawn4book::Manual::Feature.new do
     En belle typographie, les guillemets et les apostrophes ne s'utilisent pas en dépit du bon sens, ils répondent, tout comme les ponctuations, à des certaines règles. Certaines sont relatives, d'autres sont absolues.
     Tous les apostrophes droits (« ' ») seront remplacés par des apostrophes courbes (« ’ »).
     Tous les guillemets droits (« " ») — réservés à la langue anglaise — sont transformés en guillemets courbes (“…”) ou en chevrons (« … ») en fonction de la recette du livre ou de la collection.
-    Les espaces insécables oubliées* avant les ponctuations doubles sont ajoutées et les points de suspension en trois points sont remplacés par leur signe unique.
-    * « espace » est un mot féminin en typographie.
+    Les espaces insécables oubliées^^ avant les ponctuations doubles sont ajoutées et les points de suspension en trois points sont remplacés par leur signe unique.
+    
+    ^^ « espace » est un mot féminin en typographie.
     De la même manière, pour les tirets longs ou demi-longs pour mettre du texte en exergue — comme ici —, il est nécessaire de mettre à l'intérieur des espaces insécables qui empêcheront le tiret de se retrouver seul à la ligne.
     EOT
 

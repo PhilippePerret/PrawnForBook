@@ -170,12 +170,12 @@ class AnyParagraph
 
 
   # (ne pas mettre en cache : les tests foirent, sinon)
-  def self.pdfbook; @@_pdfbook ||= PdfBook.current end
-  def self.pdfbook=(value) # pour les tests
-    @@_pdfbook = value 
+  def self.book; @@_book ||= PdfBook.current end
+  def self.book=(value) # pour les tests
+    @@_book = value 
   end
   class << self
-    alias :book :pdfbook
+    alias :book :book
   end #/<< self
 
   ##
@@ -298,7 +298,7 @@ private
         paragraph:numero_par,
         hybrid: "#{first_page}-#{numero_par}"
       }
-      pdfbook.page_index.add(dmot)
+      book.page_index.add(dmot)
       dmot[:mot] + $2
     end
     str = str.gsub(/index\((.+?)\)/) do
@@ -310,7 +310,7 @@ private
         paragraph:  numero_par,
         hybrid:     "#{first_page}-#{numero_par}"
       }
-      pdfbook.page_index.add(dmot)
+      book.page_index.add(dmot)
       dmot[:mot]
     end
     return str
@@ -331,12 +331,12 @@ private
     str = str.gsub(REG_APPEL_CROSS_REFERENCE) do
       book_id = $1.freeze
       cible   = $2.freeze
-      pdfbook.table_references.add_and_get_cross_reference(book_id, cible)
+      book.table_references.add_and_get_cross_reference(book_id, cible)
     end
 
     return str    
   end
-  REG_APPEL_CROSS_REFERENCE = /\(\( \->\((.+?):(.+?)\) +\)\)/.freeze
+  REG_APPEL_CROSS_REFERENCE = /\->\((.+?):(.+?)\)/.freeze
 
   ##
   # Traitement des références interne (seulement interne)
@@ -352,11 +352,11 @@ private
     # 
     # - Traitement des CIBLES -
     # 
-    if str.match?('\( <\-'.freeze)
+    if str.match?(REG_AMORCE_CIBLE)
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
         spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
-        pdfbook.table_references.add(cible, **{
+        book.table_references.add(cible, **{
           page:       first_page, 
           paragraph:  numero_par,
           hybrid:     "p. #{first_page} § #{numero_par}"
@@ -364,25 +364,27 @@ private
         ''
       end
       # 
-      # On corrige les éventuels retours chariot intempestifs
+      # On corrige les éventuels espaces intempestifs
       # 
       str = str.gsub(/  +/, ' ')
     end
     #
     # - Traitement des APPELS -
     # 
-    if str.match?('\( \->'.freeze)
+    if str.match?(REG_AMORCE_APPEL)
       str = str.gsub(REG_APPEL_REFERENCE) do
         appel = $1.freeze
         spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
-        pdfbook.table_references.get(appel, context[:paragraph])
+        book.table_references.get(appel, context)
       end
     end
 
     return str
   end
-  REG_CIBLE_REFERENCE       = /\(\( <\-\((.+?)\) \)\)/.freeze
-  REG_APPEL_REFERENCE       = /\(\( \->\((.+?)\) +\)\)/.freeze
+  REG_AMORCE_CIBLE    = /\<\-\(/.freeze
+  REG_AMORCE_APPEL    = /\-\>\(/.freeze
+  REG_CIBLE_REFERENCE = / ?\<\-\((.+?)\)/.freeze
+  REG_APPEL_REFERENCE = /\-\>\((.+?)\)/.freeze
 
   ##
   # Traitement des termes propres aux bibliographies

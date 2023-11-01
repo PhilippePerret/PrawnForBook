@@ -9,6 +9,7 @@ book_data:
 book_format:
   page:
     show_grid: true
+    show_margins: true
   book:
     width:  '210mm'
     height: '297mm'
@@ -17,6 +18,7 @@ book_format:
     default_font_and_style: 'Numito/light'
     default_font_size:  11
     line_height: 18
+    guillemets:               ['« ',' »']
   #<titles>
   titles:
     level3:

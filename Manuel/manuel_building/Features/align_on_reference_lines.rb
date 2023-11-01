@@ -4,9 +4,9 @@ Prawn4book::Manual::Feature.new do
 
   titre "Alignement sur la grille de référence"
 
-  show_grid   true
+  show_grid(1..-1)
   line_height hline
-  new_page_before_texte(true)
+  new_page_before(:texte)
 
   description <<~EOT
     De façon naturelle et sans aucune intervention de l'auteur ou du metteur en page, les lignes de texte sont alignées sur une tt(grille de référence) ce qui permet un affichage professionnel.

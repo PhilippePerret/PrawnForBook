@@ -70,14 +70,14 @@ class NTextParagraph < AnyParagraph
     # Au premier tour, on doit corriger le texte, le préparer 
     # entièrment (et le mettre dans @text). Au deuxième tour, on n'a
     # rien à faire
-    if Prawn4book.first_turn?
+    # if Prawn4book.first_turn?
       @text = raw_text.dup
       #
       # Tous les traitements communs, comme la retenue du numéro de
       # la page ou le préformatage pour les éléments textuels.
       # 
       super
-    end
+    # end
     
     #
     # Si le paragraphe possède son propre builder, on utilise ce
