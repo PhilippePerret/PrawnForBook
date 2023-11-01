@@ -71,7 +71,7 @@ class << self
         @current_table.add_line($1.strip)
         nil
       else
-        @current_table = NTable.new(book:book, lines:[$1.strip], pindex:indice)
+        @current_table = NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
       end
     else # sinon un paragraphe
       NTextParagraph.new(book:book, raw_text:string, pindex:indice)

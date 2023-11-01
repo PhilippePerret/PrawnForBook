@@ -339,6 +339,7 @@ class AnyParagraph
       end
     end
   end
+  alias :pfbcode :prev_pfbcode
 
   def length  ; @length ||= (text||'').length     end
 

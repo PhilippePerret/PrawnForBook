@@ -19,7 +19,7 @@ module Prawn4book
           load fpath
           Manual::Feature.last.print_with(pdf, book)
         else
-          puts "Le fichier feature #{fname.inspect} est à écrire.".orange
+          add_erreur "Le fichier feature #{fname.inspect} est à écrire.".orange
         end
       end
 

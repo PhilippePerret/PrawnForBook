@@ -36,10 +36,11 @@ class << self
   def report_building_errors
     puts "\n\n"
     unless @errors.empty?
-      titre = "Erreurs mineures (#{@errors.count})"
-      puts "#{titre}\n#{'-'*titre.length}".rouge
+      num_len = @errors.count.to_s.length
+      titre = "ERREURS MINEURES (#{@errors.count})"
+      puts "#{titre}\n#{'-'*titre.length}".orange
       @errors.each_with_index do |derror, idx|
-        puts "[#{idx + 1}] ERREUR : #{derror[:message]}".rouge
+        puts "[#{(idx + 1).to_s.rjust(num_len,'0')}] #{derror[:message]}".orange
       end
     end
     unless @notices.empty?
