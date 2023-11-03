@@ -19,7 +19,7 @@ class PdfBook
   # - raccourcis -
   def first_turn?; Prawn4book.first_turn? end
   def second_turn?; Prawn4book.second_turn? end
-  def force_parse_and_write?; Prawn4book.force_parse_and_write? end
+  def second_turn_required?; Prawn4book.second_turn_required? end
 
   # Pour exposer les titres courants par niveau en cours
   # de fabrication (pour alimenter la données pages et 
@@ -101,7 +101,7 @@ class PdfBook
     # Si des appels de références avant ont été trouvées, on refait
     # une passe pour les appliquer.
     # 
-    if not(export_text?) && table_references.appels_sans_reference?
+    if not(export_text?) && second_turn_required?
 
       #
       # Pour Prawn4book.second_turn?

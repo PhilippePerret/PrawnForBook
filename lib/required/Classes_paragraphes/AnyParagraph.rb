@@ -42,8 +42,10 @@ class AnyParagraph
       # 
       context = { pdf: pdf, paragraph:self }
       @text = AnyParagraph.__parse(text, context)
-      # puts "@text = #{@text.inspect}".bleu
-      # sleep 1
+      # if @text.match?('<color')
+      #   puts "@text = #{@text.inspect}".bleu
+      #   sleep 1
+      # end
     end
   end
 

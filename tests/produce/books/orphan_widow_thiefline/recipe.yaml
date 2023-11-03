@@ -1,0 +1,10 @@
+---
+#<book_data>
+book_data:
+  title: "Veuve, Orpheline et Ligne de voleur"
+  author: 'Philippe PERRET'
+  subtitle: "Traitement des lignes avec Prawn-For-Book"
+#</book_data>
+book_format:
+  text:
+    line_height: 20

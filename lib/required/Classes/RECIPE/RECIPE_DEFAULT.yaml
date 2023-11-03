@@ -97,7 +97,6 @@ book_format:
     default_size:             12
     indent:                   0
     line_height:              14
-    leading:                  0.0
     numerotation:             false
     # - Guillemets -
     guillemets:               ['“','”']

@@ -5,7 +5,7 @@ class Feature
   # Les variables utilisables dans les textes (description, texte, 
   # sample_texte, etc.)
   VARIABLES = {
-    '_PFB_' => '**Prawn-For-Book**'
+    '_PFB_' => '***Prawn-For-Book***'
   }
 
   attr_reader :pdf, :book
@@ -427,7 +427,7 @@ class Feature
   def print_sample_texte
     entete = "Si texte.pfb.md contient…"
     str = sample_texte.dup
-    str = str.gsub(/\*/, '\\*').gsub(/_/, '\_').gsub('<','&lt;').gsub(/"/,'\\"')
+    str = str.gsub(/\*/, '\\*').gsub('_', '\_').gsub('<','&lt;').gsub(/"/,'\\"')
     __print_texte(str, entete)
   end
 

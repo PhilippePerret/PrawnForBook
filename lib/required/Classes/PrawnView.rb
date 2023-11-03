@@ -200,6 +200,11 @@ class PrawnView
     @ascender = @current_font.ascender
     move_to_closest_line
 
+    opts = {size:thefont.size, style:thefont.style, leading:0}
+    default_leading(line_height - self.height_of('X', **opts))
+    # puts "line_height: #{line_height}".jaune
+    # puts "default_leading = #{@default_leading.inspect}"
+
     return @current_font
   end
 

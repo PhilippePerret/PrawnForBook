@@ -483,6 +483,14 @@ Pour exclure un titre de la table des matières, c’est-à-dire pour qu’il so
 
 L'unité textuel de *Prawn-for-book* est le paragraphe (mais ce n'est pas l'atome puisqu'on peut introduire des éléments sémantiques dans le paragraphe lui-même, qui seront évalués "en ligne").
 
+<a name="paragraph-text"></a>
+
+Le texte du paragraphe se définit simplement en l'écrivant dans le fichier `.pfb.md`.
+~~~
+Définit dans le texte par un texte ne répondant pas aux critères suivants. Un paragraphe peut commencer par autant de balises que nécessaire pour spécifier les choses. Par exemple :
+citation::bold::center:: Une citation qui doit être centrée.
+~~~
+
 <a name="types-paragraphes"></a>
 
 #### Les différents types de paragraphe
@@ -508,8 +516,6 @@ Dans les annexes, on a souvent besoin de faire référence à une partie du livr
 #    "29-7"   si pagination hybride
 ~~~
 
-
-
 #### Évaluation du texte du paragraphe (interprétation des variables)
 
 Un texte de paragraphe est souvent constitué de variables qui dépendent du contexte ou sont définis pour un livre. En règle générale, ces variables sont estimées au cours de la fabrication du livre.
@@ -528,15 +534,56 @@ str_corriged = Prawn4book::PdfBook::AnyParagraph.__parse(<string>, <context>)
 
 > Rappel : pour obtenir `:pdf`, se souvenir que plusieurs méthodes de parsing et de formatage personnalisées peuvent utiliser leur nombre de paramètres pour déterminer les informations qui seront transmises.
 
-<a name="paragraph-text"></a>
+<a name="code-ruby-in-paragraph"></a>
 
-#### TEXTE (Paragraphes)
+#### Code ruby dans le paragraphe [expert]
 
-Le paragraphe de texte se définit simplement en l'écrivant dans le fichier `.pfb.md`.
+Du code ruby peut se trouver à l'intérieur même du paragraphe, qui sera évalué à la volée.
+
+~~~markdown
+J'utilise pour travailler la version #{RUBY_VERSION} de ruby. Et aujourd'hui, nous somme le #{Time.now.wday}^e jour de la semaine.
 ~~~
-Définit dans le texte par un texte ne répondant pas aux critères suivants. Un paragraphe peut commencer par autant de balises que nécessaire pour spécifier les choses. Par exemple :
-citation::bold::center:: Une citation qui doit être centrée.
+
+Produira :
+
+«««««««««««««««««««
+
+J'utilise pour travailler la version 3.0.1 de ruby. Et aujourd'hui, nous somme le 4<sup>e</sup> jour de la semaine.
+
+»»»»»»»»»»»»»»»»»»»»
+
+Si le code a évaluer contient des crochets, il faut utiliser des délimitateurs qui protègent le code : `#{{{ ... code avec crochets ... }}}`. Dans le cas contraire, un erreur sera produite.
+
+> Pourquoi ? Tout simplement parce que si l'on donne ce texte : 
+> ~~~markdown
+> Je suis du code #{book.recipe.page_infos={paginate:false}} qui ne doit pas être utilisé
+> ~~~
+> alors c'est le texte suivant qui sera interprété (depuis le `#{` jusqu'au premier crochet fermant trouvé) : `book.recipe.page_infos={paginate:false`
+
+Par exemple : 
+
+~~~markdown
+En coulisses je définis une table avec ruby.#{{{ matable = {un:"1", deux:"2"}; nil }}}
 ~~~
+
+C’est particulièrement utile avec un bloc de code (car `#{ ... }` ne permet pas de contenir des crochets.
+
+Le `nil` ci-dessus permet de ne rien écrire dans le texte final (le code n’est pas censé produire du texte). Pour le faire de façon encore plus correcte, on peut utiliser un `-` (tiret court) après les trois crochets pour signifier qu’il n’y aura aucun sortie à ce code.
+
+~~~markdown
+En coulisses je peux même avoir un bloc de code.#{{{- ma_table = {un: "1", deux: "2"};ma_table.each do |k, v|;end}}}
+~~~
+
+> Noter bien le moins dans `#{{{-`
+
+**Précautions**
+
+* Noter que contrairement à `#{...}`, il ne peut y avoir qu’une seule utilisation de `#{{{...}}}` par paragraphe.
+* Tout le code doit se trouver sur le même paragraphe, sinon il ne sera pas pris en compte. Séparer les lignes habituelles par des points-virgules (`(1...10).each do |i|; puts i; end`).
+
+<a name="stylisation-paragraphe"></a>
+
+#### Stylisation du paragraphe
 
 Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
 

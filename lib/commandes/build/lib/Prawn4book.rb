@@ -14,6 +14,10 @@ module Prawn4book
     @@turn = value
   end
 
+  def self.second_turn_required?
+    PdfBook.current.table_references.appels_sans_reference?
+  end
+
   def self.requires_third_turn
     @@third_turn = true
   end

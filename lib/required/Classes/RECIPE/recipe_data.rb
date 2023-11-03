@@ -143,6 +143,64 @@ class Recipe
     end
   end
 
+  # Pour les expressions régulières
+  # 
+
+  # Expression régulière pour attraper les guillemets qui ne
+  # correspondent pas à ceux voulus
+  # 
+  def reg_guillemets
+    @reg_guillemets ||= begin
+      /[“«][  ]?(?<content>.+?)[  ]?[»”]/.freeze
+    end
+  end
+
+  # Remplacement des guillemets
+  def remp_guillemets
+    @remp_guillemets ||= begin
+      "%{before}#{guillemets[0]}%{content}#{guillemets[1]}%{after}".freeze
+    end
+  end
+
+  # Expression régulière pour attraper les contre-guillemets
+  # 
+  def reg_contre_guillemets
+    @reg_contre_guillemets ||= begin
+      contre_guils = guillemets[0][0] == "« " ? ["“","”"] : ["«","»"]
+      /#{contre_guils[0]}[  ]?(?<content>.+?)[  ]?#{contre_guils[1]}/.freeze
+    end
+  end
+
+  # Remplacement des contre-guillemets
+  # 
+  def remp_contre_guillemets
+    @remp_contre_guillemets ||= begin
+      "#{guillemets[0]}%{content}#{guillemets[1]}".freeze
+    end    
+  end
+
+  # Pour modifier les guillemets à la volée (surtout pour
+  # le manuel et les tests)
+  # 
+  # @param paire [Symbol|Hash<String>]
+  # 
+  #   Soit la paire de guillemets (['“', '”'])
+  #   Soit un symbole :
+  #       :gc     Pour "guillemes courbes" => ['“', '”']
+  #       :ch     Pour "chevrons", => ['« ', ' »']
+  # 
+  def define_guillemets(paire)
+    case paire
+    when :gc then @guillemets = ['“', '”']
+    when :ch then @guillemets = ['« ', ' »']
+    else @guillemets = paire
+    end
+    @reg_guillemets         = nil
+    @remp_guillemets        = nil
+    @reg_contre_guillemets  = nil
+    @remp_contre_guillemets = nil
+  end
+
   # -- Puce --
 
   def puce

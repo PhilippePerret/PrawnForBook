@@ -46,13 +46,22 @@ class PrawnView
   # Déplace le curseur sur la ligne +x+
   # 
   # @param [Integer] x Indice 1-start de la ligne
-  # @return l'indice 1-start de la ligne
+  # 
+  # @return l'indice 1-start de la ligne (sert pour savoir sur quelle
+  # ligne on se retrouve, par exemple, quand on utilise 
+  # move_to_next_line)
   # 
   def move_to_line(x)
-    return move_to_last_line(x) if x < 0
-    next_line_top  = x * line_height
-    move_cursor_to(bounds.height - next_line_top + ascender)
-    return x
+    if x < 0
+      move_to_last_line(x)
+    else
+      # next_line_top  = x * line_height
+      next_line_top  = x * (line_height - current_leading)
+      puts "leading = #{current_leading.inspect}"
+      puts "next_line_top: #{next_line_top.inspect}"
+      move_cursor_to(bounds.height - next_line_top + ascender)
+      return x
+    end
   end
 
   def move_to_first_line
@@ -65,6 +74,10 @@ class PrawnView
   end
 
   def move_to_closest_line
+    puts "bounds.height: #{bounds.height.inspect}"
+    puts "current_line : #{current_line.inspect}"
+    puts "line_height  : #{line_height.inspect}"
+
     prevline = bounds.height - current_line * line_height
     nextline = bounds.height - (current_line + 1) * line_height
     if cursor - prevline > nextline - cursor

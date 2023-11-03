@@ -238,13 +238,28 @@ private
   # si elle est fournie)
   # 
   def self.__traite_codes_ruby_in(str, context)
-    str.gsub(REG_CODE_RUBY) do
+    str = __traite_ruby_in_with_reg(str, context, REG_CODE_RUBY_PROTECTED)
+    str = __traite_ruby_in_with_reg(str, context, REG_CODE_RUBY)
+    return str
+  end
+  def self.__traite_ruby_in_with_reg(str, context, regexp)
+    str.gsub(regexp) do
+      mat = Regexp.last_match
       begin
-        code = $1.freeze
-        if context[:paragraph]
-          context[:paragraph].instance_eval(code)
+        code = mat[:code].freeze
+        no_return = mat[:tiret] == '-'
+
+        result = 
+          if context[:paragraph]
+            context[:paragraph].instance_eval(code)
+          else
+            eval(code)
+          end
+
+        if no_return
+          ""
         else
-          eval(code)
+          result
         end
       rescue Exception => e
         raise FatalPrawnForBookError.new(101,{
@@ -255,7 +270,8 @@ private
       end
     end
   end
-  REG_CODE_RUBY = /#\{(.+?)\}/.freeze
+  REG_CODE_RUBY_PROTECTED = /#\{\{\{(?<tiret>\-)?(?<code>.+)\}\}\}/.freeze
+  REG_CODE_RUBY = /#\{(?<tiret>\-)?(?<code>.+?)\}/.freeze
 
 
   def self.__traite_markdown_inline_in(str, context)
@@ -441,33 +457,34 @@ private
   # 
   # Traitement des notes
   # 
-  # Comme les class_tags, les notes sont écrites directement par
-  # cette méthode (car le leading doit changer). Donc elle renvoie
-  # nil pour dire de ne pas écrire le texte.
-  # 
   def self.__traite_notes_in(str, context)
-    #
-    # Traitement d'une marque de note (appel)
-    # 
-    str = str.gsub(REG_NOTE_MARK) {
-      index_note = $1.freeze
-      index_note = book.notes_manager.add(index_note)
-      " <sup>#{index_note}</sup>"
-    }
     #
     # Traitement de la note
     # 
     str = str.gsub(REG_NOTE_DEF) {
-      index_note = $1.freeze
-      note       = $2.freeze
-      book.notes_manager.treate(index_note, note, context)
+      pref        = $1.freeze
+      index_note  = $2.freeze
+      note        = $3.freeze
+      pref + book.notes_manager.treate(index_note, note, context)
     }
     
+    #
+    # Traitement d'une marque de note (appel)
+    # 
+    str = str.gsub(REG_NOTE_MARK) {
+      puts "#{$&.inspect}".bleu
+      sleep 1
+      pref        = $1.freeze
+      index_note  = $2.freeze
+      index_note  = book.notes_manager.add(index_note)
+      "#{pref} <sup>#{index_note}</sup>"
+    }
+
     return str
 
   end
-  REG_NOTE_MARK = /(?!^)\^([0-9\^]+?)/.freeze
-  REG_NOTE_DEF  = /^\^([0-9\^]+?) (.+?)$/.freeze
+  REG_NOTE_MARK = /(!<=\\)\^(\^|[0-9]+)/.freeze
+  REG_NOTE_DEF  = /^(!<=\\)\^(\^|[0-9]+) (.+?)$/.freeze
 
 
   def self.__corrections_typographiques(str, context)
@@ -657,36 +674,53 @@ private
     #       texte, par exemple des courbes, mais qu'au final on 
     #       veuille utiliser les chevrons, ils seront remplacés. On
     #       par alors de "contre-guillemets"
-    str = str.gsub(REG_GUILS, remp_guillemets)
+    str = str.gsub(REG_GUILS_DROITS) {
+      found = Regexp.last_match
+      data = {
+        before: found[:before], 
+        content:found[:content].strip,
+        after: found[:after]
+      }
+      remp_guillemets % data
+    }
+
+    str = str.gsub(reg_guillemets) {
+      found = Regexp.last_match
+      data = {      
+        before: "",
+        after:  "",
+        content: found[:content]
+      }
+      remp_guillemets % data
+    }
 
     # Cf. [2]
-    str = str.gsub(reg_contre_guillemets, remp_contre_guillemets)
+    str = str.gsub(reg_contre_guillemets) {
+      found = Regexp.last_match
+      remp_contre_guillemets % {content: found[:content].strip}
+    }
 
     return str
   end
 
+  def self.reg_guillemets
+    recipe.reg_guillemets
+  end
   def self.remp_guillemets
-    @remp_guillemets ||= begin
-      "\\1#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}\\3".freeze
-    end
+    recipe.remp_guillemets
   end
 
   def self.reg_contre_guillemets
-    @reg_contre_guillemets ||= begin
-      contre_guils = recipe.guillemets[0][0] == "«" ? ["“","”"] : ["«","»"]
-      /#{contre_guils[0]}[  ]?(.*?)[  ]?#{contre_guils[1]}/.freeze
-    end
+    recipe.reg_contre_guillemets
   end
   def self.remp_contre_guillemets
-    @remp_contre_guillemets ||= begin
-      "#{recipe.guillemets[0]}\\2#{recipe.guillemets[1]}".freeze
-    end
+    recipe.remp_contre_guillemets
   end
 
-  REG_APO = /(qu|d|j|l|n|m|s|t)'/.freeze
   # Cf. la @note [1] ci-dessus
-  REG_GUILS = /([\( ])" ?(.*?) ?([\) \.…])"/.freeze
+  REG_GUILS_DROITS = /(?<before>[\( ])" ?(?<content>.*?) ?"(?<after>[\) .…])/.freeze
 
+  REG_APO = /(qu|d|j|l|n|m|s|t)'/.freeze
 
   def self.__traite_points_suspensions(str, context)
     str = str.gsub('...', '…')

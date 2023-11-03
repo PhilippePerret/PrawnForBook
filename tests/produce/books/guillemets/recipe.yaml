@@ -1,0 +1,10 @@
+---
+#<book_data>
+book_data:
+  title: "Test du traitement des guillemets"
+  author: 'Auteur DULIVRE'
+#</book_data>
+
+book_format:
+  text:
+    guillemets: ['« ', ' »']

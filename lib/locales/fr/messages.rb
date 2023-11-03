@@ -10,8 +10,8 @@ MESSAGES = {
   building: {
 
     success: <<~EOT,
-      Le book PDF a été produit avec succès !
-      #{'(dans %{path})'.gris}
+      👍 Book PDF produit avec succès !
+      #{'(in %{path})'.gris}
       EOT
   },
 
