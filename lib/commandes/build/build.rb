@@ -368,7 +368,8 @@ class PdfBook
     PrawnView::Error.report_building_errors
 
     if File.exist?(pdf_path)
-      puts "\n#{MESSAGES[:building][:success] % {path: pdf_path}}".vert
+      pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
+      puts "#{MESSAGES[:building][:success] % {path: pdf_relpath}}".vert
       puts "\n"
       return true
     else
