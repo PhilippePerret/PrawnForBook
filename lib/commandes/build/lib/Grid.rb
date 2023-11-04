@@ -10,18 +10,13 @@ class PrawnView
   # Pour bien positionner un texte, on doit connaitre la ligne de
   # référence sur laquelle il doit se poser et l'ascender de la 
   # fonte. Car par défaut, la ligne de référence, qui correspond quand
-  # elle correspond au curseur, est la ligne sous laquelle se posi-
+  # elle correspond au curseur, est la ligne SOUS laquelle se posi-
   # tionne le texte. Il faut donc remonter ce texte pour qu'il se
   # positionne SUR la ligne de référence et non pas dessous.
   # 
   # Donc, pour positionner le texte exactement sur une ligne, il 
   # faut : connaitre la ligne, y placer le curseur, et remonter de la
   # valeur de l'ascender de la fonte.
-
-
-  def correct_cursor_position(str)
-
-  end
 
   # - raccourci -
   def line_height
@@ -55,11 +50,7 @@ class PrawnView
     if x < 0
       move_to_last_line(x)
     else
-      # next_line_top  = x * line_height
-      next_line_top  = x * (line_height - current_leading)
-      puts "leading = #{current_leading.inspect}"
-      puts "next_line_top: #{next_line_top.inspect}"
-      move_cursor_to(bounds.height - next_line_top + ascender)
+      move_cursor_to(bounds.top - (x * line_height) + ascender)
       return x
     end
   end
@@ -70,32 +61,42 @@ class PrawnView
 
   # Se déplacer sur la Xe dernière ligne
   def move_to_last_line(x)
-    move_cursor_to(last_line + x.abs * line_height)
+    move_cursor_to(last_line + (x + 1).abs * line_height)
   end
 
   def move_to_closest_line
-    puts "bounds.height: #{bounds.height.inspect}"
-    puts "current_line : #{current_line.inspect}"
-    puts "line_height  : #{line_height.inspect}"
+    prevline = bounds.top - (current_line - 1) * line_height + ascender
+    currline = bounds.top - current_line * line_height + ascender
+    nextline = bounds.top - (current_line + 1) * line_height + ascender
 
-    prevline = bounds.height - current_line * line_height
-    nextline = bounds.height - (current_line + 1) * line_height
-    if cursor - prevline > nextline - cursor
-      move_to_line(current_line)
-    else
-      move_to_line(current_line + 1)
-    end
+    dist_from_prev = (cursor - prevline).abs
+    dist_from_curr = (cursor - currline).abs
+    dist_from_next = (cursor - nextline).abs
+
+    top =
+      if dist_from_prev < [dist_from_curr,dist_from_next].min
+        prevline
+      elsif dist_from_curr < dist_from_next
+        currline
+      else
+        nextline
+      end
+
+    # Déplacement du curseur
+    move_cursor_to(top)
+
+    return top
   end
 
   # @return la hauteur de la dernière ligne en bas de la page
   # en fonction de la hauteur de ligne (line_height)
   def last_line
-    bounds.height.to_i / line_height
+    bounds.top.to_i / line_height
   end
 
   # @return [Integer] Nombre de lignes dans une page actuelle
   def line_count
-    bounds.height.to_i / line_height
+    bounds.top.to_i / line_height
   end
 
   # Déplacement du curseur à la prochaine ligne de référence
@@ -113,7 +114,21 @@ class PrawnView
   # haut de la page (marge considérée), divisée par la hauteur de
   # ligne. On l'arrondit à la valeur supérieure
   def current_line
-    ((bounds.height - cursor).to_f / line_height).ceil
+    # On prend la position actuelle du curseur
+    c = cursor # position du curseur
+    # Si le cursor est placé plus haut que la limite de la marge
+    # haute, on prend le bounds.top qui correspond à la valeur 
+    # maximale en haut.
+    c = bounds.top if c > bounds.top
+    # On calcule la distance entre le bord haut maximum et la 
+    # position actuelle du curseur. Ça donne 0 si on est tout en
+    # haut.
+    d = bounds.top - c 
+    # On calcule à combien de lignes cette distance correspond.
+    # Normalement, ça doit donner un compte à peu près rond, mais
+    # on l'arrondit quand même
+    return (d / line_height).round
+    # ((bounds.to - cursor).to_f / line_height).ceil
   end
 
   # @ascender
