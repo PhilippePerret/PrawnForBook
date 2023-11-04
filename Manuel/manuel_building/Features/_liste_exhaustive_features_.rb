@@ -11,7 +11,7 @@ Prawn4book::Manual::Feature.new do
     * justification par défaut des textes
     * colorisation des textes
     * suppression des veuves et des orphelines
-    * suppression des lignes de voleur
+    * suppression automatique des lignes de voleur
     * nombreuses sortes de puces et puces personnalisées [[puces]]
     * évaluation à la volée du code ruby (pour des opérations, des constantes, etc.)
     * traitement des références croisées
@@ -23,6 +23,7 @@ Prawn4book::Manual::Feature.new do
     * corrige l'erreur d'espace avant les ponctuations doubles (pose d'une insécable)
     * corrige l'absence d'espace insécable à l'intérieur des tirets d'exergue
     * changement de fonte (police) pour le paragraphe suivant [[change_fonte_for_next_paragraph]]
+    * placement sur n'importe quelle ligne de la page
     * exportation seulement du texte produit
     * exportation comme livre numérique (pur PDF)
 

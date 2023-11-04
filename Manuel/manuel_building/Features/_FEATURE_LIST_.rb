@@ -39,6 +39,7 @@ module Prawn4book
       cross_references
       references_autres_livres
       change_fonte_for_next_paragraph
+      placement_sur_ligne_quelconque
       evaluation_code_ruby
       change_margins_on_the_fly
       export_livre_numerique
