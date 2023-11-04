@@ -22,7 +22,9 @@ task :test_p do
 
   files_list = Dir.glob("#{__dir__}/tests/produce/{collections,books}/**/recipe.{yml,yaml}")
   filtre = ENV['TEST']
+  puts "filtre = #{filtre.inspect}".rouge
   if filtre
+    filtre = eval(filtre) if filtre.match?(/^\/.+\/$/)
     files_list.select! { |pth| pth.match?(filtre) }
   end
   clear

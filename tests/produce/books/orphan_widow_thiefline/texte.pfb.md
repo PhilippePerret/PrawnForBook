@@ -3,3 +3,7 @@ Ce livre est pensé, à la base, pour voir comment on peut traiter la longueur d
 * Si la dernière ligne d’un paragraphe est une ligne de voleur, il faut jouer sur le `character_spacing` pour régler le problème et faire remonter mot (ou en faire descendre un si la réduction est trop importante — ce paragraphe possède aussi une ligne de voleur).
 (( move_to_line(-1) ))
 * Ce paragraphe à puce devrait se marquer sur la der#{-}nière ligne mais comme il est trop long et qu’il créerait une orpheline, on le passe à la page suivante.
+(( move_to_line(21) ))
+Ce paragraphe avec des styles se trouve `sur la troisième` ligne avant la fin, et *fait cinq lignes*, ce qui signifie qu’il n’y a pas de veuve `sur l’autre page`. Mais elle est <color rgb="FF0000">corrigée **automatiquement**</color> par le programme pour passer à la page suivante.
+(( move_to_line(21) ))
+Ce paragraphe avec des styles se trouve aussi sur la 3^e ligne avant la fin et *fait 4 lignes*, ce qui <color rgb="0000FF">signifie qu’il y aura/ait</color> ici une veuve sur l’autre page ***si on ne faisait** rien*.

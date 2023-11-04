@@ -151,7 +151,7 @@ class << self
 
         str = text.dup
 
-        puts "\nTXT: #{str}".vert
+        # puts "\nTXT: #{str}".vert
 
         e, b = text_box(str, options.merge(dry_run: true))
 
@@ -166,10 +166,10 @@ class << self
         # à la ligne.
         # 
         if printed_lines.last.length < THIEF_LINE_LENGTH
-          puts "Ligne de voleur !".rouge
+          # puts "Ligne de voleur !".rouge
           # La dernière ligne est trop courte
           char_spacing = my.treate_thief_line_in_par(self, str, options)
-          puts "Character spacing: #{char_spacing}".bleu
+          # puts "Character spacing: #{char_spacing}".bleu
           options.merge!(character_spacing: -char_spacing)
           # La hauteur diminue donc d'une ligne, ainsi que le nombre
           # de lignes
@@ -180,7 +180,7 @@ class << self
         # puts "Écriture de #{str.inspect}"
         # puts "Options d'écriture : #{options.inspect}"
 
-        puts "Ligne courante : #{current_line}".bleu
+        # puts "Ligne courante : #{current_line}".bleu
 
         # 
         # On calcule la ligne sur laquelle doit être posée le texte
@@ -205,7 +205,7 @@ class << self
           nb_lines_curr_page = lines_count
         end
 
-        puts "Nombre lignes : #{lines_count} / On current page:#{nb_lines_curr_page} / On next page:#{nb_lines_next_page}".bleu
+        # puts "Nombre lignes : #{lines_count} / On current page:#{nb_lines_curr_page} / On next page:#{nb_lines_next_page}".bleu
 
         parag_has_orphan = nb_lines_curr_page == 1
         parag_has_widow  = nb_lines_next_page == 1
@@ -219,6 +219,9 @@ class << self
         if parag_has_orphan
           start_new_page
           move_to_line(1)
+          # Pour passer au bon endroit ensuite
+          nb_lines_curr_page = lines_count
+          nb_lines_next_page = 0
         end
 
         # Et il faut régler la hauteur (car dans les options pour cal-
@@ -226,38 +229,65 @@ class << self
         # avoir de passage à la page suivante)
         options[:at][1] = cursor
 
-        puts "Options avant écriture : #{options.inspect}".jaune
+        # puts "Options avant écriture : #{options.inspect}".jaune
 
         # = PUCE =
         # ========
         # (if any)
         my.print_puce(self, puce) if puce
 
+        # - Par défaut -
+        excedent = nil
 
         if parag_has_widow
           # 
           # <= Une veuve
+          # 
           # => Il faut réduire le text box courant d'une ligne pour
           #    obliger le texte à passer sur la page suivante
           # 
-          puts "Je dois apprendre à gérer les veuves".rouge
-          exit 100
+          options.merge!(height: (nb_lines_curr_page - 1) * line_height)
+
+        elsif nb_lines_next_page > 1
+          #
+          # Le reste de page ne permet pas d'écrire tout le texte,
+          # mais aucun problème de veuve n'a été détecté. Donc on
+          # écrit sur cette page, puis sur l'autre.
+          # (ce sera géré automatiquement par l'excédent)
+
         else
           #
-          # Le cas normal : on écrit le texte sur la page courante et
-          # on descend le curseur de la hauteur du bloc de texte.
+          # Le cas normal : on écrit le texte sur la page courante
           # 
-          text_box(str, options)
-          move_down(boxheight)
+          
         end
 
-        # On passe toujours sur la ligne suivante
+        # 
+        # Dans tous les cas, on écrit le texte en récupérant 
+        # l'excédant (qui peut ne pas exister)
+        # 
+        excedent = text_box(str, **options)
+
+        # 
+        # Gestion de l'excedent quand il y en a
+        # 
+        if excedent.empty?
+          # - Sans excédant, on descend simplement le curseur de 
+          #   la hauteur du box -
+          move_down(boxheight)
+        else
+          # - Impression de l'exédent -
+          start_new_page
+          move_to_line(1)
+          options[:at][1] = cursor
+          options.delete(:height)
+          formatted_text_box(excedent, **options)
+        end
+
+        # On passe sur la ligne suivante
         move_cursor_to(cursor - line_height)
 
       end #/pdf
-
-
-
 
     rescue PrawnFatalError => e
       raise e
