@@ -160,12 +160,14 @@ class << self
         printed_lines = b.instance_variable_get('@printed_lines')
         lines_count = printed_lines.count
 
+        has_thief_line = lines_count > 1 && printed_lines.last.length < THIEF_LINE_LENGTH
+
         # 
         # Si la dernière ligne est trop courte, il faut chercher le
         # character_spacing qui permettra de remonter le texte seul
         # à la ligne.
         # 
-        if printed_lines.last.length < THIEF_LINE_LENGTH
+        if has_thief_line
           # puts "Ligne de voleur !".rouge
           # La dernière ligne est trop courte
           char_spacing = my.treate_thief_line_in_par(self, str, options)
