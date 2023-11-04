@@ -23,6 +23,16 @@
       "name": "Code à évaluer par Prawn",
       "scope": "meta.code",
       "foreground": "#2288AA"
+    },
+    {
+      "name": "Code ruby à évaluer",
+      "scope": "meta.ruby.code",
+      "foreground": "#009900"
+    },
+    {
+      "name": "Code ruby protégé à évaluer",
+      "scope": "meta.ruby.code.protected",
+      "foreground": "#999900"
     }
   ]
 }

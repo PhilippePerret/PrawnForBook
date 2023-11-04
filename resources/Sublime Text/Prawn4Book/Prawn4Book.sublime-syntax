@@ -17,3 +17,7 @@ contexts:
       scope: meta.tag.unknown
     - match: \(\( .+? \)\)
       scope: meta.code
+    - match: \#\{\{\{.+?\}\}\}
+      scope: meta.ruby.code.protected
+    - match: \#\{[^\{\}]+?\}
+      scope: meta.ruby.code
