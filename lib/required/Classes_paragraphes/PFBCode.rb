@@ -71,6 +71,8 @@ class PFBCode < AnyParagraph
       add_notice($1)
     when /^(?:erreur|error)\((.+?)\)$/.freeze
       add_erreur($1)
+    when /^move_to_(line|next|closest|first|last)(_line)?/.freeze
+      pdf.instance_eval(raw_code)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Une cible de référence (ou un lien) seule sur une ligne
       # Pour le moment, on considère que ça ne peut être qu'une cible
