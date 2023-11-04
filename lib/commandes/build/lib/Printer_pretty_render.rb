@@ -2,7 +2,7 @@ module Prawn4book
 class Printer
 class << self
 
-  THIEF_LINE_LENGTH = 9
+  THIEF_LINE_LENGTH = 10
 
   # @api
   # 
@@ -146,9 +146,12 @@ class << self
 
         font(fonte) if fonte
 
+        # La fonte est définie, on peut définir le leading du texte
         options.merge!(leading: default_leading)
 
         str = text.dup
+
+        puts "\nTXT: #{str}".vert
 
         e, b = text_box(str, options.merge(dry_run: true))
 
@@ -156,8 +159,6 @@ class << self
 
         printed_lines = b.instance_variable_get('@printed_lines')
         lines_count = printed_lines.count
-
-        puts "Nombre lignes : #{lines_count}".bleu
 
         # 
         # Si la dernière ligne est trop courte, il faut chercher le
@@ -196,8 +197,15 @@ class << self
         # en calculant ce qui dépasse, on doit pouvoir obtenir le nom
         # bre de lignes qui passe de l'autre côté et le nombre de lignes
         # qui passe
-        nb_lines_next_page = (cursor - boxheight).abs / line_height
-        nb_lines_curr_page = lines_count - nb_lines_next_page
+        if sur_deux_pages
+          nb_lines_next_page = ((cursor - boxheight).abs / line_height).ceil
+          nb_lines_curr_page = lines_count - nb_lines_next_page
+        else
+          nb_lines_next_page = 0
+          nb_lines_curr_page = lines_count
+        end
+
+        puts "Nombre lignes : #{lines_count} / On current page:#{nb_lines_curr_page} / On next page:#{nb_lines_next_page}".bleu
 
         parag_has_orphan = nb_lines_curr_page == 1
         parag_has_widow  = nb_lines_next_page == 1

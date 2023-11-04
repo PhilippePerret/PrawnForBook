@@ -2,4 +2,4 @@ Ce livre est pensé, à la base, pour voir comment on peut traiter la longueur d
 * Si un paragraphe entier tient dans la page (pas d’excédent), il faut juste tester sa dernière ligne.
 * Si la dernière ligne d’un paragraphe est une ligne de voleur, il faut jouer sur le `character_spacing` pour régler le problème et faire remonter mot (ou en faire descendre un si la réduction est trop importante — ce paragraphe possède aussi une ligne de voleur).
 (( move_to_line(-1) ))
-Ce paragraphe doit se marquer sur la dernière ligne.
+* Ce paragraphe à puce devrait se marquer sur la der#{-}nière ligne mais comme il est trop long et qu’il créerait une orpheline, on le passe à la page suivante.
