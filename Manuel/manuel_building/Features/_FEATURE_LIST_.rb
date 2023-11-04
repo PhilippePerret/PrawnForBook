@@ -34,6 +34,7 @@ module Prawn4book
       book_in_collection
       tables/tables
       notes_de_page
+      gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges
       cross_references
