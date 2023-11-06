@@ -10,11 +10,11 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   sample_texte <<~EOT
-    Un texte avec du <color rgb="000077">bleu</color>.
+    Un texte avec du <color rgb="2222FF">bleu</color>.
     EOT
 
   texte <<~EOT
-    Un texte avec du <color rgb="000077">bleu</color>.
+    Un texte avec du <color rgb="2222FF">bleu</color>.
     EOT
 
 end

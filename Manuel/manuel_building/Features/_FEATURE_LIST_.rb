@@ -8,6 +8,7 @@ module Prawn4book
       definition_marges
       format_yaml_de_la_recette
       definir_format_livre
+      titres/titres
       pagination
       pagination/numeroter_pages_vierges
       pagination/aspect_numero

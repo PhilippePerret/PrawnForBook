@@ -25,7 +25,7 @@ book_format:
       color: '0000AA'
     level4:
       lines_before: 2
-      lines_after:  0
+      lines_after:  1
       color: '00AA00'
   #</titles>
 #</book_format>

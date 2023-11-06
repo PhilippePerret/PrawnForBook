@@ -1,0 +1,67 @@
+---
+#<book_data>
+book_data:
+  title: "Un livre pour les titres"
+  author: 'Philippe PERRET'
+#</book_data>
+
+book_format:
+  page:
+    show_grid: true
+    show_margins: true
+  text:
+    line_height: 18
+  titles:
+    level1:
+      # font:   'Numito'
+      # style:  :italic
+      font:   'Helvetica'
+      style:  :normal
+      size:   33
+      lines_before: 0
+      lines_after: 0
+      next_page: false
+      belle_page: false
+      alone: false
+    level2:
+      font:   'Helvetica'
+      style:  :normal
+      size:   22
+      align:  center
+      lines_before: 1
+      lines_after: 0
+      next_page: false
+      belle_page: false
+      alone: false
+    level3:
+      # font:   'Courier'
+      font:   'Helvetica'
+      style:  :normal
+      size:   18
+      lines_before: 1
+      lines_after: 0
+      next_page: false
+      belle_page: false
+      alone: false
+    level4:
+      font:   'Helvetica'
+      style:  :normal
+      size:   16
+      lines_before: 1
+      lines_after: 0
+      next_page: false
+      belle_page: false
+      alone: false
+    level5:
+      font:   'Times-Roman'
+      style:  null
+      size:   22
+      align:  right
+      lines_before: 6
+      lines_after: 0
+      next_page: false
+      belle_page: false
+      alone: true
+
+test:
+  hash_ruby: "54f54b29cfda02cc57836e6b734b70c851b0d548e15809aaf4d800ee3d92bfce6d03993ab428bcaf78c0885b7e72422b0f12f167e837705463a919b3d687dc58"

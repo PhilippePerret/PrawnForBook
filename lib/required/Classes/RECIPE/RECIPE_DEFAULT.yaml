@@ -122,6 +122,7 @@ book_format:
       font:           *default_font2
       style:          *default_style2
       size:           30
+      align:          left
       lines_before:   0
       lines_after:    10
       leading:        0
@@ -133,6 +134,7 @@ book_format:
       font:           *default_font2
       style:          *default_style2
       size:           22
+      align:          left
       lines_before:   5
       lines_after:    3
       leading:        0
@@ -144,6 +146,7 @@ book_format:
       font:           *default_font2
       style:          *default_style2
       size:           18
+      align:          left
       lines_before:   4
       lines_after:    2
       leading:        0
@@ -155,6 +158,7 @@ book_format:
       font:           *default_font2
       style:          *default_style2
       size:           14
+      align:          left
       lines_before:   3
       lines_after:    1
       leading:        0
@@ -166,6 +170,7 @@ book_format:
       font:           *default_font2
       style:          *default_style2
       size:           12
+      align:          left
       lines_before:   2
       lines_after:    0
       leading:        0
@@ -177,12 +182,25 @@ book_format:
       font:           *default_font2
       style:          *default_style4
       size:           11
+      align:          left
       lines_before:   1
       lines_after:    0
       leading:        0
       next_page:      false
       belle_page:     false
       alone:          false
+    level7:
+      font_n_style:   *default3_font_n_style
+      font:           *default_font2
+      style:          *default_style4
+      size:           20
+      align:          center
+      lines_before:   4
+      lines_after:    0
+      leading:        0
+      next_page:      false
+      belle_page:     false
+      alone:          true
 
 
 #</book_format>

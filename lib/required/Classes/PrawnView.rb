@@ -58,6 +58,19 @@ class PrawnView
     end
   end
 
+  # --- CALCUL METHODS ---
+
+  # Quand line_height est défini (toujours dans Prawn-for-book), 
+  # appelé height_of ou height_of_formatted est vain puisque renvoie
+  # toujours un multiple de height_of (car height_of ne renvoie pas
+  # vraiment la hauteur de +str+ mais la hauteur que prendra l'im-
+  # pression de +str+)
+  # La méthode suivante, au contraire, permet de calculer la vraie
+  # valeur dans le contexte courant.
+  def real_height_of(str, **options)
+    e, b = text_box(str, **options.merge(dry_run: true))
+    return b.height
+  end
 
   # --- MARGINS METHODS ---
 
@@ -104,7 +117,23 @@ class PrawnView
     
     # Si une fonte est définie (c'est-à-dire si on n'en est pas au
     # tout début) On se place sur la première ligne
-    move_to_first_line if font
+    if font
+      move_to_first_line
+      cursor.round == (bounds.top - line_height + ascender).round || begin
+        puts "ON N'EST PAS SUR LA PREMIÈRE LIGNE".rouge
+        puts <<~ERR.rouge
+          La position du curseur (#{cursor.round}) devrait être égale
+          à la hauteur de page #{bounds.top.round} à laquelle on 
+          ajoute l'ascender #{ascender.round} (ce qui fait #{(bounds.top + ascender).round})
+          auquel on soustrait la hauteur de line (#{line_height}) ce qui donne
+          #{(bounds.top - line_height + ascender).round}
+          Sans arrondissement :
+            Curseur : #{cursor}
+            Calcul  : #{bounds.top - line_height + ascender}
+          ERR
+        exit
+      end
+    end
 
     # 
     # Si l'on est en mode pagination hybride (hybrid), il faut 

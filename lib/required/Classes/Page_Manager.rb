@@ -78,14 +78,20 @@ class Page
     @has_pagination = true
   end
 
+  #
+  # @note
+  #   @titres contient l'état actuel des 6 niveaux de titre
+  # 
   def add_titre(level, titre_str)
     @titres.merge!( level => [] ) unless @titres.key?(level)
     @titres[level] << titre_str
+    data[:content_length] += titre_str.length
   end
 
   def no_content?
-    data[:content_length] == 0 || data[:first_par].nil?
+    data[:content_length] == 0 && data[:first_par].nil?
   end
+  alias :empty? :no_content?
 
   def no_pagination?
     @has_pagination === false

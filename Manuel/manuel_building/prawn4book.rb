@@ -16,6 +16,7 @@ module Prawn4book
         next if fname.start_with?('#')
         fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
         if File.exist?(fpath)
+          # puts "Traitement de #{fname.inspect}".bleu
           load fpath
           Manual::Feature.last.print_with(pdf, book)
         else

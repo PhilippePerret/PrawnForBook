@@ -45,121 +45,144 @@ class NTitre < AnyParagraph
     # 
     return if level == 0
 
-    titre = my = me = self
+    my = me = self
 
     spy "Traitement du titre #{self.inspect}…".bleu
 
-    # 
-    # Faut-il passer à la page suivante ?
-    # C'est le cas si la propriété :next_page est à true dans la
-    # recette, pour ce titre. Ou si c'est sur une belle page que le
-    # titre doit être affiché.
-    # 
-    pdf.start_new_page if on_new_page?
 
-
-    if alone? && pdf.page_number.odd?
-      #
-      # Si le titre doit être seul, il doit être seul non seulement
-      # sur sa page mais sur la double page. Donc, si après avoir dé-
-      # placé le curseur sur la page suivante, on se trouve sur une
-      # belle page, alors il faut passer deux pages
-      # 
-      2.times { pdf.start_new_page }
-
-    elsif belle_page? && pdf.page_number.even?
-      # 
-      # Si le titre doit être affiché sur une belle page, et qu'on se
-      # trouve sur une page paire, il faut encore passer à la page
-      # suivante.
-      # 
-      pdf.start_new_page
-
-    end
-
-    #
-    # Traitements communs à tous les textes, comme la
-    # retenue du numéro de la page ou le préformatage pour les
-    # éléments textuels.
-    # 
+    # - Corrections du texte -
     super
 
+    # Le titre formaté
+    ftitre = text.dup
 
-    # 
-    # Principes de placement du titre
-    # 
-    # Si on est sur une nouvelle page (#on_new_page?)
-    #   - si le titre a un niveau < 3
-    #     => on applique les lignes avant
-    #   - si le titre a un niveau > 2
-    #     => on n'applique pas les lignes avant
-    # 
-    # Le titre peut "manger" sur la marge haute, il faut donc 
-    # s'assurer qu'il est assez bas (deuxième ou troisième ligne de
-    # référence)
-    # 
-    # Le titre ne doit pas se retrouver seul en bas de page (en 
-    # comptant les "lignes après" qui doivent le séparé du texte ou 
-    # de l'image ou du titre suivant)
-    # (le calcul est plus compliqué ici)
+    # Calcul du nombre de ligne avant
+    # ===============================
+    # Principes
+    # ---------
+    # Si le paragraphe précédent était un titre, on n’ajoute pas
+    # les lines avant comme ça. Le principe est de mettre entre 
+    # les deux titres la plus grande valeur. Si, par exemple, il 
+    # faut 6 lignes après un titre de niveau 2 et 4 lignes avant
+    # un titre de niveau 4, alors, avant le titre de niveau 4 on
+    # ne mettra rien (les 6 lignes du titre de niveau 2 suffisent)
+    # Si, en revanche, il faut 4 lignes après un titre de niveau
+    # 2 et 6 lignes avant un titre de niveau 4, alors, avant le
+    # titre 4, il n’y aura que les 4 lignes du titre de niveau
+    # 2. Il faudra donc en ajouter deux.
+    lines_before_calc =
+      if previous_paragraph && previous_paragraph.title?
+        if previous_paragraph.lines_after >= lines_before
+          0
+        else
+          lines_before - previous_paragraph.lines_after
+        end
+      else
+        lines_before.dup.freeze
+      end
 
+    # = Inscription =
     pdf.update do
 
-      font(my.fonte)
+      fonte = my.fonte
+      font(fonte)
 
-      # Le titre formaté
-      ftext = my.text
+      tstr = ftitre.inspect
 
-      # Nombre de lignes avant le titre
-      # 
-      # Seulement si le titre n'est pas tout seul en haut
-      # 
-      if cursor + line_height > bounds.top
-        move_to_next_line
-      else
-        lines_before = my.lines_before
-        move_down(lines_before * line_height)
-      end
+      # puts "\nCurseur au tout début de #{tstr} : #{cursor}".vert
 
-      # Empêcher le titre de "manger" sur la marge haute
-      ary = Prawn::Text::Formatted::Parser.format(ftext, [])
-      title_height = height_of_formatted(ary)
-      if cursor + title_height > bounds.top
-        move_cursor_to(bounds.top - title_height)
-        move_to_next_line
-      end
-
-      lines_after  = my.lines_after 
-
-      # Le titre ne doit pas se retrouver tout seul en bas de
-      # page et il faut que le texte qui suit :
-      #   - possède au moins deux lignes
-      #   - ne soit pas un titre (qui poserait le même problème)
-      next_cursor = cursor - lines_after * line_height
-      if next_cursor < 0
+      if my.on_new_page?
         start_new_page
-      elsif my.next_is_title?
-        if cursor - (lines_after + my.next_if_title.lines_after) * line_height < 0
+      end
+
+      # Il faut aussi passer à la page suivante quand il ne reste pas
+      # assez de place pour mettre les lignes après (nous sommes trop
+      # près du bas)
+      # 
+      # @note
+      #   On ajoute 2 lignes après les lines_after pour avoir la 
+      #   place de mettre au moins 2 lignes.
+      # 
+      if cursor - (my.lines_after + 2) * line_height <= 0
+        start_new_page
+      end
+
+      # - Page seule sur la double page -
+      # 
+      if my.alone? 
+        # puts "#{tstr} est seul sur une double".orange
+        # Si la page doit être seule sur une double page et qu'on se
+        # trouve actuellement sur une page paire, il faut passer à la
+        # page suivante. Mais si, au contraire, on se trouve sur la 
+        # page impaire (belle page) mais qu'il y a du texte à gauche,
+        # c'est deux pages qu'il faut passer.
+        if page_number.even?
+          start_new_page
+        elsif page_number.odd?
+          2.times { start_new_page }
+        end
+      elsif my.belle_page? 
+        # puts "#{tstr} est sur une belle page".orange
+        if page_number.even? # paire (= gauche)
+          # Si le titre doit être affiché sur une belle page, et qu'on se
+          # trouve sur une page paire, il faut encore passer à la page
+          # suivante.
           start_new_page
         end
+      end
+
+      # - Hauteur du titre -
+      # (je ne sais plus à quel saint me vouer pour la hauteur…)
+      # title_height = real_height_of(ftitre, **my.title_options)
+      title_height = height_of(ftitre, **my.title_options)
+
+      # Si le titre est trop haut, on cherche la première ligne
+      # ou il ne dépassera pas.
+      if cursor + title_height - ascender > bounds.top
+        # puts "#{tstr} est trop haut (de #{(cursor + title_height) - bounds.top} / par rapport à #{bounds.top.round}).".rouge
+        if my.alone?
+          # Si le titre est seul sur la double page, on le
+          # descend simplement du nombre de lignes voulu
+          move_to_line(my.lines_before + 1)
+        else
+          move_to_line(2)
+        end
+      elsif book.pages[page_number].empty?
+        # En cas de PAGE VIERGE pour le moment (donc commençant par
+        # un titre en haut) on laisse le titre en haut quel qu'il 
+        # soit
+        move_to_line(my.fonte.size > line_height ? 2 : 1)
+      else
+        # Si le titre n'est pas trop haut
+        # 
+        # puts "[Page non vide] #{tstr} n'est pas trop haut (cursor: #{cursor} / curline: #{current_line} / lines before: #{my.lines_before}".jaune
+        # - Sinon, il suffit de descendre du nombre de lignes 
+        #   voulues -
+        move_to_line(current_line + 1 + lines_before_calc)
       end
 
       ###########################
       # - IMPRESSION DU TITRE - #
       ###########################
-      title_options = my.text_params.merge(
-        size:my.size, 
-        leading:my.leading(self),
-        color: my.color,
-      )
-      text(ftext, **title_options)
+      text(ftitre, **my.title_options)
+      move_to_next_line
+
 
       if me.alone?
+        
         start_new_page
-      elsif lines_after > 0
-        move_down(lines_after * line_height) 
+
       else
-        move_to_next_line
+
+        ###################################
+        ### Traitement des LIGNES APRÈS ###
+        ###################################
+        # Principe
+        # --------
+        # On ajoute toujours les lignes après. C’est avant qu’on
+        # traite le problème de titres successifs.
+        move_down( my.lines_after * line_height )
+
       end
 
     end #/pdf.update
@@ -174,6 +197,11 @@ class NTitre < AnyParagraph
     num = AnyParagraph.get_current_numero
     in_tdm? && pdf.tdm.add_title(self, pdf.page_number, num + 1)
   
+    #
+    # Ajout du titre aux titres courants (et aux titres de la page)
+    # 
+    book.set_current_title(self, pdf.page_number)
+
   end
   # /print
 
@@ -186,17 +214,16 @@ class NTitre < AnyParagraph
   #   ajouté.
   #   Cf. les wrappers Prawn créés.
   # 
-  def text_params
-    @text_params ||= {is_title: true, align: :left, inline_format: true}.freeze
+  def title_options
+    @title_options ||= {
+      is_title: true, 
+      inline_format: true,
+      color: color,
+      align: align,
+    }.freeze
   end
 
   # --- Data Methods ---
-
-  def leading(pdf)
-    ld = pdf.line_height - pdf.height_of('X')
-    ld = 2 * pdf.line_height - pdf.height_of('X') if ld < 0
-    return ld
-  end
 
   # @return [Prawn4book::Fonte] Instance Fonte pour ce niveau de
   # titre
@@ -209,6 +236,10 @@ class NTitre < AnyParagraph
 
   def color 
     @color ||= PdfBook::NTitre.color(level)
+  end
+
+  def align
+    @align ||= PdfBook::NTitre.align(level)
   end
 
   # @prop {Integer} Espace avec le texte suivant
@@ -234,15 +265,7 @@ class NTitre < AnyParagraph
   #     à la définition dans la recette.
   # 
   def lines_before
-    if level > 2 && on_new_page?
-      0
-    elsif not(@lines_before.nil?)
-      @lines_before
-    elsif prev_printed_paragraph && prev_printed_paragraph.title?
-      0
-    else
-      self.class.lines_before(level)
-    end
+    @lines_before ||= NTitre.lines_before(level)
   end
 
   # Définition manuelle
@@ -263,14 +286,14 @@ class NTitre < AnyParagraph
   end
 
   def alone?
-    :TRUE == @alone ||= true_or_false(self.class.alone?(level))
+    :TRUE == @alone ||= true_or_false(NTitre.alone?(level))
   end
   def next_page?
-    :TRUE == @onnewpage ||= true_or_false(self.class.next_page?(level))
+    :TRUE == @onnewpage ||= true_or_false(NTitre.next_page?(level))
   end
 
   def belle_page?
-    :TRUE == @onbellepage ||= true_or_false(self.class.belle_page?(level))
+    :TRUE == @onbellepage ||= true_or_false(NTitre.belle_page?(level))
   end
 
   def sometext? ; true  end
@@ -318,18 +341,19 @@ class NTitre < AnyParagraph
   # --- MÉTHODES DE CLASSES ---
 
   def self.lines_after(level)
-    laft = get_data(:lines_after, level)
-    return laft
+    get_data(:lines_after, level)
   end
 
   def self.lines_before(level)
-    lbef = get_data(:lines_before, level)
-    # lbef = 1 if level > 1 && lbef === 0
-    return lbef
+    get_data(:lines_before, level)
   end
 
   def self.color(level)
     get_data(:color, level, '000000')
+  end
+
+  def self.align(level)
+    get_data(:align, level, :left).to_sym
   end
 
   def self.alone?(level)

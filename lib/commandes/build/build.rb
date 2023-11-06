@@ -176,7 +176,7 @@ class PdfBook
     # demandé, c'est souvent pour le corriger)
     # 
     if export_text?
-      if Q.yes?("Voulez-vous ouvrir le texte dans Antidote ?".jaune)
+      if Q.yes?("Voulez-vous ouvrir le texte dans le correcteur (#{CORRECTOR_NAME}) ?".jaune)
         `open -a "#{CORRECTOR_NAME}" "#{exportator.path}"`
       end
     end
@@ -299,11 +299,7 @@ class PdfBook
     # - TOUS LES PARAGRAPHES -
     # ========================
     # 
-    # if first_turn?
-      inputfile.parse_and_write(pdf)
-    # else
-    #   rewrite_paragraphs(pdf)
-    # end
+    inputfile.parse_and_write(pdf)
 
     #
     # - PAGES SUPPLÉMENTAIRES -

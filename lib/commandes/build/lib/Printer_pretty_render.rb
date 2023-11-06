@@ -122,6 +122,10 @@ class << self
   # 
   def pretty_render(pdf:, text:, options:, owner: nil, fonte: nil)
 
+    # puts "\n-> pretty_render\n" \
+    #   "text: #{text.inspect}\n" \
+    #   "options: #{options.inspect}"
+
     my = self
 
     options = defaultize_options(options.dup, pdf)
@@ -209,7 +213,7 @@ class << self
 
         # puts "Nombre lignes : #{lines_count} / On current page:#{nb_lines_curr_page} / On next page:#{nb_lines_next_page}".bleu
 
-        parag_has_orphan = nb_lines_curr_page == 1
+        parag_has_orphan = nb_lines_curr_page == 1 && lines_count > 1
         parag_has_widow  = nb_lines_next_page == 1
         
         # Gestion d'une orpheline
@@ -268,7 +272,10 @@ class << self
         # Dans tous les cas, on écrit le texte en récupérant 
         # l'excédant (qui peut ne pas exister)
         # 
+        # puts "Options (1er) : #{options.inspect}".bleu
         excedent = text_box(str, **options)
+
+        # puts "excedent = #{excedent.inspect}".jaune
 
         # 
         # Gestion de l'excedent quand il y en a
@@ -283,7 +290,11 @@ class << self
           move_to_line(1)
           options[:at][1] = cursor
           options.delete(:height)
-          formatted_text_box(excedent, **options)
+          # formatted_text_box(excedent, **options)
+          # Si on continue d'utiliser formatted_text au lieu de
+          # formatted_text_box, il ne faut plus :at
+          options.delete(:at)
+          formatted_text(excedent, **options)
         end
 
         # On passe sur la ligne suivante

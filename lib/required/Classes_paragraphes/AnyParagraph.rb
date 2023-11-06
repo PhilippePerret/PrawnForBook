@@ -331,6 +331,7 @@ class AnyParagraph
       end
     end
   end
+  alias :previous_paragraph :prev_printed_paragraph
 
   # @return [PdfBook::PFBCode|ClassNil] S'il existe, le paragraphe
   # de code qui précède le paragraphe courant.
@@ -348,8 +349,25 @@ class AnyParagraph
   def length  ; @length ||= (text||'').length     end
 
 
-  # @shortcut
-  def recipe; @recipe || book.recipe end
+  # Deux modes d’utilisation
+  # 1. Sans argument, c’est un simple raccourci vers la recette du
+  #    livre
+  # 2. Avec une valeur, c’est une table à merger (deep_merge) avec
+  #    la recette actuelle pour la modifier à la volée.
+  #    Pour utilisation dans le texte avec :
+  #       (( recipe(key: value) ))
+  #    En sachant que +key+ doit être une variable mise en cache.
+  # 
+  def recipe(hash = nil) 
+    if hash.nil? 
+      book.recipe
+    else
+      hash.each do |k, v|
+        var = book.recipe.send(k.to_sym)
+        book.recipe.instance_variable_set("@#{k}", var.deep_merge!(v))
+      end
+    end
+  end
 
 
   private
