@@ -3,11 +3,16 @@ module Prawn4book
   FEATURE_LIST = %w{
 
       avantages_et_forces
+      definition_fonte
+      format_markdown_du_texte
+      tables/tables
+      #---Annexe---
+      annexe/annexe
+      annexe/markdown_all_marks
+      _liste_exhaustive_features_
 
   }
 =begin
-      definition_fonte
-      format_markdown_du_texte
       definition_marges
       format_yaml_de_la_recette
       definir_format_livre
@@ -36,7 +41,6 @@ module Prawn4book
       puces/big_hyphen
       puces/custom_image
       book_in_collection
-      tables/tables
       notes_de_page
       gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur
@@ -49,11 +53,8 @@ module Prawn4book
       change_margins_on_the_fly
       export_livre_numerique
       export_text
-      #---Annexe---
-      annexe/annexe
+
       annexe/couleur_hexadecimale
-      annexe/markdown_all_marks
-      _liste_exhaustive_features_
 
 =end
  

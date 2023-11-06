@@ -56,9 +56,13 @@ class PdfBook
         @current_table.add_line(paragraph_str.strip)
         return
       else
-        # - On doit imprimer le paragraphe -
+        # - On doit imprimer le paragraphe-table -
+        puts "ON doit imprimer la table à la page #{pdf.page_number}".jaune
         par = @current_table
+        @paragraphes << par
+        # par.print(pdf)
         @current_table = nil 
+        return
       end
     end
 

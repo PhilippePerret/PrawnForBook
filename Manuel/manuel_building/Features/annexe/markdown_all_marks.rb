@@ -15,7 +15,8 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   texte <<~EOT
-    | italique | \\*...\\* | *texte en italique* |
+    Et un paragraphe normal.
+    \\| italique | \\*...\\* | *texte en italique* \\|
     | gras | \\*\\*...\\*\\* | **texte en gras** |
     | souligné | \\__...\\__ | __texte souligné__ |
     | exposants | 1\\^er | 1^er |

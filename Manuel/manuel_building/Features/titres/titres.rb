@@ -1,6 +1,8 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Les Titres"
+  grand_titre "Les Titres"
+
+  titre "Définition des titres"
 
 
   description <<~EOT

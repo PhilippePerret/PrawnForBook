@@ -99,7 +99,7 @@ class Feature
       pdf.stroke_horizontal_rule
     end
 
-    # # Mémoriser la dernière page de cette fonctionnalité
+    # Mémoriser la dernière page de cette fonctionnalité
     last_page_texte  = pdf.page_number
 
     if margins
@@ -416,7 +416,7 @@ class Feature
     fontline1 = "(( font(name:'Courier', size:12, style: :normal, hname:'recipe') ))\n"
     fontline  = "(( font('recipe') ))\n"
     str = fontline1 + str.split("\n").join("\n#{fontline}")
-    __print_texte(str, entete)
+    __print_texte(str, entete, 2)
   end
 
   # Méthode pour afficher le texte donné en exemple
@@ -428,33 +428,47 @@ class Feature
     entete = "Si texte.pfb.md contient…"
     str = sample_texte.dup
     str = str.gsub(/\*/, '\\*').gsub('_', '\_').gsub('<','&lt;').gsub(/"/,'\\"')
-    __print_texte(str, entete)
+    __print_texte(str, entete, 3)
   end
 
   def print_texte(str)
     entete = "Le livre final (document PDF) contiendra :"
-    __print_texte(str, entete)
+    __print_texte(str, entete, 3)
   end
 
   # Méthode pour imprimer le texte
   # 
   # @note
-  def __print_texte(str, entete = nil)
-    pdf.line_width = 0.3
-    if entete.nil?
-      pdf.move_to_next_line
-    else
-      pdf.move_to_next_line if last_is_not_title?
-      entete = "<color rgb=\"999999\">*#{entete}*</color>"
-      book.inject(pdf, entete, 0)
-    end
-    pdf.stroke_horizontal_rule
-    pdf.move_to_next_line
-    str.split("\n").each_with_index do |par_str, idx|
-      book.inject(pdf, par_str, idx + 1)
-    end
+  def __print_texte(str, entete = nil, lines_after = 1)
+    my = self
+    pdf.update do
+      self.line_width = 0.3
+      if entete.nil?
+        move_to_next_line
+      else
+        move_to_next_line if my.last_is_not_title?
+        entete = "<color rgb=\"999999\">*#{entete}*</color>"
+        move_to_line(current_line + 2)
+        book.inject(self, entete, 0)
+      end
+      move_up(16)
+      stroke_horizontal_rule
+      move_to_line(current_line + lines_after)
+      str.split("\n").each_with_index do |par_str, idx|
+
+        puts "Injection de #{par_str.inspect} (page #{self.page_number})".bleu
+
+        book.inject(self, par_str, idx + 1)
+      end
+    end #/pdf.update
   end
 
+
+  # TRUE si le dernier paragraphe (ou autre) écrit n'est pas un
+  # titre.
+  def last_is_not_title?
+    not(last_is_title?)
+  end
 
   private
 
@@ -489,12 +503,6 @@ class Feature
       end
     end
 
-
-    # TRUE si le dernier paragraphe (ou autre) écrit n'est pas un
-    # titre.
-    def last_is_not_title?
-      not(last_is_title?)
-    end
 
     # TRUE si le dernier paragraphe (ou autre) écrit est un titre
     def last_is_title?
