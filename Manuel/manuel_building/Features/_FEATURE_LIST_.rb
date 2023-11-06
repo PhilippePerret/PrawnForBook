@@ -3,8 +3,11 @@ module Prawn4book
   FEATURE_LIST = %w{
 
       avantages_et_forces
+
+  }
+=begin
       definition_fonte
-      #format_markdown_du_texte
+      format_markdown_du_texte
       definition_marges
       format_yaml_de_la_recette
       definir_format_livre
@@ -52,6 +55,6 @@ module Prawn4book
       annexe/markdown_all_marks
       _liste_exhaustive_features_
 
-    }
-
+=end
+ 
 end

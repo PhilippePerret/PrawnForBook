@@ -132,7 +132,11 @@ class NTitre < AnyParagraph
       end
 
       # - Hauteur du titre -
-      # (je ne sais plus à quel saint me vouer pour la hauteur…)
+      # (je ne sais plus à quel saint me vouer pour la hauteur… Ici,
+      # quelle que soit la fonte, c’est toujours 18, la hauteur de
+      # ligne, qui sort, ce qui signifie que c’est la taille affichée
+      # que renvoie height_of et non pas la taille réelle que prend
+      # la police.
       # title_height = real_height_of(ftitre, **my.title_options)
       title_height = height_of(ftitre, **my.title_options)
 
@@ -153,7 +157,7 @@ class NTitre < AnyParagraph
         # soit
         move_to_line(my.fonte.size > line_height ? 2 : 1)
       else
-        # Si le titre n'est pas trop haut
+        # # Titre normal, traité normalement
         # 
         # puts "[Page non vide] #{tstr} n'est pas trop haut (cursor: #{cursor} / curline: #{current_line} / lines before: #{my.lines_before}".jaune
         # - Sinon, il suffit de descendre du nombre de lignes 
@@ -164,6 +168,7 @@ class NTitre < AnyParagraph
       ###########################
       # - IMPRESSION DU TITRE - #
       ###########################
+      my.add_this_titre_in_page(self)
       text(ftitre, **my.title_options)
       move_to_next_line
 
@@ -187,23 +192,23 @@ class NTitre < AnyParagraph
 
     end #/pdf.update
 
-    # 
-    # Ajout du titre à la table des matières
-    # 
+  end
+  # /print
+
+  # Ajout du titre à la table des matières et à la page d’indexe
+  # +page_number+
+  # 
+  # 
+  def add_this_titre_in_page(pdf)
+    page_number = pdf.page_number
     # @note @todo
     #   Je ne comprends pas vraiment pourquoi je ne fais pas un 
     #   nouveau numéro.
-    # 
     num = AnyParagraph.get_current_numero
-    in_tdm? && pdf.tdm.add_title(self, pdf.page_number, num + 1)
-  
-    #
+    in_tdm? && pdf.tdm.add_title(self, page_number, num + 1)
     # Ajout du titre aux titres courants (et aux titres de la page)
-    # 
-    book.set_current_title(self, pdf.page_number)
-
+    book.set_current_title(self, page_number)    
   end
-  # /print
 
   # @return [Hash] Les paramètres pour la méthode PrawnView#text
   # 
