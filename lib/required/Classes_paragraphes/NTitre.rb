@@ -140,6 +140,9 @@ class NTitre < AnyParagraph
       # title_height = real_height_of(ftitre, **my.title_options)
       title_height = height_of(ftitre, **my.title_options)
 
+      # Pour simplifier (sur le debuggage)
+      curpage = book.pages[page_number]
+
       # Si le titre est trop haut, on cherche la première ligne
       # ou il ne dépassera pas.
       if cursor + title_height - ascender > bounds.top
@@ -151,7 +154,7 @@ class NTitre < AnyParagraph
         else
           move_to_line(2)
         end
-      elsif book.pages[page_number].empty?
+      elsif curpage.empty?
         # En cas de PAGE VIERGE pour le moment (donc commençant par
         # un titre en haut) on laisse le titre en haut quel qu'il 
         # soit
@@ -159,7 +162,10 @@ class NTitre < AnyParagraph
       else
         # # Titre normal, traité normalement
         # 
-        # puts "[Page non vide] #{tstr} n'est pas trop haut (cursor: #{cursor} / curline: #{current_line} / lines before: #{my.lines_before}".jaune
+        puts "[Page ##{curpage.number} non vide — length: #{curpage.data[:content_length]}] "\
+         "#{tstr} n'est pas trop haut "\
+          "(cursor: #{cursor} / curline: #{current_line} / "\
+          "lines before: #{my.lines_before}".jaune
         # - Sinon, il suffit de descendre du nombre de lignes 
         #   voulues -
         move_to_line(current_line + 1 + lines_before_calc)

@@ -1362,6 +1362,10 @@ Un paragraphe de texte normal.
 									{ column_widths: {2 => '20%'} }
 :width 						Largeur de la table (par défaut adaptée au contenu — mais il vaut mieux 
 									la spécifier explicitement) [1]
+:space_before 		L'espace qu'il faut laisser ou retirer avant la table. Un nombre avec
+									ou sans unité. Par exemple `10`, `10.cm` ou `"10cm"`
+:space_after 			L'espace qu'il faut laisser ou retirer après la table. Un nombre avec
+									ou sans unité. Par exemple `10`, `10.cm` ou `"10cm"`
 :header						Si true, la première rangée est considérée comme une entête.
 :position					Pour positionner la table. Valeur
 									:left (positionner à gauche), :right (positionner à droite) :center
@@ -1556,7 +1560,7 @@ Une table avec des bords verticaux
 
 ##### Autre manière de garder des rangées ensemble
 
-Une autre façon de garder des rangées ensemble, plus facile à appliquer dans certains cas, consiste en fait à faire un table par rangées d'information à conserver ensemble, au lieu de faire tous des rangées dans la même table.
+Une autre façon de garder des rangées ensemble, plus facile à appliquer dans certains cas, consiste en fait à faire une table par rangées d'information à conserver ensemble, au lieu de faire tous des rangées dans la même table.
 
 Imaginons un cas concret : on doit faire le « scénier » d’un film. Ce scénier comporte les informations pour chaque scène. Pour chaque scène, on trouve une première ligne avec l’intitulé (lieu, effet, décor, numéro), une seconde ligne (rangée) qui contient le synopsis de la scène et une troisième ligne (rangée) avec les informations temporelles. On veut que ces trois rangées soient toujours conservées ensemble, qu’on n’ait jamais, par exemple, un intitulé tout seul en bas de page avec le synopsis en début de page suivante.
 

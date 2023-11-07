@@ -88,6 +88,11 @@ class Page
     data[:content_length] += titre_str.length
   end
 
+  # Si deuxième tour, on remet la page à 0-content à sa création
+  def init_content
+    data.merge!(content_length: 0, first_par:nil)
+  end
+
   def no_content?
     data[:content_length] == 0 && data[:first_par].nil?
   end

@@ -16,7 +16,7 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   texte <<~EOT
-    (( {width: "100%", col_count:3, cell_style:{border_width:[0.1, 0]}} ))
+    (( {space_before:-20, width: "100%", col_count:3, cell_style:{border_width:[0.1, 0]}} ))
     | italique    | \\*...\\*         | *texte en italique*   |
     | gras        | \\*\\*...\\*\\*   | **texte en gras**     |
     | souligné    | \\__...\\__       | __texte souligné__    |

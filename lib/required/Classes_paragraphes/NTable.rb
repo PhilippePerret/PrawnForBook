@@ -49,10 +49,16 @@ class NTable < AnyParagraph
   # Impression de la table
   # 
   # @param \Hash options
-  #   @option :numerotation   \Bool Si false, on ne numérote pas la table
-  #   @option :no_space       \Bool Supprimer l'espace autour de la table (en haut et en bas)
-  #   @option :space_before   \String Distance à laisser avant la table (p.e. '2.3mm')
-  #   @option :space_after    \String Distance à laisser après la table (idem)
+  #   @option :numerotation   [Bool] 
+  #     Si false, on ne numérote pas la table
+  #   @option :no_space       [Bool] 
+  #     Supprimer l'espace autour de la table (en haut et en bas)
+  #   @option :space_before   [String] 
+  #     Distance à laisser avant la table (p.e. '2.3mm'). Noter que
+  #     ça peut aussi être défini par le pfbcode
+  #   @option :space_after    [String] 
+  #     Distance à laisser après la table (idem). Noter que ça peut
+  #     aussi être défini par le pfbcode
   # 
   def print(pdf, **options)
     @pdf = pdf
@@ -87,8 +93,8 @@ class NTable < AnyParagraph
     pdf.font(Fonte.default_fonte)
 
     # - Réglage de l'espace avant la table -
-    if options.key?(:space_before)
-      pdf.move_down(options[:space_before])
+    if options.key?(:space_before) || @space_before
+      pdf.move_down(options[:space_before] || @space_before)
     elsif not(options[:no_space] == true)
       pdf.move_down(pdf.line_height)
     end
@@ -120,8 +126,8 @@ class NTable < AnyParagraph
     end
 
     # - Réglage de l'espace après la table -
-    if options.key?(:space_after)
-      pdf.move_down(options[:space_after])
+    if options.key?(:space_after) || @space_after
+      pdf.move_down(options[:space_after] || @space_after)
     elsif not(options[:no_space] == true)
       pdf.move_down(2 * pdf.line_height)
     end
@@ -276,8 +282,12 @@ class NTable < AnyParagraph
           ps = traite_table_class(ps.delete(:table_class))
           ps = nil unless ps.is_a?(Hash)
         end
-        if ps && ps.key?(:col_count)
-          @col_count = ps.delete(:col_count)
+        if ps 
+          # - Les propriétés à mettre de côté -
+          [:col_count, :space_after, :space_before].each do |prop|
+            self.instance_variable_set("@#{prop}", ps.delete(prop))
+            # p.e. @col_count et @vadjust
+          end
         end
         ps
       end

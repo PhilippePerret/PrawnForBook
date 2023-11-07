@@ -245,7 +245,9 @@ class PdfBook
         export_text("\n#{'-'*30}\n\n") if export_text?
       end
     else
-      pdf.on_page_create { }
+      pdf.on_page_create do
+        pages[pdf.page_number].init_content
+      end
     end
 
     # = FONTS =
