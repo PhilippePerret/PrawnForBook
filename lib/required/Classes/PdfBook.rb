@@ -53,16 +53,16 @@ class PdfBook
     #   TODO Régler le problème en fin de parsing.
     # 
     if @current_table
-      if paragraph_str.match?(AnyParagraph::REG_TABLE)
-        # On met le paragraphe dans la table et on s'en retourne
-        @current_table.add_line(paragraph_str.strip)
-        return
-      elsif paragraph_str.match?(AnyParagraph::REG_END_TABLE)
+      if paragraph_str.match?(AnyParagraph::REG_END_TABLE)
         # - On doit imprimer le paragraphe-table -
         # puts "ON doit imprimer la table à la page #{pdf.page_number}".jaune
         par = @current_table
         @current_table = nil 
-        # - On poursuite pour l’imprimer ci-dessous -
+        # - On poursuit pour l’imprimer ci-dessous -
+      elsif paragraph_str.match?(AnyParagraph::REG_TABLE)
+        # On met le paragraphe dans la table et on s'en retourne
+        @current_table.add_line(paragraph_str.strip)
+        return
       end
     end
 

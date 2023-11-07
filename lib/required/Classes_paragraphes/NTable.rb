@@ -265,8 +265,8 @@ class NTable < AnyParagraph
   # 
   def table_definition
     @table_definition ||= begin
-      if pfbcode && pfbcode.parag_style
-        ps = pfbcode.parag_style
+      if pfbcode && pfbcode.next_parag_style
+        ps = pfbcode.next_parag_style
         if ps.key?(:table_class)
           # 
           # Le code définit un style de table
