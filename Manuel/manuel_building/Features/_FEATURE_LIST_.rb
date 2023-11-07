@@ -3,6 +3,7 @@ module Prawn4book
   FEATURE_LIST = %w{
 
       forces_de_prawn
+      deux_fichiers_de_base
       definition_fonte
       format_markdown_du_texte
       tables/tables

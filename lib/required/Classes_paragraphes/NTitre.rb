@@ -162,10 +162,12 @@ class NTitre < AnyParagraph
       else
         # # Titre normal, traité normalement
         # 
-        puts "[Page ##{curpage.number} non vide — length: #{curpage.data[:content_length]}] "\
-         "#{tstr} n'est pas trop haut "\
-          "(cursor: #{cursor} / curline: #{current_line} / "\
-          "lines before: #{my.lines_before}".jaune
+        if false # debug
+          puts "[Page ##{curpage.number} non vide — length: #{curpage.data[:content_length]}] "\
+           "#{tstr} n'est pas trop haut "\
+            "(cursor: #{cursor} / curline: #{current_line} / "\
+            "lines before: #{my.lines_before}".jaune
+        end
         # - Sinon, il suffit de descendre du nombre de lignes 
         #   voulues -
         move_to_line(current_line + 1 + lines_before_calc)

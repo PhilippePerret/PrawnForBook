@@ -6,6 +6,7 @@ Prawn4book::Manual::Feature.new do
   # 
   description <<~EOT.split("\n").join("\n\n")
 
+    * définition de la taille du livre
     * pagination automatique et personnalisable
     * définition de la fonte par défaut
     * justification par défaut des textes
@@ -16,6 +17,7 @@ Prawn4book::Manual::Feature.new do
     * évaluation à la volée du code ruby (pour des opérations, des constantes, etc.)
     * traitement des références croisées
     * traitement dynamique des références à d'autres livres
+    * génération dynamique de contenu
     * corrige l'erreur typographique de l'apostrophe droit
     * corrige l'erreur typographique de l'absence d'espace avant et après les chevrons
     * corrige l'erreur typographique de l'espace avant et après les guillemets droits et courbes
