@@ -6,6 +6,7 @@ class AnyParagraph
   REG_IMAGE         = /^IMAGE\[(.+)\]$/.freeze
   REG_PFBCODE       = /^\(\( (.+) \)\)$/.freeze
   REG_TABLE         = /^\|(.+)\|$/.freeze
+  REG_END_TABLE     = /^\|\/\|$/.freeze
   REG_COMMENTS      = /^<\!\-\-(.+)\-\-\>$/.freeze
   REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
   REG_END_COMMENT   = /(.*)\-\-\>$/.freeze

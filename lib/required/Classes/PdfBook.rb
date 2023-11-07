@@ -17,7 +17,9 @@ class PdfBook
   def reset
     # Pour mettre absolument tous les paragraphs rencontrés (même
     # les lignes vides)
-    @paragraphes = []
+    @paragraphes      = []
+    @current_table    = nil
+    @current_comment  = nil
   end
 
 
@@ -38,10 +40,10 @@ class PdfBook
   # 
   def inject(pdf, paragraph_str, idx, source = 'user_method')
 
-    # Une table est en cours de traitement
-    # 
-    # Si +paragraph_str+ n'est plus un élément de table, on met fin
-    # à la table et surtout, on l'imprime.
+    # Si une table est en cours de traitement (@current_table non 
+    # nil) et que +paragraph_str+ n'est plus un élément de table (il
+    # ne commence pas ni ne finit par "|") alors on met fin à la 
+    # table et on l'imprime.
     # Si +paragraph_str+ est encore un élément de table, on ajoute
     # la ligne à la table et on s'en retourne.
     # 
@@ -55,14 +57,12 @@ class PdfBook
         # On met le paragraphe dans la table et on s'en retourne
         @current_table.add_line(paragraph_str.strip)
         return
-      else
+      elsif paragraph_str.match?(AnyParagraph::REG_END_TABLE)
         # - On doit imprimer le paragraphe-table -
-        puts "ON doit imprimer la table à la page #{pdf.page_number}".jaune
+        # puts "ON doit imprimer la table à la page #{pdf.page_number}".jaune
         par = @current_table
-        @paragraphes << par
-        # par.print(pdf)
         @current_table = nil 
-        return
+        # - On poursuite pour l’imprimer ci-dessous -
       end
     end
 

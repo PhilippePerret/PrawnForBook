@@ -456,7 +456,7 @@ class Feature
       move_to_line(current_line + lines_after)
       str.split("\n").each_with_index do |par_str, idx|
 
-        puts "Injection de #{par_str.inspect} (page #{self.page_number})".bleu
+        # puts "Injection de #{par_str.inspect} (page #{self.page_number})".bleu
 
         book.inject(self, par_str, idx + 1)
       end

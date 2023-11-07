@@ -1309,13 +1309,14 @@ Les tables sont un excellent moyen de formater des paragraphes de façon particu
 
 > <font color="red"><b>Mais</b></font> : il faut tout de suite être informé que les lignes de référence sur lesquelles le texte doit se poser pour un livre à l’impression professionnelle seront plus difficilement gérées, voir rédhibitoire si la table contient de nombreuses rangées (> 3). Dans ce cas, il faut souvent ajouter des `pdf.move_up` ou `pdf.move_down`, avant la table, pour ajuster les valeurs.
 >
-> Il vaut mieux, dans ce cas, faire appel au [déplacement du texte dans la page](#hoffset-paragraph) qui permet, pour un moindre effort (mais en mode expert de ruby et de Prawn), de placer correctement le texte tout en conservant une gestion naturelle des lignes de référence ou, en mieux, d’un [Printer](#printer).
+> Il vaut mieux, dans ce cas, faire appel au [déplacement du texte dans la page](#hoffset-paragraph) qui permet, pour un moindre effort (mais en mode expert de ruby et de Prawn), de placer correctement le texte tout en conservant une gestion naturelle des lignes de référence ou de faire appel, en mieux, à un [Printer](#printer).
 
 Notez que dans ce cas, une table se réduit très souvent à définir une classe de table et mettre le texte entre traits droits, de cette manière :
 
 ~~~pfb-md
 (( {table_class: :ma_table} ))
 | Le texte qui doit se présenter d'une manière particulière |
+|/|
 ~~~
 
 #### Insertion d’une table
@@ -1325,8 +1326,9 @@ On peut insérer une table dans le code à l’aide du formatage classique de l�
 ~~~md
 | Titre 1 | Titre 2 | Titre 3 |
 | :--- | :---: | ---: |
-[ Colonne 1 | Colonne 2 | Colonne 3 | 
+| Colonne 1 | Colonne 2 | Colonne 3 | 
 etc.
+|/|
 ~~~
 
 > Note : au niveau du traitement, on n’utilise pas *Kramdown*, qui sortirait un code HTML alors que **Prawn** ne gère pas le formatage HTML. En fait on utilise le gem **`Prawn-table`**.
@@ -1343,6 +1345,7 @@ Un paragraphe de texte normal.
 (( {column_widths: [100,100, 20]} ))
 | Large | Large | Petite |
 | Content | Content | Content |
+|/|
 ~~~
 
 <a name="cell-attributes"></a>
@@ -1416,6 +1419,7 @@ Une table avec largeur de colonne implicite.
 (( {width: "50%", col_count:3, column_widths: [10, nil, 10]} ))
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+|/|
 ~~~
 
 **Noter la définition de :col_count ici** qui est importante car c’est cette valeur qui va permettre de savoir, en cas de colspan ou de rowspan combien il y a réellement de colonnes (dans le cas où il y aurait `<nombre de colonnes> - 1` éléments dans la liste `:column_widths`, avec donc une dernière colonne qui ne serait pas précisée explicitement.
@@ -1438,6 +1442,7 @@ Pour insérer une image dans une cellule, utiliser **`IMAGE[path|style]`** où `
 Ci-dessous un table qui contient une image.
 
 | La belle image | IMAGE[images/mon_image.jpg|scale:0.5] |
+|/|
 ~~~
 
 Les attributs des styles peuvent être :
@@ -1468,6 +1473,7 @@ Ci-dessous une table avec des cellules fusionnées.
 | {content:"3+4" rowspan:3} | B | C |
 | B | C |
 | B | C |
+|/|
 ~~~
 
 > Noter que si les [valeurs implicites](#implicite-values-in-table) sont utilisées et que des colspans ou rowspan aussi, il est extrêmement prudent de définir aussi `:col_count` pour définir explicitement le nombre de colonnes dans la table, afin que les calculs des valeurs implicites puissent se faire correctement.
@@ -1486,6 +1492,7 @@ Par exemple, si on a la table :
 | A3 | B3 | C3 |
 | A4 | B4 | C4 |
 | A5 | B5 | C5 |
+|/|
 ~~~
 
 … et qu’on veut que les rangée #2 et #3 soient toujours ensemble, même si la rangée 3 passe sur la page suivante (quand la table est imprimée en bas de la page par exemple), alors on utilise :
@@ -1496,6 +1503,7 @@ Par exemple, si on a la table :
 | A3 | B3 | C3 |
 | A4 | B4 | C4 |
 | A5 | B5 | C5 |
+|/|
 ~~~
 
 De cette manière, même si la rangée #2 pouvait tenir dans le bas de la page, à partir du moment où la rangée #3 passe sur la page suivante, la rangée #2 la suit.
@@ -1508,6 +1516,7 @@ On peut faire la même chose avec autant de rangées que l'on veut (attention de
 | A3 | B3 | C3 |
 | A4 | B4 | C4 |
 | A5 | B5 | C5 |
+|/|
 ~~~
 
 > Note : `keep_with_next: 2` signifie alors « conserver cette rangée avec les deux suivantes ».
@@ -1522,6 +1531,7 @@ Une table sans aucun bord :
 (( {cell_style:{border_width: 0}} ))
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+|/|
 ~~~
 
 Une table avec des bords horizontaux
@@ -1530,7 +1540,7 @@ Une table avec des bords horizontaux
 (( {cell_style:{border_width: [1,0]}} ))
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
-
+|/|
 ~~~
 
 Une table avec des bords verticaux
@@ -1539,6 +1549,7 @@ Une table avec des bords verticaux
 (( {cell_style:{border_width: [0, 0.5]}} ))
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+|/|
 ~~~
 
 <a name="keep-with-next-per-table"></a>
@@ -1590,6 +1601,7 @@ Si plusieurs tables sont similaires, plutôt que d’avoir à remettre pour chac
 (( {table_class: :ma_table_customisee} ))
 | Valeur | valeur | valeur |
 ...
+|/|
 ~~~
 
 > Attention, **NE PAS OUBLIER LES  “:”** avant le nom du style.
@@ -1622,6 +1634,7 @@ Ceci est un paragraphe quelconque.
 
 (( {table_class: :smiley_sourire} ))
 | | C'est bien de faire comme ça |
+|/|
 
 Un autre paragraphe quelconque.
 Et puis un autre.
@@ -1629,6 +1642,7 @@ Et puis un autre.
 (( {table_class: :smiley_grimace} ))
 | | Ça n'est pas bien de faire comme ça |
 | | Ça n'est pas bien non plus comme ça |
+|/|
 
 Un autre paragraphe encore.
 ~~~
@@ -1674,6 +1688,7 @@ On le fait de cette manière :
 (( {table_class: :avec_bloc} ))
 | A1 | B1 | C1 |
 | A2 | B2 | C2 |
+|/|
 ~~~
 
 Et dans `formater.rb` :
@@ -1794,6 +1809,7 @@ Ceci est une table :
 (( {table_class: :matable, variable1: "Aujourd'hui"} ))
 | A1 | A2 | A3 |
 | B1 | B2 | B3 |
+|/|
 ~~~
 
 Et dans le formater :

@@ -2,7 +2,7 @@ module Prawn4book
 
   FEATURE_LIST = %w{
 
-      avantages_et_forces
+      forces_de_prawn
       definition_fonte
       format_markdown_du_texte
       tables/tables
