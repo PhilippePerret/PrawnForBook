@@ -71,7 +71,9 @@ class NTitre < AnyParagraph
     # titre 4, il n’y aura que les 4 lignes du titre de niveau
     # 2. Il faudra donc en ajouter deux.
     lines_before_calc =
-      if previous_paragraph && previous_paragraph.title?
+      if alone?
+        lines_before.dup.freeze
+      elsif previous_paragraph && previous_paragraph.title?
         if previous_paragraph.lines_after >= lines_before
           0
         else
@@ -143,17 +145,15 @@ class NTitre < AnyParagraph
       # Pour simplifier (sur le debuggage)
       curpage = book.pages[page_number]
 
-      # Si le titre est trop haut, on cherche la première ligne
-      # ou il ne dépassera pas.
-      if cursor + title_height - ascender > bounds.top
+      if my.alone?
+        # Si le titre est seul sur la double page, on le
+        # descend simplement du nombre de lignes voulu
+        move_to_line(my.lines_before + 1)
+      elsif cursor + title_height - ascender > bounds.top
+        # Si le titre est trop haut, on cherche la première ligne
+        # ou il ne dépassera pas.
         # puts "#{tstr} est trop haut (de #{(cursor + title_height) - bounds.top} / par rapport à #{bounds.top.round}).".rouge
-        if my.alone?
-          # Si le titre est seul sur la double page, on le
-          # descend simplement du nombre de lignes voulu
-          move_to_line(my.lines_before + 1)
-        else
-          move_to_line(2)
-        end
+        move_to_line(2)
       elsif curpage.empty?
         # En cas de PAGE VIERGE pour le moment (donc commençant par
         # un titre en haut) on laisse le titre en haut quel qu'il 

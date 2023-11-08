@@ -25,6 +25,7 @@ book_format:
     level1:
       lines_before: 10
       align: :right
+      alone: true
     level3:
       color: '0000AA'
     level4:
