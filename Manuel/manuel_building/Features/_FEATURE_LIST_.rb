@@ -7,6 +7,8 @@ module Prawn4book
       definition_fonte
       format_markdown_du_texte
       tables/tables
+      #---Mode_Expert---
+      expert/mode_expert
       #---Annexe---
       annexe/annexe
       annexe/markdown_all_marks

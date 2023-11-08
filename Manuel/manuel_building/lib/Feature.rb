@@ -211,8 +211,9 @@ class Feature
     set_or_get(:grand_titre, value)
   end
 
-  def titre(value = nil)
-    set_or_get(:titre, value)
+  def titre(value = nil, level = 3)
+    return @titre if value.nil?
+    @titre = {titre: correct_string_value(value), level: level}
   end
   alias :title :titre
 
@@ -384,7 +385,7 @@ class Feature
   # Méthode pour imprimer le titre
   # 
   def print_titre
-    par = PdfBook::NTitre.new(book:book, level:3, titre: titre, pindex:0)
+    par = PdfBook::NTitre.new(book:book, level:titre[:level], titre: titre[:titre], pindex:0)
     book.paragraphes << par  
     par.print(pdf)
   end
@@ -399,8 +400,7 @@ class Feature
   def print_description
     description.split("\n").each_with_index do |par_str, idx|
       next if par_str.empty?
-      par = PdfBook::NTextParagraph.new(book:book, raw_text:"#{par_str}", pindex: idx)
-      par.print(pdf)
+      book.inject(pdf, par_str, idx + 1)
     end
   end
 
@@ -493,12 +493,7 @@ class Feature
       if value.nil?
         instance_variable_get("@#{key}")
       else
-        if value.is_a?(String)
-          value = value.strip
-          VARIABLES.each do |k, v|
-            value = value.gsub(k, v)
-          end
-        end
+        value = correct_string_value(value) if value.is_a?(String)
         instance_variable_set("@#{key}", value)
       end
     end
@@ -540,6 +535,14 @@ end #/<< self
 
 
 private
+
+    def correct_string_value(v)
+      v = v.strip
+      VARIABLES.each do |key, val|
+        v = v.gsub(key, val)
+      end
+      return v    
+    end
 
     # @private
     def define_if_last_is_title
