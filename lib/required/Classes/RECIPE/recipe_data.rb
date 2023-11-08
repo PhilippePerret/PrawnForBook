@@ -103,6 +103,15 @@ class Recipe
     @book_width       ||= format_book[:width].proceed_unit
   end
 
+  # :publishing ou :pdf
+  def output_format
+    @output_format ||= format_book[:format].to_sym
+  end
+  def output_format=(value) #tests
+    @output_format = value
+    Prawn4book::PdfBook::AnyParagraph.instance_variable_set("@remplacement_hyperlink", nil)
+  end
+
   # [Symbol] Orientation de la page
   def page_layout
     @page_layout        ||= format_page[:orientation].to_sym

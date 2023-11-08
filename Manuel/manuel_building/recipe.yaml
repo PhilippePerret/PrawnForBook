@@ -14,6 +14,7 @@ book_format:
     width:  '210mm'
     height: '297mm'
     orientation: 'portrait'
+    format: :pdf
   text:
     default_font_and_style: 'Numito/light'
     default_font_size:  11

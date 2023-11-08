@@ -174,9 +174,6 @@ class AnyParagraph
   def self.book=(value) # pour les tests
     @@_book = value 
   end
-  class << self
-    alias :book :book
-  end #/<< self
 
   ##
   # Pour le debuggage on peut vouloir ajouter la valeur du curseur
@@ -297,6 +294,10 @@ private
     # Les codes en backsticks
     # 
     str = __traite_backsticks(str)
+    #
+    # Les hyper-liens 
+    # 
+    str = __traite_hyperlinks(str)
 
     return str
   end
@@ -621,6 +622,22 @@ private
   REG_BACKSTICKS  = /`(.+?)`/.freeze
   SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
+  def self.__traite_hyperlinks(str)
+    str = str.gsub(REG_HYPERLINKS, remplacement_hyperlink)
+    return str
+  end
+  def self.remplacement_hyperlink
+    @remplacement_hyperlink ||= begin
+      if recipe.output_format == :pdf
+        REMP_HYPERLINKS_IN_PDF
+      else
+        REMP_HYPERLINKS_IN_BOOK
+      end
+    end
+  end
+  REG_HYPERLINKS = /\[(.+?)\]\((.+?)\)/
+  REMP_HYPERLINKS_IN_PDF = '<a href="\2">\1</a>'
+  REMP_HYPERLINKS_IN_BOOK = '\1 (\2)'
 
   ##
   # @private
