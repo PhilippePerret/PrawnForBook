@@ -168,6 +168,7 @@ class AnyParagraph
   extend ParserFormaterClass
   include ParserFormater
 
+  EXCHAR = /(?<!\\)/
 
   # (ne pas mettre en cache : les tests foirent, sinon)
   def self.book; @@_book ||= PdfBook.current end
@@ -270,7 +271,7 @@ private
     end
   end
   REG_CODE_RUBY_PROTECTED = /#\{\{\{(?<tiret>\-)?(?<code>.+)\}\}\}/.freeze
-  REG_CODE_RUBY = /#\{(?<tiret>\-)?(?<code>.+?)\}/.freeze
+  REG_CODE_RUBY = /#{EXCHAR}#\{(?<tiret>\-)?(?<code>.+?)\}/.freeze
 
 
   def self.__traite_markdown_inline_in(str, context)
@@ -351,15 +352,14 @@ private
     # que des appels.
     # 
     str = str.gsub(REG_APPEL_CROSS_REFERENCE) do
-      pref    = $1.freeze 
-      book_id = $2.freeze
-      cible   = $3.freeze
+      book_id = $1.freeze
+      cible   = $2.freeze
       book.table_references.add_and_get_cross_reference(book_id, cible)
     end
 
     return str    
   end
-  REG_APPEL_CROSS_REFERENCE = /(!<=\\)\->\((.+?):(.+?)\)/.freeze
+  REG_APPEL_CROSS_REFERENCE = /#{EXCHAR}\->\((.+?):(.+?)\)/.freeze
 
   ##
   # Traitement des références interne (seulement interne)
@@ -404,7 +404,6 @@ private
 
     return str
   end
-  EXCHAR = /(?<!\\)/
 
   REG_AMORCE_CIBLE    = /#{EXCHAR}\<\-\(/.freeze
   REG_AMORCE_APPEL    = /#{EXCHAR}\-\>\(/.freeze
@@ -483,17 +482,16 @@ private
     str = str.gsub(REG_NOTE_MARK) {
       puts "#{$&.inspect}".bleu
       sleep 1
-      pref        = $1.freeze
-      index_note  = $2.freeze
+      index_note  = $1.freeze
       index_note  = book.notes_manager.add(index_note)
-      "#{pref} <sup>#{index_note}</sup>"
+      " <sup>#{index_note}</sup>"
     }
 
     return str
 
   end
-  REG_NOTE_MARK = /(!<=\\)\^(\^|[0-9]+)/.freeze
-  REG_NOTE_DEF  = /^(!<=\\)\^(\^|[0-9]+) (.+?)$/.freeze
+  REG_NOTE_MARK = /#{EXCHAR}\^(\^|[0-9]+)/.freeze
+  REG_NOTE_DEF  = /^#{EXCHAR}\^(\^|[0-9]+) (.+?)$/.freeze
 
 
   def self.__corrections_typographiques(str, context)
@@ -629,15 +627,10 @@ private
   SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
   def self.__traite_hyperlinks(str)
-    str = str.gsub(REG_HYPERLINKS) {
-      if $1 == '\\'
-        $&
-      else
-        remplacement_hyperlink % {pref:$1, titre:$2, href:$3}
-      end
-    }
+    str = str.gsub(REG_HYPERLINKS, remplacement_hyperlink)
     return str
   end
+
   def self.remplacement_hyperlink
     @remplacement_hyperlink ||= begin
       if recipe.output_format == :pdf
@@ -647,12 +640,12 @@ private
       end
     end
   end
-  # REG_HYPERLINKS = /(!<=\\)\[(.+?)\]\((.+?)\)/.freeze
-  # REMP_HYPERLINKS_IN_PDF = '\1<a href="\3">\2</a>'.freeze
-  # REMP_HYPERLINKS_IN_BOOK = '\1\2 (\3)'.freeze
-  REG_HYPERLINKS = /(.)\[(.+?)\]\((.+?)\)/.freeze
-  REMP_HYPERLINKS_IN_PDF = '%{pref}<a href="%{href}">%{titre}</a>'.freeze
-  REMP_HYPERLINKS_IN_BOOK = '%{pref}%%{titre} (%{href})'.freeze
+  REG_HYPERLINKS = /#{EXCHAR}\[(.+?)\]\((.+?)\)/.freeze
+  REMP_HYPERLINKS_IN_PDF = '<a href="\2">\1</a>'.freeze
+  REMP_HYPERLINKS_IN_BOOK = '\1 (\2)'.freeze
+  # REG_HYPERLINKS = /(.)\[(.+?)\]\((.+?)\)/.freeze
+  # REMP_HYPERLINKS_IN_PDF = '%{pref}<a href="%{href}">%{titre}</a>'.freeze
+  # REMP_HYPERLINKS_IN_BOOK = '%{pref}%%{titre} (%{href})'.freeze
 
   ##
   # @private
