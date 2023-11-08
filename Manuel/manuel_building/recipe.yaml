@@ -22,6 +22,9 @@ book_format:
     guillemets:               ['« ',' »']
   #<titles>
   titles:
+    level1:
+      lines_before: 10
+      align: :right
     level3:
       color: '0000AA'
     level4:
