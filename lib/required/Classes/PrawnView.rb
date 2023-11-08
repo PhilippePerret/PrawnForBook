@@ -118,8 +118,13 @@ class PrawnView
     # Si une fonte est définie (c'est-à-dire si on n'en est pas au
     # tout début) On se place sur la première ligne
     if font
-      move_to_first_line
-      cursor.round == (bounds.top - line_height + ascender).round || begin
+      # move_to_first_line
+
+      # Je ne sais absolument pas pourquoi il faut se placer sur la
+      # seconde ligne. J’espère que ça n’est pas propre au manuel 
+      # auto-produit…
+      move_to_line(2)
+      cursor.round == (bounds.top - (2 * line_height) + ascender).round || begin
         puts "ON N'EST PAS SUR LA PREMIÈRE LIGNE".rouge
         puts <<~ERR.rouge
           La position du curseur (#{cursor.round}) devrait être égale
