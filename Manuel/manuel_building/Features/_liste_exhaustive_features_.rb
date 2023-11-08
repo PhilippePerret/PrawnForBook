@@ -9,11 +9,12 @@ Prawn4book::Manual::Feature.new do
     * définition de la taille du livre
     * pagination automatique et personnalisable
     * définition de la fonte par défaut
+    * définition des pages spéciales à insérer [[pages_speciales/pages_speciales]]
     * justification par défaut des textes
     * colorisation des textes
     * suppression des veuves et des orphelines
     * suppression automatique des lignes de voleur
-    * nombreuses sortes de puces et puces personnalisées [[puces]]
+    * nombreuses sortes de puces et puces personnalisées [[puces/puces]]
     * évaluation à la volée du code ruby (pour des opérations, des constantes, etc.)
     * traitement des références croisées
     * traitement dynamique des références à d'autres livres

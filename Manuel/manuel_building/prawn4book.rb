@@ -1,6 +1,11 @@
 require_relative 'lib/required'
 module Prawn4book
 
+  FEATURES_TO_PAGE = {}
+
+  def self.consigne_page_feature(fname, page_number)
+    FEATURES_TO_PAGE.merge!(fname => page_number)    
+  end
   # = main =
   # 
   # Construction des features dans le livre

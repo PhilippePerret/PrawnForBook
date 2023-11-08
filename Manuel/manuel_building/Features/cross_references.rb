@@ -15,16 +15,16 @@ Prawn4book::Manual::Feature.new do
   sample_texte <<~EOT
     On définit une cible avec `\\<-(<nom cible>)` et un lien vers cette cible avec `\\->(<nom cible>)`.
     Le texte ci-dessous, par exemple, est défini avec :
-    J’ai dans cette phrase une cible\\<-(exemple_cible).
+    J’ai dans cette phrase une cible MA_CIBLE qui sera appelée à la page suivante\\<-(exemple_cible).
     \\(( new_page ))
-    La cible se trouve à la page \\->(exemple_cible).
+    La cible MA_CIBLE se trouve à la page \\->(exemple_cible).
 
     EOT
 
   texte <<~EOT
-    J’ai dans cette phrase une cible<-(exemple_cible).
+    J’ai dans cette phrase une cible MA_CIBLE qui sera appelée à la page suivante<-(exemple_cible).
     (( new_page ))
-    La cible se trouve à la page ->(exemple_cible).
+    La cible MA_CIBLE se trouve à la page ->(exemple_cible).
     EOT
 
 end

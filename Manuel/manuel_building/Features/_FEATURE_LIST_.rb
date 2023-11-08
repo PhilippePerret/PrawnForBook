@@ -6,9 +6,13 @@ module Prawn4book
       deux_fichiers_de_base
       definition_fonte
       format_markdown_du_texte
+      puces/puces
       tables/tables
       hyperlinks
       cross_references
+      #---PagesSpeciales---
+      pages_speciales/pages_speciales
+      change_fonte_for_next_paragraph
       #---Mode_Expert---
       expert/mode_expert
       #---Annexe---
@@ -34,7 +38,6 @@ module Prawn4book
       pseudo_format_markdown
       guils_et_apos
       les_fontes
-      puces/puces
       puces/losange
       puces/black_losange
       puces/square
@@ -51,7 +54,6 @@ module Prawn4book
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges
       references_autres_livres
-      change_fonte_for_next_paragraph
       placement_sur_ligne_quelconque
       evaluation_code_ruby
       change_margins_on_the_fly

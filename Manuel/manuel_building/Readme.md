@@ -32,19 +32,20 @@ Ce dossier permet de produire le manuel de façon automatique à l’aide de ***
 
 Pour ajouter une fonctionnalité
 
-* On peut commencer par l’ajouter à la liste de toutes les fonctionnalités dans le fichier `Features/liste_exhaustive_features.rb`
 
 * on lui créer un fichier avec un titre unique parlant dans le dossier `Features`. Pour l’exemple, nous prendrons `nouvelle_fonction.rb`,
 
 * on l’ajoute en la plaçant (son affixe, donc `nouvelle_fonction`) au meilleur endroit dans le manuel dans la liste du fichier `Features/_FEATURE_LIST_.rb`,
 
-* on définit son code dans le fichier `nouvelle_fonction.rb` en utilisant :
+* On définit son code dans le fichier `nouvelle_fonction.rb` en utilisant :
 
   ~~~ruby
   Prawn4book::Manual::Feature.new do
     # ... ici le code ...
   end
   ~~~
+
+* On peut l’ajouter à la liste de toutes les fonctionnalités dans le fichier `Features/liste_exhaustive_features.rb`. En ajoutant le nom du fichier entre deux crochets (`[[path/fichier]]`), on crée automatiquement un lien vers la page concernée.
 
   > Voir ci-dessous pour la définition de la fonctionnalité.
 

@@ -9,7 +9,7 @@ class Feature
   }
 
   attr_reader :pdf, :book
-  attr_accessor :filename
+  attr_accessor :filename # chemin relatif (souvent le nom)
 
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
 
@@ -230,11 +230,19 @@ class Feature
     set_or_get(:recipe, value)
   end
 
-  def sample_recipe(value = nil)
+  # On peut définir la recette exemple avec un autre entête que
+  # l’entête par défaut. Avec :
+  #   sample_recipe <<~EOT, "in recipe_collection.yaml"
+  #     ---
+  #       ... 
+  #     EOT
+  def sample_recipe(value = nil, entete = nil)
+    @sample_recipe_entete = entete unless value.nil?
     set_or_get(:sample_recipe, value)
   end
 
-  def sample_texte(value = nil)
+  def sample_texte(value = nil, entete = nil)
+    @sample_texte_entete = entete unless value.nil?
     set_or_get(:sample_texte, value)
   end
 
@@ -378,6 +386,12 @@ class Feature
   def anchored(str)
     return str if @anchor_already_printed
     @anchor_already_printed = true
+    # Pour les liens de type [[path/feature]], on mémorise la page
+    # courante avec le fichier
+    Prawn4book.consigne_page_feature(filename, pdf.page_number)
+
+    # On retourne le titre avec ancre, mais pour le moment ça ne
+    # fait rien.
     "<link anchor=\"#{filename}\">#{str}</link>"
   end
 
@@ -414,7 +428,7 @@ class Feature
   # Pour afficher l'exemple de recette
   # 
   def print_sample_recipe
-    entete = "Si recipe.yaml ou recipe_collection.yaml contient…"
+    entete = @sample_recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
     str = sample_recipe.dup
     str = str.gsub(/\n( +)/){
       fois = $1.length
@@ -432,7 +446,7 @@ class Feature
   # tout échapper pour que ça s'affiche correctement
   # 
   def print_sample_texte
-    entete = "Si texte.pfb.md contient…"
+    entete = @sample_texte_entete || "Si texte.pfb.md contient…"
     str = sample_texte.dup
     str = str.gsub(/\*/, '\\*').gsub('_', '\_').gsub('<','&lt;').gsub(/"/,'\\"')
     __print_texte(str, entete, 3)
@@ -548,8 +562,18 @@ private
       VARIABLES.each do |key, val|
         v = v.gsub(key, val)
       end
+      if v.match?(/\[\[/)
+        v = v.gsub(REG_LIEN_FEATURE){
+          path = $1.freeze
+          page_nb = Prawn4book::FEATURES_TO_PAGE[path] || begin
+            raise "La feature de path #{path.inspect} est inconnue…"
+          end
+          " (page #{page_nb})"
+        }
+      end
       return v    
     end
+    REG_LIEN_FEATURE = / ?\[\[(.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title
