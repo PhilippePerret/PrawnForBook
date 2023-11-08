@@ -274,6 +274,9 @@ private
 
 
   def self.__traite_markdown_inline_in(str, context)
+
+    str = str.gsub(/\\</, '&lt;'.freeze)
+
     # 
     # Les gras ('**')
     # 
@@ -348,14 +351,15 @@ private
     # que des appels.
     # 
     str = str.gsub(REG_APPEL_CROSS_REFERENCE) do
-      book_id = $1.freeze
-      cible   = $2.freeze
+      pref    = $1.freeze 
+      book_id = $2.freeze
+      cible   = $3.freeze
       book.table_references.add_and_get_cross_reference(book_id, cible)
     end
 
     return str    
   end
-  REG_APPEL_CROSS_REFERENCE = /\->\((.+?):(.+?)\)/.freeze
+  REG_APPEL_CROSS_REFERENCE = /(!<=\\)\->\((.+?):(.+?)\)/.freeze
 
   ##
   # Traitement des références interne (seulement interne)
@@ -400,8 +404,10 @@ private
 
     return str
   end
-  REG_AMORCE_CIBLE    = /\<\-\(/.freeze
-  REG_AMORCE_APPEL    = /\-\>\(/.freeze
+  EXCHAR = /(?<!\\)/
+
+  REG_AMORCE_CIBLE    = /#{EXCHAR}\<\-\(/.freeze
+  REG_AMORCE_APPEL    = /#{EXCHAR}\-\>\(/.freeze
   REG_CIBLE_REFERENCE = / ?\<\-\((.+?)\)/.freeze
   REG_APPEL_REFERENCE = /\-\>\((.+?)\)/.freeze
 
@@ -623,7 +629,13 @@ private
   SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
   def self.__traite_hyperlinks(str)
-    str = str.gsub(REG_HYPERLINKS, remplacement_hyperlink)
+    str = str.gsub(REG_HYPERLINKS) {
+      if $1 == '\\'
+        $&
+      else
+        remplacement_hyperlink % {pref:$1, titre:$2, href:$3}
+      end
+    }
     return str
   end
   def self.remplacement_hyperlink
@@ -635,9 +647,12 @@ private
       end
     end
   end
-  REG_HYPERLINKS = /\[(.+?)\]\((.+?)\)/
-  REMP_HYPERLINKS_IN_PDF = '<a href="\2">\1</a>'
-  REMP_HYPERLINKS_IN_BOOK = '\1 (\2)'
+  # REG_HYPERLINKS = /(!<=\\)\[(.+?)\]\((.+?)\)/.freeze
+  # REMP_HYPERLINKS_IN_PDF = '\1<a href="\3">\2</a>'.freeze
+  # REMP_HYPERLINKS_IN_BOOK = '\1\2 (\3)'.freeze
+  REG_HYPERLINKS = /(.)\[(.+?)\]\((.+?)\)/.freeze
+  REMP_HYPERLINKS_IN_PDF = '%{pref}<a href="%{href}">%{titre}</a>'.freeze
+  REMP_HYPERLINKS_IN_BOOK = '%{pref}%%{titre} (%{href})'.freeze
 
   ##
   # @private

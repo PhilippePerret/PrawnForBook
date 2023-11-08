@@ -9,6 +9,7 @@ class Feature
   }
 
   attr_reader :pdf, :book
+  attr_accessor :filename
 
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
 
@@ -374,10 +375,16 @@ class Feature
     )
   end
 
+  def anchored(str)
+    return str if @anchor_already_printed
+    @anchor_already_printed = true
+    "<link anchor=\"#{filename}\">#{str}</link>"
+  end
+
   # Méthode pour imprimer un grand titre
   # 
   def print_grand_titre
-    par = PdfBook::NTitre.new(book:book, level:1, titre:grand_titre, pindex:0)
+    par = PdfBook::NTitre.new(book:book, level:1, titre:anchored(grand_titre), pindex:0)
     book.paragraphes << par  
     par.print(pdf)
   end
@@ -385,13 +392,13 @@ class Feature
   # Méthode pour imprimer le titre
   # 
   def print_titre
-    par = PdfBook::NTitre.new(book:book, level:titre[:level], titre: titre[:titre], pindex:0)
+    par = PdfBook::NTitre.new(book:book, level:titre[:level], titre: anchored(titre[:titre]), pindex:0)
     book.paragraphes << par  
     par.print(pdf)
   end
 
   def print_subtitle
-    par = PdfBook::NTitre.new(book:book, level:4, titre: subtitle, pindex:0)  
+    par = PdfBook::NTitre.new(book:book, level:4, titre: anchored(subtitle), pindex:0)  
     par.print(pdf)
   end
 

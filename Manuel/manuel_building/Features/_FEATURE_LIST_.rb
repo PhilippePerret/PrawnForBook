@@ -7,6 +7,8 @@ module Prawn4book
       definition_fonte
       format_markdown_du_texte
       tables/tables
+      hyperlinks
+      cross_references
       #---Mode_Expert---
       expert/mode_expert
       #---Annexe---
@@ -48,7 +50,6 @@ module Prawn4book
       gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges
-      cross_references
       references_autres_livres
       change_fonte_for_next_paragraph
       placement_sur_ligne_quelconque

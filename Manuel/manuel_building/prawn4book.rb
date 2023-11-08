@@ -18,6 +18,7 @@ module Prawn4book
         if File.exist?(fpath)
           # puts "Traitement de #{fname.inspect}".bleu
           load fpath
+          Manual::Feature.last.filename = fname
           Manual::Feature.last.print_with(pdf, book)
         else
           add_erreur "Le fichier feature #{fname.inspect} est à écrire.".orange
