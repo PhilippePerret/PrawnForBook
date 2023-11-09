@@ -18,21 +18,24 @@ class PdfBook
       drain
     end
 
-    # Pour tout vider (utilisé par les tests)
+    # Pour tout vider (utilisé par les tests — et le second tour)
     def drain
       @items = {}
       @current_items = []
       @flux_opened = false
       @last_indice_note = 0
       @last_indice_mark = 0
+      @last_unnumbering_note_def_index = 0
+      @last_unnumbering_note_mark_index = 0
+      @unnumbering_notes = {}
     end
 
-    def next_indice_mark
-      @last_indice_mark += 1
+    def next_unnumbering_note_mark_index
+      @last_unnumbering_note_mark_index += 1
     end
 
-    def next_indice_note
-      @last_indice_note += 1
+    def next_unnumbering_note_def_index
+      @last_unnumbering_note_def_index += 1
     end
 
 
@@ -41,12 +44,12 @@ class PdfBook
     # Pour ajouter une note (un indice)
     # 
     def add(index_mark_note)
-      if index_mark_note == '^'
-        index_mark_note = next_indice_mark
-      else
-        index_mark_note = index_mark_note.to_i
-        @last_indice_note = index_mark_note.dup
-      end
+      index_mark_note = 
+        if index_mark_note == :auto
+          next_unnumbering_note_mark_index
+        else
+          index_mark_note.to_i
+        end
       @current_items << index_mark_note
       @items.merge!(index_mark_note => Note.new(self, index_mark_note))
       return index_mark_note
@@ -55,12 +58,12 @@ class PdfBook
     # Pour traiter la note d'indice +indice+
     # 
     def treate(indice_note, note, context)
-      if indice_note == '^'
-        indice_note = next_indice_note
-      else
-        indice_note = indice_note.to_i
-        @last_indice_note = indice_note
-      end
+      indice_note = 
+        if indice_note == :auto
+          next_unnumbering_note_def_index
+        else
+          indice_note = indice_note.to_i
+        end
       pdf = context[:pdf]
       #
       # Si la note est la première des notes non encore marquées,

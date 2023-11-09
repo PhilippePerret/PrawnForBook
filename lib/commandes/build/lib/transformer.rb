@@ -467,31 +467,40 @@ private
   # 
   def self.__traite_notes_in(str, context)
     #
-    # Traitement de la note
-    # 
+    # Traitement de la DÉFINITION DE LA NOTE
+    #
+    # - Note numérotée -
     str = str.gsub(REG_NOTE_DEF) {
-      pref        = $1.freeze
-      index_note  = $2.freeze
-      note        = $3.freeze
-      pref + book.notes_manager.treate(index_note, note, context)
+      index_note  = $1.freeze
+      note        = $2.freeze
+      book.notes_manager.treate(index_note, note, context)
+    }
+    # - Note auto-incrémentée -
+    str = str.gsub(REG_NOTE_AUTO_DEF) {
+      note        = $1.freeze
+      book.notes_manager.treate(:auto, note, context)
     }
     
     #
-    # Traitement d'une marque de note (appel)
-    # 
+    # Traitement d'une MARQUE DE NOTE (appel)
+    #
+    # - Note numérotée - 
     str = str.gsub(REG_NOTE_MARK) {
-      puts "#{$&.inspect}".bleu
-      sleep 1
-      index_note  = $1.freeze
-      index_note  = book.notes_manager.add(index_note)
-      " <sup>#{index_note}</sup>"
+      " <sup>#{book.notes_manager.add($1.freeze)}</sup>"
+    }
+    # - Note auto-incrémentée -
+    str = str.gsub(REG_NOTE_AUTO) {
+      " <sup>#{book.notes_manager.add(:auto)}</sup>" 
     }
 
     return str
 
   end
-  REG_NOTE_MARK = /#{EXCHAR}\^(\^|[0-9]+)/.freeze
-  REG_NOTE_DEF  = /^#{EXCHAR}\^(\^|[0-9]+) (.+?)$/.freeze
+  REG_NOTE_AUTO     = /#{EXCHAR}\^\^/.freeze
+  REG_NOTE_AUTO_DEF = /^#{EXCHAR}\^\^ (.+?)$/.freeze
+  
+  REG_NOTE_MARK = /#{EXCHAR}\^([0-9]+)/.freeze
+  REG_NOTE_DEF  = /^#{EXCHAR}\^([0-9]+) (.+?)$/.freeze
 
 
   def self.__corrections_typographiques(str, context)

@@ -10,6 +10,7 @@ module Prawn4book
       tables/tables
       hyperlinks
       cross_references
+      notes_de_page
       #---PagesSpeciales---
       pages_speciales/pages_speciales
       change_fonte_for_next_paragraph
@@ -49,7 +50,6 @@ module Prawn4book
       puces/big_hyphen
       puces/custom_image
       book_in_collection
-      notes_de_page
       gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur
       afficher_grille_reference_et_marges

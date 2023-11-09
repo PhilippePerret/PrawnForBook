@@ -14,7 +14,7 @@ Prawn4book::Manual::Feature.new do
 
   sample_recipe <<~EOT, "Dans recipe.yaml"
     ---
-    # ...
+    .\\..
     inserted_pages:
       page_de_garde:  true
       faux_titre:     false

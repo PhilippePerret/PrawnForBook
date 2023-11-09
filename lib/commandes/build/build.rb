@@ -205,7 +205,10 @@ class PdfBook
     clear unless debug? || ENV['TEST']
     my = me = self
     
-    #
+    # Réinitialiser les NOTES DE PAGE
+    notes_manager.drain
+    
+    # #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #
     # @note

@@ -6,11 +6,11 @@ Prawn4book::Manual::Feature.new do
   titre "Notes de pages"
 
   description <<~EOT
-    Un parti-pris de _PFB_, que certains regretteront sans doute, est de ne jamais utiliser de notes de bas de page. Si elles sont souvent pratiquées, nous pensons qu'elles offrent une mauvaise expérience à la lectrice ou au lecteur, et que souvent il ne prend pas la peine d'interrompre le flux de sa lecture pour consulter une note.
+    Un des partis-pris fort de _PFB_, que certains regretteront sans doute, est de ne jamais utiliser de *notes de bas de page*. Malgré leur usage, nous pensons qu'elles offrent une mauvaise expérience à la lectrice ou au lecteur, et que souvent ce lecteur ou cette lectrice n’apprécie pas d'interrompre sa lecture pour consulter ces notes.
     
-    Nous avons donc pris l'option d'utiliser plutôt les "notes de page" qui se placent plutôt, en général, à la fin du paragraphe ou à la fin du bloc cohérent de paragraphes.
+    Nous avons donc pris l'option d'utiliser plutôt les "notes de page" qui se placent, en général, à la fin du paragraphe ou à la fin du bloc cohérent de paragraphes (vous pouvez les placer à l’endroit que vous voulez, mais elles seront toujours insérées dans le flux du texte, donc sur la page suivante si vous les placez trop loin).
 
-    Ou de les reporter toutes à la fin de l'ouvrage.
+    Vous pouvez également décider de les reporter toutes à la fin de l'ouvrage. Mais alors, assurez-vous que ce ne soit pas des notes capitales dont l’ignorance nuierait à la compréhension du texte…
 
     EOT
 
