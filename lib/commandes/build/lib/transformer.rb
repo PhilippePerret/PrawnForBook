@@ -134,6 +134,12 @@ module ParserFormaterClass
     str = __corrections_typographiques(str, context)
 
     #
+    # Traitement des autres signes
+    # (méthode inaugurée pour traiter les tirets conditionnels)
+    # 
+    str = __traite_other_signs(str, context)
+
+    #
     # Traitement des class-tags
     # 
     str = __traite_class_tags_in(str, context) || return # quand nil
@@ -248,9 +254,7 @@ private
         no_return = mat[:tiret] == '-'
 
         result = 
-          if code == '-'
-            Prawn::Text::SHY
-          elsif context[:paragraph]
+          if context[:paragraph]
             context[:paragraph].instance_eval(code)
           else
             eval(code)
@@ -276,7 +280,7 @@ private
 
   def self.__traite_markdown_inline_in(str, context)
 
-    str = str.gsub(/\\</, '&lt;'.freeze)
+    str = str.gsub('\<', '&lt;'.freeze)
 
     # 
     # Les gras ('**')
@@ -466,6 +470,10 @@ private
   # Traitement des notes
   # 
   def self.__traite_notes_in(str, context)
+
+    return str unless str.match?('\^')
+
+    # puts "str: #{str.inspect}"
     #
     # Traitement de la DÉFINITION DE LA NOTE
     #
@@ -496,7 +504,8 @@ private
     return str
 
   end
-  REG_NOTE_AUTO     = /#{EXCHAR}\^\^/.freeze
+  # REG_NOTE_AUTO     = /#{EXCHAR}\^\^/.freeze
+  REG_NOTE_AUTO     = /(?<!\\)\^\^/.freeze
   REG_NOTE_AUTO_DEF = /^#{EXCHAR}\^\^ (.+?)$/.freeze
   
   REG_NOTE_MARK = /#{EXCHAR}\^([0-9]+)/.freeze
@@ -512,6 +521,14 @@ private
     return str
   end
 
+
+  def self.__traite_other_signs(str, context)
+    
+    # # - Trait d’union conditionnel -
+    str = str.gsub('{\-\}'.freeze, Prawn::Text::SHY)
+
+    return str
+  end
 
   ##
   # @private
@@ -607,11 +624,11 @@ private
 
   def self.__traite_underline(str)
     return str unless str.match?('_')
-    str .gsub(REG_TIRET_PLAT, 'mmTIRETmmPLATmm'.freeze)
+    str .gsub(REG_TIRET_PLAT, 'mmTIRETmmPLATmm'.freeze) # pour que "\__gras__" ne soit pas transformé
         .gsub(REG_UNDERLINE, SPAN_UNDERLINE)
         .gsub(REG_PLAT_TIRET, '_'.freeze)
   end
-  REG_TIRET_PLAT = /\\_/.freeze
+  REG_TIRET_PLAT = /\\_/.freeze 
   REG_UNDERLINE = /__(.+?)__/.freeze
   SPAN_UNDERLINE = '<u>\1</u>'.freeze
   REG_PLAT_TIRET = /mmTIRETmmPLATmm/.freeze
@@ -765,14 +782,13 @@ private
 
   def self.__traite_tirets_exergue(str, context)
     str = str.gsub(REG_TIRET_EXERGUE) {
-      before  = $1.freeze
-      signe   = $2.freeze
-      content = $3.strip.freeze
-      "#{before}#{signe} #{content} #{signe}"
+      signe   = $1.freeze
+      content = $2.strip.freeze
+      "#{signe} #{content} #{signe}"
     }
     return str
   end
-  REG_TIRET_EXERGUE = /([^\\])([—–])[ ]?(.+?) ?\2/.freeze
+  REG_TIRET_EXERGUE = /#{EXCHAR}([—–])[ ]?(.+?) ?\2/.freeze
 
 end #/class AnyParagraph
 end #/class PdfBook

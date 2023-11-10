@@ -188,10 +188,6 @@ class << self
 
         # puts "Ligne courante : #{current_line}".bleu
 
-        # 
-        # On calcule la ligne sur laquelle doit être posée le texte
-        # 
-        move_to_line(current_line)
 
         # On doit voir si on va passer à la page suivante. On le sait
         # si la hauteur de curseur actuelle, à laquelle on soustrait 
@@ -223,7 +219,7 @@ class << self
         # est identique.
         # 
         if parag_has_orphan
-          start_new_page
+          start_new_page # normalement, se place sur la ligne 2
           move_to_line(1)
           # Pour passer au bon endroit ensuite
           nb_lines_curr_page = lines_count
@@ -284,6 +280,7 @@ class << self
           # - Sans excédant, on descend simplement le curseur de 
           #   la hauteur du box -
           move_down(boxheight)
+          update_current_line
         else
           # - Impression de l'exédent -
           start_new_page
@@ -295,10 +292,12 @@ class << self
           # formatted_text_box, il ne faut plus :at
           options.delete(:at)
           formatted_text(excedent, **options)
+          update_current_line
         end
 
         # On passe sur la ligne suivante
-        move_cursor_to(cursor - line_height)
+        # move_cursor_to(cursor - line_height)
+        move_to_next_line
 
       end #/pdf
 

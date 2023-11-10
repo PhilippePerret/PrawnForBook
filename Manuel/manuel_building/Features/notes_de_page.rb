@@ -15,17 +15,15 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   sample_texte <<~EOT
-    Ceci est un paragraphe avec une note numérotée\\^^ de façon automatique, bien pratique par exemple pour les notes de fin d'ouvrage.
-    Ceci est un paragraphe avec une note numérotée\\^112 explicitement.
-    
-    \\^^ Note de la note numérotée automatiquement.
-    \\^112 Note de la note numéroté explicitement.
+    Ceci est un paragraphe avec une note numérotée^{-}^ de façon automatique, bien pratique par exemple pour les notes de fin d'ouvrage.
+    Ceci est un paragraphe avec une note numérotée^{-}112 explicitement.
+    ^{-}^ Note de la note numérotée automatiquement.
+    ^{-}112 Note de la note numéroté explicitement.
     EOT
 
   texte <<~EOT
     Ceci est un paragraphe avec une note numérotée^^ de façon automatique, bien pratique par exemple pour les notes de fin d'ouvrage.
     Ceci est un paragraphe avec une note numérotée^112 explicitement.
-    
     ^^ Note de la note numérotée automatiquement.
     ^112 Note de la note numéroté explicitement.
     EOT

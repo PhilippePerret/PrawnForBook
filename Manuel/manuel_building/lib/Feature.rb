@@ -23,9 +23,11 @@ class Feature
     # Mémoriser la première page de cette fonctionnalité
     first_page_texte = pdf.page_number
 
+    # = NOUVELLE RECETTE =
     # 
-    # Si une recette est définie, il faut l'enrouler autour du 
-    # code pour pouvoir en tenir compte
+    # Si une recette est définie, il faut appliquer ses nouvelles
+    # valeurs (et garder les valeurs actuelles pour pouvoir les 
+    # remettre)
     # 
     apply_new_state if recipe
 
@@ -122,7 +124,8 @@ class Feature
       add_marged_pages(first_page_texte, last_page_texte) 
     end
 
-    # S'il y avait une recette, on remet l'état précédent
+    # = REMETTRE LA RECETTE INITIALE =
+    #
     retriev_previous_state if recipe
 
     # Si on a modifié la hauteur de ligne, il faut la remettre
@@ -199,6 +202,10 @@ class Feature
     # :sample_texte, :code, :next (à la fin de la fonctionnalité)
     # 
     @new_page_before = {}
+
+    # Pour conserver l’état actuel de la recette (les valeurs 
+    # modifiées s’il y en a)
+    @recipe_old_state = {}
 
     if block_given?
       instance_eval(&block)
@@ -344,22 +351,26 @@ class Feature
           # Appliquer la nouvelle valeur
           table.merge!(sk => sv)
           # Mémoriser la valeur actuelle
-          recipe[k].merge!( sk => cur_value )
+          @recipe_old_state.merge!(k => {}) unless @recipe_old_state.key?(k)
+          @recipe_old_state[k].merge!( sk => cur_value )
         end
       else
         # Conserver la valeur actuelle
-        cur_value = book.recipe.send(k)
+        cur_value = book.recipe.send(k).freeze
+        @recipe_old_state.merge!(k => cur_value)
         # Appliquer la nouvelle valeur
-        book.recipe.instance_variable_set("@#{k}", v)
-        # Mémoriser la valeur actuelle
-        recipe.merge!(k => cur_value)
+        if book.recipe.respond_to?("_set_#{k}".to_sym)
+          book.recipe.send("_set_#{k}".to_sym, v)
+        else
+          book.recipe.instance_variable_set("@#{k}", v)
+        end
       end
     end
   end
 
   # Revenir à l'état de recette précédent
   def retriev_previous_state
-    recipe.each do |k, v|
+    @recipe_old_state.each do |k, v|
       if v.is_a?(Hash)
         table = book.recipe.send(k)
         v.each do |sk, sv|

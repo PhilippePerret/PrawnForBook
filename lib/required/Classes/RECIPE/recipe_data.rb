@@ -35,13 +35,20 @@ class Recipe
   # pour une lecture plus aisée.
   def fonte_note_page
     @fonte_note_page ||= begin
-      fname = format_text[:note_page_font]  || default_font_name
-      fsize = format_text[:note_page_size]  || default_font_size - 2
-      fstyl = format_text[:note_page_style] || :italic
+      fname = notes_page[:font]  || default_font_name
+      fsize = notes_page[:size]  || default_font_size - 2
+      fstyl = notes_page[:style] || :italic
       Fonte.new(name:fname, size:fsize, style:fstyl, hname:'Fonte de note de page')
     end
   end
 
+  def notes_page_borders
+    @notes_page_borders ||= notes_page[:borders]
+  end
+
+  def notes_page
+    @notes_page ||= format_text[:notes_page]
+  end
 
   # 
   # --- TOUTES LES DONNÉES (DATA) ---
@@ -50,10 +57,10 @@ class Recipe
   # -- Le livre --
 
   def book_id
-    @book_id      ||= book_data[:id]
+    @book_id ||= book_data[:id]
   end
   def title
-    @title        ||= book_data[:title]||book_data[:titre]
+    @title ||= book_data[:title]||book_data[:titre]
   end
   def subtitle
     @subtitle     ||= (book_data[:subtitle]||book_data[:sous_titre])&.gsub(/\\n/, "\n")

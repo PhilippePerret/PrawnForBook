@@ -8,13 +8,10 @@ module Prawn4book
 class PdfBook
   class NotesManager
 
-    LINE_COLOR = 'CCCCCC'
+    attr_reader :book
 
-    attr_reader :pdfbook
-    alias :book :pdfbook
-
-    def initialize(pdfbook)
-      @pdfbook = pdfbook
+    def initialize(book)
+      @book = book
       drain
     end
 
@@ -38,6 +35,22 @@ class PdfBook
       @last_unnumbering_note_def_index += 1
     end
 
+    # Quand on rencontre une première note de page (définition) de
+    # bloc (donc il peut y avoir eu d’autres notes de page dans 
+    # d’autres blocs avant).
+    def init_bloc_notes(pdf)
+      my = self
+      @flux_opened = false
+      pdf.update do
+        if my.borders?
+          my.write_line(self)
+          move_to_next_line
+          move_down(line_height)
+        end
+        move_to_next_line
+      end
+    end
+
 
     # -- Action Methods --
 
@@ -58,6 +71,10 @@ class PdfBook
     # Pour traiter la note d'indice +indice+
     # 
     def treate(indice_note, note, context)
+      my = self
+      #
+      # Index de la note
+      # 
       indice_note = 
         if indice_note == :auto
           next_unnumbering_note_def_index
@@ -66,20 +83,6 @@ class PdfBook
         end
       pdf = context[:pdf]
       #
-      # Si la note est la première des notes non encore marquées,
-      # alors il faut amorcer le bloc avec une ligne.
-      # 
-      if not(@flux_opened)
-        pdf.update do
-          # - Hauteur ajustée -
-          v = cursor - ascender
-          stroke do
-            stroke_color(LINE_COLOR)
-            line [0, v], [pdf.bounds.width, v]
-          end
-          pdf.move_to_next_line
-        end
-      end
       @flux_opened = true
 
       # 
@@ -95,36 +98,93 @@ class PdfBook
         owner:    self, 
         pdf:      pdf, 
         text:     str, 
-        fonte:    book.recipe.fonte_note_page, 
-        options:  options_note_page)
+        fonte:    fonte,
+        options:  options_note_page
+      )
 
       return nil
     end
 
+
     def options_note_page
-      @options_note_page ||= {
+      {
         inline_format: true, 
-        align: :justify
+        align: :justify,
+        left:   left,
+        color:  color,
       }
     end
 
     # Méthode appelée après la dernière note écrite
     # 
     def end_bloc(pdf)
+      my = self
       pdf.update do
         # On n'ajoute une ligne que si l'on ne se retrouve pas en
-        # bas de page.
-        if cursor < pdf.bounds.height - 20
-          # - Hauteur réelle -
-          v = cursor - ascender
-          stroke do
-            stroke_color(LINE_COLOR)
-            line [0, v], [pdf.bounds.width, v]
-          end
+        # bas de page et si la recette le demande
+        if my.borders? && cursor < pdf.bounds.height - 20
           move_to_next_line
+          my.write_line(pdf)
         end
+        move_to_next_line
       end
       @flux_opened = false
+    end
+
+    def write_line(pdf)
+      my = self
+      pdf.update do
+        # - Hauteur réelle -
+        v = cursor + ascender
+        # Conservation des valeurs actuelles
+        color_init = stroke_color.freeze
+        width_init = line_width.freeze
+        # - Application des nouvelles valeurs -
+        line_width(my.border_width)
+        stroke_color(my.border_color)
+        # - Dessiner la ligne -
+        stroke do
+          line [my.left, v], [pdf.bounds.width, v]
+        end
+        stroke_color(color_init)
+        line_width(width_init)
+      end
+    end
+
+    def borders_raw_value
+      book.recipe.notes_page_borders
+    end
+
+    def borders?
+      case borders_raw_value
+      when 0, FalseClass then false
+      else true
+      end
+    end
+
+    def border_width
+      case borders_raw_value
+      when Integer, Float then borders_raw_value
+      when FalseClass then nil
+      when TrueClass then 0.3
+      else borders_raw_value
+      end
+    end
+
+    def color
+      book.recipe.notes_page[:color]
+    end
+
+    def border_color
+      book.recipe.notes_page[:border_color]
+    end
+
+    def left
+      book.recipe.notes_page[:left]
+    end
+
+    def fonte
+      book.recipe.fonte_note_page
     end
 
     # 

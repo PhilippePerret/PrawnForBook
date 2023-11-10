@@ -2,24 +2,25 @@ module Prawn4book
 
   FEATURE_LIST = %w{
 
-      forces_de_prawn
-      deux_fichiers_de_base
-      definition_fonte
-      format_markdown_du_texte
-      puces/puces
-      tables/tables
-      hyperlinks
-      cross_references
+      #forces_de_prawn
+      #deux_fichiers_de_base
+      #definition_fonte
+      #format_markdown_du_texte
+      #puces/puces
+      #tables/tables
+      #hyperlinks
+      #cross_references
       notes_de_page
-      #---PagesSpeciales---
-      pages_speciales/pages_speciales
-      change_fonte_for_next_paragraph
-      #---Mode_Expert---
-      expert/mode_expert
-      #---Annexe---
-      annexe/annexe
-      annexe/markdown_all_marks
-      _liste_exhaustive_features_
+      notes_de_page_formatage
+      ##---PagesSpeciales---
+      #pages_speciales/pages_speciales
+      #change_fonte_for_next_paragraph
+      ##---Mode_Expert---
+      #expert/mode_expert
+      ##---Annexe---
+      #annexe/annexe
+      #annexe/markdown_all_marks
+      #_liste_exhaustive_features_
 
   }
 =begin

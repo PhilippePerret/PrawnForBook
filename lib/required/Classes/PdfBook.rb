@@ -109,17 +109,28 @@ class PdfBook
   # La méthode est aussi bien appelée au premier tour qu'au second
   def print_paragraph(pdf, paragraphe)
     # - Pré-traitement en fonction du bloc courant (if any) -
-    if @current_bloc == :notes_page && not(paragraphe.note_page?)
+    if paragraphe.note_page?
+      if @current_bloc != :notes_page
+        notes_manager.init_bloc_notes(pdf)
+        @current_bloc = :notes_page
+      end
+    elsif @current_bloc == :notes_page && not(paragraphe.note_page?)
+      # Note
+      # ----
+      # Il faut mettre la fermeture du bloc avant l’écriture du 
+      # paragraphe courant qui n’est pas un paragraghe de note
       notes_manager.end_bloc(pdf)
       @current_bloc = nil
     end
+
     # --- IMPRESSION ---
     paragraphe.print(pdf)
     STDOUT.write '.'.vert
+
     # - Post-traitement en fonction du bloc éventuel -
-    if paragraphe.note_page?
-      @current_bloc = :notes_page
-    end
+
+
+
   end
 
 

@@ -113,9 +113,14 @@ book_format:
       vadjust: 1.5
       hadjust: 0
     # - Notes de page -
-    note_page_font:           *default_font1
-    note_page_size:           10
-    note_page_style:          :italic
+    notes_page:
+      font:           *default_font1
+      size:           10
+      style:          :italic
+      color:          "000000"
+      borders:        0.3
+      border_color:   "FFCCCC"
+      left:           0
   titles:
     level1:
       font_n_style:   *default2_font_n_style

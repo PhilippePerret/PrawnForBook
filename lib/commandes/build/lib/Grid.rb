@@ -18,6 +18,24 @@ class PrawnView
   # faut : connaitre la ligne, y placer le curseur, et remonter de la
   # valeur de l'ascender de la fonte.
 
+
+  # La ligne courante
+  # -----------------
+  # (en fonction de la grille de référence)
+  # Avant la version LINE 2, cette valeur était toujours calculée
+  # en fonction de la position du curseur. Mais ça posait plein de
+  # problèmes. Maintenant, elle est tenue à jour en fonction des
+  # déplacement avec move_to_line, move_to_next_line, etc. et n’est
+  # recalculée qu’en cas de problème.
+  attr_accessor :current_line
+
+  # Actualise la ligne courante en fonction de la position du 
+  # curseur
+  def update_current_line
+    @current_line = ((bounds.top - cursor) / line_height).round
+    # puts "Current line updatée : #{current_line}".bleu
+  end
+
   # - raccourci -
   def line_height
     @line_height ||= book.recipe.line_height
@@ -47,12 +65,10 @@ class PrawnView
   # move_to_next_line)
   # 
   def move_to_line(x)
-    if x < 0
-      move_to_last_line(x)
-    else
-      move_cursor_to(bounds.top - (x * line_height) + ascender)
-      return x
-    end
+    x = last_line + x if x < 0
+    move_cursor_to(bounds.top - (x * line_height) + ascender)
+    @current_line = x
+    return x
   end
 
   def move_to_first_line
@@ -60,11 +76,12 @@ class PrawnView
   end
 
   # Se déplacer sur la Xe dernière ligne
-  def move_to_last_line(x)
-    move_cursor_to(last_line + (x + 1).abs * line_height)
+  def move_to_last_line
+    move_to_line(last_line)
   end
 
   def move_to_closest_line
+    # raise "La méthode move_to_closest_line"
     prevline = bounds.top - (current_line - 1) * line_height + ascender
     currline = bounds.top - current_line * line_height + ascender
     nextline = bounds.top - (current_line + 1) * line_height + ascender
@@ -75,10 +92,12 @@ class PrawnView
 
     top =
       if dist_from_prev < [dist_from_curr,dist_from_next].min
+        @current_line = current_line - 1
         prevline
       elsif dist_from_curr < dist_from_next
         currline
       else
+        @current_line = current_line + 1
         nextline
       end
 
@@ -108,28 +127,43 @@ class PrawnView
     move_to_line(current_line - 1)
   end
 
-  # Ligne courante
-  # --------------
-  # C'est la distance entre la position actuelle du curseur et le
-  # haut de la page (marge considérée), divisée par la hauteur de
-  # ligne. On l'arrondit à la valeur supérieure
-  def current_line
-    # On prend la position actuelle du curseur
-    c = cursor # position du curseur
-    # Si le cursor est placé plus haut que la limite de la marge
-    # haute, on prend le bounds.top qui correspond à la valeur 
-    # maximale en haut.
-    c = bounds.top if c > bounds.top
-    # On calcule la distance entre le bord haut maximum et la 
-    # position actuelle du curseur. Ça donne 0 si on est tout en
-    # haut.
-    d = bounds.top - c 
-    # On calcule à combien de lignes cette distance correspond.
-    # Normalement, ça doit donner un compte à peu près rond, mais
-    # on l'arrondit quand même
-    return (d / line_height).round
-    # ((bounds.to - cursor).to_f / line_height).ceil
-  end
+  # # Ligne courante
+  # # --------------
+  # # C'est la distance entre la position actuelle du curseur et le
+  # # haut de la page (marge considérée), divisée par la hauteur de
+  # # ligne. On l'arrondit à la valeur supérieure
+  # def current_line
+  #   debugit = true
+  #   puts "Calcul current_line" if debugit
+  #   # On prend la position actuelle du curseur
+  #   c = cursor # position du curseur
+  #   puts "  cursor = #{c.inspect}" if debugit
+  #   if cursor < -line_height
+  #     puts "Curseur sous zéro => page suivante" if debugit
+  #     start_new_page
+  #     return 1
+  #   end
+  #   # Si le cursor est placé plus haut que la limite de la marge
+  #   # haute, on prend le bounds.top qui correspond à la valeur 
+  #   # maximale en haut.
+  #   if c > bounds.top
+  #     c = bounds.top
+  #     puts "  Rectif car trop haut. Mis à #{c.inspect}" if debugit
+  #   end
+  #   # On calcule la distance entre le bord haut maximum et la 
+  #   # position actuelle du curseur. Ça donne 0 si on est tout en
+  #   # haut.
+  #   d = bounds.top - c 
+  #   puts "  Distance du haut : #{d.inspect}" if debugit
+  #   # On calcule à combien de lignes cette distance correspond.
+  #   # Normalement, ça doit donner un compte à peu près rond, mais
+  #   # on l'arrondit quand même
+  #   cl = (d / line_height).round
+  #   puts "  (#{d} / line_heigh(#{line_height}).round = #{cl}"  if debugit
+  #   puts "  Valeur renvoyée : #{cl.inspect}"  if debugit
+  #   return cl
+  #   # ((bounds.to - cursor).to_f / line_height).ceil
+  # end
 
   # @ascender
   # 
