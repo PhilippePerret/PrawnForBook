@@ -26,6 +26,7 @@ Prawn4book::Manual::Feature.new do
     Ceci est un paragraphe avec une note numérotée^112 explicitement.
     ^^ Note de la note numérotée automatiquement.
     ^112 Note de la note numéroté explicitement.
+    Un paragraphe après les notes.
     EOT
 
 end

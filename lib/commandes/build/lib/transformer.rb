@@ -479,14 +479,11 @@ private
     #
     # - Note numérotée -
     str = str.gsub(REG_NOTE_DEF) {
-      index_note  = $1.freeze
-      note        = $2.freeze
-      book.notes_manager.treate(index_note, note, context)
+      book.notes_manager.treate($1.to_i.freeze, $2.freeze, context)
     }
     # - Note auto-incrémentée -
     str = str.gsub(REG_NOTE_AUTO_DEF) {
-      note        = $1.freeze
-      book.notes_manager.treate(:auto, note, context)
+      book.notes_manager.treate(nil, $1.freeze, context)
     }
     
     #
@@ -525,7 +522,7 @@ private
   def self.__traite_other_signs(str, context)
     
     # # - Trait d’union conditionnel -
-    str = str.gsub('{\-\}'.freeze, Prawn::Text::SHY)
+    str = str.gsub('{-}'.freeze, Prawn::Text::SHY)
 
     return str
   end

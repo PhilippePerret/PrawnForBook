@@ -51,8 +51,7 @@ class Feature
     # = DESCRIPTION =
     if description
       saut_page if new_page_before[:description]
-      print_description   
-      pdf.move_to_next_line
+      print_description
     end
 
     if margins
@@ -92,13 +91,11 @@ class Feature
         saut_page if new_page_before[:sample_texte]
         print_sample_texte
       end
-      pdf.move_to_next_line
       print_texte(texte || sample_texte)
     end
 
     if sample_recipe || sample_texte || texte
       # Une dernière ligne pour clore
-      pdf.move_to_next_line
       pdf.stroke_horizontal_rule
     end
 
@@ -328,7 +325,7 @@ class Feature
     end
   end
 
-
+  # Définition ou retrait de la hauteur de ligne
   def line_height(value = nil)
     set_or_get(:line_height, value)
   end
@@ -475,17 +472,12 @@ class Feature
     my = self
     pdf.update do
       self.line_width = 0.3
-      if entete.nil?
-        move_to_next_line
-      else
+      unless entete.nil?
         move_to_next_line if my.last_is_not_title?
         entete = "<color rgb=\"999999\">*#{entete}*</color>"
-        move_to_line(current_line + 2)
         book.inject(self, entete, 0)
       end
-      move_up(16)
       stroke_horizontal_rule
-      move_to_line(current_line + lines_after)
       str.split("\n").each_with_index do |par_str, idx|
 
         # puts "Injection de #{par_str.inspect} (page #{self.page_number})".bleu

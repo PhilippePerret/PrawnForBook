@@ -39,16 +39,8 @@ class PdfBook
     # bloc (donc il peut y avoir eu d’autres notes de page dans 
     # d’autres blocs avant).
     def init_bloc_notes(pdf)
-      my = self
       @flux_opened = false
-      pdf.update do
-        if my.borders?
-          my.write_line(self)
-          move_to_next_line
-          move_down(line_height)
-        end
-        move_to_next_line
-      end
+      write_line(pdf) if borders?
     end
 
 
@@ -70,20 +62,19 @@ class PdfBook
 
     # Pour traiter la note d'indice +indice+
     # 
+    # @note
+    # 
+    #   Ici sont traitées aussi bien les définitions de notes auto-
+    #   incrémentées que de notes numérotées explicitement.
+    # 
     def treate(indice_note, note, context)
       my = self
       #
       # Index de la note
       # 
-      indice_note = 
-        if indice_note == :auto
-          next_unnumbering_note_def_index
-        else
-          indice_note = indice_note.to_i
-        end
+      indice_note ||= next_unnumbering_note_def_index
+
       pdf = context[:pdf]
-      #
-      @flux_opened = true
 
       # 
       # On retire cette note des notes courante
@@ -93,11 +84,11 @@ class PdfBook
       # 
       # -- Écriture de la note --
       #
-      str   = "<sup>#{indice_note}</sup> #{note}"
+      @flux_opened = true
       Printer.pretty_render(
         owner:    self, 
         pdf:      pdf, 
-        text:     str, 
+        text:     "<sup>#{indice_note}</sup> #{note}",
         fonte:    fonte,
         options:  options_note_page
       )
@@ -118,15 +109,10 @@ class PdfBook
     # Méthode appelée après la dernière note écrite
     # 
     def end_bloc(pdf)
-      my = self
-      pdf.update do
-        # On n'ajoute une ligne que si l'on ne se retrouve pas en
-        # bas de page et si la recette le demande
-        if my.borders? && cursor < pdf.bounds.height - 20
-          move_to_next_line
-          my.write_line(pdf)
-        end
-        move_to_next_line
+      # On n'ajoute une ligne que si l'on ne se retrouve pas en
+      # bas de page et si la recette le demande
+      if borders? && pdf.cursor < pdf.bounds.height - 20
+         write_line(pdf)
       end
       @flux_opened = false
     end
@@ -135,7 +121,7 @@ class PdfBook
       my = self
       pdf.update do
         # - Hauteur réelle -
-        v = cursor + ascender
+        v = cursor - ascender + 4
         # Conservation des valeurs actuelles
         color_init = stroke_color.freeze
         width_init = line_width.freeze
@@ -148,6 +134,7 @@ class PdfBook
         end
         stroke_color(color_init)
         line_width(width_init)
+        move_to_next_line
       end
     end
 

@@ -34,9 +34,11 @@ Prawn4book::Manual::Feature.new do
 
   texte <<~EOT
     Ceci est une note automatique^^ avec une autre note auto-incrémentée^^ et une troisième note^^ pour voir.
+    On en a même une quatrième^^ sur un autre paragraphe.
     ^^ Explication de la note automatique
     ^^ Explication de la note auto-incrémentée (ou "note automatique")
     ^^ Explication de la troisième note, qui tiendra elle sur trois lignes pour bien voir l’aspect de ces notes et voir que la ligne (le *border*) est conforme à ce que l’on a décidé, avec couleur et épaisseur.
+    ^^ Bien sûr, les explications des notes auto-incrémentées doivent être dans l’ordre de leur apparition dans les paragraphes.
     Un paragraphe à la suite du bloc de notes.
     EOT
 

@@ -51,7 +51,7 @@ class NTextParagraph < AnyParagraph
 
   REG_CITATION    = /^> .+$/.freeze
   REG_LIST_ITEM   = /^\* .+$/.freeze
-  REG_NOTE_PAGE   = /^\^[0-9+\^] /.freeze
+  REG_NOTE_PAGE   = /^(?<!\\)\^[0-9^]/.freeze
 
   # --- Printing Methods ---
 
