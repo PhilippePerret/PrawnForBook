@@ -31,8 +31,7 @@ class EmptyParagraph < AnyParagraph
 
   def paragraph?; false end
   def empty_paragraph?; true end
-  def sometext? ; false end
-  alias :some_text? :sometext?
+  def some_text? ; false end
   def title?    ; false end
   def citation? ; false end
   def list_item?; false end

@@ -6,7 +6,7 @@ Prawn4book::Manual::Feature.new do
   subtitle "Puce losange"
 
   description <<~EOT
-    On peut définir une autre puce dans la [[recette du livre]], dans la partie `text:` de `book_format:`.
+    On peut définir une autre puce dans la [[recette/recette_livre]] ou la [[recette/recette_collection]], dans la partie `text:` de `book_format:`.
     EOT
 
   sample_recipe <<~YAML

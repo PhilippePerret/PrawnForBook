@@ -5,8 +5,7 @@ class AnyParagraph
   def title?    ; false end
   def paragraph?; false end
   def printed?  ; false end 
-  def sometext? ; false end # surclassé par les filles
-  alias :some_text? :sometext?
+  # def some_text? ; false end # surclassé par les filles
   def pfbcode?  ; false end
   def citation? ; false end
   def list_item?; false end

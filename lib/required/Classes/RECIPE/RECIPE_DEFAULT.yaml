@@ -119,7 +119,8 @@ book_format:
       style:          :italic
       color:          "000000"
       borders:        0.3
-      border_color:   "FFCCCC"
+      border_color:   "999999"
+      # border_color:   "FFCCCC"
       left:           0
   titles:
     level1:

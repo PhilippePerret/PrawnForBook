@@ -34,7 +34,6 @@ class NTitre < AnyParagraph
   # Méthode principale qui écrit le titre dans la page
   # 
   def print(pdf)
-
     # Si le titre a un niveau de 0* il faut s'arrêter là
     # 
     # *Cela arrive par exemple avec les titres de bibliographie qui
@@ -93,9 +92,7 @@ class NTitre < AnyParagraph
 
       # puts "\nCurseur au tout début de #{tstr} : #{cursor}".vert
 
-      if my.on_new_page?
-        start_new_page
-      end
+      start_new_page if my.on_new_page?
 
       # Il faut aussi passer à la page suivante quand il ne reste pas
       # assez de place pour mettre les lignes après (nous sommes trop
@@ -309,9 +306,9 @@ class NTitre < AnyParagraph
     :TRUE == @onbellepage ||= true_or_false(NTitre.belle_page?(level))
   end
 
-  def sometext? ; true  end
-  def title?    ; true  end
-  def printed?  ; true  end
+  def title?      ; true  end
+  def some_text?  ; true  end
+  def printed?    ; true  end
 
   # --- Data Methods ---
 

@@ -3681,18 +3681,6 @@ book_data:
 #</book_data>
 ~~~
 
-#### collection_data (données pour la collection)
-
-~~~yaml
-# Dans collection_recipe.yaml
-
-#<collection_data>
-collection_data:
-	name: "Nom humain de la collection"
-	short_name: "Nom raccourci" # pour les messages seulement
-#</collection_data>
-~~~
-
 <a name="book-format"></a>
 
 #### book_format (format du livre)

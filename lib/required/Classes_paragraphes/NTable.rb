@@ -139,8 +139,7 @@ class NTable < AnyParagraph
   def table?    ; true end
   def paragraph?; false end
   def printed?  ; true  end
-  def sometext? ; true end # seulement ceux qui contiennent du texte
-  alias :some_text? :sometext?
+  def some_text? ; true end # seulement ceux qui contiennent du texte
   def title?    ; false  end
 
   # Mis en test pour le moment, pour quand on utilise la méthode

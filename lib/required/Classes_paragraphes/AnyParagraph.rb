@@ -40,12 +40,10 @@ class AnyParagraph
       # 
       # Formatage général
       # 
-      context = { pdf: pdf, paragraph:self }
+      context = { pdf:pdf, paragraph:self }
+
       @text = AnyParagraph.__parse(text, context)
-      # if @text.match?('<color')
-      #   puts "@text = #{@text.inspect}".bleu
-      #   sleep 1
-      # end
+
     end
   end
 

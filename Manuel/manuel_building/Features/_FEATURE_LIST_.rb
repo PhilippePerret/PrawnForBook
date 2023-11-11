@@ -4,6 +4,9 @@ module Prawn4book
 
       #forces_de_prawn
       #deux_fichiers_de_base
+      recette/juste_titre
+      recette/recette_livre
+      recette/recette_collection
       #definition_fonte
       #format_markdown_du_texte
       #---Puces---
@@ -29,15 +32,15 @@ module Prawn4book
       ##---Mode_Expert---
       #expert/mode_expert
       expert/contexte_erreurs
-      ##---Annexe---
-      #annexe/annexe
+      #---Annexe---
+      annexe/annexe
       #annexe/markdown_all_marks
+      annexe/format_yaml
       #_liste_exhaustive_features_
 
   }
 =begin
       definition_marges
-      format_yaml_de_la_recette
       definir_format_livre
       titres/titres
       pagination

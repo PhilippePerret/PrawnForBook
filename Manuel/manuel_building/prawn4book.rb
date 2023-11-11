@@ -3,8 +3,8 @@ module Prawn4book
 
   FEATURES_TO_PAGE = {}
 
-  def self.consigne_page_feature(fname, page_number)
-    FEATURES_TO_PAGE.merge!(fname => page_number)    
+  def self.consigne_page_feature(fname, page_title, page_number)
+    FEATURES_TO_PAGE.merge!(fname => {title:page_title, page:page_number})    
   end
   # = main =
   # 

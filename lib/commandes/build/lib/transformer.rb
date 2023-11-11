@@ -376,10 +376,13 @@ private
   def self.__traite_references_in(str, context)
     first_page = context[:paragraph].first_page
     numero_par = context[:paragraph].numero
+
     # 
     # - Traitement des CIBLES -
     # 
     if str.match?(REG_AMORCE_CIBLE)
+      # puts "Une cible trouvée dans #{str.inspect}"
+      # sleep 0.5
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
         spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
@@ -409,6 +412,9 @@ private
     return str
   end
 
+  # REG_AMORCE_CIBLE    = /\<\-\(/.freeze
+  # REG_AMORCE_APPEL    = /\-\>\(/.freeze
+  # REG_AMORCE_CIBLE    = /(?<!\\)\<\-\(/.freeze
   REG_AMORCE_CIBLE    = /#{EXCHAR}\<\-\(/.freeze
   REG_AMORCE_APPEL    = /#{EXCHAR}\-\>\(/.freeze
   REG_CIBLE_REFERENCE = / ?\<\-\((.+?)\)/.freeze
@@ -501,7 +507,6 @@ private
     return str
 
   end
-  # REG_NOTE_AUTO     = /#{EXCHAR}\^\^/.freeze
   REG_NOTE_AUTO     = /(?<!\\)\^\^/.freeze
   REG_NOTE_AUTO_DEF = /^#{EXCHAR}\^\^ (.+?)$/.freeze
   

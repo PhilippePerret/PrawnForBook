@@ -193,8 +193,7 @@ class NTextParagraph < AnyParagraph
 
   def paragraph?; true  end
   def printed?  ; true  end
-  def sometext? ; true  end # seulement ceux qui contiennent du texte
-  alias :some_text? :sometext?
+  def some_text? ; true  end # seulement ceux qui contiennent du texte
 
   def citation?     ; @is_citation      end
   def note_page?    ; @is_note_page     end

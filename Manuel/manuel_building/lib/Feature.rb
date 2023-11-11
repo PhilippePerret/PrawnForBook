@@ -85,6 +85,13 @@ class Feature
       print_sample_recipe
     end
 
+    # = CODE EXEMPLE =
+    if sample_code
+      saut_page if new_page_before[:sample_code]
+      print_sample_code
+    end
+
+    # = TEXTE EXEMPLE =
     if sample_texte || texte
       saut_page if new_page_before[:texte]
       if sample_texte
@@ -252,25 +259,23 @@ class Feature
   #       ... 
   #     EOT
   def sample_recipe(value = nil, entete = nil)
-    @sample_recipe_entete = entete unless value.nil?
-    set_or_get(:sample_recipe, value)
+    set_or_get(:sample_recipe, value, entete)
   end
 
   def sample_texte(value = nil, entete = nil)
-    @sample_texte_entete = entete unless value.nil?
-    set_or_get(:sample_texte, value)
+    set_or_get(:sample_texte, value, entete)
   end
 
-  def texte(value = nil)
-    set_or_get(:texte, value)
+  def texte(value = nil, entete = nil)
+    set_or_get(:texte, value, entete)
   end
 
-  def sample_code(value = nil)
-    set_or_get(:sample_code, value)
+  def sample_code(value = nil, entete = nil)
+    set_or_get(:sample_code, value, entete)
   end
 
-  def code(value = nil)
-    set_or_get(:code, value)
+  def code(value = nil, entete = nil)
+    set_or_get(:code, value, entete)
   end
 
   def margins(value = nil)
@@ -403,15 +408,31 @@ class Feature
   end
 
   def anchored(str)
+    str = "#{str}<-(#{filename_cible})"
     return str if @anchor_already_printed
     @anchor_already_printed = true
     # Pour les liens de type [[path/feature]], on mémorise la page
     # courante avec le fichier
-    Prawn4book.consigne_page_feature(filename, pdf.page_number)
+    Prawn4book.consigne_page_feature(filename, feature_title, pdf.page_number)
 
     # On retourne le titre avec ancre, mais pour le moment ça ne
     # fait rien.
-    "<link anchor=\"#{filename}\">#{str}</link>"
+    # "<link anchor=\"#{filename}\">#{str}<-(#{filename_cible})</link>"
+    return str
+  end
+
+  def filename_cible
+    @filename_cible ||= filename.gsub('/','_')#.tap{|n|puts "Cible #{n.inspect}".bleu;sleep 0.3}
+  end
+
+  ## Méthode qui retourne un titre unique pour la
+  # feature, quel que soit son niveau de titre (grand titre, titre de
+  # différent niveau ou sous titre)
+  # 
+  def feature_title
+    @feature_title ||= begin
+      grand_titre || (titre && titre[:titre]) || subtitle
+    end
   end
 
   # Méthode pour imprimer un grand titre
@@ -448,10 +469,23 @@ class Feature
   # 
   def print_sample_recipe
     entete = @sample_recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
-    str = sample_recipe.dup
+    print_as_code(sample_recipe.dup, entete)
+  end
+
+  # Pour afficher l’exemple de code
+  # 
+  def print_sample_code
+    print_as_code(sample_code.dup, @sample_code_entete || "")
+  end
+
+  ##
+  # Méthode générique pour afficher du code (un bloc de code en
+  # Courrier, comme la recette ou de l’exemple de code)
+  # 
+  def print_as_code(str, entete)
     str = str.gsub(/\n( +)/){
       fois = $1.length
-      "\n" + ('  ' * fois)
+      "\n" + (' ' * fois)
     }.gsub('<','&lt;').gsub(/"/,'\\"').gsub('# ', '# ')
     fontline1 = "(( font(name:'Courier', size:12, style: :normal, hname:'recipe') ))\n"
     fontline  = "(( font('recipe') ))\n"
@@ -472,15 +506,15 @@ class Feature
   end
 
   def print_texte(str)
-    entete = "Le livre final (document PDF) contiendra :"
+    entete = @texte_entete || "Le livre final (document PDF) contiendra :"
     __print_texte(str, entete, 3)
   end
 
-  # Méthode pour imprimer le texte
+  # Méthode générique pour imprimer tous les textes
   # 
-  # @note
   def __print_texte(str, entete = nil, lines_after = 1)
     my = self
+    # str = correct_string_value(str) # si ça ne fonctionne pas avec les cibles
     pdf.update do
       self.line_width = 0.3
       unless entete.nil?
@@ -489,6 +523,7 @@ class Feature
         book.inject(self, entete, 0)
       end
       stroke_horizontal_rule
+      move_to_next_line
       str.split("\n").each_with_index do |par_str, idx|
 
         # puts "Injection de #{par_str.inspect} (page #{self.page_number})".bleu
@@ -524,11 +559,15 @@ class Feature
       pdf.instance_variable_set("@gridded_pages", gp)
     end
 
-    def set_or_get(key, value = nil)
+    def set_or_get(key, value = nil, entete = nil)
       if value.nil?
         instance_variable_get("@#{key}")
       else
-        value = correct_string_value(value) if value.is_a?(String)
+        value   = correct_string_value(value) if value.is_a?(String)
+        if entete
+          entete  = correct_string_value(entete) 
+          instance_variable_set("@#{key}_entete", entete)
+        end
         instance_variable_set("@#{key}", value)
       end
     end
@@ -579,15 +618,20 @@ private
       if v.match?(/\[\[/)
         v = v.gsub(REG_LIEN_FEATURE){
           path = $1.freeze
-          page_nb = Prawn4book::FEATURES_TO_PAGE[path] || begin
-            raise "La feature de path #{path.inspect} est inconnue…"
-          end
-          " (page #{page_nb})"
+          "->(#{path.gsub('/','_')})"
+          # if dfeature = Prawn4book::FEATURES_TO_PAGE[path]
+          #   "*#{dfeature[:title]}* (page #{dfeature[:page]})"
+          # elsif Prawn4book.first_turn?
+          #   "#{path} (page XXX)"
+          # else
+          #   add_erreur("Dans #{filename}, la feature de path #{path.inspect} est inconnue…")
+          #   "{{INCONNU : #{path}}}"
+          # end
         }
       end
       return v    
     end
-    REG_LIEN_FEATURE = / ?\[\[(.+?)\]\]/.freeze
+    REG_LIEN_FEATURE = /\[\[(.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title

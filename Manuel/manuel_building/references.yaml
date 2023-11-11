@@ -1,17 +1,77 @@
 ---
-:tables:
+:recette_juste_titre:
+  :page: 12
+  :paragraph:
+  :hybrid: 'p. 12 § '
+:recette_recette_livre:
+  :page: 12
+  :paragraph:
+  :hybrid: 'p. 12 § '
+:recette_recette_collection:
+  :page: 12
+  :paragraph:
+  :hybrid: 'p. 12 § '
+:puces_puces:
+  :page: 12
+  :paragraph:
+  :hybrid: 'p. 12 § '
+:puces_losange:
+  :page: 13
+  :paragraph:
+  :hybrid: 'p. 13 § '
+:puces_black_losange:
   :page: 14
-  :paragraph: 34
-  :hybrid: p. 14 § 34
-:cross_references:
+  :paragraph:
+  :hybrid: 'p. 14 § '
+:puces_square:
+  :page: 14
+  :paragraph:
+  :hybrid: 'p. 14 § '
+:puces_black_square:
   :page: 15
-  :paragraph: 41
-  :hybrid: p. 15 § 41
-:exemple_cible:
+  :paragraph:
+  :hybrid: 'p. 15 § '
+:puces_bullet:
   :page: 16
-  :paragraph: 55
-  :hybrid: p. 16 § 55
-:all_markdown:
-  :page: 26
-  :paragraph: 126
-  :hybrid: p. 26 § 126
+  :paragraph:
+  :hybrid: 'p. 16 § '
+:puces_black_bullet:
+  :page: 17
+  :paragraph:
+  :hybrid: 'p. 17 § '
+:puces_finger:
+  :page: 17
+  :paragraph:
+  :hybrid: 'p. 17 § '
+:puces_black_finger:
+  :page: 18
+  :paragraph:
+  :hybrid: 'p. 18 § '
+:puces_big_hyphen:
+  :page: 19
+  :paragraph:
+  :hybrid: 'p. 19 § '
+:puces_custom_image:
+  :page: 20
+  :paragraph:
+  :hybrid: 'p. 20 § '
+:notes_de_page:
+  :page: 22
+  :paragraph:
+  :hybrid: 'p. 22 § '
+:notes_de_page_formatage:
+  :page: 22
+  :paragraph:
+  :hybrid: 'p. 22 § '
+:expert_contexte_erreurs:
+  :page: 23
+  :paragraph:
+  :hybrid: 'p. 23 § '
+:annexe_annexe:
+  :page: 25
+  :paragraph:
+  :hybrid: 'p. 25 § '
+:annexe_format_yaml:
+  :page: 28
+  :paragraph:
+  :hybrid: 'p. 28 § '
