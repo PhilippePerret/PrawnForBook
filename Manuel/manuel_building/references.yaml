@@ -12,9 +12,9 @@
   :paragraph:
   :hybrid: 'p. 12 § '
 :puces_puces:
-  :page: 12
+  :page: 13
   :paragraph:
-  :hybrid: 'p. 12 § '
+  :hybrid: 'p. 13 § '
 :puces_losange:
   :page: 13
   :paragraph:
@@ -24,9 +24,9 @@
   :paragraph:
   :hybrid: 'p. 14 § '
 :puces_square:
-  :page: 14
+  :page: 15
   :paragraph:
-  :hybrid: 'p. 14 § '
+  :hybrid: 'p. 15 § '
 :puces_black_square:
   :page: 15
   :paragraph:
@@ -40,38 +40,38 @@
   :paragraph:
   :hybrid: 'p. 17 § '
 :puces_finger:
-  :page: 17
-  :paragraph:
-  :hybrid: 'p. 17 § '
-:puces_black_finger:
-  :page: 18
-  :paragraph:
-  :hybrid: 'p. 18 § '
-:puces_big_hyphen:
   :page: 19
   :paragraph:
   :hybrid: 'p. 19 § '
-:puces_custom_image:
+:puces_black_finger:
+  :page: 19
+  :paragraph:
+  :hybrid: 'p. 19 § '
+:puces_big_hyphen:
   :page: 20
   :paragraph:
   :hybrid: 'p. 20 § '
+:puces_custom_image:
+  :page: 21
+  :paragraph:
+  :hybrid: 'p. 21 § '
 :notes_de_page:
-  :page: 22
-  :paragraph:
-  :hybrid: 'p. 22 § '
-:notes_de_page_formatage:
-  :page: 22
-  :paragraph:
-  :hybrid: 'p. 22 § '
-:expert_contexte_erreurs:
   :page: 23
   :paragraph:
   :hybrid: 'p. 23 § '
+:notes_de_page_formatage:
+  :page: 23
+  :paragraph:
+  :hybrid: 'p. 23 § '
+:expert_contexte_erreurs:
+  :page: 24
+  :paragraph:
+  :hybrid: 'p. 24 § '
 :annexe_annexe:
-  :page: 25
+  :page: 26
   :paragraph:
-  :hybrid: 'p. 25 § '
+  :hybrid: 'p. 26 § '
 :annexe_format_yaml:
-  :page: 28
+  :page: 30
   :paragraph:
-  :hybrid: 'p. 28 § '
+  :hybrid: 'p. 30 § '
