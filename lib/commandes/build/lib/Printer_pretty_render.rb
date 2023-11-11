@@ -233,11 +233,6 @@ class << self
 
         # puts "Options avant écriture : #{options.inspect}".jaune
 
-        # = PUCE =
-        # ========
-        # (if any)
-        my.print_puce(self, puce) if puce
-
         # - Par défaut -
         excedent = nil
 
@@ -264,6 +259,11 @@ class << self
           
         end
 
+        # = PUCE =
+        # ========
+        # (if any)
+        puce_printed = puce && my.print_puce(self, puce)
+
         # 
         # Dans tous les cas, on écrit le texte en récupérant 
         # l'excédant (qui peut ne pas exister)
@@ -285,13 +285,26 @@ class << self
           # - Impression de l'exédent -
           start_new_page
           move_to_line(1)
+          if puce && not(puce_printed)
+            my.print_puce(self, puce)
+            options[:at][0] = left
+          end
           options[:at][1] = cursor
           options.delete(:height)
+          old_at = options.delete(:at)
+
           # formatted_text_box(excedent, **options)
           # Si on continue d'utiliser formatted_text au lieu de
           # formatted_text_box, il ne faut plus :at
-          options.delete(:at)
-          formatted_text(excedent, **options)
+          # 
+          if left > 0
+            bounding_box(old_at, width: bounds.width - left) do
+              formatted_text(excedent, **options)
+            end
+          else
+            formatted_text(excedent, **options)
+          end
+
           update_current_line
         end
 
@@ -316,7 +329,14 @@ class << self
   end #/pretty_render
 
   # Écriture de la puce, si nécessaire
+  # 
+  # @return true si la puce a pu être marquée, false dans le cas
+  # contraire.
+  # 
   def print_puce(pdf, puce)
+    # Si la puce doit être marquée après le passage à la page
+    # suivante
+    return false if pdf.cursor < 0
     puce_options = {
       at: [ (puce[:hadjust]||0), pdf.cursor + (puce[:vadjust]||0)]
     }
@@ -343,6 +363,7 @@ class << self
         end
       end
     end
+    return true
   end
   REG_IMG_EXTENSION = /\.(png|jpg|jpeg|tiff|svg)$/.freeze
 
