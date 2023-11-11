@@ -94,10 +94,8 @@ class Feature
       print_texte(texte || sample_texte)
     end
 
-    if sample_recipe || sample_texte || texte
-      # Une dernière ligne pour clore
-      pdf.stroke_horizontal_rule
-    end
+    # = DERNIÈRE LIGNE DE FONCTIONNALITÉ =
+    draw_last_feature_line if sample_recipe || sample_texte || texte
 
     # Mémoriser la dernière page de cette fonctionnalité
     last_page_texte  = pdf.page_number
@@ -130,8 +128,8 @@ class Feature
       pdf.line_height = cur_line_height 
     end
 
-
   end #/ #print_with
+
 
   # DSL
   def initialize(&block)
@@ -210,7 +208,20 @@ class Feature
     self.class.last = self
   end
 
-  # --- DSL Pour définir la fonctionnalités ---
+
+  # === BUILDING METHODS ===
+
+  # Une dernière ligne pour clore (sauf si on est sur la page
+  # suivante)
+  def draw_last_feature_line
+    pdf.update do
+      move_to_next_line
+      stroke_horizontal_rule if current_line > 3
+    end
+  end
+
+
+  # === DEFINE METHODS (DSL) ===
 
   def grand_titre(value = nil)
     set_or_get(:grand_titre, value)

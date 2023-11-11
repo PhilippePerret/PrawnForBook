@@ -230,7 +230,7 @@ class PFBCode < AnyParagraph
         raise FatalPrawnForBookError.new(1002, {code:raw_code, meth: methode})
       else
         # Méthode mal implémentée
-        raise FatalPrawnForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, backtrace:e.backtrace.join("\n")})
+        raise FatalPrawnForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, error:e, backtrace:true})
       end
     end
 

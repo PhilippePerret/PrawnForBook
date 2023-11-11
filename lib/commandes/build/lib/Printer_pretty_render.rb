@@ -306,8 +306,9 @@ class << self
     rescue Exception => e
       raise FatalPrawnForBookError.new(100, {
         text: text.inspect, 
-        err:  e.message, 
-        backtrace:(debug? ? e.backtrace.join("\n") : '')
+        err:  e.message,
+        error: e,
+        backtrace:(debug? ? true : '')
       })
     end
     

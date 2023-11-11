@@ -6,7 +6,18 @@ module Prawn4book
       #deux_fichiers_de_base
       #definition_fonte
       #format_markdown_du_texte
-      #puces/puces
+      #---Puces---
+      puces/puces
+      puces/losange
+      puces/black_losange
+      puces/square
+      puces/black_square
+      puces/bullet
+      puces/black_bullet
+      puces/finger
+      puces/black_finger
+      puces/big_hyphen
+      puces/custom_image
       #tables/tables
       #hyperlinks
       #cross_references
@@ -17,6 +28,7 @@ module Prawn4book
       #change_fonte_for_next_paragraph
       ##---Mode_Expert---
       #expert/mode_expert
+      expert/contexte_erreurs
       ##---Annexe---
       #annexe/annexe
       #annexe/markdown_all_marks
@@ -40,16 +52,6 @@ module Prawn4book
       pseudo_format_markdown
       guils_et_apos
       les_fontes
-      puces/losange
-      puces/black_losange
-      puces/square
-      puces/black_square
-      puces/bullet
-      puces/black_bullet
-      puces/finger
-      puces/black_finger
-      puces/big_hyphen
-      puces/custom_image
       book_in_collection
       gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur

@@ -20,6 +20,9 @@ class FatalPrawnForBookError < StandardError
   def self.context; @@context || '' end
 
   def initialize(err_id, temp_data = nil)
+    if temp_data[:backtrace] === true
+      temp_data.merge!(backtrace: self.class.backtracize(temp_data[:error]))
+    end
     err_msg = build_message(err_id, temp_data)
     super(err_msg)
   end
@@ -35,11 +38,11 @@ class FatalPrawnForBookError < StandardError
   end
 
   # Réduit le backtrace pour :
-  #   - n'afficher que les 5 derniers lieux
+  #   - n'afficher que les 7 dernières traces
   #   - réduire les chemins d'accès (en distinguant bien les
   #     module personnalisés des modules de PrawnForBook)
   def self.backtracize(err)
-    err.backtrace[0..4].collect do |b| 
+    err.backtrace[0..6].collect do |b| 
       b.sub(/#{APP_FOLDER}/.freeze, '<pfb>')
         .sub(/#{folder_for_backtrace}/.freeze, origine_for_backtrace)      
     end.join("\n  ")
@@ -157,6 +160,12 @@ class FatalPrawnForBookError < StandardError
     alias :add_error :add_errors
   end
 
-end
+end #/class FatalPrawnForBookError
+
+# - Raccourci, notamment pour @context -
+# Pour faire : PFBContextError.call("Le contexte")
+PFBContextError = FatalPrawnForBookError.method(:context=)
+# Pour faire : PFBError.context = "Le contexte"
+PFBError = FatalPrawnForBookError
 
 end #/module Prawn4book

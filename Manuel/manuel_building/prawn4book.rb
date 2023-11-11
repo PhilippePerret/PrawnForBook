@@ -22,23 +22,31 @@ module Prawn4book
         fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
         if File.exist?(fpath)
           # puts "Traitement de #{fname.inspect}".bleu
+          # 
+          PFBError.context = "Chargement de la feature #{fname}"
           load fpath
           Manual::Feature.last.filename = fname
+          PFBError.context = "Première impression de la feature #{fname}"
           Manual::Feature.last.print_with(pdf, book)
         else
           add_erreur "Le fichier feature #{fname.inspect} est à écrire.".orange
         end
       end
 
+
     else
 
       # = Deuxième Tour =
       
       Manual::Feature.each do |feature|
+        PFBError.context = "Seconde impression de la feature #{feature.filename}"
         feature.print_with(pdf, book)
       end
 
     end
+    
+    PFBError.context = nil
+  
   end
 
 end #/module Prawn4book
