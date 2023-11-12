@@ -6,13 +6,15 @@ class NImage < AnyParagraph
 
   # @public
   # 
-  # Méthode qui parse le code contenu à l'intérieur d'un IMAGE[...]
-  # dans le fichier source.
-  # @note : ce code doit se trouve seul sur une ligne
+  # Méthode qui parse le code contenu à l'intérieur d'un ![...]
+  # dans le fichier source (ou IMAGE[...] pour la régression).
+  # @note : ce code doit se trouve seul sur la ligne où l’image
+  # doit être insérée
   # 
   # @param dimg [String] Intérieur de IMAGE[...]
   # 
   # @return [Hash] Les données pour l'image
+  # 
   def self.parse(dimg)
     case dimg
     when /^\{(.+)\}$/.freeze

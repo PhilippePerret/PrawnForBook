@@ -21,21 +21,24 @@ module Prawn4book
       puces/black_finger
       puces/big_hyphen
       puces/custom_image
-      #tables/tables
-      #hyperlinks
+      image_inserer
       #cross_references
+      #hyperlinks
       notes_de_page
       notes_de_page_formatage
+      #tables/tables
       ##---PagesSpeciales---
       #pages_speciales/pages_speciales
       #change_fonte_for_next_paragraph
       ##---Mode_Expert---
       #expert/mode_expert
       expert/contexte_erreurs
+      expert/injection_code
       #---Annexe---
       annexe/annexe
       #annexe/markdown_all_marks
       annexe/format_yaml
+      #image_rogner_svg
       #_liste_exhaustive_features_
 
   }

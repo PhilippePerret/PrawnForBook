@@ -117,7 +117,9 @@ class ReferencesTable
       # (2e tour ou référence arrière)
       call_to(ref)
     elsif second_turn?
-      raise FatalPrawnForBookError.new(2002, {id: ref_id, targets:table.keys})
+      add_erreur(Prawn4bookError.error_by_num(2002) % {id: ref_id, targets:table.keys})
+      # raise FatalPrawnForBookError.new(2002, {id: ref_id, targets:table.keys})
+      "### REF: #{ref_id} ###"
     else
       # - Référence non définie -
       # On passe ici quand la référence cible n'est pas encore 

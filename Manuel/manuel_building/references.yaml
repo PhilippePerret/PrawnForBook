@@ -55,6 +55,10 @@
   :page: 21
   :paragraph:
   :hybrid: 'p. 21 § '
+:image_inserer:
+  :page: 22
+  :paragraph:
+  :hybrid: 'p. 22 § '
 :notes_de_page:
   :page: 23
   :paragraph:
@@ -67,10 +71,14 @@
   :page: 24
   :paragraph:
   :hybrid: 'p. 24 § '
-:annexe_annexe:
-  :page: 26
+:expert_injection_code:
+  :page: 25
   :paragraph:
-  :hybrid: 'p. 26 § '
+  :hybrid: 'p. 25 § '
+:annexe_annexe:
+  :page: 27
+  :paragraph:
+  :hybrid: 'p. 27 § '
 :annexe_format_yaml:
   :page: 30
   :paragraph:

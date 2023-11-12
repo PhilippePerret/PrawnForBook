@@ -1085,6 +1085,8 @@ Par défaut (pour le moment), les images ne sont pas numéroter comme des paragr
 >
 > Cela ne fonctionne pas non plus si on utilise [`(( line ))`](#line-vide)
 
+Pour faire référence à l’image, il suffit de mettre une cible.
+
 **Propriétés de l’image**
 
 Trouvez ci-dessous la liste des propriétés qui peuvent être utilisées pour les images :

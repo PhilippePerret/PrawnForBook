@@ -6,6 +6,16 @@ end
 class PrawnBuildingError < StandardError; end
 class PrawnFatalError < StandardError; end
 
+# Pour pouvoir faire :
+#   Prawn4bookError[num_error] % {data}
+# pour récupérer une erreur défini par FatalPrawForBookError, par
+# exemple pour la méthode add_erreur.
+class Prawn4bookError
+  def self.[](err_num)
+    FatalPrawnForBookError.error_by_num(err_num)
+  end
+end
+
 # Pour produire une erreur fatale par son numéro d'erreur
 class FatalPrawnForBookError < StandardError
 
@@ -161,6 +171,7 @@ class FatalPrawnForBookError < StandardError
   end
 
 end #/class FatalPrawnForBookError
+
 
 # - Raccourci, notamment pour @context -
 # Pour faire : PFBContextError.call("Le contexte")
