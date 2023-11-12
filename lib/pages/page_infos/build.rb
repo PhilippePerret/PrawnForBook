@@ -151,12 +151,12 @@ class PageInfos
     # Hauteur prise par un label
     # 
     height_for_label = get_label_height(pdf)
-    height_for_label.is_a?(Float) || raise(FatalPrawnForBookError.new(610))
+    height_for_label.is_a?(Float) || raise(PFBFatalError.new(610))
     # 
     # Hauteur prise par une valeur
     # 
     height_for_value = get_value_height(pdf)
-    height_for_value.is_a?(Float) || raise(FatalPrawnForBookError.new(610))
+    height_for_value.is_a?(Float) || raise(PFBFatalError.new(610))
     # 
     # On passe en revue toutes les infos pour voir l'espace total
     # qui restera et le répartir dans les interstices
@@ -397,7 +397,7 @@ class PageInfos
         page_infos_missing_keys << "#</page_infos>"
       end
       missing_keys = (page_infos_missing_keys + publisher_missing_keys).join("\n")
-      raise FatalPrawnForBookError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
+      raise PFBFatalError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
     end
   end
 

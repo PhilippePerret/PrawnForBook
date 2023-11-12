@@ -49,7 +49,7 @@ class ReferencesTable
     return if second_turn?
     ref_id = ref_id.to_sym
     if table.key?(ref_id)
-      raise FatalPrawnForBookError.new(2001, {id: ref_id, page: ref_data[:page]})
+      raise PFBFatalError.new(2001, {id: ref_id, page: ref_data[:page]})
     else
       table.merge!(ref_id => ref_data)
     end
@@ -117,8 +117,8 @@ class ReferencesTable
       # (2e tour ou référence arrière)
       call_to(ref)
     elsif second_turn?
-      add_erreur(Prawn4bookError.error_by_num(2002) % {id: ref_id, targets:table.keys})
-      # raise FatalPrawnForBookError.new(2002, {id: ref_id, targets:table.keys})
+      add_erreur(Prawn4bookError[2002] % {id: ref_id, targets:table.keys})
+      # raise PFBFatalError.new(2002, {id: ref_id, targets:table.keys})
       "### REF: #{ref_id} ###"
     else
       # - Référence non définie -

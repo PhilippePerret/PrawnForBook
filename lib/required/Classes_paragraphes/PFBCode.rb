@@ -78,7 +78,7 @@ class PFBCode < AnyParagraph
       # Pour le moment, on considère que ça ne peut être qu'une cible
       treate_as_cible_references(pdf, book)
     when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
-      raise FatalPrawnForBookError.new(2000, {code: raw_code})
+      raise PFBFatalError.new(2000, {code: raw_code})
     when 'line'
       # Inscription d'une liste
       pdf.update { text " " }
@@ -92,7 +92,7 @@ class PFBCode < AnyParagraph
       params  = $2.freeze
       traite_as_methode_with_params(pdf, methode, params)
     else
-      raise FatalPrawnForBookError.new(1001, {code:raw_code, page: pdf.page_number})
+      raise PFBFatalError.new(1001, {code:raw_code, page: pdf.page_number})
     end
   end
 
@@ -113,7 +113,7 @@ class PFBCode < AnyParagraph
       pdf.font(fonte)
       @opere_font_change = true
     rescue Exception => e
-      raise FatalPrawnForBookError.new(652, {bad:font_data.inspect, err:e.message})
+      raise PFBFatalError.new(652, {bad:font_data.inspect, err:e.message})
     end
   end
 
@@ -161,7 +161,7 @@ class PFBCode < AnyParagraph
         elsif defined?(eval(objet.to_s))
           objet = eval(objet.to_s)
         else
-          raise FatalPrawnForBookError.new(5001, {o: objet.to_s, m: methode_ini})
+          raise PFBFatalError.new(5001, {o: objet.to_s, m: methode_ini})
         end
         # 
         # Cet objet connait-il la méthode +methode+ ?
@@ -181,10 +181,10 @@ class PFBCode < AnyParagraph
             params << self
             objet.send(methode, *params)
           else
-            raise FatalPrawnForBookError.new(5003, {n:params_count, max:params_count+2, c: methode_ini})
+            raise PFBFatalError.new(5003, {n:params_count, max:params_count+2, c: methode_ini})
           end
         else
-          raise FatalPrawnForBookError.new(5002, {o: objet.to_s, m:methode, c: methode_ini})
+          raise PFBFatalError.new(5002, {o: objet.to_s, m:methode, c: methode_ini})
         end
         return
       end
@@ -223,14 +223,14 @@ class PFBCode < AnyParagraph
       else
         raise 'méthode inconnue'
       end
-    rescue FatalPrawnForBookError => e
+    rescue PFBFatalError => e
       raise e
     rescue Exception => e
       if e.message == 'méthode inconnue'
-        raise FatalPrawnForBookError.new(1002, {code:raw_code, meth: methode})
+        raise PFBFatalError.new(1002, {code:raw_code, meth: methode})
       else
         # Méthode mal implémentée
-        raise FatalPrawnForBookError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, error:e, backtrace:true})
+        raise PFBFatalError.new(1100, {code:raw_code, lieu:e.backtrace.shift, err_msg:e.message, error:e, backtrace:true})
       end
     end
 

@@ -12,12 +12,12 @@ class PrawnFatalError < StandardError; end
 # exemple pour la méthode add_erreur.
 class Prawn4bookError
   def self.[](err_num)
-    FatalPrawnForBookError.error_by_num(err_num)
+    PFBFatalError.error_by_num(err_num)
   end
 end
 
 # Pour produire une erreur fatale par son numéro d'erreur
-class FatalPrawnForBookError < StandardError
+class PFBFatalError < StandardError
 
   # Pour ajouter du contexte (c'est-à-dire mieux savoir où se 
   # déclenche et surtout "pour quoi" se déclenche une erreur)
@@ -91,7 +91,7 @@ class FatalPrawnForBookError < StandardError
     @@book ||= Prawn4book::PdfBook.current
   end
 
-  # Numéros d'erreurs à utiliser avec FatalPrawnForBookError.new(<num err>, <data>)
+  # Numéros d'erreurs à utiliser avec PFBFatalError.new(<num err>, <data>)
   def self.error_by_num(err_id)
     @@error_by_num ||= {
       # -- Base --
@@ -170,13 +170,13 @@ class FatalPrawnForBookError < StandardError
     alias :add_error :add_errors
   end
 
-end #/class FatalPrawnForBookError
+end #/class PFBFatalError
 
 
 # - Raccourci, notamment pour @context -
 # Pour faire : PFBContextError.call("Le contexte")
-PFBContextError = FatalPrawnForBookError.method(:context=)
+PFBContextError = PFBFatalError.method(:context=)
 # Pour faire : PFBError.context = "Le contexte"
-PFBError = FatalPrawnForBookError
+PFBError = PFBFatalError
 
 end #/module Prawn4book

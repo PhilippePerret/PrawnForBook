@@ -416,7 +416,7 @@ class Recipe
   # Ici, c'est [:book_format][:book], donc un sous-ensemble de
   # :book_format qui concerne seulement l'aspect du livre.
   def format_book 
-    @format_book ||= book_format[:book] || raise(FatalPrawnForBookError.new(499, {data: "recipe>book_data>book>{Hash}"}))
+    @format_book ||= book_format[:book] || raise(PFBFatalError.new(499, {data: "recipe>book_data>book>{Hash}"}))
   end
 
   def format_titles

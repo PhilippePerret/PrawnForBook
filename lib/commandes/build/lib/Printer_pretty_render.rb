@@ -317,7 +317,7 @@ class << self
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e
-      raise FatalPrawnForBookError.new(100, {
+      raise PFBFatalError.new(100, {
         text: text.inspect, 
         err:  e.message,
         error: e,
@@ -341,7 +341,7 @@ class << self
       at: [ (puce[:hadjust]||0), pdf.cursor + (puce[:vadjust]||0)]
     }
     if puce[:text].downcase.match?(REG_IMG_EXTENSION)
-      puce_image_path = book.existing_path(puce[:text]) || raise(FatalPrawnForBookError.new(102, {path:puce[:text]}))
+      puce_image_path = book.existing_path(puce[:text]) || raise(PFBFatalError.new(102, {path:puce[:text]}))
       pdf.update do
         image_options = puce_options.merge({
           position:   :center,

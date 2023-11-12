@@ -593,13 +593,13 @@ class PdfBook
   # instancier les bibliographies qui sont définies.
   def conforme?
     if recipe.page_de_titre?
-      not(recipe.title.nil?)     || raise(FatalPrawnForBookError.new(800))
-      not(recipe.authors.nil?)   || raise(FatalPrawnForBookError.new(801))
+      not(recipe.title.nil?)     || raise(PFBFatalError.new(800))
+      not(recipe.authors.nil?)   || raise(PFBFatalError.new(801))
       unless recipe.logo_defined? == recipe.logo_exists?
-         raise(FatalPrawnForBookError.new(802, {path: recipe.logo_path}))
+         raise(PFBFatalError.new(802, {path: recipe.logo_path}))
       end
     end
-  rescue FatalPrawnForBookError => e
+  rescue PFBFatalError => e
     raise e
   rescue PrawnBuildingError => e
     formated_error(e)

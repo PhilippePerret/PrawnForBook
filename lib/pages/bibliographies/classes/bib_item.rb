@@ -167,7 +167,7 @@ class BibItem
   end
 
   def exists_or_raises
-    exist? || raise(FatalPrawnForBookError.new(714, **{id: id}))
+    exist? || raise(PFBFatalError.new(714, **{id: id}))
   end
 
   # --- Méthode pour cross-reference (quand Bibliography::Livres) ---
@@ -277,7 +277,7 @@ class BibItem
   #   avec un cant' modify frozen string
   def title
     keytitle = biblio.respond_to?(:main_key) ? biblio.main_key : :title
-    data[keytitle] || raise(FatalPrawnForBookError.new(713, {id: self.id, tag:biblio.tag}))
+    data[keytitle] || raise(PFBFatalError.new(713, {id: self.id, tag:biblio.tag}))
   end
 
   # @return [String] Le titre, mais normalisé pour pouvoir servir de

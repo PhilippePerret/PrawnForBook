@@ -65,7 +65,7 @@ end
 # 
 def leading(pdf, lineheight)
   @leadings[lineheight] ||= begin
-    pdf         || raise(FatalPrawnForBookError.new(650, {name:name, pms: params.inspect}))
+    pdf         || raise(PFBFatalError.new(650, {name:name, pms: params.inspect}))
     line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
     # - par prudence -
     cur_default_leading = pdf.default_leading
@@ -149,7 +149,7 @@ class << self
     # 
 
     # Les données doivent être valides
-    dfont.key?(:style) || raise(FatalPrawnForBookError.new(651, {dfont: data_font}))
+    dfont.key?(:style) || raise(PFBFatalError.new(651, {dfont: data_font}))
 
     thefont = new(dfont)
     @fonts.merge!(key_font => thefont)

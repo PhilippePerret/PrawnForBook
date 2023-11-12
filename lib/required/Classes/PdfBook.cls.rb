@@ -10,7 +10,7 @@ class << self
   # @api public
   def ensure_current
     return current if current?
-    raise FatalPrawnForBookError.new(1, { path: File.expand_path('.') })
+    raise PFBFatalError.new(1, { path: File.expand_path('.') })
   end
 
   # @return true si on se trouve dans un dossier de livre

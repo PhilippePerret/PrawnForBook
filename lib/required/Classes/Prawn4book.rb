@@ -12,13 +12,13 @@ module Prawn4book
     begin
       command = Prawn4book::Command.new(help? ? 'help' : CLI.main_command)
       command.run
-    rescue FatalPrawnForBookError => e
+    rescue PFBFatalError => e
       puts "\n\n" + e.message.rouge
       if debug?
         puts e.backtrace.join("\n")
       end
     rescue RecipeError => e
-      warn "Ne plus utiliser. Utiliser FatalPrawnForBookError plutôt"
+      warn "Ne plus utiliser. Utiliser PFBFatalError plutôt"
       puts "\nERREUR DE DÉFINITION DE LA RECETTE\n#{e.message}".rouge
     end
     puts "\n\n"

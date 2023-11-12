@@ -28,7 +28,7 @@ module Prawn4book
     when 'package-st'
       open_sublime_text_package
     else
-      raise FatalPrawnForBookError.new(300, {ca:CLI.components[0].inspect})
+      raise PFBFatalError.new(300, {ca:CLI.components[0].inspect})
     end
   end
 
@@ -49,7 +49,7 @@ module Prawn4book
   def self.open_collection(in_finder)
     book = PdfBook.ensure_current || return
     book.in_collection? || begin
-      raise FatalPrawnForBookError.new(10, {title:File.basename(book.folder)})
+      raise PFBFatalError.new(10, {title:File.basename(book.folder)})
     end
     if in_finder
       `open -a Finder "#{book.collection.folder}"`  

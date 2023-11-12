@@ -266,7 +266,7 @@ private
           result
         end
       rescue Exception => e
-        raise FatalPrawnForBookError.new(101,{
+        raise PFBFatalError.new(101,{
           code: code,
           err: e.message,
           trace: e.backtrace[0..3].join("\n  ")
@@ -433,7 +433,7 @@ private
       bib_tag = $1.freeze
       item_av, item_ap = $2.freeze.split('|')
 
-      biblio = Prawn4book::Bibliography.get(bib_tag) || raise(FatalPrawnForBookError.new(700, {bib: bib_tag.inspect}))
+      biblio = Prawn4book::Bibliography.get(bib_tag) || raise(PFBFatalError.new(700, {bib: bib_tag.inspect}))
       canon, actual = 
         if (bibitem = biblio.exist?(item_av))
           [item_av, item_ap]
@@ -558,14 +558,14 @@ private
         begin
           str = self.send(method_name, str, context)
         rescue Exception => e
-          raise FatalPrawnForBookError.new(5000, **{
+          raise PFBFatalError.new(5000, **{
             meth: method_name, err: e.message, context: "Classe tag “#{class_tag}”",
-            trace: FatalPrawnForBookError.backtracize(e),
-            module: FatalPrawnForBookError.get_last_script(e)
+            trace: PFBFatalError.backtracize(e),
+            module: PFBFatalError.get_last_script(e)
           })
         end
       else
-        raise FatalPrawnForBookError.new(1000, **{meth: method_name})
+        raise PFBFatalError.new(1000, **{meth: method_name})
       end
     end
 

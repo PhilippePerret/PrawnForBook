@@ -134,7 +134,7 @@ private
         return tpath if File.exist?(tpath)
       end
     end
-    raise FatalPrawnForBookError.new(50, {p: patharg.inspect})
+    raise PFBFatalError.new(50, {p: patharg.inspect})
   end
 
 
