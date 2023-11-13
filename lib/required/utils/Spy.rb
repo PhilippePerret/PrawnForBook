@@ -75,7 +75,8 @@ class DebugInOtherTerm
   def write(msg)
     begin
       # cmd = "printf '#{msg.gsub(/'/,'’').gsub(/\{/,'\\{')}\n' > #{term}"
-      cmd = "printf -- \"#{msg.gsub(/"/,'“').gsub(/\{/,'\\{')}\n\" > #{term}"
+      # cmd = "printf -- \"#{msg.gsub(/"/,'“').gsub(/\{/,'\\{')}\n\" > #{term}"
+      cmd = "printf -- \"#{msg.gsub(/\%/,'%%').gsub(/"/,'“').gsub(/\{/,'\\{')}\n\" > #{term} 2>&1"
       # puts "Commande spy = #{cmd}".rouge
       `#{cmd}`
     rescue Exception => e

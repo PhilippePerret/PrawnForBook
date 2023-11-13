@@ -3,7 +3,11 @@ class PdfBook
 class AnyParagraph
 
   REG_TITRE         = /^(\#{1,6}) (.+)$/.freeze
-  REG_IMAGE         = /^IMAGE\[(.+)\]$/.freeze
+  
+  REG_OLD_IMAGE     = /^IMAGE\[(.+?)(?:\|(.+))?\]$/.freeze
+  REG_NEW_IMAGE     = /^\!\[(.+?)\](?:\((.+?)\))?$/.freeze
+  REG_AMORCE_IMAGE  = /^(?<!\\)(\!|IMAGE)\[/.freeze
+
   REG_PFBCODE       = /^\(\( (.+) \)\)$/.freeze
   REG_TABLE         = /^\|(.+)\|$/.freeze
   REG_END_TABLE     = /^\|\/\|$/.freeze
@@ -24,8 +28,11 @@ class << self
       EmptyParagraph.new(book:book, pindex:indice)
     when REG_TITRE
       NTitre.new(book:book, titre:$2, level:$1.length, pindex:indice)
-    when REG_IMAGE
-      NImage.new(book:book, data_str:$1, pindex:indice)
+    when REG_AMORCE_IMAGE
+      unless d = string.match(REG_OLD_IMAGE)
+        d = string.match(REG_NEW_IMAGE)
+      end
+      NImage.new(book:book, path:d[1], data_str:d[2], pindex:indice)
     when REG_PFBCODE
       PFBCode.new(book:book, raw_code:$1.strip, pindex:indice)
     when REG_COMMENTS

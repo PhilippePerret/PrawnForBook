@@ -48,12 +48,18 @@ class PrawnOwner
   def image_path(relpath)
     if File.exist?(relpath)
       relpath
-    elsif in_collection? && File.exist?(pth = File.join(collection.folder,'images',relpath))
+    elsif in_collection? 
+      if File.exist?(pth = File.join(collection.folder, relpath))
+        return pth
+      elsif File.exist?(pth = File.join(collection.folder,'images',relpath))
+        return pth
+      end
+    elsif File.exist?(pth = File.join(folder, relpath))
       return pth
     elsif File.exist?(pth = File.join(folder_images, relpath))
       return pth
     else
-      raise "L'image '#{relpath}' est introuvable (ni dans le dossier de la collection si le livre appartient à une collection, ni dans le dossier 'images' du livre, ni en tant que path absolue)"
+      nil
     end
   end
 

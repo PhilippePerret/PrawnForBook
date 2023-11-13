@@ -2,8 +2,39 @@ module Prawn4book
 module Manual
 class Feature
 
+  # TRAITEMENT D’UNE FONCTIONNALITÉ
+  # ===============================
+  # 
+  # Quand on veut donner un exemple de texte (dans texte.pfb.md), on
+  # utilise :
+  # 
+  #   sample_texte <<~EOT
+  #     ... Ici le texte ...
+  #     EOT
+  # 
+  # Si le texte doit être le même, mais avec juste les "\" supprimés,
+  # c’est-à-dire que tous les codes seront exécutés, il suffit de
+  # faire :
+  # 
+  #   texte(:as_sample)
+  # 
+  # Dans le cas contraire, on définit explicitement le texte (en 
+  # sachant que c’est moins bon, puisqu’on n’est pas sûr que ce soit
+  # exactement le code donné en exemple)
+  # 
+  # Pour insérer une page avant un élément :
+  # 
+  #   new_page_before(:what)
+  # 
+  # où :what peut être :
+  # 
+  #   :feature      Avant toute la fonctionnalité
+  #   :texte        Avant le texte (évalué)
+  #   :description  Avant la description
+
   # Les variables utilisables dans les textes (description, texte, 
   # sample_texte, etc.)
+  # 
   VARIABLES = {
     '_PFB_' => '***Prawn-For-Book***'
   }
@@ -93,11 +124,11 @@ class Feature
 
     # = TEXTE EXEMPLE =
     if sample_texte || texte
-      saut_page if new_page_before[:texte]
       if sample_texte
         saut_page if new_page_before[:sample_texte]
         print_sample_texte
       end
+      saut_page if new_page_before[:texte]
       print_texte(texte || sample_texte)
     end
 
@@ -137,6 +168,9 @@ class Feature
 
   end #/ #print_with
 
+  def deslash(str)
+    str.gsub('\\','')
+  end
 
   # DSL
   def initialize(&block)
@@ -267,6 +301,12 @@ class Feature
   end
 
   def texte(value = nil, entete = nil)
+    if value == :as_sample
+      value = sample_texte
+        .gsub('\\\\','_DOBLEANTISLASHES_')
+        .gsub('\\','')
+        .gsub('_DOBLEANTISLASHES_','\\')
+    end
     set_or_get(:texte, value, entete)
   end
 

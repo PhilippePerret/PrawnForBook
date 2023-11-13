@@ -1,5 +1,23 @@
 class String
 
+
+  # Reçoit soit une valeur avec des unités comme "mm" ou "cm", soit
+  # une valeur en pourcentage et retourne la valeur correspondante 
+  # en "points-post-script", c’est-à-dire en "point-PDF".
+  # 
+  # Si c’est une valeur en pourcentage, +ref+ doit être impérativement
+  # fournie et correspondre à la valeur 100 % à prendre en référence.
+  # 
+  def to_pps(ref = nil)
+    if self.strip.match?(/\%$/)
+      ref || raise(ArgumentError.new(PFBError[6000]))
+      str = self.strip.gsub(/ ?\%$/,'').to_i
+      ref.to_f * str.to_f / 100
+    else
+      self.class.proceed_unit(self)
+    end
+  end
+
   # Transforme en points-pdf des valeurs fournies comme "xmm" ou
   # "xcm", etc. en utilsant Prawn::Measurements
   def self.proceed_unit(foo)
@@ -28,6 +46,7 @@ class Array
 end
 class Integer
   def proceed_unit; self  end
+  def to_pps(arg=nil); self end
 end
 class Float
   def proceed_unit; self  end
@@ -35,6 +54,7 @@ class Float
   def pt2mm
     real_pt2mm(self)
   end
+  def to_pps(arg=nil); self end
 end
 class NilClass
   def proceed_unit; nil   end

@@ -27,18 +27,21 @@ module Prawn4book
       notes_de_page
       notes_de_page_formatage
       #tables/tables
-      ##---PagesSpeciales---
+      ###---PagesSpeciales---###
       #pages_speciales/pages_speciales
       #change_fonte_for_next_paragraph
-      ##---Mode_Expert---
+      ###---Changements_comportements_par_default---###
+      #alignement_du_texte
+      ##---Mode_Expert---###
       #expert/mode_expert
       expert/contexte_erreurs
       expert/injection_code
-      #---Annexe---
+      ###---Annexe---###
       annexe/annexe
       #annexe/markdown_all_marks
       annexe/format_yaml
       #image_rogner_svg
+      #annexe/synopsis_creation
       #_liste_exhaustive_features_
 
   }

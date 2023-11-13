@@ -32,6 +32,8 @@ book_format:
       lines_before: 2
       lines_after:  1
       color: '00AA00'
+    level5:
+      lines_before: 0
   #</titles>
 #</book_format>
 

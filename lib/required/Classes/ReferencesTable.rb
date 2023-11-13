@@ -117,7 +117,7 @@ class ReferencesTable
       # (2e tour ou référence arrière)
       call_to(ref)
     elsif second_turn?
-      add_erreur(Prawn4bookError[2002] % {id: ref_id, targets:table.keys})
+      add_erreur(PFBError[2002] % {id: ref_id, targets:table.keys})
       # raise PFBFatalError.new(2002, {id: ref_id, targets:table.keys})
       "### REF: #{ref_id} ###"
     else

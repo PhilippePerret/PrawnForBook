@@ -2,6 +2,15 @@ module Prawn4book
 
 ERRORS = {
 
+  string: {
+    pps_require_ref_for_pourcent: <<~ERR,
+      La méthode String#to_pps réclame en premier argument la valeur
+      de référence (le 100 %) lorsqu’un pourcentage doit être calculé.
+      ERR
+  },
+
+
+
   # --- Application --- #
 
   app: {
@@ -509,6 +518,12 @@ ERRORS = {
       ERR
   }, #/:references
 
-
+  images: {
+    unfound: <<~ERR,
+      L'image '%{filename}' est introuvable (ni dans le dossier de la 
+      collection si le livre appartient à une collection, ni dans le dossier 
+      'images' du livre, ni en tant que path relatif ou absolu).
+      ERR
+  },
 }
 end #/module Prawn4book

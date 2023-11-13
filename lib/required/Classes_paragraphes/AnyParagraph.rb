@@ -292,8 +292,8 @@ class AnyParagraph
   # Style précis du paragraphe
   # 
   # Est censé contenir tout ce qu'il faut savoir sur le paragraphe
-  # à commencer par les styles définis par le prev_pfbcode (paragraphe
-  # précédent)
+  # à commencer par les styles définis par un paragraphe précédent 
+  # de type PfbCode qui contiendrait (( {<key>: <value}, ... ))
   # 
   def styles
     @styles ||= get_and_calc_styles

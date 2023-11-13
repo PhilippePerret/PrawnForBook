@@ -148,7 +148,7 @@ class NTextParagraph < AnyParagraph
       overflow: :truncate, 
       at:    [margin_left, nil],
       width: width || (@pdf.bounds.width - margin_left),
-      align: :justify
+      align: text_align
     }
   end
 

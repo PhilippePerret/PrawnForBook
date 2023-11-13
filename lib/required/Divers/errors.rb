@@ -7,12 +7,15 @@ class PrawnBuildingError < StandardError; end
 class PrawnFatalError < StandardError; end
 
 # Pour pouvoir faire :
-#   Prawn4bookError[num_error] % {data}
+#   PFBError[num_error] % {data}
 # pour récupérer une erreur défini par FatalPrawForBookError, par
 # exemple pour la méthode add_erreur.
-class Prawn4bookError
+class PFBError
   def self.[](err_num)
     PFBFatalError.error_by_num(err_num)
+  end
+  def self.context=(value)
+    PFBFatalError.context = value
   end
 end
 
@@ -106,6 +109,8 @@ class PFBFatalError < StandardError
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      # -- Images --
+      250   => Prawn4book::ERRORS[:images][:unfound],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
       # -- Recette (voir aussi en 800) ---
@@ -146,6 +151,8 @@ class PFBFatalError < StandardError
       5001  => Prawn4book::ERRORS[:user_modules][:unknown_objet],
       5002  => Prawn4book::ERRORS[:user_modules][:unknown_method],
       5003  => Prawn4book::ERRORS[:user_modules][:wrong_arguments_count],
+      # -- Divers --
+      6000  => Prawn4book::ERRORS[:string][:pps_require_ref_for_pourcent],
       # 
       # 20 000 à 30 000 : réservés au livre/collection
     }
@@ -176,7 +183,6 @@ end #/class PFBFatalError
 # - Raccourci, notamment pour @context -
 # Pour faire : PFBContextError.call("Le contexte")
 PFBContextError = PFBFatalError.method(:context=)
-# Pour faire : PFBError.context = "Le contexte"
-PFBError = PFBFatalError
+
 
 end #/module Prawn4book

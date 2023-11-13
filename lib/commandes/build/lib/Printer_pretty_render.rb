@@ -63,16 +63,6 @@ class << self
   #   des tables ou des affichage tabulaires, plutôt.
   # 
   # 
-  # TODO
-  # ----
-  # 
-  #   Dans une version ultérieure, pour optimiser l'impression (i.e.
-  #   l'accélérer), on pourrait ne passer par le ligne à ligne que
-  #   lorsque le texte en tient pas entièrement dans la page.
-  #   Dans ce système, seule la dernière ligne devra être étudiée
-  #   (mais comment ?) pour savoir si elle présente une ligne de
-  #   voleur.
-  #
   # PARAMÈTRES
   # ----------
   # 
