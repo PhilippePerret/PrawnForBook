@@ -50,122 +50,113 @@ Prawn4book::Manual::Feature.new do
     Les exemples ci-dessous sont tous construits à partir du code exact donné en exemple. Vous pouvez donc lui faire pleinement confiance.
     EOT
 
-  ex1 = "\\!\\[images/exemples/plus_large.jpg]"
-  
-  ex2 = "\\!\\[exemples/plus_large.jpg](legend:\\\"Image plus grande réduite en largeur\\\")"
-
-  ex3 = "\\!\\[exemples/plus_haute.png]"
-
-  ex4 = "\\!\\[exemples/plus_haute.png](legend:\\\"Image plus haute réduite et\\<br>placée sur la page suivante\\\")"
-
-  ex5 = "\\!\\[exemples/plus_haute.png](height:\\\"30%\\\", legend:\\\"Trop haute avec height à 30%\\\")"
-
-  ex6 = "\\!\\[exemples/plus_haute.png](height:\\\"30%\\\", width:\\\"100%\\\", legend:\\\"Trop haute avec height à 30% et width à 100%\\\")"
-
-  ex7 = "\\!\\[exemples/moins_large.jpg](legend:\\\"Image centrée\\\")"
-
-  ex8 = "\\!\\[exemples/moins_large.jpg](left: \\\"2cm\\\")"
-
-  ex9 = "\\!\\[exemples/moins_large.jpg](left: \\\"2cm\\\", vadjust: 15, legend:\\\"Image à gauche décalée\\<br>vers\\<br>la droite\\\")"
-
-  ex10 = "\\!\\[exemples/moins_large.jpg](align: :right, legend:\\\"Alignée à droite\\\")"
-
-  ex11 = "\\!\\[exemples/moins_large.jpg](right: 2.cm, legend:\\\"À 2 cm de la droite\\\")"
-
-  ex12 = "\\!\\[exemples/moins_large_et_bas.jpg](width:\\\"100%\\\", legend:\\\"Image agrandie à 100 % avec une grande légende qui doit tenir sur plusieurs lignes car une légende, par défaut, couvre la moitié de la page, mais on peut changer ce comportement.\\\")"
-
-  ex13 = "\\!\\[exemples/moins_large.jpg](scale: 2.5, legend:\\\"Image avec scale de 2.5\\\")"
-
-  ex14 = "\\!\\[exemples/image.svg]"
-
-  ex15 = "\\!\\[exemples/image.svg](width: \\\"100%\\\", height: 600)"
-
   ex16_height = 1000
-  ex16 = "\\!\\[exemples/image.svg](width: 200, height: #{ex16_height})"
 
-  ex17 = "\\!\\[exemples/image.svg](width:\\\"90%\\\", legend:\\\"Image SVG avec légende\\\")"
+  EXEMPLES = {
+    1 => {
+      text:   "Une image trop large sera réduite à la taille du livre.",
+      code:   '\!\[images/exemples/plus_large.jpg]',
+      line_after: true
+    },
+    2 => {
+      left: true,
+      text: 'La même image, mais avec une légende, insérée (notez qu’ici on n’a pas indiqué `images` dans le chemin d’accès, puisque ce dossier est implicite).',
+      code: '\!\[exemples/plus_large.jpg](legend:\\"Image plus grande réduite en largeur\\")',
+      page_after: true
+    },
+    3 => {
+      text: 'Une image PNG trop haute, *sans légende*, qui sera réduite à la taille d’une page du livre et mise sur la page suivante.',
+      code: '\!\[exemples/plus_haute.png]'
+    },
+    4 => {
+      text: 'Une image PNG trop haute, *avec légende*, qui sera réduite à la taille d’une page du livre et mise sur la page suivante.',
+      code: '\!\[exemples/plus_haute.png](legend:\\"Image plus haute réduite et\\<br>placée sur la page suivante\\")',
+      page_after: true
+    },
+    5 => {
+      text: 'Une image PNG trop haute, dont on réduit explicitement la hauteur.',
+      code: '\!\[exemples/plus_haute.png](height:\\"30%\\", legend:\\"Trop haute avec height à 30%\\")',
+      left: true,
+    },
+    6 => {
+      left: true,
+      text: 'Une image PNG trop haute, dont on réduit explicitement la hauteur mais qui doit faire la largeur de la page. Elle va bien entendu être complètement déformée…',
+      code: '\!\[exemples/plus_haute.png](height:\\"30%\\", width:\\"100%\\", legend:\\"Trop haute avec height à 30% et width à 100%\\")'
+    },
+    7 => {
+      text: 'Une image plus petite que la largeur sera laissée telle quelle.',
+      code: '\!\[exemples/moins_large.jpg](legend:\\"Image centrée\\")',
+      line_after: true
+    },
+    8 => {
+      text: 'Image plus petite en largeur, alignée à gauche et décalée vers la droite, sans légende.',
+      code: '\!\[exemples/moins_large.jpg](left: \\"2cm\\")',
+      line_after: true
+    },
+    9 => {
+      text: 'Image plus petite en largeur, avec légende, alignée à gauche et décalée vers la droite. Noter comment la légende a été découpée pour passer à la ligne. Noter également l’utilisation d’un ajustement vertical pour l’image (`vadjust`) et pour la légende (`vadjust_legend`).',
+      code: '\!\[exemples/moins_large.jpg](left: \\"2cm\\", vadjust: 1, legend:\\"Image à gauche décalée\<br>vers\<br>la droite\\", vadjust_legend: 10)',
+      left: true,
+      line_after: true
+    },
+    10 => {
+      text: 'Image plus petite en largeur alignée à droite.',
+      code: '\!\[exemples/moins_large.jpg](align: :right, legend:\\"Alignée à droite\\")',
+      left: true,
+      line_after: true
+    },
+    11 => {
+      text: 'Image plus petite en largeur alignée à droite et décalée vers la gauche.',
+      code: '\!\[exemples/moins_large.jpg](right: 2.cm, legend:\\"À 2 cm de la droite\\")',
+      line_after: true
+    },
+    12 => {
+      text: 'Image plus petite que la largeur, agrandie avec "`width: \"100%\"`" pour tenir dans la largeur (déconseillé car cela "abîme" l’image).',
+      code: '\!\[exemples/moins_large_et_bas.jpg](width:\\"100%\\", legend:\\"Image agrandie à 100 % avec une grande légende qui doit tenir sur plusieurs lignes car une légende, par défaut, couvre la moitié de la page, mais on peut changer ce comportement.\\")',
+      left: true,
+      line_after:true
+    },
+    13 => {
+      text: 'Image plus grande grâce à "`scale: 2.5`".',
+      code: '\!\[exemples/moins_large.jpg](scale: 2.5, legend:\\"Image avec scale de 2.5\\")',
+      left: true,
+    },
+    14 => {
+      text: 'Image SVG affichée sans aucune indication.',
+      code: '\!\[exemples/image.svg]',
+    },
+    15 => {
+      text: 'Image SVG grossie.',
+      code: '\!\[exemples/image.svg](width: \\"100%\\")',
+    },
+    16 => {
+      text: "On ne peut pas (à ma connaissance) modifier disproportionnellement une image SVG dans Prawn même avec des valeurs explicites. Ci-dessous, la hauteur, bien que mise à #{ex16_height}, reste proportionnée à la largeur.",
+      code: "\\!\\[exemples/image.svg](width: 200, height: #{ex16_height})",
+    },
+    17 => {
+      text: 'Image SVG avec légende. Remarquez l’utilisation de `vadjust_legend ("ajustement vertical de la légende") qui permet ici de l’éloigner de l’image.`',
+      code: '\!\[exemples/image.svg](width:\\"80%\\", legend:\\"Image SVG avec légende\\", vadjust_legend: 10)',
+      left: true,
+    }
+  } #/ EXEMPLES
 
-  texte <<~EOT, "Aspect des images en fonction du code"
-    **EXEMPLE 1 •** Une image trop large sera réduite à la taille du livre<br>Code : `#{ex1}`
-    #{deslash ex1}
+  # last_for_try = 5
+  last_for_try = 17
 
-    (( line ))
+  lines = []
+  (1..last_for_try).each do |iex|
+  # [last_for_try].each do |iex|
+    data_exemple = EXEMPLES[iex]
+    lines << data_exemple[:before] if data_exemple[:before]
+    lines << '(( {align: :left} ))' if data_exemple[:left]
+    lines << "**EXEMPLE #{iex} •** #{data_exemple[:text]}<br>`#{data_exemple[:code]}`"
+    lines << deslash(data_exemple[:code])
+    lines << data_exemple[:after] if data_exemple[:after]
+    lines << '(( line ))' if data_exemple[:line_after]
+    lines << '(( new_page ))' if data_exemple[:page_after]
+  end
+  lines << "Fin des exemples d’images."
 
-    (( {align: :left} ))
-    **EXEMPLE 2 •** La même image, mais avec une légende, insérée (notez qu’ici on n’a pas indiqué `images` dans le chemin d’accès, puisque ce dossier est implicite).<br>Code : `#{ex2}`
-    #{deslash ex2}
-
-    (( new_page ))
-
-    **EXEMPLE 3 •** Une image PNG trop haute, *sans légende*, qui sera réduite à la taille d’une page du livre et mise sur la page suivante<br>Code : `#{ex3}`
-    #{deslash ex3}
-
-
-    **EXEMPLE 4 •** Une image PNG trop haute, *avec légende*, qui sera réduite à la taille d’une page du livre et mise sur la page suivante<br>Code : `#{ex4}`
-    #{deslash ex4}
-    
-    (( new_page ))
-    
-    (( {align: :left} ))
-    **EXEMPLE 5 •** Une image PNG trop haute, dont on réduit explicitement la hauteur.<br>Code : `#{ex5}`
-    #{deslash ex5}
-
-    (( {align: :left} ))
-    **EXEMPLE 6 •** Une image PNG trop haute, dont on réduit explicitement la hauteur mais qui doit faire la largeur de la page.<br>Code : `#{ex6}`
-    #{deslash ex6}
-
-    **EXEMPLE 7 •** Une image plus petite que la largeur sera laissée telle quelle<br>Code : `#{ex7}`
-    #{deslash ex7}
-
-    (( line ))
-    
-    **EXEMPLE 8 •** Image plus petite en largeur, alignée à gauche et décalée vers la droite, sans légende.<br>Code : `#{ex8}`
-    #{deslash ex8}
-
-    (( line ))
-    
-    (( {align: :left} ))
-    **EXEMPLE 9 •** Image plus petite en largeur, alignée à gauche et décalée vers la droite. Noter comment la légende a été découpée pour passer à la ligne. Noter également l’ajustement vertical qui a été utilisé pour bien placer l’image (qui aurait été trop collée au code ci-dessous)<br>Code : `#{ex9}`
-    #{deslash ex9}
-
-    (( line ))
-
-    (( {align: :left} ))
-    **EXEMPLE 10 •** Image plus petite en largeur alignée à droite<br>Code : `#{ex10}`
-    #{deslash ex10}
-
-    (( line ))
-
-    **EXEMPLE 11 •** Image plus petite en largeur alignée à droite et décalée vers la gauche.<br>Code : `#{ex11}`
-    #{deslash ex11}
-
-    (( line ))
-
-    (( {align: :left} ))
-    **EXEMPLE 12 •** Image plus petite que la largeur, agrandie avec "`width: \\"100%\\"`" pour tenir dans la largeur (déconseillé car cela "abîme" l’image)<br>Code : `#{ex12}`
-    #{deslash ex12}
-
-    (( line ))
-
-    (( {align: :left} ))
-    **EXEMPLE 13 •** Image plus grande grâce à "`scale: 2.5`"<br>Code : `#{ex13}`
-    #{deslash ex13}
-
-    **EXEMPLE 14 •** Image SVG affichée sans aucune indication<br>Code : `#{ex14}`
-    #{deslash ex14}
-
-    **EXEMPLE 15 •** Image SVG grossie. Code : `#{ex15}`
-    #{deslash ex15}
-
-    **EXEMPLE 16 •** On ne peut pas (à ma connaissance) modifier disproportionnellement une image SVG dans Prawn même avec des valeurs explicites. Ci-dessous, la hauteur, bien que mise à #{ex16_height}, reste proportionnée à la largeur.<br>Code : `#{ex16}`
-    #{deslash ex16}
-
-    (( {align: :left} ))
-    **EXEMPLE 17 •** Image SVG avec légende. Code : `#{ex17}`
-    #{deslash ex17}
-
-    Fin des exemples d’images.
-    EOT
-
+  texte lines.join("\n"), "Aspect des images en fonction du code"
 
 end
