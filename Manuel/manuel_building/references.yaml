@@ -59,27 +59,35 @@
   :page: 23
   :paragraph:
   :hybrid: 'p. 23 § '
-:notes_de_page:
+:exemple_image_18:
   :page: 35
-  :paragraph:
-  :hybrid: 'p. 35 § '
-:notes_de_page_formatage:
-  :page: 35
-  :paragraph:
-  :hybrid: 'p. 35 § '
-:expert_contexte_erreurs:
+  :paragraph: 247
+  :hybrid: p. 35 § 247
+:exemple_image_19:
   :page: 36
-  :paragraph:
-  :hybrid: 'p. 36 § '
-:expert_injection_code:
+  :paragraph: 248
+  :hybrid: p. 36 § 248
+:notes_de_page:
   :page: 37
   :paragraph:
   :hybrid: 'p. 37 § '
-:annexe_annexe:
+:notes_de_page_formatage:
+  :page: 37
+  :paragraph:
+  :hybrid: 'p. 37 § '
+:expert_contexte_erreurs:
+  :page: 38
+  :paragraph:
+  :hybrid: 'p. 38 § '
+:expert_injection_code:
   :page: 39
   :paragraph:
   :hybrid: 'p. 39 § '
-:annexe_format_yaml:
-  :page: 42
+:annexe_annexe:
+  :page: 41
   :paragraph:
-  :hybrid: 'p. 42 § '
+  :hybrid: 'p. 41 § '
+:annexe_format_yaml:
+  :page: 44
+  :paragraph:
+  :hybrid: 'p. 44 § '

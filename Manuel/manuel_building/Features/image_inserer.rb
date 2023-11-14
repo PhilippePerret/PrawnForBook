@@ -21,13 +21,14 @@ Prawn4book::Manual::Feature.new do
 
     ##### Positionnement de l’image
 
-    Par défaut, l’image est placée au centre. Pour la mettre à droite ou à gauche, utiliser respectivement `align: right`, `align: :left` comme dans les exemples ci-dessous.
+    Par défaut, l’image est placée au centre. Pour la mettre à droite ou à gauche, utiliser respectivement `align: right`, `align: :left` et/ou la définition de `left` (décalage avec la marge gauche) et `right` (décalage avec la marge droite), comme dans les exemples ci-dessous.
+    Par défaut, l’image s’insère de façon fluide et naturelle avec le texte qui la précède et qui la suit. Mais on peut définir l’espacement de façon très précise avec les propriétés `space_before` ("espace avant") et `space_after` ("espace après"), comme dans les exemples suivant (voir l’exemple 18, par exemple, à la page ->(exemple_image_18)).
 
     Pour un placement optimum, on peut ajuster la position de l’image verticalement à l’aide de `vadjust` ("ajustement vertical"). L’ajustement horizontal, bien entendu, peut se faire avec `right` et `left`. Bien sûr, il est raisonnable de ne faire ces aajustements qu’à la dernière minute, lorsque le livre est presque finalisé.
 
     ##### Taille de l’image
 
-    La taille de l’image peut être définie avec `width:` (largeur), `height:` (hauteur) et/ou `scale:` (échelle). Notez que la largeur sera toujours ramenée à la largeur du livre si elle est supérieure, et la hauteur sera toujours ramenée à sa hauteur.
+    La taille de l’image peut être définie avec `width:` (largeur), `height:` (hauteur) et/ou `scale:` (échelle). Notez que la largeur sera toujours ramenée à la largeur du livre si elle est supérieure, et la hauteur sera toujours ramenée à sa hauteur de la page si elle excède. Si vraiment on sait ce qu’on veut faire et qu’on désire tout contrôler soi-même, on peut ajouter l’option `no_resize: true` qui empêchera tout redimensionnement (à vos risques et péril 🤣 comme dans l’exemple 19 à la page ->(exemple_image_19)).
 
     ##### Légende de l’image
 
@@ -137,19 +138,34 @@ Prawn4book::Manual::Feature.new do
       text: 'Image SVG avec légende. Remarquez l’utilisation de `vadjust_legend ("ajustement vertical de la légende") qui permet ici de l’éloigner de l’image.`',
       code: '\!\[exemples/image.svg](width:\\"80%\\", legend:\\"Image SVG avec légende\\", vadjust_legend: 10)',
       left: true,
-    }
+    },
+    18 => {
+      text: '<-(exemple_image_18)Image avec de l’espace avant et de l’espace après définis par les propriétés `space_before` ("espace avant") et `space_after` ("espace après").',
+      code: '\!\[exemples/plus_large.jpg](space_before:180, space_after: 100, legend:\\"La légende se place toujours bien.\\")',
+      left: true,
+      page_before: true,
+    },
+    19 => {
+      text: '<-(exemple_image_19)Image sans aucun redimensionnement, grâce à l’option `no_resize`. Cette image "mange" évidemment sur la marge extérieure…',
+      code: '\!\[exemples/plus_large.jpg](no_resize:true, width:1000, left:0.1)',
+      left: true,
+      page_before: true,
+
+    },
   } #/ EXEMPLES
 
   # last_for_try = 5
-  last_for_try = 17
+  last_for_try = 18
 
   lines = []
-  (1..last_for_try).each do |iex|
+  # (1..last_for_try).each do |iex|
   # [last_for_try].each do |iex|
-    data_exemple = EXEMPLES[iex]
+    # data_exemple = EXEMPLES[iex]
+  EXEMPLES.each do |iex, data_exemple|
     lines << data_exemple[:before] if data_exemple[:before]
+    lines << '(( new_page ))' if data_exemple[:page_before]
     lines << '(( {align: :left} ))' if data_exemple[:left]
-    lines << "**EXEMPLE #{iex} •** #{data_exemple[:text]}<br>`#{data_exemple[:code]}`"
+    lines << "**EXEMPLE #{iex} • ** #{data_exemple[:text]}<br>`#{data_exemple[:code]}`"
     lines << deslash(data_exemple[:code])
     lines << data_exemple[:after] if data_exemple[:after]
     lines << '(( line ))' if data_exemple[:line_after]

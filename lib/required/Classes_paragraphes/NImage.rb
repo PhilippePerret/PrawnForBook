@@ -181,6 +181,10 @@ class NImage < AnyParagraph
         end
       end
 
+      if my.space_before != 0
+        move_down(my.space_before)
+      end
+
       cursor_before = cursor.freeze
 
       #########################
@@ -228,7 +232,12 @@ class NImage < AnyParagraph
 
       if my.svg?
         move_down(line_height)
-      end        
+      end
+
+      if my.space_after != 0
+        move_down(my.space_after)
+      end
+
     end #/pdf
     
     spy(:off) if first_turn?
@@ -238,7 +247,7 @@ class NImage < AnyParagraph
   # --- Calcul Methods ---
 
   def rectify_width
-    if calc_width > max_width
+    if resize? && calc_width > max_width
       @data_image.merge!(width: max_width)
       @data_image.delete(:height) unless height
     elsif width
@@ -249,7 +258,7 @@ class NImage < AnyParagraph
   end
 
   def rectify_height
-    if calc_height > max_height
+    if resize? && calc_height > max_height
       @data_image.merge!(height: max_height)
       @data_image.delete(:width) unless width
     elsif height
@@ -289,10 +298,10 @@ class NImage < AnyParagraph
   end
 
   # @return [Float] La hauteur max pour l’image
-  # (en tenant compte de la légende)
+  # (en tenant compte de la légende et des marges avant et après)
   # 
   def max_height
-    page_height - 10 - (vadjust + legend_height + vadjust_legend)
+    page_height - 10 - (vadjust + legend_height + vadjust_legend + space_before + space_after)
   end
 
   # w * ratio donnera la hauteur
@@ -375,7 +384,20 @@ class NImage < AnyParagraph
     :TRUE == @issvg ||= true_or_false(extname == '.svg')
   end
 
+  def resize?
+    :TRUE == @resizeit ||= true_or_false(not(data[:no_resize] === true))
+  end
+
   # --- Image Data ---
+
+
+  def space_before
+    @space_before ||= data[:space_before] || 0
+  end
+  def space_after
+    @space_after ||= data[:space_after] || 0
+  end
+
 
   def original_width
     @original_width ||= original_size[:width] * scale
