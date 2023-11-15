@@ -10,18 +10,15 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   recipe <<~YAML
-    #<book_format>
+    ---
     book_format:
-      ...
       text:
-        ...
         puce:
           text: :losange
           vadjust: 2
           hadjust: 4
           left: 20mm
           size: 18
-    #</book_format>
     YAML
 
   init_recipe([:format_text])

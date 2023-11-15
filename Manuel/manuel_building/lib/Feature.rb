@@ -461,7 +461,7 @@ class Feature
   def apply_new_state
     # - Appliquer le nouvelle état de la recette -
     @saved_state = Marshal.dump(Prawn4book::Recipe::DATA)
-    apply_recipe_state(YAML.safe_load(recipe))
+    apply_recipe_state(YAML.safe_load(recipe, **YAML_OPTIONS))
   end
 
   # Revenir à l'état de recette précédent
@@ -472,13 +472,15 @@ class Feature
 
   def apply_recipe_state(patch)
     Prawn4book::Recipe::DATA.deep_merge!(patch)
+    # spy "Prawn4book::Recipe::DATA : #{Prawn4book::Recipe::DATA}".gris
     # - Initialiser des variables caches -
     init_recipe_cache_variables
   end
 
   def init_recipe_cache_variables
+    # book.instance_variable_set('@recipe', nil)
     # - Réinitialisation des variables caches existantes -
-    recipe_patch = YAML.safe_load(recipe)
+    recipe_patch = YAML.safe_load(recipe, **YAML_OPTIONS)
     # - Initialisation des variables caches possibles -
     init_cache_variables_in(recipe_patch)
     # - Les variables cache définies explicitement -
@@ -493,6 +495,8 @@ class Feature
     if book.recipe.instance_variable_get(cvar_name)
       book.recipe.instance_variable_set(cvar_name, nil)
       spy "Variable-cache initialisée dans recette: #{cvar_name}".bleu
+    # else 
+    #   spy "Variable-cache inconnue: #{cvar_name}".rouge
     end
   end
 
@@ -519,6 +523,7 @@ class Feature
         cur_racine  = []
         racine.reverse.each do |kr|
           cur_racine << kr
+          cached_names << "@#{kr}"
           cached_names << "@#{cur_racine.reverse.join('_')}_#{k}"
         end
         cached_names.each { |vckey| init_cache_variable(vckey) }

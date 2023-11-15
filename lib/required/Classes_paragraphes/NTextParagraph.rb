@@ -124,7 +124,6 @@ class NTextParagraph < AnyParagraph
     # 
     # Voir Printer::pretty_render
     # 
-    spy(:on) if text.start_with?('Un premier')
     Printer.pretty_render(
       owner:    self,
       pdf:      pdf, 
@@ -132,7 +131,6 @@ class NTextParagraph < AnyParagraph
       text:     text,
       options:  dry_options
     )
-    spy(:off) if text.start_with?('Un premier')
 
     # 
     # On prend la dernière page du paragraphe, c'est toujours celle

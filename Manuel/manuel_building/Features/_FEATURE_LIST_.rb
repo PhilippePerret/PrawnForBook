@@ -9,14 +9,14 @@ module Prawn4book
 
       forces_de_prawn
       #deux_fichiers_de_base
-      ##recette/juste_titre
-      ##recette/recette_livre
-      ##recette/recette_collection
+      recette/juste_titre
+      recette/recette_livre
+      recette/recette_collection
       definition_fonte
       format_markdown_du_texte
       #---Puces---
-      ##puces/puces
-      ##puces/losange
+      puces/puces
+      puces/losange
       ##puces/black_losange
       ##puces/square
       ##puces/black_square

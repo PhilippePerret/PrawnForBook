@@ -3,15 +3,35 @@
   :page: 12
   :paragraph:
   :hybrid: 'p. 12 § '
-:definition_fonte:
+:recette_juste_titre:
   :page: 12
   :paragraph:
   :hybrid: 'p. 12 § '
+:recette_recette_livre:
+  :page: 12
+  :paragraph:
+  :hybrid: 'p. 12 § '
+:recette_recette_collection:
+  :page: 13
+  :paragraph:
+  :hybrid: 'p. 13 § '
+:definition_fonte:
+  :page: 13
+  :paragraph:
+  :hybrid: 'p. 13 § '
 :format_markdown_du_texte:
-  :page: 13
+  :page: 14
   :paragraph:
-  :hybrid: 'p. 13 § '
+  :hybrid: 'p. 14 § '
+:puces_puces:
+  :page: 14
+  :paragraph:
+  :hybrid: 'p. 14 § '
+:puces_losange:
+  :page: 15
+  :paragraph:
+  :hybrid: 'p. 15 § '
 :annexe_format_yaml:
-  :page: 13
+  :page: 15
   :paragraph:
-  :hybrid: 'p. 13 § '
+  :hybrid: 'p. 15 § '

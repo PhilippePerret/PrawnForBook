@@ -100,3 +100,6 @@ DATA_STYLES_FONTS = [
   {name: 'Bold Italic'    , value: :bold_italic   , index:10},
   {name: 'Roman'          , value: :roman         , index:11},
 ]
+
+YAML_OPTIONS = {symbolize_names:true, aliases: true, permitted_classes: [Date, Symbol, TrueClass, FalseClass]}.freeze
+

@@ -110,8 +110,9 @@ book_format:
     # - puces -
     puce:
       text: '–'
-      vadjust: 1.5
+      vadjust: 6
       hadjust: 0
+      left: 6mm
     # - Notes de page -
     notes_page:
       font:           *default_font1

@@ -222,7 +222,7 @@ class Recipe
   def puce
     pu = format_text[:puce]
     fsize = pu[:size] if pu.is_a?(Hash)
-    fsize ||= '12'
+    fsize ||= 12
     pu_default = {text:nil, vadjust: 1, hadjust: 0, left: 3.5.mm, size: 12}
     
     if pu.is_a?(Hash)
@@ -405,7 +405,7 @@ class Recipe
   # 
 
   def format_text
-    @format_text        ||= book_format[:text]
+    @format_text ||= book_format[:text]
   end
 
   def format_page
@@ -502,13 +502,8 @@ class Recipe
 
     def get_data_in_recipe(recipe_path)
       return unless File.exist?(recipe_path)
-      DATA.deep_merge!(YAML.load_file(recipe_path, **options_yaml)||{})
+      DATA.deep_merge!(YAML.load_file(recipe_path, **YAML_OPTIONS)||{})
     end
-
-    def options_yaml
-      @options_yaml ||= {symbolize_names:true, aliases: true, permitted_classes: [Date, Symbol, TrueClass, FalseClass]}.freeze
-    end
-
 
   DEFAULT_BIBLIOGRAPHIES = {
     book_identifiant: :livre,
