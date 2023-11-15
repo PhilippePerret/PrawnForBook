@@ -10,6 +10,8 @@ Prawn4book::Manual::Feature.new do
     Pour insérer une image dans le flux du livre, on utilise le code pseudo-markdown **`\\!\\[chemin/vers/image]`**. Si des données sont à passer, on utiliser **`\\!\\[vers/image](\\<data>)`** où `\\<data>` est une [[table_ruby]].
     Noter que ce code doit obligatoirement se trouver sur une ligne seule.
 
+    La suite va présenter toutes les propriétés utilisables avec les images, mais les pages suivantes reprendront toutes ces propriétés pour en donner des exemples concrets et illustrés.
+
     ##### Chemin d’accès à l’image
 
     Le chemin d’accès à l’image peut se donner…
@@ -28,13 +30,15 @@ Prawn4book::Manual::Feature.new do
 
     ##### Taille de l’image
 
-    La taille de l’image peut être définie avec `width:` (largeur), `height:` (hauteur) et/ou `scale:` (échelle). Notez que la largeur sera toujours ramenée à la largeur du livre si elle est supérieure, et la hauteur sera toujours ramenée à sa hauteur de la page si elle excède. Si vraiment on sait ce qu’on veut faire et qu’on désire tout contrôler soi-même, on peut ajouter l’option `no_resize: true` qui empêchera tout redimensionnement (à vos risques et péril 🤣 comme dans l’exemple 19 à la page ->(exemple_image_19)).
+    La taille de l’image peut être définie avec `width:` (largeur), `height:` (hauteur) et/ou `scale:` (échelle). 
+    Notez que la largeur sera ramenée par défaut à la largeur de la page du livre si elle est supérieure, et la hauteur de la page si sa hauteur l’excède. Mais si l’on sait ce que l’on veut obtenir et qu’on désire tout contrôler soi-même, on peut ajouter l’option `no_resize: true` qui empêchera le redimensionnement naturel (à vos risques et péril comme dans l’exemple 19 à la page ->(exemple_image_19)).
 
     ##### Légende de l’image
 
-    Une légende peut être définie en donnant la donnée `legend: \\"La légende de l’image\\"`. Par défaut, cette légende sera inscrite avec la même police que la police courante, avec une taille de une unité inférieure et en italique.
-
-    {{TODO: Modification, par la recette, de a) la taille, b) le style, c) la police, d) la largeur de la légende}}
+    Une légende peut être définie en renseignant la donnée `legend: \\"La légende de l’image\\"`. Par défaut, cette légende sera inscrite avec la même police que la police courante, avec une taille de une unité inférieure, en noir et en italique.
+    Mais on peut régler tous ces aspects :
+    * soit pour tout le livre (ou toute la collection) dans le fichier recette, dans `book_format > images > legend` (avec les propriétés `font`, `size`, `style` et `color`) — comme ce sera illustré dans la partie [[images/format_legende]].
+    * soit de façon ponctuelle pour une seule image/légende en définissant dans les données de l’image les propriétés `legend_font` (nom de la police), `legend_style` (style de la police, par exemple `:regular`), `legend_size` (taille de la police) et `legend_color` (couleur de la légende).
 
     ##### Image SVG
 

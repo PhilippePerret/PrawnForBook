@@ -8,7 +8,7 @@ module Prawn4book
   FEATURE_LIST = %w{
 
       forces_de_prawn
-      #deux_fichiers_de_base
+      deux_fichiers_de_base
       recette/grand_titre
       recette/recette_livre
       recette/recette_collection
@@ -19,15 +19,16 @@ module Prawn4book
       puces/losange
       puces/black_losange
       puces/square
-      ##puces/black_square
-      ##puces/bullet
-      ##puces/black_bullet
-      ##puces/finger
-      ##puces/black_finger
-      ##puces/big_hyphen
-      ##puces/custom_image
-      image_inserer
-      image_format_legende
+      puces/black_square
+      puces/bullet
+      puces/black_bullet
+      puces/finger
+      puces/black_finger
+      puces/big_hyphen
+      puces/custom_image
+      #-Images-#
+      images/inserer
+      images/format_legende
       #cross_references
       #hyperlinks
       ##notes_de_page
@@ -48,7 +49,7 @@ module Prawn4book
       annexe/grand_titre
       #annexe/markdown_all_marks
       annexe/format_yaml
-      #image_rogner_svg
+      images/rogner_svg
       #annexe/synopsis_creation
       #_liste_exhaustive_features_
 

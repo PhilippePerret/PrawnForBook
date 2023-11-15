@@ -18,7 +18,7 @@ Prawn4book::Manual::Feature.new do
     #### Le fichier recette
 
     Il porte impérativement le nom `recipe.yaml` quand il concerne un livre et `recipe_collection.yaml` quand il concerne une collection (nous reviendrons en temps voulu sur cette distincion).
-    Comme l’indique son extension, ce fichier est au format `YAML`, un format très simple permettant de définir des données (cf. plus loin).
+    Comme l’indique son extension, ce fichier est au format `YAML`, un format très simple permettant de définir des données (cf. ci-dessous).
     EOT
 
 
