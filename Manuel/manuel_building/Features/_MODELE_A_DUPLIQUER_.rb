@@ -16,9 +16,11 @@ Prawn4book::Manual::Feature.new do
     Texte à interpréter, si 'sample_texte' ne peut pas l'être.
     EOT
 
-  sample_recipe <<~EOT #, "Autre entête"
+  recipe <<~EOT #, "Autre entête"
     ---
       # ...
     EOT
+
+  # init_recipe([:custom_cached_var_key])
 
 end

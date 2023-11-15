@@ -10,7 +10,7 @@ Prawn4book::Manual::Feature.new do
   font_style = ''
   font_size  = 20
 
-  sample_recipe <<~EOT
+  recipe <<~EOT
     book_format:
       text:
         default_font_and_style: "#{font_name}/#{font_style}"
@@ -18,14 +18,7 @@ Prawn4book::Manual::Feature.new do
         default_font_size: #{font_size}
     EOT
 
-
-
-  recipe({
-    default_font_n_style: "#{font_name}/#{font_style}",
-    default_font_style: font_style,
-    default_font_name: "#{font_name}",
-    default_font_size: font_size,
-  })
+  init_recipe([:default_font_n_style])
 
   texte <<~EOT
     (( font(name: "#{font_name}", size: #{font_size}, style: "#{font_style}") ))

@@ -8,7 +8,7 @@ Prawn4book::Manual::Feature.new do
     Vous pouvez trouver ci-dessous les données propres à une collection. 
     EOT
 
-  sample_recipe <<~EOT #, "Autre entête"
+  recipe <<~EOT #, "Autre entête"
     ---
       #<collection_data>
       # (données de la collection)

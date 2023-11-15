@@ -2,19 +2,36 @@ module Prawn4book
 module Manual
 class Feature
 
+  # DESCRIPTION
+  # ===========
+  # 
+  # La classe Prawn4book::Manual::Feature permet de décrire une 
+  # fonctionnalité à ajouter au manuel, tout en la testant. Le 
+  # principe est le suivant : tous les codes donnés en exemple sont
+  # exécutés pour produire ce qu’on voit dans le document. Donc s’il
+  # y a un problème dans le programme, ce problème se voit dans le
+  # mode d’emploi.
+  # Cela est valable pour le texte du livre (texte.pfb.md) aussi bien
+  # que pour le code de la recette.
+  # 
+  # 
   # TRAITEMENT D’UNE FONCTIONNALITÉ
   # ===============================
   # 
   # Quand on veut donner un exemple de texte (dans texte.pfb.md), on
-  # utilise :
+  # utilise (**) :
   # 
   #   sample_texte <<~EOT
   #     ... Ici le texte ...
   #     EOT
   # 
-  # Si le texte doit être le même, mais avec juste les "\" supprimés,
-  # c’est-à-dire que tous les codes seront exécutés, il suffit de
-  # faire :
+  # (**) Mais il vaut mieux, toujours, utiliser le même code que 
+  # celui donné par #texte (ci-dessous) pour être sûr d’obtenir un
+  # résultat réel.
+  # 
+  # Si le texte doit être le même que sample_texte, juste avec les 
+  # "\" supprimés, c’est-à-dire que tous les codes seront exécutés, 
+  # il suffit de faire :
   # 
   #   texte(:as_sample)
   # 
@@ -22,11 +39,54 @@ class Feature
   # sachant que c’est moins bon, puisqu’on n’est pas sûr que ce soit
   # exactement le code donné en exemple)
   # 
-  # Pour insérer une page avant un élément :
+  # 
+  # Modification de la recette
+  # ---------------------------
+  # 
+  # On modifie ponctuellement (*) la recette avec la méthode #recipe.
+  # 
+  # (*) La recette est mise à son état précédent après l’écriture de
+  # la fonctionnalité.
+  # 
+  #   recipe <<~EOT[, "<entete>"]
+  #     ---
+  #     ensemble:
+  #       groupe:
+  #         element1: <valeur>
+  #         element2: <valeur>
+  #     EOT
+  # 
+  # Quand cette recette est défini, les variables "@ensemble", 
+  # "@ensemble_groupe", "@groupe", "@ensemble_groupe_element1",
+  # "@groupe_element1", "@element1", "@ensemble_groupe_element2",
+  # "@groupe_element2" et "@element2", *s’ils existent dans la 
+  # recette* sont automatiquement remis à nil.
+  # 
+  # Mais si des variables en cache portent d’autres noms que ces noms
+  # naturels, alors il faut les définir dans une liste envoyée à 
+  # #init_recipe :
+  # 
+  #   init_recipe([:premier_nom_var_cache, :second_nom_var_cache])
+  # 
+  # Ces variables cache seront initialisées au début et à la fin de
+  # l’inscription de la recette.
+  # 
+  # Si c’est juste un exemple de recette, qui ne doit pas être
+  # "interprété", on utilise la méthode #sample_recipe
+  # 
+  #   sample_recipe <<~EOT[, "<entete>"]
+  #     ...
+  #     EOT
+  # 
+  # 
+  # Insertion d’une page avant un élément
+  # -------------------------------------
+  # 
+  # Pour insérer une page avant un élément(*) quelconque :
   # 
   #   new_page_before(:what)
   # 
-  # où :what peut être :
+  # (*) Les éléments (:what) peuvent être :
   # 
   #   :feature      Avant toute la fonctionnalité
   #   :texte        Avant le texte (évalué)
@@ -45,6 +105,8 @@ class Feature
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
 
   def print_with(pdf, book)
+
+    spy(:on)
 
     @pdf  = pdf
     @book = book
@@ -111,7 +173,7 @@ class Feature
     end
 
     # = RECETTE EN EXEMPLE =
-    if sample_recipe
+    if recipe || sample_recipe
       saut_page if new_page_before[:recipe]
       print_sample_recipe
     end
@@ -133,7 +195,7 @@ class Feature
     end
 
     # = DERNIÈRE LIGNE DE FONCTIONNALITÉ =
-    draw_last_feature_line if sample_recipe || sample_texte || texte
+    draw_last_feature_line if recipe || sample_texte || texte || sample_recipe
 
     # Mémoriser la dernière page de cette fonctionnalité
     last_page_texte  = pdf.page_number
@@ -159,12 +221,14 @@ class Feature
 
     # = REMETTRE LA RECETTE INITIALE =
     #
-    retriev_previous_state if recipe
+    retrieve_previous_state if recipe
 
     # Si on a modifié la hauteur de ligne, il faut la remettre
     if line_height
       pdf.line_height = cur_line_height 
     end
+
+    spy(:off)
 
   end #/ #print_with
 
@@ -180,8 +244,6 @@ class Feature
     # contient une liste, il faut séparer chaque item d'un double 
     # retour chariot
     @description    = nil
-    # Exemple de recette
-    @sample_recipe  = nil 
     # Pour modifier la recette
     # 
     # Avec cette donnée, on va vraiment modifier la recette.
@@ -211,6 +273,9 @@ class Feature
     # Les anciennes valeurs sont aussitôt réappliquées.
     # 
     @recipe         = nil
+    # Quand c’est seulement un exemple de recette, qui ne doit pas
+    # être interprété
+    @sample_recipe = nil
     # Le texte donné en exemple
     # Si @texte n'est pas fourni, c'est lui qui sera injecté dans le
     # document (et donc interprété).
@@ -241,7 +306,7 @@ class Feature
 
     # Pour conserver l’état actuel de la recette (les valeurs 
     # modifiées s’il y en a)
-    @recipe_old_state = {}
+    @current_state = nil
 
     if block_given?
       instance_eval(&block)
@@ -282,16 +347,10 @@ class Feature
     set_or_get(:description, value)
   end
 
-  def recipe(value = nil)
-    set_or_get(:recipe, value)
+  def recipe(value = nil, entete = nil)
+    set_or_get(:recipe, value, entete)
   end
 
-  # On peut définir la recette exemple avec un autre entête que
-  # l’entête par défaut. Avec :
-  #   sample_recipe <<~EOT, "in recipe_collection.yaml"
-  #     ---
-  #       ... 
-  #     EOT
   def sample_recipe(value = nil, entete = nil)
     set_or_get(:sample_recipe, value, entete)
   end
@@ -394,43 +453,75 @@ class Feature
     pdf.start_new_page
   end
 
+  attr_reader :recipe_cache_variables
+  def init_recipe(liste)
+    @recipe_cache_variables = liste
+  end
+
   def apply_new_state
-    recipe.each do |k, v|
-      if v.is_a?(Hash)
-        table = book.recipe.send(k)
-        v.each do |sk, sv|
-          # Conserver la valeur actuelle
-          cur_value = table[sk]
-          # Appliquer la nouvelle valeur
-          table.merge!(sk => sv)
-          # Mémoriser la valeur actuelle
-          @recipe_old_state.merge!(k => {}) unless @recipe_old_state.key?(k)
-          @recipe_old_state[k].merge!( sk => cur_value )
-        end
-      else
-        # Conserver la valeur actuelle
-        cur_value = book.recipe.send(k).freeze
-        @recipe_old_state.merge!(k => cur_value)
-        # Appliquer la nouvelle valeur
-        if book.recipe.respond_to?("_set_#{k}".to_sym)
-          book.recipe.send("_set_#{k}".to_sym, v)
-        else
-          book.recipe.instance_variable_set("@#{k}", v)
-        end
+    # - Appliquer le nouvelle état de la recette -
+    @saved_state = Marshal.dump(Prawn4book::Recipe::DATA)
+    apply_recipe_state(YAML.safe_load(recipe))
+  end
+
+  # Revenir à l'état de recette précédent
+  def retrieve_previous_state
+    # - Remettre la recette dans son ancien état -
+    apply_recipe_state(Marshal.load(@saved_state))
+  end
+
+  def apply_recipe_state(patch)
+    Prawn4book::Recipe::DATA.deep_merge!(patch)
+    # - Initialiser des variables caches -
+    init_recipe_cache_variables
+  end
+
+  def init_recipe_cache_variables
+    # - Réinitialisation des variables caches existantes -
+    recipe_patch = YAML.safe_load(recipe)
+    # - Initialisation des variables caches possibles -
+    init_cache_variables_in(recipe_patch)
+    # - Les variables cache définies explicitement -
+    if recipe_cache_variables
+      recipe_cache_variables.each do |cvar|
+        init_cache_variable("@#{cvar}")
       end
     end
   end
 
-  # Revenir à l'état de recette précédent
-  def retriev_previous_state
-    @recipe_old_state.each do |k, v|
-      if v.is_a?(Hash)
-        table = book.recipe.send(k)
-        v.each do |sk, sv|
-          table.merge!(sk => sv)
-        end
+  def init_cache_variable(cvar_name)
+    if book.recipe.instance_variable_get(cvar_name)
+      book.recipe.instance_variable_set(cvar_name, nil)
+      spy "Variable-cache initialisée dans recette: #{cvar_name}".bleu
+    end
+  end
+
+  # Méthode récursive qui permet d’initialiser toutes les variables
+  # cache qui peuvent avoir des noms correspondant aux clés de la
+  # +table+. Par exemple, si :
+  #   +table+ = {
+  #     key1: {
+  #       subkey1: <valeur string>,
+  #       subkey2: <valeur number>,
+  #     }
+  #   }
+  # alors les variables cache @key1, @key1_subkey1, @subkey1, 
+  # @key1_subkey2, @subkey2, si elles existent dans la recette du 
+  # livre, seront remise à nil.
+  def init_cache_variables_in(table, racine = [])
+    table.each do |k, v|
+      case v
+      when Hash 
+        init_cache_variables_in(v, racine.dup << k)
       else
-        book.recipe.instance_variable_set("@#{k}", v)
+        # - Liste des noms de variables-cache possibles -
+        cached_names = ["@#{k}"]
+        cur_racine  = []
+        racine.reverse.each do |kr|
+          cur_racine << kr
+          cached_names << "@#{cur_racine.reverse.join('_')}_#{k}"
+        end
+        cached_names.each { |vckey| init_cache_variable(vckey) }
       end
     end
   end
@@ -508,8 +599,13 @@ class Feature
   # Pour afficher l'exemple de recette
   # 
   def print_sample_recipe
-    entete = @sample_recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
-    print_as_code(sample_recipe.dup, entete)
+    if sample_recipe
+      entete = @sample_recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
+      print_as_code(sample_recipe.dup, entete)
+    elsif recipe
+      entete = @recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
+      print_as_code(recipe.dup, entete)
+    end
   end
 
   # Pour afficher l’exemple de code

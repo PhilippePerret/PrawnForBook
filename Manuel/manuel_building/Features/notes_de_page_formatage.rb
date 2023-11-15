@@ -9,7 +9,7 @@ Prawn4book::Manual::Feature.new do
     Par défaut, les notes sont alignées à gauche comme le texte, mais grâce à `note_page_left`, on peut définir de les mettre en retrait. La valeur est un nombre de points-pdf (points post-script).
     EOT
 
-  sample_recipe <<~EOT #, "Autre entête"
+  recipe <<~EOT #, "Autre entête"
     ---
       .\\..
       book_format:
@@ -24,13 +24,7 @@ Prawn4book::Manual::Feature.new do
             left: 40
     EOT
 
-  recipe({
-    fonte_note_page: Prawn4book::Fonte.new(name:"Helvetica", size:15, style: :normal),
-    notes_page: {
-      font:"Helvetica", style: :normal, size:15, borders:8,
-      border_color: '00FF00', color: 'CCCCCC', left: 40
-    }
-  })
+  init_recipe([:fonte_note_page])
 
   texte <<~EOT
     Ceci est une note automatique^^ avec une autre note auto-incrémentée^^ et une troisième note^^ pour voir.

@@ -37,7 +37,7 @@ Prawn4book::Manual::Feature.new do
   int_mg_mm = int_margin.proceed_unit
   ext_mg_mm = ext_margin.proceed_unit
 
-  sample_recipe <<~EOT
+  recipe <<~EOT
     book_format:
       page:
         margins:

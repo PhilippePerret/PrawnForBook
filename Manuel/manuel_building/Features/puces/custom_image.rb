@@ -17,7 +17,7 @@ Prawn4book::Manual::Feature.new do
   size    = 14
   left    = 8
 
-  sample_recipe <<~YAML
+  recipe <<~YAML
     #<book_format>
     book_format:
       text:
@@ -29,13 +29,7 @@ Prawn4book::Manual::Feature.new do
     #</book_format>
     YAML
 
-  recipe({
-    format_text: {
-      puce: {
-        text: puce, size: size, vadjust:vadjust, hadjust: 0, left: "#{left}mm"
-      }
-    }
-  })
+  init_recipe([:format_text])
 
   _ps = vadjust > 1 ? 's' : ''
   

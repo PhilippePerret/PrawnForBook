@@ -1,31 +1,36 @@
 module Prawn4book
 
+  #
+  # @note
+  #   Avec ’##’ devant, ce sont les fonctionnalités qui étaient "en
+  #   route avant le changement du traitement de la recette"
+  # 
   FEATURE_LIST = %w{
 
-      #forces_de_prawn
+      forces_de_prawn
       #deux_fichiers_de_base
-      recette/juste_titre
-      recette/recette_livre
-      recette/recette_collection
-      #definition_fonte
-      #format_markdown_du_texte
+      ##recette/juste_titre
+      ##recette/recette_livre
+      ##recette/recette_collection
+      definition_fonte
+      format_markdown_du_texte
       #---Puces---
-      puces/puces
-      puces/losange
-      puces/black_losange
-      puces/square
-      puces/black_square
-      puces/bullet
-      puces/black_bullet
-      puces/finger
-      puces/black_finger
-      puces/big_hyphen
-      puces/custom_image
-      image_inserer
+      ##puces/puces
+      ##puces/losange
+      ##puces/black_losange
+      ##puces/square
+      ##puces/black_square
+      ##puces/bullet
+      ##puces/black_bullet
+      ##puces/finger
+      ##puces/black_finger
+      ##puces/big_hyphen
+      ##puces/custom_image
+      ##image_inserer
       #cross_references
       #hyperlinks
-      notes_de_page
-      notes_de_page_formatage
+      ##notes_de_page
+      ##notes_de_page_formatage
       #tables/tables
       ###---PagesSpeciales---###
       #pages_speciales/pages_speciales
@@ -34,10 +39,10 @@ module Prawn4book
       #alignement_du_texte
       ##---Mode_Expert---###
       #expert/mode_expert
-      expert/contexte_erreurs
-      expert/injection_code
+      ##expert/contexte_erreurs
+      ##expert/injection_code
       ###---Annexe---###
-      annexe/annexe
+      ##annexe/annexe
       #annexe/markdown_all_marks
       annexe/format_yaml
       #image_rogner_svg

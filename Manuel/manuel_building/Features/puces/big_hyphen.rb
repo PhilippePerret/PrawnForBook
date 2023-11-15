@@ -10,7 +10,7 @@ Prawn4book::Manual::Feature.new do
   vadjust = 65
   left = '20'
 
-  sample_recipe <<~YAML
+  recipe <<~YAML
     #<book_format>
     book_format:
       text:
@@ -22,13 +22,7 @@ Prawn4book::Manual::Feature.new do
     #</book_format>
     YAML
 
-  recipe({
-    format_text: {
-      puce: {
-        text: :hyphen, size: taille_tiret, vadjust:vadjust, hadjust: 0, left: "#{left}mm"
-      }
-    }
-  })
+  init_recipe([:format_text])
 
   sample_texte <<~EOT
     * Ceci est une puce `:hyphen` de #{taille_tiret} points, remontée de #{vadjust} points, texte décalé de #{left}mm, avec les autres paramètres laissés intacts,

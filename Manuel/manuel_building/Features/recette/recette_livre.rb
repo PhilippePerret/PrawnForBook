@@ -9,13 +9,13 @@ Prawn4book::Manual::Feature.new do
 
   sample_recipe <<~EOT #, "Autre entête"
     ---
-      #<book_data>
-      # .\\..
-      #</book_data>
+    #<book_data>
+    # .\\..
+    #</book_data>
 
-      #<book_format>
-      # .\\..
-      #</book_format>
-    EOT
+    #<book_format>
+    # .\\..
+    #</book_format>
+  EOT
 
 end

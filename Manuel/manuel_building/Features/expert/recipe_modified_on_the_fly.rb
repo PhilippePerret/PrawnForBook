@@ -11,10 +11,10 @@ Prawn4book::Manual::Feature.new do
     C’est un deep_merge qui est utilisé, donc il n’y a pas besoin de tout remettre dans le hash, mais seulement ce qui a été modifié
     EOT
 
-  sample_texte <<~EOT
-    EOT
+  # sample_texte <<~EOT
+  #   EOT
 
-  texte <<~EOT
-    EOT
+  # texte <<~EOT
+  #   EOT
 
 end

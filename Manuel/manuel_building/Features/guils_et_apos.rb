@@ -12,13 +12,11 @@ Prawn4book::Manual::Feature.new do
     De la même manière, pour les tirets longs ou demi-longs pour mettre du texte en exergue — comme ici —, il est nécessaire de mettre à l'intérieur des espaces insécables qui empêcheront le tiret de se retrouver seul à la ligne.
     EOT
 
-  sample_recipe <<~EOT
+  recipe <<~EOT
     book_format:
       text:
         guillemets: ['« ', ' »']
     EOT
-
-  recipe({guillemets: ['« ', ' »']})
 
   sample_texte <<~EOT
     Remarquez ici le \\"guillemets droits\\" et il y a plein d'apostrophes droits mais laissés dans du \#{'#'}{"code"} reconnu comme tel.

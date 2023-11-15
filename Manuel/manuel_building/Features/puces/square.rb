@@ -6,7 +6,7 @@ Prawn4book::Manual::Feature.new do
 
   subtitle "Puce carrée"
 
-  sample_recipe <<~YAML
+  recipe <<~YAML
     #<book_format>
     book_format:
       text:
@@ -17,13 +17,7 @@ Prawn4book::Manual::Feature.new do
     #</book_format>
     YAML
 
-  recipe({
-    format_text: {
-      puce: {
-        text: :square, size: 20, vadjust:2, hadjust: 0, left: '4mm'
-      }
-    }
-  })
+  init_recipe([:format_text])
 
   sample_texte <<~EOT
     * Ceci est une puce `:square` de 20 points, remontée de 2 points, avec les autres paramètres laissés intacts,

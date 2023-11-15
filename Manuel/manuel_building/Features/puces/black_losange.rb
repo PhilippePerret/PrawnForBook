@@ -6,7 +6,7 @@ Prawn4book::Manual::Feature.new do
 
   subtitle "Puce losange noir"
 
-  sample_recipe <<~YAML
+  recipe <<~YAML
     #<book_format>
     book_format:
       text:
@@ -17,13 +17,7 @@ Prawn4book::Manual::Feature.new do
     #</book_format>
     YAML
 
-  recipe({
-    format_text: {
-      puce: {
-        text: :black_losange, size: 14, vadjust:-2, hadjust: 0, left: '4mm'
-      }
-    }
-  })
+  init_recipe([:format_text])
 
   sample_texte <<~EOT
     * Ceci est une puce :black_losange de 14 points, descendue de 2 points avec les autres paramètres laissés intacts,
