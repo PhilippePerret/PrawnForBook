@@ -460,14 +460,16 @@ class Feature
 
   def apply_new_state
     # - Appliquer le nouvelle état de la recette -
-    @saved_state = Marshal.dump(Prawn4book::Recipe::DATA)
+    @init_recipe_state ||= Marshal.dump(Prawn4book::Recipe::DATA)
     apply_recipe_state(YAML.safe_load(recipe, **YAML_OPTIONS))
   end
 
   # Revenir à l'état de recette précédent
   def retrieve_previous_state
     # - Remettre la recette dans son ancien état -
-    apply_recipe_state(Marshal.load(@saved_state))
+    ::Prawn4book::Recipe.send(:remove_const, 'DATA')
+    ::Prawn4book::Recipe.const_set('DATA', Marshal.load(@init_recipe_state))
+    init_recipe_cache_variables
   end
 
   def apply_recipe_state(patch)

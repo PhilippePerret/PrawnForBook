@@ -9,7 +9,7 @@ module Prawn4book
 
       forces_de_prawn
       #deux_fichiers_de_base
-      recette/juste_titre
+      recette/grand_titre
       recette/recette_livre
       recette/recette_collection
       definition_fonte
@@ -17,8 +17,8 @@ module Prawn4book
       #---Puces---
       puces/puces
       puces/losange
-      ##puces/black_losange
-      ##puces/square
+      puces/black_losange
+      puces/square
       ##puces/black_square
       ##puces/bullet
       ##puces/black_bullet
@@ -26,23 +26,26 @@ module Prawn4book
       ##puces/black_finger
       ##puces/big_hyphen
       ##puces/custom_image
-      ##image_inserer
+      image_inserer
+      image_format_legende
       #cross_references
       #hyperlinks
       ##notes_de_page
       ##notes_de_page_formatage
       #tables/tables
       ###---PagesSpeciales---###
+      pages_speciales/grand_titre
       #pages_speciales/pages_speciales
       #change_fonte_for_next_paragraph
       ###---Changements_comportements_par_default---###
       #alignement_du_texte
       ##---Mode_Expert---###
-      #expert/mode_expert
+      expert/grand_titre
+      expert/mode_expert
       ##expert/contexte_erreurs
       ##expert/injection_code
       ###---Annexe---###
-      ##annexe/annexe
+      annexe/grand_titre
       #annexe/markdown_all_marks
       annexe/format_yaml
       #image_rogner_svg

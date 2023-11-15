@@ -3,7 +3,7 @@
   :page: 12
   :paragraph:
   :hybrid: 'p. 12 § '
-:recette_juste_titre:
+:recette_grand_titre:
   :page: 12
   :paragraph:
   :hybrid: 'p. 12 § '
@@ -31,7 +31,47 @@
   :page: 15
   :paragraph:
   :hybrid: 'p. 15 § '
-:annexe_format_yaml:
+:puces_black_losange:
   :page: 15
   :paragraph:
   :hybrid: 'p. 15 § '
+:puces_square:
+  :page: 16
+  :paragraph:
+  :hybrid: 'p. 16 § '
+:image_inserer:
+  :page: 18
+  :paragraph:
+  :hybrid: 'p. 18 § '
+:exemple_image_18:
+  :page: 30
+  :paragraph: 135
+  :hybrid: p. 30 § 135
+:exemple_image_19:
+  :page: 31
+  :paragraph: 136
+  :hybrid: p. 31 § 136
+:image_format_legende:
+  :page: 31
+  :paragraph:
+  :hybrid: 'p. 31 § '
+:pages_speciales_grand_titre:
+  :page: 35
+  :paragraph:
+  :hybrid: 'p. 35 § '
+:expert_grand_titre:
+  :page: 39
+  :paragraph:
+  :hybrid: 'p. 39 § '
+:expert_mode_expert:
+  :page: 42
+  :paragraph:
+  :hybrid: 'p. 42 § '
+:annexe_grand_titre:
+  :page: 43
+  :paragraph:
+  :hybrid: 'p. 43 § '
+:annexe_format_yaml:
+  :page: 46
+  :paragraph:
+  :hybrid: 'p. 46 § '

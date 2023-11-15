@@ -408,6 +408,10 @@ class Recipe
     @format_text ||= book_format[:text]
   end
 
+  def format_images
+    @format_images ||= book_format[:images] || {}
+  end
+
   def format_page
     @format_page ||= book_format[:page]
   end

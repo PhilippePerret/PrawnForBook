@@ -77,7 +77,7 @@ class NImage < AnyParagraph
   #   image — et donc ce sera le cadre qui sera important)
   # 
   def print(pdf)
-    spy(:on) if first_turn?
+    # spy(:on) if first_turn?
 
     my = self # ATTENTION : pas "me"
 
@@ -135,24 +135,24 @@ class NImage < AnyParagraph
       @data_image.merge!(color_mode: :cmyk)
     end
 
-    spy "Image:       #{filename}".bleu
-    spy "Légende:     #{legend}".bleu if legend
-    spy <<~EOD.bleu
-      (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
-      Original W: #{original_width.inspect}
-      Original H: #{original_height.inspect}
-      Explicit W: #{width.inspect}
-      Explicit H: #{height.inspect}
-      Calc W:     #{calc_width} 
-      Calc H:     #{calc_height} 
-      Scale:      #{scale.inspect}
-      left:       #{left.inspect}
-      right:      #{right.inspect}
-      position legend: #{position_legend}
-      left legend: #{left_legend}
-      -----------
-      Data image: #{@data_image}
-      EOD
+    # spy "Image:       #{filename}".bleu
+    # spy "Légende:     #{legend}".bleu if legend
+    # spy <<~EOD.bleu
+    #   (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
+    #   Original W: #{original_width.inspect}
+    #   Original H: #{original_height.inspect}
+    #   Explicit W: #{width.inspect}
+    #   Explicit H: #{height.inspect}
+    #   Calc W:     #{calc_width} 
+    #   Calc H:     #{calc_height} 
+    #   Scale:      #{scale.inspect}
+    #   left:       #{left.inspect}
+    #   right:      #{right.inspect}
+    #   position legend: #{position_legend}
+    #   left legend: #{left_legend}
+    #   -----------
+    #   Data image: #{@data_image}
+    #   EOD
 
 
     # Propriété à sortir (pour le scope dans pdf)
@@ -210,7 +210,7 @@ class NImage < AnyParagraph
       if cursor_after == cursor_before
         move_down(image_height)
       elsif cursor_after < (cursor_before - image_height)
-        puts "Le curseur n’est pas tout à fait en dessous pour #{my.me}".orange
+        # puts "Le curseur n’est pas tout à fait en dessous pour #{my.me}".orange
       else
         # puts "Le curseur est bien placé#{he}".vert
       end
@@ -240,7 +240,7 @@ class NImage < AnyParagraph
 
     end #/pdf
     
-    spy(:off) if first_turn?
+    # spy(:off) if first_turn?
 
   end #/print
 
@@ -322,9 +322,19 @@ class NImage < AnyParagraph
     pdf.bounds.height.to_f
   end
 
+  # --- Legend methods ---
+
+  # def wrap_in_color(str)
+  #   fmt = 
+  #     if legend_color.is_a?(String)
+  #       '<color rgb="%s">'.freeze
+  #     else
+  #       '<color >'.freeze
+  #     end
+  #   format(fmt, legend_color) + str + '</color>'
+  # end
+
   # Hauteur que prendra la légende
-  # TODO: Il faudrait affiner le calcul car la légend est moins 
-  # large que la largeur de la page
   def legend_height
     @legend_height ||= begin
       if legend
@@ -359,13 +369,30 @@ class NImage < AnyParagraph
   def legend_options(params = nil)
     @legend_options ||= {
         align:  :center,
-        style:  :italic,
-        size:   Fonte.current.size - 1,
+        style:  legend_style,
+        size:   legend_size,
         width:  legend_width,
-        inline_format: true,
+        color:  legend_color,
+        inline_format: true
       }
   end
 
+  def legend_font_name
+    data[:legend_font] || legend_data[:font] 
+  end
+  def legend_style
+    @legend_style ||= data[:legend_style] || legend_data[:style] || :italic
+  end
+  def legend_size
+    @legend_size ||= data[:legend_size] || legend_data[:size] || Fonte.current.size - 1
+  end
+  def legend_color
+    @legend_color ||= data[:legend_color] || legend_data[:color]
+  end
+
+  def legend_data
+    book.recipe.format_images[:legend] || {}
+  end
 
 
   # --- Predicate Methods ---
