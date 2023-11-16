@@ -121,6 +121,13 @@ class ReferencesTable
     if ref = table[ref_id]
       # - Référence définie -
       # (2e tour ou référence arrière)
+
+      # - Il faut toujours qu’il y ait une marque pour la page ou
+      #   le paragraphe -
+      unless custom_mark.match?(/_(ref|page|paragraph)_/)
+        custom_mark = "#{custom_mark} (_ref_)"
+      end
+      # - Transformation de la marque -
       custom_mark
         .gsub(/_ref_/, endroit_to(ref))
         .gsub(/_page_/, ref[:page].to_s)

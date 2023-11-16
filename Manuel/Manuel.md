@@ -2476,9 +2476,9 @@ Ces tiers sont repérés par des clés qui portent en préfix l’indication de 
 
 ~~~yaml
 ---
-:headers_footers:
-	:headfooters:
-		:HF0001:
+headers_footers:
+	headfooters:
+		HF0001:
 			:id: :HF0001
 			:name: Le headfooter en démo
 			:font_n_style: "Times-Roman/normal"
@@ -2512,7 +2512,7 @@ Ces tiers sont repérés par des clés qui portent en préfix l’indication de 
 	:dispositions:
 		# ... définition des dispositions (table)
 	:headfooters:
-		# ... défintion des headfooters (table
+		# ... défintion des headfooters (table)
 ~~~
 
 #### Variables

@@ -542,7 +542,7 @@ class Feature
   def init_cache_variable(cvar_name)
     if book.recipe.instance_variable_get(cvar_name)
       book.recipe.instance_variable_set(cvar_name, nil)
-      spy "Variable-cache initialisée dans recette: #{cvar_name}".bleu
+      # spy "Variable-cache initialisée dans recette: #{cvar_name}".bleu
     # else 
     #   spy "Variable-cache inconnue: #{cvar_name}".rouge
     end
@@ -818,31 +818,27 @@ private
       if v.match?(/\[\[/)
         v = v.gsub(REG_LIEN_FEATURE){
           tirets = $~['tirets'].freeze
-          path = $~['relpath'].freeze
-          titre = nil
+          path = $~['filename'].freeze
+          tit = nil
           if tirets
-            titre = Prawn4book::FEATURES_TO_PAGE[path] || "Unknown Title"
-            if tirets.length == 2
-              titre = titre.downcase
+            if tit = Prawn4book::FEATURES_TO_PAGE[path]
+              tit = tit[:title]
             else
-              titre[0] = titre[0].downcase
+              tit = "Unknown Title"
             end
-            titre = "|#{titre}"
+            if tirets.length == 2
+              tit = tit.downcase
+            else
+              tit[0] = tit[0].downcase
+            end
+            tit = "|#{tit}"
           end
-          "->(#{path.gsub('/','_')}#{titre})"
-          # if dfeature = Prawn4book::FEATURES_TO_PAGE[path]
-          #   "*#{dfeature[:title]}* (page #{dfeature[:page]})"
-          # elsif Prawn4book.first_turn?
-          #   "#{path} (page XXX)"
-          # else
-          #   add_erreur("Dans #{filename}, la feature de path #{path.inspect} est inconnue…")
-          #   "{{INCONNU : #{path}}}"
-          # end
+          "->(#{path.gsub('/','_')}#{tit})"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
         }
       end
       return v    
     end
-    REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<relpath>.+?)\]\]/.freeze
+    REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<filename>.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title

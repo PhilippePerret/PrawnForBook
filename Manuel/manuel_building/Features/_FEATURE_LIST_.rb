@@ -13,6 +13,7 @@ module Prawn4book
       recette/recette_livre
       recette/recette_collection
       ###---Contenu_textuel_(intro)---###
+      texte/grand_titre
       format_markdown_du_texte
       definition_fonte
       ###---PagesSpeciales---###
@@ -23,6 +24,8 @@ module Prawn4book
       ###---Entetes/Pied-de-page---###
       header_footer/grand_titre
       header_footer/par_defaut
+      ###__Texte_Details___###
+      texte_detail/grand_titre
       #---Puces---
       puces/puces
       puces/losange

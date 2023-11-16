@@ -19,135 +19,151 @@
   :page: 14
   :paragraph:
   :hybrid: 'p. 14 § '
+:texte_grand_titre:
+  :page: 15
+  :paragraph:
+  :hybrid: 'p. 15 § '
 :format_markdown_du_texte:
-  :page: 14
+  :page: 18
   :paragraph:
-  :hybrid: 'p. 14 § '
+  :hybrid: 'p. 18 § '
 :definition_fonte:
-  :page: 16
+  :page: 18
   :paragraph:
-  :hybrid: 'p. 16 § '
+  :hybrid: 'p. 18 § '
 :pages_speciales_grand_titre:
-  :page: 17
+  :page: 19
   :paragraph:
-  :hybrid: 'p. 17 § '
+  :hybrid: 'p. 19 § '
 :pages_speciales_pages_speciales:
-  :page: 20
+  :page: 22
   :paragraph:
-  :hybrid: 'p. 20 § '
+  :hybrid: 'p. 22 § '
+:pages_speciales_table_des_matieres:
+  :page: 22
+  :paragraph:
+  :hybrid: 'p. 22 § '
+:pages_speciales_page_infos:
+  :page: 22
+  :paragraph:
+  :hybrid: 'p. 22 § '
 :header_footer_grand_titre:
-  :page: 21
+  :page: 24
   :paragraph:
-  :hybrid: 'p. 21 § '
+  :hybrid: 'p. 24 § '
 :header_footer_par_defaut:
-  :page: 24
-  :paragraph:
-  :hybrid: 'p. 24 § '
-:puces_puces:
-  :page: 24
-  :paragraph:
-  :hybrid: 'p. 24 § '
-:puces_losange:
-  :page: 24
-  :paragraph:
-  :hybrid: 'p. 24 § '
-:puces_black_losange:
-  :page: 25
-  :paragraph:
-  :hybrid: 'p. 25 § '
-:puces_square:
-  :page: 27
-  :paragraph:
-  :hybrid: 'p. 27 § '
-:puces_black_square:
-  :page: 27
-  :paragraph:
-  :hybrid: 'p. 27 § '
-:puces_bullet:
   :page: 28
   :paragraph:
   :hybrid: 'p. 28 § '
-:puces_black_bullet:
-  :page: 29
-  :paragraph:
-  :hybrid: 'p. 29 § '
-:puces_finger:
-  :page: 30
-  :paragraph:
-  :hybrid: 'p. 30 § '
-:puces_black_finger:
-  :page: 30
-  :paragraph:
-  :hybrid: 'p. 30 § '
-:puces_big_hyphen:
+:texte_detail_grand_titre:
   :page: 31
   :paragraph:
   :hybrid: 'p. 31 § '
-:puces_custom_image:
-  :page: 32
-  :paragraph:
-  :hybrid: 'p. 32 § '
-:images_inserer:
+:puces_puces:
   :page: 34
   :paragraph:
   :hybrid: 'p. 34 § '
+:puces_losange:
+  :page: 34
+  :paragraph:
+  :hybrid: 'p. 34 § '
+:puces_black_losange:
+  :page: 35
+  :paragraph:
+  :hybrid: 'p. 35 § '
+:puces_square:
+  :page: 35
+  :paragraph:
+  :hybrid: 'p. 35 § '
+:puces_black_square:
+  :page: 36
+  :paragraph:
+  :hybrid: 'p. 36 § '
+:puces_bullet:
+  :page: 37
+  :paragraph:
+  :hybrid: 'p. 37 § '
+:puces_black_bullet:
+  :page: 37
+  :paragraph:
+  :hybrid: 'p. 37 § '
+:puces_finger:
+  :page: 38
+  :paragraph:
+  :hybrid: 'p. 38 § '
+:puces_black_finger:
+  :page: 39
+  :paragraph:
+  :hybrid: 'p. 39 § '
+:puces_big_hyphen:
+  :page: 40
+  :paragraph:
+  :hybrid: 'p. 40 § '
+:puces_custom_image:
+  :page: 40
+  :paragraph:
+  :hybrid: 'p. 40 § '
+:images_inserer:
+  :page: 42
+  :paragraph:
+  :hybrid: 'p. 42 § '
 :exemple_image_18:
-  :page: 46
-  :paragraph: 300
-  :hybrid: p. 46 § 300
+  :page: 54
+  :paragraph: 340
+  :hybrid: p. 54 § 340
 :exemple_image_19:
-  :page: 47
-  :paragraph: 301
-  :hybrid: p. 47 § 301
+  :page: 55
+  :paragraph: 341
+  :hybrid: p. 55 § 341
 :images_format_legende:
-  :page: 47
+  :page: 55
   :paragraph:
-  :hybrid: 'p. 47 § '
+  :hybrid: 'p. 55 § '
 :references_cross_references:
-  :page: 51
+  :page: 59
   :paragraph:
-  :hybrid: 'p. 51 § '
+  :hybrid: 'p. 59 § '
 :exemple_cible:
-  :page: 52
-  :paragraph: 351
-  :hybrid: p. 52 § 351
+  :page: 60
+  :paragraph: 390
+  :hybrid: p. 60 § 390
 :ex_autre_cible:
-  :page: 53
-  :paragraph: 353
-  :hybrid: p. 53 § 353
+  :page: 61
+  :paragraph: 392
+  :hybrid: p. 61 § 392
 :notes_de_page:
-  :page: 55
+  :page: 63
   :paragraph:
-  :hybrid: 'p. 55 § '
+  :hybrid: 'p. 63 § '
 :notes_de_page_formatage:
-  :page: 55
+  :page: 63
   :paragraph:
-  :hybrid: 'p. 55 § '
+  :hybrid: 'p. 63 § '
 :expert_grand_titre:
-  :page: 57
+  :page: 65
   :paragraph:
-  :hybrid: 'p. 57 § '
+  :hybrid: 'p. 65 § '
 :expert_mode_expert:
-  :page: 60
+  :page: 68
   :paragraph:
-  :hybrid: 'p. 60 § '
+  :hybrid: 'p. 68 § '
 :expert_contexte_erreurs:
-  :page: 60
+  :page: 68
   :paragraph:
-  :hybrid: 'p. 60 § '
+  :hybrid: 'p. 68 § '
 :expert_injection_code:
-  :page: 60
+  :page: 68
   :paragraph:
-  :hybrid: 'p. 60 § '
+  :hybrid: 'p. 68 § '
 :annexe_grand_titre:
-  :page: 62
+  :page: 70
   :paragraph:
-  :hybrid: 'p. 62 § '
+  :hybrid: 'p. 70 § '
 :annexe_format_yaml:
-  :page: 66
+  :page: 74
   :paragraph:
-  :hybrid: 'p. 66 § '
+  :hybrid: 'p. 74 § '
 :images_rogner_svg:
-  :page: 66
+  :page: 74
   :paragraph:
-  :hybrid: 'p. 66 § '
+  :hybrid: 'p. 74 § '
