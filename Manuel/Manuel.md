@@ -3069,17 +3069,32 @@ end #/module BibliographyFormaterModule
 
 ### RÉFÉRENCES (et références croisées)
 
+#### Lexique
+
+Cf. dans le manuel auto-produit
+
+
 On peut faire très simplement des références dans le livre (références à d'autres pages ou d'autres paragraphes, du livre ou d'autres livres) à l'aide des balises :
 
 ~~~text
-(( <-(id_reference_unique) )) # référence (cible)
+<-(id_reference_unique) # référence (cible)
 
-(( ->(id_reference_unique) )) # appel de référence
+->(id_reference_unique) # appel de référence
 ~~~
 
-La référence sera tout simplement supprimée du texte (attention de ne pas laisser d’espaces — même si, normalement, ils sont supprimés). Pour l’appel de référence il sera toujours remplacé par *“la page xxx”* ou *“le paragraphe xxx”* en fonction de [la pagination souhaitée](#pagination) et du préfix de référence choisi (TODO).
+La référence sera tout simplement supprimée du texte (attention de ne pas laisser d’espaces — même si, normalement, ils sont supprimés). Pour l’appel de référence il sera toujours remplacé par *“la page xxx”* ou *“le paragraphe xxx”* en fonction de [la pagination souhaitée](#pagination) et du préfix de référence choisi.
 
-#### Références croisées
+#### Format de la référence 
+
+Le format de la référence, c’est-à-dire la marque qui renverra à la cible, peut être définie aussi après un trait droit « | » dans l’appel de la cible. Par exemple :
+
+~~~
+->(id_reference|"Le texte de la marque")
+~~~
+
+
+
+#### Références à un autre livre
 
 Pour une *référence croisée à un autre livre*, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant. Elle peut ressembler à :
 

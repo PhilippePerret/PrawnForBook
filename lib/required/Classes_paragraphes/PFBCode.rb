@@ -77,7 +77,7 @@ class PFBCode < AnyParagraph
       # Une cible de référence (ou un lien) seule sur une ligne
       # Pour le moment, on considère que ça ne peut être qu'une cible
       treate_as_cible_references(pdf, book)
-    when PdfBook::ReferencesTable::REG_LIEN_REFERENCE
+    when PdfBook::ReferencesTable::REG_APPEL_REFERENCE
       raise PFBFatalError.new(2000, {code: raw_code})
     when 'line'
       # Inscription d'une liste

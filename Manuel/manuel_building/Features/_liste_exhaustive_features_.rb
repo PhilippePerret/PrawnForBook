@@ -18,6 +18,7 @@ Prawn4book::Manual::Feature.new do
     * évaluation à la volée du code ruby (pour des opérations, des constantes, etc.)
     * traitement des références croisées
     * traitement dynamique des références à d'autres livres
+    * gestion par défaut ou personnalisée des images et de leur légende
     * génération dynamique de contenu
     * corrige l'erreur typographique de l'apostrophe droit
     * corrige l'erreur typographique de l'absence d'espace avant et après les chevrons

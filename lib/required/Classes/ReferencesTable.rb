@@ -3,7 +3,7 @@ class PdfBook
 class ReferencesTable
 
   REG_CIBLE_REFERENCE = /^<\-\((.+?)\)$/.freeze
-  REG_LIEN_REFERENCE = /^\->\((.+?)\)$/.freeze
+  REG_APPEL_REFERENCE = /^\->\((.+?)\)$/.freeze
 
   attr_reader :book
   attr_reader :table
@@ -107,15 +107,24 @@ class ReferencesTable
     #
     # Traitement particulier des références croisées
     # 
-    return get_cross_reference(ref_id, paragraph) if ref_id.match?(':')
+    return get_cross_reference(ref_id, paragraph) if ref_id.match?(/[^  ]:/.freeze)
     # 
     # Sinon, une référence simple dans le livre
     # 
+    # (mais qui peut être personnalisée)
+    # 
+    custom_mark = "_ref_"
+    if ref_id.match?('\|')
+      ref_id, custom_mark = ref_id.split('|')
+    end
     ref_id = ref_id.to_sym
     if ref = table[ref_id]
       # - Référence définie -
       # (2e tour ou référence arrière)
-      call_to(ref)
+      custom_mark
+        .gsub(/_ref_/, endroit_to(ref))
+        .gsub(/_page_/, ref[:page].to_s)
+        .gsub(/_paragraph_/, ref[:paragraph].to_s)
     elsif second_turn?
       add_erreur(PFBError[2002] % {id: ref_id, targets:table.keys})
       # raise PFBFatalError.new(2002, {id: ref_id, targets:table.keys})
@@ -165,10 +174,10 @@ class ReferencesTable
   # @note
   #   Les références croisées utilisent une autre méthode.
   # 
-  def call_to(ref)
+  def endroit_to(ref)
     case book.recipe.page_num_type
     when 'pages'
-      "#{ref[:page]}"
+      "page #{ref[:page]}"
     when 'parags'
       ref[:paragraph] ? "§ #{ref[:paragraph]}" : "#{ref[:page]}"
     when 'hybrid'

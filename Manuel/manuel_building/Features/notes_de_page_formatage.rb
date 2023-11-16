@@ -11,17 +11,16 @@ Prawn4book::Manual::Feature.new do
 
   recipe <<~EOT #, "Autre entête"
     ---
-      .\\..
-      book_format:
-        text:
-          notes_page:
-            font: "Times-Roman"
-            size: 15
-            style: ""
-            color: CCCCCC
-            borders: 8
-            border_color: 00FF00
-            left: 40
+    book_format:
+      text:
+        notes_page:
+          font: "Times-Roman"
+          size: 15
+          style: ""
+          color: CCCCCC
+          borders: 8
+          border_color: 00FF00
+          left: 40
     EOT
 
   init_recipe([:fonte_note_page])
@@ -33,7 +32,7 @@ Prawn4book::Manual::Feature.new do
     ^^ Explication de la note auto-incrémentée (ou "note automatique")
     ^^ Explication de la troisième note, qui tiendra elle sur trois lignes pour bien voir l’aspect de ces notes et voir que la ligne (le *border*) est conforme à ce que l’on a décidé, avec couleur et épaisseur.
     ^^ Bien sûr, les explications des notes auto-incrémentées doivent être dans l’ordre de leur apparition dans les paragraphes.
-    Un paragraphe à la suite du bloc de notes.
+    Id in deserunt deserunt ut incididunt consequat occaecat est.
     EOT
 
 end

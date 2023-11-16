@@ -39,6 +39,19 @@ class Feature
   # sachant que c’est moins bon, puisqu’on n’est pas sûr que ce soit
   # exactement le code donné en exemple)
   # 
+  # Description de la fonctionnalité
+  # --------------------------------
+  # Elle se définit par :
+  # 
+  #     description <<~EOT
+  #       <la description>
+  #       EOT
+  # 
+  # Si on veut écrire cette description dans un fichier .md séparé, 
+  # il suffira ensuite de le charger par :
+  # 
+  #     description(File.read(__dir__+'<nom_fichier>.md'))
+  # 
   # 
   # Modification de la recette
   # ---------------------------
@@ -91,6 +104,39 @@ class Feature
   #   :feature      Avant toute la fonctionnalité
   #   :texte        Avant le texte (évalué)
   #   :description  Avant la description
+  # 
+  # 
+  # Faire référence à une autre fonctionnalités
+  # -------------------------------------------
+  # On peut faire très facilement référence à une autre fonction-
+  # nalités, c’est-à-dire afficher son titre et sa page, en mettant
+  # le chemin relatif au fichier entre doubles-crochets :
+  # 
+  #     [[puces/black_losange]]
+  # 
+  # Cette marque sera remplacée par : 
+  # 
+  #     "Les  puces losange noir (page 56)"
+  # 
+  # Pour ne pas avoir de majuscule au début, il suffit d’ajouter un
+  # '-' (un moins) au début (noter que seule la première lettre sera
+  # mise en minuscules) :
+  # 
+  #     [[-puces/black_losange]]
+  # 
+  # =>
+  # 
+  #     "les  puces losange noir (page 56)"
+  # 
+  # Si tout le titre doit être mis en minuscules, ajouter deux 
+  # moins :
+  # 
+  #     [[--forces_de_prawn]]  # titre : #Les forces de Prawn-For-Book
+  # 
+  # =>
+  # 
+  #     "les forces de prawn-for-book"
+  # 
 
   # Les variables utilisables dans les textes (description, texte, 
   # sample_texte, etc.)
@@ -683,6 +729,17 @@ class Feature
     not(last_is_title?)
   end
 
+  # ATTENTION : Les données suivantes ne sont pas définies lorsque
+  # le module de la fonctionnalité est loadé
+  def __path
+    @__path ||= File.join(FEATURES_FOLDER, filename)
+  end
+
+  def __folder
+    @__folder ||= File.dirname(__path)
+  end
+
+
   private
 
     # Pour ajouter des pages à marger, c'est-à-dire où il faut
@@ -760,8 +817,19 @@ private
       end
       if v.match?(/\[\[/)
         v = v.gsub(REG_LIEN_FEATURE){
-          path = $1.freeze
-          "->(#{path.gsub('/','_')})"
+          tirets = $~['tirets'].freeze
+          path = $~['relpath'].freeze
+          titre = nil
+          if tirets
+            titre = Prawn4book::FEATURES_TO_PAGE[path] || "Unknown Title"
+            if tirets.length == 2
+              titre = titre.downcase
+            else
+              titre[0] = titre[0].downcase
+            end
+            titre = "|#{titre}"
+          end
+          "->(#{path.gsub('/','_')}#{titre})"
           # if dfeature = Prawn4book::FEATURES_TO_PAGE[path]
           #   "*#{dfeature[:title]}* (page #{dfeature[:page]})"
           # elsif Prawn4book.first_turn?
@@ -774,7 +842,7 @@ private
       end
       return v    
     end
-    REG_LIEN_FEATURE = /\[\[(.+?)\]\]/.freeze
+    REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<relpath>.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title

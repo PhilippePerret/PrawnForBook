@@ -110,7 +110,7 @@ book_format:
     # - puces -
     puce:
       text: '–'
-      vadjust: 6
+      vadjust: 1.5
       hadjust: 0
       left: 6mm
     # - Notes de page -

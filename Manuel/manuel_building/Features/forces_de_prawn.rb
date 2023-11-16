@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Les Forces de <i>Prawn-for-book</i>"
+  titre "Les Forces de <i>Prawn-For-Book</i>"
 
   description <<~EOT
     ***Prawn-for-book*** possède de nombreuses forces et de nombreux atouts dont nous ne pouvons que donner un aperçu non exhaustif dans cette introduction.

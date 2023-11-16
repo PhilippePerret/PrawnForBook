@@ -46,9 +46,7 @@ Prawn4book::Manual::Feature.new do
 
     ##### Rogner une image SVG
 
-    Rogner une image svg [[image_rogner_svg]].
-
-    {{TODO: les data}}
+    Pour savoir comment rogner une image svg, voir [[images/rogner_svg]].
 
     ##### Exemples
 

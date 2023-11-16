@@ -12,8 +12,17 @@ module Prawn4book
       recette/grand_titre
       recette/recette_livre
       recette/recette_collection
-      definition_fonte
+      ###---Contenu_textuel_(intro)---###
       format_markdown_du_texte
+      definition_fonte
+      ###---PagesSpeciales---###
+      pages_speciales/grand_titre
+      pages_speciales/pages_speciales
+      pages_speciales/table_des_matieres
+      pages_speciales/page_infos
+      ###---Entetes/Pied-de-page---###
+      header_footer/grand_titre
+      header_footer/par_defaut
       #---Puces---
       puces/puces
       puces/losange
@@ -29,22 +38,19 @@ module Prawn4book
       #-Images-#
       images/inserer
       images/format_legende
-      #cross_references
+      references/cross_references
       #hyperlinks
-      ##notes_de_page
-      ##notes_de_page_formatage
+      notes_de_page
+      notes_de_page_formatage
       #tables/tables
-      ###---PagesSpeciales---###
-      pages_speciales/grand_titre
-      #pages_speciales/pages_speciales
+      ##---Changements_comportements_par_default---##
       #change_fonte_for_next_paragraph
-      ###---Changements_comportements_par_default---###
       #alignement_du_texte
       ##---Mode_Expert---###
       expert/grand_titre
       expert/mode_expert
-      ##expert/contexte_erreurs
-      ##expert/injection_code
+      expert/contexte_erreurs
+      expert/injection_code
       ###---Annexe---###
       annexe/grand_titre
       #annexe/markdown_all_marks
@@ -62,7 +68,6 @@ module Prawn4book
       pagination/numeroter_pages_vierges
       pagination/aspect_numero
       pagination/numerotation
-      table_des_matieres
       align_on_reference_lines
       pages_initiales
       numerotation_des_paragraphes
