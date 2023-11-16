@@ -5,11 +5,11 @@ class PrawnView
   #  pieds de page sur tout le livre
   # 
   def build_headers_and_footers(book)
-    HeadersFooters.new(book, self).build
+    HeadersFooters.new(book).build(self)
   end
 end #/class PrawnView
 
-class HeadersFooters
+class HeadersFooters # Garder ce nom ?
   
   # Exposition du livre et du pdf
   attr_reader :book, :pdf
@@ -17,16 +17,25 @@ class HeadersFooters
   # Exposition des données de page préparées
   attr_reader :data_pages
 
-  def initialize(book, pdf)
+  def initialize(book)
     @book = book
+  end
+
+  # = main =
+  # 
+  # Construction des entêtes et pied de page, pour la version 2 de
+  # l’application
+  # 
+  def build(pdf)
     @pdf  = pdf  
+    
   end
 
   # = main =
   # 
   # Construction de toutes les dispositions
   # 
-  def build
+  def OLD_build
     #
     # On ne fait rien s'il ne faut pas placer de header/footer.
     # 
