@@ -8,7 +8,7 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     Comme pour les autres éléments de _PFB_, les entêtes et pieds de page par défaut sont conçus pour être directement "professionnels". C’est-à-dire que la numérotation est intelligente, elle ne numérote pas bêtement toutes les pages de la première à la dernière. Seules sont numérotées les pages qui le sont dans un livre imprimé. Sont soigneusement évitées les pages vides, les pages de titre ou les pages spéciales comme [[-pages_speciales/table_des_matieres]] ou [[-pages_speciales/page_infos]].
     (( line ))
-    Les pages suivantes font définir les différents entête et pieds de page que l’on peut définir, en présentant dans la page le code utilisé et le résultat dans les entêtes et/ou les pieds de page.
+    Les pages suivantes vont définir les différents entête et pieds de page que l’on peut définir, en présentant dans la page le code utilisé et le résultat dans les entêtes et/ou les pieds de page.
 
     ##### Lexique
 
@@ -18,28 +18,42 @@ Prawn4book::Manual::Feature.new do
     * **Header**. *Entête*, en anglais.
     * **Pied de page**. C’est la partie, en bas de page, sous le texte principal de la page, qui contient le plus souvent le *numéro de page*.
     * **Footer**. *Pied de page*, anglais.
-    * **Portion**. Nous appelons "portion" l’un des trois tiers de page qui constituent une *entête* ou un *pied de page*. On trouve la *portion gauche*, la *portion droite* et la *portion centrale*.
-    * **Disposition**. Une *disposition* décrit le contenu des pieds et page et entête d’une ou plusieurs pages. Cela revient à définir quel *headfooter* les pages utilisent en entête et quel *headfooter* elles utilisent en pied de page. Puisque nous sommes en page double (page droite et page gauche), il y a 4 *headfooters* à définir par disposition (cf. plus bas). 
-    * **Headfooter**. Un *headfooter* décrit le contenu exact des trois portions qui constituent une *entête* ou un *pied de page* mais qui peuvent s’utiliser indifféremment pour l’un ou pour l’autre. Un *headfooter* peut même être utilisé en même temps en pied de page et en entête.
+    * **Portion**. Nous appelons "portion" l’un des 6 tiers de page qui constituent une *entête* ou un *pied de page*. Il y en a 6 parce qu’on travaille ici en double page. On trouve la *portion gauche*, la *portion droite* et la *portion centrale* de la page gauche et les mêmes portions sur la page droite.
+    * **Disposition**. Une *disposition* décrit le contenu des pieds et page et entête d’une ou plusieurs pages. Cela revient à définir les 6 portions de l’entête et les 6 portions du pied de page. 
     
     ##### Trois portions de page
 
-    Un *entête* ou un *pied de page* est un espace de page qui contient trois portions, trois tiers de page, une portion gauche, une portion droite et une portion centrale. On répartie les éléments dans ces trois portions. Les trois portions peuvent être différentes entre page gauche et page droite.
+    Un *entête* ou un *pied de page* est un espace de page qui contient trois portions au maximum, trois tiers de page, une portion gauche, une portion droite et une portion centrale. On répartie les éléments dans ces trois portions. Les trois portions peuvent être différentes entre page gauche et page droite.
+    On peut ne définir qu’une seule de ces trois portions, ou deux seulement.
 
-    ##### Les éléments
-
-    Les éléments qui peuvent être utilisés dans les entêtes et les pieds de page sont illimités en mode expert ([[expert/header_footer]]). Pour le commun des mortels, ils se limitent — ce qui est déjà largement suffisant — aux titres courants jusqu’au niveau 3, au numéro de la page ainsi qu’au nombre total de page.
 
     ##### Définition des entêtes et pieds de page
 
     Les *entêtes* et *pieds de page*, comme pour le reste, se définissent dans [[-recette/grand_titre]] du livre ou de la collection, dans une section qui s’appelle, on ne s’en étonnera pas : `headers_footers`.
     (( line ))
-    Pour les définir, on définit en fait des entités qui s’appellent des `headfooter`s, spécifiant le contenu des trois portions dont nous avons parlé plus haut, et qu’on peut utiliser indifféremment comme entête ou comme pied de page, en page droite ou page gauche. On utilise ensuite ces *headfooters* pour créer des *dispositions* d’entête ou de pied de page. Il y a en quatre par disposition :
-    * le *headfooter* de l’entête de page gauche,
-    * le *headfooter* de l’entête de page droite (qui peut être le même, bien entendu),
-    * le *headfooter* du pied de page gauche (par défaut, il contient le numéro de page dans sa portion gauche),
-    * le *headfooter* du pied de page droite (par défaut, il contient le numéro de page dans sa portion droite).
     On peut définir autant de *dispositions* que l’on veut, même s’il est conseillé, toujours, de rester le plus sobre possible. On peut se contenter, pour un résultat optimum, d’une *disposition* pour le corps du livre, son contenu principal, et une *disposition* pour les annexes si elles existent.
+    La propriété principale de la disposition est la valeur de son `header` (son "entête") et son `footer` ("pied de page"). Par défaut, les valeurs sont :
+    * `header` : \\"| x    | x | x || x | x | x    |\\"
+    * `footer` : \\"| -NUM | x | x || x | x | NUM- |\\"
+    On voit clairement la reliure représentée par `||` et de chaque côté les trois portions.
+    Les `x` signifient qu’on ne met rien dans ces portions.
+    Le `NUM` indique l’endroit où l’on va marquer le numéro de la page. Voir ci-dessous les *éléments* qui peuvent composer une disposition.
+    Le tiret (moins) qui précède ou suit *NUM* indique l’alignement dans la portion. Le trait avant (`-NUM`) signifie que le numéro sera aligné à gauche, le trait après (`NUM-`) signifie que le numéro sera aligné à droite. Pour le centrer, on aurait rien mit car l’élément est aligné au centre par défaut.
+    (( line ))
+    Mais en fait, la vraie disposition est plus simple, car il est inutile de définir toutes les portions si elles sont vides. La vraie disposition par défaut dans _PFB_ est :
+    * `header` : \\"| x    || x    |\\"
+    * `footer` : \\"| -NUM || NUM- |\\"
+
+    ##### Les éléments
+
+    Les éléments qui peuvent être utilisés dans les entêtes et les pieds de page sont illimités en mode expert ([[expert/header_footer]]). Pour le commun des mortels, ils se limitent — ce qui est déjà largement suffisant — aux titres courants jusqu’au niveau 3, au numéro de la page ainsi qu’au nombre total de page.
+    * **`NUM`** pour le numéro de page,
+    * **`TIT1`** pour le titre de niveau 1 courant,
+    * **`TIT2`** pour le titre de niveau 2 courant,
+    * **`TIT3`** pour le titre de niveau 3 courant,
+    * **`TOT`** pour le nombre total de pages,
+    * **`\\\#{code}`** pour un code ruby quelconque à évaluer à la volée, par exemple un numéro de version ou des auteurs,
+
 
     ##### Ajustement
 
@@ -54,84 +68,53 @@ Prawn4book::Manual::Feature.new do
     sample_recipe <<~EOT
       ---
       # .\\..
+      # Définit le début de la définition des entêtes et pieds de
+      # page
       headers_footers:
-        headfooters:
-          # Définitions des "headfooters"
 
-          # Un headfooter d’identifiant HD22. Cet identifiant
-          # permet d’y faire référence dans la disposition
-          HD22:
-            # Définition de l’headfooter HD22
-            left: <contenu portion gauche>
-            center: <contenu portion centrale>
-            right: <contenu portion droite>
+        # Fonte générale pour tous les pieds et page et entêtes
+        # Si non défini, c’est la fonte par défaut qui sera utilisée
+        font: "<name>/<style>/<size>/<color>"
 
-          AutreHD:
-            # Définition de l’autre headfooter
-
-          H23D:
-            # Définition de l’headfooter H23D
-        
+        # Définition des dispositions
         dispositions:
-          # Définitions des différentes dispositions en
-          # fonction des pages
 
-          - name: "Nom humain juste pour mémoire"
+          # Pour supprimer la disposition par défaut, il suffit 
+          # de faire :
+          default: null
+
+          # Définition d’une disposition
+          ma_disposition:
+            name: "Nom humain juste pour mémoire"
+            # Fonte particulière pour cette disposition en 
+            # particulier :
+            font: "<font name>/<font style>/<font size>/<font color>"
             first_page: <première page>
             last_page:  <dernière page>
-            lp_header:  <id headfooter entête page gauche>
-            lp_footer:  <id headfooter pied page gauche>
-            rp_header:  <id headfooter entête page droite>
-            rp_footer:  <id headfooter pied page droite>
+            header: | x | x | x || x | x | x |
+            footer: | x | x | x || x | x | x |
             header_vadjust: <ajustement vertical entête>
-            footer_vadjust: <ajustement vertical pied>
             header_hadjust: <ajustement horizontal entete>
             footer_vadjust: <ajustement vertical pied>
+            footer_vadjust: <ajustement vertical pied>
 
+          - name: "Autre disposition"
+            font: .\\..
+            etc.
       EOT
 
     recipe <<~YAML
     ---
     headers_footers:
-      # Fonte générale pour tous les pieds et page et entêtes
-      font: "<name>/<style>/<size>"
-      headfooters:
-        HF01:
-          # Fonte générale pour ce headfooter
-          font: "<name>/<style>/<size>"
-          # Contenu du tiers gauche
-          left: "-NUM"
-          # Fonte particulière pour le tiers gauche (si ≠)
-          left_font: "<name>/<style>/<size>"
-          # Contenu du tiers central
-          center: null
-          # Contenu du tiers droit
-          right: "TIT1"
-          # Fonte particulière du tiers droit (si ≠)
-          right_font: "<name>/<style>/<size>"
-        HF02:
-          # Fonte générale pour ce headfooter
-          font: "<name>/<style>/<size>"
-
-          left: "-NUM"
-          center: null
-          right: "v2.3"
-        HF03:
-          left: "TIT2"
-          center: null
-          right: "NUM-"
-        HF04:
-          left: null
-          center: "#{Time.now.strftime('%d-%m-%Y')}"
-          right: "NUM-"
-
       dispositions:
-        - name: "Sur cette page"
-          lp_header: HF01
-          lp_footer: HF02
-          rp_header: HF03
-          rp_footer: HF04
+        - name: "Disposition pages normales"
           first_page: \#{pdf.number_page - 1}
           last_page: \#{pdf.number_page + 1}
+          header: "| x    || x    |"
+          footer: "| -NUM || NUM- |"
       YAML
+
+    texte <<~EOT
+
+    EOT
 end

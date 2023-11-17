@@ -147,6 +147,7 @@ class Feature
 
   attr_reader :pdf, :book
   attr_accessor :filename # chemin relatif (souvent le nom)
+  attr_reader :first_page
 
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
 
@@ -161,6 +162,8 @@ class Feature
 
     # Mémoriser la première page de cette fonctionnalité
     first_page_texte = pdf.page_number
+    # L’exposer pour pouvoir l’utiliser dans les codes
+    @first_page = first_page_texte
 
     # = NOUVELLE RECETTE =
     # 
@@ -244,6 +247,9 @@ class Feature
     draw_last_feature_line if recipe || sample_texte || texte || sample_recipe
 
     # Mémoriser la dernière page de cette fonctionnalité
+    # (inutile de mémoriser et d’exposer ce numéro de page car
+    #  il sera défini après que la fonctionnalité a été imprimée 
+    #  dans le livre)
     last_page_texte  = pdf.page_number
 
     if margins

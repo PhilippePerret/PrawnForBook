@@ -546,16 +546,16 @@ class PdfBook
     # (pour le moment, juste pour savoir qu'elle n'est pas vide)
     #
     moitie = parag.length / 2
-    pag_first[:content_length] += moitie
+    pag_first.add_content_length(moitie)
     # 
     # Si le paragraphe se trouve sur deux pages, on divise arbitrai-
     # rement par deux, car pour le moment le compte exact importe 
     # peu)
     # 
     if plast_num != pfirst_num
-      pag_last[:content_length] += moitie
+      pag_last.add_content_length(moitie)
     else 
-      pag_first[:content_length] += moitie
+      pag_first.add_content_length(moitie)
     end
   end
 

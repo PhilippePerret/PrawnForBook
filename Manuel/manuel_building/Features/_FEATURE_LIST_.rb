@@ -24,6 +24,7 @@ module Prawn4book
       ###---Entetes/Pied-de-page---###
       header_footer/grand_titre
       header_footer/par_defaut
+      header_footer/exemple_complexe
       ###__Texte_Details___###
       texte_detail/grand_titre
       #---Puces---

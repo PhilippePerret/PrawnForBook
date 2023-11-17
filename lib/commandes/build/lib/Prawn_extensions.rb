@@ -38,7 +38,7 @@ class Prawn::Document
     page = @book.pages[page_number] || begin
       @book.add_page(page_number)
     end
-    page[:content_length] += len
+    page.add_content_length(len)
     page[:first_par] = 1 # sinon n'imprime pas le numéro
   end
 

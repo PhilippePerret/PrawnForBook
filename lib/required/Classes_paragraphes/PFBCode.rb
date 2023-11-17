@@ -64,7 +64,7 @@ class PFBCode < AnyParagraph
       AnyParagraph.restart_numerotation_paragraphs
     when 'index'
       book.page_index.build(pdf)
-      book.pages[pdf.page_number][:content_length] += 100
+      book.pages[pdf.page_number].add_content_length(100) #arbitrairement
     when /^biblio/
       treate_as_bibliography(pdf)
     when /^notice\((.+?)\)$/.freeze
@@ -239,28 +239,6 @@ class PFBCode < AnyParagraph
     #   
     page_number_at_end = pdf.page_number.freeze
 
-    #
-    # On considère toujours que du contenu a été ajouté sur la
-    # page courante :
-    # 
-    # unless book.pages[page_number_at_start]
-    #   book.add_page(page_number_at_start)
-    # end
-    # book.pages[page_number_at_start][:content_length] += 100
-
-    #
-    # Si plusieurs pages ont été créées, on part du principe que
-    # du contenu a été ajouté.
-    #
-    # if page_number_at_end > page_number_at_start
-    #   # puts "La méthode #{methode.inspect} est partie de ".orange
-    #   # puts "la page : #{page_number_at_start}".orange
-    #   # puts "jusqu'à la page : #{page_number_at_end}".orange
-    #   for ipage in (page_number_at_start+1..page_number_at_end) do
-    #     book.add_page(ipage)
-    #     book.pages[ipage][:content_length] += 1000
-    #   end
-    # end
   end
 
   ##

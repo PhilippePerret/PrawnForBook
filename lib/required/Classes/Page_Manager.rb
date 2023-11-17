@@ -18,6 +18,12 @@ class PageManager
     @without_pagination = []
   end
 
+  # @return le nombre de page
+  # 
+  def count
+    @pages.count
+  end
+
   # Boucle sur toutes les pages (dans l'ordre)
   # 
   def each(&block)
@@ -76,6 +82,7 @@ class Page
     @number         = dpage[:number]
     @titres         = dpage[:titres]
     @has_pagination = true
+    init_content
   end
 
   #
@@ -85,21 +92,48 @@ class Page
   def add_titre(level, titre_str)
     @titres.merge!( level => [] ) unless @titres.key?(level)
     @titres[level] << titre_str
-    data[:content_length] += titre_str.length
+    @own_titles << {title: titre_str, level: level}
+  end
+
+  def add_content_length(len)
+    data[:content_length] += len
   end
 
   # Si deuxième tour, on remet la page à 0-content à sa création
   def init_content
     data.merge!(content_length: 0, first_par:nil)
+    @own_titles = [] # les titres propres à la page
+  end
+
+  # @return true si la page peut recevoir une entête et/ou un pied
+  # de page, c’est-à-dire si ça n’est pas juste une page de titre ou
+  # une page vide
+  def printable?
+    not(not_printable?)
+  end
+
+  # @return True si c’est une page vierge, une page ne contenant 
+  # qu’un titre ou une page marquée explicitement à ne pas paginer
+  def not_printable?
+    no_content? || no_pagination? || title_only?
   end
 
   def no_content?
-    data[:content_length] == 0 && data[:first_par].nil?
+    data[:content_length] == 0 && data[:first_par].nil? && no_title?
   end
   alias :empty? :no_content?
 
   def no_pagination?
     @has_pagination === false
+  end
+
+  def no_title?
+    @own_titles.count == 0
+  end
+
+  # @return true si la page ne contient qu’un titre
+  def title_only?
+    @own_titles.count == 1 && data[:content_length] == 0
   end
 
   def pagination=(value)
@@ -115,7 +149,6 @@ class Page
     instance_variable_set("@#{key}", value)
   end
 
-end
-
+end #/class PageManager
 end #/class PdfBook
 end #/module Prawn4book

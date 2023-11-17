@@ -104,7 +104,7 @@ class Bibliography
           # -- valeur fictive retirée --
           book.pages[page_number_at_start][:content_length] = 0
         end
-        book.pages[page_number_at_start][:content_length] += str.length
+        book.pages[page_number_at_start].add_content_length(str.length)
         pdf.move_down(4)
       end
     end

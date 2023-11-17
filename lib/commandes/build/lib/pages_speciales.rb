@@ -62,7 +62,7 @@ class PrawnView
     unless tdata[:no_title] || tdata[:title].nil? || tdata[:title] == '---'
       titre = PdfBook::NTitre.new(book, **{text:tdata[:title], level:tdata[:title_level]})
       titre.print(self)
-      book.pages[page_number][:content_length] = 100 # arbitrairement juste pour savoir qu'il y aura du contenu dans cette page
+      book.pages[page_number].add_content_length(tdata[:title].length + 3)
     end
     # 
     # On mémorise le numéro de page de la table des matières

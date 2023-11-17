@@ -295,6 +295,18 @@ table_of_content:
     indent:       '30mm'
     separator:    null
 #</table_of_content>
+
+#<headers_footers>
+headers_footers:
+  dispositions:
+    default: 
+      name: "Disposition par défaut"
+      first_page: 1
+      last_page: -1
+      header: "| x    || x    |"
+      footer: "| -NUM || NUM- |"
+      
+#</headers_footers>
 #
 # --- La page d'infos ---
 #

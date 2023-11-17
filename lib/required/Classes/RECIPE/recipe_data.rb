@@ -378,12 +378,6 @@ class Recipe
     @index_number_font_size ||= page_index[:aspect][:number][:size]
   end
 
-  # -- Headers & Footers --
-
-  def headers_footers
-    @headers ||= get(:headers_footers)
-  end
-
   # -- Modèle --
 
   # Pas de modèle définissable pour le moment
@@ -454,12 +448,17 @@ class Recipe
   def book_data
     @book_data          ||= DATA[:book_data]
   end
+
   def publisher
     @publisher         ||= DATA[:publisher]
   end
 
   def inserted_pages
     @inserted_pages     ||= DATA[:inserted_pages]
+  end
+
+  def headers_footers
+    @headers_footers    ||= DATA[:headers_footers]
   end
 
   def bibliographies

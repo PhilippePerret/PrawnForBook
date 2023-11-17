@@ -348,6 +348,16 @@ ERRORS = {
         (( font('police12') ))
 
       EOT
+    bad_formatted_color: <<~EOT,
+      La couleur %{color} est mal définie. 
+      Soit elle devrait être au format hexadécimal RRVVBB où R est la 
+      valeur hexa de rouge, V est la valeur hexa de vert et B est la 
+      valeur hexa de bleu.
+      Soit elle devrait être au format CMJN, c’est-à-dire une liste
+      [C, M, J, N] où C est la valeur 0-126 de Cyan, M est la valeur
+      0-126 de Magenta, J est la valeur 0-126 de Jaune et N est la
+      valeur 0-126 de Noir.
+      EOT
   },
 
   # --- Maison d'éditions ---
