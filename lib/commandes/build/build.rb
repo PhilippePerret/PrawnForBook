@@ -34,10 +34,16 @@ class PdfBook
   ### GÉNÉRATION DU LIVRE PDF ###
   ###############################
   def generate_pdf_book
-    # 
+    
     # Initialiser le suivi des titres par niveau
     # 
-    @current_titles = {}
+    # Cette donnée permet de définir les titres de niveau 1 à 6 pour
+    # toutes les pages (utile par exemple pour les entêtes ou pied de
+    # page)
+    # 
+    @current_titles = {
+      1 => nil, 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil
+    }
 
     #
     # Si c'est "juste" un export du texte, il faut charger le
@@ -79,9 +85,7 @@ class PdfBook
     # S'il existe une méthode de reset propre au livre ou à la 
     # collection, on l'invoque
     # 
-    if Prawn4book.respond_to?(:reset)
-      Prawn4book.reset(true)
-    end
+    Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
 
     #
     # Pour consigner les erreurs mineures en cours de construction
@@ -115,13 +119,11 @@ class PdfBook
       # 
       Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
 
-      #
       # Construction finale du livre
       # (mais elle peut se faire à la première passe s'il n'y a
       #  pas de références arrières)
       # 
       ok_book = build_pdf_book
-
 
       if Prawn4book.require_third_turn?
 
@@ -203,12 +205,13 @@ class PdfBook
   # 
   def build_pdf_book
     clear unless debug? || ENV['TEST']
+
+    # Utile dans le DSL pdf.update
     my = me = self
     
     # Réinitialiser les NOTES DE PAGE
     notes_manager.drain
     
-    # #
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #
     # @note
@@ -221,20 +224,17 @@ class PdfBook
     pdf = PrawnView.new(self, pdf_config)
     @pdf = pdf
 
-    # 
     # Détruire le fichier PDF final s'il existe déjà
     # (note : il existe toujours si c'est un deuxième tour)
     # 
     File.delete(pdf_path) if File.exist?(pdf_path)
 
-    #
     # Initier la table des matières (je préfère faire mon 
     # instance plutôt que d'utiliser l'outline de Prawn)
     # 
     tdm = Tdm.new(self, pdf)
     pdf.tdm = tdm
 
-    #
     # Méthode appelée automatiquement à chaque création de page
     # dans le livre, qu'elle soit automatique ou forcée.
     # 
@@ -269,14 +269,12 @@ class PdfBook
       Fonte.default = default_fonte
     end
 
-    # 
     # Initier UNE PREMIÈRE PAGE, si on a demandé de la sauter
     # au départ (on le demande pour qu'elle prenne en compte les
     # définitions de marge, etc.)
     # 
     pdf.start_new_page if skip_page_creation?
 
-    #
     # Fonte par défaut
     # ----------------
     # 
@@ -471,7 +469,7 @@ class PdfBook
     #
     # On met les valeurs par défaut dans la donnée de page
     # 
-    data_page = {number: num_page}.merge(DEFAULT_DATA_PAGE)
+    data_page = {number: num_page}.merge(DEFAULT_DATA_PAGE.dup)
 
     #
     # On lui donne tous les titres courants
@@ -482,8 +480,7 @@ class PdfBook
     #   qui doit être utilisé — pour les entêtes par exemple.)
     # 
     current_titles.each do |level, titre|
-      data_page[:titres].merge!( level => [])
-      data_page[:titres][level] << titre
+      data_page[:titres].merge!( level => titre)
     end
 
     pages << data_page
@@ -565,24 +562,24 @@ class PdfBook
   #                 titre. Noter qu'elle a été ajoutée à @pages à
   #                 l'écriture du paragraphe.
   def set_current_title(parag, num_page)
-    @current_titles.merge!(parag.level => parag.text)
-    # 
+    titre_level = parag.level.dup
+    titre_text  = parag.text.dup
+
+    # On actualise la donnée qui tient à jour les titres courants
+    @current_titles[titre_level] = titre_text
+    # Tous les titres de niveau suivant doivent être
+    # ré-initialisés (remis à rien)
+    (titre_level + 1..6).each { |lev| @current_titles[lev] = nil }
+
     # Ajouter ce titre à la page de numéro +num_page+
     # 
     # @note
     #   On crée la page si elle n'existe pas.
     # 
     page = pages[num_page] || add_page(num_page)
-    page.add_titre(parag.level, parag.text)
+    page.add_titre(titre_level, titre_text)
+    page.set_current_titles(current_titles.dup)
 
-    # 
-    # Tous les titres de niveau suivant doivent être
-    # ré-initialisés (remis à rien)
-    # 
-    ((parag.level + 1)..6).each do |level|
-      ktit = "title#{level}".to_sym
-      @current_titles.merge!(level => nil)
-    end
 
   end
 

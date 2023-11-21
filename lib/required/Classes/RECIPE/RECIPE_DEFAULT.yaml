@@ -301,8 +301,7 @@ headers_footers:
   dispositions:
     default: 
       name: "Disposition par défaut"
-      first_page: 1
-      last_page: -1
+      pages: "1-"
       header: "| x    || x    |"
       footer: "| -NUM || NUM- |"
       

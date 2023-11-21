@@ -10,6 +10,9 @@ class PrawnView
   # Construction de la table des matières
   # 
   def build_table_of_contents
+    @current_titles = {
+      1 => "Table des matières", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
+    }
     require 'lib/pages/table_of_content'
     page = Prawn4book::Pages::TableOfContent.new(self)
     page.build(self) # mais seulement si elle est définie
@@ -30,12 +33,18 @@ class PrawnView
   end
 
   def build_page_infos
+    @current_titles = {
+      1 => "Page des infos", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
+    }
     require 'lib/pages/page_infos'
     page = Prawn4book::Pages::PageInfos.new(self)
     page.build(self)
   end
 
   def build_page_index
+    @current_titles = {
+      1 => "Index", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
+    }
     require 'lib/pages/page_index'
     page = Prawn4book::Pages::PageIndex.new(self)
     page.build(self)

@@ -29,7 +29,7 @@ class PdfBook
   # 
   # = main =
   # 
-  # Méthode principale qui reçoit le +paragraph_str+ d'une +source
+  # Méthode principale qui reçoit le +paragraph_str+ d'une +source+
   # qui peut être le fichier texte.pfb.md (avant tout), un fichier
   # inclus ou une méthode d'utilisateur, qui l'instancie et l'injecte
   # dans le livre en construction.
@@ -74,7 +74,8 @@ class PdfBook
       else
         @current_comment.add(paragraph_str)
       end
-      # Dans tous les cas on s'en retourne
+      # Dans tous les cas (si un commentaire *est* ou *était* 
+      # ouvert), on s'en retourne
       return
     end
 

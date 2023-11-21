@@ -85,14 +85,25 @@ class Page
     init_content
   end
 
-  #
-  # @note
-  #   @titres contient l'état actuel des 6 niveaux de titre
+  # Ajoute un titre à la page
   # 
   def add_titre(level, titre_str)
-    @titres.merge!( level => [] ) unless @titres.key?(level)
-    @titres[level] << titre_str
     @own_titles << {title: titre_str, level: level}
+  end
+
+  # Définit les titres courants de la page
+  # 
+  # @note
+  #   @titres contient l'état actuel des 6 niveaux de titre
+  #   Bien faire la différence entre @titres, qui contient les titres
+  #   en cours sur la page, même s’ils ont été "déclarés" des dizaines
+  #   de pages avant, et @own_titles qui définit les titres que la
+  #   page contient réellement, qui sont imprimés sur elle.
+  # 
+  def set_current_titles(les_titres)
+    spy("Titres courants de page ##{number} mis à #{les_titres}".jaune,
+      true)
+    @titres = les_titres
   end
 
   def add_content_length(len)

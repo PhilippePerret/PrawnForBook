@@ -8,13 +8,33 @@ class << self
   # Construit tous les entêtes et pieds de page
   # 
   def build_headers_and_footers(book, pdf)
-    
+    # Pour ne traiter qu’une seule fois les pages
+    @traited_pages = {}
     # On boucle sur toutes les dispositions définies pour les
     # imprimer
-    book.recipe.headers_footers[:dispositions].each do |dispo_id, dispo_data|
-      new(book, dispo_data.merge(id: dispo_id)).print(pdf)
+    book.recipe.headers_footers[:dispositions].map do |dispo_id, dispo_data|
+      new(book, dispo_data.merge(id: dispo_id))
+    end.sort_by do |dispo|
+      # Pour que celle par défaut soit en dernier et qu’elle ne
+      # se mette pas sur toutes les pages traitées par d’autres
+      # dispositions d’entête et pied de page
+      dispo.id == :default ? 1 : 0
+    end.each do |dispo|
+      dispo.print(pdf)
     end
+  end
 
+  # @return true si la page +number+ a déjà été traitée (i.e. a déjà
+  # reçu son entête et pied de page) ou retourne false et mémorise
+  # la page pour qu’elle ne reçoive pas un autre entête pied de page
+  # 
+  def traited?(number)
+    if @traited_pages[number]
+      return true
+    else
+      @traited_pages.merge!(number => true)
+      return false
+    end
   end
 
 end #/<< class self
@@ -46,6 +66,10 @@ def print(pdf)
   # puts "Pages à entêter : #{pages.inspect}".bleu
   pdf.repeat(pages, **options) do 
     number = pdf.page_number
+
+    # Une page ne peut recevoir qu’un seul entête/pied de page
+    next if self.class.traited?(number)
+
     # puts "Entête et pied de page sur page #{number}"
     if book.pages[number].not_printable?
       # puts "Non imprimable"
@@ -53,6 +77,12 @@ def print(pdf)
     end
 
     # --- Page Data ---
+    # Pour pouvoir faire le test avec une page au milieu :
+    if number == 34
+      puts "\nDonnées de titre de la page #{number}".bleu
+      puts book.pages[number].titres.inspect.bleu
+      exit
+    end
     # (les données de la page qui serviront à remplacer les variables
     #  template)
     page_data = {
@@ -110,9 +140,9 @@ end
 
 # --- Data ---
 
+def id          ; @id           ||= data[:id].freeze          end
 def name        ; @name         ||= data[:name].freeze        end
-def first_page  ; @first_page   ||= data[:first_page].freeze  end
-def last_page   ; @last_page    ||= data[:last_page].freeze   end
+def raw_pages   ; @raw_pages    ||= data[:pages].freeze       end
 def raw_header  ; @raw_header   ||= data[:header].freeze      end
 def raw_footer  ; @raw_footer   ||= data[:footer].freeze      end
 def font        ; @font         ||= data[:font].freeze        end
@@ -150,12 +180,15 @@ end
 # Rang des pages à imprimer, pour pdf.repeater
 def pages
   @pages ||= begin
-    real_last_page = 
-      case last_page.to_i
-      when -1, 0 then pages_count
-      else last_page.to_i
-      end
-    ((first_page||1).to_i..real_last_page)
+    nombre_pages = book.pages.count
+    if raw_pages.nil?
+      (1..nombre_pages)
+    else
+      first_page, last_page = (raw_pages||'-').split('-').map{|n|n.to_i}
+      first_page = 1 if first_page == 0
+      last_page = nombre_pages if last_page.nil? || last_page == 0
+      (first_page..last_page)
+    end
   end
 end
 

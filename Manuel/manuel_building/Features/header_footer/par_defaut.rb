@@ -89,8 +89,7 @@ Prawn4book::Manual::Feature.new do
             # Fonte particulière pour cette disposition en 
             # particulier :
             font: "<font name>/<font style>/<font size>/<font color>"
-            first_page: <première page>
-            last_page:  <dernière page>
+            pages: <première page>-<dernière page>
             header: | x | x | x || x | x | x |
             footer: | x | x | x || x | x | x |
             header_vadjust: <ajustement vertical entête>
@@ -107,14 +106,15 @@ Prawn4book::Manual::Feature.new do
     ---
     headers_footers:
       dispositions:
-        - name: "Disposition pages normales"
-          first_page: \#{pdf.number_page - 1}
-          last_page: \#{pdf.number_page + 1}
+        defaut_manuel:
+          name: "Disposition pages normales"
+          pages:  1-
           header: "| x    || x    |"
           footer: "| -NUM || NUM- |"
       YAML
 
-    texte <<~EOT
+    # texte <<~EOT
 
-    EOT
+    # EOT
+
 end

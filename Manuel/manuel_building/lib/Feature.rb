@@ -153,7 +153,7 @@ class Feature
 
   def print_with(pdf, book)
 
-    spy(:on)
+    # spy(:on)
 
     @pdf  = pdf
     @book = book
@@ -280,7 +280,7 @@ class Feature
       pdf.line_height = cur_line_height 
     end
 
-    spy(:off)
+    # spy(:off)
 
   end #/ #print_with
 
@@ -546,11 +546,11 @@ class Feature
   end
 
   def init_cache_variable(cvar_name)
-    if book.recipe.instance_variable_get(cvar_name)
+    if book.recipe.instance_variable_get(cvar_name) || book.recipe.respond_to?(cvar_name.to_sym)
       book.recipe.instance_variable_set(cvar_name, nil)
       # spy "Variable-cache initialisée dans recette: #{cvar_name}".bleu
     # else 
-    #   spy "Variable-cache inconnue: #{cvar_name}".rouge
+      # spy "Variable-cache inconnue: #{cvar_name}".rouge
     end
   end
 

@@ -34,10 +34,10 @@ class NTitre < AnyParagraph
   # Méthode principale qui écrit le titre dans la page
   # 
   def print(pdf)
-    # Si le titre a un niveau de 0* il faut s'arrêter là
+    # Si le titre a un niveau de 0 (*) il faut s'arrêter là
     # 
-    # *Cela arrive par exemple avec les titres de bibliographie qui
-    # doivent toujours être définis mais pas toujours affichés.
+    # (*) Cela arrive par exemple avec les titres de bibliographie
+    # qui doivent toujours être définis mais pas toujours affichés.
     # 
     # @note
     #   Avant, ce retour se faisait plus bas, après le 'super'.
