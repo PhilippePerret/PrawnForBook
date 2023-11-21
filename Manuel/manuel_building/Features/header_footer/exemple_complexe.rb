@@ -28,13 +28,14 @@ Prawn4book::Manual::Feature.new do
   recipe <<~EOT #, "Autre entête"
     ---
     headers_footers:
-      font: "Courier/regular/15/FF0000"
       dispositions:
         exemple1:
           name: "Exemple headers/footers complexe pour manuel"
+          font: "Courier/regular/12/FF0000"
           pages: "\#{first_page - 2}-\#{first_page + 3}"
           header: "| -TIT3   || -v4.452 | TIT4- |"
           footer: "| x | NUM || NUM/TOT | PhP |"
+          header_font: "Reenie/normal/20/009900"
     EOT
 
   # init_recipe([:custom_cached_var_key])

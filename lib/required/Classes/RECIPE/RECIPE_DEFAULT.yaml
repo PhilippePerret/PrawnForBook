@@ -31,9 +31,11 @@ fonts:
     bold:  'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
     italic: 'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
     bold_italic: 'resources/fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf'
-#   Helvetica:
-#     normal: "/System/Library/Fonts/Helvetica.ttc"
-#     bold:   "/System/Library/Fonts/HelveticaNeue.ttc"
+  Helvetica:
+    normal: "/System/Library/Fonts/Helvetica.ttc"
+    bold:   "/System/Library/Fonts/HelveticaNeue.ttc"
+  Reenie:
+    normal: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
 #</fonts>
 
 # --- Données du livre ---

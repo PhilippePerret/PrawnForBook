@@ -63,11 +63,12 @@ def print(pdf)
 
   @pdf = pdf
 
+  @current_filled_color = pdf.fill_color
+
   parse # il dépend de pdf
 
-  # puts "\nheaders : #{headers.inspect}".jaune
-  # puts "footers : #{footers.inspect}".jaune
-
+  # Appliquer la fonte générale si elle est définie
+  pdf.font(fonte) if font
   
   options = {dynamic: true}
   # puts "Pages à entêter : #{pages.inspect}".bleu
@@ -77,11 +78,11 @@ def print(pdf)
     # Une page ne peut recevoir qu’un seul entête/pied de page
     next if self.class.traited?(number)
 
+    # La page courante [Prawn4book::PageManager::Page]
+    curpage = book.pages[number]
+
     # puts "Entête et pied de page sur page #{number}"
-    if book.pages[number].not_printable?
-      # puts "Non imprimable"
-      next
-    end
+    next if curpage.not_printable?
 
     # --- Page Data ---
     # Pour pouvoir faire le test avec une page au milieu :
@@ -95,11 +96,11 @@ def print(pdf)
     # (les données de la page qui serviront à remplacer les variables
     #  template)
     page_data = {
-      Title1:       book.pages[number].titres[0],
-      Title2:       book.pages[number].titres[1],
-      Title3:       book.pages[number].titres[2],
-      Title4:       book.pages[number].titres[3],
-      Title5:       book.pages[number].titres[4],
+      Title1:       curpage.titres[0],
+      Title2:       curpage.titres[1],
+      Title3:       curpage.titres[2],
+      Title4:       curpage.titres[3],
+      Title5:       curpage.titres[4],
     }
     (1..5).each do |n|
       tit = page_data["Title#{n}".to_sym] || ''
@@ -127,34 +128,49 @@ def print(pdf)
 
   end
 
+  # On remet la couleur initiale
+  pdf.fill_color(@current_filled_color)
+
+
 end #/print
 
 def print_header(portions_header, page_data)
-  # puts "print header: #{portions_header.inspect}"
+  apply_color(:header)
   portions_header.each do |portion|
     print_portion(portion, page_data)
   end
 end
 
 def print_footer(portions_footer, page_data)
-  # puts "print footer: #{portions_footer.inspect}"
+  apply_color(:footer)
   portions_footer.each do |portion|
     print_portion(portion, page_data)
   end
 end
 
+# = Impression du Header ou du Footer =
+# (méthode générique)
 def print_portion(portion_data, page_data)
-  text = portion_data.dup.delete(:text) % page_data
-  pdata = portion_data.merge({
+  pdata = portion_data.dup 
+  text = pdata.delete(:text) % page_data
+  pdata = pdata.merge({
     height: 20,
     overflow: :shrink_to_fit,
   })
-  # puts "Portion à inscrire : #{pdata.inspect}".bleu
-  # return
   pdf.update do
-    text_box(text, **pdata)
+    font(pdata.delete(:fonte)) do
+      text_box(text, **pdata)
+    end
   end
 end
+
+# @param thing [Symbol] :header ou :footer
+# 
+def apply_color(thing)
+  fte = fontes[thing]
+  pdf.fill_color(fte.color || @current_filled_color)
+end
+
 
 # --- Data ---
 
@@ -164,9 +180,32 @@ def raw_pages   ; @raw_pages    ||= data[:pages].freeze       end
 def raw_header  ; @raw_header   ||= data[:header].freeze      end
 def raw_footer  ; @raw_footer   ||= data[:footer].freeze      end
 def font        ; @font         ||= data[:font].freeze        end
+def header_font ; @header_font  ||= data[:header_font].freeze end
+def footer_font ; @footer_font  ||= data[:footer_font].freeze end
 
 
 # --- Volatile Data ---
+
+def font_size(thing)
+  fontes[thing].size
+end
+
+def font_name(thing)
+  fontes[thing].name
+end
+
+def fontes
+  @fontes ||= {
+    header: Prawn4book.fnss2Fonte(header_font) || fonte,
+    footer: Prawn4book.fnss2Fonte(footer_font) || fonte,
+  }
+end
+
+# [Prawn4book::Fonte] Fonte générale à utiliser (elle est définie 
+# dans tous les cas
+def fonte
+  @fonte ||= Prawn4book.fnss2Fonte(font) || Prawn4book::Fonte.default
+end
 
 def pages_count
   @pages_count ||= book.pages.count
@@ -190,10 +229,6 @@ def footers
   @footers # calculé ci-dessous
 end
 
-# [Prawn4book::Fonte] Fonte à utiliser par défaut
-def fonte
-  @fonte ||= Prawn4book.fnss2Fonte(font)
-end
 
 # Rang des pages à imprimer, pour pdf.repeater
 def pages
@@ -235,6 +270,7 @@ private
   # portion est une table contenant pour le moment :text et :align
   # 
   # @param thing [Symbol] :header ou :footer
+  # 
   def parse_side(side, thing)
     return nil if side.nil?
     top = thing == :header ? header_top : footer_bottom
@@ -247,7 +283,13 @@ private
       .split('|').each do |s|
         s = s.strip
         next if s == 'x'
-        tb_portion = {text: nil, align: nil, width: nil}
+        tb_portion = {
+          text: nil, 
+          align: nil, 
+          width: nil, 
+          # size: font_size(thing),
+          fonte: fontes[thing]
+        }
         # - Alignement -
         tb_portion[:align] = 
           if s.start_with?('-')

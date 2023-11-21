@@ -51,5 +51,7 @@ headers_footers:
       pages: "16-"
       header: "| TIT3- || -TIT4 |"
       footer: "| -NUM  || NUM-  |"
+      header_font: "Numito/light/10/999999"
+      footer_font: "Numito/bold/13/333333"
 #</headers_footers>
 

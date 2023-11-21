@@ -16,16 +16,17 @@ class Fonte
 
 ####################       INSTANCE      ###################
 
-attr_reader :name, :style, :size
+attr_reader :name, :style, :size, :color
 attr_reader :hname
 
 public
 
-def initialize(name:, style:, size:, hname: '')
+def initialize(name:, style:, size:, hname: '', color: nil)
   @name   = name
   @style  = style.to_sym
   @size   = size
   @hname  = hname # a human name
+  @color  = color
   Fonte.add_by_name(self) if hname != ''
   @leadings = {}
 end

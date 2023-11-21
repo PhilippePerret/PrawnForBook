@@ -2,15 +2,16 @@ class FatalError < StandardError; end
 
 module Prawn4book
 
-  # Reçoit une fonte définie par :
+  # Reçoit Nil ou une fonte définie par :
   #   "<font name>/<font style>/<size>/<color>"
-  # et retourne une instance Prawn4book::Fonte
+  # et retourne Nil ou une instance Prawn4book::Fonte
   # 
   # @note
   #   À l’avenir, toutes les fontes doivent être définies de cette
   #   manière dans les recettes, pour simplifier.
   # 
   def self.fnss2Fonte(font_str)
+    return nil if font_str.nil?
     dfont = font_str.split('/')
     # La couleur se présente soit sous la forme ’FF00DD’ soit sous la
     # forme CMYK ’[10,100,50,47]’
