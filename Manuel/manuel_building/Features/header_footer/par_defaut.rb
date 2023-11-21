@@ -46,11 +46,15 @@ Prawn4book::Manual::Feature.new do
 
     ##### Les éléments
 
-    Les éléments qui peuvent être utilisés dans les entêtes et les pieds de page sont illimités en mode expert ([[expert/header_footer]]). Pour le commun des mortels, ils se limitent — ce qui est déjà largement suffisant — aux titres courants jusqu’au niveau 3, au numéro de la page ainsi qu’au nombre total de page.
+    Les éléments qui peuvent être utilisés dans les entêtes et les pieds de page sont illimités en mode expert ([[expert/header_footer]]). Pour le commun des mortels, ils se limitent — ce qui est déjà largement suffisant — aux titres courants jusqu’au niveau 5 (en majuscules, en minuscules, ou format titre), au numéro de la page ainsi qu’au nombre total de page.
     * **`NUM`** pour le numéro de page,
-    * **`TIT1`** pour le titre de niveau 1 courant,
-    * **`TIT2`** pour le titre de niveau 2 courant,
-    * **`TIT3`** pour le titre de niveau 3 courant,
+    * **`TIT1`** pour le titre de niveau 1 courant, en majuscules,
+    * **`tit1`** pour le titre de niveau 1 courant, en minuscules,
+    * **`Tit1`** pour le titre de niveau 1 courant, en format titre,
+    * **`TIT2`** (et **tit2**, **Tit2**) pour le titre de niveau 2 courant,
+    * **`TIT3`** (et **tit3**, **Tit3**) pour le titre de niveau 3 courant,
+    * **`TIT4`** (et **tit4**, **Tit4**) pour le titre de niveau 4 courant,
+    * **`TIT5`** (et **tit5**, **Tit5**) pour le titre de niveau 5 courant,
     * **`TOT`** pour le nombre total de pages,
     * **`\\\#{code}`** pour un code ruby quelconque à évaluer à la volée, par exemple un numéro de version ou des auteurs,
 
@@ -102,16 +106,16 @@ Prawn4book::Manual::Feature.new do
             etc.
       EOT
 
-    recipe <<~YAML
-    ---
-    headers_footers:
-      dispositions:
-        defaut_manuel:
-          name: "Disposition pages normales"
-          pages:  1-
-          header: "| x    || x    |"
-          footer: "| -NUM || NUM- |"
-      YAML
+    # sample_recipe <<~YAML
+    # ---
+    # headers_footers:
+    #   dispositions:
+    #     defaut_manuel:
+    #       name: "Disposition pages normales"
+    #       pages:  1-
+    #       header: "| -TIT2 || TIT3- |"
+    #       footer: "| -NUM  || NUM-  |"
+    #   YAML
 
     # texte <<~EOT
 

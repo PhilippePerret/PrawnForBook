@@ -24,6 +24,12 @@ book_format:
   titles:
     level1:
       lines_before: 10
+      size:         30
+      align: :right
+      alone: true
+    level2:
+      lines_before: 10
+      size:         22
       align: :right
       alone: true
     level3:
@@ -36,4 +42,14 @@ book_format:
       lines_before: 0
   #</titles>
 #</book_format>
+
+#<headers_footers>
+headers_footers:
+  dispositions:
+    default:
+      name: "Dispositions pages fonctionnalités"
+      pages: "16-"
+      header: "| TIT3- || -TIT4 |"
+      footer: "| -NUM  || NUM-  |"
+#</headers_footers>
 

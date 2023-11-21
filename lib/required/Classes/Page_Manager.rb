@@ -37,11 +37,11 @@ class PageManager
   # @param data_page [Hash]
   # 
   #   @option :number   [Integer] Numéro de page
-  #   TODO : 
-  #     - premier paragraphe
-  #     - autres informations
+  # 
   def add(data_page)
-    pages << Page.new(data_page)
+    pages << Page.new(Marshal.load(Marshal.dump(data_page)))
+    # STDOUT.write "\nPage ##{data_page[:number]} #{data_page}".bleu
+    # sleep 0.5
   end
   alias :<< :add
 

@@ -7,8 +7,10 @@ module Prawn4book
   # 
   FEATURE_LIST = %w{
 
-      forces_de_prawn
-      deux_fichiers_de_base
+      generalites/grand_titre
+      generalites/forces_de_prawn
+      generalites/deux_fichiers_de_base
+      ###---Recettes---###
       recette/grand_titre
       recette/recette_livre
       recette/recette_collection

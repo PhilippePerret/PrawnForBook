@@ -1,4 +1,11 @@
 module Prawn4book
+class PrawnView
+  # Méthode principale qui invoque la construction des entêtes et
+  #  pieds de page sur tout le livre
+  def build_headers_and_footers(book)
+    Prawn4book::HeadersFooters::Disposition.build_headers_and_footers(book, self)
+  end
+end #/class PrawnView
 module HeadersFooters
 class Disposition
 class << self
@@ -78,20 +85,31 @@ def print(pdf)
 
     # --- Page Data ---
     # Pour pouvoir faire le test avec une page au milieu :
-    if number == 34
-      puts "\nDonnées de titre de la page #{number}".bleu
-      puts book.pages[number].titres.inspect.bleu
-      exit
-    end
+    # if number == 34
+    #   (1..70).each do |n|
+    #     puts "\nDonnées de titre de la page #{n}".bleu
+    #     puts book.pages[n].titres.inspect.bleu
+    #   end
+    #   exit
+    # end
     # (les données de la page qui serviront à remplacer les variables
     #  template)
     page_data = {
-      number:       number,
-      title1:       book.pages[number].titres[0],
-      title2:       book.pages[number].titres[1],
-      title3:       book.pages[number].titres[2],
-      pages_count:  book.pages.count
+      Title1:       book.pages[number].titres[0],
+      Title2:       book.pages[number].titres[1],
+      Title3:       book.pages[number].titres[2],
+      Title4:       book.pages[number].titres[3],
+      Title5:       book.pages[number].titres[4],
     }
+    (1..5).each do |n|
+      tit = page_data["Title#{n}".to_sym] || ''
+      page_data.merge!("TITLE#{n}".to_sym => tit.upcase)
+      page_data.merge!("title#{n}".to_sym => tit.downcase)
+    end
+    page_data.merge!({
+      number:       number,
+      pages_count:  book.pages.count,
+    })
     
     # --- Construction du Header ---
 
@@ -203,6 +221,8 @@ private
   def parse
     @headers = parse_thing(raw_header, :header)
     @footers = parse_thing(raw_footer, :footer)
+    # puts "@headers = #{@headers.inspect}".jaune
+    # puts "@footers = #{@footers.inspect}".jaune
   end
 
   def parse_thing(raw, thing)
@@ -219,10 +239,11 @@ private
     return nil if side.nil?
     top = thing == :header ? header_top : footer_bottom
     portions = []
+    side = side[1..-1] if side.start_with?('|')
+    side = side[0..-2] if side.end_with?('|')
     # On découpe le côté suivant les "|" en supprimant le premier
     # et le dernier s’ils ont été mis
     side
-      .gsub(/^\|?(.+)\|?$/,'\1')
       .split('|').each do |s|
         s = s.strip
         next if s == 'x'
@@ -257,10 +278,22 @@ private
 
   TABLE_BALISES = {
     'NUM'   => '%{number}',
-    'TIT1'  => '%{title1}',
-    'TIT2'  => '%{title2}',
-    'TIT3'  => '%{title3}',
-    'TOT'   => '%{pages_count}'
+    'TOT'   => '%{pages_count}',
+    'TIT1'  => '%{TITLE1}',
+    'TIT2'  => '%{TITLE2}',
+    'TIT3'  => '%{TITLE3}',
+    'TIT4'  => '%{TITLE4}',
+    'TIT5'  => '%{TITLE5}',
+    'tit1'  => '%{title1}',
+    'tit2'  => '%{title2}',
+    'tit3'  => '%{title3}',
+    'tit4'  => '%{title4}',
+    'tit5'  => '%{title5}',
+    'Tit1'  => '%{Title1}',
+    'Tit2'  => '%{Title2}',
+    'Tit3'  => '%{Title3}',
+    'Tit4'  => '%{Title4}',
+    'Tit5'  => '%{Title5}',
   }
   def remplace_balises_in(str)
     TABLE_BALISES.each do |k, v|

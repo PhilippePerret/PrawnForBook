@@ -245,6 +245,8 @@ class PdfBook
     if first_turn?
       pdf.on_page_create do
         my.add_page(pdf.page_number)
+        # STDOUT.write "\nAjout page ##{pdf.page_number} (#{current_titles})".bleu
+        # sleep 0.5
         export_text("\n#{'-'*30}\n\n") if export_text?
       end
     else

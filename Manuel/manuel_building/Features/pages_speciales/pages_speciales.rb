@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Les Pages spéciales", 2
+  titre "Les Types de pages spéciales"
 
 
   description <<~EOT

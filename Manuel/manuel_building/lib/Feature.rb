@@ -628,7 +628,7 @@ class Feature
   # Méthode pour imprimer un grand titre
   # 
   def print_grand_titre
-    par = PdfBook::NTitre.new(book:book, level:1, titre:anchored(grand_titre), pindex:0)
+    par = PdfBook::NTitre.new(book:book, level:2, titre:anchored(grand_titre), pindex:0)
     book.paragraphes << par  
     par.print(pdf)
   end
@@ -642,7 +642,7 @@ class Feature
   end
 
   def print_subtitle
-    par = PdfBook::NTitre.new(book:book, level:4, titre: anchored(subtitle), pindex:0)  
+    par = PdfBook::NTitre.new(book:book, level:3, titre: anchored(subtitle), pindex:0)  
     par.print(pdf)
   end
 

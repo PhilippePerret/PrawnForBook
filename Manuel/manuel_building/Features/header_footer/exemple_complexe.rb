@@ -33,7 +33,7 @@ Prawn4book::Manual::Feature.new do
         exemple1:
           name: "Exemple headers/footers complexe pour manuel"
           pages: "\#{first_page - 2}-\#{first_page + 3}"
-          header: "| -TIT1 || -v4.452 | TIT2- |"
+          header: "| -TIT3   || -v4.452 | TIT4- |"
           footer: "| x | NUM || NUM/TOT | PhP |"
     EOT
 
