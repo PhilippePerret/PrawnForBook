@@ -14,8 +14,10 @@ class PrawnView
       1 => "Table des matières", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
     }
     require 'lib/pages/table_of_content'
+    spy(:on)
     page = Prawn4book::Pages::TableOfContent.new(self)
     page.build(self) # mais seulement si elle est définie
+    spy(:off)
   end
 
   ##
@@ -69,7 +71,7 @@ class PrawnView
     # Instancier un titre pour la table des matières
     # 
     unless tdata[:no_title] || tdata[:title].nil? || tdata[:title] == '---'
-      titre = PdfBook::NTitre.new(book, **{text:tdata[:title], level:tdata[:title_level]})
+      titre = PdfBook::NTitre.new(book:book, titre:tdata[:title], level:tdata[:title_level], pindex:nil)
       titre.print(self)
       book.pages[page_number].add_content_length(tdata[:title].length + 3)
     end

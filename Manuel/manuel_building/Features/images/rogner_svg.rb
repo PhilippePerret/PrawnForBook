@@ -5,7 +5,8 @@ Prawn4book::Manual::Feature.new do
   description <<~EOT
     Il est fort possible qu’en produisant une image SVG, et en l’insérant dans le livre, elle laisse voir trop de blanc autour d’elle, comme dans le premier exemple donné ci-après. Pour palier ce problème, il faut "rogner" cette image SVG. Mais *rogner* une image SVG ne se fait pas aussi facilement qu’avec une image d’un format non vectoriel (JPG, PNG, etc.). Il faut pour ce faire utiliser, après avoir chargé la commande `inkscape` dans votre ordinateur, le code suivant :
 
-      `inkscape -l -D -o image-rogned.svg image.svg`
+    (( {align: :center} ))
+    `inkscape -l -D -o image-rogned.svg image.svg`
 
     EOT
 

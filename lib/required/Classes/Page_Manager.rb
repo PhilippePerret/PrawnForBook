@@ -101,8 +101,6 @@ class Page
   #   page contient réellement, qui sont imprimés sur elle.
   # 
   def set_current_titles(les_titres)
-    spy("Titres courants de page ##{number} mis à #{les_titres}".jaune,
-      true)
     @titres = les_titres
   end
 

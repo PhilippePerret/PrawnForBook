@@ -7,3 +7,4 @@ Si vous êtes intéressé(e) de voir comment il est généré, vous pouvez consu
 
 # Fonctionnalités
 (( build_features ))
+(( toc ))

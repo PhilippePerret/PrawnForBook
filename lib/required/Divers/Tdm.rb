@@ -46,6 +46,11 @@ class Titre
     @book   = book
     @params = params
   end
+
+  def inspect
+    "<<Tdm::Titre numero:#{numero.inspect} content:#{content.inspect} level:#{level.inspect}>>"
+  end
+
   # @return [Integer] Le numéro en fonction du fait qu'il faut
   # numéroter avec le numéro de page ou de paragraphe.
   def numero

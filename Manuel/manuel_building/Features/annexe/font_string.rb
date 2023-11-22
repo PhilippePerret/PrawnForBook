@@ -4,7 +4,7 @@ Prawn4book::Manual::Feature.new do
 
   description <<~EOT
     Pour définir les polices dans les éléments, à commencer par la recette, on utilise de préférence ce qu’on appelle dans _PFB_ les "**fonte-string**" ("string" signifie quelque chose comme "caractère" en anglais).
-    Ces *fonte-strings* se présentent toujours de la même manière, par une chaine de caractères (de lettres) contenant dans l’ordre :
+    Ces *fonte-strings* se présentent toujours de la même manière, par une chaine de caractères (de lettres) contenant 4 valeurs séparées par des balances, dans l’ordre :
     * le **nom** de la police,
     * le **style** de la police (qui doit être définie,
     * la **taille** à appliquer au texte (en points-pdf),

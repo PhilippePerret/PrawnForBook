@@ -122,6 +122,7 @@ class PFBFatalError < StandardError
       651   => Prawn4book::ERRORS[:fonts][:require_style],
       652   => Prawn4book::ERRORS[:fonts][:bad_formatted_data],
       653   => Prawn4book::ERRORS[:fonts][:bad_formatted_color],
+
       # -- Bibliographies --
       700   => Prawn4book::ERRORS[:biblio][:unfound],
       710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],
@@ -136,6 +137,8 @@ class PFBFatalError < StandardError
       800   => Prawn4book::ERRORS[:recipe][:book_data][:require_title],
       801   => Prawn4book::ERRORS[:recipe][:book_data][:require_author],
       802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
+      # -- Table des matières --
+      850   => Prawn4book::ERRORS[:toc][:problem_with_title],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],

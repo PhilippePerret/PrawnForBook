@@ -360,6 +360,20 @@ ERRORS = {
       EOT
   },
 
+  # --- Table des matières ---
+
+  toc: {
+    problem_with_title: <<~EOR,
+      Un problème est survenu lors de :
+        %{context}
+      Erreur rencontrée :
+        %{error}
+      À titre indicatif, les données recette sont :
+        %{data}
+      (cf. plus bas le contexte)
+      EOR
+  },
+
   # --- Maison d'éditions ---
 
     publisher: {

@@ -48,138 +48,138 @@
   :paragraph:
   :hybrid: 'p. 30 § '
 :pages_speciales_page_infos:
-  :page: 30
-  :paragraph:
-  :hybrid: 'p. 30 § '
-:header_footer_grand_titre:
   :page: 31
   :paragraph:
   :hybrid: 'p. 31 § '
+:header_footer_grand_titre:
+  :page: 32
+  :paragraph:
+  :hybrid: 'p. 32 § '
 :header_footer_par_defaut:
-  :page: 34
+  :page: 36
   :paragraph:
-  :hybrid: 'p. 34 § '
+  :hybrid: 'p. 36 § '
 :header_footer_exemple_complexe:
-  :page: 38
+  :page: 40
   :paragraph:
-  :hybrid: 'p. 38 § '
+  :hybrid: 'p. 40 § '
 :texte_detail_grand_titre:
-  :page: 41
+  :page: 43
   :paragraph:
-  :hybrid: 'p. 41 § '
+  :hybrid: 'p. 43 § '
 :puces_puces:
-  :page: 44
-  :paragraph:
-  :hybrid: 'p. 44 § '
-:puces_losange:
-  :page: 44
-  :paragraph:
-  :hybrid: 'p. 44 § '
-:puces_black_losange:
-  :page: 45
-  :paragraph:
-  :hybrid: 'p. 45 § '
-:puces_square:
-  :page: 45
-  :paragraph:
-  :hybrid: 'p. 45 § '
-:puces_black_square:
   :page: 46
   :paragraph:
   :hybrid: 'p. 46 § '
-:puces_bullet:
+:puces_losange:
+  :page: 46
+  :paragraph:
+  :hybrid: 'p. 46 § '
+:puces_black_losange:
   :page: 47
   :paragraph:
   :hybrid: 'p. 47 § '
-:puces_black_bullet:
+:puces_square:
+  :page: 47
+  :paragraph:
+  :hybrid: 'p. 47 § '
+:puces_black_square:
   :page: 48
   :paragraph:
   :hybrid: 'p. 48 § '
-:puces_finger:
+:puces_bullet:
   :page: 49
   :paragraph:
   :hybrid: 'p. 49 § '
-:puces_black_finger:
-  :page: 49
-  :paragraph:
-  :hybrid: 'p. 49 § '
-:puces_big_hyphen:
+:puces_black_bullet:
   :page: 50
   :paragraph:
   :hybrid: 'p. 50 § '
-:puces_custom_image:
+:puces_finger:
   :page: 51
   :paragraph:
   :hybrid: 'p. 51 § '
-:images_inserer:
+:puces_black_finger:
+  :page: 51
+  :paragraph:
+  :hybrid: 'p. 51 § '
+:puces_big_hyphen:
+  :page: 52
+  :paragraph:
+  :hybrid: 'p. 52 § '
+:puces_custom_image:
   :page: 53
   :paragraph:
   :hybrid: 'p. 53 § '
+:images_inserer:
+  :page: 55
+  :paragraph:
+  :hybrid: 'p. 55 § '
 :exemple_image_18:
-  :page: 65
-  :paragraph: 398
-  :hybrid: p. 65 § 398
+  :page: 67
+  :paragraph: 408
+  :hybrid: p. 67 § 408
 :exemple_image_19:
-  :page: 66
-  :paragraph: 399
-  :hybrid: p. 66 § 399
+  :page: 68
+  :paragraph: 409
+  :hybrid: p. 68 § 409
 :images_format_legende:
-  :page: 66
+  :page: 68
   :paragraph:
-  :hybrid: 'p. 66 § '
+  :hybrid: 'p. 68 § '
 :references_cross_references:
-  :page: 70
-  :paragraph:
-  :hybrid: 'p. 70 § '
-:exemple_cible:
-  :page: 71
-  :paragraph: 448
-  :hybrid: p. 71 § 448
-:ex_autre_cible:
   :page: 72
-  :paragraph: 450
-  :hybrid: p. 72 § 450
+  :paragraph:
+  :hybrid: 'p. 72 § '
+:exemple_cible:
+  :page: 73
+  :paragraph: 458
+  :hybrid: p. 73 § 458
+:ex_autre_cible:
+  :page: 74
+  :paragraph: 460
+  :hybrid: p. 74 § 460
 :notes_de_page:
-  :page: 74
+  :page: 76
   :paragraph:
-  :hybrid: 'p. 74 § '
+  :hybrid: 'p. 76 § '
 :notes_de_page_formatage:
-  :page: 74
+  :page: 76
   :paragraph:
-  :hybrid: 'p. 74 § '
+  :hybrid: 'p. 76 § '
 :expert_grand_titre:
-  :page: 77
+  :page: 79
   :paragraph:
-  :hybrid: 'p. 77 § '
+  :hybrid: 'p. 79 § '
 :expert_mode_expert:
-  :page: 80
-  :paragraph:
-  :hybrid: 'p. 80 § '
-:expert_contexte_erreurs:
-  :page: 80
-  :paragraph:
-  :hybrid: 'p. 80 § '
-:expert_injection_code:
-  :page: 80
-  :paragraph:
-  :hybrid: 'p. 80 § '
-:annexe_grand_titre:
   :page: 82
   :paragraph:
   :hybrid: 'p. 82 § '
+:expert_contexte_erreurs:
+  :page: 82
+  :paragraph:
+  :hybrid: 'p. 82 § '
+:expert_injection_code:
+  :page: 82
+  :paragraph:
+  :hybrid: 'p. 82 § '
+:annexe_grand_titre:
+  :page: 84
+  :paragraph:
+  :hybrid: 'p. 84 § '
 :annexe_format_yaml:
-  :page: 86
-  :paragraph:
-  :hybrid: 'p. 86 § '
-:annexe_font_string:
-  :page: 86
-  :paragraph:
-  :hybrid: 'p. 86 § '
-:annexe_definition_couleur:
-  :page: 87
-  :paragraph:
-  :hybrid: 'p. 87 § '
-:images_rogner_svg:
   :page: 88
   :paragraph:
   :hybrid: 'p. 88 § '
+:annexe_font_string:
+  :page: 88
+  :paragraph:
+  :hybrid: 'p. 88 § '
+:annexe_definition_couleur:
+  :page: 89
+  :paragraph:
+  :hybrid: 'p. 89 § '
+:images_rogner_svg:
+  :page: 90
+  :paragraph:
+  :hybrid: 'p. 90 § '
