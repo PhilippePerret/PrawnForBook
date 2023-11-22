@@ -825,7 +825,7 @@ private
         v = v.gsub(REG_LIEN_FEATURE){
           tirets = $~['tirets'].freeze
           path = $~['filename'].freeze
-          tit = nil
+          tit = $~['titre'].freeze # nil souvent
           if tirets
             if tit = Prawn4book::FEATURES_TO_PAGE[path]
               tit = tit[:title]
@@ -844,7 +844,8 @@ private
       end
       return v    
     end
-    REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<filename>.+?)\]\]/.freeze
+    REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?:(?<titre>.+?)\|)?(?<filename>.+?)\]\]/.freeze
+    # REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<filename>.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title

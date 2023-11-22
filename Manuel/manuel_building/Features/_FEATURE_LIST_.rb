@@ -61,6 +61,8 @@ module Prawn4book
       annexe/grand_titre
       #annexe/markdown_all_marks
       annexe/format_yaml
+      annexe/font_string
+      annexe/definition_couleur
       images/rogner_svg
       #annexe/synopsis_creation
       #_liste_exhaustive_features_

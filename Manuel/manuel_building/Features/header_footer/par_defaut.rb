@@ -23,8 +23,10 @@ Prawn4book::Manual::Feature.new do
     
     ##### Trois portions de page
 
-    Un *entête* ou un *pied de page* est un espace de page qui contient trois portions au maximum, trois tiers de page, une portion gauche, une portion droite et une portion centrale. On répartie les éléments dans ces trois portions. Les trois portions peuvent être différentes entre page gauche et page droite.
-    On peut ne définir qu’une seule de ces trois portions, ou deux seulement.
+    Un *entête* ou un *pied de page* est un espace de page qui contient jusqu’à trois portions, trois "tiers" de page, une portion gauche, une portion droite et une portion centrale. On répartie les éléments dans ces trois portions. Les trois portions peuvent être différentes entre page gauche et page droite.
+    Puisqu’on travaille les entêtes et pieds de page en double page, on peut donc définir jusqu’à 6 portions qu’on peut représenter la manière suivante, en considérant que `||` représente la reliure du livre :
+    (( {align: :center} ))
+    `| gauche | centre | droit || gauche | centre | droit |`
 
 
     ##### Définition des entêtes et pieds de page
@@ -66,6 +68,8 @@ Prawn4book::Manual::Feature.new do
     ##### Fontes
 
     Bien qu’on puisse définir les polices très précisément pour chaque élément, il est conseillé de ne pas trop les différencier. La sobriété est toujours bonne conseillère, en matière de mise en page.
+    C’est la raison pour laquelle, par défaut, on ne peut définir que la police générale des deux *entête* et *pied de page*, à l’aide de la propriété `font` (qui est une [["fonte-string"|annexe/font_string]]), et/ou les propriétés `header_font` (fonte pour les entêtes) et `footer_font` (fonte pour les pieds de page).
+    Vous pourrez trouver dans les exemples suivants l’utilisation de ces propriétés.
     EOT
 
 
@@ -75,10 +79,6 @@ Prawn4book::Manual::Feature.new do
       # Définit le début de la définition des entêtes et pieds de
       # page
       headers_footers:
-
-        # Fonte générale pour tous les pieds et page et entêtes
-        # Si non défini, c’est la fonte par défaut qui sera utilisée
-        font: "<name>/<style>/<size>/<color>"
 
         # Définition des dispositions
         dispositions:
@@ -95,11 +95,13 @@ Prawn4book::Manual::Feature.new do
             font: "<font name>/<font style>/<font size>/<font color>"
             pages: <première page>-<dernière page>
             header: | x | x | x || x | x | x |
-            footer: | x | x | x || x | x | x |
+            header_font: "<fonte>/<style>/<size>/<color>"
             header_vadjust: <ajustement vertical entête>
             header_hadjust: <ajustement horizontal entete>
             footer_vadjust: <ajustement vertical pied>
             footer_vadjust: <ajustement vertical pied>
+            footer_font: "<fonte>/<style>/<size>/<color>"
+            footer: | x | x | x || x | x | x |
 
           - name: "Autre disposition"
             font: .\\..

@@ -117,12 +117,12 @@
   :hybrid: 'p. 53 § '
 :exemple_image_18:
   :page: 65
-  :paragraph: 396
-  :hybrid: p. 65 § 396
+  :paragraph: 398
+  :hybrid: p. 65 § 398
 :exemple_image_19:
   :page: 66
-  :paragraph: 397
-  :hybrid: p. 66 § 397
+  :paragraph: 399
+  :hybrid: p. 66 § 399
 :images_format_legende:
   :page: 66
   :paragraph:
@@ -133,12 +133,12 @@
   :hybrid: 'p. 70 § '
 :exemple_cible:
   :page: 71
-  :paragraph: 446
-  :hybrid: p. 71 § 446
+  :paragraph: 448
+  :hybrid: p. 71 § 448
 :ex_autre_cible:
   :page: 72
-  :paragraph: 448
-  :hybrid: p. 72 § 448
+  :paragraph: 450
+  :hybrid: p. 72 § 450
 :notes_de_page:
   :page: 74
   :paragraph:
@@ -171,7 +171,15 @@
   :page: 86
   :paragraph:
   :hybrid: 'p. 86 § '
-:images_rogner_svg:
+:annexe_font_string:
   :page: 86
   :paragraph:
   :hybrid: 'p. 86 § '
+:annexe_definition_couleur:
+  :page: 87
+  :paragraph:
+  :hybrid: 'p. 87 § '
+:images_rogner_svg:
+  :page: 88
+  :paragraph:
+  :hybrid: 'p. 88 § '
