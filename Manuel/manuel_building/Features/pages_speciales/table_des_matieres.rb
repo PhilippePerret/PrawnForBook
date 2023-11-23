@@ -16,22 +16,113 @@ Prawn4book::Manual::Feature.new do
 
     Si on inscrit la table des matières à la fin de l’ouvrage, il n’y a aucune précaution à prendre.
     C’est d’ailleurs ce que l’on fait pour ce manuel, dont on trouve deux tables des matières, une en début d’ouvrage et l’autre en fin d’ouvrage.
+
+    ##### Aspect de la table des matières
+
+    Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/grand_titre]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
+    On trouve ces propriétés :
+    * **`level_max`**. Niveau maximum. Le niveau de titre qui sera affiché dans la table des matières. Par défaut, il est à 3, ce qui signifie que les titres jusqu’à 3 dièses seront affichés dans la table des matières (sauf exclusion).
+    * **`title`**. Le grand titre à utiliser pour la table des matières. Par défaut, en français, c’est "Table des matières".
+    * **`title_level`**. Le niveau de titre pour ce grand titre. Par défaut, c’est 1.
+    * **`no_title`**. S’il ne faut pas imprimer de grand titre "Table des matières" (ou autre valeur de `title`), alors il faut mettre cette propriété à `true` (vrai).
+    * **`font`**. Pour la fonte générale ([[*fonte string*|annexe/font_string]])
+    * **`number_font`**. Fonte à utiliser pour les numéros de page ([[*fonte string*|annexe/font_string]]).
+    * **`number_size`**. Si on ne veut changer que la taille du numéro (pas toute la fonte), on peut utiliser cette propriété.
+    * **`numeroter`**. Si false (faux), on ne numérote pas la table des matières (éviter).
+    * **`lines_before`**. Définit le nombre de lignes avant le premier titre,
+    * **`line_height`**. Hauteur de la ligne (entre chaque titre). Attention de ne pas donner une valeur plus petite que la taille des titres, sinon ils n’apparaitront pas.
+    * **`vadjust_number`**. Nombre de points-post-scripts pour ajuster verticalement le numéro de la page en face du titre (un nombre positif fait descendre le numéro, un nombre négatif le fait monter),
+    * **`vadjust_line`**. Nombre de points-ps pour ajuster verticalement la ligne pointillée d’alignement entre le titre et le numéro de page,
+    * **`dash_line`**. Les *experts* peuvent modifier la ligne pointillée en jouant sur cette propriété. Cf. plus bas, à propos de la ligne d’alignement.
+    * **`levelX`** où `X` va de 1 au niveau maximum de titre défini par `level_max`. Donc, par défaut, `level1`, `level2` et `level3`
+
+    Chaque niveau de titre peut définir :
+
+    * **`font`**. Sa fonte/style/taille/couleur,
+    * **`size`** ou seulement sa taille, en gardant la police par défaut de la table des matières,
+    * **`indent`**. Indentation du titre, donc son décalage à droite par rapport à la marge gauche.
+    * **`number_size`**. La taille du numéro (mais pour un meilleur aspect, il vaut mieux garder la taille générale).
+    * **`caps`**. La modification (casse) du titre. Les valeurs possibles sont `all-caps` (tout en majuscule), `all-min` (tout en minustule), `title` (titre normal, en fonction de la langue du livre) ou `none` pour le laisser tel quel.
+    * **`number_font`**. La police fonte/style/taille/couleur à utiliser pour les numéros de ce niveau de titre (mais il vaut mieux une grande cohérence avec l’ensemble et éviter de la définir).
+
+    ##### Exclusion de titres
+
+    On peut exclure de la table des matières des titres du niveau voulu (`level_max`) en ajoutant `{no_toc}` à leur titre, soit à la fin soit après les dièses. Par exemple :
+    `\\### {no_toc} Titre hors TdM`
+    ou :
+    `\\## Titre hors TdM {no_toc}`
+    Vous pouvez vérifier que le titre dans le texte en exemple ci-dessous ne sera pas imprimé dans la table des matières.
+    *(rappel : "toc" signifie "table of content", c’est-à-dire "table des matières" en anglais — on peut aussi utiliser `{no_tdm}`)*
+
+    ##### Numérotation
+
+    Le "numéro de page" utilisé dans la table des matières dépend directement de la pagination utilisée pour le livre. C’est le numéro de page seule si la pagination est à `pages`, c’est le numéro de paragraphe si la pagination est à `paragraphs` et c’est à page et paragraphe si la pagination est `hybrid`.
+
+    ##### Ligne d’alignement
+
+    La *ligne d’alignement* est une ligne, souvent pointillée, qui relie le titre (à gauche) au numéro de page (à droite), et permet de mieux faire correspondre visuellement titre et numéro de page.
+    Elle est définie dans la recette à l’aide de la propriété `dash_line`.
+    `dash_line` est une table définissant `{:length, :space, :color}` où `:length` est la longueur du tiret (1 pour un point), `:space` est l’espace entre deux tirets et `:color` est la couleur hexadécimale du trait.
+    Astuce : on peut obtenir une ligne très fine, très discrète, en mettant `dash_line` à `{length:1, space:0, color:"DDDDDD"}`. Noter que c’est le `space: 0` qui, en ne laissant aucun espace entre les points, génère une ligne.
     EOT
 
-  # sample_texte <<~EOT #, "Autre entête"
-  #   Le texte en exemple. Si 'texte' n'est pas défini, sera interprété aussi. Sinon sera mis en illustration et c'est 'texte' qui sera interprété comme texte du livre.    
-  #   EOT
-
   sample_texte <<~EOT
+    \\### {no_toc} TITRE HORS TDM
     \\(( toc ))
     EOT
 
+  texte(:as_sample)
 
+  # TODO : Modifier l’aspect de la table des matières
   # recipe <<~EOT #, "Autre entête"
   #   ---
   #     # ...
   #   EOT
 
+  # code_before(Proc.new { pdf.table_of_content&.reset })
+  # code_after(Proc.new { pdf.table_of_content.reset })
+
+  sample_recipe <<~YAML
+    ---
+    .\\..
+    table_of_content:
+      # Voir ci-dessus les explications de chaque propriété
+      # - Titre -
+      title: "Table des matières"
+      title_level: 1
+      no_title: false
+      # - Contenu -
+      level_max: 3
+      numeroter: true
+      # - Aspect -
+      font: "<font>/<style>/<size>/<color>"
+      number_font: "<font>/<style>/<size>/<color>"
+      number_size: 10
+      line_height: 14
+      vadjust_line: 0     # ligne pointillée
+      vadjust_number: 0   # numéro page
+      dash_line: {length: 1, space: 3}
+      # - Aspect des titres par niveau -
+      level1:
+        font: "<font>/<style>/<size>/<color>"
+        size: 12
+        number_size: null # => même que défaut
+        caps: all-caps
+        indent: 0
+      level2:
+        .\\..
+        indent: 1cm
+      level3:
+        .\\..
+        indent: 15mm
+    YAML
   # # init_recipe([:custom_cached_var_key])
+  recipe <<~YAML
+    ---
+    table_of_content:
+      font: "Courier/regular/20/0000FF"
+      number_font: "Helvetica/italic/18/009900"
+      line_height: 24
+    YAML
 
 end

@@ -55,3 +55,16 @@ headers_footers:
       footer_font: "Numito/bold/13/333333"
 #</headers_footers>
 
+#<table_of_content>
+table_of_content:
+  font: "Helvetica/regular/12/000000"
+  number_font: "Helvetica/italic/12/FF0000"
+  dash_line: {length: 5, phase: 6, space: 0, color: "DDDDDD"}
+  # line_height: 20
+  level1:
+    caps: "all-caps"
+  level2:
+    caps: none
+  level3:
+    caps: none
+#</table_of_content>

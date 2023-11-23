@@ -341,8 +341,8 @@ class NTitre < AnyParagraph
     # des matières
     def check_inscription_in_tdm
       txt = text.dup
-      @writeit_in_tdm = not(txt.match?(/\{no[_\-]tdm\}/i))
-      txt = txt.gsub(/\{no[_-]tdm\}/,'').strip unless @writeit_in_tdm
+      @writeit_in_tdm = not(txt.match?(/\{no[_\-](tdm|toc)\}/i))
+      txt = txt.gsub(/\{no[_-](tdm|toc)\}/,'').strip unless @writeit_in_tdm
       @text = txt
     end
 

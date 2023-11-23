@@ -372,6 +372,16 @@ ERRORS = {
         %{data}
       (cf. plus bas le contexte)
       EOR
+
+    cannotfit_error: <<~ERR,
+      Un problème de "remplissage" est survenu dans la table des matière, 
+      c’est-à-dire que le texte ne peut être mis dans le bloc défini.
+      Cette erreur survient par exemple lorsque l’on veut appliquer une
+      taille de numéro de page supérieure à la taille du titre.
+      Pour le corriger, essayer de modifier la fonte du numéro de page pour
+      qu’elle soit égale ou inférieure à la taille des titres de niveau
+      correspondant.
+      ERR
   },
 
   # --- Maison d'éditions ---

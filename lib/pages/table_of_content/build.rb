@@ -8,6 +8,8 @@ class TableOfContent
   # 
   def build(pdf)
 
+    reset
+
     # 
     # On sait que la table des matières (son emplacement) est défini
     # lorsque son @page_number est défini. Si ça n'est pas le cas,
@@ -33,127 +35,128 @@ class TableOfContent
     # 
     pdf.go_to_page(tdm.page_number)
     spy "On rejoint la page #{tdm.page_number} pour écrire la TdM".jaune
-    pdf.move_down(recipe_tdm[:lines_before] * tdm_line_height)
+    pdf.move_down(lines_before * tdm_line_height)
     #
     # Il faudrait calculer la hauteur totale de la table des 
     # matières pour bien la placer sur un certain nombre de pages
     # 
 
-    # Si on doit numéroter, on doit calculer la taille de la boite
-    # pour le numéro, pour chaque niveau de titre. Pour ce faire,
-    # on doit donc, pour chaque niveau de titre, relever le nombre
-    # (numéro de page ou hybrid) le plus grand.
-    # 
-    (1..recipe_tdm[:level_max]).each do |n|
-      recipe_tdm["level#{n}".to_sym].merge!(numero_max: "xx")
-    end
-    begin
-      tdm.each_titre do |titre|
-        PFBFatalError.context = "#{titre.inspect}"
-        next if titre.level > recipe_tdm[:level_max]
-        num = titre.numero.to_s
-        niv = titre.level
-        key = "level#{niv}".to_sym
-        len = num.length
-        recipe_tdm[key].merge!(numero_max: num) if len > recipe_tdm[key][:numero_max].length
-      end
-    rescue Exception => e
-      raise PFBFatalError.new(850, {context: "Calcul du chiffre le plus grand", error: e.message, data: recipe_tdm.inspect})
-    end
-
-    # L’indentation peut avoir été donnée en string, on la corrige
-    # partout
-    recipe_tdm.each do |k, rdata|
-      next unless rdata.is_a?(Hash)
-      if rdata[:indent].is_a?(String)
-        recipe_tdm[k][:indent] = rdata[:indent].to_f
-      end
-    end
-
     # - Couleur normale -
     pdf.update do
       fill_color "000000"
-      font(Fonte.default) # TODO 
+      font(my.font)
     end
 
 
-    # Les données de titre courante
-    # (pour ne pas avoir à répéter chaque fois les fontes, par
-    # exemple)
-    # C'est la donnée :level<level> de la recette qui sera mise
-    # dans cette table.
+    # Données pour le titre en cours de traitement
+    # (permet de récupérer plus rapidement les données si le niveau
+    #  de titre ne change pas)
+    # Définit :
+    # 
+    #   :indent           Identation à appliquer
+    #   :title_options    Options text-box pour le titre
+    #   :number_options   Options text-box pour le numéro
     # 
     cdata = {}
-    # 
-    # On procède à l'écriture de la table des matières
+
+
+    # = ÉCRITURE DE LA TABLE DES MATIÈRES =
     # 
     tdm.each_titre do |titre|
       # - On ne prend pas au-dessus du niveau de titre voulu -
-      next if titre.level > recipe_tdm[:level_max]
-      # 
+      next if titre.level > level_max
+
       # Si le niveau de titre change, il faut aussi changer les
       # données courantes
-      # 
       if titre.level != cdata[:level]
-        key_level = "level#{titre.level}".to_sym
-        if recipe_tdm[key_level].key?(:numero_width)
-          cdata = recipe_tdm[key_level]
-          pdf.font(cdata[:font], **data_font_for(cdata))
-        else
-          cdata = me.define_values_for_niveau_titre(pdf, titre.level)
-        end
-        indent        = cdata[:indent]
-        separator     = cdata[:separator]||'.'
-        titre_width   = cdata[:titre_width]
-        numero_width  = cdata[:numero_width]
+        cdata = cdata_per_level(titre.level)
+        # puts "\nNouveau cdata = #{cdata.inspect}".bleu
       end
-      # 
-      # Le titre à inscrire (avec )
-      # 
-      content = titre.content # par défaut (si non numéroté)
-      if me.numeroter?
+      indent          = cdata[:indent]
+      # title_fonte     = cdata[:title_font] 
+      # number_fonte    = cdata[:number_font]
+      title_options   = cdata[:title_options]
+      title_color     = cdata[:title_options][:color]
+      number_options  = cdata[:number_options]
+      number_color    = cdata[:number_options][:color]
+      caps            = cdata[:caps]
+
+      # puts "title_options = #{title_options.inspect}".jaune
+
+      # Titre à inscrire
+      # ----------------
+      content = case caps
+        when 'none'       then titre.content
+        when 'title', NilClass then titre.content.titleize
+        when 'all-caps'   then titre.content.upcase
+        when 'all-min'    then titre.content.downcase
+        else raise "Caps inconnu : #{caps.inspect}"
+        end
+
+      begin # pour rescuer les erreurs
+
         pdf.update do
 
-          titre_width = width_of(content)
+          # Largeur prise par le titre
+          title_width = width_of(content, **title_options)
+          spy = "Largeur de #{content.inspect} : #{title_width}"
 
-          ####################################
-          ### Impression du NUMÉRO DE PAGE ###
-          ####################################
-          float {
-            span(numero_width, **{position: :right}) { 
-              text(titre.numero.to_s, **{size: cdata[:numero_size]})
-            }
-            # Les lignes d’alignement
-            # sep = "#{" #{separator}" * 100}"
-            sep = "#{" #{separator}" * 30}"
-            text_box(sep, **{
-              at:[indent + 10, cursor + line_height],
-              width: bounds.width - (indent + 10 + numero_width),
-              height: 18,
-              overflow: :truncate,
-            })
-          }
-        end
-      end
+          number_width = 0
+          line_width   = 0
 
-      ############################
-      ### Impression du TITRE  ###
-      ############################
-      spy "[1020] Impression du titre #{content.inspect} (niveau #{titre.level})".bleu
-      pdf.update do
-        toptions = {
-          at:[indent, cursor], 
-          width: titre_width, 
-          # height: (my.tdm_line_height),
-          height: 18,
-          inline_format: true,
-        }
+          if me.numeroter?
 
-        spy "       options: #{toptions.inspect}".bleu
-        text_box(content, **toptions)
-        move_down(my.tdm_line_height)
-        # Passer à la page suivante si trop peu de reste
-        start_new_page if cursor < 20
+            number_width = width_of(titre.numero.to_s, **number_options)
+            spy = "Largeur du numéro #{titre.numero} : #{number_width}"
+
+            line_width = bounds.width - (indent + title_width + number_width + 10)
+            spy = "Largeur de la ligne : #{line_width}"
+
+            ####################################
+            ### Impression du NUMÉRO DE PAGE ###
+            ####################################
+            # float do
+              # span(number_width + 10, **{position: :right}) do
+              #   text("#{titre.numero}", **number_options)
+              # end
+            # end
+            nopts = number_options.merge(width: number_width)
+            nopts[:at] = [bounds.width - (number_width + 4), cursor - my.vadjust_number]
+            fill_color(number_color) if number_color
+            text_box("#{titre.numero}", **nopts)
+
+            ##########################
+            ### LIGNE D’ALIGNEMENT ###
+            ##########################
+            # La ligne d’alignement
+            lf = indent + title_width + 5
+            hl = cursor - (12 + my.vadjust_line)
+            dash(my.dash_line[:length], **my.dash_line[:options])
+            stroke_color(my.dash_line[:color]) if my.dash_line[:color]
+            stroke_horizontal_line(lf, lf + line_width, at: hl)
+
+          end #/s’il faut numéroter
+
+          ############################
+          ### Impression du TITRE  ###
+          ############################
+          spy "[1020] Impression du titre #{content.inspect} (niveau #{titre.level})".bleu
+          opts = title_options.merge(width: title_width + 10)
+          opts[:at][1] = cursor
+          spy "       options: #{opts.inspect}".bleu
+          # - Impression -
+          fill_color(title_color)
+          text_box(content, **opts)
+          move_down(my.tdm_line_height)
+          # Passer à la page suivante si trop peu de reste
+          start_new_page if cursor < 20
+        
+        end #/pdf.update
+
+      rescue Prawn::Errors::CannotFit => e
+
+        raise PFBFatalError.new(851)
+
       end
 
       # break # pour voir
@@ -167,50 +170,82 @@ class TableOfContent
   # utiles pour les placements. Une fois pour toutes, pour ne pas
   # avoir à les recalculer pour tous les titres de même niveau
   # 
-  def define_values_for_niveau_titre(pdf, level)
+  def cdata_per_level(level)
+    @cdata_per_level ||= define_all_cdata_per_level
+    return @cdata_per_level[level]
+  end
+
+  def define_all_cdata_per_level
+
+    cdatas = {}
     
-    my = self
+    (1..level_max).each do |level|
 
-    # Clé de niveau de titre
-    key_level = "level#{level}".to_sym
+      cdata = {
+        level: level,
+      }
 
-    # Données actuelles du niveau de titre
-    cdata = recipe_tdm[key_level]
+      # Les données recette pour le titre
+      title_rdata = recipe_tdm["level#{level}".to_sym] || {}
 
-    # Largeur du numéro (en fonction du numéro le plus grand de ce
-    # niveau de titre)
-    # 
-    font_size_numero = cdata[:numero_size] == :same ? cdata[:size] : cdata[:numero_size]
-    numero_width = nil
-    pdf.update do
-      font(cdata[:font], **my.data_font_for(cdata.merge(size: font_size_numero)))
-      numero_width = pdf.width_of(cdata[:numero_max] || "xxx")
-    end
-    cdata.merge!(numero_width: numero_width)
-    # - Application de la fonte pour ce titre -
-    pdf.font(cdata[:font], **data_font_for(cdata))
-    # - Largeur du niveau de titre -
-    begin
-      titre_width = pdf.bounds.width - cdata[:numero_width] - (cdata[:indent]||0)
-    rescue Exception => e
-      puts "Problème avec cdata = #{cdata.inspect}".rouge
-      puts e.message.rouge
-      exit
-    end
-    cdata.merge!(titre_width: titre_width)
-    # On retourne la table
-    return cdata
+      # - Transformation du titre -
+      cdata.merge!(caps: (title_rdata[:caps]||'title').to_s.downcase)
+
+      # - Indentation -
+      indent = title_rdata[:indent] || 0
+      indent = indent.to_f if indent.is_a?(String)
+      cdata.merge!(indent: indent)
+
+      # - TITRE -
+      # Fonte pour le titre de ce niveau de titre
+      title_fonte = Prawn4book.fnss2Fonte(title_rdata[:font]) || font
+      # Les options de titre pour ce niveau de titre
+      title_opts = {
+        at: [indent, nil],
+        font_name:  title_fonte.name,
+        style:      title_fonte.style,
+        size:       title_fonte.size,
+        color:      title_fonte.color,
+        align:      :left,
+        inline_format: true
+      }
+      cdata.merge!(title_options: title_opts)
+
+      # - NUMÉRO -
+      # Fonte pour le numéro de ce niveau de titre
+      number_fonte = Prawn4book.fnss2Fonte(title_rdata[:number_font]) || number_font
+      # Les options de numéro pour ce niveau de titre
+      number_opts = {
+        at:         [nil,nil], # fonction de title-width
+        font_name:  number_fonte.name,
+        style:      number_fonte.style,
+        size:       number_fonte.size,
+        color:      number_fonte.color,
+        align:      :right,
+        inline_format: true # utile ?
+      }
+      cdata.merge!(number_options: number_opts)
+
+      cdatas.merge!(level => cdata)
+    end #/chaque niveau de titre
+
+    # On retourne la table complète
+    return cdatas
   end
 
-  def data_font_for(dfont)
-    datafont = {size: dfont[:size]}
-    datafont.merge!(style: dfont[:style]) unless dfont[:style].nil?
-    return datafont
+
+  def reset
+    self.instance_variables.each do |varname|
+      next if varname == :@folder
+      # puts "Variable instanciée : #{varname.inspect}"
+      self.instance_variable_set("#{varname}", nil)
+    end
   end
+
 
   # @return [Boolean] true s'il faut numéroter la table des matières
   def numeroter?
-    recipe.tdm_numerotation?
+    recipe_tdm[:numeroter] == true
   end
 
   # @return [Boolean] true si la numérotation se fait par les pages
@@ -218,13 +253,58 @@ class TableOfContent
     recipe.page_number?
   end
 
+  # --- DÉFINITIONS RECETTE ---
+
+  # Fonte générale (définie ou par défaut)
+  def font
+    @font ||= Prawn4book.fnss2Fonte(recipe_tdm[:font]) || Fonte.default
+  end
+
+  # Fonte générale pour le numéro (ou police de la tdm)
+  def number_font
+    @number_font ||= Prawn4book.fnss2Fonte(recipe_tdm[:number_font]) || font
+  end
+
+  def level_max
+    @level_max ||= recipe_tdm[:level_max].freeze
+  end
+
   # @return [Integer] Hauteur de ligne (si elle est définie)
   def tdm_line_height
-    @tdm_line_height ||= recipe_tdm[:line_height]
+    @tdm_line_height ||= recipe_tdm[:line_height].freeze
+  end
+
+  def lines_before
+    recipe_tdm[:lines_before]
+  end
+
+  # Ajustement vertical de la ligne d’alignement
+  def vadjust_line
+    recipe_tdm[:vadjust_line]
+  end
+
+  # Ajustement vertical du numéro de page
+  def vadjust_number
+    recipe_tdm[:vadjust_number]
+  end
+
+  # Ligne pointillée d’alignement
+  def dash_line
+    @dash_line ||= begin
+      dl = recipe_tdm[:dash_line]
+      {
+        length: dl[:length]||1, 
+        options: {
+          space: dl[:space]||1, 
+          phase: dl[:phase] || 1
+        },
+        color: dl[:color]
+      }
+    end
   end
 
   def recipe_tdm
-    @recipe_tdm ||= recipe.table_of_content
+    recipe.table_of_content
   end
 
 end #/class TableOfContent

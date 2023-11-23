@@ -81,13 +81,6 @@ class Recipe
     format_page[:no_headers_footers] == true
   end
 
-
-  # --- Table des matières ---
-
-  def tdm_numerotation?
-    :TRUE == @numerotertdm ||= true_or_false(table_of_content[:numeroter])
-  end
-
   def show_grid?
     format_page[:show_grid] || CLI.option(:grid)
   end

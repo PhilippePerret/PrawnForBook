@@ -6,6 +6,8 @@
 module Prawn4book
 class PrawnView
 
+  attr_accessor :table_of_content
+
   ##
   # Construction de la table des matières
   # 
@@ -15,8 +17,8 @@ class PrawnView
     }
     require 'lib/pages/table_of_content'
     spy(:on)
-    page = Prawn4book::Pages::TableOfContent.new(self)
-    page.build(self) # mais seulement si elle est définie
+    self.table_of_content = Prawn4book::Pages::TableOfContent.new(self)
+    self.table_of_content.build(self) # mais seulement si elle est définie
     spy(:off)
   end
 

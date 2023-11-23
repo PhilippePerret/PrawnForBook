@@ -10,6 +10,7 @@ module Prawn4book
       generalites/grand_titre
       generalites/forces_de_prawn
       generalites/deux_fichiers_de_base
+      generalites/doubles_parentheses
       ###---Recettes---###
       recette/grand_titre
       recette/recette_livre
@@ -59,6 +60,7 @@ module Prawn4book
       expert/injection_code
       ###---Annexe---###
       annexe/grand_titre
+      annexe/package_sublime_text
       #annexe/markdown_all_marks
       annexe/format_yaml
       annexe/font_string

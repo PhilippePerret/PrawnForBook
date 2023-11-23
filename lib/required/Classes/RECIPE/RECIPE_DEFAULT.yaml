@@ -269,15 +269,16 @@ table_of_content:
   level_max:            3
   line_height:          14
   lines_before:         10
-  separator:            '.'
-  add_to_numero_width:  0
   numeroter:            true
+  vadjust_number:       2
+  dash_line:      {length: 1, space: 3}
+  vadjust_line:         0
   level1:
     font_n_style: *default1_font_n_style
+    caps:         "all-caps"
     size:         12
     numero_size:  10
     indent:       0
-    separator:    null
   level2:
     font_n_style: *default1_font_n_style
     size:         10

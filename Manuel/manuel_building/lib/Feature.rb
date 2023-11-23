@@ -52,6 +52,32 @@ class Feature
   # 
   #     description(File.read(__dir__+'<nom_fichier>.md'))
   # 
+  # Texte et texte exemple
+  # -----------------------
+  # 
+  # Si on définit :
+  # 
+  #     sample_texte("<str>"[, "<entete>"])
+  # 
+  # On définit en même temps un texte exemple et l’illustration de 
+  # ce texte. Par exemple, si on met des *...* dans sample_texte, ils
+  # seront conservés tels quels tandis qu’ils seront interprétés dans
+  # le texte.
+  # 
+  # Si le texte doit être différent (mais c’est à éviter), on 
+  # utilise :
+  # 
+  #     texte("<string>"[, "<entete>"])
+  # 
+  # Si on doit échapper des caractères spéciaux dans @sample_texte et
+  # qu’ils ne doivent par l’être dans @texte. On utilise :
+  # 
+  #     texte(:as_sample)
+  # 
+  # Si aucun texte illustration ne doit être ajoué, alors on met :
+  # 
+  #     texte(:none)
+  # 
   # 
   # Modification de la recette
   # ---------------------------
@@ -137,6 +163,8 @@ class Feature
   # 
   #     "les forces de prawn-for-book"
   # 
+  ################################################################
+
 
   # Les variables utilisables dans les textes (description, texte, 
   # sample_texte, etc.)
@@ -659,10 +687,10 @@ class Feature
   # 
   def print_sample_recipe
     if sample_recipe
-      entete = @sample_recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
+      entete = @sample_recipe_entete || "Si le fichier recipe.yaml ou recipe_collection.yaml contient…"
       print_as_code(sample_recipe.dup, entete)
     elsif recipe
-      entete = @recipe_entete || "Si recipe.yaml ou recipe_collection.yaml contient…"
+      entete = @recipe_entete || "Si le fichier recipe.yaml ou recipe_collection.yaml contient…"
       print_as_code(recipe.dup, entete)
     end
   end
@@ -694,13 +722,14 @@ class Feature
   # tout échapper pour que ça s'affiche correctement
   # 
   def print_sample_texte
-    entete = @sample_texte_entete || "Si texte.pfb.md contient…"
+    entete = @sample_texte_entete || "Si le fichier « texte.pfb.md » contient…"
     str = sample_texte.dup
     str = str.gsub(/\*/, '\\*').gsub('_', '\_').gsub('<','&lt;').gsub(/"/,'\\"')
     __print_texte(str, entete, 3)
   end
 
   def print_texte(str)
+    return if str == :none
     entete = @texte_entete || "Le livre final (document PDF) contiendra :"
     __print_texte(str, entete, 3)
   end

@@ -32,7 +32,7 @@ class PFBFatalError < StandardError
   end
   def self.context; @@context || '' end
 
-  def initialize(err_id, temp_data = nil)
+  def initialize(err_id, temp_data = {})
     if temp_data[:backtrace] === true
       temp_data.merge!(backtrace: self.class.backtracize(temp_data[:error]))
     end
@@ -139,6 +139,7 @@ class PFBFatalError < StandardError
       802   => Prawn4book::ERRORS[:recipe][:book_data][:unfound_logo],
       # -- Table des matières --
       850   => Prawn4book::ERRORS[:toc][:problem_with_title],
+      851   => Prawn4book::ERRORS[:toc][:cannotfit_error],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],
