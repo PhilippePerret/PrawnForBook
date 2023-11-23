@@ -328,10 +328,10 @@ class PdfBook
       # ==================
       build_page_infos if my.page_infos? && last_page > page_number
 
-      # ==========================
-      # -   TABLE DES MATIÈRES   -
-      # ==========================
-      build_table_of_contents
+      # =============================
+      # -   TABLE(S) DES MATIÈRES   -
+      # =============================
+      build_tables_of_contents
 
       # ===========================
       # -  ENTETE & PIED DE PAGE  -

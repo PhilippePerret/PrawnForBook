@@ -9,7 +9,7 @@ class Tdm
 
   # @prop [Integer] Numéro de page sur laquelle écrire la table
   # des matières
-  attr_accessor :page_number
+  attr_accessor :pages_number
 
   # @prop [Array<Titre>] Liste des instances de titre
   attr_reader :titres
@@ -19,6 +19,13 @@ class Tdm
     @document = document
     @pdf      = pdf
     @titres   = []
+  end
+
+  # Ajouter une page où se trouve la table des matières
+  # 
+  def add_page_number(page_number)
+    @pages_number ||= []
+    @pages_number << page_number
   end
 
   ##

@@ -1,7 +1,7 @@
 Prawn4book::Manual::Feature.new do
 
 
-  subtitle "Recette de la collection"
+  titre "Recette de la collection"
 
   description <<~EOT
     La *recette de la collection* est un fichier de nom `recipe_collection.yaml` qui se trouve à la racine du dossier d’une collection de livres. Son nom vient de "recipe" qui signifie *recette* en anglais et de `.yaml`, extension des fichiers au format simple `YAML` (cf. page [[annexe/format_yaml]]).

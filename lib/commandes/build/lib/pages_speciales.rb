@@ -10,15 +10,22 @@ class PrawnView
 
   ##
   # Construction de la table des matières
+  # Ou DES tables des matières (s’il y en a plusieurs par livre)
   # 
-  def build_table_of_contents
+  def build_tables_of_contents
+    # S’il n’y a pas de table des matières, on s’en retourne tout de
+    # suite.
+    return if tdm.pages_number.nil? || tdm.pages_number.empty?
+    
     @current_titles = {
       1 => "Table des matières", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
     }
     require 'lib/pages/table_of_content'
     spy(:on)
     self.table_of_content = Prawn4book::Pages::TableOfContent.new(self)
-    self.table_of_content.build(self) # mais seulement si elle est définie
+    tdm.pages_number.each do |pnumber|
+      self.table_of_content.build(self, pnumber) # mais seulement si elle est définie
+    end
     spy(:off)
   end
 
@@ -77,10 +84,11 @@ class PrawnView
       titre.print(self)
       book.pages[page_number].add_content_length(tdata[:title].length + 3)
     end
+
+    # On mémorise le numéro de page de cette table des matières
+    # (il peut y en avoir plusieurs)
     # 
-    # On mémorise le numéro de page de la table des matières
-    # 
-    tdm.page_number = page_number
+    tdm.add_page_number(page_number)
   end
 
 end #/PrawnView

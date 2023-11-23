@@ -57,9 +57,14 @@ headers_footers:
 
 #<table_of_content>
 table_of_content:
-  font: "Helvetica/regular/12/000000"
-  number_font: "Helvetica/italic/12/FF0000"
-  dash_line: {length: 5, phase: 6, space: 0, color: "DDDDDD"}
+  no_title: true
+  lines_top: 4
+  lines_bottom:  4
+  font: "Helvetica/normal/12/000000"
+  line_height:  18
+  vadjust_line: -3
+  vadjust_number: 0
+  dash_line: {length: 1, phase: 0, space: 3, color: "888888"}
   # line_height: 20
   level1:
     caps: "all-caps"

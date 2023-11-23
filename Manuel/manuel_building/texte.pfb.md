@@ -7,4 +7,6 @@ Si vous êtes intéressé(e) de voir comment il est généré, vous pouvez consu
 
 # Fonctionnalités
 (( build_features ))
+(( new_page ))
 (( toc ))
+(( new_page ))

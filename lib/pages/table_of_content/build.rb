@@ -6,19 +6,9 @@ class TableOfContent
   #
   # Méthode principale construisant la page
   # 
-  def build(pdf)
+  def build(pdf, page_number)
 
     reset
-
-    # 
-    # On sait que la table des matières (son emplacement) est défini
-    # lorsque son @page_number est défini. Si ça n'est pas le cas,
-    # on ne fait rien.
-    # 
-    if pdf.tdm.page_number.nil?
-      spy "Pas de table des matières.".jaune
-      return
-    end
 
     #
     # Raccourci de l'instance Prawn4Book::Tdm
@@ -30,21 +20,14 @@ class TableOfContent
     # 
     me = my = self
     
-    # 
-    # On se rend sur la page voulue
-    # 
-    pdf.go_to_page(tdm.page_number)
-    spy "On rejoint la page #{tdm.page_number} pour écrire la TdM".jaune
-    pdf.move_down(lines_before * tdm_line_height)
-    #
-    # Il faudrait calculer la hauteur totale de la table des 
-    # matières pour bien la placer sur un certain nombre de pages
-    # 
-
-    # - Couleur normale -
     pdf.update do
       fill_color "000000"
       font(my.font)
+
+      # On se rend sur la page voulue
+      go_to_page(page_number)
+      spy "On rejoint la page #{page_number} pour écrire la TdM".jaune
+      move_down(my.lines_top * my.tdm_line_height)
     end
 
 
@@ -84,7 +67,8 @@ class TableOfContent
       # puts "title_options = #{title_options.inspect}".jaune
 
       # Titre à inscrire
-      # ----------------
+      # (peut-être transformé)
+      # ----------------------
       content = case caps
         when 'none'       then titre.content
         when 'title', NilClass then titre.content.titleize
@@ -99,36 +83,29 @@ class TableOfContent
 
           # Largeur prise par le titre
           title_width = width_of(content, **title_options)
-          spy = "Largeur de #{content.inspect} : #{title_width}"
 
           number_width = 0
           line_width   = 0
 
           if me.numeroter?
 
+            # Largeur pour le numéro
             number_width = width_of(titre.numero.to_s, **number_options)
-            spy = "Largeur du numéro #{titre.numero} : #{number_width}"
 
+            # Largeur (longueur) pour la ligne
             line_width = bounds.width - (indent + title_width + number_width + 10)
-            spy = "Largeur de la ligne : #{line_width}"
 
             ####################################
             ### Impression du NUMÉRO DE PAGE ###
             ####################################
-            # float do
-              # span(number_width + 10, **{position: :right}) do
-              #   text("#{titre.numero}", **number_options)
-              # end
-            # end
             nopts = number_options.merge(width: number_width)
-            nopts[:at] = [bounds.width - (number_width + 4), cursor - my.vadjust_number]
+            nopts[:at] = [bounds.width - number_width, cursor - my.vadjust_number]
             fill_color(number_color) if number_color
             text_box("#{titre.numero}", **nopts)
 
             ##########################
             ### LIGNE D’ALIGNEMENT ###
             ##########################
-            # La ligne d’alignement
             lf = indent + title_width + 5
             hl = cursor - (12 + my.vadjust_line)
             dash(my.dash_line[:length], **my.dash_line[:options])
@@ -140,16 +117,18 @@ class TableOfContent
           ############################
           ### Impression du TITRE  ###
           ############################
-          spy "[1020] Impression du titre #{content.inspect} (niveau #{titre.level})".bleu
           opts = title_options.merge(width: title_width + 10)
           opts[:at][1] = cursor
-          spy "       options: #{opts.inspect}".bleu
           # - Impression -
           fill_color(title_color)
           text_box(content, **opts)
           move_down(my.tdm_line_height)
+
           # Passer à la page suivante si trop peu de reste
-          start_new_page if cursor < 20
+          if cursor < (my.lines_bottom * my.tdm_line_height)
+            start_new_page 
+            move_down(my.lines_top * my.tdm_line_height)
+          end
         
         end #/pdf.update
 
@@ -162,6 +141,8 @@ class TableOfContent
       # break # pour voir
 
     end #/fin de loop
+
+    # exit
 
   end
 
@@ -274,8 +255,12 @@ class TableOfContent
     @tdm_line_height ||= recipe_tdm[:line_height].freeze
   end
 
-  def lines_before
-    recipe_tdm[:lines_before]
+  def lines_top
+    recipe_tdm[:lines_top]
+  end
+
+  def lines_bottom
+    recipe_tdm[:lines_bottom]
   end
 
   # Ajustement vertical de la ligne d’alignement

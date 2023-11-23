@@ -21,15 +21,16 @@ Prawn4book::Manual::Feature.new do
 
     Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/grand_titre]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
     On trouve ces propriétés :
-    * **`level_max`**. Niveau maximum. Le niveau de titre qui sera affiché dans la table des matières. Par défaut, il est à 3, ce qui signifie que les titres jusqu’à 3 dièses seront affichés dans la table des matières (sauf exclusion).
-    * **`title`**. Le grand titre à utiliser pour la table des matières. Par défaut, en français, c’est "Table des matières".
+    * **`level_max`** | Niveau maximum. Le niveau de titre qui sera affiché dans la table des matières. Par défaut, il est à 3, ce qui signifie que les titres jusqu’à 3 dièses seront affichés dans la table des matières (sauf exclusion).
+    * **`title`** | Le grand titre à utiliser pour la table des matières. Par défaut, en français, c’est "Table des matières".
     * **`title_level`**. Le niveau de titre pour ce grand titre. Par défaut, c’est 1.
     * **`no_title`**. S’il ne faut pas imprimer de grand titre "Table des matières" (ou autre valeur de `title`), alors il faut mettre cette propriété à `true` (vrai).
     * **`font`**. Pour la fonte générale ([[*fonte string*|annexe/font_string]])
     * **`number_font`**. Fonte à utiliser pour les numéros de page ([[*fonte string*|annexe/font_string]]).
     * **`number_size`**. Si on ne veut changer que la taille du numéro (pas toute la fonte), on peut utiliser cette propriété.
     * **`numeroter`**. Si false (faux), on ne numérote pas la table des matières (éviter).
-    * **`lines_before`**. Définit le nombre de lignes avant le premier titre,
+    * **`lines_top`**. Définit le nombre de lignes au-dessus du premier titre de chaque page de table des matières.
+    * **`lines_bottom`**. Nombre de lignes au-dessous du dernier titre de chaque page de table des matières.
     * **`line_height`**. Hauteur de la ligne (entre chaque titre). Attention de ne pas donner une valeur plus petite que la taille des titres, sinon ils n’apparaitront pas.
     * **`vadjust_number`**. Nombre de points-post-scripts pour ajuster verticalement le numéro de la page en face du titre (un nombre positif fait descendre le numéro, un nombre négatif le fait monter),
     * **`vadjust_line`**. Nombre de points-ps pour ajuster verticalement la ligne pointillée d’alignement entre le titre et le numéro de page,
@@ -68,7 +69,6 @@ Prawn4book::Manual::Feature.new do
 
   sample_texte <<~EOT
     \\### {no_toc} TITRE HORS TDM
-    \\(( toc ))
     EOT
 
   texte(:as_sample)
@@ -82,7 +82,7 @@ Prawn4book::Manual::Feature.new do
   # code_before(Proc.new { pdf.table_of_content&.reset })
   # code_after(Proc.new { pdf.table_of_content.reset })
 
-  sample_recipe <<~YAML
+  sample_recipe <<~YAML, "Propriétés qu’on peut trouver dans la recette"
     ---
     .\\..
     table_of_content:
@@ -95,6 +95,8 @@ Prawn4book::Manual::Feature.new do
       level_max: 3
       numeroter: true
       # - Aspect -
+      lines_top: 4
+      lines_bottom: 4
       font: "<font>/<style>/<size>/<color>"
       number_font: "<font>/<style>/<size>/<color>"
       number_size: 10
