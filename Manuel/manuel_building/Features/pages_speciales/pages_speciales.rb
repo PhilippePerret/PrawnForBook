@@ -19,7 +19,7 @@ Prawn4book::Manual::Feature.new do
       page_de_garde:  true
       faux_titre:     false
       page_de_titre:  true
-      credits_page:     false
+      credits_page:   false
     EOT
 
 end

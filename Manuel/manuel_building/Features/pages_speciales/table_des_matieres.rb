@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "La Table des matières"
+  titre "Table des matières"
 
   description <<~EOT
     On imprime la table des matières à l’endroit voulu à l’aide de la marque :

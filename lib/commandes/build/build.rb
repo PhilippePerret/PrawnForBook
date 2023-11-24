@@ -323,11 +323,6 @@ class PdfBook
 
     pdf.update do 
       
-      # ==================
-      # -   PAGE INFOS   -
-      # ==================
-      build_credits_page if my.credits_page? && last_page > page_number
-
       # =============================
       # -   TABLE(S) DES MATIÈRES   -
       # =============================
@@ -337,6 +332,11 @@ class PdfBook
       # -  ENTETE & PIED DE PAGE  -
       # ===========================
       build_headers_and_footers(me)
+
+      # ==================
+      # -   PAGE INFOS   -
+      # ==================
+      build_credits_page if my.credits_page? && last_page > page_number
 
       # ===========================
       # -   GRILLE DE RÉFÉRENCE   -

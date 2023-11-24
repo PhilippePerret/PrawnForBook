@@ -4,7 +4,6 @@ class PageManager
 
   attr_reader :book, :pdf
   attr_reader :pages
-  attr_reader :without_pagination
 
   def initialize(book, pdf)
     @book = book
@@ -14,8 +13,6 @@ class PageManager
     # ( instances PdfBook::Page )
     @pages = []
 
-    # -- Liste des numéros de page sans pagination --
-    @without_pagination = []
   end
 
   # @return le nombre de page

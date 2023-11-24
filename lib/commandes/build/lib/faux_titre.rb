@@ -26,7 +26,7 @@ class PrawnView
     # indication contraire dans la recette
     # 
     unless dfauxtitre[:paginate] == true
-      book.pages_without_pagination << page_number
+      book.page(page_number).pagination = false
     end
 
     #

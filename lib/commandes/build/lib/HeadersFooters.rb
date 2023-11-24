@@ -76,6 +76,7 @@ def print(pdf)
     number = pdf.page_number
 
     # Une page ne peut recevoir qu’un seul entête/pied de page
+    # Si elle a déjà été traitée, on la passe
     next if self.class.traited?(number)
 
     # La page courante [Prawn4book::PageManager::Page]
@@ -83,6 +84,9 @@ def print(pdf)
 
     # puts "Entête et pied de page sur page #{number}"
     next if curpage.not_printable?
+
+    # La passer si elle ne doit pas être paginée
+    next if curpage.no_pagination?
 
     # --- Page Data ---
     # Pour pouvoir faire le test avec une page au milieu :

@@ -3,6 +3,8 @@
 book_data:
   title: "Manuel de Prawn-for-book"
   author: "Philippe PERRET"
+  isbn: "---"
+  url:  null
 #</book_data>
 
 #<book_making>
@@ -10,7 +12,7 @@ book_making:
   conception:
     patro: "Philippe PERRET"
     mail:  "philippe.perret@icare-editions.fr"
-  design:
+  page_design:
     patro: "Prawn-For-Book"
     mail: null
   cover:
@@ -57,6 +59,11 @@ book_format:
   #</titles>
 #</book_format>
 
+#<inserted_pages>
+inserted_pages:
+  credits_page: true
+#</inserted_pages>
+
 #<headers_footers>
 headers_footers:
   dispositions:
@@ -94,9 +101,22 @@ table_of_content:
 credits_page:
   disposition: "distribute"
 #</credits_page>
+#<book_making>
 book_making:
   conception:
     patro: "Philippe PERRET"
     mail: "philippe.perret@icare-editions.fr"
-#<book_making>
+  page_design:
+    patro: "Prawn-For-Book"
+  cover:
+    patro: "MM & PP"
+  correction:
+    patro: "Marion MICHEL"
+  printing:
+    name: "Prawn-For-Book"
 #</book_making>
+
+#<publisher>
+publisher:
+  name: "Icare Éditions"
+#</publisher>

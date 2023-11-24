@@ -319,9 +319,9 @@ headers_footers:
 credits_page:
   disposition: 'distribute' # 'bottom', 'top'
   libelle:
-    font: "Times-Roman/italic/10/777777"
+    font: "Times-Roman/italic/9/777777"
   value:
-    font: "Times-Roman//12/000000"
+    font: "Times-Roman//11/000000"
 #</credits_page>
 
 #<book_making>
@@ -332,7 +332,7 @@ book_making:
   writing:
     patro: null
     mail: null
-  design: # mise en page
+  page_design: # mise en page
     patro:      null
     mail:       null
   cover: 
