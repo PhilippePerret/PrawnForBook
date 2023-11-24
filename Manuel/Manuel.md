@@ -556,9 +556,9 @@ Si le code a évaluer contient des crochets, il faut utiliser des délimitateurs
 
 > Pourquoi ? Tout simplement parce que si l'on donne ce texte : 
 > ~~~markdown
-> Je suis du code #{book.recipe.page_infos={paginate:false}} qui ne doit pas être utilisé
+> Je suis du code #{book.recipe.credits_page={paginate:false}} qui ne doit pas être utilisé
 > ~~~
-> alors c'est le texte suivant qui sera interprété (depuis le `#{` jusqu'au premier crochet fermant trouvé) : `book.recipe.page_infos={paginate:false`
+> alors c'est le texte suivant qui sera interprété (depuis le `#{` jusqu'au premier crochet fermant trouvé) : `book.recipe.credits_page={paginate:false`
 
 Par exemple : 
 
@@ -4189,8 +4189,8 @@ page_de_titre:
 ```yaml
 # in recipe.yaml/collection_recipe.yaml
 
-#<page_infos>
-page_infos:
+#<credits_page>
+credits_page:
 	aspect:
 		libelle: # pour les libellés
 			font_n_style: "Police/style"
@@ -4215,7 +4215,7 @@ page_infos:
   	name: "Imprimerie de l'Ouest"
   	lieu: "Ours sur Orge"
   paginate: false # [4]
-#</page_infos>
+#</credits_page>
 #<publisher> [3]
 publisher:
 	name: 		"<nom de la Maison d'éditions>"

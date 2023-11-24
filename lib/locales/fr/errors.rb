@@ -307,7 +307,7 @@ ERRORS = {
     
     # -- Recette > Page infos --
 
-    page_infos: {
+    credits_page: {
       require_info: <<~ERR,
         Je ne suis pas en mesure de produire la page d'information de fin
         de livre, il me manque ces informations : 

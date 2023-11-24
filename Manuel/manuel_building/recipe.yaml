@@ -5,6 +5,20 @@ book_data:
   author: "Philippe PERRET"
 #</book_data>
 
+#<book_making>
+book_making:
+  conception:
+    patro: "Philippe PERRET"
+    mail:  "philippe.perret@icare-editions.fr"
+  design:
+    patro: "Prawn-For-Book"
+    mail: null
+  cover:
+    patro: "MM & PP"
+    mail: null
+  correction:
+    patro: ["Marion MICHEL"]
+    mail:  [null]
 #<book_format>
 book_format:
   page:
@@ -75,3 +89,14 @@ table_of_content:
   level3:
     caps: none
 #</table_of_content>
+
+#<credits_page>
+credits_page:
+  disposition: "distribute"
+#</credits_page>
+book_making:
+  conception:
+    patro: "Philippe PERRET"
+    mail: "philippe.perret@icare-editions.fr"
+#<book_making>
+#</book_making>

@@ -127,7 +127,7 @@ class InitedThing
         #   Maintenant, la recette est enregistrée au fur et à mesure
         return true
 
-      when :book_data, :book_format, :page_infos
+      when :book_data, :book_format, :credits_page
         # 
         # Ici passent toutes les choses qu'on peut définir par le biais
         # du système des "pages spéciales"
@@ -212,7 +212,7 @@ class InitedThing
     {name:'Page de garde', value: :page_de_garde, default: true},
     {name:'Page de faux titre (seulement titre)', value: :faux_titre, default: false},
     {name:'Page de titre (titre avec auteurs et édition)', value: :page_de_titre, default: true},
-    {name:'Page d’information (fin du livre)', value: :page_infos, default: true}
+    {name:'Page d’information (fin du livre)', value: :credits_page, default: true}
   ]
   def define_and_set_values_for_inserted_pages
     cur_data = recipe.inserted_pages

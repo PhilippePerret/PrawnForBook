@@ -326,7 +326,7 @@ class PdfBook
       # ==================
       # -   PAGE INFOS   -
       # ==================
-      build_page_infos if my.page_infos? && last_page > page_number
+      build_credits_page if my.credits_page? && last_page > page_number
 
       # =============================
       # -   TABLE(S) DES MATIÈRES   -

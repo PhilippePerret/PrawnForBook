@@ -49,7 +49,7 @@ end #/Command
     when 'index', 'page index', 'index page'
       traite_as_page_speciale('page_index')
     when 'infos', 'page infos', 'infos page'
-      traite_as_page_speciale('page_infos')
+      traite_as_page_speciale('credits_page')
     else
       puts (ERRORS[:help][:unknown_assistant] % chose.inspect).rouge
     end

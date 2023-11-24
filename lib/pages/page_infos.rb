@@ -3,4 +3,4 @@ module Prawn4book
 class Pages
 class PageInfos < SpecialPage
 end;end;end
-require_page('page_infos')
+require_page('credits_page')

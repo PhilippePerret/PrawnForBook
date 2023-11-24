@@ -8,7 +8,7 @@ class PageInfos
   # 
   def build(pdf)
     spy "-> Construction de la page d'informations".bleu
-    # 
+
     # S'assurer que les informations requises sont bien fournies
     # par la recette du livre ou de la collection
     # 
@@ -220,7 +220,7 @@ class PageInfos
     end
     ary[-1].merge!(no_space: false)
     ary << {label: 'Contact', value:publisher[:contact]} if publisher[:contact]
-    ary << {value: "Dépôt légal : #{page_infos[:depot_legal]}"} if page_infos[:depot_legal]
+    ary << {value: "Dépôt légal : #{credits_page[:depot_legal]}"} if credits_page[:depot_legal]
     ary << {value:"ISBN : #{isbn}"} if isbn
     ary << :delimitor
     if conception_redaction
@@ -268,39 +268,39 @@ class PageInfos
 
   def conception_redaction
     @conception_redaction ||= begin
-      if page_infos[:conception][:patro]
-        traite_people_in(page_infos[:conception])
+      if credits_page[:conception][:patro]
+        traite_people_in(credits_page[:conception])
       end
     end
   end
 
   def mise_en_page
     @mise_en_page ||= begin
-      if page_infos[:mise_en_page][:patro]
-        traite_people_in(page_infos[:mise_en_page])
+      if credits_page[:mise_en_page][:patro]
+        traite_people_in(credits_page[:mise_en_page])
       end
     end
   end
 
   def cover_conception
     @cover_conception ||= begin
-      if page_infos[:cover][:patro]
-        traite_people_in(page_infos[:cover])
+      if credits_page[:cover][:patro]
+        traite_people_in(credits_page[:cover])
       end
     end
   end
 
   def relectures_et_corrections
     @relectures_et_corrections ||= begin
-      if page_infos[:correction][:patro]
-        traite_people_in(page_infos[:correction])
+      if credits_page[:correction][:patro]
+        traite_people_in(credits_page[:correction])
       end
     end
   end
 
   def imprimerie
     @imprimerie ||= begin
-      dimp = page_infos[:printing]
+      dimp = credits_page[:printing]
       d = dimp[:name]
       d = "#{d} (#{dimp[:lieu]})" if dimp[:lieu]
       d
@@ -313,8 +313,8 @@ class PageInfos
 
   # --- General Data ---
 
-  def page_infos
-    @page_infos ||= recipe.page_infos
+  def credits_page
+    @credits_page ||= recipe.credits_page
   end
 
   def publisher
@@ -368,14 +368,14 @@ class PageInfos
   # pour les informations.
   # 
   def infos_valides_or_raises
-    infs = page_infos
+    infs = credits_page
     publ = owner.recipe.publisher
     # 
     # Les données qu'on doit trouver pour pouvoir établir la 
     # page d'informations
     # 
     missing_functions = []
-    page_infos_missing_keys = []
+    credits_page_missing_keys = []
     publisher_missing_keys = []
     [
       [ infs[:conception][:patro]   ,'le concepteur/rédacteur', "  conception:\n    patro: ..."],
@@ -384,25 +384,25 @@ class PageInfos
       [ infs[:mise_en_page][:patro] ,'le metteur en page', "  mise_en_page:\n    patro: ..."],
       [ infs[:printing][:name]      ,'l’imprimerie', "  printing:\n    name: ..." ],
       [ publ[:name]                  ,'la maison d’édition', nil, "#<publisher>\npublisher:\n  name: ...\n#</publisher>"],
-    ].each do |value, fonction, page_infos_keys, publisher_keys|
+    ].each do |value, fonction, credits_page_keys, publisher_keys|
       value || begin
         missing_functions.push(fonction)
-        page_infos_missing_keys << page_infos_keys if page_infos_keys
+        credits_page_missing_keys << credits_page_keys if credits_page_keys
         publisher_missing_keys << publisher_keys if publisher_keys
       end
     end
     missing_functions.empty? || begin
-      unless page_infos_missing_keys.empty?
-        page_infos_missing_keys.unshift("#<page_infos>\npage_infos:")
-        page_infos_missing_keys << "#</page_infos>"
+      unless credits_page_missing_keys.empty?
+        credits_page_missing_keys.unshift("#<credits_page>\ncredits_page:")
+        credits_page_missing_keys << "#</credits_page>"
       end
-      missing_keys = (page_infos_missing_keys + publisher_missing_keys).join("\n")
+      missing_keys = (credits_page_missing_keys + publisher_missing_keys).join("\n")
       raise PFBFatalError.new(500, {missing_infos: missing_functions.pretty_join, missing_keys: missing_keys})
     end
   end
 
   def paginate?
-    page_infos[:paginate] === true
+    credits_page[:paginate] === true
   end
 
   def mode_distributed?
@@ -418,30 +418,30 @@ class PageInfos
   end
 
   def disposition
-    @disposition ||= page_infos[:aspect][:disposition]
+    @disposition ||= credits_page[:disposition]
   end
 
   def info_font
-    @info_font ||= page_infos[:aspect][:value][:font]||Metric.default_font_name
+    @info_font ||= Prawn4book.fnssc2fonte  credits_page[:value][:font]||Metric.default_font_name
   end
   def info_style
-    @info_style ||= page_infos[:aspect][:value][:style]||Metric.default_font_style
+    @info_style ||= credits_page[:value][:style]||Metric.default_font_style
   end
   def info_size
-    @info_size ||= page_infos[:aspect][:value][:size]||Metric.default_font_size
+    @info_size ||= credits_page[:value][:size]||Metric.default_font_size
   end
 
   def label_font
-    @label_font ||= page_infos[:aspect][:libelle][:font]||Metric.default_font_name
+    @label_font ||= credits_page[:libelle][:font]||Metric.default_font_name
   end
   def label_style
-    @label_style ||= page_infos[:aspect][:libelle][:style]||Metric.default_font_style
+    @label_style ||= credits_page[:libelle][:style]||Metric.default_font_style
   end
   def label_size
-    @label_size ||= page_infos[:aspect][:libelle][:size]||Metric.default_font_size
+    @label_size ||= credits_page[:libelle][:size]||Metric.default_font_size
   end
   def label_color
-    @label_color ||= page_infos[:aspect][:libelle][:color]
+    @label_color ||= credits_page[:libelle][:color]
   end
 
 end #/class PageInfos

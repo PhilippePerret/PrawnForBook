@@ -23,7 +23,7 @@ module Prawn4book
       pages_speciales/grand_titre
       pages_speciales/pages_speciales
       pages_speciales/table_des_matieres
-      pages_speciales/page_infos
+      pages_speciales/credits_page
       ###---Entetes/Pied-de-page---###
       header_footer/grand_titre
       header_footer/par_defaut

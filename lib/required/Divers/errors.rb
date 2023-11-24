@@ -118,8 +118,8 @@ class PFBFatalError < StandardError
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
       # -- Recette (voir aussi en 800) ---
       499   => Prawn4book::ERRORS[:recipe][:missing_even_default_data],
-      500   => Prawn4book::ERRORS[:recipe][:page_infos][:require_info],
-      610   => Prawn4book::ERRORS[:recipe][:page_infos][:bad_font_definition],
+      500   => Prawn4book::ERRORS[:recipe][:credits_page][:require_info],
+      610   => Prawn4book::ERRORS[:recipe][:credits_page][:bad_font_definition],
       # -- Fontes --
       650   => Prawn4book::ERRORS[:fonts][:leading_must_be_calculated],
       651   => Prawn4book::ERRORS[:fonts][:require_style],

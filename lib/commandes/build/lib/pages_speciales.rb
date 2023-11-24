@@ -43,11 +43,11 @@ class PrawnView
     page.build(self)
   end
 
-  def build_page_infos
+  def build_credits_page
     @current_titles = {
       1 => "Page des infos", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
     }
-    require 'lib/pages/page_infos'
+    require 'lib/pages/credits_page'
     page = Prawn4book::Pages::PageInfos.new(self)
     page.build(self)
   end

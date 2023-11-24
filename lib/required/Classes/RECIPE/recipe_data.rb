@@ -438,19 +438,23 @@ class Recipe
   end
 
   def page_index
-    @page_index         ||= DATA[:page_index]
+    @page_index    ||= DATA[:page_index]
   end
 
-  def page_infos
-    @page_infos         ||= DATA[:page_infos]
+  def credits_page
+    @credits_page   ||= DATA[:credits_page]
+  end
+
+  def book_making
+    @book_making   ||= DATA[:book_making]
   end
 
   def book_data
-    @book_data          ||= DATA[:book_data]
+    @book_data     ||= DATA[:book_data]
   end
 
   def publisher
-    @publisher         ||= DATA[:publisher]
+    @publisher     ||= DATA[:publisher]
   end
 
   def inserted_pages

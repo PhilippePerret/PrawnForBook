@@ -30,8 +30,8 @@ class Recipe
     inserted_pages[:page_de_titre] == true
   end
 
-  def page_infos?
-    inserted_pages[:page_infos] == true
+  def credits_page?
+    inserted_pages[:credits_page] == true
   end
 
   # --- Numérotation des pages et des paragraphes ---

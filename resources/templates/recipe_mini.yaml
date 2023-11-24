@@ -36,6 +36,6 @@ infos:
 #<inserted_pages>
 inserted_pages:
   faux_titre: true
-  page_infos: false
+  credits_page: false
 #</inserted_pages>
 

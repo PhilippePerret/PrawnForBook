@@ -6,7 +6,7 @@ Prawn4book::Manual::Feature.new do
   description <<~EOT
     Comme pour les autres éléments, on pourra laisser les **entêtes** et **pieds de page** par défaut, ce qui signifiera n’afficher que les numéro de pages — sur les pages adéquates —, ou au contraire on pourra définir des entêtes et pieds de page complexes et adaptés au contenu pour une navigation optimum.
     (( line ))
-    Comme pour les autres éléments de _PFB_, les entêtes et pieds de page par défaut sont conçus pour être directement "professionnels". C’est-à-dire que la numérotation est intelligente, elle ne numérote pas bêtement toutes les pages de la première à la dernière. Seules sont numérotées les pages qui le sont dans un livre imprimé. Sont soigneusement évitées les pages vides, les pages de titre ou les pages spéciales comme [[-pages_speciales/table_des_matieres]] ou [[-pages_speciales/page_infos]].
+    Comme pour les autres éléments de _PFB_, les entêtes et pieds de page par défaut sont conçus pour être directement "professionnels". C’est-à-dire que la numérotation est intelligente, elle ne numérote pas bêtement toutes les pages de la première à la dernière. Seules sont numérotées les pages qui le sont dans un livre imprimé. Sont soigneusement évitées les pages vides, les pages de titre ou les pages spéciales comme [[-pages_speciales/table_des_matieres]] ou [[-pages_speciales/credits_page]].
     (( line ))
     Les pages suivantes vont définir les différents entête et pieds de page que l’on peut définir, en présentant dans la page le code utilisé et le résultat dans les entêtes et/ou les pieds de page.
 

@@ -19,7 +19,7 @@ class PdfBook
   def page_de_garde?        ;recipe.page_de_garde?       end
   def page_faux_titre?      ;recipe.page_faux_titre?     end
   def page_de_titre?        ;recipe.page_de_titre?       end
-  def page_infos?           ;recipe.page_infos?          end
+  def credits_page?           ;recipe.credits_page?          end
 
   # --- Configuration Pdf Methods ---
 
@@ -50,7 +50,7 @@ class PdfBook
         print_scaling:      nil, # ?
         # Autres options
         default_leading:    recipe.text_leading,
-        infos:              recipe.page_infos,
+        infos:              recipe.credits_page,
         template:           recipe.template,
       }.tap do |h|
         spy "options pour #generate : #{h.pretty_inspect}"

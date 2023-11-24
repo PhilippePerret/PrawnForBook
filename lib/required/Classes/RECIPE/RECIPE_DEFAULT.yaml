@@ -220,7 +220,7 @@ inserted_pages:
   page_de_garde: false
   faux_titre:     false
   page_de_titre:  true
-  page_infos:     false
+  credits_page:     false
 
 #</inserted_pages>
 
@@ -315,13 +315,24 @@ headers_footers:
 #
 # --- La page d'infos ---
 #
-#<page_infos>
-page_infos:
-  paginate: false
+#<credits_page>
+credits_page:
+  disposition: 'distribute' # 'bottom', 'top'
+  libelle:
+    font: "Times-Roman/italic/10/777777"
+  value:
+    font: "Times-Roman//12/000000"
+#</credits_page>
+
+#<book_making>
+book_making:
   conception:
     patro:      null
     mail:       null
-  mise_en_page:
+  writing:
+    patro: null
+    mail: null
+  design: # mise en page
     patro:      null
     mail:       null
   cover: 
@@ -330,20 +341,11 @@ page_infos:
   correction:
     patro:      null
     mail:       null
-  aspect:
-    libelle:
-      font_n_style: *default1_font_n_style
-      size:         10
-      color:        null
-    value:
-      font_n_style: *default1_font_n_style
-      size:         11
-      color:        null
-    disposition:    'distribute' # 'bottom', 'top'
   printing: 
     name:           'à la demande'
     lieu:           null
-#</page_infos>
+#</book_making>
+
 #
 # --- La page d'index ---
 #<page_index>

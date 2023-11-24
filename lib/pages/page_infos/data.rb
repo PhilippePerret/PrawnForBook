@@ -26,7 +26,7 @@ class PageInfos < SpecialPage
   # Table des données recette pour la page
   # telles qu'elles sont définies dans le fichier recipe.yaml
   # 
-  # Mis dans :page_infos dans la recette
+  # Mis dans :credits_page dans la recette
   # 
   PAGE_DATA = {
     conception: {
