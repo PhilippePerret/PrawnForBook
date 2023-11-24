@@ -773,7 +773,7 @@ private
   end
 
   # Cf. la @note [1] ci-dessus
-  REG_GUILS_DROITS = /(?<before>[\( ])" ?(?<content>.*?) ?"(?<after>[\) .…])/.freeze
+  REG_GUILS_DROITS = /(?<before>[\( ])" ?(?<content>.*?) ?"(?<after>[\),; .…])/.freeze
 
   REG_APO = /(qu|d|j|l|n|m|s|t)'/.freeze
 
