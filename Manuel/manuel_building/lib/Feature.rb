@@ -670,7 +670,7 @@ class Feature
   end
 
   def print_subtitle
-    par = PdfBook::NTitre.new(book:book, level:3, titre: anchored(subtitle), pindex:0)  
+    par = PdfBook::NTitre.new(book:book, level:4, titre: anchored(subtitle), pindex:0)  
     par.print(pdf)
   end
 

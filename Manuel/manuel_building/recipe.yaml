@@ -59,6 +59,7 @@ headers_footers:
 table_of_content:
   # title: "Table des matières"
   no_title: true
+  level_max: 3
   lines_top: 4
   lines_bottom:  4
   font: "Helvetica/normal/12/000000"

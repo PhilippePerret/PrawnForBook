@@ -96,13 +96,13 @@
   :paragraph:
   :hybrid: 'p. 61 § '
 :puces_black_bullet:
+  :page: 61
+  :paragraph:
+  :hybrid: 'p. 61 § '
+:puces_finger:
   :page: 62
   :paragraph:
   :hybrid: 'p. 62 § '
-:puces_finger:
-  :page: 63
-  :paragraph:
-  :hybrid: 'p. 63 § '
 :puces_black_finger:
   :page: 63
   :paragraph:
@@ -112,78 +112,78 @@
   :paragraph:
   :hybrid: 'p. 64 § '
 :puces_custom_image:
-  :page: 65
+  :page: 64
   :paragraph:
-  :hybrid: 'p. 65 § '
+  :hybrid: 'p. 64 § '
 :images_inserer:
-  :page: 67
+  :page: 66
   :paragraph:
-  :hybrid: 'p. 67 § '
+  :hybrid: 'p. 66 § '
 :exemple_image_18:
-  :page: 79
+  :page: 78
   :paragraph: 496
-  :hybrid: p. 79 § 496
+  :hybrid: p. 78 § 496
 :exemple_image_19:
-  :page: 80
+  :page: 79
   :paragraph: 497
-  :hybrid: p. 80 § 497
+  :hybrid: p. 79 § 497
 :images_format_legende:
-  :page: 80
+  :page: 79
   :paragraph:
-  :hybrid: 'p. 80 § '
+  :hybrid: 'p. 79 § '
 :references_cross_references:
-  :page: 84
+  :page: 83
   :paragraph:
-  :hybrid: 'p. 84 § '
+  :hybrid: 'p. 83 § '
 :exemple_cible:
-  :page: 85
+  :page: 84
   :paragraph: 546
-  :hybrid: p. 85 § 546
+  :hybrid: p. 84 § 546
 :ex_autre_cible:
-  :page: 86
+  :page: 85
   :paragraph: 548
-  :hybrid: p. 86 § 548
+  :hybrid: p. 85 § 548
 :notes_de_page:
-  :page: 88
+  :page: 87
   :paragraph:
-  :hybrid: 'p. 88 § '
+  :hybrid: 'p. 87 § '
 :notes_de_page_formatage:
-  :page: 88
+  :page: 87
   :paragraph:
-  :hybrid: 'p. 88 § '
+  :hybrid: 'p. 87 § '
 :expert_grand_titre:
-  :page: 91
+  :page: 89
   :paragraph:
-  :hybrid: 'p. 91 § '
+  :hybrid: 'p. 89 § '
 :expert_mode_expert:
-  :page: 94
+  :page: 92
   :paragraph:
-  :hybrid: 'p. 94 § '
+  :hybrid: 'p. 92 § '
 :expert_contexte_erreurs:
-  :page: 94
+  :page: 92
   :paragraph:
-  :hybrid: 'p. 94 § '
+  :hybrid: 'p. 92 § '
 :expert_injection_code:
+  :page: 92
+  :paragraph:
+  :hybrid: 'p. 92 § '
+:annexe_grand_titre:
   :page: 94
   :paragraph:
   :hybrid: 'p. 94 § '
-:annexe_grand_titre:
-  :page: 96
-  :paragraph:
-  :hybrid: 'p. 96 § '
 :annexe_format_yaml:
-  :page: 100
+  :page: 98
   :paragraph:
-  :hybrid: 'p. 100 § '
+  :hybrid: 'p. 98 § '
 :annexe_font_string:
+  :page: 98
+  :paragraph:
+  :hybrid: 'p. 98 § '
+:annexe_definition_couleur:
+  :page: 99
+  :paragraph:
+  :hybrid: 'p. 99 § '
+:images_rogner_svg:
   :page: 100
   :paragraph:
   :hybrid: 'p. 100 § '
-:annexe_definition_couleur:
-  :page: 101
-  :paragraph:
-  :hybrid: 'p. 101 § '
-:images_rogner_svg:
-  :page: 102
-  :paragraph:
-  :hybrid: 'p. 102 § '
