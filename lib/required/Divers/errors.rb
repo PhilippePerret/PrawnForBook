@@ -102,13 +102,16 @@ class PFBFatalError < StandardError
       2     => Prawn4book::ERRORS[:errors][:bad_custom_errid],
       # -- Book --
       10    => Prawn4book::ERRORS[:book][:not_in_collection],
+
       # -- Fichier texte --
       50    => Prawn4book::ERRORS[:textfile][:unfound_text_file],
       # -- Paragraphes --
       100   => Prawn4book::ERRORS[:paragraph][:print][:unknown_error],
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
-      200   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      # -- Pages --
+      200   => Prawn4book::ERRORS[:pages][:unfound],
       # -- Images --
       250   => Prawn4book::ERRORS[:images][:unfound],
       # -- Commandes (divers) --
@@ -140,6 +143,8 @@ class PFBFatalError < StandardError
       # -- Table des matières --
       850   => Prawn4book::ERRORS[:toc][:problem_with_title],
       851   => Prawn4book::ERRORS[:toc][:cannotfit_error],
+      852   => Prawn4book::ERRORS[:toc][:write_on_non_empty_page],
+      853   => Prawn4book::ERRORS[:toc][:must_add_even_pages_count],
       # -- Modules ---
       1000  => Prawn4book::ERRORS[:parsing][:class_tag_formate_method_required],
       1001  => Prawn4book::ERRORS[:unknown_pfbcode],

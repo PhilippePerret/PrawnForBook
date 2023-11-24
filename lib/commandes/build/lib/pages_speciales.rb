@@ -68,15 +68,13 @@ class PrawnView
   # Préparation de la page où sera écrite la table des matières
   # 
   def init_table_of_contents
-    # 
-    # Toujours la mettre sur une nouvelle page, comme c'est l'usage
-    # 
-    start_new_page
-    # 
+
     # Recette pour la table des matières
-    # 
     tdata = book.recipe.table_of_content
-    # 
+
+    # On passe toujours sur la page suivante
+    start_new_page
+
     # Instancier un titre pour la table des matières
     # 
     unless tdata[:no_title] || tdata[:title].nil? || tdata[:title] == '---'
@@ -85,10 +83,32 @@ class PrawnView
       book.pages[page_number].add_content_length(tdata[:title].length + 3)
     end
 
+    # Il faut toujours se placer sur une page paire (gauche) sauf si
+    # :not_on_even est true
+    if page_number.odd? && not(tdata[:not_on_even])
+      start_new_page
+    end
+
+    # On mémorise le numéro de première page de cette table des
+    # matières
+    first_toc_page_number = page_number.freeze
+
+    # Le nombre de pages à ajouter est défini par :pages_count qui
+    # doit impérativement être un nombre pair.
+    added = tdata[:pages_count] || 2
+    if added.odd? || added == 0
+      add_erreur(PFBError[853] % {num: added})
+      added += 1
+    end
+
+    # On ajoute autant de pages que voulu (une page a déjà été
+    # ajoutée plus haut)
+    (added - 1).times do start_new_page end
+
     # On mémorise le numéro de page de cette table des matières
     # (il peut y en avoir plusieurs)
     # 
-    tdm.add_page_number(page_number)
+    tdm.add_page_number(first_toc_page_number)
   end
 
 end #/PrawnView

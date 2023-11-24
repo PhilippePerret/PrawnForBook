@@ -212,6 +212,12 @@ class PdfBook
     @pages ||= PdfBook::PageManager.new(self, pdf)
   end
 
+  # @return la page de numéro +number+
+  # 
+  def page(number)
+    return pages.page(number)
+  end
+
   ##
   # Instance pour gérer les références (internes et croisées) 
   # du livre courant.

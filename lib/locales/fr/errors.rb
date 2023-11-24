@@ -167,6 +167,18 @@ ERRORS = {
     unknown_assistant: 'Impossible de trouver un assistant ou une aide pour %s…',
   },
 
+  # --- Pages ---
+
+  pages: {
+
+    unfound: <<~ERR,
+      Le numéro de page %{num} est introuvable.
+      Je rectifie le numéro en fonction du nombre de pages (%{nb}), mais 
+      il faudra corriger le problème car les effets indésirables sont 
+      imprévisibles.
+      ERR
+  },
+
   # --- Texte du livre ---
 
   paragraph: {
@@ -381,6 +393,25 @@ ERRORS = {
       Pour le corriger, essayer de modifier la fonte du numéro de page pour
       qu’elle soit égale ou inférieure à la taille des titres de niveau
       correspondant.
+      ERR
+    write_on_non_empty_page: <<~ERR,
+      On se retrouve à écrire la table des matières sur une page qui n’est
+      pas vide (la page %{num}). Il faut ajouter des pages dédiées à la 
+      table des matières soit manuellement (expliciement dans le livre avec
+      des « (( new_page )) ») soit dans la recette en réglant la valeur de
+      « table_of_content: pages_count: » (en donnant à :pages_count une
+      valeur paire pour ne pas décaler tout le livre).
+      ERR
+
+    must_add_even_pages_count: <<~ERR,
+      Le nombre de pages dédiées à la table des matières (ici %{num} défini
+      par la valeur « table_of_content: pages_count: » de la recette) doit
+      être supérieure à zéro ou paire pour ne pas bousculer toute la mise en
+      page (c’est-à-dire pour conserver les belles-pages à leur place et les
+      fausses-pages).
+
+      J’ajoute 1 pour obtenir un nombre paire mais il serait bon de modifier
+      cette valeur pour éviter ce message.
       ERR
   },
 

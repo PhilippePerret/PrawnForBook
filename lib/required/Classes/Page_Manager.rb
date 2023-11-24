@@ -58,14 +58,12 @@ class PageManager
       #   =>     31           - 30      - 1
       #   => 0
       # 
-      add_erreur <<~ERR
-        Le numéro de page #{number.inspect} est introuvable.
-        Je rectifie le numéro en fonction du nombre de pages (#{@pages.count}), mais il faudra corriger le problème car les effets indésirables sont imprévisibles.
-        ERR
+      add_erreur(PFBError[200] % {num: number.inspect, nb: count}) 
       correct_num = number - @pages.count
       @pages[correct_num]
     end
-  end
+  end #/[]
+  alias :page :[] # pour faire book.pages.page(x)
 
 end #/class PageManager
 
@@ -119,6 +117,18 @@ class Page
   # une page vide
   def printable?
     not(not_printable?)
+  end
+
+  # @return true si la page ne contient rien, ni titre ni aucun
+  # texte.
+  def empty?
+    no_content? && no_title?
+  end
+
+  # @return true si la page n’est pas vierge, c’est-à-dire si elle 
+  # contient au moins un titre et un court texte
+  def not_empty?
+    not(empty?)
   end
 
   # @return True si c’est une page vierge, une page ne contenant 

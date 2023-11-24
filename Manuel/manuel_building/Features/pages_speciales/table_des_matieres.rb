@@ -8,6 +8,8 @@ Prawn4book::Manual::Feature.new do
     ou :
     **`\(( toc \))`** pour "T"able "Of" "C"ontent, la table des matières en anglais.
 
+    Noter que la table des matières, sauf indication contraire, se placera toujours sur une page paire, c’est-à-dire sur une fausse-page (page gauche). Cela part du principe qu’une table des matières fait en général en moins deux pages et qu’il est préférable de l’avoir sur une double page.
+    On peut cependant empêcher ce comportement en mettant la propriété `not_on_even` ("pas sur la paire" en anglais) à true dans la recette.
     ##### Table des matières en début d’ouvrage
 
     Si on inscrit la table des matières en début d’ouvrage, il faut calculer le nombre de pages qu’elle va occuper.
@@ -21,6 +23,7 @@ Prawn4book::Manual::Feature.new do
 
     Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/grand_titre]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
     On trouve ces propriétés :
+    * **`pages_count`** | Définit le nombre de pages réservées par la table des matières. Ce nombre doit impérativement être pair pour conserver l’agencement des *belles pages* (pages impaires) et des *fausses pages* (pages paires) dans le livre. Par défaut, on compte 2 pages pour la table des matières. Cette valeur vaut 2 par défaut. Noter que les pages supplémentaires (il y en aura toujours deux) peuvent aussi être ajoutées explicitement dans le livre par des `\\(( new_page ))`.
     * **`level_max`** | Niveau maximum. Le niveau de titre qui sera affiché dans la table des matières. Par défaut, il est à 3, ce qui signifie que les titres jusqu’à 3 dièses seront affichés dans la table des matières (sauf exclusion).
     * **`title`** | Le grand titre à utiliser pour la table des matières. Par défaut, en français, c’est "Table des matières".
     * **`title_level`**. Le niveau de titre pour ce grand titre. Par défaut, c’est 1.
@@ -29,9 +32,10 @@ Prawn4book::Manual::Feature.new do
     * **`number_font`**. Fonte à utiliser pour les numéros de page ([[*fonte string*|annexe/font_string]]).
     * **`number_size`**. Si on ne veut changer que la taille du numéro (pas toute la fonte), on peut utiliser cette propriété.
     * **`numeroter`**. Si false (faux), on ne numérote pas la table des matières (éviter).
-    * **`lines_top`**. Définit le nombre de lignes au-dessus du premier titre de chaque page de table des matières.
+    * **`lines_top`** | Définit le nombre de lignes au-dessus du premier titre de chaque page de table des matières.
     * **`lines_bottom`**. Nombre de lignes au-dessous du dernier titre de chaque page de table des matières.
     * **`line_height`**. Hauteur de la ligne (entre chaque titre). Attention de ne pas donner une valeur plus petite que la taille des titres, sinon ils n’apparaitront pas.
+    * **`not_on_even`** | Si true (vrai), on n’impose pas de commencer la table des matières sur une *fausse page* (à gauche). `false` par défaut.
     * **`vadjust_number`**. Nombre de points-post-scripts pour ajuster verticalement le numéro de la page en face du titre (un nombre positif fait descendre le numéro, un nombre négatif le fait monter),
     * **`vadjust_line`**. Nombre de points-ps pour ajuster verticalement la ligne pointillée d’alignement entre le titre et le numéro de page,
     * **`dash_line`**. Les *experts* peuvent modifier la ligne pointillée en jouant sur cette propriété. Cf. plus bas, à propos de la ligne d’alignement.
@@ -49,9 +53,9 @@ Prawn4book::Manual::Feature.new do
     ##### Exclusion de titres
 
     On peut exclure de la table des matières des titres du niveau voulu (`level_max`) en ajoutant `{no_toc}` à leur titre, soit à la fin soit après les dièses. Par exemple :
-    `\\### {no_toc} Titre hors TdM`
+     `\\### {no_toc} Titre hors TdM`
     ou :
-    `\\## Titre hors TdM {no_toc}`
+     `\\## Titre hors TdM {no_toc}`
     Vous pouvez vérifier que le titre dans le texte en exemple ci-dessous ne sera pas imprimé dans la table des matières.
     *(rappel : "toc" signifie "table of content", c’est-à-dire "table des matières" en anglais — on peut aussi utiliser `{no_tdm}`)*
 
@@ -69,6 +73,7 @@ Prawn4book::Manual::Feature.new do
 
   sample_texte <<~EOT
     \\### {no_toc} TITRE HORS TDM
+    Vous pouvez vérifier que ce titre ne sera placé ni dans la table des matières de début de livre ni dans celle de fin de livre.
     EOT
 
   texte(:as_sample)

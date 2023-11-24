@@ -263,6 +263,8 @@ page_de_titre:
 #
 #<table_of_content>
 table_of_content:
+  not_on_even:          false
+  pages_count:          2
   title:                "Table des matières"
   no_title:             false
   title_level:          1

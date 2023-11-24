@@ -57,6 +57,7 @@ headers_footers:
 
 #<table_of_content>
 table_of_content:
+  # title: "Table des matières"
   no_title: true
   lines_top: 4
   lines_bottom:  4
