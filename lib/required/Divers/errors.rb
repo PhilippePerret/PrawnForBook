@@ -112,6 +112,9 @@ class PFBFatalError < StandardError
       103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       # -- Pages --
       200   => Prawn4book::ERRORS[:pages][:unfound],
+      201   => Prawn4book::ERRORS[:pages][:credits][:notfit],
+      202   => Prawn4book::ERRORS[:pages][:credits][:unable_to_reduce],
+      203   => Prawn4book::ERRORS[:pages][:credits][:disposition_unknown],
       # -- Images --
       250   => Prawn4book::ERRORS[:images][:unfound],
       # -- Commandes (divers) --

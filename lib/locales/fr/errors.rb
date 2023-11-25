@@ -177,7 +177,30 @@ ERRORS = {
       il faudra corriger le problème car les effets indésirables sont 
       imprévisibles.
       ERR
-  },
+
+    # -- Page des crédits (Colophon) --
+    credits: {
+      notfit: <<~ERR,
+        Les crédits dépassent la page d’impression. Je réduis la taille
+        des polices pour obtenir un résultat satisfaisant.
+        ERR
+
+      unable_to_reduce: <<~ERR,
+        Je ne parviens pas à réduire la taille de la page des crédits, même
+        en réduisant la fonte (elle passe en dessous des 5, ce qui la rend 
+        invisible).
+        Solution : il faut réduire le nombre d’informations, et particuliè-
+        rement les informations sur plusieurs lignes (comme les adresses).
+        ERR
+      disposition_unknown: <<~ERR,
+        La disposition '%{dispo}' pour le colophon (page des crédits)
+        est inconnue. 
+        Elle doit valoir 'distribute' (centré verticalement), 'top' (aligné
+        en haut) ou 'bottom' (aligné en bas).
+        ERR
+    },
+  
+  }, #/ pages:
 
   # --- Texte du livre ---
 

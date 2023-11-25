@@ -16,12 +16,17 @@ Prawn4book::Manual::Feature.new do
 
     Toutes les informations requises pour la page des informations se trouvent dans les données `book_making` ("fabrication du livre" en anglais) et `credits_page` de la recette du livre et/ou de la collection.
     Toutes les données de `book_making` — le ou les concepteurs du livre, le ou les rédacteurs, le ou les metteurs en page, graphiste, concepteurs de la couverture ou correcteurs — comprennent deux informations :
-    * **`patro`** | Pour le patronyme, seul ou une liste. Le patronyme s’écrit toujours avec la même convention : le prénom en minuscule avec capitale au début, le nom tout en capitales. S’il y en a plusieurs, on les met entre crochets (cf. l’exemple ci-dessous).
+    * **`patro`** | Pour le patronyme, seul ou une liste. Le patronyme s’écrit toujours avec la même convention : le prénom en minuscule avec capitale au début, le nom tout en capitales. S’il y en a plusieurs, on les met entre crochets (cf. l’exemple ci-dessous). Par défaut, les noms seront corrigés pour être corrects au niveau de la typographie ("Philippe PERRET" dans la donnée recette s’affichera "Philippe Perret"). Pour que le nom reste identique, il suffit de le faire précéder d’un signe égal).
     * **`mail`** | Le mail du *patro* ci-dessus. S’il y a plusieurs personnes, on indique les mails dans le même ordre, entre crochets (comme ci-dessous).
     (( line ))
     La page des crédits contient aussi les informations sur l’éditeur ou la maison d’édition, qui doivent se trouver dans la section `publisher` de la recette. La seule information requise est le nom de l’éditeur (`publisher: name:`).
     (( line ))
     Vous trouverez ci-dessous, dans l’exemple de recette, toutes les informations utilisables dans la page de crédits.
+
+    ##### Disposition
+
+    Les crédits du colophon peuvent se placer en haut, en bas ou au milieu de la page. On définit cette position grâce à la propriété `credits_page: disposition:` qui peut prendre les valeurs `\\"distribute\\"` (ou `\\"middle\\"`, milieu), `\\"top\\"` (haut de page) ou `\\"bottom\\"` (bas de page).
+    La valeur par défaut des `\\"distribute\\"`.
 
     EOT
 
@@ -45,7 +50,7 @@ Prawn4book::Manual::Feature.new do
         patro: ["Prénom NOM", "Prénom NOM"]
         mail:  ["premier@chez.lui", "deuxieme@chez.lui"]
       cover:  #  Couverture
-        patro: .\\..
+        patro: "=MM & PP" # '=' => non transformé
         mail: null
       correction:
         patro: .\\..

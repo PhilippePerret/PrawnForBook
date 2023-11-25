@@ -3,7 +3,7 @@
 book_data:
   title: "Manuel de Prawn-for-book"
   author: "Philippe PERRET"
-  isbn: "---"
+  isbn: null
   url:  null
 #</book_data>
 
@@ -109,7 +109,7 @@ book_making:
   page_design:
     patro: "Prawn-For-Book"
   cover:
-    patro: "MM & PP"
+    patro: "=MM & PP"
   correction:
     patro: "Marion MICHEL"
   printing:

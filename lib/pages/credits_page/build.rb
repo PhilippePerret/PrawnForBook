@@ -6,11 +6,11 @@ class PageInfos
   #
   # Méthode principale construisant la page
   # 
-  def build(pdf)
+  def build( pdf )
     spy "-> Construction de la page d'informations".bleu
 
-    # pour exposer à pdf
-    my = me = self
+    # Exposer pdf
+    @pdf = pdf
 
     # On définit le delimiteur linéaire en fonction de la disposition
     # des informations (un retour chariot en mode distribué, une 
@@ -23,24 +23,17 @@ class PageInfos
     # 
     infos_valides_or_raises
 
-    # Liste des informations à imprimer
+    # Définition de la hauteur des éléments (libellé et valeur)
+    # 
+    define_heights
+
+    # Liste des crédits à imprimer
     # 
     # C’est une liste qui contient le nom d’éléments à imprimer, en
     # sachant que certains tiennent sur plusieurs lignes et d’autres
     # sur une seule.
-    @infos_to_print = get_infos_to_print
+    @credits = get_infos_to_print
 
-
-    # On compte le nombre de lignes pour savoir la taille qu’on va
-    # devoir donner aux informations
-    @nombre_lignes = 0
-    @infos_to_print.each do |dline|
-      @nombre_lignes += 1
-      next if dline == :delimitor
-      @nombre_lignes += dline[:value].count("\n") + 1 if dline.key?(:label)
-    end
-
-    # 
     # On commence par se placer sur la bonne page
     # (une belle page seule)
     # 
@@ -54,149 +47,82 @@ class PageInfos
 
     # == Construction en fonction de la disposition ==
     # 
-    case disposition
-    when "distribute"   then print_distributed(pdf)
-    when "botttom"      then print_at_the_bottom(pdf)
-    when "top"          then print_at_the_top(pdf)
-    else raise "Credits page, disposition #{disposition.inspect} unknown"
-    end
+    print_per_disposition
 
-    spy "<- /Construction de la page d'informations".bleu
   end
 
-  def print_distributed(pdf)
-
-    # Pour s’exposer à pdf
-    my = self
-
-    dispose_element_on_surface(pdf)
-
-    # Boucle sur toutes les informations à imprimer
-    @infos_to_print.each do |dinfo|
-
-      pdf.update do 
-        case dinfo
-        when :delimitor
-          move_down(my.interstice_height)
-        else
-          if dinfo[:label]
-            # - Le label -
-            font(my.label_fonte)
-            fill_color(my.label_color)
-            text(dinfo[:label], **{align: :center, leading: 2})
-          end
-          # - La valeur -
-          font(my.value_fonte)
-          fill_color(my.value_color)
-          text(dinfo[:value], **{align: :center, inline_format: true})
-          # - Descendre encore -
-          pdf.move_down(my.interstice_height)
-        end
+  # Impression de la page des crédits en fonction de la disposition
+  # voulue
+  def print_per_disposition
+    # Calcul de la hauteur du bloc des crédits
+    calc_block_credits_height
+    # = Calcul du top =
+    top =
+      case disposition
+      when 'distribute', 'distributed', 'middle'
+        pdf.bounds.height - (pdf.bounds.height - credits_height) / 2
+      when 'bottom'
+        credits_height + 40
+      when 'top'
+        pdf.bounds.height
+      else 
+        raise PFBFatalError.new(203, {dispo: disposition})
       end
-    end    
+    # Impression des crédits
+    print_credits_at(pdf, top)  
   end
 
-  def print_at_the_bottom(pdf)
 
-    pdf.font(value_fonte)
-
-    # On doit se placer assez haut pour tout écrire
-    # 
-    hauteur_ligne = pdf.height_of(@infos_to_print.first[:value])
-    top_cursor    = @nombre_lignes * hauteur_ligne
-    pdf.move_cursor_to(top_cursor)
-
-    # = Imprimer toutes les infos =
-    @infos_to_print.each do |dinfo|
-      case dinfo
-      when :delimitor then next
-      else print_line(pdf, dinfo)
-      end
-    end
-  end
-
-  def print_at_the_top(pdf)
-
-    pdf.font(value_fonte)
-
-    # = Imprimer toutes les infos =
-    @infos_to_print.each do |dinfo|
-      case dinfo
-      when :delimitor then next
-      else print_line(pdf, dinfo)
-      end
-    end
-  end
-
-  def print_line(pdf, dinfo)
-    line = dinfo[:value]
-    line = "#{dinfo[:label]} : #{line}" if dinfo[:label]
-    pdf.text(line, **{align: :left, leading:0})
-  end
-
-  def interstice_height
-    @interstice_height
-  end
-
-  # Méthode qui réparti les informations de la page sur la page en
-  # mode "distribué"
+  # = IMPRESSION DES CRÉDITS =
   # 
-  def dispose_element_on_surface(pdf)
-
-    # = Surface sur laquelle pourront se mettre les informations si
-    #   on doit les répartir. =
-    surface_height = pdf.bounds.height
-
-    # = Hauteur prise par un label =
-    height_for_label = get_label_height(pdf)
-    height_for_label.is_a?(Float) || raise(PFBFatalError.new(610))
-
-    # = Hauteur prise par une valeur =
-    height_for_value = get_value_height(pdf)
-    height_for_value.is_a?(Float) || raise(PFBFatalError.new(610))
-
-    # On passe en revue toutes les infos pour voir l'espace total
-    # qui restera et le répartir dans les interstices
-    texte_height = 0
-    nombre_interstices = 0
-    @infos_to_print.each do |dinfo|
-      if dinfo == :delimitor
-        nombre_interstices += 1
+  # Block qui écrit vraiment les crédits, à partir du +top+ fourni
+  # 
+  def print_credits_at(pdf, top)
+    # pdf.move_cursor_to(top)
+    puts "\n"
+    mycursor = top
+    credits.each_with_index do |dcredit, idx|
+      if dcredit == :delimitor
+        mycursor -= value_height
       else
-        texte_height += height_for_label unless dinfo[:label].nil?
-        nombre_lignes = dinfo[:value].count("\n") + 1
-        texte_height += height_for_value * nombre_lignes
+        if dcredit[:label]
+          pdf.fill_color(label_color) if label_color
+          pdf.font(label_fonte)
+          pdf.text_box(dcredit[:label], **label_options.merge(at:[0, mycursor]))
+          mycursor -= label_height
+        end
+        if dcredit[:value]
+          pdf.fill_color(value_color) if value_color
+          pdf.font(value_fonte)
+          pdf.text_box(dcredit[:value], **value_options.merge(at:[0, mycursor]))
+          mycursor -= (dcredit[:lines] + 1) * value_height
+        end
+        # break if idx == 4
       end
     end
-
-    # = Hauteur des interstices
-    @interstice_height = ((surface_height - texte_height) / nombre_interstices).round(3)
-    # - Jamais plus que la hauteur de ligne
-    @interstice_height = pdf.line_height * 2 if @interstice_height > pdf.line_height * 2
-
-    spy "Calcul des hauteurs".jaune
-    spy "Surface utilisable         : #{surface_height}".bleu
-    spy "Hauteur d'un label         : #{height_for_label}".bleu
-    spy "Hauteur d'une valeur       : #{height_for_value}".bleu
-    spy "Hauteur prise par le texte : #{texte_height}".bleu
-    spy "Nombre d'interstices       : #{nombre_interstices}".bleu
-    spy "=> Hauteur interstices     : #{@interstice_height}".bleu
-
   end
 
-  ##
-  # Pour calculer les hauteurs des labels et des valeurs
-  # 
-  def get_label_height(pdf)
-    pdf.font(label_fonte) do
-      return pdf.height_of("Label")
-    end
+  def label_options
+    @label_options ||= {
+      align:    :center, 
+      width:    pdf.bounds.width,
+      leading:  4
+    }.freeze
   end
-  def get_value_height(pdf)
-    pdf.font(value_fonte) do
-      return pdf.height_of("Une valeur")
-    end
+
+  def value_options
+    @value_options ||= {
+      size: value_fonte.size,
+      color: value_fonte.color,
+      align: :center,
+      width: pdf.bounds.width,
+      leading: 0
+    }.freeze
   end
+
+  def pdf; @pdf end
+  def credits; @credits end
+
 
   # @return [Array] La liste des informations à afficher
   def get_infos_to_print
@@ -250,34 +176,7 @@ class PageInfos
     @depot_legal ||= credits_page[:depot_legal]||credits_page[:legal_deposit]
   end
 
-  # --- Helpers --- #
-
-  def render_as_label(pdf, label)
-    # Pour exposer
-    my = self
-
-    if label_color
-      original_color = pdf.fill_color
-      pdf.fill_color(label_color)
-    end
-    # 
-    # Écriture du label
-    # 
-    pdf.font(label_fonte)
-    pdf.text(label, **{align: :center, leading: 2})
-    # 
-    # Remettre la couleur originale
-    # 
-    pdf.fill_color(original_color) if label_color
-  end
-
-  def render_as_value(pdf, info)
-    pdf.font(value_fonte) do
-      pdf.text(info, **{align: :center, leading: 0})
-    end
-  end
-
-  # --- Données mises en forme --- #
+  # --- Données crédits --- #
 
   def conception
     @conception ||= begin
@@ -335,7 +234,12 @@ class PageInfos
     @isbn ||= book_data[:isbn]
   end
 
-  # -- Fonts Volatile Infos --
+  def credits_height; @credits_height end 
+  
+  # # -- Fonts Volatile Infos --
+
+  def label_height; @label_height end
+  def value_height; @value_height end
 
   # Fontes pour le libellé et la valeur
   def label_fonte
@@ -382,12 +286,80 @@ class PageInfos
     # la même ligne. C'est la constante LINEAR_DELIMITOR, définie ici,
     # qui détermine ce comportement
     # 
+    # OBSOLÈTE : maintenant, on met toujours un retour chariot, mais
+    # je laisse comme ça, pour avoir peut-être la possibilité de le 
+    # changer en cas de problème de "fit" dans la page
     def define_linear_delimitor
       unless defined?(LINEAR_DELIMITOR)
-        Object.const_set('LINEAR_DELIMITOR', distributed? ? "\n" : " ")
+        # Object.const_set('LINEAR_DELIMITOR', distributed? ? "\n" : " ")
+        Object.const_set('LINEAR_DELIMITOR', "\n")
       end
     end
 
+    # Définir les hauteurs des éléments de base (fontes, line)
+    def define_heights
+      define_value_height
+      define_label_height
+      define_line_height
+    end
+
+    # Calcul des hauteurs des labels et des valeurs en fonction de
+    # la fonte utilisée
+    # 
+    def define_label_height
+      pdf.font(label_fonte) do
+        @label_height = pdf.height_of("Label", **label_options) - 4
+      end
+      @label_height.is_a?(Float) || raise(PFBFatalError.new(610))
+    end
+    def define_value_height
+      pdf.font(value_fonte) do
+        @value_height = pdf.height_of("Une valeur", **value_options) + 2
+      end
+      @value_height.is_a?(Float) || raise(PFBFatalError.new(610))
+    end
+
+    # On définit la hauteur de ligne
+    # (ne sert plus vraiment, à part pour les valeurs sur plusieurs
+    #  lignes comme les adresses physiques)
+    def define_line_height
+      pdf.line_height = value_fonte.size + 2      
+    end
+
+    # Calcul de la hauteur du bloc de crédits
+    # 
+    def calc_block_credits_height
+      h = 0
+      @credits.each do |dcredit|
+        if dcredit == :delimitor
+          h += value_height
+        else
+          h += label_height if dcredit[:label]
+          # On ajoute le nombre de lignes
+          dcredit.merge!(lines: dcredit[:value].count("\n") + 1)
+          h += value_height * (dcredit[:lines] + 1)
+        end
+      end
+
+      # Si la hauteur est trop importante, on réduit la taille des
+      # police pour arriver à une taille acceptable
+      if h > pdf.bounds.height - 40
+        if label_fonte.size < 5
+          raise PFBFatalError.new(202)
+        end
+        if not(@error_dont_fit_already_done)
+          add_erreur(PFBError[201])
+          @error_dont_fit_already_done = true
+        end
+        label_fonte.size = 10
+        value_fonte.size = value_fonte.size - 2
+        define_heights
+        calc_block_credits_height
+        return
+      end
+
+      @credits_height = h
+    end
 
   # Reçoit une donnée "people", avec un ou des patronymes (:patro) et
   # un ou des mails et compose la donnée en ajoutant les mails aux
@@ -410,9 +382,14 @@ class PageInfos
   end
 
   # Méthode qui transforme "Philippe PERRET" en "Philippe Perret"
-  #
+  # (sauf si +patro+ commence par un signe égal, ce qui signifie 
+  #  qu’il faut le garder tel quel)
   def human_for_patro(patro)
-    patro.titleize
+    if patro.start_with?('=')
+      patro[1..-1]
+    else
+      patro.titleize
+    end
   end
 
   ##
@@ -493,7 +470,7 @@ class PageInfos
   # -- Predicate Methods --
 
   def distributed?
-    disposition == 'distribute'
+    disposition == 'distribute' || disposition == 'distributed' || disposition == 'middle'
   end
 
   # -- Données pour l’aspect de la page de crédits --
