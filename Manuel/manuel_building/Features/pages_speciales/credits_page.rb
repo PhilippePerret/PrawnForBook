@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Page des crédits (Colophon)"
+  titre " Page des crédits (Colophon)"
 
   description <<~EOT
     On appelle *page des crédits*  ou *colophon* la page placée à la fin du livre qui donne toutes les informations sur le livre, aussi bien au niveau de l’éditeur ou la maison d’éditions (son nom, son adresse, son email) qu’au niveau de toutes les personnes qui ont contribué à conception du livre, rédacteur ou rédactrice, metteur ou metteuse en page, graphiste, concepteur, directeur ou directrice de collection, en passant par d’autres informations comme le numéro ISBN du livre et sa date de parution ou les remerciements.
@@ -77,19 +77,6 @@ Prawn4book::Manual::Feature.new do
         lieu: null
     YAML
 
-  # sample_texte <<~EOT #, "Autre entête"
-  #   Le texte en exemple. Si 'texte' n'est pas défini, sera interprété aussi. Sinon sera mis en illustration et c'est 'texte' qui sera interprété comme texte du livre.    
-  #   EOT
-
-  # texte <<~EOT
-  #   Texte à interpréter, si 'sample_texte' ne peut pas l'être.
-  #   EOT
-
-  # recipe <<~EOT #, "Autre entête"
-  #   ---
-  #     # ...
-  #   EOT
-
-  # # init_recipe([:custom_cached_var_key])
+  sample_real_recipe([:book_making, :credits_page, :inserted_pages])
 
 end

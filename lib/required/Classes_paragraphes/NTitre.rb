@@ -48,7 +48,6 @@ class NTitre < AnyParagraph
 
     spy "Traitement du titre #{self.inspect}…".bleu
 
-
     # - Corrections du texte -
     super
 
@@ -200,7 +199,7 @@ class NTitre < AnyParagraph
   end
   # /print
 
-  # Ajout du titre à la table des matières et à la page d’indexe
+  # Ajout du titre à la table des matières et à la page d’index
   # +page_number+
   # 
   # 

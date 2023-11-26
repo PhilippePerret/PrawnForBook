@@ -122,7 +122,7 @@ class SpecialPage
   # En fin de définition, on peut sauver la recette
   def save_recipe_data
     set_data_in_recipe(recipe_data)
-    puts "Données recette pour #{page_name.downcase} enregistrées avec succès.".vert
+    # puts "Données recette pour #{page_name.downcase} enregistrées avec succès.".vert
   end
 
   # @return [String] The tag name for comments in the recipe

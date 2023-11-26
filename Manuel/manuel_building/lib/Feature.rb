@@ -39,7 +39,7 @@ class Feature
   # sachant que c’est moins bon, puisqu’on n’est pas sûr que ce soit
   # exactement le code donné en exemple)
   # 
-  # Description de la fonctionnalité
+  # DESCRIPTION de la fonctionnalité
   # --------------------------------
   # Elle se définit par :
   # 
@@ -52,7 +52,7 @@ class Feature
   # 
   #     description(File.read(__dir__+'<nom_fichier>.md'))
   # 
-  # Texte et texte exemple
+  # TEXTE et TEXTE EXEMPLE
   # -----------------------
   # 
   # Si on définit :
@@ -78,8 +78,32 @@ class Feature
   # 
   #     texte(:none)
   # 
+  # Exemple de RECETTE
+  # ------------------
   # 
-  # Modification de la recette
+  # Pour donner un exemple de recette on utilise la méthode :
+  # 
+  #   sample_recipe("<yaml string>"[, "<entête personnalisé>"])
+  # 
+  # où "<yaml string>" sera un extrait YAML du code de la recette.
+  # 
+  # 
+  # Exemple de la VRAIE RECETTE actuelle
+  # ------------------------------------
+  # 
+  # On peut aussi extraire le code de la recette courante elle-même
+  # avec :
+  # 
+  #     sample_real_recipe([Symbol|Array<Symbol>], "<custom header>")
+  # 
+  # où :
+  #   [Symbol] correspnd à la section de recette à afficher (par 
+  #   exemple «:book_data»)
+  #   Array<Symbol>] est une liste de symboles lorsque plusieurs
+  #   section sont à afficher.
+  # 
+  # 
+  # Modification de la RECETTE
   # ---------------------------
   # 
   # On modifie ponctuellement (*) la recette avec la méthode #recipe.
@@ -111,9 +135,11 @@ class Feature
   # l’inscription de la recette.
   # 
   # Si c’est juste un exemple de recette, qui ne doit pas être
-  # "interprété", on utilise la méthode #sample_recipe
+  # "interprété", comme nous l’avons vu, on utilise la méthode 
+  # #sample_recipe
   # 
   #   sample_recipe <<~EOT[, "<entete>"]
+  #     ---
   #     ...
   #     EOT
   # 
@@ -130,6 +156,8 @@ class Feature
   #   :feature      Avant toute la fonctionnalité
   #   :texte        Avant le texte (évalué)
   #   :description  Avant la description
+  #   :recipe       Avant la recette
+  #   :real_recipe  Avant la vraie recette (extrait)
   # 
   # 
   # Faire référence à une autre fonctionnalités
@@ -253,6 +281,10 @@ class Feature
     if recipe || sample_recipe
       saut_page if new_page_before[:recipe]
       print_sample_recipe
+    end
+    if sample_real_recipe
+      saut_page if new_page_before[:real_recipe]
+      print_sample_real_recipe
     end
 
     # = CODE EXEMPLE =
@@ -431,7 +463,13 @@ class Feature
     set_or_get(:recipe, value, entete)
   end
 
+  def sample_real_recipe(value = nil, entete = "Extrait de la recette actuelle")
+    value = extract_from_recipe(value) unless value.nil?
+    set_or_get(:sample_real_recipe, value, entete)
+  end
+
   def sample_recipe(value = nil, entete = nil)
+    return sample_real_recipe(value, entete) if value.is_a?(Symbol) || value.is_a?(Array)
     set_or_get(:sample_recipe, value, entete)
   end
 
@@ -510,6 +548,7 @@ class Feature
   #   :description    Avant la description
   #   :texte          Avant le texte (interprété)
   #   :recipe         Avant l'exemple de recette
+  #   :real_recipe    Avant l’exemple de la vrai recette
   #   :sample_texte   Avant le code du texte
   #   :code     Avant de jouer le code
   def new_page_before(what = nil)
@@ -695,6 +734,12 @@ class Feature
     end
   end
 
+  # Pour afficher l’exemple de la vraie recette
+  # 
+  def print_sample_real_recipe
+    print_as_code(sample_real_recipe.dup, @sample_real_recipe_entete)
+  end
+
   # Pour afficher l’exemple de code
   # 
   def print_sample_code
@@ -857,14 +902,13 @@ private
           tit = $~['titre'].freeze # nil souvent
           if tirets
             if tit = Prawn4book::FEATURES_TO_PAGE[path]
-              tit = tit[:title]
+              tit = tit[:title].dup
             else
               tit = "Unknown Title"
             end
-            if tirets.length == 2
-              tit = tit.downcase
-            else
-              tit[0] = tit[0].downcase
+            case tirets.length
+            when 2 then tit = tit.downcase
+            when 1 then tit[0] = tit[0].downcase
             end
             tit = "|#{tit}"
           end
@@ -883,6 +927,21 @@ private
       end
     end
 
+
+    # On extrait un bout de la recette courante et on la renvoie en
+    # String, pour exemple.
+    # 
+    def extract_from_recipe(value)
+      value = [value] if value.is_a?(Symbol)
+      tbl = {}
+      value.each do |section|
+        tbl.merge!(section => Prawn4book::Recipe::DATA[section])
+      end
+      # La méthode #to_yaml écrit les symboles avec :key: mais je 
+      # n’aime pas cette tournure donc j’enlève les premiers ":" et
+      # j’ajoute également un "# ..." en haut du fichier.
+      tbl.to_yaml.gsub(/:([a-zA-Z_0-9]+):/,'\1:').gsub(/^\-\-\-/,"---\n# .\\..")
+    end
 
 end #/class Feature
 end #/module Manual
