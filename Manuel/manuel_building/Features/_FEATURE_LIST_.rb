@@ -15,15 +15,18 @@ module Prawn4book
       recette/grand_titre
       recette/recette_livre
       recette/recette_collection
+      recette/book_data
+      recette/definition_fonte
+      recette/publisher
       ###---Contenu_textuel_(intro)---###
       texte/grand_titre
       format_markdown_du_texte
-      definition_fonte
       ###---PagesSpeciales---###
       pages_speciales/grand_titre
       pages_speciales/pages_speciales
       pages_speciales/table_des_matieres
       pages_speciales/credits_page
+      pages_speciales/title_page
       ###---Entetes/Pied-de-page---###
       header_footer/grand_titre
       header_footer/par_defaut

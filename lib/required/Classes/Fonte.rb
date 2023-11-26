@@ -172,13 +172,13 @@ class << self
   # Pour retourner une copie de la fonte par défaut (pour ne pas la
   # toucher)
   def dup_default
-    new(name:default.name, size:default.size, style:default.style)
+    new(name:default.name, size:default.size, style:default.style, color: default.color.dup)
   end
 
   # Pour dupliquer une police quelconque
   # 
   def dup(fonte)
-    new(name:fonte.name.dup, size:fonte.size.dup, style: fonte.style.dup)
+    new(name:fonte.name.dup, size:fonte.size.dup, style: fonte.style.dup, color: default.color.dup)
   end
 
 

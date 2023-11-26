@@ -79,10 +79,13 @@ class Recipe
 
   def logo_path
     @logo_path ||= begin
-      rp = publisher[:logo_path]
+      relp = publisher[:logo_path].freeze
+      rp = relp.dup
       if rp
         File.exist?(rp) || begin
-          rp = File.join(owner.folder, rp)
+          File.exist?(rp = File.join(owner.folder, rp)) || begin
+            rp = File.join(owner.folder, 'images', relp)
+          end
         end
         rp
       end
@@ -434,15 +437,15 @@ class Recipe
   end
 
   def page_de_titre
-    @page_de_titre      ||= DATA[:page_de_titre]
+    @page_de_titre ||= inserted_pages[:page_de_titre]||inserted_pages[:title_page]
   end
 
   def page_index
-    @page_index    ||= DATA[:page_index]
+    @page_index    ||= inserted_pages[:page_index]||inserted_pages[:index_page]
   end
 
   def credits_page
-    @credits_page   ||= DATA[:credits_page]
+    @credits_page   ||= inserted_pages[:credits_page]||inserted_pages[:page_credits]
   end
 
   def book_making
@@ -458,11 +461,11 @@ class Recipe
   end
 
   def inserted_pages
-    @inserted_pages     ||= DATA[:inserted_pages]
+    @inserted_pages ||= DATA[:inserted_pages]
   end
 
   def headers_footers
-    @headers_footers    ||= DATA[:headers_footers]
+    @headers_footers ||= DATA[:headers_footers]
   end
 
   def bibliographies

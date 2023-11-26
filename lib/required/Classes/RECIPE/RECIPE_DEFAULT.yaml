@@ -217,47 +217,41 @@ book_format:
 # --- PAGES INSÉRÉES ---
 #<inserted_pages>
 inserted_pages:
-  page_de_garde: false
+  page_de_garde:  true
   faux_titre:     false
-  page_de_titre:  true
-  credits_page:     false
+  page_de_titre:
+    title:
+      font: "Times-Roman//18/000000"
+      line: 12
+    subtitle:
+      font: "Times-Roman//11/000000"
+      line: 13
+    author: 
+      font: "Times-Roman//15/000000"
+      line: 15
+    collection: 
+      font: "Times-Roman//12/000000"
+      line: 1
+    publisher:
+      font: "Times-Roman//12/000000"
+      line: 24
+      logo:
+        height: 10
+        line: 26
+    copyright: "Tous droits réservés"
+  # Colophon
+  credits_page:   false
+    # disposition: 'distribute' # 'bottom', 'top'
+    # libelle:
+    #   font: "Times-Roman/italic/9/777777"
+    # value:
+    #   font: "Times-Roman//11/000000"
 
 #</inserted_pages>
 
 #
 # --- PAGE DE TITRE ---
-#<page_de_titre>
-page_de_titre:
-  paginate: false
-  title:
-    name: *default_font1
-    size: 18
-    style: *default_style1
-  subtitle:
-    name: *default_font1
-    size: 11
-    style: *default_style1
-  author: 
-    name: *default_font1
-    size: 15
-    style: *default_style1
-  collection_title: 
-    name: *default_font1
-    size: 12
-    style: *default_style1
-  publisher:
-    name: *default_font1
-    size: 12
-    style: *default_style1
-  # Ne pas mettre cette données dans les hash ci-dessus, car
-  # ces hashes servent à initialiser la fonte.
-  spaces_before:
-    title:              4
-    subtitle:           1
-    author:             2
-  logo:
-    height:             10
-#</page_de_titre>
+
 #
 # --- TABLE DES MATIÈRES ---
 #
@@ -312,17 +306,6 @@ headers_footers:
       footer: "| -NUM || NUM- |"
       
 #</headers_footers>
-#
-# --- La page d'infos ---
-#
-#<credits_page>
-credits_page:
-  disposition: 'distribute' # 'bottom', 'top'
-  libelle:
-    font: "Times-Roman/italic/9/777777"
-  value:
-    font: "Times-Roman//11/000000"
-#</credits_page>
 
 #<book_making>
 book_making:

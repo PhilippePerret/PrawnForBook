@@ -16,16 +16,16 @@ class PageDeTitre
     #
     # Les données de fontes
     # 
-    dtitre = book.recipe.page_de_titre
+    dtitre = data
 
     pdf.update do
 
-      #
-      # Toujours une nouvelle page
-      # 
-      start_new_page
+      current_color = fill_color.freeze
 
-      #
+      # Toujours une nouvelle page (avec feuillet vierge pour 
+      # séparer de couverture)
+      3.times { start_new_page }
+
       # Toujours sur une belle page
       # 
       start_new_page if not(belle_page?)
@@ -35,7 +35,7 @@ class PageDeTitre
       # indication contraire dans la recette
       # 
       if Prawn4book.first_turn?
-        book.pages[page_number].pagination = not(my.paginate?)
+        book.pages[page_number].pagination = false
       end
 
       # 
@@ -52,8 +52,9 @@ class PageDeTitre
       #===============
       # (if any)
       if book.in_collection?
-        move_to_first_line
-        font(recipe.page_titre[:collection_title_font])
+        move_to_line(my.collection_line)
+        font(my.collection_title)
+        fill_color(my.collection_color)
         text(book.collection.name, **{align:center})
       end
 
@@ -61,25 +62,24 @@ class PageDeTitre
       #===================
       # - TITRE DU LIVRE -
       #===================
-      # (à un tiers)
-      font(Fonte.new(dtitre[:title]))
-      move_to_line(line_count / 3)
+      # (à un tiers environ)
+      font(my.title_font)
+      fill_color(my.title_color)
+      move_to_line(my.title_line)
       line_titre = current_line.freeze
-      text( book.title , **{align: :center})
+      text( book.title , **{align: :center, inline_format: true, style: my.title_font.style})
 
       #===============
       # - SOUS-TITRE -
       #===============
       # (if any)
       if book.subtitle
-        font(Fonte.new(dtitre[:subtitle]))
-        move_to_closest_line
-        last_line_subtitle = nil
-        move_to_next_line if current_line == line_titre
+        font(my.subtitle_font)
+        fill_color(my.subtitle_color)
+        move_to_line(my.subtitle_line)
+        subtitle_options = {align: :center, leading: 0, style: my.subtitle_font.style}
         ("(#{book.subtitle})").split('\\n').compact.each do |seg|
-          text(seg , **{align: :center, leading: 0})
-          last_line_subtitle = current_line.freeze
-          move_to_next_line
+          text(seg , **subtitle_options)
         end
       end
 
@@ -87,9 +87,10 @@ class PageDeTitre
       # - AUTEURS -
       #============
       # 
-      font(Fonte.new(dtitre[:author]))
-      move_to_closest_line
-      move_to_next_line if current_line == last_line_subtitle
+      my.setup(:author, self)
+      # font(my.author_font)
+      # fill_color(my.author_color)
+      # move_to_line(my.author_line)
       text(book.recipe.authors.titleize, **{align: :center})
       line_authors = current_line.freeze
       
@@ -97,26 +98,42 @@ class PageDeTitre
       # - MAISON D'ÉDITION -
       #=====================
       # 
-      publisher   = book.recipe.publisher
-      logo        = publisher[:logo_path] 
-      logo_height = dtitre[:logo][:height]
-      font(Fonte.new(dtitre[:publisher]))
-      move_cursor_to(logo_height.mm + 2 * line_height)
-      move_to_closest_line
-      text(publisher[:name], **{align: :center})
-      if logo
-        move_cursor_to(logo_height.mm + line_height)
-        logo_full_path = File.join(book.folder, logo)
-        image(logo_full_path, {height: logo_height.mm, position: :center})
+      publisher   = my.data[:publisher]
+      font(my.publisher_font)
+      fill_color(my.publisher_color)
+      move_to_line(my.publisher_line)
+      text(book.recipe.publisher[:name], **{align: :center})
+      if book.recipe.logo_exists? && publisher[:logo]
+        move_to_line(my.logo_line)
+        logopath = book.recipe.logo_path
+        options_logo = {height: my.logo_height, position: :center}
+        if File.extname(logopath) == '.svg'
+          svg(File.read(logopath), **options_logo)
+        else
+          image(logopath, **options_logo)
+        end
       end
 
-      # 
       # On passe au recto
-      # 
       start_new_page
 
-    end
+      # On remet la couleur originale
+      fill_color(current_color)
 
+    end #/pdf.update
+
+  end
+  # /build
+
+  def setup(key, pdf)
+    couleur = send("#{key}_color".to_sym)
+    numline = send("#{key}_line".to_sym)
+    lafonte = send("#{key}_font".to_sym)
+    pdf.update do
+      fill_color(couleur)
+      move_to_line(numline)
+      font(lafonte)
+    end
   end
 
   # - Predicate methods -
@@ -125,8 +142,84 @@ class PageDeTitre
     :TRUE == @withlogo ||= true_or_false(publisher.logo? && logo)
   end
 
-  def paginate?
-    book.recipe.page_de_titre[:paginate] == true
+  # -- Volatile Data Methods --
+
+  def collection_font 
+    @collection_font ||= Prawn4book.fnss2Fonte(data[:collection][:font])
+  end
+
+  def collection_color
+    @collection_color ||= collection_font.color || '000000'
+  end
+
+  def collection_line
+    @collection_line ||= data[:collection][:line]
+  end
+
+  def title_font 
+    @title_font ||= Prawn4book.fnss2Fonte(data[:title][:font])
+  end
+
+  def title_color
+    @title_color ||= title_font.color || '000000'
+  end
+
+  def title_line
+    @title_line ||= data[:title][:line]
+  end
+
+  def subtitle_font 
+    @subtitle_font ||= Prawn4book.fnss2Fonte(data[:subtitle][:font])
+  end
+
+  def subtitle_color
+    @subtitle_color ||= subtitle_font.color || '000000'
+  end
+
+  def subtitle_line
+    @subtitle_line ||= data[:subtitle][:line]
+  end
+
+  def author_font
+    @author_font ||= Prawn4book.fnss2Fonte(data[:author][:font])
+  end
+
+  def author_color
+    @author_color ||= author_font.color || '000000'
+  end
+
+  def author_line
+    @author_line ||= data[:author][:line]
+  end
+
+  def publisher_font
+    @publisher_font ||= Prawn4book.fnss2Fonte(data[:publisher][:font])
+  end
+
+  def publisher_color
+    @publisher_color ||= publisher_font.color || '000000'
+  end
+
+  def publisher_line
+    @publisher_line ||= data[:publisher][:line]
+  end
+
+  def logo_line
+    @logo_line ||= data[:publisher][:logo][:line]
+  end
+
+  def logo_height
+    @logo_height ||= begin
+      lh = (data[:publisher][:logo][:height] || 20)
+      lh = lh.to_f if lh.is_a?(String)
+      lh
+    end
+  end
+
+  # -- Data Methods --
+
+  def data
+    @data ||= book.recipe.page_de_titre
   end
 
 end #/class PageDeTitre

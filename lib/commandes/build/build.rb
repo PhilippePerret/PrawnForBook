@@ -292,8 +292,8 @@ class PdfBook
     # -   PREMIÈRES PAGES   -
     # =======================
     #     
-    pdf.start_new_page      if page_de_garde?   && pdf.first_page < 2
-    pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 3
+    pdf.build_faux_titre    if page_faux_titre? && pdf.first_page < 2
+    pdf.start_new_page      if page_de_garde?   && pdf.first_page < 3
     pdf.build_page_de_titre if page_de_titre?   && pdf.first_page < 4
     
     # Toujours commencer sur la BELLE PAGE

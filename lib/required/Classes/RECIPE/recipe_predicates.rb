@@ -19,19 +19,19 @@ class Recipe
   end
 
   def page_de_garde?
-    inserted_pages[:page_de_garde] == true
+    (inserted_pages[:page_de_garde]||inserted_pages[:endpage]) == true
   end
 
   def page_faux_titre?
-    inserted_pages[:faux_titre] == true
+    inserted_pages[:faux_titre]||inserted_pages[:half_title_page]
   end
 
   def page_de_titre?
-    inserted_pages[:page_de_titre] == true
+    inserted_pages[:page_de_titre]||inserted_pages[:title_page]
   end
 
   def credits_page?
-    inserted_pages[:credits_page] == true
+    (inserted_pages[:credits_page]||inserted_pages[:page_credits]) == true
   end
 
   # --- Numérotation des pages et des paragraphes ---

@@ -2,6 +2,7 @@
 #<book_data>
 book_data:
   title: "Manuel de Prawn-for-book"
+  subtitle: "le manuel autoproduit de l’application\\nde mise en forme professionnelle"
   author: "Philippe PERRET"
   isbn: null
   url:  null
@@ -47,7 +48,7 @@ book_format:
       lines_before: 10
       size:         22
       align: :right
-      alone: true
+      alone: false
     level3:
       color: '0000AA'
     level4:
@@ -61,7 +62,25 @@ book_format:
 
 #<inserted_pages>
 inserted_pages:
-  credits_page: true
+  credits_page:
+    disposition: "distribute"
+  page_de_titre:
+    title:
+      font: "Numito/normal/30/FF0000"
+      line: 15
+    subtitle:
+      font: "Numito/italic/16/007700"
+      line: 16
+    author:
+      font: "Numito/normal/18/000077"
+      line: 22
+    publisher:
+      font: "Numito/normal/12/FF8000"
+      line: 2
+      logo:
+        height: 40
+        line: 3
+
 #</inserted_pages>
 
 #<headers_footers>
@@ -97,10 +116,7 @@ table_of_content:
     caps: none
 #</table_of_content>
 
-#<credits_page>
-credits_page:
-  disposition: "distribute"
-#</credits_page>
+
 #<book_making>
 book_making:
   conception:
@@ -119,4 +135,5 @@ book_making:
 #<publisher>
 publisher:
   name: "Icare Éditions"
+  logo_path: "logo/couleur.jpg"
 #</publisher>
