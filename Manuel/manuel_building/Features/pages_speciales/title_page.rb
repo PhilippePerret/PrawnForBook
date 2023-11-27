@@ -13,6 +13,7 @@ Prawn4book::Manual::Feature.new do
     (mettre `false` — "faux" — au lieu de `true` — "vrai" — pour que la page de titre ne soit pas affichée)
     (( line ))
     Mais comme tout autre élément de _PFB_, on peut définir la page de titre de façon plus précise. Trouvez ci-dessous les propriétés définissables et retrouvez-les dans l’exemple de recette plus bas.
+    Vous pourrez aussi trouver, tout en bas de cette section, la recette utilisée pour produire la page de titre un peu trop bariolée (pour cette illustration) de ce manuel, dans les premières pages.
 
     ##### Propriétés de la page de titre
 

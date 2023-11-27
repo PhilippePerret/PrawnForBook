@@ -174,6 +174,11 @@ class PdfBook
       book.recipe.fonte_note_page
     end
 
+    # Pour le "test de limite basse" (test qui vérifie dans 
+    # pretty_render si le curseur n’est pas trop bas)
+    # 
+    def title?; false end
+
     # 
     # === Class Prawn4book::PdfBook::NotesManager::Note
     # 

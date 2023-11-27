@@ -81,6 +81,8 @@ class NTitre < AnyParagraph
         lines_before.dup.freeze
       end
 
+    debugit = false # ftitre.match?(/recette.+collection/i)
+
     # = Inscription =
     pdf.update do
 
@@ -88,10 +90,6 @@ class NTitre < AnyParagraph
       font(fonte)
 
       tstr = ftitre.inspect
-
-      # puts "\nCurseur au tout début de #{tstr} : #{cursor}".vert
-
-      start_new_page if my.on_new_page?
 
       # Il faut aussi passer à la page suivante quand il ne reste pas
       # assez de place pour mettre les lignes après (nous sommes trop
@@ -101,8 +99,10 @@ class NTitre < AnyParagraph
       #   On ajoute 2 lignes après les lines_after pour avoir la 
       #   place de mettre au moins 2 lignes.
       # 
-      if cursor - (my.lines_after + 2) * line_height <= 0
-        start_new_page
+      limite_basse = cursor - (my.lines_after + my.lines_before + 2) * line_height
+
+      if limite_basse || my.on_new_page?
+        start_new_page 
       end
 
       # - Page seule sur la double page -

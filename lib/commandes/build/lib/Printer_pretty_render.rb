@@ -13,13 +13,20 @@ class << self
   #   - sans aucune orpheline
   #   - sans aucune ligne de voleurs
   # 
+  # NOTE CAPITALE
+  # -------------
+  #   LES TITRES [NTitle] NE PASSENT PAS PAR CETTE MÉTHODE (et c’est
+  #   bien dommage)
+  # 
   # PRINCIPE
   # --------
   # 
+  #   OBSOLÈTE
   #   V2.0 L'écriture se fait ligne à ligne. C'est de cette manière qu'on
   #   peut gérer les lignes de voleur sur tous les paragraphes ainsi
   #   que les veuves et les orphelines aux changements de pages.
   # 
+  #   ACTUELLEMENT
   #   V2.1 Le problème de la formule précédente, c'est que dès qu'il
   #   y a du code dans le paragraphe (par exemple pour un changement
   #   de couleur), s'il se trouve que le <color ...> se trouve sur 
@@ -72,12 +79,12 @@ class << self
   #   plupart du temps un [PdfBook::NTextParagraph].
   #   Si nil, c'est un Prawn4book::PdfBook::UserParagraph qui est
   #   initié.
-  #   NOTE: C'est l'instance qui est retournée.
+  #   NOTE: L'instance est retournée.
   # 
   # @param pdf [Prawn4book::PrawnView]
   # 
   #   Le document Prawn::Document (PrawnView) en train d'être
-  #   construit, qui produira le PDF
+  #   construit, qui produira le PDF en fin de processus.
   # 
   # @param text [String|Formatted String]
   # 
@@ -103,14 +110,19 @@ class << self
   #   :no_num   Si true, on ne doit pas marquer de numéro de paragraphe
   # 
   #   @notes
+  # 
   #     - Il sera ajouté 'dry_run:true' pour
-  #       gérer les orphelines, les veuves et les lignes de voleurs
-  #       car l'écriture se fait ligne par ligne (c'est cher mais
-  #       c'est précis).
+  #       gérer les orphelines, les veuves et les lignes de voleurs.
   # 
   # @return owner
   # 
   def pretty_render(pdf:, text:, options:, owner: nil, fonte: nil)
+
+    # RAPPEL
+    # ------
+    # Les titres ne passent pas par cette méthode
+    # 
+
 
     # puts "\n-> pretty_render\n" \
     #   "text: #{text.inspect}\n" \
@@ -120,7 +132,7 @@ class << self
 
     options = defaultize_options(options.dup, pdf)
 
-    owner ||= PdfBook::UserParagraph.new(text, options.merge(fonte:fonte))
+    owner ||= PdfBook::UserParagraph.new(pdf, text, options.merge(fonte:fonte))
 
     # Le décalage horizontal du texte à écrire
     # 
@@ -140,6 +152,27 @@ class << self
 
         font(fonte) if fonte
 
+        # # /débug
+        # if page_number > 18 && text.match?(/Recette.+collection/i)
+        #   puts"\ncursor au tout départ : #{cursor.round(3)}".bleu
+        # end
+
+        # Si le curseur est déjà sous le zéro, on passe directement
+        # à la page suivante
+        # 
+        # @note
+        #   Pour le moment, je n’ajoute pas "- line_height" car si
+        #   on peut écrire encore une ligne, ça peut être bon.
+        # 
+        # @rappel
+        #   Les titres ne passent pas par cette méthode. Cf. 
+        #   NTitre#build
+        #   
+        if cursor < 0
+          start_new_page
+          move_to_line(1)
+        end
+
         # La fonte est définie, on peut définir le leading du texte
         options.merge!(leading: default_leading)
 
@@ -154,9 +187,9 @@ class << self
         printed_lines = b.instance_variable_get('@printed_lines')
         lines_count = printed_lines.count
 
+        # Y a-t-il une ligne de voleur ?
         has_thief_line = lines_count > 1 && printed_lines.last.length < THIEF_LINE_LENGTH
 
-        # 
         # Si la dernière ligne est trop courte, il faut chercher le
         # character_spacing qui permettra de remonter le texte seul
         # à la ligne.
@@ -184,6 +217,16 @@ class << self
         # la hauteur du bloc, passe en dessous de zéro (zéro, c'est la
         # limite basse de la page)
         sur_deux_pages = cursor - boxheight < 0
+
+        # # /débug
+        # if page_number > 18 && text.match?(/Recette.+collection/i)
+        #   puts "\n"
+        #   puts "cursor = #{cursor.round(3)}".bleu
+        #   puts "boxheight = #{boxheight.round(3)}".bleu
+        #   puts "cursor - boxheight = #{cursor - boxheight}".bleu
+        #   puts "sur_deux_pages est #{sur_deux_pages.inspect}".bleu
+        #   exit 100
+        # end
 
         # Il faut traiter le cas du passage à la page suivante. En fait,
         # en calculant ce qui dépasse, on doit pouvoir obtenir le nom
@@ -301,6 +344,11 @@ class << self
         # On passe sur la ligne suivante
         # move_cursor_to(cursor - line_height)
         move_to_next_line
+
+        # if page_number > 18 && page_number < 23
+        #   puts "\nCurseur après #{text.inspect} : #{cursor.round}".gris
+        #   exit 110 if page_number == 22
+        # end
 
       end #/pdf
 

@@ -5,6 +5,7 @@ Prawn4book::Manual::Feature.new do
   description <<~EOT
     L’éditeur du livre ("publisher" en anglais) ou la maison d’édition se définissent dans la propriété `publisher` de la recette du livre ou de la collection.
     On peut définir toutes les données utiles
+    {{TODO: Poursuivre cette fonctionnalités}}
     EOT
 
   sample_recipe <<~EOT #, "Autre entête"
