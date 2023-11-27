@@ -26,6 +26,8 @@ class TableOfContent
 
       # On se rend sur la page voulue
       go_to_page(page_number)
+      # Jamais paginée
+      book.page(page_number).pagination = false
       spy "On rejoint la page #{page_number} pour écrire la TdM".jaune
       move_down(my.lines_top * my.tdm_line_height)
     end
@@ -184,6 +186,7 @@ class TableOfContent
 
       # On va sur la page suivante, qui doit être vide
       go_to_page(new_page_number)
+      book.page(new_page_number).pagination = false
       # On se place au bon endroit vertical de la page
       move_down(my.lines_top * my.tdm_line_height)
     
