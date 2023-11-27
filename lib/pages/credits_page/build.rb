@@ -41,10 +41,11 @@ class PageInfos
       2.times { start_new_page }
       # start_new_page
       start_new_page while page_number.odd?
-      # go_to_page(page_number + 1)
     end
 
-    book.page(pdf.page_number).pagination = false
+    # La page des crédits n’est pas enregistrée en tant que page,
+    # donc c’est inutile de faire :
+    # book.page(pdf.page_number).pagination = false
 
     # == Construction en fonction de la disposition ==
     # 
@@ -89,18 +90,26 @@ class PageInfos
         if dcredit[:label]
           pdf.fill_color(label_color) if label_color
           pdf.font(label_fonte)
-          pdf.text_box(dcredit[:label], **label_options.merge(at:[0, mycursor]))
+          # pdf.text_box(dcredit[:label], **label_options.merge(at:[0, mycursor]))
+          myprint(pdf, dcredit[:label], **label_options.merge(at:[0, mycursor]))
           mycursor -= label_height
         end
         if dcredit[:value]
           pdf.fill_color(value_color) if value_color
           pdf.font(value_fonte)
-          pdf.text_box(dcredit[:value], **value_options.merge(at:[0, mycursor]))
+          # pdf.text_box(dcredit[:value], **value_options.merge(at:[0, mycursor]))
+          myprint(pdf, dcredit[:value], **value_options.merge(at:[0, mycursor]))
           mycursor -= (dcredit[:lines] + 1) * value_height
         end
         # break if idx == 4
       end
     end
+  end
+
+  # Pour ne pas générer l’erreur #200
+  # (cette page des crédits n’est pas enregistrée en tant que page)
+  def myprint(pdf, str, opts)
+    pdf.__real_text_box(str, **opts)
   end
 
   def label_options

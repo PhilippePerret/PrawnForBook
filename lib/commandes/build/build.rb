@@ -245,8 +245,6 @@ class PdfBook
     if first_turn?
       pdf.on_page_create do
         my.add_page(pdf.page_number)
-        # STDOUT.write "\nAjout page ##{pdf.page_number} (#{current_titles})".bleu
-        # sleep 0.5
         export_text("\n#{'-'*30}\n\n") if export_text?
       end
     else
@@ -333,9 +331,9 @@ class PdfBook
       # ===========================
       build_headers_and_footers(me)
 
-      # ==================
-      # -   PAGE INFOS   -
-      # ==================
+      # ====================
+      # -   PAGE CRÉDITS   -
+      # ====================
       build_credits_page if my.credits_page? && last_page > page_number
 
       # ===========================

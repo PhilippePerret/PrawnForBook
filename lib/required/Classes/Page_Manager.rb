@@ -55,7 +55,20 @@ class PageManager
       #   =>     31           - 30      - 1
       #   => 0
       # 
-      add_erreur(PFBError[200] % {num: number.inspect, nb: count}) 
+
+      # Le backtrace pour savoir d’où on vient
+      bt = caller.map do |str|
+        if str.match?(APP_FOLDER)
+          str.sub(APP_FOLDER,'.')
+        end
+      end.compact[0..-6].join("\n")
+
+      # L’erreur générée
+      add_erreur(PFBError[200] % {
+        num: number.inspect, 
+        nb: count,
+        bt: bt
+      }) 
       correct_num = number - @pages.count
       @pages[correct_num]
     end

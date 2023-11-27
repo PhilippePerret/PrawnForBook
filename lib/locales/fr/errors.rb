@@ -176,6 +176,8 @@ ERRORS = {
       Je rectifie le numéro en fonction du nombre de pages (%{nb}), mais 
       il faudra corriger le problème car les effets indésirables sont 
       imprévisibles.
+      Backtrace: 
+      %{bt}
       ERR
 
     # -- Page des crédits (Colophon) --

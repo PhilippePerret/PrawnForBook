@@ -12,7 +12,7 @@ class PrawnFatalError < StandardError; end
 # exemple pour la méthode add_erreur.
 class PFBError
   def self.[](err_num)
-    PFBFatalError.error_by_num(err_num)
+    "[##{err_num}] #{PFBFatalError.error_by_num(err_num)}"
   end
   def self.context=(value)
     PFBFatalError.context = value
@@ -43,7 +43,7 @@ class PFBFatalError < StandardError
   def build_message(err_id, temp_data)
     err = self.class.error_by_num(err_id)
     err = err % temp_data unless temp_data.nil?
-    err = "[#{err_id}] #{err}"
+    err = "[##{err_id}] #{err}"
     if self.class.context
       err = "#{err}\nContext:\n-------\n#{self.class.context}"
     end
