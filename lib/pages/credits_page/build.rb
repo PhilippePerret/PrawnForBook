@@ -39,8 +39,9 @@ class PageInfos
     # 
     pdf.update do
       2.times { start_new_page }
-      start_new_page while page_number.even?
-      go_to_page(page_number + 1)
+      # start_new_page
+      start_new_page while page_number.odd?
+      # go_to_page(page_number + 1)
     end
 
     book.page(pdf.page_number).pagination = false
@@ -243,16 +244,27 @@ class PageInfos
 
   # Fontes pour le libellé et la valeur
   def label_fonte
-    @label_fonte ||= Prawn4book.fnss2Fonte(credits_page[:libelle][:font])||Fonte.default
+    @label_fonte ||= begin
+      Prawn4book.fnss2Fonte(label_data ? label_data[:font] : nil) || Fonte.default
+    end
   end
   def label_color
     @label_color ||= label_fonte.color
   end
+  def label_data
+    @label_data ||= credits_page[:libelle]
+  end
+
   def value_fonte
-    @value_fonte ||= Prawn4book.fnss2Fonte(credits_page[:value][:font])||Fonte.default
+    @value_fonte ||= begin
+      Prawn4book.fnss2Fonte(value_data ? value_data[:font] : nil) || Fonte.default
+    end
   end
   def value_color
     @value_color ||= value_fonte.color
+  end
+  def value_data
+    @value_data ||= credits_page[:value]
   end
 
   # --- General Data ---
@@ -277,6 +289,8 @@ class PageInfos
     @book ||= PdfBook.ensure_current
   end
 
+  attr_accessor :value_height
+  attr_accessor :label_height
 
   private
 
@@ -307,16 +321,36 @@ class PageInfos
     # la fonte utilisée
     # 
     def define_label_height
-      pdf.font(label_fonte) do
-        @label_height = pdf.height_of("Label", **label_options) - 4
+      my = self
+      pdf.update do
+        font(my.label_fonte)
+        my.label_height = height_of("Label", **my.label_options) - 4
       end
-      @label_height.is_a?(Float) || raise(PFBFatalError.new(610))
+      label_height.is_a?(Float) || begin
+        raise(PFBFatalError.new(610, {
+          t: "libellé", 
+          f: label_fonte.inspect, 
+          h: label_height.inspect,
+          o: label_options.inspect
+        }))
+      end
     end
+
+
     def define_value_height
-      pdf.font(value_fonte) do
-        @value_height = pdf.height_of("Une valeur", **value_options) + 2
+      my  = self
+      pdf.update do 
+        font(my.value_fonte)
+        my.value_height = height_of("Une valeur", **my.value_options) + 2
       end
-      @value_height.is_a?(Float) || raise(PFBFatalError.new(610))
+      value_height.is_a?(Float) || begin
+        raise(PFBFatalError.new(610, {
+          t: "valeur (la personne)",
+          f: value_fonte.inspect, 
+          h: value_height.inspect,
+          o: value_options.inspect
+        }))
+      end
     end
 
     # On définit la hauteur de ligne

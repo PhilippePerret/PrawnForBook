@@ -23,15 +23,15 @@ class Recipe
   end
 
   def page_faux_titre?
-    inserted_pages[:faux_titre]||inserted_pages[:half_title_page]
+    !!(inserted_pages[:faux_titre]||inserted_pages[:half_title_page])
   end
 
   def page_de_titre?
-    inserted_pages[:page_de_titre]||inserted_pages[:title_page]
+    !!(inserted_pages[:page_de_titre]||inserted_pages[:title_page])
   end
 
   def credits_page?
-    (inserted_pages[:credits_page]||inserted_pages[:page_credits]) == true
+    !!(inserted_pages[:credits_page]||inserted_pages[:page_credits])
   end
 
   # --- Numérotation des pages et des paragraphes ---

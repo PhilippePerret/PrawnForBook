@@ -343,9 +343,11 @@ ERRORS = {
         
         ERR
       bad_font_definition: <<~ERR,
-        La définition des fontes, pour la page des infos (au moins) est
-        mauvaise. Je n'arrive pas à calculer les emplacements et les 
-        positions.
+        La définition des fontes, pour la page des crédits est mauvaise.
+        Je n'arrive pas à calculer les emplacements et les positions.
+        Fonte du %{t} : %{f}
+        Options : %{o}
+        Height obtenu : %{h} (doit être un flottant)
         ERR
     },
 
