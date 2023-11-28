@@ -276,7 +276,7 @@ class BibItem
   #   '@title ||=' pour mettre en cache la donnée titre, ça plante
   #   avec un cant' modify frozen string
   def title
-    keytitle = biblio.respond_to?(:main_key) ? biblio.main_key : :title
+    keytitle = biblio.respond_to?(:main_key) ? biblio.main_key.to_sym : :title
     data[keytitle] || raise(PFBFatalError.new(713, {id: self.id, tag:biblio.tag}))
   end
 

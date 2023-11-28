@@ -147,5 +147,16 @@ publisher:
 bibliographies:
   article:
     title: "Articles de presse"
+    title_level: 2
     path: "biblios/articles"
+  film:
+    title: "Films cités"
+    title_level: 2
+    path: "biblios/films"
+  custom:
+    title: "Liste personnalisée"
+    title_level: 3
+    path: "biblios/customs"
+    main_key: nom
+
 #</bibliographies>

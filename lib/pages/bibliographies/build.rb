@@ -38,7 +38,7 @@ class Bibliography
     # 
     # Inscription du TITRE DE LA BIBLIOGRAPHIE
     # 
-    ititre = PdfBook::NTitre.new(book, text:biblio.title, level:biblio.title_level)
+    ititre = PdfBook::NTitre.new(book:book, titre:biblio.title, level:biblio.title_level, pindex: nil)
     ititre.print(pdf)
     # 
     # Application de la fonte

@@ -8,15 +8,38 @@ Prawn4book::Manual::Feature.new do
     Une bibliographie se définit dans _PFB_ par une donnée dans la section principale de recette `bibliographies` et une balise qui servira d’identifiant pour la bibliographie et de balise pour repérer le texte. Par exemple les balises `article` et `film` qui serviront d’illustration ci-dessous et seront utilisés dans le texte de cette manière :
     « C’est une référence à l’article article\\(Les chaussures|0001) et une référence au film film\\(Titanic). »
 
+    ##### Lexique
+
+    *(comme pour les autres parties, commençons par un lexique qui permet de fixer les termes que nous employons pour parler de bibliographie)*
+    (( line ))
+    * **Bibliographie** | Ensemble de sources quelconques, de toutes natures, dont il est fait référence au cours du livre, et qu’ils faut rassembler à la fin du livre, avec ses informations, pour que le lecteur puisse s’y référer. Par exemple une liste de livres, de films ou de mots techniques. Désigne aussi l’ensemble de ses *items*.
+    * **item** ou **item bibliographique** | C’est un élément en particulier de la bibliographie, un film en particulier s’il s’agit d’une liste de films, un livre en particulier s’il s’agit d’une liste de livres, un mot en particulier si c’est un index de mots.
+    * **Marque de référence** | Marque spéciale, dans le texte, qui permet de consigner un *item bibliographique*. Elle se construit à l’aide de l’identifiant de la bibliographie, suivi de parenthèses à l’intérieur desquelles on place l’identifiant de l’*item bibliographique*. Par exemple `livre\\(Les Misérables)` dans la phrase `Avez-vous lu livre\\(Les Misérables), un livre de person\\(Victor Hugo)`.
+    * **Données bibliographiques**, ou **Banque de données** | Ensemble complet des fiches qui comprennent l’intégralité des *items* d’un bibliographie, même ceux non cités, dans laquelle on va puiser les sources pour y faire référence.
+    * **Liste des sources** | Désigne la liste, à la fin du livre, qui liste l’ensemble des *items* cités (et seulement les items cités) et, dans _PFB_, indique les pages où il y est fait référence.
+
     ##### Données minimales
 
     Une bibliographie est définie par les données minimales et indispensables suivantes (pour la compréhension, on choisit d’illustrer une bibliographie pour des articles de journaux) :
-    * le **tag** (ou **identifiant**) | C’est un mot simple, au singulier (p.e. "article") qui caractérise la bibliographie. C’est ce tag qui permettra de définir, au cours du livre, les éléments bibliographiques.
-    * Un **titre** (**`title`**) | Le titre de la bibliographie, qui sera imprimé avant d’afficher la bibliographie.
+    * Le **tag** (ou **identifiant**) | C’est un mot simple en minuscule (donc seulement les lettres de "a" à "z", au singulier (p.e. "article") qui caractérise la bibliographie. C’est ce tag qui sera utilisé au cours du livre pour construire un *marquer de référence* pour faire référence à un *item bibliographique* en particulier (cf. plus bas).
+    * **`title`** ("titre" en anglais) | Le titre de la bibliographie, qui sera imprimé avant d’afficher la bibliographie.
+    * **`title_level`** ("niveau de titre" en anglais) | Le niveau de titre pour la section qui liste les sources citées. Par défaut, ce niveau est 1, le plus grand titre.
+    * **`main_key`** ("clé principale" en anglais) | Si ce n’est pas la propriété `title` de l’item (à ne pas confondre avec le `title` dont nous venons de parler) qui doit être utilisée pour remplacer la marque de référence, c’est la valeur de cette clé principale qu’il faudra prendre (et qui doit donc impérativement être définie pour chaque item bibliographique)
     * Une **banque de données** qui contient, comme son nom l’indique, toutes les données bibliographiques. Pour la définir, on définit simplement son chemin d’accès **`path`**, qui peut être un dossier (contenant les *cartes* de données) ou un fichier (contenant toutes les données).
     Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable.
     (( line ))
     À partir de là, dans le texte, il suffit de mettre un mot ou un grand de mot entre parenthèses en le précédant de l’identifiant de la bibliographie pour que cet élément soit pris en repère. Par exemple :
+    (( line ))
+    (( {align: :center} ))
+     `\\<id biblio>(\\<id item>)` 
+    (( line ))
+    Ce mot sera remplacé par la propriété `title` de l’item (cf. plus bas) et cette référence sera enregistrée pour l’ajouter à la liste des sources bibliographiques à la fin du livre.
+    Si le `title` de l’item de convient pas dans une utilisation particulière, on peut définir un texte quelconque avant l’identifiant, en le séparant avec un trait droit ("|") de l’identifiant, comme ci-dessous.
+    (( line ))
+    (( {align: :center} ))
+     `C’est un film\\(exemple de film|the titanic) dans le texte.` 
+    (( line ))
+    Avec le code ci-dessus, le texte "exemple de film" sera utilisé à la place du titre du film, mais c’est une référence au film en question qui sera enregistrée en liste des sources en fin de volume.
 
     ##### Données bibliographiques
 
@@ -32,6 +55,21 @@ Prawn4book::Manual::Feature.new do
      `title_fr: "Titanic"`
      `director: "James CAMERON`
      `year: 1999`
+
+    ##### Liste des sources
+
+    Dans le livre, il suffit de placer le code `\\(( <id bibliographie> \\))` pour insérer la bibliographie à l’endroit voulu. Par défaut, toutes les informations seront affichées, mais il sera possible de tout formater à sa convenance (cf. plus loin).
+    Par exemple :
+    (( line ))
+    (( {align: :center} ))
+     `(( biblio(film) ))` 
+    (( line ))
+    … pour afficher la liste des films cités (et seulement ceux cités) et/ou :
+    (( line ))
+    (( {align: :center} ))
+     `(( biblio(article) ))` 
+    (( line ))
+    … pour afficher la liste des articles (seulement ceux cités), avec les pages où ils sont cités.
     EOT
 
   sample_recipe <<~YAML
@@ -43,6 +81,7 @@ Prawn4book::Manual::Feature.new do
        
       article: # id bibliographie
         title: "Articles de presse"
+        title_level: 2
         path:  "chemin/vers/données/articles"
        
       # Définition de la deuxième bibliographie
@@ -60,7 +99,7 @@ Prawn4book::Manual::Feature.new do
     YAML
 
   sample_texte <<~EOT #, "Autre entête"
-    Un texte exemple qui utilise un article\\(premier article) en référence bibliographique. Ce paragraphe contient aussi une référence au film film(The Titanic) qui se déroule dans un bateau.
+    Un texte exemple qui utilise un article\\(premier article) en référence bibliographique. Ce paragraphe contient aussi une référence au film film(The Titanic) qui se déroule sur un bateau.
     EOT
 
   texte(:as_sample)

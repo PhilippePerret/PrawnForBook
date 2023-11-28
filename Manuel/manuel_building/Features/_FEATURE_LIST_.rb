@@ -68,6 +68,7 @@ module Prawn4book
     #---Bibliographies---#
     'bibliographies/grand_titre',
     'bibliographies/introduction',
+    'bibliographies/customisation',
 
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',
