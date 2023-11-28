@@ -56,7 +56,12 @@ book_format:
       lines_after:  1
       color: '00AA00'
     level5:
-      lines_before: 0
+      lines_before: 2
+      lines_after: 1
+      alone: false
+      next_page: false
+      belle_page: false
+
   #</titles>
 #</book_format>
 
@@ -137,3 +142,9 @@ publisher:
   name: "Icare Éditions"
   logo_path: "logo/couleur.jpg"
 #</publisher>
+
+#<bibliographies>
+bibliographies:
+  article:
+    title: "Articles de presse"
+#</bibliographies>
