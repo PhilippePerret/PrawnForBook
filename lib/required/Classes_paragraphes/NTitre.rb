@@ -101,9 +101,7 @@ class NTitre < AnyParagraph
       # 
       limite_basse = cursor - (my.lines_after + my.lines_before + 2) * line_height
 
-      if limite_basse || my.on_new_page?
-        start_new_page 
-      end
+      start_new_page if limite_basse < 0 || my.on_new_page?
 
       # - Page seule sur la double page -
       # 
