@@ -69,7 +69,7 @@ class Bibliography
   # @return [Hash] Table des données recette pour la bibliographie
   # courante
   def recipe_data
-    @recipe_data ||= book.recipe.bibliographies[:biblios][biblio.id.to_sym]
+    @recipe_data ||= book.recipe.bibliographies[biblio.id.to_sym]
   end
   
 end #/class Bibliography

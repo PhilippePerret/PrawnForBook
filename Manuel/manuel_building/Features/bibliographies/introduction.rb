@@ -16,8 +16,22 @@ Prawn4book::Manual::Feature.new do
     * Une **banque de données** qui contient, comme son nom l’indique, toutes les données bibliographiques. Pour la définir, on définit simplement son chemin d’accès **`path`**, qui peut être un dossier (contenant les *cartes* de données) ou un fichier (contenant toutes les données).
     Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable.
     (( line ))
-    À partir de là, dans le texte, il suffit de mettre un mot ou un grand de mot entre parenthèses en le précédant de l’identifiant de la bibliographie pour que cet élément soit pris en repère. Par exemple : 
+    À partir de là, dans le texte, il suffit de mettre un mot ou un grand de mot entre parenthèses en le précédant de l’identifiant de la bibliographie pour que cet élément soit pris en repère. Par exemple :
 
+    ##### Données bibliographiques
+
+    Dans l’idéal, les données sont consignées dans un dossier qui contient chaque donnée sous forme de fiche (un fiche par item) au forme YAML (le format des recettes). Ce format permet une édition facile des données. Cependant, vous pouvez aussi utiliser le format `JSON` ou même `TXT` (simple texte).
+
+    ##### Items de la bibliographie
+
+    Au minimum (mais ce serait un peu idiot de n’avoir que ça…), un item de bibliographie doit définir sa propriété `title` qui correspond à son titre. `title` est sa clé principale. Mais puisque _PFB_ est hautement configurable, même cette clé principale peut avoir un autre nom, il suffit de la définir dans la propriété `main_key` des données de la bibliographie, dans la recette.
+    Donc un item bibliographique peut ressembler à :
+     `# Dans "the titanic.yaml`
+     `---`
+     `title: "The Titanic"`
+     `title_fr: "Titanic"`
+     `director: "James CAMERON`
+     `year: 1999`
     EOT
 
   sample_recipe <<~YAML
@@ -36,6 +50,13 @@ Prawn4book::Manual::Feature.new do
       film:
         title: "Liste des films"
         path: "chemin/vers/données/films"
+       
+      # Définition d’une autre bibliographie
+       
+      autrebib:
+        title: "Pour propose autre chose"
+        path: "..."
+        main_key: "truc" # autre clé que ’title’
     YAML
 
   sample_texte <<~EOT #, "Autre entête"

@@ -42,7 +42,7 @@ class Bibliography
   #
   def custom_format_method
     @custom_format_method ||= begin
-      if BibliographyFormaterModule
+      if defined?(BibliographyFormaterModule)
         self.extend(BibliographyFormaterModule)
         method_name = "#{id}_in_text".to_sym
         if self.methods.include?(method_name) # true ou false
@@ -79,7 +79,7 @@ class Bibliography
 
   def custom_format_method_for_biblio
     @custom_format_method_for_biblio ||= begin
-      if BibliographyFormaterModule
+      if defined?(BibliographyFormaterModule)
         self.extend(BibliographyFormaterModule)
         method_name = "biblio_#{id}".to_sym
         if self.methods.include?(method_name) # true ou false
@@ -191,9 +191,7 @@ class Bibliography
       # 
       pth = File.expand_path(File.join(book.folder, pth_ini)) unless File.exist?(pth)
       pth = File.expand_path(File.join(book.collection.folder, pth_ini)) if not(File.exist?(pth)) && not(book.collection.nil?)
-      # 
-      # Pour @folder
-      # 
+      # - Pour @folder -
       pth
     end
   end
@@ -212,6 +210,8 @@ class Bibliography
   def well_defined?
     :TRUE == @iswelldefined ||= true_or_false(check_if_well_defined)
   end
+
+  # Pour vérifier si la bibliographie est bien définie
   def check_if_well_defined
     prefix_err = ERRORS[:biblio][:biblio_malformed] % {tag: tag}
     data.key?(:title)   || raise(PFBFatalError.new(710, **{prefix: prefix_err, tag: tag}))
@@ -239,11 +239,8 @@ class Bibliography
     # @param [String] biblio_id Identifiant singulier de la bibliographie (p.e. 'livre' ou 'film')
     # 
     def get_data_biblios(biblio_id)
-      book.recipe.bibliographies[:biblios] || begin
-        raise PrawnBuildingError.new(ERRORS[:biblio][:data_undefined])
-      end
-      book.recipe.bibliographies[:biblios][biblio_id] || begin
-        raise PrawnBuildingError.new(ERRORS[:biblio][:biblio_undefined] % biblio_id)
+      book.recipe.bibliographies[biblio_id] || begin
+        raise PrawnFatalError.new(700, {bib: biblio_id})
       end
     end
 

@@ -9,7 +9,7 @@ class Command
     when NilClass
       puts "Mettez après 'choose' le tag de la bibliographie dans laquelle il faut chercher l'item (par exemple 'pfb choose film').".jaune
     else
-      biblios = book.recipe.bibliographies[:biblios]
+      biblios = book.recipe.bibliographies
       dbiblio = biblios[biblio_tag.to_sym] || begin
         puts "La bibliographie #{biblio_tag.inspect} est inconnue…".rouge
         puts "Bibliographies connues : #{biblios.keys.inspect}.".rouge

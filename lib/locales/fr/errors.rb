@@ -452,7 +452,7 @@ ERRORS = {
   # --- Bibliographie --- #
 
   biblio: {
-    unfound: 'Impossible de trouver la bibliographie de tag %{bib}',
+    unfound: 'Impossible de trouver la bibliographie d’identifiant %{bib}',
     custom_format_method_error: <<~ERR,
       Une erreur a été levée par votre méthode BibliographyFormaterModule#%{method}
       (qui doit être définie dans le module formater.rb)
@@ -473,7 +473,7 @@ ERRORS = {
     instanciation_requires_book: "Une livre est requis, pour l'instanciation d'une bibliographie.",
     data_undefined: "La recette du livre ou de la collection ne définit aucun donnée bibliographique (consulter le mode d'emploi pour remédier au problème ou lancer l'assistant bibliographies).",
     biblios_malformed: <<~ERR,
-      La recette bibliographie (:biblios) devrait être une table (un item par 
+      La recette bibliographie devrait être une table (un item par 
       type d'élément).
       ERR
     formater_required: "Un fichier 'formater.rb' devrait exister dans '%s' pour définir la mise en forme à adopter pour la bibliographie.",
@@ -488,34 +488,35 @@ ERRORS = {
         # in recipe.yaml / recipe_collection.yaml
         #<bibliographies>
         bibliographies:
-          biblios:
-            %{tag}:
-              # ...
-              title:
+          %{tag}:
+            # ...
+            title:
         #</bibliographies>
 
         ERR
       path_undefined: <<~ERR,
         %{prefix}
-        Le chemin d'accès au dossier des items doit être défini et non nil.
+        Le chemin d'accès au données de la bibliographie %{tag} doit 
+        être défini et non nil.
         Ajouter cette information au fichier recette de la collection ou du
         livre :
 
         # in recipe.yaml / recipe_collection.yaml
         #<bibliographies>
         bibliographies:
-          biblios:
-            %{tag}:
-              # ...
-              path:
+          %{tag}:
+            # ...
+            path:
         #</bibliographies>
         ERR
       path_unfound: <<~ERR,
         %{prefix}
-        Le dossier des fiches bibliographiques est introuvable…
-        (%{path}
-          cherché en tant que chemin absolu ou relatif dans le dossier du 
-          livre ou de la collection)
+        Les données des fiches bibliographiques est introuvable…
+        %{path} a été cherché en tant que :
+          - chemin absolu,
+          - chemin relatif dans le dossier du livre,
+          - chemin relatif dans le dossier de la collection si c’est une
+            collection.
         ERR
     },
     bad_format_bibitem: "Le format '%s' est un format de données bibliographique invalide.",

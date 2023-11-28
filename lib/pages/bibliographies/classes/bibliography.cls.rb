@@ -19,13 +19,10 @@ class << self
   def init
     @biblios = {}
     pdfbook = Prawn4book::PdfBook.ensure_current
-    if pdfbook.recipe.bibliographies[:biblios]
-      pdfbook.recipe.bibliographies[:biblios].each do |bib_id, bib_data|
+    if pdfbook.recipe.bibliographies.any?
+      pdfbook.recipe.bibliographies.each do |bib_id, bib_data|
         new(pdfbook, bib_id)
       end
-    else
-      # - Toujours la bibliographie des livres -
-      add_biblio(new(pdfbook, pdfbook.recipe.biblio_book_identifiant))
     end
     # init_biblio_livres(pdfbook)
     prepare(pdfbook)
@@ -65,12 +62,12 @@ class << self
   end
 
   ##
-  # Retourne les données bibliographies (:biblios) telles que définies
+  # Retourne les données bibliographies telles que définies
   # dans la recette du livre ou de la collection.
   # 
   def data_biblios(book = nil)
     @data_biblios = nil unless book.nil?
-    @data_biblios ||= book.recipe.bibliographies[:biblios] || {}  
+    @data_biblios ||= book.recipe.bibliographies || {}  
   end
 
   ##

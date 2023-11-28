@@ -131,6 +131,7 @@ class PFBFatalError < StandardError
 
       # -- Bibliographies --
       700   => Prawn4book::ERRORS[:biblio][:unfound],
+      701   => Prawn4book::ERRORS[:biblio][:biblio_undefined],
       710   => Prawn4book::ERRORS[:biblio][:malformation][:title_undefined],
       711   => Prawn4book::ERRORS[:biblio][:malformation][:path_undefined],
       712   => Prawn4book::ERRORS[:biblio][:malformation][:path_unfound],

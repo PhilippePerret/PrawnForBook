@@ -412,9 +412,6 @@ private
     return str
   end
 
-  # REG_AMORCE_CIBLE    = /\<\-\(/.freeze
-  # REG_AMORCE_APPEL    = /\-\>\(/.freeze
-  # REG_AMORCE_CIBLE    = /(?<!\\)\<\-\(/.freeze
   REG_AMORCE_CIBLE    = /#{EXCHAR}\<\-\(/.freeze
   REG_AMORCE_APPEL    = /#{EXCHAR}\-\>\(/.freeze
   REG_CIBLE_REFERENCE = / ?\<\-\((.+?)\)/.freeze

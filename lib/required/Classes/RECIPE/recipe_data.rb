@@ -469,9 +469,7 @@ class Recipe
   end
 
   def bibliographies
-    @bibliographies ||= begin
-      DEFAULT_BIBLIOGRAPHIES.deep_merge(DATA[:bibliographies]||{})
-    end
+    @bibliographies ||= DATA[:bibliographies] || {}
   end
 
 
@@ -514,15 +512,6 @@ class Recipe
       return unless File.exist?(recipe_path)
       DATA.deep_merge!(YAML.load_file(recipe_path, **YAML_OPTIONS)||{})
     end
-
-  DEFAULT_BIBLIOGRAPHIES = {
-    book_identifiant: :livre,
-    biblios: {
-      livre: {
-        path: './livres.yaml'
-      }
-    }
-  }
 
 end #/Class Recipe
 end #/module Prawn4book

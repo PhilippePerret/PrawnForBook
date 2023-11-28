@@ -147,4 +147,5 @@ publisher:
 bibliographies:
   article:
     title: "Articles de presse"
+    path: "biblios/articles"
 #</bibliographies>
