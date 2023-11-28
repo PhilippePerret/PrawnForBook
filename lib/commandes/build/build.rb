@@ -218,7 +218,7 @@ class PdfBook
     #   Il faut l'instancier à chaque tour, sinon les pages seraient
     #   ajoutées au pdf précédent. Ici, ça ne changera qu'au niveau
     #   de la table des matières qu'il faudra recommencer. Mais pour
-    #   tout les reste (à commencer par les pages), elles seront 
+    #   tout le reste (à commencer par les pages), elles seront 
     #   conservées telles qu'on les a relevées la première fois.
     # 
     pdf = PrawnView.new(self, pdf_config)
@@ -319,8 +319,13 @@ class PdfBook
       __custom_builder(pdf)
     end
 
-    pdf.update do 
-      
+    pdf.update do
+
+      # ====================
+      # -   PAGE CRÉDITS   -
+      # ====================
+      build_credits_page if my.credits_page? && last_page > page_number
+
       # =============================
       # -   TABLE(S) DES MATIÈRES   -
       # =============================
@@ -330,11 +335,6 @@ class PdfBook
       # -  ENTETE & PIED DE PAGE  -
       # ===========================
       build_headers_and_footers(me)
-
-      # ====================
-      # -   PAGE CRÉDITS   -
-      # ====================
-      build_credits_page if my.credits_page? && last_page > page_number
 
       # ===========================
       # -   GRILLE DE RÉFÉRENCE   -
@@ -361,7 +361,6 @@ class PdfBook
       ParserParagraphModule.report
     end
 
-    #
     # Afficher les erreurs mineures si on en a rencontrées
     # 
     PrawnView::Error.report_building_errors

@@ -92,10 +92,12 @@ class NImage < AnyParagraph
     # Exposer à toute l’instance
     @pdf = pdf
 
-    # # 
+    # Pour surveiller l’erreur de page (cf. page_number_fin plus
+    # bas)
+    page_number_debut = pdf.page_number.freeze
+
     # Il faut mettre le style par défaut
     # 
-    # pdf.font(pdf.default_font_name, **{style:pdf.default_font_style, size:pdf.default_font_size})
     pdf.font(Fonte.default_fonte, **{size:Fonte.default_fonte.size})
 
     # Table où seront consignés les données de l’image
@@ -238,7 +240,19 @@ class NImage < AnyParagraph
         move_down(my.space_after)
       end
 
-    end #/pdf
+      page_number_fin = page_number.freeze
+      if cursor < 0 && page_number_fin == page_number_debut
+        # Je ne sais absolument pourquoi je dois faire ça, mais si 
+        # je ne le fais pas, avec une image trop grande, ça crée une
+        # nouvelle page qui n’est pas comptabilisée et ça décale tout,
+        # ce qui génère une erreur de une page dans la suite.
+        # Problème à surveiller : car si ce bug est corrigé, ça ne
+        # sera plus le cas.
+        start_new_page
+        start_new_page
+      end
+
+    end #/pdf.update
     
     # spy(:off) if first_turn?
 

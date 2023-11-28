@@ -15,7 +15,8 @@ Prawn4book::Manual::Feature.new do
   texte <<~EOT
     Image non rognée :
     ![exemples/rogned_non.svg](width:200)
-    La même image rognée :
+    *(note : la page vide précédente est occupée par le blanc de l’image rognée)*
+    La même image, rognée cette fois :
     ![exemples/rogned.svg](width:200)
     Amet exercitation ut dolore in in nulla adipisicing laborum.
     EOT

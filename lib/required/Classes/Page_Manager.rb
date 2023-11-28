@@ -37,8 +37,10 @@ class PageManager
   # 
   def add(data_page)
     pages << Page.new(Marshal.load(Marshal.dump(data_page)))
-    # STDOUT.write "\nPage ##{data_page[:number]} #{data_page}".bleu
-    # sleep 0.5
+    if pages[-1].number != pages.count
+      puts "Mauvais numéro de page dans add. Ne devrait jamais arriver".rouge
+      exit 114
+    end
   end
   alias :<< :add
 
@@ -178,6 +180,6 @@ class Page
     instance_variable_set("@#{key}", value)
   end
 
-end #/class PageManager
+end #/class Page
 end #/class PdfBook
 end #/module Prawn4book
