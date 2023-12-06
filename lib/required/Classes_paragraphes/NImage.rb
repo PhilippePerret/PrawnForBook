@@ -76,6 +76,33 @@ class NImage < AnyParagraph
   #   moment, c’est-à-dire jusqu’au moment où on pourra "cadrer" une
   #   image — et donc ce sera le cadre qui sera important)
   # 
+  # 
+  # [002] Image flottante  (floating? est true)
+  #   Depuis décembre 2023, on peut utiliser des images flottantes, 
+  #   ce qui reste extrêmement compliqué avec prawn. Voilà comment on
+  #   procède à cette opération :
+  #   - on place l’image dans la page, avec une certaine taille, donc
+  #     une certaine largeur qui laissera passer du texte. Si l’image
+  #     flotte à gauche, c’est à droite que se positionnera le texte,
+  #     si l’image flotte à droite, c’est à gauche que se positionne-
+  #     ra le texte.
+  #     La valeur :
+  #         LARGEUR_PAGE - (TAILLE_IMAGE + ESPACE_AVEC_TEXTE)
+  #     … détermine la largeur disponible avec le texte.
+  #   - on peut avoir un texte passant au-dessus de l’image en jouant
+  #     sur le paramètre :floating_top qui détermine le flottement de
+  #     l’image avec le haut. On ne peut pas déterminer le flottement
+  #     avec le bas, car il faudrait alors déterminer la hauteur 
+  #     prise par le texte.
+  #   - une fois qu’on a ces valeurs, en imaginant un texte très long
+  #     on aura un text-box au-dessus pour le début du texte, d’une
+  #     taille correspondant à floating_top, ensuite un text-box de la
+  #     largeur laissée par l’image et de la hauteur de l’image + le
+  #     float_bottom qui permettra de laisser de l’air sous l’image
+  #     avant le texte.
+  #   - et enfin un text-box sous l’image, pour mettre l’exédant de
+  #     texte s’il y en a.
+  # 
   def print(pdf)
     # spy(:on) if first_turn?
 
@@ -164,6 +191,8 @@ class NImage < AnyParagraph
 
     data_image = @data_image
 
+    floating_data = {} if floating? # [002]
+
     pdf.update do
 
       # On passe à la ligne, sauf quand l’image occupe toute la
@@ -187,11 +216,22 @@ class NImage < AnyParagraph
         move_down(my.space_before)
       end
 
+      if my.floating? # [002]
+        # La première chose à faire, pour une image flottante, est
+        # de mémoriser le cursor courant, qui va correspondre au 
+        # curseur du premier text-box de texte.
+        floating_data.merge!(textbox1_top: cursor.freeze)
+        if my.floating_top != 0
+          move_down(my.floating_top)
+        end
+        floating_data.merge!(textbox2_top: cursor.freeze)
+      end
+
       cursor_before = cursor.freeze
 
-      #########################
-      ###        IMAGE      ###
-      #########################
+      #######################
+      ###      IMAGE      ###
+      #######################
       if my.svg?
         # Pour le moment, je ne sais pas gérer la rotation,
         # il faut tourner l’image d’origine et mettre la
@@ -240,6 +280,14 @@ class NImage < AnyParagraph
         move_down(my.space_after)
       end
 
+      if my.floating?
+        floating_data.merge!(textbox3_top: cursor.freeze)
+        ###################################
+        ###   TEXTE AUTOUR DE L’IMAGE   ###
+        ###################################
+        my.print_text_around_image(floating_data)
+      end
+
       page_number_fin = page_number.freeze
       if cursor < 0 && page_number_fin == page_number_debut
         # Je ne sais absolument pourquoi je dois faire ça, mais si 
@@ -257,6 +305,77 @@ class NImage < AnyParagraph
     # spy(:off) if first_turn?
 
   end #/print
+
+  # --- Floating Image Treatment ---
+
+  # Méthode principale qui écrit le texte autour d’une image 
+  # flottante
+  def print_text_around_image(float_data)
+    # S’il y a un floating_top, il faut écrire du texte avant
+    if floating_top
+      # L’image est un peu décalée du haut, il faut donc écrire le
+      # texte avant
+      options_textbox1 = {
+        width:  page_width, 
+        height: float_data[:textbox2_top] - float_data[:textbox1_top],
+        at: [0, float_data[:textbox1_top]],
+        overflow: :truncate,
+        inline_format: true
+      }
+      exces = pdf.text_box(wrapped_text, **options_textbox1)
+    else
+      exces = wrapped_text
+    end
+    # Le texte restant doit être mis à côté de l’image
+    if exces 
+      image_width   = calc_width + (margin_left + margin_right)
+      text_width = page_width - image_width
+      text_left  = float_left? ? image_width : 0
+      image_height  = float_data[:textbox3_top] - float_data[:textbox2_top]
+      options_textbox2 = {
+        width:  text_width,
+        height: image_height,
+        at:     [text_left, float_data[:textbox2_top]],
+        overflow: :truncate,
+        inline_format: true
+      }
+      if exces.is_a?(String)
+        exces = pdf.text_box(exces, **options_textbox2)
+      else
+        exces = pdf.formatted_text_box(exces, **options_textbox2)
+      end
+    end
+    # Le texte restant doit être mis en dessous de l’image
+    if exces
+      options_textbox3 = {
+        width:  page_width,
+        at:     [0, float_data[:textbox3_top]],
+        inline_format: true
+      }
+      pdf.formatted_text_box(exces, **options_textbox2)
+    end
+  end
+
+  # Le texte à enrouler autour de l’image (cf. [002])
+  # Rapel : ce sont tous les paragraphes qui suivent l’image, qui 
+  # sont précédés de "!"
+  # 
+  def wrapped_text
+    s = []
+    pp = self.prev_printed_paragraph
+    s << pp.raw_text
+    while pp.prev_printed_paragraph.wrapped?
+      pp = pp.prev_printed_paragraph
+      s  << pp.raw_text
+    end
+    s = AnyParagraph.__parse(s.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
+      # @note : peut-être faudra-t-il simplement appeler __parse sur 
+      # chaque paragraphe
+
+    puts "\ns final = #{s}"
+    sleep 3
+    return s
+  end
 
   # --- Calcul Methods ---
 
@@ -429,8 +548,35 @@ class NImage < AnyParagraph
     :TRUE == @resizeit ||= true_or_false(not(data[:no_resize] === true))
   end
 
+  def floating?
+    :TRUE == @isfloating ||= true_or_false([:left, :right].include?(data[:float]))
+  end
+
+  def float_right?
+    :TRUE == @isfloatright ||= true_or_false(floating? && data[:float].to_sym == :right)
+  end
+  def float_left?
+    :TRUE == @isfloatleft ||= true_or_false(floating? && data[:float].to_sym == :left)
+  end
+
   # --- Image Data ---
 
+  def floating_top
+    @floating_top ||= data[:floating_top] || 0
+  end
+  def floating_bottom
+    @floating_bottom ||= data[:floating_bottom] || 0
+  end
+  def margin_left
+    @margin_left ||= data[:margin_left] || begin
+      float_left? ? 0 : 10
+    end
+  end
+  def margin_right
+    @margin_right ||= data[:margin_right] || begin
+      float_right? ? 0 : 10
+    end
+  end
 
   def space_before
     @space_before ||= data[:space_before] || 0

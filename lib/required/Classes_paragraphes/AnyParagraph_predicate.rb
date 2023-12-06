@@ -14,6 +14,9 @@ class AnyParagraph
   def image?    ; false end
   def table?    ; false end
 
+  # @return true si c’est un paragraphe textuel à enrouler autour
+  # d’une image (s’il commence, donc, par un "!")
+  def wrapped?  ; false end
 
   def has_unknown_target?
     @unknown_targets.any?

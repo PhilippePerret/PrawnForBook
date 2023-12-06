@@ -152,7 +152,6 @@ Prawn4book::Manual::Feature.new do
       code: '\!\[exemples/plus_large.jpg](no_resize:true, width:1000, left:0.1)',
       left: true,
       page_before: true,
-
     },
   } #/ EXEMPLES
 

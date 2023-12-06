@@ -310,7 +310,7 @@ class AnyParagraph
   # excluant les lignes vides)
   # 
   # @note
-  #   Cette méthode a été inauguré pour les titres, pour savoir si
+  #   Cette méthode a été inaugurée pour les titres, pour savoir si
   #   un titre suit un autre titre.
   #   Voir aussi la méthode predicate previous_is_title?
   # 

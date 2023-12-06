@@ -56,8 +56,9 @@ module Prawn4book
     # 'puces/custom_image',
 
     #-Images-#
-    # 'images/inserer',
-    # 'images/format_legende',
+    'images/inserer',
+    'images/images_flottantes',
+    'images/format_legende',
     
     # 'references/cross_references'
     # 'hyperlinks',

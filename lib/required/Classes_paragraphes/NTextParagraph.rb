@@ -28,10 +28,11 @@ class NTextParagraph < AnyParagraph
     @is_note_page   = raw_text.match?(REG_NOTE_PAGE)
     @is_citation    = raw_text.match?(REG_CITATION)
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
+    @is_wrapped     = raw_text.start_with?('!')
 
     # En cas de citation ou d'item de liste, on retire la marque
     # de début du paragraphe ("> " ou "* ")
-    @raw_text = raw_text[1..-1].strip if citation? || list_item?
+    @raw_text = raw_text[1..-1].strip if citation? || list_item? || wrapped?
 
     recup = {}
     tx = NTextParagraph.__get_class_tags_in(raw_text, recup)
@@ -62,6 +63,10 @@ class NTextParagraph < AnyParagraph
   #   en plaçant le curseur, en réglant les propriétés, etc.
   # 
   def print(pdf)
+
+    # Si c’est un paragraphe enroulé (sous-entendu : autour d’une
+    # image), on ne l’imprime pas ici.
+    return if wrapped?
 
     @pdf = pdf
 
@@ -197,6 +202,7 @@ class NTextParagraph < AnyParagraph
   def note_page?    ; @is_note_page     end
   def table_line?   ; @is_table_line    end
   def tagged_line?  ; @is_tagged_line   end
+  def wrapped?      ; @is_wrapped       end
   def list_item?    ; @is_list_item     end
   attr_accessor :is_list_item
 

@@ -1,5 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
+  new_page_before(:feature)
 
   subtitle "Format de la légende"
 
