@@ -1,5 +1,5 @@
 Prawn4book::Manual::Feature.new do
 
-  grand_titre "Bibligraphies"
+  grand_titre "Bibliographies"
 
 end

@@ -14,7 +14,7 @@ module Prawn4book
     # 'generalites/doubles_parentheses',
 
     #---Recette---#
-    # 'recette/grand_titre',
+    'recette/grand_titre',
     # 'recette/recette_livre',
     # 'recette/recette_collection',
     # 'recette/book_data',
@@ -75,10 +75,11 @@ module Prawn4book
     # 'alignement_du_texte',
 
     #---Mode_Expert---#
-    # 'expert/grand_titre',
+    'expert/grand_titre',
     # 'expert/mode_expert',
     # 'expert/contexte_erreurs',
     # 'expert/injection_code',
+    'expert/bibliographies',
 
     #---Annexe---#
     # 'annexe/grand_titre',

@@ -22,8 +22,17 @@ class Bibliography
     load_items_from_file if one_file? && data_file_exist? # pour ne pas être obligé de charger quand la bibliographie n'est pas définie
   end
 
+  # @api
+  # 
+  # Return true si la bibliographie, dans la recette, définit son
+  # format.
+  # 
+  def has_format?
+    :TRUE == @hasitsformat ||= true_or_false(not(self.format.nil?))
+  end
+
   ##
-  # @public
+  # @api
   # 
   # @return true si la bibliographie possède une méthode
   # de formatage personnalisée
@@ -223,8 +232,10 @@ class Bibliography
 
   def tag         ; id.to_s end
   def path        ; @path         ||= File.join(book.folder,data[:path])           end
-  def title       ; @title        ||= data[:title]          end
-  def title_level ; @title_level  ||= data[:title_level]||1 end
+  def title       ; @title        ||= data[:title]              end
+  def format      ; @format       ||= data[:format]             end
+  def picto       ; @picto        ||= data[:picto]              end
+  def title_level ; @title_level  ||= data[:title_level]||1     end
   def main_key    ; @main_key     ||= data[:main_key] || :title end
 
   private

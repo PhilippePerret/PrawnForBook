@@ -6,11 +6,12 @@ Prawn4book::Manual::Feature.new do
 
 
   description <<~EOT
-    Les choses à décrire :
+    {TODO: Les choses à décrire :}
 
     * les éléments de base que sont la fonte, la taille et le style
     * le placement sur une page particulière (next_page, belle_page, alone)
     * l'alignement (:align) qui permet de mettre le titre :left, :right ou :center
+    * la transformation du titre avec `caps` (comme pour les entêtes)
     * utilisation d'un titre de niveau élevé pour faire un titre gros et particulier. Montrer qu'on se sert de :alone pour définir qu'il doit être seul sur la page et que, dans ce cas, on peut se servir de :lines_before pour le placer verticalement et de :align pour l'aligner
     EOT
 

@@ -7,6 +7,8 @@ module Prawn4book
 class Bibliography
 class BibItem
 
+  PICTOBIB = '<font name="PictoPhil" size="14"><color rgb="555555">%s</color></font>'
+
   attr_reader :id, :biblio
   attr_reader :occurrences
 
@@ -139,11 +141,9 @@ class BibItem
     unite = TERMS[key_numerotation]
     unite = "#{unite}s" if @occurrences.count > 1
     # "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
-    if pretty
-      "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
-    else
-      "#{@occurrences.map { |hoccu| hoccu[key_numerotation] }.join(', ')}"
-    end
+    liste = @occurrences.map { |hoccu| hoccu[key_numerotation] }.uniq
+    # unite + ":" + (pretty ? liste.pretty_join : liste.join(', '))
+    (pretty ? liste.pretty_join : liste.join(', '))
   end
 
   # --- Predicate Methods ---
@@ -271,10 +271,13 @@ class BibItem
   end
 
 
+  # @return [String] Titre pour l’item de bibliographie
+  # 
   # @note
   #   Je ne sais pas du tout pourquoi, mais ici, si j'utilise
   #   '@title ||=' pour mettre en cache la donnée titre, ça plante
-  #   avec un cant' modify frozen string
+  #   avec un cant' modify frozen string (à quel moment est-elle 
+  #   gelée ?…)
   def title
     keytitle = biblio.respond_to?(:main_key) ? biblio.main_key.to_sym : :title
     data[keytitle] || raise(PFBFatalError.new(713, {id: self.id, tag:biblio.tag}))

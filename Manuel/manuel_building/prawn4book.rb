@@ -49,12 +49,8 @@ module Prawn4book
   
   end
 
-end #/module Prawn4book
 
-module Prawn4book
 class Feature 
-
-
 
   # On écrit le code en caractère courrier blanc sur du noir
   def print_code
@@ -127,4 +123,15 @@ private
     }.freeze
   end
 end #/class Feature
+
+class Bibliography
+
+  # Pour montrer comment avoir une méthode de transformation d’une
+  # propriété d’un item de bibliographie dans :format
+  def transforme_nom(str)
+    "<font size=\"20\"><color rgb=\"059950\">#{str}</color></font>"
+  end
+
+end #/class Bibliography
+
 end #/module Prawn4book

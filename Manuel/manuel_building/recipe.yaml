@@ -61,6 +61,7 @@ book_format:
       alone: false
       next_page: false
       belle_page: false
+      caps: "all-caps"
 
   #</titles>
 #</book_format>
@@ -149,14 +150,18 @@ bibliographies:
     title: "Articles de presse"
     title_level: 2
     path: "biblios/articles"
+    picto: :fiche
   film:
     title: "Films cités"
     title_level: 2
     path: "biblios/films"
-  custom:
-    title: "Liste personnalisée"
+    picto: clap
+    format: "%{title|all_caps} (%{year} — %{year|age}, réalisation : %{director|person}, acteurs : %{actors|person}, durée : %{duration|minute_to_horloge}). Occurrences : %{pages}"
+  costum:
+    title: "Liste des costumes"
     title_level: 3
-    path: "biblios/customs"
+    path: "biblios/costums"
     main_key: nom
+    format: "%{nom|transforme_nom}"
 
 #</bibliographies>

@@ -7,15 +7,27 @@
   :page: 17
   :paragraph:
   :hybrid: 'p. 17 § '
+:recette_grand_titre:
+  :page: 18
+  :paragraph:
+  :hybrid: 'p. 18 § '
 :bibliographies_grand_titre:
-  :page: 18
+  :page: 19
   :paragraph:
-  :hybrid: 'p. 18 § '
+  :hybrid: 'p. 19 § '
 :bibliographies_introduction:
-  :page: 18
+  :page: 19
   :paragraph:
-  :hybrid: 'p. 18 § '
+  :hybrid: 'p. 19 § '
 :bibliographies_customisation:
-  :page: 23
+  :page: 24
   :paragraph:
-  :hybrid: 'p. 23 § '
+  :hybrid: 'p. 24 § '
+:expert_grand_titre:
+  :page: 29
+  :paragraph:
+  :hybrid: 'p. 29 § '
+:expert_bibliographies:
+  :page: 29
+  :paragraph:
+  :hybrid: 'p. 29 § '

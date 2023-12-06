@@ -47,6 +47,14 @@ end
 class Integer
   def proceed_unit; self  end
   def to_pps(arg=nil); self end
+  # Seconds to Horloge
+  def s2h
+    h = (self / 3600).to_s
+    r = self % 3600
+    m = (r / 60).to_s.rjust(2, '0')
+    s = (r % 60).to_s.rjust(2, '0')
+    "#{h}:#{m}:#{s}"
+  end
 end
 class Float
   def proceed_unit; self  end

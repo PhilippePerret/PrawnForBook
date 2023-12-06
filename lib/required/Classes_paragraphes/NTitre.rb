@@ -53,6 +53,7 @@ class NTitre < AnyParagraph
 
     # Le titre formaté
     ftitre = text.dup
+    ftitre = ftitre.upcase if caps || caps == 'all-caps'
 
     # Calcul du nombre de ligne avant
     # ===============================
@@ -249,6 +250,10 @@ class NTitre < AnyParagraph
     @align ||= PdfBook::NTitre.align(level)
   end
 
+  def caps
+    @caps ||= PdfBook::NTitre.caps(level)
+  end
+
   # @prop {Integer} Espace avec le texte suivant
   def lines_after
     @lines_after ||= self.class.lines_after(level)
@@ -361,6 +366,10 @@ class NTitre < AnyParagraph
 
   def self.align(level)
     get_data(:align, level, :left).to_sym
+  end
+
+  def self.caps(level)
+    get_data(:caps, level, nil).to_sym
   end
 
   def self.alone?(level)
