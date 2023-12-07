@@ -35,7 +35,7 @@ book_format:
   text:
     default_font_and_style: 'Numito/light'
     default_font_size:  11
-    line_height: 18
+    line_height: 14
     guillemets:               ['« ',' »']
   #<titles>
   titles:

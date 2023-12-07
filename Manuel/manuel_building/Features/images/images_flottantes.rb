@@ -34,10 +34,13 @@ Prawn4book::Manual::Feature.new do
 
   sample_texte <<~EOT #, "Autre entête"
     \\!Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas.
-    \\!\\[exemples/plus_large.jpg](float: :left, width: 100)
+    \\!\\[exemples/moins_large_border.jpg](float: :left, width: 100)
+    \\(( line \\))
+    \\!Texte placé à gauche d’une image qui porte le float à :right (flottante à droite) et le :width à 100.
+    \\!\\[exemples/moins_large_border.jpg](float: :right, width: 100)
     \\(( line \\))
     \\!Un texte qui va commencer au-dessus de l’image, sur deux lignes, puis s’enrouler à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajouté à gauche (`left: 0`) et une marge de 10 est définie entre l’image et le texte (`right: 10`).
-    \\!\\[exemples/plus_large.jpg](float: :left, floating_top: 30, width: 100, left: 0, right: 10)
+    \\!\\[exemples/moins_large_border.jpg](float: :left, floating_top: 30, width: 100, margin_left: 0, margin_right: 2)
     EOT
 
   texte(:as_sample)

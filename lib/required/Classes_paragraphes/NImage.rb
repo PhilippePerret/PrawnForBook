@@ -104,7 +104,7 @@ class NImage < AnyParagraph
   #     texte s’il y en a.
   # 
   def print(pdf)
-    # spy(:on) if first_turn?
+    spy(:on) if first_turn? && floating?
 
     my = self # ATTENTION : pas "me"
 
@@ -142,11 +142,13 @@ class NImage < AnyParagraph
       @data_image.merge!(at: [left, pdf.cursor - pdf.line_height])
     elsif right > 0
       spy "right est défini et vaut #{right.inspect}".jaune
-      left = pdf.bounds.width - (calc_width + right)
-      @data_image.merge!(at: [left, pdf.cursor - pdf.line_height])
+      lf = pdf.bounds.width - (calc_width + right)
+      @data_image.merge!(at: [lf, pdf.cursor - pdf.line_height])
     else
       @data_image.merge!({
-        position: @data[:align]||:center
+        position: @data[:align] || begin
+          floating? ? (float_left? ? :left : :right) : :center
+        end
       })
     end
 
@@ -164,24 +166,24 @@ class NImage < AnyParagraph
       @data_image.merge!(color_mode: :cmyk)
     end
 
-    # spy "Image:       #{filename}".bleu
-    # spy "Légende:     #{legend}".bleu if legend
-    # spy <<~EOD.bleu
-    #   (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
-    #   Original W: #{original_width.inspect}
-    #   Original H: #{original_height.inspect}
-    #   Explicit W: #{width.inspect}
-    #   Explicit H: #{height.inspect}
-    #   Calc W:     #{calc_width} 
-    #   Calc H:     #{calc_height} 
-    #   Scale:      #{scale.inspect}
-    #   left:       #{left.inspect}
-    #   right:      #{right.inspect}
-    #   position legend: #{position_legend}
-    #   left legend: #{left_legend}
-    #   -----------
-    #   Data image: #{@data_image}
-    #   EOD
+    spy "Image:       #{filename}".bleu
+    spy "Légende:     #{legend}".bleu if legend
+    spy <<~EOD.bleu
+      (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
+      Original W: #{original_width.inspect}
+      Original H: #{original_height.inspect}
+      Explicit W: #{width.inspect}
+      Explicit H: #{height.inspect}
+      Calc W:     #{calc_width} 
+      Calc H:     #{calc_height} 
+      Scale:      #{scale.inspect}
+      left:       #{left.inspect}
+      right:      #{right.inspect}
+      position legend: #{position_legend}
+      left legend: #{left_legend}
+      -----------
+      Data image: #{@data_image}
+      EOD
 
 
     # Propriété à sortir (pour le scope dans pdf)
@@ -205,14 +207,15 @@ class NImage < AnyParagraph
 
       # S’il y a un ajustement vertical
       if my.vadjust > 0
-        if data_image.key?(:at)
-          data_image[:at][1] -= my.vadjust
-        else
-          move_down(my.vadjust)
-        end
+        data_image[:at][1] -= my.vadjust if data_image.key?(:at)
+        # Dans tous les cas, on se déplace vers le bas
+        move_down(my.vadjust)
       end
 
+      # S’il y a de l’espace à laisser avant
       if my.space_before != 0
+        data_image[:at][1] -= my.space_before if data_image.key?(:at)
+        # Dans tous les cas, on se déplace vers le bas
         move_down(my.space_before)
       end
 
@@ -225,9 +228,14 @@ class NImage < AnyParagraph
           move_down(my.floating_top)
         end
         floating_data.merge!(textbox2_top: cursor.freeze)
+        # Ensuite, on définit sa valeur :left et son alignement s’il
+        # n’est pas défini
+        data_image[:left] = my.float_left? ? my.margin_left : my.calc_width
+        # data_image[:at][0] = data_image[:left]
       end
 
       cursor_before = cursor.freeze
+      image_top = (data_image.key?(:at) ? data_image[:at][1] : cursor_before).freeze
 
       #######################
       ###      IMAGE      ###
@@ -281,11 +289,32 @@ class NImage < AnyParagraph
       end
 
       if my.floating?
+        # J’essaie de mémoriser le cursor actuel pour le remettre 
+        # après l’écriture du texte.
+        last_cursor = cursor.freeze
+
         floating_data.merge!(textbox3_top: cursor.freeze)
         ###################################
         ###   TEXTE AUTOUR DE L’IMAGE   ###
         ###################################
         my.print_text_around_image(floating_data)
+        # Où faut-il se placer (cursor) ensuite ?
+        spy <<~EOT
+          Pour trouver la position de curseur (best_cursor)
+          -----------------------------------
+          image_top = #{image_top}
+          image_height = #{image_height}
+          image_top - image_height = #{image_top - image_height}
+          cursor = #{cursor}
+          floating_data[:textbox3_top] = #{floating_data[:textbox3_top]}          
+          last_cursor = #{last_cursor}  
+          EOT
+        best_cursor = [image_top - image_height, cursor, floating_data[:textbox3_top], last_cursor].min.freeze
+        spy "Meilleur curseur obtenu : #{best_cursor}".bleu
+        move_cursor_to(best_cursor)
+        update_current_line
+        move_to_next_line
+        spy "Donc se placer sur la line suivant : #{cursor.freeze}".jaune
       end
 
       page_number_fin = page_number.freeze
@@ -302,7 +331,7 @@ class NImage < AnyParagraph
 
     end #/pdf.update
     
-    # spy(:off) if first_turn?
+    spy(:off) if first_turn? && floating?
 
   end #/print
 
@@ -312,13 +341,16 @@ class NImage < AnyParagraph
   # flottante
   def print_text_around_image(float_data)
     # S’il y a un floating_top, il faut écrire du texte avant
-    if floating_top
+    if floating_top > 0
       # L’image est un peu décalée du haut, il faut donc écrire le
       # texte avant
+      pdf.move_cursor_to(float_data[:textbox1_top])
+      pdf.update_current_line
+      pdf.move_to_next_line
       options_textbox1 = {
         width:  page_width, 
-        height: float_data[:textbox2_top] - float_data[:textbox1_top],
-        at: [0, float_data[:textbox1_top]],
+        height: (float_data[:textbox2_top] - float_data[:textbox1_top]).abs,
+        at: [0, pdf.cursor],
         overflow: :truncate,
         inline_format: true
       }
@@ -331,11 +363,14 @@ class NImage < AnyParagraph
       image_width   = calc_width + (margin_left + margin_right)
       text_width = page_width - image_width
       text_left  = float_left? ? image_width : 0
-      image_height  = float_data[:textbox3_top] - float_data[:textbox2_top]
+      image_height  = (float_data[:textbox3_top] - float_data[:textbox2_top]).abs
+      pdf.move_cursor_to(float_data[:textbox2_top])
+      pdf.update_current_line
+      pdf.move_to_next_line
       options_textbox2 = {
         width:  text_width,
         height: image_height,
-        at:     [text_left, float_data[:textbox2_top]],
+        at:     [text_left, pdf.cursor],
         overflow: :truncate,
         inline_format: true
       }
@@ -347,13 +382,22 @@ class NImage < AnyParagraph
     end
     # Le texte restant doit être mis en dessous de l’image
     if exces
+      pdf.move_cursor_to(float_data[:textbox3_top])
+      pdf.update_current_line
+      pdf.move_to_next_line
       options_textbox3 = {
         width:  page_width,
-        at:     [0, float_data[:textbox3_top]],
+        at:     [0, pdf.cursor],
         inline_format: true
       }
-      pdf.formatted_text_box(exces, **options_textbox2)
+      pdf.formatted_text_box(exces, **options_textbox3)
     end
+
+    # Pour le moment je ne mets que ça, mais ça m’étonnerait beaucoup
+    # que ça suffise en soi…
+    pdf.move_to_next_line
+
+
   end
 
   # Le texte à enrouler autour de l’image (cf. [002])
@@ -372,8 +416,8 @@ class NImage < AnyParagraph
       # @note : peut-être faudra-t-il simplement appeler __parse sur 
       # chaque paragraphe
 
-    puts "\ns final = #{s}"
-    sleep 3
+    # puts "\ns final = #{s}"
+    # sleep 3
     return s
   end
 
@@ -617,7 +661,13 @@ class NImage < AnyParagraph
 
   def left
     @left ||= begin
-      data[:left].to_pps if data.key?(:left)
+      if data.key?(:left)
+        data[:left].to_pps
+      elsif data.key?(:margin_left) # floating
+        data[:margin_left].to_pps
+      elsif float_left?
+        0.0
+      end
     end || 0.0
   end
 

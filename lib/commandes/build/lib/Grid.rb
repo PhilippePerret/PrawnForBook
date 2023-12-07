@@ -29,6 +29,16 @@ class PrawnView
   # recalculée qu’en cas de problème.
   attr_accessor :current_line
 
+  # Essai de surclassement de la méthode #move_cursor_to pour que
+  # soit actualisée la ligne courante
+  # NON : si des méthodes s’en serve pour déplacer le 
+  # curseur sans volonté de changer la ligne courante, ça va fausser
+  # tous les calculs
+  # def move_cursor_to(value)
+  #   super
+  #   update_current_line
+  # end
+
   # Actualise la ligne courante en fonction de la position du 
   # curseur
   def update_current_line
