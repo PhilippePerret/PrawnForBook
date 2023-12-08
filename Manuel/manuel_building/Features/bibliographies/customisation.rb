@@ -4,7 +4,7 @@ Prawn4book::Manual::Feature.new do
   subtitle "Personnalisation des bibliographiques"
 
   description <<~EOT
-    Comme pour tout éléménet de _PFB_, on peut le garder simple ou au contraire le formater tel qu’on le désire. C’est pratiquement incontournable pour les bibliographies, au moins au niveau de la *liste des sources*.
+    Comme pour tout élément de _PFB_, on peut le garder simple ou au contraire le formater tel qu’on le désire. C’est pratiquement incontournable pour les bibliographies, au moins au niveau de la *liste des sources*.
 
     ##### Définir la fonte
 

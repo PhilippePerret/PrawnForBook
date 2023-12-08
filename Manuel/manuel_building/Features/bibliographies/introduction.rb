@@ -123,7 +123,7 @@ Prawn4book::Manual::Feature.new do
     YAML
 
   sample_texte <<~EOT #, "Autre entête"
-    Un texte exemple qui utilise un article\\(premier article) en référence bibliographique. Ce paragraphe contient aussi une référence au film film(The Titanic) qui se déroule sur un bateau.
+    Un texte exemple qui utilise un article\\(premier article) en référence bibliographique. Ce paragraphe contient aussi une référence au film film\\(The Titanic) qui se déroule sur un bateau.
     EOT
 
   texte(:as_sample)
