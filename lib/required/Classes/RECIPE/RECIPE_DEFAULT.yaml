@@ -26,12 +26,12 @@ fonts:
     # FONCTIONNE MAL AVEC LES .OTF
     # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
   Numito:
-    normal: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
-    regular: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
-    light: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
-    bold:  'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
-    italic: 'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
-    bold_italic: 'resources/fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf'
+    normal:       'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
+    regular:      'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
+    light:        'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
+    bold:         'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
+    italic:       'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
+    bold_italic:  'resources/fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf'
   Helvetica:
     normal:       'resources/fonts/Helvetica/Helvetica.ttf'
     regular:      'resources/fonts/Helvetica/Helvetica.ttf'
