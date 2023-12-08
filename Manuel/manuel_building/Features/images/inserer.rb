@@ -166,7 +166,7 @@ Prawn4book::Manual::Feature.new do
     lines << data_exemple[:before] if data_exemple[:before]
     lines << '(( new_page ))' if data_exemple[:page_before]
     lines << '(( {align: :left} ))' if data_exemple[:left]
-    lines << "**EXEMPLE #{iex} • ** #{data_exemple[:text]}<br>`#{data_exemple[:code]}`"
+    lines << "**EXEMPLE #{iex} • ** #{data_exemple[:text]}<br> `#{data_exemple[:code]}`"
     lines << deslash(data_exemple[:code])
     lines << data_exemple[:after] if data_exemple[:after]
     lines << '(( line ))' if data_exemple[:line_after]
