@@ -52,51 +52,25 @@ class NTitre < AnyParagraph
     super
 
     # Le titre formaté
-    ftitre = text.dup
-
-    # Mettre le titre en capitale (si demandé)
-    # 
-    # Mais attention, il ne faut pas que les marquages de format
-    # passent en majuscule car Prawn ne sait pas interpréter "<em>"
-    # comme "<EM>".
-    # Il restait quand même une faiblesse ici : si les balises qui 
-    # contenaient des capitales seraient remplacées par des balises
-    # avec seulement des minuscules. Il faut un traitement plus fin 
-    # qui ne mette en majuscules que le texte. Il faut donc procéder 
-    # ainsi : on retire toutes les balises HTML et on les met dans 
-    # une table en les remplaçant provisoirement par _BALHTMLxxx_ 
-    # puis on remet les balises originales après la capitalisation.
-    if caps || caps == 'all-caps'
-      table_html_tags = {}
-      x_html_tag = 0
-      ftitre = ftitre.gsub(/(<.+?>)/) do
-        x_html_tag += 1
-        k_html_tag = "_BALHTML#{x_html_tag}_"
-        table_html_tags.merge!(k_html_tag => $1.freeze)
-        k_html_tag
-      end
-      ftitre = ftitre.upcase
-      table_html_tags.each do |ktag, real_value|
-        ftitre = ftitre.sub(ktag, real_value)
-      end
-    end
+    ftitre = formated_as_title
 
     # Calcul du nombre de ligne avant
     # ===============================
     # Principes
     # ---------
-    # Si le paragraphe précédent était un titre, on n’ajoute pas
-    # les lines avant comme ça. Le principe est de mettre entre 
-    # les deux titres la plus grande valeur. Si, par exemple, il 
-    # faut 6 lignes après un titre de niveau 2 et 4 lignes avant
-    # un titre de niveau 4, alors, avant le titre de niveau 4 on
-    # ne mettra rien (les 6 lignes du titre de niveau 2 suffisent)
-    # Si, en revanche, il faut 4 lignes après un titre de niveau
-    # 2 et 6 lignes avant un titre de niveau 4, alors, avant le
-    # titre 4, il n’y aura que les 4 lignes du titre de niveau
-    # 2. Il faudra donc en ajouter deux.
+    # Si le paragraphe précédent était un titre, le principe est de 
+    # mettre entre les deux titres la plus grande valeur de nombre de
+    # lignes. Si, par exemple, il faut 6 lignes après un titre de 
+    # niveau 2 et 4 lignes avant un titre de niveau 4, alors, avant 
+    # le titre de niveau 4 on ne mettra rien (les 6 lignes du titre 
+    # de niveau 2 suffisent). Si, en revanche, il faut 4 lignes après
+    # un titre de niveau 2 et 6 lignes avant un titre de niveau 4, 
+    # alors, avant le titre 4, il n’y aura que les 4 lignes du titre 
+    # de niveau 2. Il faudra donc en ajouter deux.
     lines_before_calc =
       if alone?
+        # Pour un titre seul dans la page, on préserve toujours son
+        # nombre de ligne avant qui définit sa position dans la page.
         lines_before.dup.freeze
       elsif previous_paragraph && previous_paragraph.title?
         if previous_paragraph.lines_after >= lines_before
@@ -116,7 +90,7 @@ class NTitre < AnyParagraph
       fonte = my.fonte
       font(fonte)
 
-      tstr = ftitre.inspect
+      tstr = ftitre.inspect # débuggage
 
       # Il faut aussi passer à la page suivante quand il ne reste pas
       # assez de place pour mettre les lignes après (nous sommes trop
@@ -126,9 +100,18 @@ class NTitre < AnyParagraph
       #   On ajoute 2 lignes après les lines_after pour avoir la 
       #   place de mettre au moins 2 lignes.
       # 
-      limite_basse = cursor - (my.lines_after + my.lines_before + 2) * line_height
+      limite_basse = cursor - (my.lines_after + lines_before_calc + 2) * line_height
 
-      start_new_page if limite_basse < 0 || my.on_new_page?
+      # spy <<~EOT.bleu
+      #   limite_basse pour #{ftitre.inspect} : #{limite_basse.inspect}
+      #   Calculée avec :
+      #   cursor : #{cursor}
+      #   lines after : #{my.lines_after}
+      #   lines before (calculées) : #{lines_before_calc}
+      #   line_height: #{line_height}
+      #   EOT
+
+      start_new_page if limite_basse < line_height || my.on_new_page?
 
       # - Page seule sur la double page -
       # 
@@ -161,7 +144,10 @@ class NTitre < AnyParagraph
       # que renvoie height_of et non pas la taille réelle que prend
       # la police.
       # title_height = real_height_of(ftitre, **my.title_options)
-      title_height = height_of(ftitre, **my.title_options)
+      # title_height = height_of("VOIR", **my.title_options)
+      title_height = my.size
+
+      # spy "title_height de #{tstr} : #{title_height} (size: #{my.size})".bleu, true
 
       # Pour simplifier (sur le debuggage)
       curpage = book.pages[page_number]
@@ -223,6 +209,40 @@ class NTitre < AnyParagraph
   end
   # /print
 
+  # Quelques opérations de formatage sur le titre
+  # 
+  def formated_as_title
+    # Mettre le titre en capitale (si demandé)
+    # 
+    # Mais attention, il ne faut pas que les marquages de format
+    # passent en majuscule car Prawn ne sait pas interpréter "<em>"
+    # comme "<EM>".
+    # Il restait quand même une faiblesse ici : si les balises qui 
+    # contenaient des capitales seraient remplacées par des balises
+    # avec seulement des minuscules. Il faut un traitement plus fin 
+    # qui ne mette en majuscules que le texte. Il faut donc procéder 
+    # ainsi : on retire toutes les balises HTML et on les met dans 
+    # une table en les remplaçant provisoirement par _BALHTMLxxx_ 
+    # puis on remet les balises originales après la capitalisation.
+    str = text.dup
+    if caps || caps == 'all-caps'
+      table_html_tags = {}
+      x_html_tag = 0
+      str = str.gsub(/(<.+?>)/) do
+        x_html_tag += 1
+        k_html_tag = "_BALHTML#{x_html_tag}_"
+        table_html_tags.merge!(k_html_tag => $1.freeze)
+        k_html_tag
+      end
+      str = str.upcase
+      table_html_tags.each do |ktag, real_value|
+        str = str.sub(ktag, real_value)
+      end
+    end
+
+    return str
+  end #/formated_as_title
+
   # Ajout du titre à la table des matières et à la page d’index
   # +page_number+
   # 
@@ -251,6 +271,7 @@ class NTitre < AnyParagraph
     @title_options ||= {
       is_title: true, 
       inline_format: true,
+      size:  self.size,
       color: color,
       align: align,
     }.freeze
