@@ -29,15 +29,15 @@ class PrawnView
   # recalculée qu’en cas de problème.
   attr_accessor :current_line
 
-  # Essai de surclassement de la méthode #move_cursor_to pour que
-  # soit actualisée la ligne courante
-  # NON : si des méthodes s’en serve pour déplacer le 
-  # curseur sans volonté de changer la ligne courante, ça va fausser
-  # tous les calculs
-  # def move_cursor_to(value)
-  #   super
-  #   update_current_line
-  # end
+  # Dans Prawn-for-book, chaque fois qu’on place le curseur quelque
+  # part, on actualilse la ligne (de référence) courante en fonction
+  # de la nouvelle position.
+  # Si, exceptionnellement, la ligne ne doit pas être actualisée, on
+  # met +no_update+ à true
+  def move_cursor_to(value, no_update = false)
+    super(value)
+    update_current_line unless no_update
+  end
 
   # Actualise la ligne courante en fonction de la position du 
   # curseur
