@@ -345,8 +345,7 @@ class NImage < AnyParagraph
       # L’image est un peu décalée du haut, il faut donc écrire le
       # texte avant
       pdf.move_cursor_to(float_data[:textbox1_top])
-      pdf.update_current_line
-      pdf.move_to_next_line
+      # pdf.move_to_next_line
       options_textbox1 = {
         width:  page_width, 
         height: (float_data[:textbox2_top] - float_data[:textbox1_top]).abs,
@@ -365,8 +364,7 @@ class NImage < AnyParagraph
       text_left  = float_left? ? image_width : 0
       image_height  = (float_data[:textbox3_top] - float_data[:textbox2_top]).abs
       pdf.move_cursor_to(float_data[:textbox2_top])
-      pdf.update_current_line
-      pdf.move_to_next_line
+      # pdf.move_to_next_line
       options_textbox2 = {
         width:  text_width,
         height: image_height,
@@ -383,8 +381,7 @@ class NImage < AnyParagraph
     # Le texte restant doit être mis en dessous de l’image
     if exces
       pdf.move_cursor_to(float_data[:textbox3_top])
-      pdf.update_current_line
-      pdf.move_to_next_line
+      # pdf.move_to_next_line
       options_textbox3 = {
         width:  page_width,
         at:     [0, pdf.cursor],
