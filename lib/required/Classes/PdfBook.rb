@@ -132,10 +132,6 @@ class PdfBook
     paragraphe.print(pdf)
     STDOUT.write '.'.vert
 
-    # - Post-traitement en fonction du bloc éventuel -
-
-
-
   end
 
 

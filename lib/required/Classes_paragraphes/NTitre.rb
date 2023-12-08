@@ -53,7 +53,33 @@ class NTitre < AnyParagraph
 
     # Le titre formaté
     ftitre = text.dup
-    ftitre = ftitre.upcase if caps || caps == 'all-caps'
+
+    # Mettre le titre en capitale (si demandé)
+    # 
+    # Mais attention, il ne faut pas que les marquages de format
+    # passent en majuscule car Prawn ne sait pas interpréter "<em>"
+    # comme "<EM>".
+    # Il restait quand même une faiblesse ici : si les balises qui 
+    # contenaient des capitales seraient remplacées par des balises
+    # avec seulement des minuscules. Il faut un traitement plus fin 
+    # qui ne mette en majuscules que le texte. Il faut donc procéder 
+    # ainsi : on retire toutes les balises HTML et on les met dans 
+    # une table en les remplaçant provisoirement par _BALHTMLxxx_ 
+    # puis on remet les balises originales après la capitalisation.
+    if caps || caps == 'all-caps'
+      table_html_tags = {}
+      x_html_tag = 0
+      ftitre = ftitre.gsub(/(<.+?>)/) do
+        x_html_tag += 1
+        k_html_tag = "_BALHTML#{x_html_tag}_"
+        table_html_tags.merge!(k_html_tag => $1.freeze)
+        k_html_tag
+      end
+      ftitre = ftitre.upcase
+      table_html_tags.each do |ktag, real_value|
+        ftitre = ftitre.sub(ktag, real_value)
+      end
+    end
 
     # Calcul du nombre de ligne avant
     # ===============================
@@ -168,18 +194,17 @@ class NTitre < AnyParagraph
         move_to_line(current_line + 1 + lines_before_calc)
       end
 
-      ###########################
-      # - IMPRESSION DU TITRE - #
-      ###########################
+      # Ajout du titre courant à la page courante
       my.add_this_titre_in_page(self)
+
+      ###############################
+      ###   IMPRESSION DU TITRE   ###
+      ###############################
       text(ftitre, **my.title_options)
       move_to_next_line
 
-
       if me.alone?
-        
         start_new_page
-
       else
 
         ###################################
