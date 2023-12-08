@@ -27,13 +27,18 @@ fonts:
     # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
   Numito:
     normal: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
+    regular: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
     light: 'resources/fonts/Nunito_Sans/NunitoSans-Light.ttf'
     bold:  'resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf'
     italic: 'resources/fonts/Nunito_Sans/NunitoSans-Italic.ttf'
     bold_italic: 'resources/fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf'
   Helvetica:
-    normal: "/System/Library/Fonts/Helvetica.ttc"
-    bold:   "/System/Library/Fonts/HelveticaNeue.ttc"
+    normal:       'resources/fonts/Helvetica/Helvetica.ttf'
+    regular:      'resources/fonts/Helvetica/Helvetica.ttf'
+    light:        'resources/fonts/Helvetica/Helvetica-light.ttf'
+    bold:         'resources/fonts/Helvetica/Helvetica-Bold.ttf'
+    bold_italic:  'resources/fonts/Helvetica/Helvetica-BoldOblique.ttf'
+    italic:       'resources/fonts/Helvetica/Helvetica-Oblique.ttf'
   Reenie:
     normal: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
 #</fonts>
