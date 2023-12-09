@@ -29,6 +29,20 @@ class PrawnView
   # recalculée qu’en cas de problème.
   attr_accessor :current_line
 
+  # Pour dessiner une ligne horizontale de repère de la couleur
+  # +color+ donnée
+  # 
+  def rule(color, width = nil)
+    color = color.to_html_color if color.is_a?(Symbol)
+    initial_color = stroke_color.freeze
+    initial_width = line_width.freeze unless width.nil?
+    stroke_color(color)
+    line_width(width) unless width.nil?
+    stroke_horizontal_rule
+    stroke_color(initial_color)
+    line_width(initial_width) unless width.nil?
+  end
+
   # Dans Prawn-for-book, chaque fois qu’on place le curseur quelque
   # part, on actualilse la ligne (de référence) courante en fonction
   # de la nouvelle position.

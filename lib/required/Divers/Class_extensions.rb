@@ -68,3 +68,22 @@ class NilClass
   def proceed_unit; nil   end
   def to_sym; nil end
 end
+
+class Symbol
+
+  SYMBOL_TO_HTML_COLOR = {
+    rouge: 'FF0000',
+    red: 'FF0000',
+    vert:  '008800',
+    green:  '008800',
+    bleu:  '0000FF',
+    blue:  '0000FF',
+    jaune: 'FCFF33',
+    yellow: 'FCFF33',
+  }
+
+  def to_html_color
+    SYMBOL_TO_HTML_COLOR[self]
+  end
+
+end #/class Symbol

@@ -90,13 +90,13 @@ class NImage < AnyParagraph
   #         LARGEUR_PAGE - (TAILLE_IMAGE + ESPACE_AVEC_TEXTE)
   #     … détermine la largeur disponible avec le texte.
   #   - on peut avoir un texte passant au-dessus de l’image en jouant
-  #     sur le paramètre :floating_top qui détermine le flottement de
+  #     sur le paramètre :margin_top qui détermine le flottement de
   #     l’image avec le haut. On ne peut pas déterminer le flottement
   #     avec le bas, car il faudrait alors déterminer la hauteur 
   #     prise par le texte.
   #   - une fois qu’on a ces valeurs, en imaginant un texte très long
   #     on aura un text-box au-dessus pour le début du texte, d’une
-  #     taille correspondant à floating_top, ensuite un text-box de la
+  #     taille correspondant à margin_top, ensuite un text-box de la
   #     largeur laissée par l’image et de la hauteur de l’image + le
   #     float_bottom qui permettra de laisser de l’air sous l’image
   #     avant le texte.
@@ -195,6 +195,9 @@ class NImage < AnyParagraph
 
     floating_data = {} if floating? # [002]
 
+    debugit = true
+
+
     pdf.update do
 
       # On passe à la ligne, sauf quand l’image occupe toute la
@@ -205,13 +208,6 @@ class NImage < AnyParagraph
         data_image[:at][1] += final_line if data_image.key?(:at)
       end
 
-      # S’il y a un ajustement vertical
-      if my.vadjust > 0
-        data_image[:at][1] -= my.vadjust if data_image.key?(:at)
-        # Dans tous les cas, on se déplace vers le bas
-        move_down(my.vadjust)
-      end
-
       # S’il y a de l’espace à laisser avant
       if my.space_before != 0
         data_image[:at][1] -= my.space_before if data_image.key?(:at)
@@ -219,18 +215,34 @@ class NImage < AnyParagraph
         move_down(my.space_before)
       end
 
+      # S’il y a un ajustement vertical
+      if my.vadjust > 0
+        data_image[:at][1] -= my.vadjust if data_image.key?(:at)
+        # Dans tous les cas, on se déplace vers le bas
+        move_down(my.vadjust)
+      end
+
+      # Si l’image est flottante
       if my.floating? # [002]
         # La première chose à faire, pour une image flottante, est
         # de mémoriser le cursor courant, qui va correspondre au 
         # curseur du premier text-box de texte.
+        move_to_closest_line
         floating_data.merge!(textbox1_top: cursor.freeze)
+        rule('FF0000',0.3) if debugit # haut de l’image (rouge)
         if my.lines_before > 0
-          move_down(my.lines_before * pdf.line_height)
-        end
-        if my.floating_top != 0
-          move_down(my.floating_top)
+          # move_down(my.lines_before * pdf.line_height + my.margin_top + 3)
+          move_down(my.lines_before * pdf.line_height + 3)
+          rule('008800') if debugit
+        # elsif my.margin_top != 0
+        #   move_down(my.margin_top)
         end
         floating_data.merge!(textbox2_top: cursor.freeze)
+        rule('00FFFF') if debugit
+        if my.margin_top != 0
+          move_down(my.margin_top)
+          rule('0000FF') if debugit
+        end
         # Ensuite, on définit sa valeur :left et son alignement s’il
         # n’est pas défini
         data_image[:left] = my.float_left? ? my.margin_left : my.calc_width
@@ -296,7 +308,13 @@ class NImage < AnyParagraph
         # après l’écriture du texte.
         last_cursor = cursor.freeze
 
+        update_current_line
+        move_to_closest_line
+        if cursor > last_cursor # <= line de référence au-dessus
+        end
+        move_to_next_line
         floating_data.merge!(textbox3_top: cursor.freeze)
+        rule(:jaune) if debugit
         ###################################
         ###   TEXTE AUTOUR DE L’IMAGE   ###
         ###################################
@@ -312,11 +330,12 @@ class NImage < AnyParagraph
           floating_data[:textbox3_top] = #{floating_data[:textbox3_top]}          
           last_cursor = #{last_cursor}  
           EOT
-        best_cursor = [image_top - image_height, cursor, floating_data[:textbox3_top], last_cursor].min.freeze
-        spy "Meilleur curseur obtenu : #{best_cursor}".bleu
-        move_cursor_to(best_cursor)
-        update_current_line
-        move_to_next_line
+        # best_cursor = [image_top - image_height, cursor, floating_data[:textbox3_top], last_cursor].min.freeze
+        # spy "Meilleur curseur obtenu : #{best_cursor}".bleu
+        # move_cursor_to(best_cursor)
+        # move_to_closest_line
+        # update_current_line
+        # move_to_next_line
         spy "Donc se placer sur la line suivant : #{cursor.freeze}".jaune
       end
 
@@ -343,29 +362,45 @@ class NImage < AnyParagraph
   # Méthode principale qui écrit le texte autour d’une image 
   # flottante
   def print_text_around_image(float_data)
-    # S’il y a un floating_top, il faut écrire du texte avant
-    if floating_top > 0 || lines_before > 0
+    # S’il y a un margin_top, il faut écrire du texte avant
+    if lines_before > 0
       # L’image est un peu décalée du haut, il faut donc écrire le
       # texte avant
+      # @note
+      #   La hauteur de curseur de :textbox1_top correspond à une 
+      #   ligne de référence
+      # 
       pdf.move_cursor_to(float_data[:textbox1_top])
-      pdf.move_to_closest_line
       options_textbox1 = {
         width:  page_width, 
         height: (float_data[:textbox2_top] - float_data[:textbox1_top]).abs,
         at: [0, pdf.cursor],
         overflow: :truncate,
+        align:    :justify,
         inline_format: true
       }
       exces = pdf.text_box(wrapped_text, **options_textbox1)
+      exces = nil if exces.empty?
     else
       exces = wrapped_text
     end
+
+    if exces.nil?
+      # Cela se produit lorsqu’il y a des lignes de texte à écrire
+      # au-dessus, mais qu’aucun texte n’est à écrire à côté de 
+      # l’image. On signale une erreur.
+      add_erreur("Une image flottante ne possède aucun texte à côté d’elle. Il est défini, mais trop court.")
+      pdf.move_cursor_to(float_data[:textbox3_top])
+      pdf.move_to_next_line
+      return
+    end
+
     # Le texte restant doit être mis à côté de l’image
-    if exces 
+    if exces
       image_width   = calc_width + (margin_left + margin_right)
       text_width = page_width - image_width
       text_left  = float_left? ? image_width : 0
-      image_height  = (float_data[:textbox3_top] - float_data[:textbox2_top]).abs
+      image_height  = ((float_data[:textbox3_top] - pdf.line_height) - float_data[:textbox2_top]).abs
       pdf.move_cursor_to(float_data[:textbox2_top])
       pdf.move_to_closest_line
       options_textbox2 = {
@@ -373,6 +408,7 @@ class NImage < AnyParagraph
         height: image_height,
         at:     [text_left, pdf.cursor],
         overflow: :truncate,
+        align:    :justify,
         inline_format: true
       }
       if exces.is_a?(String)
@@ -380,23 +416,40 @@ class NImage < AnyParagraph
       else
         exces = pdf.formatted_text_box(exces, **options_textbox2)
       end
+      exces = nil if exces.empty?
     end
+
+
+    if exces.nil?
+      # Cela se produit si tout le texte a pu être mis à côté de 
+      # l’image. Dans ce cas, on passe sous l’image pour continuer à
+      # écrire la suite.
+      pdf.move_cursor_to(float_data[:textbox3_top])
+      pdf.move_to_next_line
+      return
+    end
+
     # Le texte restant doit être mis en dessous de l’image
-    if exces
+    if exces && exces.any?
       pdf.move_cursor_to(float_data[:textbox3_top])
       pdf.move_to_closest_line
       options_textbox3 = {
+        document: pdf,
         width:  page_width,
         at:     [0, pdf.cursor],
+        align:  :justify,
         inline_format: true
       }
+      # - Calcul de la hauteur que prendra le reste -
+      fbox = Prawn::Text::Formatted::Box.new(exces, **options_textbox3)
+      fbox.render(dry_run: true)
+      hauteur_reste = fbox.height
+      # - Écriture du reste -
       pdf.formatted_text_box(exces, **options_textbox3)
+      # - Déplacement du curseur -
+      pdf.move_down(hauteur_reste)
+      pdf.update_current_line
     end
-
-    # Pour le moment je ne mets que ça, mais ça m’étonnerait beaucoup
-    # que ça suffise en soi…
-    pdf.move_to_next_line
-
 
   end
 
@@ -610,11 +663,17 @@ class NImage < AnyParagraph
   def lines_before
     @lines_before ||= data[:lines_before] || 0
   end
-  def floating_top
-    @floating_top ||= data[:floating_top] || 0
+  def margin_top
+    @margin_top ||= data[:margin_top] || 0
   end
   def floating_bottom
     @floating_bottom ||= data[:floating_bottom] || 0
+  end
+  def margin_top
+    @margin_top ||= data[:margin_top] || 0
+  end
+  def margin_bottom
+    @margin_bottom ||= data[:margin_bottom] || 0
   end
   def margin_left
     @margin_left ||= data[:margin_left] || begin

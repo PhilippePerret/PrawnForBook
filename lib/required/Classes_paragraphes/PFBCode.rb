@@ -79,9 +79,8 @@ class PFBCode < AnyParagraph
       treate_as_cible_references(pdf, book)
     when PdfBook::ReferencesTable::REG_APPEL_REFERENCE
       raise PFBFatalError.new(2000, {code: raw_code})
-    when 'line'
-      # Inscription d'une liste
-      pdf.update { text " " }
+    when 'line' # Inscription d'une ligne vide
+      pdf.move_to_next_line
     when /^fonte?\((.+)\)$/.freeze # Changement forcé de fonte
       force_fonte_change(pdf, $1.strip)
     when REG_METHODE_WITH_ARGS
