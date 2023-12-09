@@ -155,7 +155,8 @@ class << self
       dfont.merge!(size: default_fonte.size)
     end
     dfont.key?(:style) || begin
-      raise(PFBFatalError.new(651, {dfont: dfont, prop: 'style'}))
+      add_erreur(PFBError[651] % {dfont: dfont, prop: 'style'})
+      dfont.merge!(style: :regular)
     end
 
     # - Clé de consignation de la fonte -

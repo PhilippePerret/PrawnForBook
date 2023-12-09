@@ -114,6 +114,9 @@ book_format:
     parag_num_size:           8
     parag_num_style:          *default_style2
     parag_num_strength:       75
+    # - Image flottante -
+    left_margin_with_floating_image:   10
+    right_margin_with_floating_image:  10
     # - puces -
     puce:
       text: '–'

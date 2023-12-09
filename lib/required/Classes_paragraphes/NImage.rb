@@ -233,6 +233,9 @@ class NImage < AnyParagraph
         if my.lines_before > 0
           # move_down(my.lines_before * pdf.line_height + my.margin_top + 3)
           move_down(my.lines_before * pdf.line_height + 3)
+          if data_image[:at]
+            data_image[:at][1] = cursor.freeze - my.vadjust
+          end
           rule('008800') if debugit
         # elsif my.margin_top != 0
         #   move_down(my.margin_top)
@@ -245,8 +248,17 @@ class NImage < AnyParagraph
         end
         # Ensuite, on définit sa valeur :left et son alignement s’il
         # n’est pas défini
-        data_image[:left] = my.float_left? ? my.margin_left : my.calc_width
-        # data_image[:at][0] = data_image[:left]
+        data_image[:left] = 
+          if my.float_left? 
+            my.margin_left 
+          else 
+            my.page_width - (my.calc_width + my.margin_right)
+          end
+        if data_image[:at]
+          data_image[:at][0] = data_image[:left]
+        else
+          data_image.merge!(at: [data_image[:left], cursor])
+        end
       end
 
       cursor_before = cursor.freeze
@@ -405,14 +417,19 @@ class NImage < AnyParagraph
 
     # Le texte restant doit être mis à côté de l’image
     if exces
-      image_width   = calc_width + (margin_left + margin_right)
-      text_width = page_width - image_width
-      text_left  = float_left? ? image_width : 0
+      image_w = calc_width + (margin_left + margin_right)
+      text_w  = text_width ? text_width : page_width - image_w
+      text_left = 
+        if float_left?
+          image_w
+        else
+          page_width - (text_w + image_w) # 0 en cas normal
+        end
       image_height  = ((float_data[:textbox3_top] - pdf.line_height) - float_data[:textbox2_top]).abs
       pdf.move_cursor_to(float_data[:textbox2_top])
       pdf.move_to_closest_line
       options_textbox2 = {
-        width:  text_width,
+        width:  text_w,
         height: image_height,
         at:     [text_left, pdf.cursor],
         overflow: :truncate,
@@ -476,9 +493,6 @@ class NImage < AnyParagraph
     s = AnyParagraph.__parse(s.reverse.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
       # @note : peut-être faudra-t-il simplement appeler __parse sur 
       # chaque paragraphe
-
-    # puts "\ns final = #{s}"
-    # sleep 3
     return s
   end
 
@@ -666,6 +680,11 @@ class NImage < AnyParagraph
 
   # --- Image Data ---
 
+  # En cas d’image flottante, la largeur que doit prendre le texte,
+  # si elle est définie
+  def text_width
+    @text_width ||= data[:text_width]
+  end
   # EN cas d’image flottante, le nombre de lignes à laisser passer
   # au-dessus de l’image.
   def lines_before
@@ -685,12 +704,12 @@ class NImage < AnyParagraph
   end
   def margin_left
     @margin_left ||= data[:margin_left] || begin
-      float_left? ? 0 : 10
+      float_left? ? 0 : book.recipe.right_margin_with_floating_image
     end
   end
   def margin_right
     @margin_right ||= data[:margin_right] || begin
-      float_right? ? 0 : 10
+      float_right? ? 0 : book.recipe.left_margin_with_floating_image
     end
   end
 

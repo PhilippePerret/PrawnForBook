@@ -180,7 +180,7 @@ class PrawnView
     when Fonte
       thefont = fonte
     when String, Symbol
-      data_font = params.dup.merge({name:fonte})
+      data_font = (params||{}).dup.merge({name:fonte})
     when Hash
       data_font = fonte.dup
       data_font.merge!(name: fonte.delete(:font)) if fonte.key?(:font)

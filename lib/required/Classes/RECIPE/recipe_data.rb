@@ -335,6 +335,13 @@ class Recipe
     @text_indent      ||= format_text[:indent]
   end
 
+  def right_margin_with_floating_image
+    @right_margin_with_floating_image ||= format_text[:right_margin_with_floating_image]
+  end
+  def left_margin_with_floating_image
+    @left_margin_with_floating_image ||= format_text[:left_margin_with_floating_image]
+  end
+
   # -- Polices --
 
   def default_font_n_style
