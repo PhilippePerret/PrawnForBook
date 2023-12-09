@@ -150,7 +150,17 @@ class << self
     # 
 
     # Les données doivent être valides
-    dfont.key?(:style) || raise(PFBFatalError.new(651, {dfont: data_font}))
+    dfont.key?(:size)  || begin
+      add_erreur(PFBError[651] % {dfont: dfont, prop: 'size'})
+      dfont.merge!(size: default_fonte.size)
+    end
+    dfont.key?(:style) || begin
+      raise(PFBFatalError.new(651, {dfont: dfont, prop: 'style'}))
+    end
+
+    # - Clé de consignation de la fonte -
+    # (il faut la refaire avec les données peut-être modifiées)
+    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}"
 
     thefont = new(dfont)
     @fonts.merge!(key_font => thefont)

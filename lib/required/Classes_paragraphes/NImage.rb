@@ -104,7 +104,7 @@ class NImage < AnyParagraph
   #     texte s’il y en a.
   # 
   def print(pdf)
-    spy(:on) if first_turn? && floating?
+    # spy(:on) if first_turn? && floating?
 
     my = self # ATTENTION : pas "me"
 
@@ -195,7 +195,7 @@ class NImage < AnyParagraph
 
     floating_data = {} if floating? # [002]
 
-    debugit = true
+    debugit = false # true
 
 
     pdf.update do
@@ -313,6 +313,9 @@ class NImage < AnyParagraph
         if cursor > last_cursor # <= line de référence au-dessus
         end
         move_to_next_line
+        if my.margin_bottom != 0
+          move_down(my.margin_bottom)
+        end
         floating_data.merge!(textbox3_top: cursor.freeze)
         rule(:jaune) if debugit
         ###################################
@@ -330,12 +333,17 @@ class NImage < AnyParagraph
           floating_data[:textbox3_top] = #{floating_data[:textbox3_top]}          
           last_cursor = #{last_cursor}  
           EOT
-        # best_cursor = [image_top - image_height, cursor, floating_data[:textbox3_top], last_cursor].min.freeze
+        best_cursor = [
+          image_top - image_height - line_height, 
+          cursor, 
+          floating_data[:textbox3_top], 
+          last_cursor
+        ].min.freeze
         # spy "Meilleur curseur obtenu : #{best_cursor}".bleu
-        # move_cursor_to(best_cursor)
-        # move_to_closest_line
+        move_cursor_to(best_cursor)
+        move_to_closest_line
         # update_current_line
-        # move_to_next_line
+        move_to_next_line
         spy "Donc se placer sur la line suivant : #{cursor.freeze}".jaune
       end
 
@@ -353,7 +361,7 @@ class NImage < AnyParagraph
 
     end #/pdf.update
     
-    spy(:off) if first_turn? && floating?
+    # spy(:off) if first_turn? && floating?
 
   end #/print
 
@@ -465,7 +473,7 @@ class NImage < AnyParagraph
       pp = pp.prev_printed_paragraph
       s  << pp.raw_text
     end
-    s = AnyParagraph.__parse(s.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
+    s = AnyParagraph.__parse(s.reverse.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
       # @note : peut-être faudra-t-il simplement appeler __parse sur 
       # chaque paragraphe
 

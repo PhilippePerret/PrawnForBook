@@ -15,15 +15,12 @@ Prawn4book::Manual::Feature.new do
     * **`margin_top`** | Définit la hauteur à laisser au-dessus de l’image, qu’il y ait ou non des lignes au-dessus. En ne jouant que sur ce paramètre, on ne peut pas faire passer de lignes au-dessus de l’image (utiliser `lines_before` pour ça).
     * **`margin_left`** | Marge à gauche. Quand l’image est flottante à gauche, détermine la distance de l’image avec la marge gauche. Quand l’image est flottante à droite, détermine la distance de l’image avec le texte à gauche.
     * **`margin_right`** | Marge à droite. Quand l’image est flottante à gauche, détermine la distance de l’image avec le texte à droite. Quand l’image est flottante à droite, déterminer la distance entre l’image et la marge droite.
-    Note : on ne permet pas l’utilisation d’une image flottante au milieu, ce qui ne se fait jamais dans un livre qui n’est pas purement graphique.
+    Note : on ne permet pas l’utilisation d’une image flottante au milieu, ce qui se fait rarement dans un livre qui n’est pas purement graphique.
 
     ##### Positionnement exact de l’image
 
     On peut déterminer le positionnement exact de l’image de façon générale, dans le recette (pour que toutes les images disposent de la même présentation) ou pour chaque image en particulier.
 
-    {{QUESTION: Avec le système actuel, on ne peut que laisser la hauteur d’une ligne (<) au-dessus ou en dessous de l’image. Sinon, la place est remplie par une autre ligne. Il faudrait donc deux valeurs : une indiquant le nombre de lignes de texte au-dessus (aussi au-dessous) et l’écartement de l’image (margin_top) par rapport à ces lignes de texte. Pareillement, le margin_bottom indiquera l’espace entre le bas de l’image et la première ligne de texte restante.
-
-    }}
     {{TODO: montrer comment une valeur négative pour :float_top permet de commencer l’image au-dessud du texte
       - montrer comment une valeur négative pour :right (quand c’est le flottement à gauche qui est demandé) permet de couvrir l’image
       - montrer comment un texte plutôt court n’écrit aucune ligne sous l’image
@@ -47,9 +44,11 @@ Prawn4book::Manual::Feature.new do
   sample_texte <<~EOT #, "Autre entête"
     \\!Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas.
     \\!\\[exemples/moins_large_border.jpg](float: :left, width: 100)
+    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne devrait pas être mangé par le bas de l’image.
     \\(( line \\))
     \\!Texte placé à gauche d’une image qui porte le float à :right (flottante à droite) et le :width à 100.
     \\!\\[exemples/moins_large_border.jpg](float: :right, width: 100)
+    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne devrait pas être mangé par le bas de l’image.
     \\(( new_page ))
     \\!Un texte avec deux lignes au-dessus de l’image et qui va s’enrouler ensuite par la droite jusqu’au milieu de l’image ensuite. Il est obtenu avec un *float* à *:left*, un *lines_before* à 2 et ensuite toutes les marges à 0. Le *margin_top* à 0 fait que l’image "colle" aux deux lignes supérieures. Le *margin_left* fait que l’image "colle" à la marge gauche et le *margin_right* fait que le texte "colle" à l’image. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Noter cependant que le texte, se plaçant toujours sur des lignes de référence, se trouve plus éloigné de l’image en bas car la ligne de référence se trouve plus loin. En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même. C’est ce que l’on fait avec l’image suivante, en partant sur les mêmes bases que cette image-ci.
     \\!\\[exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 0, margin_left: 0, margin_right: 0)
@@ -59,8 +58,12 @@ Prawn4book::Manual::Feature.new do
 
 
     \\(( new_page ))
-    \\!Un texte qui va commencer au-dessus de l’image, sur deux lignes, puis s’enrouler à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajouté à gauche (`margin_left: 0`) et une marge de 2 (donc toute petite) est définie entre l’image et le texte (`margin_right: 2`).
-    \\!\\[exemples/moins_large_border.jpg](float: :left, width: 100, lines_before: 2, margin_top: 30, margin_left: 0, margin_right: 2, margin_bottom: 30)
+    \\!Ce texte commence avec deux lignes au-dessus de l’image car `lines_before` est à 2, puis s’enroule à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajoutée à gauche (`margin_left: 0`) et un espace de 40 (donc plus grand que l’espace par défaut qui est de 10) est défini entre l’image et le texte grâce à la propriété `margin_right`).
+    \\!De la même manière que pour le haut, on a mis un `margin_bottom` à une grosse valeur pour montrer comment on peut avoir beaucoup d’espace entre le texte et l’image en jouant sur toutes ces propriétés.
+    \\!On voit aussi grâce à cet exemple comment plusieurs paragraphes peuvent être "enroulés" autour d’une image simplement en les précédant d’un point d’exclamation (voir le code du texte et le rendu). Noter que le nombre de lignes sous l’image n’a pas besoin d’être précisé, contrairement au nombre de lignes au-dessus, puisque c’est simplement tout le texte restant qui sera écrit sous l’image, au besoin. Ici, on n’aura que deux lignes, mais ça pourra dépendre encore des changements de taille du présent manuel.
+    \\!\\[exemples/moins_large_border.jpg](float: :left, width: 100, lines_before: 2, margin_top: 30, margin_left: 0, margin_right: 40, margin_bottom: 30)
+    \\(( line ))
+    Dans la suite, nous allons voir différents cas d’utilisation.
     EOT
 
   new_page_before(:texte)

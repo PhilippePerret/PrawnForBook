@@ -125,7 +125,7 @@ class PFBFatalError < StandardError
       610   => Prawn4book::ERRORS[:recipe][:credits_page][:bad_font_definition],
       # -- Fontes --
       650   => Prawn4book::ERRORS[:fonts][:leading_must_be_calculated],
-      651   => Prawn4book::ERRORS[:fonts][:require_style],
+      651   => Prawn4book::ERRORS[:fonts][:require_property],
       652   => Prawn4book::ERRORS[:fonts][:bad_formatted_data],
       653   => Prawn4book::ERRORS[:fonts][:bad_formatted_color],
 

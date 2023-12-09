@@ -367,9 +367,9 @@ ERRORS = {
       '%{name}' (%{pms})
       On le calcule à l'aide de <fonte>.leading(<pdf>,<line_height>).
       EOT
-    require_style: <<~EOT,
-      Le style (:style) est requis dans la définition d'une fonte. Il doit
-      être ajouté à la donnée : %{dfont}
+    require_property: <<~EOT,
+      La propriété :%{prop} est requise dans la définition d'une fonte. Elle
+      doit être ajoutée à la donnée : %{dfont}
       EOT
     bad_formatted_data: <<~EOT,
       Les données %{bad} pour changer de fonte 
