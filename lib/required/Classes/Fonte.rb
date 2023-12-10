@@ -151,12 +151,12 @@ class << self
 
     # Les données doivent être valides
     dfont.key?(:size)  || begin
-      add_erreur(PFBError[651] % {dfont: dfont, prop: 'size'})
-      dfont.merge!(size: default_fonte.size)
+      # add_erreur(PFBError[651] % {dfont: dfont, prop: 'size'})
+      dfont.merge!(size: current.size)
     end
     dfont.key?(:style) || begin
-      add_erreur(PFBError[651] % {dfont: dfont, prop: 'style'})
-      dfont.merge!(style: :regular)
+      # add_erreur(PFBError[651] % {dfont: dfont, prop: 'style'})
+      dfont.merge!(style: current.style)
     end
 
     # - Clé de consignation de la fonte -

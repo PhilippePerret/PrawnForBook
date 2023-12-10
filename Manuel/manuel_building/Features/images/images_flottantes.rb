@@ -1,7 +1,8 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Images flottantes"
+  new_page_before(:feature)
 
+  titre "Les Images flottantes"
 
   description <<~EOT
     Cette partie décrit comment obtenir une image flottante dans le texte. Pour définir une image flottante, il faut définir deux choses indispensables :
@@ -23,7 +24,8 @@ Prawn4book::Manual::Feature.new do
 
     On peut déterminer le positionnement exact de l’image de façon générale, dans le recette (pour que toutes les images disposent de la même présentation) ou pour chaque image en particulier.
 
-    {{TODO: montrer comment une valeur négative pour :float_top permet de commencer l’image au-dessud du texte
+    {{TODO: 
+      - montrer comment une valeur négative pour :float_top permet de commencer l’image au-dessud du texte
       - montrer comment une valeur négative pour :right (quand c’est le flottement à gauche qui est demandé) permet de couvrir l’image
       - voir comment les choses se passent quand on arrive en bas de page (par exemple, le cas piège serait celui où un peu de texte doit rester sur la page précédente et l’image doit passer à la page suivante)
       - Problème possible avec une légende, c’est à essayer ou dire que ce n’est pas encore possible — SI ! RENDRE TOUT ÇA POSSIBLE ET JUSTE.

@@ -56,6 +56,7 @@ module Prawn4book
     # 'puces/custom_image',
 
     #-Images-#
+    'images/grand_titre',
     'images/inserer',
     'images/images_flottantes',
     'images/format_legende',

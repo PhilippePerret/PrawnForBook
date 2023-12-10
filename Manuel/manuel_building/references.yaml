@@ -11,43 +11,47 @@
   :page: 18
   :paragraph:
   :hybrid: 'p. 18 § '
-:images_inserer:
+:images_grand_titre:
   :page: 19
   :paragraph:
   :hybrid: 'p. 19 § '
+:images_inserer:
+  :page: 20
+  :paragraph:
+  :hybrid: 'p. 20 § '
 :exemple_image_18:
-  :page: 31
+  :page: 32
   :paragraph: 48
-  :hybrid: p. 31 § 48
+  :hybrid: p. 32 § 48
 :exemple_image_19:
-  :page: 32
+  :page: 33
   :paragraph: 49
-  :hybrid: p. 32 § 49
+  :hybrid: p. 33 § 49
 :images_images_flottantes:
-  :page: 32
+  :page: 34
   :paragraph:
-  :hybrid: 'p. 32 § '
+  :hybrid: 'p. 34 § '
 :images_format_legende:
-  :page: 40
+  :page: 41
   :paragraph:
-  :hybrid: 'p. 40 § '
+  :hybrid: 'p. 41 § '
 :bibliographies_grand_titre:
-  :page: 43
+  :page: 44
   :paragraph:
-  :hybrid: 'p. 43 § '
+  :hybrid: 'p. 44 § '
 :bibliographies_introduction:
-  :page: 43
+  :page: 44
   :paragraph:
-  :hybrid: 'p. 43 § '
+  :hybrid: 'p. 44 § '
 :bibliographies_customisation:
-  :page: 46
+  :page: 47
   :paragraph:
-  :hybrid: 'p. 46 § '
+  :hybrid: 'p. 47 § '
 :expert_grand_titre:
-  :page: 51
+  :page: 52
   :paragraph:
-  :hybrid: 'p. 51 § '
+  :hybrid: 'p. 52 § '
 :expert_bibliographies:
-  :page: 51
+  :page: 52
   :paragraph:
-  :hybrid: 'p. 51 § '
+  :hybrid: 'p. 52 § '
