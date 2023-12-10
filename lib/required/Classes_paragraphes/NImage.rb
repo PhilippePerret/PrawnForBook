@@ -299,7 +299,7 @@ class NImage < AnyParagraph
         # Calculer les options pour la légende
         my.legend_options({image_width:image_width})
         bounding_box(
-          [my.left_legend, cursor - my.vadjust_legend], 
+          [my.left_legend, cursor - (my.vadjust_legend + my.vadjust)], 
           position: my.position_legend,
           width: my.legend_options[:width]
         ) do
@@ -604,6 +604,8 @@ class NImage < AnyParagraph
   def left_legend
     if @data_image[:position] == :right || right > 0
       pdf.bounds.width - (legend_width + right)
+    elsif float_left?
+      left
     else
       (left > 0 && left) || pdf.bounds.width / 2 - legend_width / 2
     end
