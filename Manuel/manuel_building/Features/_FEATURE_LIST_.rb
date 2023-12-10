@@ -1,5 +1,11 @@
 module Prawn4book
 
+  # TOUT = nil
+  TOUT = true
+
+  TOUT_RECETTE = TOUT || nil
+  # TOUT_RECETTE = TOUT || true
+
   #
   # @note
   #   Avec ’##’ devant, ce sont les fonctionnalités qui étaient "en
@@ -10,18 +16,18 @@ module Prawn4book
     # -- Généralités --
     'generalites/grand_titre',
     'generalites/forces_de_prawn',
-    # 'generalites/deux_fichiers_de_base',
-    # 'generalites/doubles_parentheses',
+    TOUT && 'generalites/deux_fichiers_de_base',
+    TOUT && 'generalites/doubles_parentheses',
 
     #---Recette---#
     'recette/grand_titre',
-    # 'recette/recette_livre',
-    # 'recette/recette_collection',
-    # 'recette/book_data',
-    # 'definition_marges',
-    # 'definir_format_livre',
-    # 'recette/definition_fonte',
-    # 'recette/publisher',
+    TOUT_RECETTE && 'recette/recette_livre',
+    TOUT_RECETTE && 'recette/recette_collection',
+    TOUT_RECETTE && 'recette/book_data',
+    TOUT_RECETTE && 'definition_marges',
+    TOUT_RECETTE && 'definir_format_livre',
+    TOUT_RECETTE && 'recette/definition_fonte',
+    TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#
     # 'texte/grand_titre',
@@ -88,14 +94,14 @@ module Prawn4book
     # 'annexe/grand_titre',
     # 'annexe/package_sublime_text',
     # 'annexe/markdown_all_marks',
-    # 'annexe/format_yaml',
+    TOUT && 'annexe/format_yaml',
     # 'annexe/font_string',
     # 'annexe/definition_couleur',
     # 'images/rogner_svg',
     # 'annexe/synopsis_creation',
     # '_liste_exhaustive_features_',
 
-  ]
+  ].compact
 
 =begin
       titres/titres

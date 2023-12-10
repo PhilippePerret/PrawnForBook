@@ -7,59 +7,91 @@
   :page: 17
   :paragraph:
   :hybrid: 'p. 17 § '
-:recette_grand_titre:
+:generalites_deux_fichiers_de_base:
+  :page: 17
+  :paragraph:
+  :hybrid: 'p. 17 § '
+:generalites_doubles_parentheses:
   :page: 18
   :paragraph:
   :hybrid: 'p. 18 § '
-:images_grand_titre:
+:recette_grand_titre:
   :page: 19
   :paragraph:
   :hybrid: 'p. 19 § '
+:recette_recette_livre:
+  :page: 19
+  :paragraph:
+  :hybrid: 'p. 19 § '
+:recette_recette_collection:
+  :page: 19
+  :paragraph:
+  :hybrid: 'p. 19 § '
+:definition_marges:
+  :page: 21
+  :paragraph:
+  :hybrid: 'p. 21 § '
+:recette_definition_fonte:
+  :page: 23
+  :paragraph:
+  :hybrid: 'p. 23 § '
+:recette_publisher:
+  :page: 23
+  :paragraph:
+  :hybrid: 'p. 23 § '
+:images_grand_titre:
+  :page: 24
+  :paragraph:
+  :hybrid: 'p. 24 § '
 :images_inserer_images:
-  :page: 20
+  :page: 25
   :paragraph:
-  :hybrid: 'p. 20 § '
+  :hybrid: 'p. 25 § '
 :exemple_image_18:
-  :page: 32
-  :paragraph: 48
-  :hybrid: p. 32 § 48
+  :page: 37
+  :paragraph: 144
+  :hybrid: p. 37 § 144
 :exemple_image_19:
-  :page: 33
-  :paragraph: 49
-  :hybrid: p. 33 § 49
+  :page: 38
+  :paragraph: 145
+  :hybrid: p. 38 § 145
 :images_images_flottantes:
-  :page: 34
+  :page: 39
   :paragraph:
-  :hybrid: 'p. 34 § '
+  :hybrid: 'p. 39 § '
 :images_format_legende:
-  :page: 43
+  :page: 48
   :paragraph:
-  :hybrid: 'p. 43 § '
+  :hybrid: 'p. 48 § '
 :bibliographies_grand_titre:
-  :page: 46
+  :page: 51
   :paragraph:
-  :hybrid: 'p. 46 § '
+  :hybrid: 'p. 51 § '
 :bibliographies_introduction:
-  :page: 46
+  :page: 51
   :paragraph:
-  :hybrid: 'p. 46 § '
+  :hybrid: 'p. 51 § '
 :bibliographies_customisation:
-  :page: 49
+  :page: 54
   :paragraph:
-  :hybrid: 'p. 49 § '
+  :hybrid: 'p. 54 § '
 :expert_grand_titre:
-  :page: 54
+  :page: 59
   :paragraph:
-  :hybrid: 'p. 54 § '
+  :hybrid: 'p. 59 § '
 :expert_mode_expert:
-  :page: 54
+  :page: 59
   :paragraph:
-  :hybrid: 'p. 54 § '
+  :hybrid: 'p. 59 § '
 :expert_evaluation_code_ruby:
-  :page: 54
+  :page: 59
   :paragraph:
-  :hybrid: 'p. 54 § '
+  :hybrid: 'p. 59 § '
 :expert_bibliographies:
-  :page: 56
+  :page: 61
   :paragraph:
-  :hybrid: 'p. 56 § '
+  :hybrid: 'p. 61 § '
+:annexe_format_yaml:
+  :page: 61
+  :paragraph:
+  :hybrid: 'p. 61 § '
