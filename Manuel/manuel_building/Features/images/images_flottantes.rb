@@ -36,7 +36,24 @@ Prawn4book::Manual::Feature.new do
   new_page_before(:sample_texte)
 
   texte <<~EOT, "Exemples divers"
+
+    #### Texte enroulé autour de l’image
+
+    !Un texte avec deux lignes au-dessus de l’image et qui va s’enrouler ensuite par la droite jusqu’au milieu de l’image ensuite. Il est obtenu avec un *float* à *:left*, un *lines_before* à 2 et ensuite toutes les marges à 0. Le *margin_top* à 0 fait que l’image "colle" aux deux lignes supérieures. Le *margin_left* fait que l’image "colle" à la marge gauche et le *margin_right* fait que le texte "colle" à l’image. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Noter cependant que le texte, se plaçant toujours sur des lignes de référence, se trouve plus éloigné de l’image en bas car la ligne de référence se trouve plus loin. En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même. C’est ce que l’on fait avec l’image suivante, en partant sur les mêmes bases que cette image-ci.
+    ![exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 0, margin_left: 0, margin_right: 0)
+    (( line ))
+    !Même chose que ci-dessus, mais la position de l’image a été ajustée avec un `margin_top: 4` pour être bien au millieu verticalement. Obtenu avec un `float: :left`, un `lines_before: 2` et les deux marges `margin_left` et `margin_right` à 0. Le *margin_left* fait que l’image "colle" à la marge gauche et le *margin_right* fait que le texte "colle" à l’image. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Noter cependant que le texte, se plaçant toujours sur des lignes de référence, se trouve plus éloigné de l’image en bas car la ligne de référence se trouve plus loin. En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même. C’est ce que l’on fait avec cette image, en partant sur les mêmes bases que l’image précédente.
+    ![exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 4, margin_left: 0, margin_right: 0)
+    (( line ))
+    !Même chose que ci-dessus, mais avec les valeurs de marge droite et gauche (`margin_left` et `margin_right`) laissées à leur valeur par défaut, c’est-à-dire respectivement 0 et 10. Donc : `float: :left`, position de l’image a été ajustée avec un `margin_top: 4` pour être bien au millieu verticalement. `lines_before: 2` pour laisser deux lignes au-dessus, `margin_left` à 0 et `margin_right` à 10. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Pour rappel, ce texte s’enroule autour de l’image parce qu’il est précédé d’un point d’interrogation (`!Même chose que ci-dessus, [etc.]`). En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même.
+    ![exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 4)
+
+    (( new_page ))
+
+    #### Texte à côté de l’image
+
     !Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec `float: :left` et `width: 100`.
+    !`\\!Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec \\`float: :left\\` et \\`width: 100\\``.
     ![exemples/moins_large_border.jpg](float: :left, width: 100)
     Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
     (( line ))
@@ -44,15 +61,7 @@ Prawn4book::Manual::Feature.new do
     ![exemples/moins_large_border.jpg](float: :right, width: 100)
     Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
     (( new_page ))
-    !Un texte avec deux lignes au-dessus de l’image et qui va s’enrouler ensuite par la droite jusqu’au milieu de l’image ensuite. Il est obtenu avec un *float* à *:left*, un *lines_before* à 2 et ensuite toutes les marges à 0. Le *margin_top* à 0 fait que l’image "colle" aux deux lignes supérieures. Le *margin_left* fait que l’image "colle" à la marge gauche et le *margin_right* fait que le texte "colle" à l’image. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Noter cependant que le texte, se plaçant toujours sur des lignes de référence, se trouve plus éloigné de l’image en bas car la ligne de référence se trouve plus loin. En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même. C’est ce que l’on fait avec l’image suivante, en partant sur les mêmes bases que cette image-ci.
-    ![exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 0, margin_left: 0, margin_right: 0)
-    (( line ))
-    !Un texte avec deux lignes au-dessus de l’image et qui va s’enrouler ensuite par la droite jusqu’au milieu de l’image ensuite. Il est obtenu avec un *float* à *:left*, un *lines_before* à 2 et ensuite toutes les marges à 0. Le *margin_top* à 4 fait que l’image "colle" aux deux lignes supérieures mais, contrairement à l’image précédente, laisse autant d’air en bas qu’en haut. Le *margin_left* fait que l’image "colle" à la marge gauche et le *margin_right* fait que le texte "colle" à l’image. Et enfin, le *margin_bottom* fait que le texte qui passe sous l’image est collé à l’image comme le texte au-dessus. Noter cependant que le texte, se plaçant toujours sur des lignes de référence, se trouve plus éloigné de l’image en bas car la ligne de référence se trouve plus loin. En fonction du texte, on joue sur les propriétés *margin_top* et *margin_bottom* pour obtenir la meilleure harmonie. Il faut toujours s’arranger pour que l’air au-dessus et au-dessous de l’image soit toujours le même. C’est ce que l’on fait avec cette image, en partant sur les mêmes bases que l’image précédente.
-    ![exemples/moins_large_border.jpg](float: :left, lines_before: 2, width: 100, margin_top: 4, margin_left: 0, margin_right: 0)
-
-
-    (( new_page ))
-    !Ce texte commence avec deux lignes au-dessus de l’image car `lines_before` est à 2, puis s’enroule à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajoutée à gauche (`margin_left: 0`) et un espace de 40 (donc plus grand que l’espace par défaut qui est de 10) est défini entre l’image et le texte grâce à la propriété `margin_right`).
+        !Ce texte commence avec deux lignes au-dessus de l’image car `lines_before` est à 2, puis s’enroule à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajoutée à gauche (`margin_left: 0`) et un espace de 40 (donc plus grand que l’espace par défaut qui est de 10) est défini entre l’image et le texte grâce à la propriété `margin_right`).
     !De la même manière que pour le haut, on a mis un `margin_bottom` à une grosse valeur pour montrer comment on peut avoir beaucoup d’espace entre le texte et l’image en jouant sur toutes ces propriétés.
     !On voit aussi grâce à cet exemple comment plusieurs paragraphes peuvent être "enroulés" autour d’une image simplement en les précédant d’un point d’exclamation (voir le code du texte et le rendu). Noter que le nombre de lignes sous l’image n’a pas besoin d’être précisé, contrairement au nombre de lignes au-dessus, puisque c’est simplement tout le texte restant qui sera écrit sous l’image, au besoin. Ici, on n’aura que deux lignes, mais ça pourra dépendre encore des changements de taille du présent manuel.
     ![exemples/moins_large_border.jpg](float: :left, width: 100, lines_before: 2, margin_top: 30, margin_left: 0, margin_right: 40, margin_bottom: 30)
