@@ -648,7 +648,7 @@ private
       SPAN_BACKSTICKS % [$1.freeze]
     end  
   end
-  REG_BACKSTICKS  = /`(.+?)`/.freeze
+  REG_BACKSTICKS  = /#{EXCHAR}`(.+?)#{EXCHAR}`/.freeze
   SPAN_BACKSTICKS = '<font name="Courier">%s</font>'.freeze
 
   def self.__traite_hyperlinks(str)

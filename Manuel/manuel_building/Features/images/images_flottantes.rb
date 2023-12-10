@@ -24,8 +24,12 @@ Prawn4book::Manual::Feature.new do
 
     On peut déterminer le positionnement exact de l’image de façon générale, dans le recette (pour que toutes les images disposent de la même présentation) ou pour chaque image en particulier.
 
+    ##### Passage naturel à la page suivante
+
+    Pour le moment, _PFB_ ne gère pas le passage naturel à la page suivante lorsque l’image et son texte enroulé ne tiennent pas dans la page. Il faut donc le gérer *manuellement*, à l’aide de `\\(( line \\))` et de `\\(( new_page \\))` par exemple.
+
     {{TODO: 
-      - montrer comment une valeur négative pour :float_top permet de commencer l’image au-dessud du texte
+      - montrer comment une valeur négative pour :margin_top permet de commencer l’image au-dessus du texte
       - montrer comment une valeur négative pour :right (quand c’est le flottement à gauche qui est demandé) permet de couvrir l’image
       - voir comment les choses se passent quand on arrive en bas de page (par exemple, le cas piège serait celui où un peu de texte doit rester sur la page précédente et l’image doit passer à la page suivante)
       - Problème possible avec une légende, c’est à essayer ou dire que ce n’est pas encore possible — SI ! RENDRE TOUT ÇA POSSIBLE ET JUSTE.
@@ -50,24 +54,28 @@ Prawn4book::Manual::Feature.new do
 
     (( new_page ))
 
-    #### Texte à côté de l’image
-
-    !Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec `float: :left` et `width: 100`.
-    !`\\!Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec \\`float: :left\\` et \\`width: 100\\``.
-    ![exemples/moins_large_border.jpg](float: :left, width: 100)
-    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
-    (( line ))
-    !Texte placé à gauche d’une image qui porte le float à :right (flottante à droite) et le :width à 100.
-    ![exemples/moins_large_border.jpg](float: :right, width: 100)
-    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
-    (( new_page ))
-        !Ce texte commence avec deux lignes au-dessus de l’image car `lines_before` est à 2, puis s’enroule à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajoutée à gauche (`margin_left: 0`) et un espace de 40 (donc plus grand que l’espace par défaut qui est de 10) est défini entre l’image et le texte grâce à la propriété `margin_right`).
+    !Ce texte commence avec deux lignes au-dessus de l’image car `lines_before` est à 2, puis s’enroule à droite de l’image pour repasser ensuite ses dernières lignes sous l’image. Aucune marge n’est ajoutée à gauche (`margin_left: 0`) et un espace de 40 (donc plus grand que l’espace par défaut qui est de 10) est défini entre l’image et le texte grâce à la propriété `margin_right`).
     !De la même manière que pour le haut, on a mis un `margin_bottom` à une grosse valeur pour montrer comment on peut avoir beaucoup d’espace entre le texte et l’image en jouant sur toutes ces propriétés.
     !On voit aussi grâce à cet exemple comment plusieurs paragraphes peuvent être "enroulés" autour d’une image simplement en les précédant d’un point d’exclamation (voir le code du texte et le rendu). Noter que le nombre de lignes sous l’image n’a pas besoin d’être précisé, contrairement au nombre de lignes au-dessus, puisque c’est simplement tout le texte restant qui sera écrit sous l’image, au besoin. Ici, on n’aura que deux lignes, mais ça pourra dépendre encore des changements de taille du présent manuel.
     ![exemples/moins_large_border.jpg](float: :left, width: 100, lines_before: 2, margin_top: 30, margin_left: 0, margin_right: 40, margin_bottom: 30)
     (( new_page ))
 
-    ##### Différents cas d’utilisation
+    #### Texte à côté de l’image
+
+    !Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec `float: :left` et `width: 100`. Code :
+    ! `\\!Un texte qui va simplement [etc.]`.
+    ! `\\!\\[exemples/image.jpg](float: :left, width: 100)`
+    ![exemples/moins_large_border.jpg](float: :left, width: 100)
+    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
+    (( line ))
+    !Texte placé à gauche d’une image qui porte le float à :right (flottante à droite) et le :width à 100. Code :
+    ! `\\!Text placé à gauche d’une [etc.]`
+    ! `\\!\\[exemples/image.jpg](float: :right, width: 100)`
+    ![exemples/moins_large_border.jpg](float: :right, width: 100)
+    Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
+    (( new_page ))
+
+    #### Autre cas d’utilisation
 
     !Pour une image qui flotte à gauche (`float: :left`), éloignement de la marge gauche avec un `margin_left` à 40. Le texte est éloigné de l’image avec un `margin_right` à 20 au lieu de la valeur par défaut 10.
     ![exemples/moins_large_border.jpg](float: :left, width: 100, margin_left: 40, margin_right: 20)
@@ -79,7 +87,7 @@ Prawn4book::Manual::Feature.new do
     ![exemples/moins_large_border.jpg](float: :left, width: 100, text_width: 200, margin_left: 40, margin_right: 40)
     (( new_page ))
 
-    ##### Adaptation naturelle du texte
+    #### Adaptations naturelles du texte
 
     Montrons quelques cas d’adaptation du texte à l’image en fonction de quelques propriétés comme les marges et la largeur du texte.
     !Un largeur de texte normale, un simple `float: :left` avec dimensionnement de l’image (pour avoir moins de lignes)
@@ -94,6 +102,26 @@ Prawn4book::Manual::Feature.new do
     !Et enfin, toujours en s’inspirant de l’image ci-dessus, on se sert de la propriété `vadjust: 5` (ajustement vertical) pour équilibrer l’espace vertical entre le texte et l’image, pour qu’il y ait le même espace au-dessus et au-dessous et qu’ainsi l’image soit affichée de façon plus équilibrée.
     ![exemples/moins_large_border.jpg](float: :left, width: 150, height:44, text_width: 200, lines_before: 1, margin_bottom: 8, margin_left: 30, margin_right: 45, vadjust: 5)
     (( line ))
+
+    #### Image avec légende
+
+    (( new_page ))
+
+    #### Cas spéciaux
+
+    (( line ))
+    (( line ))
+    (( line ))
+    (( line ))
+    !Un texte qui va être placé plus bas, presque au milieu de l’image, grâce à un `margin_top` négatif.
+    ![exemples/moins_large_border.jpg](float: :right, margin_top: -40)
+    Pour obtenir l’effet ci-dessus, nous avons eu recours à :
+     `(\\( line )\\)`
+     `(\\( line )\\)`
+     `(\\( line )\\)`
+     `(\\( line )\\)`
+     `\\!Un texte qui va être placé plus bas, presque au milieu de l’image, grâce à un \\`margin_top\\` négatif.`
+     `\\!\\[exemples/moins_large_border.jpg](float: :right, margin_top: -40)`
     EOT
 
   new_page_before(:texte)
