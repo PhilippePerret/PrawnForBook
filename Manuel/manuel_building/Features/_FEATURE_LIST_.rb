@@ -57,7 +57,7 @@ module Prawn4book
 
     #-Images-#
     'images/grand_titre',
-    'images/inserer',
+    'images/inserer_images',
     'images/images_flottantes',
     'images/format_legende',
     

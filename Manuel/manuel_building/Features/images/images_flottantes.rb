@@ -14,6 +14,7 @@ Prawn4book::Manual::Feature.new do
     * **`float`** | Définit que l’image est flottante. Ce paramètre peut avoir la valeur `:left` ("gauche" en anglais) pour "flottante à gauche" (l’image sera donc à gauche du texte) ou `:right` ("droite" en anglais) pour "flottante à droite" (l’image sera donc à droite du texte).
     * **`lines_before`** | Définit le nombre de lignes qui vont passer au-dessus de l’image. Par défaut à 0, la première ligne de texte est alignée au haut de l’image (en fonction de ligne de référence du texte).
     * **`margin_top`** | Définit la hauteur à laisser au-dessus de l’image, qu’il y ait ou non des lignes au-dessus. En ne jouant que sur ce paramètre, on ne peut pas faire passer de lignes au-dessus de l’image (utiliser `lines_before` pour ça).
+    * **`vadjust`** | Lorsque le `margin_top` ne permet pas de positionner l’image verticalement, on peut se servir de cette propriété *traditionnelle*.
     * **`margin_left`** | Marge à gauche. Quand l’image est flottante à gauche, détermine la distance de l’image avec la marge gauche. Quand l’image est flottante à droite, détermine la distance de l’image avec le texte à gauche. Cette valeur peut être déterminée par défaut dans la recette comme indiqué ci-dessous.
     * **`margin_right`** | Marge à droite. Quand l’image est flottante à gauche, détermine la distance de l’image avec le texte à droite. Quand l’image est flottante à droite, déterminer la distance entre l’image et la marge droite. Cette valeur peut être déterminée par défaut dans la recette comme indiqué ci-dessous.
     * **`margin_bottom`** | Marge en bas entre le bas de l’image et la première ligne du texte associé à l’image. Attention : il s’agit bien du *texte associé à l’image* et non pas d’un paragraphe suivant qu’il faut éloigner de l’image soit avec `space_after` soit avec des `\\(( line ))`.
@@ -27,7 +28,12 @@ Prawn4book::Manual::Feature.new do
     ##### Passage naturel à la page suivante
 
     Pour le moment, _PFB_ ne gère pas le passage naturel à la page suivante lorsque l’image et son texte enroulé ne tiennent pas dans la page. Il faut donc le gérer *manuellement*, à l’aide de `\\(( line \\))` et de `\\(( new_page \\))` par exemple.
-    }}
+
+    ##### Rotation de l’image
+
+    Pour le moment, en mode simple, _PFB_ ne permet pas d’effectuer une rotation de l’image. Mais cette fonctionnalité sera implémentée plus tard.
+    Pour le moment, la solution consiste à faire une image déjà tournée et à jouer sur des valeurs négatives pour bien placer le texte. Ou, en mode expert, à l’imprimer explicitement avec du code ruby.
+
     EOT
 
   new_page_before(:sample_texte)
@@ -56,14 +62,14 @@ Prawn4book::Manual::Feature.new do
     #### Texte à côté de l’image
 
     !Un texte qui va simplement se placer à droite de l’image, sans dépasser ni en haut ni en bas, avec `float: :left` et `width: 100`. Code :
-    ! `\\!Un texte qui va simplement [etc.]`.
-    ! `\\!\\[exemples/image.jpg](float: :left, width: 100)`
+    !{-}`\\!Un texte qui va simplement [etc.]`.
+    !{-}`\\!\\[exemples/image.jpg](float: :left, width: 100)`
     ![exemples/moins_large_border.jpg](float: :left, width: 100)
     Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
     (( line ))
     !Texte placé à gauche d’une image qui porte le float à :right (flottante à droite) et le :width à 100. Code :
-    ! `\\!Text placé à gauche d’une [etc.]`
-    ! `\\!\\[exemples/image.jpg](float: :right, width: 100)`
+    !{-}`\\!Text placé à gauche d’une [etc.]`
+    !{-}`\\!\\[exemples/image.jpg](float: :right, width: 100)`
     ![exemples/moins_large_border.jpg](float: :right, width: 100)
     Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
     (( new_page ))
@@ -72,8 +78,8 @@ Prawn4book::Manual::Feature.new do
 
     !Un texte qui s’enroule autour d’une image flottante à droite qui possède une légende normale et toutes les valeurs par défaut.
     !Code utilisé :
-    ! `\\!Un texte qui s’enroule autour d’une [etc.]`
-    ! `\\!\\[exemples/image.jpg](float: :right, legend: "La légende de l’image")`
+    !{-}`\\!Un texte qui s’enroule autour d’une [etc.]`
+    !{-}`\\!\\[exemples/image.jpg](float: :right, legend: "La légende de l’image")`
     ![exemples/moins_large_border.jpg](float: :right, legend: "La légende de l’image")
 
     !Dans cette exemple d’image avec une légende, le texte s’enroule vraiment autour de l’image c’est-à-dire qu’un `lines_before` à `2` permet de laisser passer deux lignes au-dessus et la longueur du texte fait passer des lignes en dessous de la légende. Un `margin_left` à `20` permet de décoller l’image de la marge gauche tandis qu’un `margin_right` à `20` éloigne un peu le texte horizontalement. Un `margin_bottom` à `8` fait descendre d’une ligne les lignes sous l’image et pour bien positionner verticalement l’image et sa légende, un `vadjust` à `12` fait descendre l’image (ce qui est nécessaire puisque le texte se place toujours sur les lignes de référence — il est donc nécessaire, en fonction de l’image, d’ajuster la position verticale comme on le ferait à la main).
@@ -122,19 +128,19 @@ Prawn4book::Manual::Feature.new do
     !Un texte qui va être placé plus bas, presque au milieu de l’image, grâce à un `margin_top` négatif.
     ![exemples/moins_large_border.jpg](float: :right, margin_top: -40)
     Pour obtenir l’effet ci-dessus, nous avons eu recours à :
-     `(\\( line )\\)`
-     `(\\( line )\\)`
-     `(\\( line )\\)`
-     `(\\( line )\\)`
-     `\\!Un texte qui va être placé plus bas, presque au milieu de l’image, grâce à un \\`margin_top\\` négatif.`
-     `\\!\\[exemples/moins_large_border.jpg](float: :right, margin_top: -40)`
+    {-}`(\\( line )\\)`
+    {-}`(\\( line )\\)`
+    {-}`(\\( line )\\)`
+    {-}`(\\( line )\\)`
+    {-}`\\!Un texte qui va être placé plus bas, presque au milieu de l’image, grâce à un \\`margin_top\\` négatif.`
+    {-}`\\!\\[exemples/moins_large_border.jpg](float: :right, margin_top: -40)`
     (( line ))
 
     !**<font size="16"><color rgb="FF0000">Un texte qui va "manger" sur l’image en mettant un \\`margin_right\\` négatif.</color></font>**
     ![exemples/moins_large_border.jpg](float: :left, margin_right: -40)
     L’effet ci-dessus est obtenu à partir du code :
-     `\\!\\*\\*\\<font size="16">\\<color rgb="FF0000">Un texte qui va "manger" sur […] négatif.\\</color>\\</font>**`
-     `\\!\\[exemples/image.jpg](float: :left, margin_right: -40)`
+    {-}`\\!\\*\\*\\<font size="16">\\<color rgb="FF0000">Un texte qui va "manger" sur […] négatif.\\</color>\\</font>**`
+    {-}`\\!\\[exemples/image.jpg](float: :left, margin_right: -40)`
 
     EOT
 

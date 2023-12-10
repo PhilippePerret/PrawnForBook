@@ -80,11 +80,13 @@ Prawn4book::Manual::Feature.new do
       text: 'Une image PNG trop haute, dont on réduit explicitement la hauteur.',
       code: '\!\[exemples/plus_haute.png](height:\\"30%\\", legend:\\"Trop haute avec height à 30%\\")',
       left: true,
+      line_after: true
     },
     6 => {
       left: true,
       text: 'Une image PNG trop haute, dont on réduit explicitement la hauteur mais qui doit faire la largeur de la page. Elle va bien entendu être complètement déformée…',
-      code: '\!\[exemples/plus_haute.png](height:\\"30%\\", width:\\"100%\\", legend:\\"Trop haute avec height à 30% et width à 100%\\")'
+      code: '\!\[exemples/plus_haute.png](height:\\"30%\\", width:\\"100%\\", legend:\\"Trop haute avec height à 30% et width à 100%\\")',
+      line_after: true
     },
     7 => {
       text: 'Une image plus petite que la largeur sera laissée telle quelle.',
@@ -125,16 +127,20 @@ Prawn4book::Manual::Feature.new do
       left: true,
     },
     14 => {
+      page_before: true,
       text: 'Image SVG affichée sans aucune indication.',
       code: '\!\[exemples/image.svg]',
+      line_after:true
     },
     15 => {
       text: 'Image SVG grossie.',
       code: '\!\[exemples/image.svg](width: \\"100%\\")',
+      line_after:true
     },
     16 => {
       text: "On ne peut pas (à ma connaissance) modifier disproportionnellement une image SVG dans Prawn même avec des valeurs explicites. Ci-dessous, la hauteur, bien que mise à #{ex16_height}, reste proportionnée à la largeur.",
       code: "\\!\\[exemples/image.svg](width: 200, height: #{ex16_height})",
+      line_after:true
     },
     17 => {
       text: 'Image SVG avec légende. Remarquez l’utilisation de `vadjust_legend ("ajustement vertical de la légende") qui permet ici de l’éloigner de l’image.`',
@@ -164,9 +170,13 @@ Prawn4book::Manual::Feature.new do
     # data_exemple = EXEMPLES[iex]
   EXEMPLES.each do |iex, data_exemple|
     lines << data_exemple[:before] if data_exemple[:before]
-    lines << '(( new_page ))' if data_exemple[:page_before]
+    if data_exemple[:page_before]
+      lines << '(( new_page ))' 
+    else
+      lines << '(( line ))'
+    end
     lines << '(( {align: :left} ))' if data_exemple[:left]
-    lines << "**EXEMPLE #{iex} • ** #{data_exemple[:text]}<br> `#{data_exemple[:code]}`"
+    lines << "**EXEMPLE #{iex} • ** #{data_exemple[:text]}<br>{-}`#{data_exemple[:code]}`"
     lines << deslash(data_exemple[:code])
     lines << data_exemple[:after] if data_exemple[:after]
     lines << '(( line ))' if data_exemple[:line_after]

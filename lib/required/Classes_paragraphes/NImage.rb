@@ -357,6 +357,13 @@ class NImage < AnyParagraph
         # update_current_line
         move_to_next_line
         spy "Donc se placer sur la line suivant : #{cursor.freeze}".jaune
+
+      else
+
+        # Cas d’une image non flottante
+
+        update_current_line
+
       end
 
       page_number_fin = page_number.freeze
