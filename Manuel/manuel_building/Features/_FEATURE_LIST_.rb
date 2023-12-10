@@ -78,9 +78,10 @@ module Prawn4book
 
     #---Mode_Expert---#
     'expert/grand_titre',
-    # 'expert/mode_expert',
+    'expert/mode_expert',
     # 'expert/contexte_erreurs',
     # 'expert/injection_code',
+    'expert/evaluation_code_ruby',
     'expert/bibliographies',
 
     #---Annexe---#
@@ -115,7 +116,6 @@ module Prawn4book
       afficher_grille_reference_et_marges
       references_autres_livres
       placement_sur_ligne_quelconque
-      evaluation_code_ruby
       change_margins_on_the_fly
       export_livre_numerique
       export_text

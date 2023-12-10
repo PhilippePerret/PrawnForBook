@@ -74,7 +74,7 @@ Prawn4book::Manual::Feature.new do
     Le paragraphe qui suit l’image se place bien en dessous et, normalement, ne doit pas être mangé par le bas de l’image.
     (( new_page ))
 
-    #### Image avec légende
+    #### Image flottante avec légende
 
     !Un texte qui s’enroule autour d’une image flottante à droite qui possède une légende normale et toutes les valeurs par défaut.
     !Code utilisé :
