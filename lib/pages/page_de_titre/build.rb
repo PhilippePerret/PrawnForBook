@@ -53,9 +53,9 @@ class PageDeTitre
       # (if any)
       if book.in_collection?
         move_to_line(my.collection_line)
-        font(my.collection_title)
+        font(my.collection_font)
         fill_color(my.collection_color)
-        text(book.collection.name, **{align:center})
+        text(book.collection.name, **{align: :center})
       end
 
 
@@ -221,6 +221,11 @@ class PageDeTitre
   def data
     @data ||= book.recipe.page_de_titre
   end
+
+  def collection_name
+    @collection_name ||= book.recipe[:collection_data][:name]
+  end
+
 
 end #/class PageDeTitre
 end #/class Pages

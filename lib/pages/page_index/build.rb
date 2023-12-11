@@ -99,7 +99,8 @@ class PageIndex
           name:   number_font_name, 
           style:  number_font_style, 
           size:   number_font_size, 
-          hname:  "Numéro pour pagination"})
+          hname:  "Numéro pour pagination"
+          )
       end
     end
   end
