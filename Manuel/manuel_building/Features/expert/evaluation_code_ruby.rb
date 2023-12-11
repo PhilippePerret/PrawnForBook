@@ -3,9 +3,7 @@ Prawn4book::Manual::Feature.new do
   titre "Évaluation du code ruby"
 
   description <<~EOT
-    Tous les codes qui se trouveront entre `\#{'#'}{...}` seront évalués en tant que code ruby, dans le cadre du livre (c'est-à-dire qu'ils pourront faire appel à des méthodes personnalisées)
-
-    Typiquement, on peut par exemple obtenir la date courante.
+    Tous les codes qui se trouveront entre "`\\#\\{..\\.}`" (ou entre "`\\#\\{\{\{.\\..}}}`" lorsque le code contient des accolades) seront évalués en tant que code ruby, dans le cadre du livre (c'est-à-dire qu'ils pourront faire appel à des méthodes personnalisées). Typiquement, on peut par exemple obtenir la date courante ou le numéro de version du livre pour l’insérer dans les premières pages à titre de repère.
 
     #### Évaluation au second tour
 

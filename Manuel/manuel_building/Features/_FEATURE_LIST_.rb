@@ -10,6 +10,14 @@ module Prawn4book
   # TOUT_HEADFOOT = TOUT || true
   TOUT_PUCES = TOUT || nil
   # TOUT_PUCES = TOUT || true
+  TOUT_IMAGE = TOUT || nil
+  # TOUT_IMAGE = TOUT || true
+  TOUT_EXPERT = TOUT || nil
+  # TOUT_EXPERT = TOUT || true
+  TOUT_TUTORIEL = TOUT || nil
+  # TOUT_TUTORIEL = TOUT || true
+  TOUT_ANNEXE = TOUT || nil
+  # TOUT_ANNEXE = TOUT || true
 
   #
   # @note
@@ -88,23 +96,28 @@ module Prawn4book
     # 'alignement_du_texte',
 
     #---Mode_Expert---#
-    'expert/grand_titre',
-    'expert/mode_expert',
-    # 'expert/contexte_erreurs',
-    # 'expert/injection_code',
-    'expert/evaluation_code_ruby',
-    'expert/bibliographies',
+    TOUT_EXPERT && 'expert/grand_titre',
+    TOUT_EXPERT && 'expert/mode_expert',
+    TOUT_EXPERT && 'expert/contexte_erreurs',
+    TOUT_EXPERT && 'expert/injection_code',
+    TOUT_EXPERT && 'expert/evaluation_code_ruby',
+    TOUT_EXPERT && 'expert/bibliographies',
+
+    #---Tutoriel de prise en main---#
+    TOUT_TUTORIEL && 'tutoriel/grand_titre',
+    TOUT_TUTORIEL && 'tutoriel/installation',
 
     #---Annexe---#
-    # 'annexe/grand_titre',
-    # 'annexe/package_sublime_text',
-    # 'annexe/markdown_all_marks',
-    TOUT && 'annexe/format_yaml',
-    # 'annexe/font_string',
-    # 'annexe/definition_couleur',
-    # 'images/rogner_svg',
-    # 'annexe/synopsis_creation',
-    # '_liste_exhaustive_features_',
+    TOUT_ANNEXE && 'annexe/grand_titre',
+    TOUT_ANNEXE && 'annexe/package_sublime_text',
+    TOUT_ANNEXE && 'annexe/markdown_all_marks',
+    TOUT_ANNEXE && 'annexe/format_yaml',
+    TOUT_ANNEXE && 'annexe/font_string',
+    TOUT_ANNEXE && 'annexe/definition_couleur',
+    TOUT_ANNEXE && 'images/rogner_svg',
+    TOUT_ANNEXE && 'annexe/synopsis_creation',
+    TOUT_ANNEXE && 'annexe/installation_application',
+    TOUT_ANNEXE && '_liste_exhaustive_features_',
 
   ].compact
 

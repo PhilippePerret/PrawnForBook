@@ -2,15 +2,16 @@ require_relative '../Divers/constants'
 
 module Prawn4book
 
-  NAME = 'Prawn-For-Book'
+  NAME    = 'Prawn-For-Book'
+  SUBNAME = 'Write and publish!'
   
   VERSION = begin
-    File.read(File.join(APP_FOLDER,'VERSION'))
+    File.read(File.join(APP_FOLDER,'VERSION')).strip
   end
       
   def self.run
     begin
-      command = Prawn4book::Command.new(help? ? 'help' : CLI.main_command)
+      command = Prawn4book::Command.new(help? ? 'help' : (version? ? 'version' : CLI.main_command))
       command.run
     rescue PFBFatalError => e
       puts "\n\n" + e.message.rouge

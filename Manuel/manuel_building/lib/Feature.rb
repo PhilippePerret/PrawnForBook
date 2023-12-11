@@ -39,6 +39,17 @@ class Feature
   # sachant que c’est moins bon, puisqu’on n’est pas sûr que ce soit
   # exactement le code donné en exemple)
   # 
+  # TITRE de la fonctionnalité
+  # --------------------------
+  # 
+  # On peut utiliser les méthode `titre’ ou `grand_titre’ pour défi-
+  # nir le titre de la fonctionnalité.
+  # 
+  # Si l’on veut un "très grand titre", c’est-à-dire un titre qui se
+  # placera sur une belle page et seul, il faut utiliser :
+  # 
+  #   titre "le grand grand titre", 1
+  # 
   # DESCRIPTION de la fonctionnalité
   # --------------------------------
   # Elle se définit par :

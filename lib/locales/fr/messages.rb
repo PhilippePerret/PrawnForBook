@@ -89,7 +89,7 @@ MESSAGES = {
     confirmation_init: <<~EOT.bleu,
       À présent, vous pouvez :
 
-      1) rejoindre le dossier du livre avec 'cd %{folder}'
+      1) rejoindre le dossier du livre avec 'cd "%{folder}"'
 
       2) jouer ces commandes :
       
