@@ -2,9 +2,14 @@ module Prawn4book
 
   # TOUT = nil
   TOUT = true
-
   TOUT_RECETTE = TOUT || nil
   # TOUT_RECETTE = TOUT || true
+  TOUT_PAGES_SPECS = TOUT || nil
+  # TOUT_PAGES_SPECS = TOUT || true
+  TOUT_HEADFOOT = TOUT || nil
+  # TOUT_HEADFOOT = TOUT || true
+  TOUT_PUCES = TOUT || nil
+  # TOUT_PUCES = TOUT || true
 
   #
   # @note
@@ -30,36 +35,36 @@ module Prawn4book
     TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#
-    # 'texte/grand_titre',
-    # 'format_markdown_du_texte',
+    TOUT && 'texte/grand_titre',
+    TOUT && 'format_markdown_du_texte',
 
     #---PagesSpeciales---#
-    # 'pages_speciales/grand_titre',
-    # 'pages_speciales/pages_speciales',
-    # 'pages_speciales/table_des_matieres',
-    # 'pages_speciales/credits_page',
-    # 'pages_speciales/title_page',
+    TOUT_PAGES_SPECS && 'pages_speciales/grand_titre',
+    TOUT_PAGES_SPECS && 'pages_speciales/pages_speciales',
+    TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
+    TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
+    TOUT_PAGES_SPECS && 'pages_speciales/title_page',
 
     #---Entetes/Pied-de-page---#
-    # 'header_footer/grand_titre',
-    # 'header_footer/par_defaut',
-    # 'header_footer/exemple_complexe',
+    TOUT_HEADFOOT && 'header_footer/grand_titre',
+    TOUT_HEADFOOT && 'header_footer/par_defaut',
+    TOUT_HEADFOOT && 'header_footer/exemple_complexe',
 
     #__Texte_Details___#
-    # 'texte_detail/grand_titre',
+    TOUT && 'texte_detail/grand_titre',
 
     #---Puces---#
-    # 'puces/puces',
-    # 'puces/losange',
-    # 'puces/black_losange',
-    # 'puces/square',
-    # 'puces/black_square',
-    # 'puces/bullet',
-    # 'puces/black_bullet',
-    # 'puces/finger',
-    # 'puces/black_finger',
-    # 'puces/big_hyphen',
-    # 'puces/custom_image',
+    TOUT_PUCES && 'puces/puces',
+    TOUT_PUCES && 'puces/losange',
+    TOUT_PUCES && 'puces/black_losange',
+    TOUT_PUCES && 'puces/square',
+    TOUT_PUCES && 'puces/black_square',
+    TOUT_PUCES && 'puces/bullet',
+    TOUT_PUCES && 'puces/black_bullet',
+    TOUT_PUCES && 'puces/finger',
+    TOUT_PUCES && 'puces/black_finger',
+    TOUT_PUCES && 'puces/big_hyphen',
+    TOUT_PUCES && 'puces/custom_image',
 
     #-Images-#
     'images/grand_titre',

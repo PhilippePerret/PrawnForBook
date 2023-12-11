@@ -12,6 +12,7 @@ MESSAGES = {
     success: <<~EOT,
       👍 Book PDF produit avec succès !
       #{'(in %{path})'.gris}
+      #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
   },
 

@@ -9,13 +9,13 @@ Prawn4book::Manual::Feature.new do
 
   description <<~EOT
     Des marges par défaut sont proposées, mais vous pouvez tout à fait définir celles que vous voulez très précisément, dans la recette du livre ou de la collection.
-    La seule chose à comprendre, par rapport à aux documents dont vous avez l'habitude, c'est qu'ici les pages sont doubles, en vis-à-vis, et définissent donc :
+    La seule chose à comprendre, par rapport aux documents dont vous avez l'habitude, c'est qu'ici les pages sont doubles, en vis-à-vis, et définissent donc :
 
     * une marge haute et une marge basse (traditionnelle),
 
     * une marge intérieure, qui comme son nom l'indique est à l'intérieur du livre, contre le dos,
 
-    * une marge extérieure, qui comme son nom l'indique est tournée vers l'extérieure du livre, vers la tranche (attention, la tranche du livre, ça n'est pas la partie qui reprend le titre du livre et son auteur, qu'on appelle le « dos »).
+    * une marge extérieure, qui comme son nom l'indique est tournée vers l'extérieur du livre, vers la tranche (attention, la tranche du livre, ça n'est pas la partie qui reprend le titre du livre et son auteur, qu'on appelle le « dos »).
 
     Ces marges sont donc définies par les propriétés `top` (haut) `bot` (pour « bottom », bas), `ext` (pour « extérieur ») et `int` (pour « intérieur »).
 

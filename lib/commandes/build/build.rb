@@ -64,7 +64,8 @@ class PdfBook
 
     # 
     # --- INITIALISATIONS ---
-    # 
+    #
+    @start_time = Time.now
     Prawn4book.turn = 1
     # - Bibliographies -
     require 'lib/pages/bibliographies'
@@ -182,6 +183,26 @@ class PdfBook
         `open -a "#{CORRECTOR_NAME}" "#{exportator.path}"`
       end
     end
+
+    @end_time = Time.now
+
+    # Message tout final
+    if File.exist?(pdf_path)
+      pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
+      puts "#{MESSAGES[:building][:success] % {
+        path: pdf_relpath,
+        nombre_paragraphes: paragraphes.count,
+        nombre_pages: pages.count,
+        duree_traitement: (@end_time.to_f - @start_time.to_f).round(2)
+      }}".vert
+      puts "\n"
+      return true
+    else
+      puts ERRORS[:building][:book_not_built].rouge
+      return false
+    end
+
+
   end
   #/generate_pdf_book
 
@@ -201,7 +222,8 @@ class PdfBook
   # ajouter au PDF en les parsant/helpant/formatant.
   # 
   # @note
-  #   PrawnView hérite de Prawn::View (comme conseillé par le code de Prawn.
+  #   PrawnView hérite de Prawn::View (comme conseillé par le code 
+  #   de Prawn.
   # 
   def build_pdf_book
     clear unless debug? || ENV['TEST']
@@ -365,15 +387,21 @@ class PdfBook
     # 
     PrawnView::Error.report_building_errors
 
-    if File.exist?(pdf_path)
-      pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
-      puts "#{MESSAGES[:building][:success] % {path: pdf_relpath}}".vert
-      puts "\n"
-      return true
-    else
-      puts ERRORS[:building][:book_not_built].rouge
-      return false
-    end
+    # À l’origine, le message final était écrit ici
+    # if File.exist?(pdf_path)
+    #   pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
+    #   puts "#{MESSAGES[:building][:success] % {
+    #     path: pdf_relpath,
+    #     nombre_paragraphes: paragraphes.count,
+    #     duree_traitement:   
+    #   }}".vert
+    #   puts "\n"
+    #   return true
+    # else
+    #   puts ERRORS[:building][:book_not_built].rouge
+    #   return false
+    # end
+  
   end
 
 

@@ -8,18 +8,20 @@ Prawn4book::Manual::Feature.new do
     ou :
     **`\(( toc \))`** pour "T"able "Of" "C"ontent, la table des matières en anglais.
 
-    Noter que la table des matières, sauf indication contraire, se placera toujours sur une page paire, c’est-à-dire sur une fausse-page (page gauche). Cela part du principe qu’une table des matières fait en général en moins deux pages et qu’il est préférable de l’avoir sur une double page.
+    Noter que la table des matières, sauf indication contraire, se placera toujours sur une page paire, c’est-à-dire sur une fausse-page (page gauche). Cela part du principe qu’une table des matières fait en général au moins deux pages et qu’il est préférable de l’avoir sur une double page.
     On peut cependant empêcher ce comportement en mettant la propriété `not_on_even` ("pas sur la paire" en anglais) à true dans la recette.
-    ##### Table des matières en début d’ouvrage
 
-    Si on inscrit la table des matières en début d’ouvrage, il faut calculer le nombre de pages qu’elle va occuper.
+    #### Table des matières en début d’ouvrage
 
-    ##### Table des matières en fin d’ouvrage
+    Si on inscrit la table des matières en début d’ouvrage, il faut calculer le nombre de pages qu’elle va occuper et le définir dans la propriété `page_count` de la section `table_of_content` ("table des matières" en anglais). Ce nombre doit être pair et il vaut 2 par défaut.
+    Dans la pratique, estimez grossièrement la longueur de la table des matières en fonction de la taille de l’ouvrage et du nombre de titres et ajoutez 2 pour garder une certaine latitude. Ajustez le nombre final une fois l’ouvrage presque achevé pour supprimez les pages superflues (ou ajoutez-en de nouvelles si la table des matières "mange" sur le texte).
 
-    Si on inscrit la table des matières à la fin de l’ouvrage, il n’y a aucune précaution à prendre.
-    C’est d’ailleurs ce que l’on fait pour ce manuel, dont on trouve deux tables des matières, une en début d’ouvrage et l’autre en fin d’ouvrage.
+    #### Table des matières en fin d’ouvrage
 
-    ##### Aspect de la table des matières
+    Si on inscrit la table des matières à la fin de l’ouvrage, il n’y a aucune précaution à prendre concernant le nombre de pages qu’elle couvrira.
+    Pour ce manuel, dont on trouve deux tables des matières, une en début d’ouvrage et l’autre en fin d’ouvrage. Seule la table des matières en début d’ouvrage a dû faire l’objet d’un calcul du nombre de pages.
+
+    #### Aspect de la table des matières
 
     Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/grand_titre]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
     On trouve ces propriétés :
@@ -50,7 +52,7 @@ Prawn4book::Manual::Feature.new do
     * **`caps`**. La modification (casse) du titre. Les valeurs possibles sont `all-caps` (tout en majuscule), `all-min` (tout en minustule), `title` (titre normal, en fonction de la langue du livre) ou `none` pour le laisser tel quel.
     * **`number_font`**. La police fonte/style/taille/couleur à utiliser pour les numéros de ce niveau de titre (mais il vaut mieux une grande cohérence avec l’ensemble et éviter de la définir).
 
-    ##### Exclusion de titres
+    #### Exclusion de titres dans la table des matières
 
     On peut exclure de la table des matières des titres du niveau voulu (`level_max`) en ajoutant `{no_toc}` à leur titre, soit à la fin soit après les dièses. Par exemple :
      `\\### {no_toc} Titre hors TdM`
@@ -59,11 +61,11 @@ Prawn4book::Manual::Feature.new do
     Vous pouvez vérifier que le titre dans le texte en exemple ci-dessous ne sera pas imprimé dans la table des matières.
     *(rappel : "toc" signifie "table of content", c’est-à-dire "table des matières" en anglais — on peut aussi utiliser `{no_tdm}`)*
 
-    ##### Numérotation
+    #### Numérotation de la table des matières
 
     Le "numéro de page" utilisé dans la table des matières dépend directement de la pagination utilisée pour le livre. C’est le numéro de page seule si la pagination est à `pages`, c’est le numéro de paragraphe si la pagination est à `paragraphs` et c’est à page et paragraphe si la pagination est `hybrid`.
 
-    ##### Ligne d’alignement
+    #### Ligne d’alignement de la table des matières
 
     La *ligne d’alignement* est une ligne, souvent pointillée, qui relie le titre (à gauche) au numéro de page (à droite), et permet de mieux faire correspondre visuellement titre et numéro de page.
     Elle est définie dans la recette à l’aide de la propriété `dash_line`.
