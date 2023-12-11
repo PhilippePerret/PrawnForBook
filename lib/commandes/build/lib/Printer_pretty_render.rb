@@ -51,15 +51,6 @@ class << self
   #          orphelines.
   #     - On procède à l'écriture. 
   # 
-  #   NOTE: PREMIÈRE CHOSE À FAIRE : VOIR COMMENT ON RÉCUPÈRE LA
-  #         DERNIÈRE LIGNE D'UN PARAGRAPHE TRAITÉ
-  #   NOTE : il faudra étudier :
-  #     - un code couleur qui passe d'une page à l'autre
-  #     - un code couleur qui commence sur l'avant-dernière ligne et
-  #       se termine sur une ligne de voleur.
-  #   NOTE : Une fois installé, on pourra regarder si ça règle le 
-  #     problème du test "produce/guillemets"
-  # 
   #   Les fausses tables, quand elles passent par ici, fonctionnent
   #   colonne par colonne, en récupérant le curseur et la hauteur 
   #   pour gérer la prochaine colonne.
@@ -96,8 +87,8 @@ class << self
   # 
   # @param options [Hash]
   # 
-  #   Table des options telles qu'envoyé à pdf.box_text.
-  #   En plus des options régulière, propres à Prawn on peut trouver
+  #   Table des options telles qu'envoyée à pdf.box_text.
+  #   En plus des options régulières, propres à Prawn on peut trouver
   #   aussi :
   #   :puce     qui définit une puce (typiquement utilisé pour les
   #             paragraphe qui sont des items de liste). C'est soit
@@ -114,7 +105,10 @@ class << self
   #     - Il sera ajouté 'dry_run:true' pour
   #       gérer les orphelines, les veuves et les lignes de voleurs.
   # 
-  # @return owner
+  #     - Les titres ont leur propre méthode de gravage, ils ne 
+  #       passent pas par ici.
+  # 
+  # @return owner (pour l’avoir quand il est instancié ici)
   # 
   def pretty_render(pdf:, text:, options:, owner: nil, fonte: nil)
 
@@ -168,7 +162,8 @@ class << self
         #   Les titres ne passent pas par cette méthode. Cf. 
         #   NTitre#build
         #   
-        if cursor < 0
+        # if cursor < 0
+        if cursor < line_height
           start_new_page
           move_to_line(1)
         end
@@ -178,11 +173,30 @@ class << self
 
         str = text.dup
 
-        # puts "\nTXT: #{str}".vert
+        debugit = str.match?('Le grand titre à utiliser pour la table des matières')
 
         e, b = text_box(str, options.merge(dry_run: true))
 
         boxheight = b.height
+
+        # Un peu hackish… mais permet de régler le bug #147
+        # Quand il y a une puce (vraiment nécessaire ?), et un seul
+        # paragraphe dans le texte, et que la boite excède la place
+        # restante, on passe directement à la page suivante.
+        #   @note
+        #     Peut-être faudra-t-il le faire mais sans puce, lorsque 
+        #     le texte possède un left ?
+        # 
+        if puce && cursor - boxheight < 0 && str.count("\n") == 0
+          start_new_page
+          move_to_line(1)
+        end
+
+        # if debugit
+        #   puts "cursor : #{cursor}".bleu
+        #   puts "boxheight : #{boxheight}".bleu
+        #   exit 112
+        # end
 
         printed_lines = b.instance_variable_get('@printed_lines')
         lines_count = printed_lines.count
