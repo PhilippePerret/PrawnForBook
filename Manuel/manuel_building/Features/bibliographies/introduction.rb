@@ -8,7 +8,7 @@ Prawn4book::Manual::Feature.new do
     Une bibliographie se définit dans _PFB_ par une donnée dans la section principale de recette `bibliographies` et une balise qui servira d’identifiant pour la bibliographie et de balise pour repérer le texte. Par exemple les balises `article` et `film` qui serviront d’illustration ci-dessous et seront utilisés dans le texte de cette manière :
     « C’est une référence à l’article article\\(Les chaussures|0001) et une référence au film film\\(Titanic). »
 
-    ##### Lexique
+    #### Nomenclature pour les bibliographies
 
     *(comme pour les autres parties, commençons par un lexique qui permet de fixer les termes que nous employons pour parler de bibliographie)*
     (( line ))
@@ -19,7 +19,7 @@ Prawn4book::Manual::Feature.new do
     * **Fiche** ou **carte** | Fichier informatatique ou enregistrement (dans une fichier CSV) qui contient toutes les données de l’*item bibliographique* (par exemple toutes les données du film ou du livre).
     * **Liste des sources** | Désigne la liste, à la fin du livre, qui liste l’ensemble des *items* cités (et seulement les items cités) et, dans _PFB_, indique les pages où il y est fait référence.
 
-    ##### Données minimales
+    #### Données minimales des bibliographies
 
     Une bibliographie est définie par les données minimales et indispensables suivantes (pour la compréhension, on choisit d’illustrer une bibliographie pour des articles de journaux) :
     * Le **tag** (ou **identifiant**) | C’est un mot simple en minuscule (donc seulement les lettres de "a" à "z", au singulier (p.e. "article") qui sert de *clé* pour la bibliographie. C’est ce tag qui sera utilisé au cours du livre pour construire un *marquer de référence* pour faire référence à un *item bibliographique* en particulier (cf. plus bas).
@@ -28,26 +28,26 @@ Prawn4book::Manual::Feature.new do
     * **`main_key`** ("clé principale" en anglais) | Si ce n’est pas la propriété `title` de l’item (à ne pas confondre avec le `title` dont nous venons de parler) qui doit être utilisée pour remplacer la marque de référence, c’est la valeur de cette clé principale qu’il faudra prendre (et qui doit donc impérativement être définie pour chaque item bibliographique)
     Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable. Dans la recette (cf. [[recette/grand_titre]]), elles sont définies de cette manière :
     (( line ))
-     `bibliographies:`
-     `  \\<tag>:`
-     `    # Propriétés indispensables`
-     `    title: "\\<titre>"`
-     `    path: "\\<path/to/data>"`
-     `    main_key: "\\<clé item>" # si autre que title`
-     `    # Propriétés optionnelles`
-     `    format: \\<format>`
-     `    picto: "\\<picto>"`
+    {-}`bibliographies:`
+    {-}`  \\<tag>:`
+    {-}`    # Propriétés indispensables`
+    {-}`    title: "\\<titre>"`
+    {-}`    path: "\\<path/to/data>"`
+    {-}`    main_key: "\\<clé item>" # si autre que title`
+    {-}`    # Propriétés optionnelles`
+    {-}`    format: \\<format>`
+    {-}`    picto: "\\<picto>"`
     (( line ))
     À partir de là, dans le texte, il suffit de mettre un mot ou un grand de mot entre parenthèses en le précédant de l’identifiant de la bibliographie pour que cet élément soit pris en repère. Par exemple :
     (( line ))
     (( {align: :center} ))
-     `\\<id biblio>(\\<id item>)` 
+    {-}`\\<id biblio>(\\<id item>)` 
     (( line ))
     Ce mot sera remplacé par la propriété `title` de l’item (cf. plus bas) et cette référence sera enregistrée pour l’ajouter à la liste des sources bibliographiques à la fin du livre.
     Si le `title` de l’item de convient pas dans une utilisation particulière, on peut définir un texte quelconque avant l’identifiant, en le séparant avec un trait droit ("|") de l’identifiant, comme ci-dessous.
     (( line ))
     (( {align: :center} ))
-     `C’est un film\\(exemple de film|the titanic) dans le texte.` 
+    {-}`C’est un film\\(exemple de film|the titanic) dans le texte.` 
     (( line ))
     Avec le code ci-dessus, le texte "exemple de film" sera utilisé à la place du titre du film, mais c’est une référence au film en question qui sera enregistrée en liste des sources en fin de volume.
 
@@ -67,12 +67,12 @@ Prawn4book::Manual::Feature.new do
 
     Au minimum (mais ce serait un peu idiot de n’avoir que ça…), un item de bibliographie doit définir sa propriété `title` qui correspond à son titre. `title` est sa clé principale. Mais puisque _PFB_ est hautement configurable, même cette clé principale peut avoir un autre nom, il suffit de la définir dans la propriété `main_key` des données de la bibliographie, dans la recette.
     Donc un item bibliographique peut ressembler à :
-     `# Dans "the titanic.yaml`
-     `---`
-     `title: "The Titanic"`
-     `title_fr: "Titanic"`
-     `director: "James CAMERON`
-     `year: 1999`
+    {-}`# Dans "the titanic.yaml`
+    {-}`---`
+    {-}`title: "The Titanic"`
+    {-}`title_fr: "Titanic"`
+    {-}`director: "James CAMERON`
+    {-}`year: 1999`
 
     ##### Liste des sources
 
@@ -80,12 +80,12 @@ Prawn4book::Manual::Feature.new do
     Par exemple :
     (( line ))
     (( {align: :center} ))
-     `(( biblio(film) ))` 
+    {-}`(( biblio(film) ))` 
     (( line ))
     … pour afficher la liste des films cités (et seulement ceux cités) et/ou :
     (( line ))
     (( {align: :center} ))
-     `(( biblio(article) ))` 
+    {-}`(( biblio(article) ))` 
     (( line ))
     … pour afficher la liste des articles (seulement ceux cités), avec les pages où ils sont cités.
 

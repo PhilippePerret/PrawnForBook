@@ -67,10 +67,10 @@ module Prawn4book
     TOUT_PUCES && 'puces/custom_image',
 
     #-Images-#
-    'images/grand_titre',
-    'images/inserer_images',
-    'images/images_flottantes',
-    'images/format_legende',
+    TOUT_IMAGE && 'images/grand_titre',
+    TOUT_IMAGE && 'images/inserer_images',
+    TOUT_IMAGE && 'images/images_flottantes',
+    TOUT_IMAGE && 'images/format_legende',
     
     # 'references/cross_references'
     # 'hyperlinks',

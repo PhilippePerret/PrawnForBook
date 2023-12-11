@@ -1,15 +1,15 @@
-#### Lexique
+#### Nomenclaure des références croisées
 Pour bien comprendre de quoi nous parlons, nous nommons les choses de façon stricte :
 * la **cible** (ou **cible de la référence**), c’est l’endroit du livre auquel nous faisons référence (il se marque par `\\<-(id_ref)`), 
 * l’**appel** (ou **appel de la référence)**, c’est la marque qui permet, dans le code-texte du livre, de faire référence à un autre endroit du livre (il ressemble à `\\->(id_ref)`,
 * la **marque** (ou **marque de la référence**), c’est le texte précis qui remplacera l’*appel* et qui sera donc lu dans le livre imprimé,
 * l’**endroit** (ou **endroit de la référence**), c’est précisément la page, le paragraphe ou la page et le paragraphe où se trouve la *cible*.
 
-#### Définition
+#### Définition des références croisées
 Les *références croisées* permettent de faire référence, dans un livre, à une autre partie du livre ou même, avec _PFB_, à une partie d’un autre livre. Typiquement, c’est le "cf. page 12" qu’on trouve dans un ouvrage.
 Les *références croisées* fonctionne à partir d’une *cible*, la partie du livre à rejoindre, et d’un *lien* vers cette cible.
 
-#### Format de la marque
+#### Format de la marque de référence
 
 Dans _PFB_, la *marque de la référence* peut s’imprimer de différentes manière. Par défaut, elle pourra avoir trois aspects qui dépendront du type de numérotation défini, à savoir :
 

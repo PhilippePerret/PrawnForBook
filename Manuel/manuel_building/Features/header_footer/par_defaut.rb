@@ -10,9 +10,9 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     Les pages suivantes vont définir les différents entête et pieds de page que l’on peut définir, en présentant dans la page le code utilisé et le résultat dans les entêtes et/ou les pieds de page.
 
-    ##### Lexique
+    #### Nomenclature des entêtes et pieds de page
 
-    Comme pour les autres parties, nous définissons ici le lexique des termes qui seront rigoureusement utilisés dans cette partie.
+    Comme pour les autres parties, nous définissons ici la liste des termes qui seront rigoureusement utilisés dans cette partie et propres au entêtes et pieds de page.
 
     * **Entête**. C’est la partie, en haut de page, au-dessus du texte principal de la page, qui contient le plus souvent le titre courant, qui permet de naviguer plus facilement dans les chapitres du livre.
     * **Header**. *Entête*, en anglais.
