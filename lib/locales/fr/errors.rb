@@ -584,6 +584,72 @@ ERRORS = {
     crossable_requires_recipe_or_refsfile: "Un livre ”croisable” nécessite un fichier recette (quand c'est un prawn-book) ou un fichier références 'references.yaml' (quand c'est un livre quelconque).",
   }, #/biblio
 
+  # --- Index Personnalisés ---
+
+  index: {
+
+    invalid: <<~ERR,
+      L’index personnalisé d’identifiant '%{id}' est invalide :
+      %{err}
+      ERR
+
+    missing_item_treatment_method: <<~ERR,
+      Aucune méthode de traitement des items de cet index personnalisé n’est
+      implémenté.
+      Pour y remédier, dans un fichier `parser.rb’ ou `prawn4book.rb’,
+      implémenter la méthode #index_%{id} dans un module CustomIndexModule:
+
+      module CustomIndexModule
+
+        def index_%{id}(id, output, context)
+          output ||= id
+          # ... traitement ...
+          return output # à écrire dans le livre
+        end
+
+      end
+      ERR
+
+    bad_params_count_in_item_treatment_method: <<~ERR,
+      La méthode #index_%{id} devrait recevoir trois paramètres :
+
+      module CustomIndexModule
+
+        # @param id [String]
+        #     Identifiant de l’item de l’index
+        #
+        # @param output [String]
+        #     Optionnellement, le texte à écrire dans le livre. S’il
+        #     n’est pas défini, c’est +id+ qui sera utilisé.
+        #
+        # @param context [Hash]
+        #     Table contenant :pdf (le Prawn::PdfView en cours de
+        #     construction), :paragraph (l’instance du paragraphe qui
+        #     contient l’item d’index). On peut s’en servir, notamment
+        #     pour récupérer le numéro de paragraphe ou de page.
+        #
+        def index_%{id}(id, output, context)
+          # ...
+        end
+
+      end
+
+      ERR
+
+    missing_print_method: <<~ERR,
+      La méthode d’impression de l’index personnalisé %{id} doit 
+      être implémentée.
+
+      module CustomIndexModule
+
+      end
+      ERR
+
+    bad_params_count_in_print_method: <<~ERR,
+
+      ERR
+  },
+
   # --- Références --- #
 
   references: {

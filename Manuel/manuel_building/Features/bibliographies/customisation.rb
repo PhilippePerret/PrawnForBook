@@ -43,7 +43,7 @@ Prawn4book::Manual::Feature.new do
   sample_texte <<~EOT
     Un costum\\(cravate) pour voir.
     \\(( new_page ))
-    \\(( biblio(costum) ))
+    \\(( biblio\\(costum) ))
     \\(( new_page ))
     EOT
 

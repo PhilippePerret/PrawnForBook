@@ -133,6 +133,11 @@ book_format:
       border_color:   "999999"
       # border_color:   "FFCCCC"
       left:           0
+    # - Référrences -
+    references:
+      page_format:    'page %{page}'
+      paragraph_format: '§ %{paragraph}'
+      hybrid_format:  'p. %{page} § %{paragraph}'
   titles:
     level1:
       font_n_style:   *default2_font_n_style
@@ -320,21 +325,30 @@ book_making:
   conception:
     patro:      null
     mail:       null
+    site:       null
+  editor_in_chief:
+    patro:      null
+    mail:       null
+    site:       null
   writing:
     patro: null
     mail: null
+    site:       null
   page_design: # mise en page
     patro:      null
     mail:       null
+    site:       null
   cover: 
     patro:      null
     mail:       null
+    site:       null
   correction:
     patro:      null
     mail:       null
+    site:       null
   printing: 
-    name:           'à la demande'
-    lieu:           null
+    name:       'à la demande'
+    lieu:       null
 #</book_making>
 
 #

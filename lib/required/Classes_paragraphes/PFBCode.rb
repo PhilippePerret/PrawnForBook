@@ -65,6 +65,8 @@ class PFBCode < AnyParagraph
     when 'index'
       book.page_index.build(pdf)
       book.pages[pdf.page_number].add_content_length(100) #arbitrairement
+    when /^index\((?<index_id>[a-z]+)\)$/
+      book.index($~[:index_id].to_sym).print(pdf)
     when /^biblio/
       treate_as_bibliography(pdf)
     when /^notice\((.+?)\)$/.freeze

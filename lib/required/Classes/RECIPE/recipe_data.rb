@@ -27,6 +27,10 @@ class Recipe
     DATA[key] || default
   end
 
+  def level_error
+    FATAL_LEVEL_ERROR
+  end
+
   # --- Fonts Definitions ---
 
   # La fonte [Prawn4book::Fonte] à utiliser pour les notes de page
@@ -292,6 +296,18 @@ class Recipe
       when 'parags' then :paragraph
       end
     end
+  end
+
+  # -- Format des références --
+
+  def reference_page_format
+    format_text[:references][:page_format]
+  end
+  def reference_paragraph_format
+    format_text[:references][:paragraph_format]
+  end
+  def reference_hybrid_format
+    format_text[:references][:hybrid_format]
   end
 
   # Type de numérotation (des pages et de tout)

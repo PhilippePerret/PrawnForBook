@@ -1,5 +1,8 @@
 module Prawn4book
 
+  WARNING_LEVEL_ERROR = 1
+  FATAL_LEVEL_ERROR   = 16
+
 # Pour déclencher une erreur de recette
 class RecipeError < StandardError
 end
@@ -158,6 +161,12 @@ class PFBFatalError < StandardError
       2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
       2001  => Prawn4book::ERRORS[:references][:target_already_exists],
       2002  => Prawn4book::ERRORS[:references][:target_undefined],
+      # -- Index Personnalisés --
+      2500  => Prawn4book::ERRORS[:index][:invalid],
+      2501  => Prawn4book::ERRORS[:index][:missing_item_treatment_method],
+      2502  => Prawn4book::ERRORS[:index][:bad_params_count_in_item_treatment_method],
+      2503  => Prawn4book::ERRORS[:index][:missing_print_method],
+      2504  => Prawn4book::ERRORS[:index][:bad_params_count_in_print_method],
       # -- Tables --
       3000  => Prawn4book::ERRORS[:table][:can_not_fit],
       # -- Modules utilisateurs personnalisés --

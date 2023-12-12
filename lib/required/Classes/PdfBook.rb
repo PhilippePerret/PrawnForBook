@@ -233,20 +233,38 @@ class PdfBook
   alias :references :table_references
 
   ##
-  # Pour gérer les notes dans le livre
+  # Instance pour gérer les notes dans le livre
   # 
   def notes_manager
     @notes_manager ||= PdfBook::NotesManager.new(self)    
   end
 
   ##
-  # Pour gérer l'index du livre
+  # Instance pour gérer l'index du livre
   # 
   def page_index
     @page_index ||= begin
       require 'lib/pages/page_index'
       Prawn4book::Pages::PageIndex.new(self)
     end
+  end
+
+  ##
+  # Instance pour gérer les index personnalisés du livre
+  # 
+  def index_manager
+    @index_manager ||= PdfBook::IndexManager.new(self)
+  end
+
+  # Retourne l’instance [PdfBook::Index] de l’index personnalisé
+  # d’identifiant +index_id+
+  # 
+  # @note
+  #   Attention : il n’existe pas forcément au moment de son
+  #   appel.
+  # 
+  def index(index_id)
+    index_manager.get(index_id)
   end
 
   def collection

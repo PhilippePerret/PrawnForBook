@@ -80,12 +80,12 @@ Prawn4book::Manual::Feature.new do
     Par exemple :
     (( line ))
     (( {align: :center} ))
-    {-}`(( biblio(film) ))` 
+    {-}`(( biblio\\(film) ))` 
     (( line ))
     … pour afficher la liste des films cités (et seulement ceux cités) et/ou :
     (( line ))
     (( {align: :center} ))
-    {-}`(( biblio(article) ))` 
+    {-}`(( biblio\\(article) ))` 
     (( line ))
     … pour afficher la liste des articles (seulement ceux cités), avec les pages où ils sont cités.
 

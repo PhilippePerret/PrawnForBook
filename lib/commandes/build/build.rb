@@ -120,6 +120,9 @@ class PdfBook
       # 
       Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
 
+      # Réinitialisation des index personnalisés
+      self.index_manager.drain_second_tour
+
       # Construction finale du livre
       # (mais elle peut se faire à la première passe s'il n'y a
       #  pas de références arrières)
@@ -146,6 +149,9 @@ class PdfBook
         # collection, on l'invoque
         # 
         Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
+
+        # Réinitialisation des index personnalisés
+        book.index.drain_second_tour
 
         if PdfBook::AnyParagraph.respond_to?(:init_third_turn)
           PdfBook::AnyParagraph.init_third_turn
@@ -466,6 +472,11 @@ class PdfBook
     if defined?(ParserFormaterClass)
       spy "Extension du module ParserFormaterClass dans PdfBook::AnyParagraph".bleu
       PdfBook::AnyParagraph.extend(ParserFormaterClass)
+    end
+
+    if defined?(CustomIndexModule)
+      spy "Extension des index personnalisés dans PdfBook::Index".bleu
+      PdfBook::Index.include(CustomIndexModule)
     end
 
     if defined?(PdfBookFormatageModule)

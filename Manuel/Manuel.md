@@ -685,12 +685,6 @@ Les propriétés qu’on peut définir sont les suivantes :
 | **width**                                                    | Largeur de l’image (si c’est une image) ou largeur du texte. | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
 | **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
 
-##### Traitement des mots seuls en bas de paragraphe
-
-À partir de la version 2.0, les *lignes de voleur*, tout comme les *orphelines* ou les *veuves* sont automatiquement traitées. 
-
-Dans les formateurs personnalisés (personnels), pour que ce soit le cas, il faut utiliser la méthode [Printer::pretty_render](#printer-pretty-render) pour écrire tout texte.
-
 <a name="style-extrait-with-helper"></a>
 
 ##### Stylisation d’un extrait du paragraphe par helper [Expert]

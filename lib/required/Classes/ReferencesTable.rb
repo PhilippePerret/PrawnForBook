@@ -116,11 +116,13 @@ class ReferencesTable
     custom_mark = "_ref_"
     if ref_id.match?('\|')
       ref_id, custom_mark = ref_id.split('|')
+      custom_mark ||= ref_id # on peut utiliser "->(mon_id|)" (noter le trait droit)
     end
     ref_id = ref_id.to_sym
     if ref = table[ref_id]
+      #
       # - Référence définie -
-      # (2e tour ou référence arrière)
+      # (2e tour ou référence à un élément déjà traité)
 
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
@@ -141,11 +143,13 @@ class ReferencesTable
       # On passe ici quand la référence cible n'est pas encore 
       # définie (parce qu'elle se trouve plus loin, peut-être même 
       # dans le paragraphe suivant). Dans ce cas, on prend un "ticket 
-      # de poissonnerie" en attendant dans la référence. Elle prend
+      # de poissonnerie" en attendant la référence. Elle prend
       # la place de la future référence, en faisant une longueur qui
       # correspond approximativement à la longueur de la référérence
       # finale en fonction de la pagination utilisée.
-      ticket_boucherie = "#{'x' * ref_default_length}" 
+      len = ref_default_length
+      len += custom_mark.length if custom_mark != '_ref_'
+      ticket_boucherie = "#{'x' * len}"
       @wanted_references.merge!(ticket_boucherie => ref_id )
       data_unknown_target = {
         paragraph:  paragraph,
@@ -184,11 +188,15 @@ class ReferencesTable
   def endroit_to(ref)
     case book.recipe.page_num_type
     when 'pages'
-      "page #{ref[:page]}"
+      book.recipe.reference_page_format % {page: ref[:page]}
     when 'parags'
-      ref[:paragraph] ? "§ #{ref[:paragraph]}" : "#{ref[:page]}"
+      if ref[:paragraph]
+        book.recipe.reference_paragraph_format % {paragraph: ref[:paragraph]}
+      else
+        "#{ref[:page]}"
+      end
     when 'hybrid'
-      ref[:hybrid] # "p. XXX § XX"
+      book.recipe.reference_hybrid_format % {page: ref[:page], paragraph: ref[:paragraph]}
     end
   end
 

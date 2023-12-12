@@ -22,6 +22,15 @@ module ParserFormaterClass
   # Méthode principale qui parse la chaine +str+ dans le context
   # +context+ et la renvoie corrigée
   # 
+  # [001]
+  #   Par défaut, l’index est construit à partir des codes "index(mot)"
+  #   ou "index:mot" qui sont trouvés. Mais depuis la version 2.1,
+  #   n’importe quel identifiant peut devenir un identifiant d’index.
+  #   On peut avoir par exemple "Je connais bien people(John Doe)" qui
+  #   utilise ’people’ comme id d’index.
+  #   C’est la méthode #__traite_other_mots_indexed_in ci-dessous qui
+  #   traite ce cas d’index
+  # 
   # @param [String] str La chaine de caractère à traiter, qui peut
   #     être aussi bien un texte complet (une description de 
   #     bibliographie) qu'un simple paragraphe en passant par le
@@ -57,7 +66,7 @@ module ParserFormaterClass
 
     #
     # Est-ce un texte avec un class-tags ?
-    # (cf. l'explication au-dessus de la méthode, ci-dessous)
+    # (cf. l'explication au-dessus de la méthode, plus bas)
     #   
     str = __get_class_tags_in(str, context)
 
@@ -92,9 +101,14 @@ module ParserFormaterClass
     str = __traite_markdown_inline_in(str, context)
 
     #
-    # Traitement des mots indexés
+    # Traitement des mots indexés (index:mot)
     # 
     str = __traite_mots_indexed_in(str, context)
+
+    #
+    # Traitement des autres mots indexés [001]
+    # 
+    str = __traite_other_mots_indexed_in(str, context)
 
     #
     # Traitement des références croisées externes
@@ -340,8 +354,26 @@ private
       book.page_index.add(dmot)
       dmot[:mot]
     end
+
     return str
   end
+
+  # Traitement des index personnalisés
+  # cf. [001]
+  # 
+  def self.__traite_other_mots_indexed_in(str, context)
+    return str unless str.match?('\(')
+    str = str.gsub(REG_INDEX) do
+      indexId = $~[:index_id].to_sym.freeze
+      output  = $~[:mot].freeze
+      motId   = ($~[:id_mot] || output).freeze
+      book.index(indexId).add(motId, output, **context)
+    end
+
+    return str    
+  end
+
+  REG_INDEX = /(?<=(^| ))(?<index_id>[a-z]+?)#{EXCHAR}\((?<mot>.+?)(?:\|(?<id_mot>.+?))?\)/.freeze
 
   ##
   # Traitement des références croisées
@@ -389,7 +421,6 @@ private
         book.table_references.add(cible, **{
           page:       first_page, 
           paragraph:  numero_par,
-          hybrid:     "p. #{first_page} § #{numero_par}"
         })
         ''
       end
@@ -456,7 +487,6 @@ private
         bibitem.add_occurrence({
           page:       first_page, 
           paragraph:  parag_num,
-          hybrid:     "p. #{first_page} § #{parag_num}"
         })
         #
         # Formatage de l'élément bibliographique
