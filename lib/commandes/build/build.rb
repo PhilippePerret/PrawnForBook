@@ -115,7 +115,7 @@ class PdfBook
       
       #
       # S'il existe une méthode de reset propre au livre ou à la 
-      # collection, on l'invoque, en indique (+false+) que c'est le
+      # collection, on l'invoque, en indiquant (+false+) que c'est le
       # second tour.
       # 
       Prawn4book.reset(false) if Prawn4book.respond_to?(:reset)
