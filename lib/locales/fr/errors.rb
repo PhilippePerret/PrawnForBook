@@ -604,7 +604,14 @@ ERRORS = {
         def index_%{id}(id, output, context)
           output ||= id
           # ... traitement ...
-          return output # à écrire dans le livre
+          #
+          # Trois retours possibles :
+          # 1) le texte simple à écrire dans la page
+          # return output # à écrire dans le livre
+          # 2) l’identifiant (transformé) et le texte à écrire
+          # return [new_id, output]
+          # 3) la table des informations à enregistrer dans l’occurrence
+          return {id: }
         end
 
       end
@@ -646,7 +653,9 @@ ERRORS = {
       ERR
 
     bad_params_count_in_print_method: <<~ERR,
-
+      La méthode d’impression de l’index personnalisé %{id} 
+      (#print_index_%{id}) devrait recevoir un paramètre, 
+      le document en construction (pdf).
       ERR
   },
 

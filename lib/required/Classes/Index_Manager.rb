@@ -108,21 +108,45 @@ class Index
   # @return [String] Le texte à écrire
   # 
   def add(item_id, output, **context)
+    data_item = {
+      id:           item_id,
+      paragraph:    context[:paragraph],
+      output:       output,
+      real_output:  output,
+    }
+
     # On traite cet item avec la méthode personnalisée qui doit
-    # obligatoirement exister
-    real_output = send(treat_item_method_name, item_id, output, **context)
-    if real_output.is_a?(Array)
+    # obligatoirement exister. 
+    # Elle peut, en fonction de son retour :
+    # - modifier le texte à écrire
+    # - modifier l’identifiant de l’item
+    # - ajouter des données pour l’item
+    # 
+    case real_output = send(treat_item_method_name, item_id, output, **context)
+    when String
+      data_item.merge!(real_output: real_output)
+    when Array
       item_id, real_output = real_output
+      data_item.merge!(real_output: real_output, id: item_id)
+    when Hash
+      if real_output.key?(:output) and not(real_output.key?(:real_output))
+        real_output.merge!(real_output: real_output.delete(:output))
+      end
+      data_item.merge!(real_output)
+    else
+      # Erreur
     end
 
-    unless items.key?(item_id)
-      items.merge!(item_id => [])
-    end
+    # Identifiant qui a pu être rectifié
+    item_id = data_item[:id]
+
+    # Instancier l’item s’il n’existe pas
+    items.merge!(item_id => []) unless items.key?(item_id)
 
     # On ajoute cette occurrence
-    items[item_id] << {paragraph: context[:paragraph], output: output, real_output: real_output}
+    items[item_id] << data_item
     # On retourne ce qu’il faut écrire
-    return real_output
+    return data_item[:real_output]
   end
 
   # Méthode appelée quand on demande à inscrire l’index personnalisé
@@ -139,7 +163,8 @@ class Index
     nbp = self.method(printing_method_name).parameters.count
     nbp == 1 || \
       raise(PFBFatalError.new(2504, {id: id}))
-    return send(printing_method_name, pdf)
+    send(printing_method_name, pdf)
+    pdf.update_current_line
   end
 
   # Méthode appelée à la création de l’index personnalisé pour 

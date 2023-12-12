@@ -6,9 +6,6 @@ class NTitre < AnyParagraph
 
   attr_reader :level
 
-  # Numéro de page du titre
-  attr_accessor :page_numero
-
   # Numéro de paragraphe de titre
   # (correspond au numéro du paragraphe suivant, puisque les
   #  titres ne sont pas numérotés)

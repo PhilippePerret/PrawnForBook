@@ -144,7 +144,8 @@ class AnyParagraph
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
   attr_accessor :last_page
-  attr_accessor :page_numero
+  alias :page_numero :first_page
+  alias :page_number :first_page
 
   # Liste des balises de style de paragraphe
   attr_accessor :class_tags
