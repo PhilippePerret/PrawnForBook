@@ -172,6 +172,9 @@ class AnyParagraph
     @unknown_targets = []
   end
 
+  # Par défaut
+  def some_text?; false end
+
   # @return La référence au paragraphe en fonction de la pagination
   # choisie. Si on est en mode 'page', seul le numéro de la première
   # page du paragraphe est retourné. Si on est en mode 'parags', seul
@@ -385,9 +388,18 @@ class AnyParagraph
               when :right   then :margin_right
               when :top     then :margin_top
               when :bottom  then :margin_bottom
-              else k
+              else 
+                case k
+                when :indentation
+                  self.indentation = v.to_pps
+                  v = :NOT_STYLE_VALUE
+                when :no_indentation
+                  self.no_indentation = v
+                  v = :NOT_STYLE_VALUE
+                else k
+                end
               end
-          sty.merge!(k => real_value_for(v))
+          sty.merge!(k => real_value_for(v)) unless v == :NOT_STYLE_VALUE
         end
       end
       return sty

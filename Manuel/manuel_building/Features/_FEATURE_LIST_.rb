@@ -60,6 +60,7 @@ module Prawn4book
 
     #__Texte_Details___#
     TOUT && 'texte_detail/grand_titre',
+    TOUT && 'texte_detail/indentation',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',

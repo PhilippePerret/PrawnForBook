@@ -135,3 +135,20 @@ class Bibliography
 end #/class Bibliography
 
 end #/module Prawn4book
+
+
+module CustomIndexModule
+  def index_article(id, output, **context)
+    output || id
+  end
+
+  def index_film(id, output, **context)
+    output || id
+  end
+
+  def index_costum(id, output, **context)
+    output || id
+  end
+
+
+end

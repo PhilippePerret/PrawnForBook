@@ -27,6 +27,10 @@ end
 
 module Prawn
 module Text
+
+  # Narrow no-break-space
+  NNBSP = "\u202F"
+  
   module Formatted
     class Box
       def at=(coor)

@@ -121,6 +121,16 @@ class NTextParagraph < AnyParagraph
         width:  pdf.bounds.width - left,
         no_num: true,
       })
+    elsif indentation
+      # Si ce n’est pas un item de liste et qu’il y a une indentation,
+      # on ajoute le texte voulu
+      # 
+      # Le calcul doit être beaucoup plus complexe que ça : il ne
+      # faudrait pas mettre d’indentation lorsque la ligne est vide
+      # au-dessus. Mais comment le savoir ?
+      unless no_indentation || prev_printed_paragraph.title? || not(prev_printed_paragraph.some_text?)
+        @text = "#{self.class.string_indentation(pdf, indentation, **dry_options)}#{text}"
+      end
     end
 
     ###########################
@@ -151,6 +161,7 @@ class NTextParagraph < AnyParagraph
       overflow: :truncate, 
       at:    [margin_left, nil],
       width: width || (@pdf.bounds.width - margin_left),
+      # indent_paragraphs: indentation, 
       align: text_align
     }
   end
@@ -171,8 +182,34 @@ class NTextParagraph < AnyParagraph
     end
   end
 
-  def indent
-    @indent ||= book.recipe.text_indent
+  def indentation
+    @indentation ||= book.recipe.text_indent
+  end
+  # Pour modifier dynamiquement l’indentation
+  def indentation=(value)
+    @indentation = value.to_pps
+  end
+  # Pour supprimer dynamiquement l’indentation s’il y en a
+  def no_indentation=(value)
+    @no_indentation = value
+  end
+  def no_indentation; @no_indentation || false end
+
+  # Création de l’indentation artificielle
+  def self.string_indentation(pdf, indent_length, **options)
+    @@string_indentation = nil if defined?(@@ref_length_for_string_indentation) && indent_length != @@ref_length_for_string_indentation
+    @@string_indentation ||= begin
+      nnbsp = Prawn::Text::NBSP
+      indent_str = "#{nnbsp}"
+      itimes = 1
+      while pdf.width_of(indent_str, **options) < indent_length
+        indent_str = nnbsp * (itimes += 1)
+      end
+      puts "itimes: #{itimes} / len attendue: #{indent_length} / indent string: #{indent_str.inspect}".bleu
+      exit 112
+      @@ref_length_for_string_indentation = indent_length
+      indent_str
+    end      
   end
 
   def own_builder?

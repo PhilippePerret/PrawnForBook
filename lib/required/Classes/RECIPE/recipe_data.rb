@@ -348,7 +348,13 @@ class Recipe
   end
 
   def text_indent
-    @text_indent      ||= format_text[:indent]
+    @text_indent      ||= begin
+      if format_text[:indent].nil? || format_text[:indent] == 0
+        nil
+      else
+        format_text[:indent].to_pps
+      end
+    end
   end
 
   def right_margin_with_floating_image

@@ -117,11 +117,6 @@ class << self
     # Les titres ne passent pas par cette méthode
     # 
 
-
-    # puts "\n-> pretty_render\n" \
-    #   "text: #{text.inspect}\n" \
-    #   "options: #{options.inspect}"
-
     my = self
 
     options = defaultize_options(options.dup, pdf)
@@ -173,7 +168,7 @@ class << self
 
         str = text.dup
 
-        debugit = str.match?('Le grand titre à utiliser pour la table des matières')
+        debugit = false # str.match?('Le grand titre à utiliser pour la table des matières')
 
         e, b = text_box(str, options.merge(dry_run: true))
 
@@ -219,12 +214,6 @@ class << self
           boxheight   -= line_height
           lines_count -= 1
         end
-
-        # puts "Écriture de #{str.inspect}"
-        # puts "Options d'écriture : #{options.inspect}"
-
-        # puts "Ligne courante : #{current_line}".bleu
-
 
         # On doit voir si on va passer à la page suivante. On le sait
         # si la hauteur de curseur actuelle, à laquelle on soustrait 
@@ -355,14 +344,8 @@ class << self
           update_current_line
         end
 
-        # On passe sur la ligne suivante
-        # move_cursor_to(cursor - line_height)
+        # On passe à la ligne suivante
         move_to_next_line
-
-        # if page_number > 18 && page_number < 23
-        #   puts "\nCurseur après #{text.inspect} : #{cursor.round}".gris
-        #   exit 110 if page_number == 22
-        # end
 
       end #/pdf
 
@@ -456,6 +439,8 @@ class << self
       ary = Prawn::Text::Formatted::Parser.format(str, [])
 
       # Hauteur actuelle du paragraphe, sans kerning
+      opts_pur = opts.dup
+      opts_pur.delete(:indent_paragraphs)
       normal_height = height_of_formatted(ary, **opts)
 
       curr_height = normal_height.dup
