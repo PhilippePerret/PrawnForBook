@@ -773,7 +773,7 @@ Il existe deux manières de le faire :
   >
   > Avec la version 2.0, les tables sont plutôt déconseillées (elles ne permettent pas une gestion fine des lignes de voleurs, des veuves ou des orphelines.
 
-  La manière complexe consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
+  OBSOLÈTE {{On peut passer par la méthode précédente en prenant le paragraphe et le pdf par `context` et en pensant à renvoyer nil}} La manière complexe consiste à définir dans le module **`FormaterParagraphModule`** du  [fichier `formater.rb`][] la méthode **build_<balise>_paragraph(paragraph, pdf)** qui reçoit en premier argument l’instance du paragraphe et en second argument l’instance `Prawn::View` du constructeur du livre. Ensuite, à l’’intérieur de la méthode, on construit le paragraphe. Par exemple :
   
   ~~~ruby
   module FormaterParagraphModule

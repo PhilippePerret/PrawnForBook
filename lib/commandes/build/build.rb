@@ -326,6 +326,16 @@ class PdfBook
     # 
     pdf.start_new_page if pdf.page_number.even?
 
+    # Calculer l’indentation des paragraphes s’il y en a une
+    # 
+    # @note
+    #   On ne peut le faire que lorsque les fontes sont définies et
+    #   qu’on se trouve déjà sur une page
+    # 
+    if recipe.text_indent
+      PdfBook::NTextParagraph.calc_string_indentation(pdf, recipe.text_indent)
+    end
+
     # ========================
     # - TOUS LES PARAGRAPHES -
     # ========================

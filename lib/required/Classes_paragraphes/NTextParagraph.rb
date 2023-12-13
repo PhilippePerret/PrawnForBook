@@ -123,13 +123,9 @@ class NTextParagraph < AnyParagraph
       })
     elsif indentation
       # Si ce n’est pas un item de liste et qu’il y a une indentation,
-      # on ajoute le texte voulu
-      # 
-      # Le calcul doit être beaucoup plus complexe que ça : il ne
-      # faudrait pas mettre d’indentation lorsque la ligne est vide
-      # au-dessus. Mais comment le savoir ?
+      # on ajoute l’espace voulu
       unless no_indentation || prev_printed_paragraph.title? || not(prev_printed_paragraph.some_text?)
-        @text = "#{self.class.string_indentation(pdf, indentation, **dry_options)}#{text}"
+        @text = "#{string_indentation}#{text}"
       end
     end
 
@@ -185,9 +181,13 @@ class NTextParagraph < AnyParagraph
   def indentation
     @indentation ||= book.recipe.text_indent
   end
+  def string_indentation
+    @string_indentation ||= self.class.string_indentation
+  end
   # Pour modifier dynamiquement l’indentation
   def indentation=(value)
     @indentation = value.to_pps
+    @string_indentation = self.class.calc_indentation(pdf, indentation)
   end
   # Pour supprimer dynamiquement l’indentation s’il y en a
   def no_indentation=(value)
@@ -195,22 +195,46 @@ class NTextParagraph < AnyParagraph
   end
   def no_indentation; @no_indentation || false end
 
-  # Création de l’indentation artificielle
-  def self.string_indentation(pdf, indent_length, **options)
-    @@string_indentation = nil if defined?(@@ref_length_for_string_indentation) && indent_length != @@ref_length_for_string_indentation
-    @@string_indentation ||= begin
+  class << self
+    # Création de l’indentation artificielle à l’aide d’espaces
+    def string_indentation
+      @string_indentation ||= calc_string_indentation(pdf, expected_length)
+    end
+
+    def calc_string_indentation(pdf, expected_length)
+      @string_indentation = calc_indentation(pdf, expected_length)
+    end
+    def calc_indentation(pdf, expected_length)
       nnbsp = Prawn::Text::NBSP
       indent_str = "#{nnbsp}"
+      final_length = nil
       itimes = 1
-      while pdf.width_of(indent_str, **options) < indent_length
-        indent_str = nnbsp * (itimes += 1)
+      pdf.update do
+        font('Courier', **{size: 4, style: :regular}) do
+          while width_of(indent_str) < expected_length
+            indent_str = nnbsp * (itimes += 1)
+          end
+          final_length = width_of(indent_str)
+
+          # On essaie pour voir si avec un itime de moins, on est plus
+          # près de la valeur recherchée. Si c’est le cas, on la prend
+          indent_str_moins_un = nnbsp * (itimes - 1)
+          lenght_moins_un = width_of(indent_str_moins_un)
+          if (expected_length - lenght_moins_un).abs < (final_length - expected_length).abs
+            indent_str    = indent_str_moins_un.freeze
+            final_length  = lenght_moins_un.freeze # débug
+            itimes        -= 1 # débug
+          end            
+        end
       end
-      puts "itimes: #{itimes} / len attendue: #{indent_length} / indent string: #{indent_str.inspect}".bleu
-      exit 112
-      @@ref_length_for_string_indentation = indent_length
-      indent_str
-    end      
-  end
+      indent_str = "<font name=\"Courier\" size=\"4\">#{indent_str}</font>".freeze
+      # débug
+      puts "\nexpected len: #{expected_length} / final length: #{final_length} / indent: #{indent_str} (itimes: #{itimes})".bleu
+      sleep 4
+      # /débug
+      return indent_str
+    end
+  end #/<< self
 
   def own_builder?
     return false if class_tags.nil?

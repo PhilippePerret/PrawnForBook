@@ -70,13 +70,35 @@ ERRORS = {
       ERR
     class_tag_formate_method_required: <<~ERR,
       La méthode #%{meth} doit être définie dans le module ParserFormaterClass
-      du fichier formater.rb du livre ou de la collection.
-      # in ./formater.rb
+      du fichier formater.rb (ou parser.rb) du livre ou de la collection.
+
+      # in ./formater.rb (ou ./parser.rb)
+
       module ParserFormaterClass
-        def %{meth}(pdf, context)
+        
+        def %{meth}(str, context)
           # ... définir le code ici
         end
+      
       end
+
+      Deux grandes utilisations possibles : 
+      - en travaillant le texte puis en le retournant
+      - en le gravant directement dans le pdf
+      Pour la première utilisation, retourner simplement le texte transformé.
+      Pour la deuxième utilisation, récupérer le paragraphe et le pdf du para-
+      mètre `context’ et renvoyer nil pour ne pas écrire deux fois le texte :
+
+      def %{meth}(str, context)
+        pdf = context[:pdf]
+        par = context[:paragraph]
+        pdf.update do
+          text par.text, **{size: 20}
+          update_current_line
+        end
+        return nil
+      end
+
       ERR
     unknown_method: <<~ERR
       Je ne sais pas comment traiter le code `%{code}'.
