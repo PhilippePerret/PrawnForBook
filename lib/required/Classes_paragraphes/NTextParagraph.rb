@@ -186,8 +186,13 @@ class NTextParagraph < AnyParagraph
   end
   # Pour modifier dynamiquement l’indentation
   def indentation=(value)
-    @indentation = value.to_pps
-    @string_indentation = self.class.calc_indentation(pdf, indentation)
+    if value.nil?
+      @indentation = nil  
+      @string_indentation = nil
+    else
+      @indentation = value.to_pps
+      @string_indentation = self.class.calc_indentation(pdf, indentation)
+    end
   end
   # Pour supprimer dynamiquement l’indentation s’il y en a
   def no_indentation=(value)
