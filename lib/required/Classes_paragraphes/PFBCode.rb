@@ -285,6 +285,9 @@ class PFBCode < AnyParagraph
   def paragraph?  ; false end
   def pfbcode?    ; true  end
 
+  # Par défaut un pfb-code est un paragraphe vide
+  def empty_paragraph?; true end
+
   def for_next_paragraph?
     @is_for_next_paragraph === true
   end

@@ -124,7 +124,20 @@ class NTextParagraph < AnyParagraph
     elsif indentation
       # Si ce n’est pas un item de liste et qu’il y a une indentation,
       # on ajoute l’espace voulu
-      unless no_indentation || prev_printed_paragraph.title? || not(prev_printed_paragraph.some_text?)
+      if no_indentation || prev_printed_paragraph.title? || not(prev_printed_paragraph.some_text?)
+        # msg = "Mais il ne doit pas être indenté car "
+        # if no_indentation
+        #   msg += "il ne doit pas être indenté"
+        # elsif prev_printed_paragraph.title?
+        #   msg += "il suit un titre"
+        # elsif not(prev_printed_paragraph.some_text?)
+        #   msg += "son paragraphe précédent (#{prev_printed_paragraph.text}::#{prev_printed_paragraph.class}) ne contient pas de texte"
+        # else
+        #   msg += "… je ne sais pas pourquoi, en fait"
+        # end
+        # puts msg.jaune
+        # sleep 2
+      else
         @text = "#{string_indentation}#{text}"
       end
     end
@@ -195,9 +208,7 @@ class NTextParagraph < AnyParagraph
     end
   end
   # Pour supprimer dynamiquement l’indentation s’il y en a
-  def no_indentation=(value)
-    @no_indentation = value
-  end
+  def no_indentation=(value); @no_indentation = value end
   def no_indentation; @no_indentation || false end
 
   class << self
@@ -210,34 +221,41 @@ class NTextParagraph < AnyParagraph
       @string_indentation = calc_indentation(pdf, expected_length)
     end
     def calc_indentation(pdf, expected_length)
-      nnbsp = Prawn::Text::NBSP
-      indent_str = "#{nnbsp}"
-      final_length = nil
-      itimes = 1
-      pdf.update do
-        font('Courier', **{size: 4, style: :regular}) do
-          while width_of(indent_str) < expected_length
-            indent_str = nnbsp * (itimes += 1)
-          end
-          final_length = width_of(indent_str)
+      # Au départ, j’essayais vraiment de calculer la vraie longueur,
+      # avec width_of. Seulement, ça ne collait pas du tout. Maintenant
+      # je pars du principe qu’un caractère insécable, dans la police
+      # Courier avec la taille 4.3 fait à peu près 1 mm.
+      indent_str = Prawn::Text::NBSP * expected_length.pt2mm
+      courier_size = 4.3
+      return "<font name=\"Courier\" size=\"#{courier_size}\">#{indent_str}</font>".freeze
+      # nnbsp = Prawn::Text::NBSP
+      # indent_str = "#{nnbsp}"
+      # final_length = nil
+      # itimes = 1
+      # pdf.update do
+      #   font('Courier', **{size: courier_size, style: :regular}) do
+      #     while width_of(indent_str) < expected_length
+      #       indent_str = nnbsp * (itimes += 1)
+      #     end
+      #     final_length = width_of(indent_str)
 
-          # On essaie pour voir si avec un itime de moins, on est plus
-          # près de la valeur recherchée. Si c’est le cas, on la prend
-          indent_str_moins_un = nnbsp * (itimes - 1)
-          lenght_moins_un = width_of(indent_str_moins_un)
-          if (expected_length - lenght_moins_un).abs < (final_length - expected_length).abs
-            indent_str    = indent_str_moins_un.freeze
-            final_length  = lenght_moins_un.freeze # débug
-            itimes        -= 1 # débug
-          end            
-        end
-      end
-      indent_str = "<font name=\"Courier\" size=\"4\">#{indent_str}</font>".freeze
-      # débug
-      puts "\nexpected len: #{expected_length} / final length: #{final_length} / indent: #{indent_str} (itimes: #{itimes})".bleu
-      sleep 4
-      # /débug
-      return indent_str
+      #     # On essaie pour voir si avec un itime de moins, on est plus
+      #     # près de la valeur recherchée. Si c’est le cas, on la prend
+      #     indent_str_moins_un = nnbsp * (itimes - 1)
+      #     lenght_moins_un = width_of(indent_str_moins_un)
+      #     if (expected_length - lenght_moins_un).abs < (final_length - expected_length).abs
+      #       indent_str    = indent_str_moins_un.freeze
+      #       final_length  = lenght_moins_un.freeze # débug
+      #       itimes        -= 1 # débug
+      #     end            
+      #   end
+      # end
+      # indent_str = "<font name=\"Courier\" size=\"#{courier_size}\">#{indent_str}</font>".freeze
+      # # débug
+      # # puts "\nexpected len: #{expected_length} / final length: #{final_length} / indent: #{indent_str} (itimes: #{itimes})".bleu
+      # # sleep 1
+      # # /débug
+      # return indent_str
     end
   end #/<< self
 

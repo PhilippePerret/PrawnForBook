@@ -17,32 +17,24 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   sample_texte <<~EOT
-    Un texte avec l’indentation normale qui est réglée, ponctuellement pour cette fonctionnalité, à 15 mm
+    Un texte normal donc sans indentation puisque nous n’en utilisons pas dans ce manuel.
     \\(( {indentation: '40mm'} \\))
-    Ce paragraphe, ponctuellement, aura une indentation de 40 mm définie par la ligne de code au-dessus de lui.
-    Et ce troisième paragraphe utilise à nouveau l’indentation de 15 mm par défaut
+    Ce paragraphe, ponctuellement, possède une indentation de 40 mm définie par la ligne de code au-dessus de lui.
+    Et ce troisième paragraphe utilise à nouveau l’indentation par défaut (donc pas d’indentation).
+    <font name="Courier" size="3">    </font>Et normal.
     \\(( {no_indentation: true} \\))
-    Ce dernier paragraphe, précédé d’un pfb-code supprimant son indentation, est imprimé contre la marge gauche.
-    Et enfin, le dernier présente à nouveau l’indentation normale de 15 mm.
+    Ce dernier paragraphe, précédé d’un pfb-code supprimant son indentation, est imprimé contre la marge gauche (mais bon… c’est un test gratuit puisqu’il n’y a pas d’indentation par défaut…).
     EOT
 
   texte(:as_sample)
-
-  recipe <<~EOT
-    ---
-    book_format:
-      text:
-        indent: '5cm'
-    EOT
 
   sample_recipe <<~EOT #, "Autre entête"
     ---
     book_format:
       text:
-        indent: 15mm
+        indent: '2cm'
     EOT
 
-  # init_recipe([:custom_cached_var_key])
-  init_recipe([:text_indent])
+  init_recipe([:text_indent, :format_text])
 
 end

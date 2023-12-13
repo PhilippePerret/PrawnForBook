@@ -225,6 +225,11 @@ class Feature
     @pdf  = pdf
     @book = book
 
+
+    if code_before
+      eval(code_before)
+    end
+
     saut_page if new_page?
 
     # Mémoriser la première page de cette fonctionnalité
@@ -239,6 +244,12 @@ class Feature
     # remettre)
     # 
     apply_new_state if recipe
+
+    # Si un code doit être effectué après l’application de la
+    # recette
+    if code_after_recipe
+      eval(code_after_recipe)
+    end
 
     # = GRAND TITRE =
     if grand_titre
@@ -351,6 +362,8 @@ class Feature
       pdf.line_height = cur_line_height 
     end
 
+    eval(code_after) if code_after
+
     # spy(:off)
 
   end #/ #print_with
@@ -414,7 +427,12 @@ class Feature
     # code joué en coulisses pour obtenir le résultat voulu.
     # N'a rien à voir avec @sample_code
     @code           = nil 
-
+    # Code avant de commencer
+    @code_before
+    # Code après avoir appliqué la recette
+    @code_after_recipe
+    # Code à la fin de la fonctionnalité
+    @code_after
     # Pour modifier la hauteur de ligne (la grille de référence)
     # Si cette valeur est modifiée (par 'line_height(new value)'),
     # la fonctionnalité est automatiquement "isolée", c'est-à-dire
@@ -504,6 +522,18 @@ class Feature
 
   def code(value = nil, entete = nil)
     set_or_get(:code, value, entete)
+  end
+
+  def code_before(value = nil, entete = nil)
+    set_or_get(:code_before, value, entete)
+  end
+
+  def code_after_recipe(value = nil, entete = nil)
+    set_or_get(:code_after_recipe, value, entete)
+  end
+
+  def code_after(value = nil, entete = nil)
+    set_or_get(:code_after, value, entete)
   end
 
   def margins(value = nil)
