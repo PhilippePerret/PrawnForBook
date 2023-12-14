@@ -188,8 +188,6 @@ class AnyParagraph
   extend ParserFormaterClass
   include ParserFormater
 
-  EXCHAR = /(?<!\\)/
-
   # (ne pas mettre en cache : les tests foirent, sinon)
   def self.book; @@_book ||= PdfBook.current end
   def self.book=(value) # pour les tests

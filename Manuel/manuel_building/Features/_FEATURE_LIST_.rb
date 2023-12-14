@@ -18,6 +18,8 @@ module Prawn4book
   # TOUT_TUTORIEL = TOUT || true
   TOUT_ANNEXE = TOUT || nil
   # TOUT_ANNEXE = TOUT || true
+  TOUT_AIDE = TOUT || nil
+  # TOUT_AIDE = TOUT || true
 
   #
   # @note
@@ -57,6 +59,10 @@ module Prawn4book
     TOUT_HEADFOOT && 'header_footer/grand_titre',
     TOUT_HEADFOOT && 'header_footer/par_defaut',
     TOUT_HEADFOOT && 'header_footer/exemple_complexe',
+
+    #---Aides conception---#
+    TOUT_AIDE && 'aide/erreurs_et_notices',
+    TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
 
     #__Texte_Details___#
     TOUT && 'texte_detail/grand_titre',
@@ -118,7 +124,7 @@ module Prawn4book
     TOUT_ANNEXE && 'images/rogner_svg',
     TOUT_ANNEXE && 'annexe/synopsis_creation',
     TOUT_ANNEXE && 'annexe/installation_application',
-    TOUT_ANNEXE && '_liste_exhaustive_features_',
+    TOUT_ANNEXE && 'annexe/_liste_exhaustive_features_',
 
   ].compact
 
@@ -138,7 +144,6 @@ module Prawn4book
       book_in_collection
       gestion_tirets_conditionnels
       veuves_orphelines_et_lignes_de_voleur
-      afficher_grille_reference_et_marges
       references_autres_livres
       placement_sur_ligne_quelconque
       change_margins_on_the_fly

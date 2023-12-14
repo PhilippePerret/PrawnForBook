@@ -3,7 +3,7 @@ module Prawn4book
 class PdfBook
 class PFBCode < AnyParagraph
 
-  REG_NEXT_PARAG_STYLE = /^\{.+?\}$/.freeze
+  REG_NEXT_PARAG_STYLE = /^#{EXCHAR}\{.+?\}$/.freeze
 
   attr_reader :raw_code
 

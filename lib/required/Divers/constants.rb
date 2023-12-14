@@ -101,5 +101,11 @@ DATA_STYLES_FONTS = [
   {name: 'Roman'          , value: :roman         , index:11},
 ]
 
+# Options pour lire n’importe quel fichier YAML correctement
 YAML_OPTIONS = {symbolize_names:true, aliases: true, permitted_classes: [Date, Symbol, TrueClass, FalseClass]}.freeze
+
+# Pour dire de ne pas interpréter s’il y a un caractère échappement
+# Par exemple, si on veut trouver le caractère "(" dans 
+# "blabal (bla) bla" mais pas dans "blabla \(bla) bla"
+EXCHAR = /(?<!\\)/
 

@@ -41,13 +41,24 @@ class ReferencesTable
   #   à dire dans le même livre. Pour les références à d'autres li-
   #   vres, voir la méthode suivante.
   # 
-  # @param ref_id {String} IDentifiant de la référence
-  # @param ref_data {Hash} Données de la référence, contient
-  #         {:page, :paragraph, :hybrid}
+  # @param ref_id {String} 
+  #   IDentifiant de la référence. Il peut contenir un "|". Dans ce
+  #   cas, le premier terme est la version textuelle de la référence
+  #   et le deuxième terme est l’identifiant proprement dit.
+  # 
+  # @param ref_data {Hash} 
+  #   Données de la référence, contient {:page, :paragraph, :hybrid}
   # 
   def add(ref_id, ref_data)
     return if second_turn?
+    if ref_id.match?('\|')
+      ref_text, ref_id = ref_id.split('|') 
+    else
+      ref_text  = ref_id.dup.freeze
+      ref_id    = ref_id.gsub(/<.+?>/,'')
+    end
     ref_id = ref_id.to_sym
+    ref_data.merge!(text: ref_text)
     if table.key?(ref_id)
       raise PFBFatalError.new(2001, {id: ref_id, page: ref_data[:page]})
     else
@@ -106,6 +117,8 @@ class ReferencesTable
     pdf = context[:pdf]
     #
     # Traitement particulier des références croisées
+    # TODO: Ici, apparemment, on ne traite pas le problème du texte
+    # différent de l’id (avec un "|")
     # 
     return get_cross_reference(ref_id, paragraph) if ref_id.match?(/[^  ]:/.freeze)
     # 
@@ -113,10 +126,13 @@ class ReferencesTable
     # 
     # (mais qui peut être personnalisée)
     # 
-    custom_mark = "_ref_"
+    ref_text = nil
     if ref_id.match?('\|')
-      ref_id, custom_mark = ref_id.split('|')
-      custom_mark ||= ref_id # on peut utiliser "->(mon_id|)" (noter le trait droit)
+      ref_text, ref_id = ref_id.split('|')
+      ref_id ||= ref_text  # on peut utiliser "->(mon_id|)" (noter le trait droit)
+    else
+      ref_text = ref_id.dup
+      ref_id = ref_id.gsub(/<.+?>/,'') # on supprime les éventuels formatages
     end
     ref_id = ref_id.to_sym
     if ref = table[ref_id]
@@ -126,11 +142,11 @@ class ReferencesTable
 
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
-      unless custom_mark.match?(/_(ref|page|paragraph)_/)
-        custom_mark = "#{custom_mark} (_ref_)"
+      unless ref_text.match?(/_(ref|page|paragraph)_/)
+        ref_text = "#{ref_text} (_ref_)"
       end
       # - Transformation de la marque -
-      custom_mark
+      ref_text
         .gsub(/_ref_/, endroit_to(ref))
         .gsub(/_page_/, ref[:page].to_s)
         .gsub(/_paragraph_/, ref[:paragraph].to_s)
@@ -148,7 +164,7 @@ class ReferencesTable
       # correspond approximativement à la longueur de la référérence
       # finale en fonction de la pagination utilisée.
       len = ref_default_length
-      len += custom_mark.length if custom_mark != '_ref_'
+      len += ref_text.length if ref_text != '_ref_'
       ticket_boucherie = "#{'x' * len}"
       @wanted_references.merge!(ticket_boucherie => ref_id )
       data_unknown_target = {
@@ -161,7 +177,6 @@ class ReferencesTable
       return ticket_boucherie
     end
   end
-
 
   ##
   # Enregistrement des la liste des références

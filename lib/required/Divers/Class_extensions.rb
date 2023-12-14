@@ -55,6 +55,10 @@ class Integer
     s = (r % 60).to_s.rjust(2, '0')
     "#{h}:#{m}:#{s}"
   end
+  alias :real_pt2mm :pt2mm
+  def pt2mm
+    real_pt2mm(self)
+  end
 end
 class Float
   def proceed_unit; self  end

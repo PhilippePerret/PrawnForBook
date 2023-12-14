@@ -335,8 +335,8 @@ class AnyParagraph
   end
   alias :previous_paragraph :prev_printed_paragraph
 
-  # @return [PdfBook::PFBCode|ClassNil] S'il existe, le paragraphe
-  # de code qui précède le paragraphe courant.
+  # @return [PdfBook::PFBCode|NilClass] S'il existe, le paragraphe
+  # de code qui précède le paragraphe courant ou nil.
   def prev_pfbcode
     @prev_pfbcode ||= begin
       if abs_index && abs_index > 0
