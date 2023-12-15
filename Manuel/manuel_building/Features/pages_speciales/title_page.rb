@@ -36,8 +36,11 @@ Prawn4book::Manual::Feature.new do
     inserted_pages:
       page_de_titre:
         title:
-          font: "fonte/style/taille/couleur"
+          # Police du titre (toute valeur non définie prendra
+          # la valeur par défaut)
+          font: "<fonte>/<style>/<taille>/<couleur>"
           line: 4
+          leading: 0.7
         subtitle:
           # idem
         author:

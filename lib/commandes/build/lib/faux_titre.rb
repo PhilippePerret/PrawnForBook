@@ -7,24 +7,9 @@ class PrawnView
   # 
   def insert_faux_titre
 
-    # Le titre du livre
-    # 
-    titre = book.titre
-
-    # Les données pour le faux-titre
-    # 
-    dfauxtitre = book.recipe.inserted_pages[:faux_titre]||book.recipe.inserted_pages[:half_title_page]
-    if dfauxtitre === true
-      dfauxtitre = {paginate: false, size: 24}
-    elsif dfauxtitre.key?(:font)
-      dfauxtitre.merge!(font: Prawn4book.fnss2Fonte(dfauxtitre[:font]))
-    end
-
-    dfauxtitre[:font] || begin
-      fs = Fonte.dup_default
-      fs.size = dfauxtitre[:size] || 24
-      dfauxtitre.merge!(font: fs)
-    end
+    # Pour éviter les collisions qu’on pouvait avoir avant, on 
+    # isole les données du faux titre
+    ft = FauxTitre.new(book, self)
 
     # On commence une nouvelle page
     start_new_page
@@ -33,47 +18,95 @@ class PrawnView
     # à la page suivante.
     start_new_page if page_number.even?
 
-    # On indique qu'il ne faudra pas numéroter cette page, sauf
-    # indication contraire dans la recette
-    # 
-    book.page(page_number).pagination = dfauxtitre[:paginate] || false
+    # On indique qu'il ne faudra pas numéroter cette page
+    book.page(page_number).pagination = false
 
     # Mise en forme voulue
-    # 
-    if dfauxtitre[:font].is_a?(Prawn4book::Fonte)
-      fauxtitre_font = dfauxtitre[:font]
-    else
-      fauxtitre_font = Fonte.new(
-        name:   dfauxtitre[:font],
-        size:   dfauxtitre[:size],
-        style:  dfauxtitre[:style],
-        color:  dfauxtitre[:color]||'000000',
-      )
-    end
-    font(fauxtitre_font)
-
-    # Calcul de la taille du titre pour le placer correctement
-    # 
-    hauteur_titre = self.height_of(titre, **{inline_format: true})
-    puts "hauteur_titre: #{hauteur_titre.round(2)}".bleu
-    top   = 2 * (self.bounds.height / 3)
+    font(ft.title_fonte)
 
     # On se positionne au bon endroit pour écrire le texte
-    # 
+    move_to_line(ft.title_line)
     options = {
-      at: [0, top],
-      width: bounds.width,
-      height: hauteur_titre,
       align: :center,
-      valign: :center,
-      # size: 14,
-      leading: 2,
+      leading: ft.title_leading,
       overflow: :shrink_to_fit,
       inline_format: true
     }
-    text_box(titre, options)
+    text(ft.title_text, **options)
+
+    if ft.subtitle?
+      font(ft.subtitle_fonte)
+      move_to_line(ft.subtitle_line)
+      options.merge!(leading: ft.subtitle_leading)
+      text(ft.subtitle_text, **options)
+    end
     
   end
 
 end #/class PrawnView
+
+class FauxTitre
+  attr_reader :book, :pdf
+  def initialize(book, pdf)
+    @book = book
+    @pdf  = pdf
+  end
+
+  # --- Predicate --- #
+
+  def subtitle?
+    not(book.subtitle.nil? || book.subtitle == '')
+  end
+
+  # --- Data --- #
+
+  def title_text
+    book.title
+  end
+  # Ligne sur laquelle poser le titre
+  def title_line
+    data_title[:line] || pdf.line_count / 3
+  end
+  def title_fonte
+    Fonte.get_in(data_title, {size: Fonte.default.size + 4}).or_default
+  end
+  def title_leading
+    data_title[:leading] || 0.2
+  end
+
+  def subtitle_text
+    book.subtitle
+  end
+  def subtitle_line
+    data_subtitle[:line] || pdf.line_count / 3 + 2
+  end
+  def subtitle_fonte
+    Fonte.get_in(data_subtitle, {size: Fonte.default.size + 2}).or_default
+  end
+  def subtitle_leading
+    data_subtitle[:leading] || 0.0
+  end
+
+  def data_title
+    @data_title ||= data[:title] || {}
+  end
+
+  def data_subtitle
+    @data_subtitle ||= data[:subtitle] || {}
+  end
+  
+  def data
+    @data ||= begin
+      if book.recipe.faux_titre === true
+        {}
+      else
+        book.recipe.faux_titre
+      end
+    end
+  end
+
+end #/class FauxTitre
+
+
 end #/module Prawn4book
+# 

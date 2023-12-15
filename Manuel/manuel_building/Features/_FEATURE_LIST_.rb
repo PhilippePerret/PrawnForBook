@@ -54,6 +54,7 @@ module Prawn4book
     TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
     TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
     TOUT_PAGES_SPECS && 'pages_speciales/title_page',
+    TOUT_PAGES_SPECS && 'pages_speciales/faux_titre',
 
     #---Entetes/Pied-de-page---#
     TOUT_HEADFOOT && 'header_footer/grand_titre',

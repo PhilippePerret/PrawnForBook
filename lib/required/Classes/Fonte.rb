@@ -10,6 +10,11 @@
   etc. et surtout de ne pas avoir à détailler chaque fois le nom,
   le style, la taille et même le leading de chaque fonte.
 
+
+  Class Prawn4book::FonteGetter
+  -----------------------------
+  En bas de ce module. Pour récupérer une fonte dans une table.
+
 =end
 module Prawn4book
 class Fonte
@@ -128,6 +133,40 @@ class << self
   attr_accessor :default
 
 
+  # Pour récupérer une fonte dans une table de valeur quelconque
+  # 
+  # @note
+  #   Toutes les méthodes de fonte doivent maintenant utiliser cette
+  #   méthode pour définir la fonte. La définition par :
+  #   "name/style/size/couleur" doit se généraliser dans la recette.
+  # 
+  # @param table [Hash|Nil]
+  #   La table qui peut contenir :font définie en tant que string
+  #   contenant "name/style/taille/couleur" ou simple nom de font
+  #   si table définit :size (ou :font_size), :style (ou :font_style)
+  #   :color (ou :font_color)
+  # 
+  # @param default_values [Hash]
+  #   Table pouvant définir :name, :style, :size, :color qui seront
+  #   les valeurs de remplacement en cas d’absence d’une valeur. Par
+  #   exemple, si table[:font] est définie comme "Courier//12", le
+  #   style est la couleur ne sont donc pas définis.
+  #   Si default_values = {style: :italic}, alors la fonte sera mise
+  #   à {name: ’Courier’, size: 12, style: :italic, color: ’000000’}
+  #   (la couleur n’étant pas définie, on prend la couleur par 
+  #   défaut)
+  # 
+  # @return
+  #   Une instance FonteGetter dont on va appeler la propriété 
+  #   @font si on veut simplement la fonte ou nil si elle n’existe
+  #   pas ou la méthode #or_default si on veut la police par défaut
+  #   à utiliser (en sachant que ça n’est pas forcément la police
+  #   par défaut si des valeurs par défaut ont été envoyées)
+  # 
+  def get_in(table, default_values = {})
+    FonteGetter.new(table || {}, default_values)
+  end
+
   # @return la fonte dont les données sont +dfont+
   # 
   # @param dfont [Hash]
@@ -140,7 +179,7 @@ class << self
     @fonts ||= {}
 
     # - Clé de consignation de la fonte -
-    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}"
+    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}:#{dfont[:color]}"
 
     return @fonts[key_font] if @fonts.key?(key_font)
 
@@ -388,4 +427,70 @@ end #/<< self Fonte
 ###################       INSTANCE      ###################
 
 end #/class Fonte
+
+
+
+class FonteGetter
+  attr_reader :table, :default_values
+  attr_reader :font
+  def initialize(table, default_values)
+    @table = table
+    @default_values = default_values
+    # On recherche la fonte dans la table fournie
+    search_font
+  end
+  def or_default
+    font || Fonte.default
+  end
+  def search_font
+    @font = nil # @semantic
+    data_font = table[:font]||table[:fonte]
+    nom, style, taille, couleur = [nil, nil, nil, nil]
+    if data_font.is_a?(String)
+      if data_font.match?('/')
+        nom, style, taille, couleur = data_font.split('/').map do |v|
+          v = nil if v == ''
+          v
+        end
+        taille = taille && taille.to_pps
+      else
+        nom = data_font
+      end
+    else
+      if table[:size] || table[:font_size]
+        taille = (table[:size] || table[:font_size]).to_pps
+      end
+      if table[:style] || table[:font_style]
+        style = table[:style] || table[:font_style]
+      end
+      if table[:color] || table[:font_color]
+        couleur = table[:color] || table[:font_color]
+      end
+    end
+    # Si rien n’est défini, on renonce
+    return nil if nom.nil? && style.nil? && taille.nil? && couleur.nil?
+    # Sinon, on comble par les valeurs par défaut
+    nom     ||= default_name
+    taille  ||= default_size
+    style   ||= default_style
+    couleur ||= default_color
+    # On instancie la fonte
+    @font = Fonte.get_or_instanciate(name:nom, style:style, size:taille, color:couleur)
+  end
+
+  def default_name
+    default_values[:name] || Fonte.default.name
+  end
+  def default_size
+    default_values[:size] || Fonte.default.size
+  end
+  def default_style
+    default_values[:style] || Fonte.default.style
+  end
+  def default_color
+    default_values[:color] || Fonte.default.color
+  end
+end #/FonteGetter
+
+
 end #/module Prawn4book
