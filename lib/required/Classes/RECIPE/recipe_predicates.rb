@@ -22,8 +22,9 @@ class Recipe
     (inserted_pages[:page_de_garde]||inserted_pages[:endpage]) == true
   end
 
-  def page_faux_titre?
-    !!(inserted_pages[:faux_titre]||inserted_pages[:half_title_page])
+
+  def faux_titre?
+    faux_titre === true || faux_titre.is_a?(Hash)
   end
 
   def page_de_titre?

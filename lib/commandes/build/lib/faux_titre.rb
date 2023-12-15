@@ -1,6 +1,10 @@
 module Prawn4book
 class PrawnView
 
+  ##
+  # Méthode permettant d’écrire la page de faux titre, quand sa
+  # valeur (inserted_pages: faux_titre:) n’est pas à faux.
+  # 
   def insert_faux_titre
 
     # Le titre du livre
@@ -23,8 +27,11 @@ class PrawnView
     end
 
     # On commence une nouvelle page
-    # 
     start_new_page
+
+    # Si on ne se trouve pas sur une belle page, on passe encore
+    # à la page suivante.
+    start_new_page if page_number.even?
 
     # On indique qu'il ne faudra pas numéroter cette page, sauf
     # indication contraire dans la recette
@@ -47,7 +54,8 @@ class PrawnView
 
     # Calcul de la taille du titre pour le placer correctement
     # 
-    hauteur_titre = self.height_of(titre)
+    hauteur_titre = self.height_of(titre, **{inline_format: true})
+    puts "hauteur_titre: #{hauteur_titre.round(2)}".bleu
     top   = 2 * (self.bounds.height / 3)
 
     # On se positionne au bon endroit pour écrire le texte
@@ -58,13 +66,12 @@ class PrawnView
       height: hauteur_titre,
       align: :center,
       valign: :center,
+      # size: 14,
+      leading: 2,
+      overflow: :shrink_to_fit,
+      inline_format: true
     }
     text_box(titre, options)
-
-    #
-    # Le recto de la page
-    # 
-    start_new_page
     
   end
 

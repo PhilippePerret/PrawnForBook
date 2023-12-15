@@ -232,6 +232,7 @@ book_format:
 inserted_pages:
   page_de_garde:  true
   faux_titre:     false
+  # half_title:     false # faux titre en anglais
   page_de_titre:
     title:
       font: "Times-Roman//18/000000"

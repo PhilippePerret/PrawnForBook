@@ -469,6 +469,10 @@ class Recipe
     @page_de_titre ||= inserted_pages[:page_de_titre]||inserted_pages[:title_page]
   end
 
+  def faux_titre
+    @faut_titre ||= inserted_pages[:faux_titre] || inserted_pages[:half_title]
+  end
+
   def page_index
     @page_index    ||= inserted_pages[:page_index]||inserted_pages[:index_page]
   end

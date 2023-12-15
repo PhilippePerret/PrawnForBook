@@ -53,6 +53,9 @@ Prawn4book::Manual::Feature.new do
     Quelques couleurs quadrichromiques :
     #{couleurs_cmjn}
 
+    #### Outils couleurs *online*
+
+    Vous trouverez sur le net, en tapant simplement "Couleur HTML CMJN" dans un moteur de recherche, des outils *en ligne* vous permettant de choisir des couleurs précises et d’obtenir leur code.
     EOT
 
 
