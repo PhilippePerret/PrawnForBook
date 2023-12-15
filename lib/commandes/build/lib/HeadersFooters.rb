@@ -71,8 +71,8 @@ def print(pdf)
   pdf.font(fonte) if font
   
   options = {dynamic: true}
-  puts "Disposition: #{name}".jaune
-  puts "Pages à header/footer : #{pages.inspect}".jaune
+  # puts "Disposition: #{name}".jaune
+  # puts "Pages à header/footer : #{pages.inspect}".jaune
   pdf.repeat(pages, **options) do 
     number = pdf.page_number
 
@@ -85,11 +85,11 @@ def print(pdf)
 
     # puts "Entête et pied de page sur page #{number}"
     next if curpage.not_printable?
-    puts "La page ##{number} est printable".bleu
+    # puts "La page ##{number} est printable".bleu
 
     # La passer si elle ne doit pas être paginée
     next if curpage.no_pagination?
-    puts "La page ##{number} est paginée"
+    # puts "La page ##{number} est paginée"
 
     # --- Page Data ---
     # Pour pouvoir faire le test avec une page au milieu :
@@ -128,7 +128,6 @@ def print(pdf)
     # --- Construction du Footer ---
 
     if footer = footers[number.odd? ? :right : :left]
-      puts "[Page ##{number}] Construction du footer #{footer} avec #{page_data}".jaune
       print_footer(footer, page_data)
     end    
 
