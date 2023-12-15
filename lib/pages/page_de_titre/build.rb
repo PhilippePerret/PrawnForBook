@@ -24,10 +24,12 @@ class PageDeTitre
 
       # Toujours une nouvelle page (avec feuillet vierge pour 
       # séparer de couverture)
+      # TODO: S’il y a un copyright, il faut le mettre sur la page
+      # juste avec la page de titre, donc en regard, à gauche de la
+      # page de titre qui sera à droite.
       3.times { start_new_page }
 
-      # Toujours sur une belle page
-      # 
+      # - Toujours sur une belle page -
       start_new_page if not(belle_page?)
 
       #
@@ -145,7 +147,7 @@ class PageDeTitre
   # -- Volatile Data Methods --
 
   def collection_font 
-    @collection_font ||= Prawn4book.fnss2Fonte(data[:collection][:font])
+    @collection_font ||= Fonte.get_in(data_collection).or_default
   end
 
   def collection_color
@@ -153,11 +155,18 @@ class PageDeTitre
   end
 
   def collection_line
-    @collection_line ||= data[:collection][:line]
+    @collection_line ||= data_collection[:line] || 1
   end
 
+  def data_collection
+    @data_collection ||= data[:collection] || {}
+  end
+
+  def data_title
+    @data_title ||= data[:title] || {}
+  end
   def title_font 
-    @title_font ||= Prawn4book.fnss2Fonte(data[:title][:font])
+    @title_font ||= Fonte.get_in(data_title).or_default
   end
 
   def title_color
@@ -165,11 +174,14 @@ class PageDeTitre
   end
 
   def title_line
-    @title_line ||= data[:title][:line]
+    @title_line ||= data_title[:line]
   end
 
+  def data_subtitle
+    @data_subtitle ||= data[:subtitle]
+  end
   def subtitle_font 
-    @subtitle_font ||= Prawn4book.fnss2Fonte(data[:subtitle][:font])
+    @subtitle_font ||= Fonte.get_in(data_subtitle).or_default
   end
 
   def subtitle_color
@@ -177,11 +189,14 @@ class PageDeTitre
   end
 
   def subtitle_line
-    @subtitle_line ||= data[:subtitle][:line]
+    @subtitle_line ||= data_subtitle[:line]
   end
 
+  def data_author
+    @data_author ||= data[:author]
+  end
   def author_font
-    @author_font ||= Prawn4book.fnss2Fonte(data[:author][:font])
+    @author_font ||= Fonte.get_in(data_author).or_default
   end
 
   def author_color
@@ -192,8 +207,11 @@ class PageDeTitre
     @author_line ||= data[:author][:line]
   end
 
+  def data_publisher
+    @data_publisher ||= data[:publisher]
+  end
   def publisher_font
-    @publisher_font ||= Prawn4book.fnss2Fonte(data[:publisher][:font])
+    @publisher_font ||= Fonte.get_in(data_publisher).or_default
   end
 
   def publisher_color
@@ -201,16 +219,16 @@ class PageDeTitre
   end
 
   def publisher_line
-    @publisher_line ||= data[:publisher][:line]
+    @publisher_line ||= data_publisher[:line]
   end
 
   def logo_line
-    @logo_line ||= data[:publisher][:logo][:line]
+    @logo_line ||= data_publisher[:logo][:line]
   end
 
   def logo_height
     @logo_height ||= begin
-      lh = (data[:publisher][:logo][:height] || 20)
+      lh = (data_publisher[:logo][:height] || 20)
       lh = lh.to_f if lh.is_a?(String)
       lh
     end
@@ -219,7 +237,13 @@ class PageDeTitre
   # -- Data Methods --
 
   def data
-    @data ||= book.recipe.page_de_titre
+    @data ||= begin
+      if book.recipe.page_de_titre === true
+        {}
+      else
+        book.recipe.page_de_titre
+      end
+    end
   end
 
   def collection_name

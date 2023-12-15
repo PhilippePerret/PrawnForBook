@@ -17,7 +17,6 @@ class PdfBook
 
   def skip_page_creation?   ;recipe.skip_page_creation?  end
   def page_de_garde?        ;recipe.page_de_garde?       end
-  def page_faux_titre?      ;recipe.page_faux_titre?     end
   def page_de_titre?        ;recipe.page_de_titre?       end
   def credits_page?         ;recipe.credits_page?        end
 
