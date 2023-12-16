@@ -143,7 +143,7 @@ class ReferencesTable
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
       unless ref_text.match?(/_(ref|page|paragraph)_/)
-        ref_text = "#{ref_text} (_ref_)"
+        ref_text = "#{ref_text} (_ref_)"
       end
       # - Transformation de la marque -
       ref_text

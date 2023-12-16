@@ -149,10 +149,6 @@ class << self
         # Si le curseur est déjà sous le zéro, on passe directement
         # à la page suivante
         # 
-        # @note
-        #   Pour le moment, je n’ajoute pas "- line_height" car si
-        #   on peut écrire encore une ligne, ça peut être bon.
-        # 
         # @rappel
         #   Les titres ne passent pas par cette méthode. Cf. 
         #   NTitre#build
@@ -299,6 +295,16 @@ class << self
         # ========
         # (if any)
         puce_printed = puce && my.print_puce(self, puce)
+
+        # Si le paragraphe est tout en haut et qu’il a dû être 
+        # indenté (*), il faut supprimer l’indentation
+        # 
+        # (*) Dans PFB, l’indentation se gère avec des espaces car
+        # Prawn ne sait pas calculer les dimensions avec une indenta-
+        # tionsinon des paragraphes
+        if current_line == 1 && owner.indentation > 0 && str.start_with?('<font name="Courier"')
+          str = str.sub(/^<font(.+?)<\/font>/,'')
+        end
 
         # 
         # Dans tous les cas, on écrit le texte en récupérant 
