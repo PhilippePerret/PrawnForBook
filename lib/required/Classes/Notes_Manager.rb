@@ -179,6 +179,11 @@ class PdfBook
     # 
     def title?; false end
 
+    # Pour compatibilité avec NTextParagraph
+    def indentation
+      nil
+    end
+
     # 
     # === Class Prawn4book::PdfBook::NotesManager::Note
     # 

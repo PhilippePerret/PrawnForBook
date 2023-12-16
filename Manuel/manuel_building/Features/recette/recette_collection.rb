@@ -9,15 +9,14 @@ Prawn4book::Manual::Feature.new do
     Vous pouvez trouver ci-dessous les données propres à une collection. 
     EOT
 
-  recipe <<~EOT #, "Autre entête"
+  recipe <<~YAML #, "Autre entête"
     ---
-      #<collection_data>
-      # (données de la collection)
-      collection_data:
-        name: "Nom de la collection"
-        short_name: "Nom raccourci (pour les messages)"
-      #</collection_data>
-      # .\\..
-    EOT
+    # (données de la collection)
+    collection:
+      name: "Nom de la collection"
+      short_name: "Nom raccourci (pour les messages)"
+    #/collection
+    # .\\..
+    YAML
 
 end

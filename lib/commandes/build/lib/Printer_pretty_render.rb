@@ -302,7 +302,7 @@ class << self
         # (*) Dans PFB, l’indentation se gère avec des espaces car
         # Prawn ne sait pas calculer les dimensions avec une indenta-
         # tionsinon des paragraphes
-        if current_line == 1 && owner.indentation > 0 && str.start_with?('<font name="Courier"')
+        if current_line == 1 && owner.indentation && owner.indentation > 0 && str.start_with?('<font name="Courier"')
           str = str.sub(/^<font(.+?)<\/font>/,'')
         end
 
@@ -362,7 +362,7 @@ class << self
         text: text.inspect, 
         err:  e.message,
         error: e,
-        backtrace:(debug? ? true : '')
+        backtrace:(debug? ? true : '(ajouter -debug pour voir le backtrace)')
       })
     end
     

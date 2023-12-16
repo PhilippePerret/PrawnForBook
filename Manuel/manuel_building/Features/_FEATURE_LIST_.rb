@@ -1,11 +1,11 @@
 module Prawn4book
 
-  # TOUT = nil
-  TOUT = true
+  # TOUT = true # ou nil, attention !
+  TOUT = nil
   TOUT_RECETTE = TOUT || nil
   # TOUT_RECETTE = TOUT || true
-  TOUT_PAGES_SPECS = TOUT || nil
-  # TOUT_PAGES_SPECS = TOUT || true
+  # TOUT_PAGES_SPECS = TOUT || nil
+  TOUT_PAGES_SPECS = TOUT || true
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
   TOUT_PUCES = TOUT || nil
@@ -55,6 +55,7 @@ module Prawn4book
     TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
     TOUT_PAGES_SPECS && 'pages_speciales/title_page',
     TOUT_PAGES_SPECS && 'pages_speciales/faux_titre',
+    TOUT_PAGES_SPECS && 'pages_speciales/index_page',
 
     #---Entetes/Pied-de-page---#
     TOUT_HEADFOOT && 'header_footer/grand_titre',

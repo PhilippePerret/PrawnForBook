@@ -438,7 +438,10 @@ class AnyParagraph
       refval * value / 100
     end
 
-
+    def indentation
+      nil
+    end
+    
 end #/class AnyParagraph
 end #/class PdfBook
 end #/module Prawn4book

@@ -58,10 +58,9 @@ class PageIndex
     end.each do |canon, dcanon|
       pdf.font(canon_fonte)
       pdf.move_to_next_line
-      puts "\ncanon fonte : #{canon_fonte.inspect}".bleu
-      puts "number fonte : #{number_fonte.inspect}".bleu
+      txt = INDEX.key?(canon.downcase.to_sym) ? INDEX[canon.downcase.to_sym] : canon
       pdf.formatted_text [
-        {text: canon, font: canon_fonte.name, size: canon_fonte.size, styles: canon_fonte.styles, color: canon_fonte.color},
+        {text: txt, font: canon_fonte.name, size: canon_fonte.size, styles: canon_fonte.styles, color: canon_fonte.color},
         {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_fonte.name, size: number_fonte.size, styles: number_fonte.styles, color: number_fonte.color}
       ]
     end
