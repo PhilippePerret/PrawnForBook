@@ -22,20 +22,9 @@ class PageIndex
     # 
     # Le titre de la page d'index
     # 
-    titre = PdfBook::NTitre.new(pdfbook, text:"Index", level:1)
+    titre = PdfBook::NTitre.new(book:pdfbook, titre:"Index", level:1, pindex: 0)
     titre.print(pdf)
-    # 
-    # Pour savoir si la police du canon est différente de celle des
-    # nombres
-    # 
-    diff_font_canon_and_number = (canon_fonte != number_fonte)
-    # 
-    # Police et taille
-    # 
-    unless diff_font_canon_and_number
-      spy "Font/size appliqués : #{canon_fontstyle.inspect}/#{canon_font_size.inspect}".bleu
-      pdf.font(canon_fonte)
-    end
+
     # 
     # Boucle sur la table des index 
     # 
@@ -67,68 +56,23 @@ class PageIndex
       end
       dcanon.merge!(items: new_items)
     end.each do |canon, dcanon|
+      pdf.font(canon_fonte)
       pdf.move_to_next_line
-      if diff_font_canon_and_number
-        pdf.formatted_text [
-          {text: canon, font: canon_fonte},
-          {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_fonte}
-          # {text: canon, font: font_name, size: font_size, styles: [font_style]},
-          # {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_font_name, size: number_font_size, styles: [number_font_style]}
-        ]
-      else
-        pdf.text("#{canon} : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}")
-      end
+      puts "\ncanon fonte : #{canon_fonte.inspect}".bleu
+      puts "number fonte : #{number_fonte.inspect}".bleu
+      pdf.formatted_text [
+        {text: canon, font: canon_fonte.name, size: canon_fonte.size, styles: canon_fonte.styles, color: canon_fonte.color},
+        {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_fonte.name, size: number_fonte.size, styles: number_fonte.styles, color: number_fonte.color}
+      ]
     end
     spy "<- /construction de l'index".jaune
   end
 
   def canon_fonte
-    @canon_fonte ||= Fonte.new(
-      name:   canon_font_name, 
-      style:  canon_font_style, 
-      size:   canon_font_size,
-      hname:  "Canon"
-      )
+    @canon_fonte ||= recipe.index_canon_fonte
   end
   def number_fonte
-    @number_fonte ||= begin
-      if canon_fontstyle == number_fontstyle && canon_font_size == number_font_size
-        canon_fonte
-      else
-        Fonte.new(
-          name:   number_font_name, 
-          style:  number_font_style, 
-          size:   number_font_size, 
-          hname:  "Numéro pour pagination"
-          )
-      end
-    end
-  end
-
-  def canon_font_name
-    @canon_font_name ||= canon_fontstyle.split('/')[0]
-  end
-  def canon_font_style
-    @canon_font_style ||= canon_fontstyle.split('/')[1]
-  end
-  def canon_fontstyle
-    @canon_fontstyle ||= recipe.index_canon_font_n_style
-  end
-  def canon_font_size
-    @canon_font_size ||= recipe.index_canon_font_size
-  end
-
-  def number_font_name
-    @number_font_name ||= number_fontstyle.split('/')[0]
-  end
-  def number_font_style
-    @number_font_style ||= number_fontstyle.split('/')[1]
-  end
-  def number_fontstyle
-    @number_font_name ||= recipe.index_number_font_n_style
-  end
-  def number_font_size
-    @number_font_size ||= recipe.index_number_font_size
+    @number_fonte ||= recipe.index_number_fonte
   end
 
 end #/class PageIndex

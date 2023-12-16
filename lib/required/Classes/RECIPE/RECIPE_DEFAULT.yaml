@@ -345,15 +345,12 @@ book_making:
     lieu:       null
 #</book_making>
 
-#
 # --- La page d'index ---
-#<page_index>
+
 page_index:
   aspect:
     canon:
-      font_n_style: *default1_font_n_style
-      size:         10
+      font: "//11"
     number:
-      font_n_style: *default1_font_n_style
-      size:         10
-#</page_index>
+      font: "Courier/italic/9/555555"
+

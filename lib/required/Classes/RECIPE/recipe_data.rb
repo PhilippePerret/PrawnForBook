@@ -397,6 +397,21 @@ class Recipe
 
   # --- Page d'index ---
 
+  def index_canon_fonte
+    @index_canon_fonte ||= begin
+      tbl = page_index[:aspect] || {}
+      tbl = tbl[:canon] || {}
+      Fonte.get_in(tbl).or_default
+    end
+  end
+  def index_number_fonte
+    @index_number_fonte ||= begin
+      tbl = page_index[:aspect] || {}
+      tbl = tbl[:number] || {}
+      Fonte.get_in(tbl).or_default
+    end
+  end
+
   def index_canon_font_n_style
     @index_canon_font_n_style ||= page_index[:aspect][:canon][:font_n_style]
   end
@@ -474,7 +489,7 @@ class Recipe
   end
 
   def page_index
-    @page_index    ||= inserted_pages[:page_index]||inserted_pages[:index_page]
+    @page_index    ||= DATA[:page_index]||inserted_pages[:page_index]||inserted_pages[:index_page]
   end
 
   def credits_page

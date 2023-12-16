@@ -26,7 +26,7 @@ attr_reader :hname
 
 public
 
-def initialize(name:, style:, size:, hname: '', color: nil)
+def initialize(name:, style:, size:, hname: nil, color: nil)
   @name   = name
   @style  = style.to_sym
   @size   = size
@@ -40,7 +40,34 @@ def reset
   @leadings = {}
 end
 
+# Retourne les données pour la donnée :styles utilisée par exemple
+# dans formatted_text
+# 
+def styles
+  @styles ||= begin
+    ary = []
+    if italic? || bold?
+      ary << :italic if italic?
+      ary << :bold   if bold?
+    else
+      ary << style
+    end
+    ary
+  end
+end
+
+# -- Predicate Methods --
+
+def italic?
+  style.to_s.match?(/italic/i)
+end
+
+def bold?
+  style.to_s.match?(/bold/i)
+end
+
 # -- Méthodes pour forcer des changements --
+
 def name=(value)
   @name = value
   reset
@@ -91,10 +118,11 @@ end
 def inspect
   @inspect ||= begin
     d = []
-    d << hname if hname
-    d << name
-    d << style
-    d << size
+    d << hname || '<sans nom>'
+    d << name.inspect
+    d << style.inspect
+    d << size.inspect
+    d << color.inspect
     d.join('/')
   end
 end
@@ -417,7 +445,13 @@ end #/<< self Fonte
 end #/class Fonte
 
 
-
+#############################################################
+# 
+# Class FonteGetter
+# 
+# La classe qui permet d’obtenir une fonte à partir des données
+# fonte fournies, quelles qu’elles soient.
+# 
 class FonteGetter
   attr_reader :table, :default_values
   attr_reader :font

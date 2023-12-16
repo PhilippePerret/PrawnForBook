@@ -101,6 +101,11 @@ module ParserFormaterClass
     str = __traite_markdown_inline_in(str, context)
 
     #
+    # Traitement des marques bibliograghiques
+    # 
+    str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
+
+    #
     # Traitement des mots indexés (index:mot)
     # 
     str = __traite_mots_indexed_in(str, context)
@@ -119,11 +124,6 @@ module ParserFormaterClass
     # Traitement des références croisées internes
     # 
     str = __traite_references_in(str, context)
-
-    #
-    # Traitement des marques bibliograghiques
-    # 
-    str = __traite_termes_bibliographiques_in(str, context) if Prawn4book::Bibliography.any?
 
     #
     # Si des formatages propres existent 
