@@ -131,13 +131,12 @@ book_format:
       color:          "000000"
       borders:        0.3
       border_color:   "999999"
-      # border_color:   "FFCCCC"
       left:           0
     # - Référrences -
     references:
-      page_format:    'page %{page}'
-      paragraph_format: '§ %{paragraph}'
-      hybrid_format:  'p. %{page} § %{paragraph}'
+      page_format:    'page %{page}'
+      paragraph_format: '§ %{paragraph}'
+      hybrid_format:  'p. %{page} § %{paragraph}'
   titles:
     level1:
       font_n_style:   *default2_font_n_style
@@ -236,23 +235,17 @@ inserted_pages:
   page_de_titre:
     title:
       font: "Times-Roman//18/000000"
-      line: 12
     subtitle:
       font: "Times-Roman//11/000000"
-      line: 13
     author: 
       font: "Times-Roman//15/000000"
-      line: 15
     collection: 
       font: "Times-Roman//12/000000"
-      line: 1
     publisher:
       font: "Times-Roman//12/000000"
-      line: 24
       logo:
         height: 10
-        line: 26
-    copyright: "Tous droits réservés"
+    copyright: "@Tous droits réservés"
   # Colophon
   credits_page:   false
     # disposition: 'distribute' # 'bottom', 'top'

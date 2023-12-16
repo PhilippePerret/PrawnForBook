@@ -120,6 +120,7 @@ class PFBFatalError < StandardError
       203   => Prawn4book::ERRORS[:pages][:credits][:disposition_unknown],
       # -- Images --
       250   => Prawn4book::ERRORS[:images][:unfound],
+      252   => Prawn4book::ERRORS[:images][:logo_page_title_unfound],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
       # -- Recette (voir aussi en 800) ---

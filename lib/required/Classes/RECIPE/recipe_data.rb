@@ -490,7 +490,7 @@ class Recipe
   end
 
   def publisher
-    @publisher     ||= DATA[:publisher]
+    @publisher ||= DATA[:publisher] || {}
   end
 
   def inserted_pages
@@ -503,6 +503,12 @@ class Recipe
 
   def bibliographies
     @bibliographies ||= DATA[:bibliographies] || {}
+  end
+
+  def collection
+    @collection ||= begin
+      DATA[:collection] || DATA[:collection_data] || {}
+    end
   end
 
 

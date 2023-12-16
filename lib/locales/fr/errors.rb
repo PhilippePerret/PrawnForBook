@@ -714,6 +714,11 @@ ERRORS = {
       collection si le livre appartient à une collection, ni dans le dossier 
       'images' du livre, ni en tant que path relatif ou absolu).
       ERR
+    logo_page_title_unfound: <<~ERR,
+      L’image pour le logo de la page de titre, à l’adresse :
+      %{path}
+      est introuvable.
+      ERR
   },
 }
 end #/module Prawn4book

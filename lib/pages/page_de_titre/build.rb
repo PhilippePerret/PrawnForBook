@@ -13,229 +13,270 @@ class PageDeTitre
     @book = pdf.book
     my = self
 
-    #
-    # Les données de fontes
+    current_color = pdf.fill_color.freeze
+
+    # Toujours une nouvelle page (avec feuillet vierge pour 
+    # séparer de couverture)
+    pdf.start_new_page
+
+    # - Toujours sur une belle page -
+    pdf.start_new_page if not(pdf.belle_page?)
+
+    # - Copyright -
     # 
-    dtitre = data
+    # S’il y a un copyright, il faut le mettre en regard de la 
+    # page de titre. Donc il faut revenir à la page précédente
+    # et le copier
+    print_copyright(pdf) if copyright?
+
+    #
+    # On indique qu'il ne faudra pas numéroter cette page, sauf
+    # indication contraire dans la recette
+    # 
+    if Prawn4book.first_turn?
+      book.pages[pdf.page_number].pagination = false
+    end
+
+    # 
+    # Calculer la position des éléments en fonction de
+    # la hauteur de page disponible
+    # 
+    calc_default_lines(pdf)
+
+    # - COLLECTION -
+    # (if any)
+    print_element(:collection, pdf) if book.in_collection?
+
+    # - TITRE DU LIVRE -
+    # 
+    print_element(:title, pdf)
+
+    # - SOUS-TITRE -
+    # (if any)
+    print_element(:subtitle, pdf) if book.subtitle
+
+    # - AUTEURS -
+    # 
+    print_element(:author, pdf)
+    
+    # - MAISON D'ÉDITION -
+    #   (et son logo)
+    # 
+    if book.publisher
+      print_element(:publisher, pdf)
+      if logo?
+        pdf.move_to_line(logo_line)
+        logopath = logo_path
+        options_logo = {height: logo_height, position: :center}
+        if File.extname(logopath) == '.svg'
+          pdf.svg(File.read(logopath), **options_logo)
+        else
+          pdf.image(logopath, **options_logo)
+        end
+      end
+    end
 
     pdf.update do
-
-      current_color = fill_color.freeze
-
-      # Toujours une nouvelle page (avec feuillet vierge pour 
-      # séparer de couverture)
-      # TODO: S’il y a un copyright, il faut le mettre sur la page
-      # juste avec la page de titre, donc en regard, à gauche de la
-      # page de titre qui sera à droite.
-      3.times { start_new_page }
-
-      # - Toujours sur une belle page -
-      start_new_page if not(belle_page?)
-
-      #
-      # On indique qu'il ne faudra pas numéroter cette page, sauf
-      # indication contraire dans la recette
-      # 
-      if Prawn4book.first_turn?
-        book.pages[page_number].pagination = false
-      end
-
-      # 
-      # Calculer la position des éléments en fonction de
-      # la hauteur de page disponible
-      # 
-      height = bounds.top - bounds.bottom
-      spy "Hauteur efficiente : #{height.inspect}".bleu
-      # un_tiers = (height / 3).round # pour le titre
-
-
-      #===============
-      # - COLLECTION -
-      #===============
-      # (if any)
-      if book.in_collection?
-        move_to_line(my.collection_line)
-        font(my.collection_font)
-        fill_color(my.collection_color)
-        text(book.collection.name, **{align: :center})
-      end
-
-
-      #===================
-      # - TITRE DU LIVRE -
-      #===================
-      # (à un tiers environ)
-      font(my.title_font)
-      fill_color(my.title_color)
-      move_to_line(my.title_line)
-      line_titre = current_line.freeze
-      text( book.title , **{align: :center, inline_format: true, style: my.title_font.style})
-
-      #===============
-      # - SOUS-TITRE -
-      #===============
-      # (if any)
-      if book.subtitle
-        font(my.subtitle_font)
-        fill_color(my.subtitle_color)
-        move_to_line(my.subtitle_line)
-        subtitle_options = {align: :center, leading: 0, style: my.subtitle_font.style}
-        ("(#{book.subtitle})").split('\\n').compact.each do |seg|
-          text(seg , **subtitle_options)
-        end
-      end
-
-      #============
-      # - AUTEURS -
-      #============
-      # 
-      my.setup(:author, self)
-      # font(my.author_font)
-      # fill_color(my.author_color)
-      # move_to_line(my.author_line)
-      text(book.recipe.authors.titleize, **{align: :center})
-      line_authors = current_line.freeze
-      
-      #=====================
-      # - MAISON D'ÉDITION -
-      #=====================
-      # 
-      publisher   = my.data[:publisher]
-      font(my.publisher_font)
-      fill_color(my.publisher_color)
-      move_to_line(my.publisher_line)
-      text(book.recipe.publisher[:name], **{align: :center})
-      if book.recipe.logo_exists? && publisher[:logo]
-        move_to_line(my.logo_line)
-        logopath = book.recipe.logo_path
-        options_logo = {height: my.logo_height, position: :center}
-        if File.extname(logopath) == '.svg'
-          svg(File.read(logopath), **options_logo)
-        else
-          image(logopath, **options_logo)
-        end
-      end
-
-      # On passe au recto
-      start_new_page
-
-      # On remet la couleur originale
-      fill_color(current_color)
-
+      fill_color(current_color)     # couleur originale
     end #/pdf.update
 
   end
   # /build
 
-  def setup(key, pdf)
-    couleur = send("#{key}_color".to_sym)
-    numline = send("#{key}_line".to_sym)
-    lafonte = send("#{key}_font".to_sym)
+  # -- Building Methods --
+
+  #########################################
+  ###   ÉCRITURE DE L’ÉLÉMENT DE TITRE  ###
+  #########################################
+  # Sur la ligne voulue, de la couleur voulue, avec la police voulu
+  # 
+  # @param key [Symbol]
+  # 
+  #     L’élément à écrire, par exemple :collection ou :authors
+  # 
+  # @param pdf [Prawn::PrawnView]
+  # 
+  #     Le document en construction
+  def print_element(key, pdf)
+    my = self
+    numline = eget(key, :line)
+    lafonte = eget(key, :font)
+    content = eget(key, :content)
+    options = options_element.merge(eget(key, :options))
     pdf.update do
-      fill_color(couleur)
+      fill_color(lafonte.color)
       move_to_line(numline)
       font(lafonte)
+      text(content, **options)
+    end
+  end
+
+  def eget(key, prop)
+    methode = "#{key}_#{prop}".to_sym
+    if self.respond_to?(methode)
+      send(methode)
+    else
+      key_data = send("data_#{key}".to_sym)
+      case prop
+      when :font
+        Fonte.get_in(key_data).or_default
+      when :line
+        key_data[:line] || default_line_for(key)
+      when :options
+        sup_options_for(key_data)
+      when :color
+        eget(key, :font).color
+      end
+    end
+  end
+
+  def options_element
+    @options_element ||= {
+      align: :center,
+      inline_format: true,
+    }
+  end
+
+  def sup_options_for(keydata)
+    tbl = {}
+    tbl.merge!(leading: keydata[:leading]) if keydata[:leading]
+    return tbl
+  end
+
+  # Écriture du COPYRIGHT
+  # 
+  # @note
+  #   On se trouve sur la page de titre, déjà. Donc il faut remonter
+  #   d’une page puis retourner ensuite à la page de titre.
+  # 
+  def print_copyright(pdf)
+    my = self
+    fonte = Fonte.default
+    content = copyright_content
+    copyright_options = {size:fonte.size - 3, align: :left}
+    pdf.update do
+      current_page = page_number.freeze
+      go_to_page(current_page - 1)
+      book.page(current_page - 1).pagination = false
+      font(fonte)
+      h = height_of(content, **copyright_options)
+      move_cursor_to(h + line_height)
+      text(content, **copyright_options)
+      go_to_page(current_page)
     end
   end
 
   # - Predicate methods -
 
+  def subtitle?
+    not(book.subtitle.nil?)
+  end
+
+  # @return true s’il faut écrire un copyright
+  def copyright?
+    data.key?(:copyright) && copyright_content && copyright_content.length > 10
+  end
+
+  # Concernant le logo
+  # 
+  # @note
+  #   Attention : il peut s’agir d’un autre logo que le logo
+  #   "officiel"
+  # 
   def logo?
-    :TRUE == @withlogo ||= true_or_false(publisher.logo? && logo)
+    book.publisher.logo? && logo && logo_valid?
+  end
+  def logo_valid?
+    File.exist?(logo_path) || begin
+      add_erreur(PFBError[252] % {path: logo_path})
+      false
+    end
   end
 
   # -- Volatile Data Methods --
 
-  def collection_font 
-    @collection_font ||= Fonte.get_in(data_collection).or_default
-  end
-
-  def collection_color
-    @collection_color ||= collection_font.color || '000000'
-  end
-
-  def collection_line
-    @collection_line ||= data_collection[:line] || 1
-  end
-
   def data_collection
-    @data_collection ||= data[:collection] || {}
+    @data_collection ||= book.recipe.collection
   end
+  def collection_content
+    @collection_content ||= data_collection[:name] || ''
+  end
+
 
   def data_title
     @data_title ||= data[:title] || {}
   end
-  def title_font 
-    @title_font ||= Fonte.get_in(data_title).or_default
-  end
-
-  def title_color
-    @title_color ||= title_font.color || '000000'
-  end
-
-  def title_line
-    @title_line ||= data_title[:line]
+  def title_content
+    @title_content ||= book.title
   end
 
   def data_subtitle
     @data_subtitle ||= data[:subtitle]
   end
-  def subtitle_font 
-    @subtitle_font ||= Fonte.get_in(data_subtitle).or_default
-  end
-
-  def subtitle_color
-    @subtitle_color ||= subtitle_font.color || '000000'
-  end
-
-  def subtitle_line
-    @subtitle_line ||= data_subtitle[:line]
+  def subtitle_content
+    @subtitle_content ||= "(#{book.subtitle})"
   end
 
   def data_author
-    @data_author ||= data[:author]
+    @data_author ||= data[:author] || {}
   end
-  def author_font
-    @author_font ||= Fonte.get_in(data_author).or_default
-  end
-
-  def author_color
-    @author_color ||= author_font.color || '000000'
-  end
-
-  def author_line
-    @author_line ||= data[:author][:line]
+  def author_content
+    @author_content ||= book.recipe.authors.titleize
   end
 
   def data_publisher
-    @data_publisher ||= data[:publisher]
+    @data_publisher ||= data[:publisher] || {}
   end
-  def publisher_font
-    @publisher_font ||= Fonte.get_in(data_publisher).or_default
-  end
-
-  def publisher_color
-    @publisher_color ||= publisher_font.color || '000000'
+  def publisher_content
+    @publisher_content ||= book.recipe.publisher[:name] || ''
   end
 
-  def publisher_line
-    @publisher_line ||= data_publisher[:line]
+  def data_logo
+    @data_logo ||= data_publisher[:logo] || {}
   end
-
-  def logo_line
-    @logo_line ||= data_publisher[:logo][:line]
+  def logo_path
+    @logo_path ||= data_publisher[:path] || book.recipe.logo_path
   end
 
   def logo_height
     @logo_height ||= begin
-      lh = (data_publisher[:logo][:height] || 20)
-      lh = lh.to_f if lh.is_a?(String)
-      lh
+      lh = data_logo[:height] || 20
+      lh.to_pps
     end
+  end
+
+  def copyright_content
+    @copyright_content ||= data[:copyright]
+  end
+
+  # -- Calc Methods --
+
+  # Méthode de calcul de l’emplacement des éléments dans la page
+  # (les numéros de ligne)
+  # 
+  def default_line_for(key)
+    @default_lines[key] || begin
+      # Erreur systématique
+      raise "Élément de page de titre inconnu : key = #{key.inspect}"
+    end
+  end
+
+  def calc_default_lines(pdf)
+    @default_lines = {}
+    line_count = pdf.line_count.freeze
+    @default_lines.merge!(collection: 2)
+    @default_lines.merge!(title: line_count / 3)
+    @default_lines.merge!(subtitle: line_count / 3 + 2)
+    lineauthor = line_count / 3 + 2
+    lineauthor += 2 if subtitle?
+    @default_lines.merge!(author: lineauthor)
+    @default_lines.merge!(logo: line_count - 1)
+    @default_lines.merge!(publisher: logo? ? line_count - 4 : line_count - 1)
   end
 
   # -- Data Methods --
 
+  # Données pour la page de titre
   def data
     @data ||= begin
       if book.recipe.page_de_titre === true
@@ -244,10 +285,6 @@ class PageDeTitre
         book.recipe.page_de_titre
       end
     end
-  end
-
-  def collection_name
-    @collection_name ||= book.recipe[:collection_data][:name]
   end
 
 

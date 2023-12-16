@@ -31,7 +31,7 @@ def initialize(name:, style:, size:, hname: '', color: nil)
   @style  = style.to_sym
   @size   = size
   @hname  = hname # a human name
-  @color  = color
+  @color  = color || '000000'
   Fonte.add_by_name(self) if hname != ''
   @leadings = {}
 end
@@ -200,7 +200,7 @@ class << self
 
     # - Clé de consignation de la fonte -
     # (il faut la refaire avec les données peut-être modifiées)
-    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}"
+    key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}:#{dfont[:color]}"
 
     thefont = new(dfont)
     @fonts.merge!(key_font => thefont)
@@ -273,18 +273,6 @@ class << self
   # @api public
   def default_fonte
     default
-    # @default_fonte ||= begin
-    #   if book && recipe.default_font_n_style
-    #     font_name, font_style = recipe.default_font_n_style.split('/')
-    #     font_style = font_style.to_sym
-    #     new(name:font_name, style: font_style, size:default_size)
-    #   elsif book && recipe.fonts_data && not(recipe.fonts_data.empty?)
-    #     datafirst = recipe.fonts_data.values.first
-    #       new(name:recipe.fonts_data.keys.first.to_s, style: datafirst.keys.first, size: default_size)
-    #   else
-    #     default_fonte_times
-    #   end
-    # end
   end
 
   def default_size
