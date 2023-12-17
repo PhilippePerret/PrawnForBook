@@ -83,7 +83,7 @@ class PdfBook
     # (ça a pu être fait avant avec une table)
 
     par || begin
-      par = AnyParagraph.instance_type_from_string(self, paragraph_str, idx)
+      par = AnyParagraph.instance_type_from_string(book:self, string:paragraph_str, indice:idx)
       if par.is_a?(NTable)
         @current_table = par
         return
@@ -94,6 +94,8 @@ class PdfBook
 
     # Réglage de l'index absolu.
     par.abs_index = @paragraphes.count
+    # Définition de la source (utile pour certains messages)
+    par.source = source
 
     # - Ajout à la liste des paragraphes -
     @paragraphes << par

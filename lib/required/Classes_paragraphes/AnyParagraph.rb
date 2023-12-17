@@ -141,6 +141,9 @@ class AnyParagraph
 
   attr_reader :text
 
+  # Source du paragraphe, quel qu’il soit
+  attr_accessor :source
+
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
   attr_accessor :last_page
@@ -438,10 +441,6 @@ class AnyParagraph
       refval * value / 100
     end
 
-    def indentation
-      nil
-    end
-    
 end #/class AnyParagraph
 end #/class PdfBook
 end #/module Prawn4book

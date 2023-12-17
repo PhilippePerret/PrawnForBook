@@ -22,7 +22,7 @@ class << self
   # Par exemple, un +string+ commençant par "### " est un titre donc
   # une instance NTitre. Un string commençant par "| " et terminant
   # par " |" est une table, etc.
-  def instance_type_from_string(book, string, indice)
+  def instance_type_from_string(book:, string:, indice:)
     case string
     when "" 
       EmptyParagraph.new(book:book, pindex:indice)

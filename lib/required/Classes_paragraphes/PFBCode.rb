@@ -36,7 +36,7 @@ class PFBCode < AnyParagraph
     when REG_NEXT_PARAG_STYLE
       treat_as_next_parag_code 
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
-      
+      # Rien
     end
   end
 
@@ -51,7 +51,7 @@ class PFBCode < AnyParagraph
         start_new_page
         start_new_page if page_number.odd?
       end
-    when 'new_odd_page', 'new_belle_page', 'nouvelle_page_impaire'
+    when 'new_odd_page', 'new_belle_page', 'nouvelle_page_impaire'#, 'belle_page', 'page_impaire'
       pdf.update do
         start_new_page
         start_new_page if page_number.even?
@@ -62,6 +62,10 @@ class PFBCode < AnyParagraph
       AnyParagraph.stop_numerotation_paragraphs
     when 'restart_numerotation_paragraphs'
       AnyParagraph.restart_numerotation_paragraphs
+    when /^notice\((.+?)\)$/.freeze
+      add_notice($1, self)
+    when /^(?:erreur|error)\((.+?)\)$/.freeze
+      add_erreur($1, self)
     when 'index'
       book.page_index.build(pdf)
       book.pages[pdf.page_number].add_content_length(100) #arbitrairement
@@ -69,10 +73,6 @@ class PFBCode < AnyParagraph
       book.index($~[:index_id].to_sym).print(pdf)
     when /^biblio/
       treate_as_bibliography(pdf)
-    when /^notice\((.+?)\)$/.freeze
-      add_notice($1)
-    when /^(?:erreur|error)\((.+?)\)$/.freeze
-      add_erreur($1)
     when /^move_to_(line|next|closest|first|last)(_line)?/.freeze
       pdf.instance_eval(raw_code)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
@@ -138,7 +138,7 @@ class PFBCode < AnyParagraph
   # 
   def traite_as_methode_with_params(pdf, methode, params)
     # -- Exposer (pour les méthodes) --
-    @pdf      = pdf
+    @pdf   = pdf
     @book  = book
     # -- Pour l'erreur --
     methode_ini = methode.dup.freeze

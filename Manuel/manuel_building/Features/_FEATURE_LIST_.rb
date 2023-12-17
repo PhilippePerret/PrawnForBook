@@ -16,10 +16,10 @@ module Prawn4book
   # TOUT_EXPERT = TOUT || true
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
-  TOUT_ANNEXE = TOUT || nil
-  # TOUT_ANNEXE = TOUT || true
-  TOUT_AIDE = TOUT || nil
-  # TOUT_AIDE = TOUT || true
+  #TOUT_ANNEXE = TOUT || nil
+  TOUT_ANNEXE = TOUT || true
+  # TOUT_AIDE = TOUT || nil
+  TOUT_AIDE = TOUT || true
 
   #
   # @note
@@ -63,6 +63,9 @@ module Prawn4book
     TOUT_HEADFOOT && 'header_footer/exemple_complexe',
 
     #---Aides conception---#
+    TOUT_AIDE && 'aide/grand_titre',
+    TOUT_AIDE && 'aide/manuel_et_autres_aides',
+    TOUT_AIDE && 'aide/assistants',
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
 
@@ -118,6 +121,7 @@ module Prawn4book
 
     #---Annexe---#
     TOUT_ANNEXE && 'annexe/grand_titre',
+    TOUT_ANNEXE && 'annexe/reconstruction_manuel',
     TOUT_ANNEXE && 'annexe/package_sublime_text',
     TOUT_ANNEXE && 'annexe/markdown_all_marks',
     TOUT_ANNEXE && 'annexe/format_yaml',

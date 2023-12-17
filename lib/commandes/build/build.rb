@@ -89,11 +89,6 @@ class PdfBook
     Prawn4book.reset(true) if Prawn4book.respond_to?(:reset)
 
     #
-    # Pour consigner les erreurs mineures en cours de construction
-    # 
-    PrawnView::Error.reset
-
-    #
     # === CONSTRUCTION DU LIVRE ===
     #     (PREMIÈRE PASSE/TURN)
     # 
@@ -239,6 +234,10 @@ class PdfBook
     
     # Réinitialiser les NOTES DE PAGE
     notes_manager.drain
+
+    # Pour consigner les erreurs mineures en cours de construction
+    # 
+    PrawnView::Error.reset
     
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #
