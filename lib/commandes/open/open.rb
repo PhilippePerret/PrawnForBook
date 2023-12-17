@@ -18,6 +18,7 @@ module Prawn4book
       when :cffolder        then open_collection(true)
       when :package         then open_sublime_text_package
       when :pfb_manual      then open_manual_prawn_for_book
+      when :folder_manuel   then open_manual_folder
       when :prawn_manual    then open_prawn_manual
       when :prawntbl_manual then open_prawn_table_manual
       end
@@ -71,6 +72,10 @@ module Prawn4book
     `open "#{PRAWN_MANUEL_PATH}"`
   end
 
+  def self.open_manual_folder
+    `open -a "Finder" "#{APP_FOLDER}/Manuel/manuel_building"`
+  end
+
   def self.open_prawn_table_manual
     `open #{PRAWN_TABLE_MANUAL}`
   end
@@ -91,6 +96,7 @@ module Prawn4book
       {name:TERMS[:manual_pfb],         value: :pfb_manual},
       {name:TERMS[:manual_prawn],       value: :prawn_manual},
       {name:TERMS[:manual_prawn_table], value: :prawntbl_manual},
+      {name:TERMS[:folder_manuel]     , value: :folder_manuel}
     ]
     precfile = File.join(__dir__, '.precedences')
     choix = precedencize(choices, precfile) do |q|

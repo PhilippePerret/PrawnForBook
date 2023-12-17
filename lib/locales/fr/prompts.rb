@@ -21,6 +21,7 @@ TERMS = {
   default_value: 'par défaut',
   Default_value: 'Valeur par défaut ',
   A_explicit_value: "Une valeur explicite",
+  folder_manuel: "Le dossier du Manuel autoproduit",
   fonts: 'fontes',
   footer: 'pied de page',
   format: 'format',
