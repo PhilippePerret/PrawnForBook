@@ -1,14 +1,12 @@
 ---
-#<book_data>
 book_data:
   title: "Manuel de Prawn-for-book"
   subtitle: "le manuel autoproduit de l’application\\nde mise en forme professionnelle"
   author: "Philippe PERRET"
   isbn: null
   url:  null
-#</book_data>
+#/book_data
 
-#<book_making>
 book_making:
   conception:
     patro: "Philippe PERRET"
@@ -22,7 +20,8 @@ book_making:
   correction:
     patro: ["Marion MICHEL"]
     mail:  [null]
-#<book_format>
+#/book_making
+
 book_format:
   page:
     show_grid: false
@@ -65,28 +64,22 @@ book_format:
       caps: "all-caps"
 
   #</titles>
-#</book_format>
+#/book_format
 
-#<inserted_pages>
 inserted_pages:
   credits_page:
     disposition: "distribute"
   page_de_titre:
     title:
       font: "Numito/normal/30/FF0000"
-      line: 15
     subtitle:
       font: "Numito/italic/16/007700"
-      line: 16
     author:
       font: "Numito/normal/18/000077"
-      line: 22
     publisher:
       font: "Numito/normal/12/FF8000"
-      line: 2
       logo:
         height: 40
-        line: 3
 
 #</inserted_pages>
 
