@@ -57,12 +57,15 @@ class PageIndex
       dcanon.merge!(items: new_items)
     end.each do |canon, dcanon|
       pdf.font(canon_fonte)
-      pdf.move_to_next_line
+      # pdf.move_to_next_line
       txt = INDEX.key?(canon.downcase.to_sym) ? INDEX[canon.downcase.to_sym] : canon
-      pdf.formatted_text [
+      segments = [
         {text: txt, font: canon_fonte.name, size: canon_fonte.size, styles: canon_fonte.styles, color: canon_fonte.color},
         {text: " : #{dcanon[:items].map{|dmot|dmot[key_num]}.join(', ')}", font: number_fonte.name, size: number_fonte.size, styles: number_fonte.styles, color: number_fonte.color}
       ]
+      # -- Gravure du canon et ses références --
+      # Note : ça passe automatiquement à la ligne, ne rien faire.
+      pdf.formatted_text(segments)
     end
     spy "<- /construction de l'index".jaune
   end
