@@ -151,7 +151,14 @@ class ReferencesTable
         .gsub(/_page_/, ref[:page].to_s)
         .gsub(/_paragraph_/, ref[:paragraph].to_s)
     elsif second_turn?
-      add_erreur(PFBError[2002] % {id: ref_id, targets:table.keys})
+      err_msg = PFBError[2002] % {id: ref_id}
+      unless @_key_table_list_has_been_done === true
+        # Pour ne donner le message qu’une seule fois
+        err_msg = "#{err_msg}\nPour information, la table des références (des cibles) contient : #{table.keys}"
+        @_key_table_list_has_been_done = true
+      end 
+      add_erreur(err_msg)
+
       # raise PFBFatalError.new(2002, {id: ref_id, targets:table.keys})
       "### REF: #{ref_id} ###"
     else
