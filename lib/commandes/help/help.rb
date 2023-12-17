@@ -4,7 +4,10 @@ class Command
   def proceed
     methode =
       case ini_name
-      when 'manuel', 'manual', 'aide' then :open_user_manuel
+      when 'aide', 'help'     
+        :display_mini_help
+      when 'manuel', 'manual' 
+        :open_user_manuel
       when 'manuel-prawn', 'prawn-manual', 'prawn-manuel'
         :open_prawn_manual
       when 'manuel-prawn-table'
@@ -104,8 +107,16 @@ MINI_AIDE = <<-TEXT
     Construire le livre du livre courant.
     Ajouter l'option '-open' pour l'ouvrir après fabrication.
 
-#{'pfb aide'.jaune}
-    Aide en ligne pour pfb
+#{'pfb open'.jaune}
+    Ouvrir un élément quelconque, dossier du livre, de la collection,
+    manuel de Prawn-for-book, manuel de Prawn etc.
+
+#{'pfb manuel'.jaune}
+    Manuel PDF
+    Ajouter '-dev' pour ouvrir la version markdown annotable.
+
+#{'pfb init'.jaune}
+    Initier un nouveau livre dans le dossier courant.
 
 #{'pfb choose <biblio>'.jaune}
     Pour choisir un item dans une bibliographie courante.
@@ -119,10 +130,6 @@ MINI_AIDE = <<-TEXT
 #{'pfb assistant'.jaune}
     Permet de choisir un assistant et de le jouer.
 
-#{'pfb manuel'.jaune}
-    Manuel PDF
-    Ajouter '-dev' pour ouvrir la version markdown.
-
 #{'pfb install'.jaune}
     Pour installer ou définir les snippets dans Sublime Text
 
@@ -133,14 +140,6 @@ MINI_AIDE = <<-TEXT
 
 #{'pfb lexique "<mot>"'.jaune}
     Aide lexicale sur le mot <mot>.
-
-#{'pfb init'.jaune}
-    Initier un nouveau livre dans le dossier
-    courant.
-
-#{'pfb open'.jaune}
-    Ouvrir un élément quelconque, dossier du livre, de la collection,
-    manuel de Prawn-for-book, manuel de Prawn etc.
 
 #{'pfb aide fontes'.jaune}
     Assistant en ligne pour produire la donnée :fonts du 
@@ -154,10 +153,8 @@ MINI_AIDE = <<-TEXT
     Pour mettre à niveau le livre ou la collection courante, 
     c'est-à-dire, principalement, pour créer les nouveaux éléments.
 
----
-
-#{'pfb manuel -dev'.jaune}
-    Manuel PDF en version markdown (édition)
+#{'pfb aide'.jaune}
+    Aide en ligne pour pfb (cette aide-ci)
 
 TEXT
 

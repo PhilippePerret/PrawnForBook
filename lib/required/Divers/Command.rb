@@ -4,6 +4,7 @@ class Command
   attr_reader :ini_name, :name
 
   def initialize(ini_name)
+    ini_name ||= 'help'
     @ini_name = ini_name
     @name = COMMAND_NAMES_TO_COMMAND_REAL_NAME[ini_name.downcase]||ini_name
   end
