@@ -180,6 +180,11 @@ class PdfBook
     # demandé, c'est souvent pour le corriger)
     # 
     if export_text?
+      puts "Le texte doit être ouvert dans Sublime Text, et l’encodage mis à UTF-8".rouge
+      if Q.yes?("Dois-je ouvrir le texte dans Sublime Text ?".jaune)
+        `subl "#{exportator.path}"`
+        Q.yes?("L’encodage a été changé ?".jaune)
+      end
       if Q.yes?("Voulez-vous ouvrir le texte dans le correcteur (#{CORRECTOR_NAME}) ?".jaune)
         `open -a "#{CORRECTOR_NAME}" "#{exportator.path}"`
       end
@@ -272,7 +277,7 @@ class PdfBook
     if first_turn?
       pdf.on_page_create do
         my.add_page(pdf.page_number)
-        export_text("\n#{'-'*30}\n\n") if export_text?
+        export_text("\n#{'-'*15}PAGE ##{pdf.page_number}#{'-'*15}\n\n") if export_text?
       end
     else
       pdf.on_page_create do

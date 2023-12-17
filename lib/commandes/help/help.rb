@@ -4,8 +4,13 @@ class Command
   def proceed
     methode =
       case ini_name
-      when 'aide', 'help'     
-        :display_mini_help
+      when 'aide', 'help'
+        if CLI.components[0].nil?
+          :display_mini_help
+        else
+          require_relative 'lib/Manuel_Searcher'
+          return ManuelSearcher.search(CLI.components[0])
+        end
       when 'manuel', 'manual' 
         :open_user_manuel
       when 'manuel-prawn', 'prawn-manual', 'prawn-manuel'
@@ -138,8 +143,10 @@ MINI_AIDE = <<-TEXT
     On peut utiliser 
     'pfb script <nom script partiel> ./images/<nom image partiel>'
 
-#{'pfb lexique "<mot>"'.jaune}
-    Aide lexicale sur le mot <mot>.
+#{'pfb aide "<mot>"'.jaune}
+    Rechercher le mot <mot> dans l’aide.
+    Si c’est une expression régulière, l’entourer par des 
+    balances (#{'pfb aide "/<expression régulière>/"'.jaune})
 
 #{'pfb aide fontes'.jaune}
     Assistant en ligne pour produire la donnée :fonts du 

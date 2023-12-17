@@ -10,6 +10,7 @@ GEM
       tty-prompt
     fastimage (2.2.7)
     hashery (2.1.2)
+    iconv (1.0.8)
     json (2.7.1)
     minitest (5.16.3)
     minitest-fail-fast (0.1.0)
@@ -50,6 +51,7 @@ PLATFORMS
 DEPENDENCIES
   clir (>= 0.24.2)
   fastimage
+  iconv
   minitest
   minitest-fail-fast
   minitest-reporters

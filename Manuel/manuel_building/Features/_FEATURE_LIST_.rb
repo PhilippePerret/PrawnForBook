@@ -1,11 +1,11 @@
 module Prawn4book
 
-  # TOUT = true # ou nil, attention !
-  TOUT = nil
+  TOUT = true # ou nil, attention ! (pas false)
+  # TOUT = nil
   TOUT_RECETTE = TOUT || nil
   # TOUT_RECETTE = TOUT || true
-  # TOUT_PAGES_SPECS = TOUT || nil
-  TOUT_PAGES_SPECS = TOUT || true
+  TOUT_PAGES_SPECS = TOUT || nil
+  # TOUT_PAGES_SPECS = TOUT || true
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
   TOUT_PUCES = TOUT || nil

@@ -7,99 +7,259 @@
   :page: 15
   :paragraph:
   :text: generalites_forces_de_prawn
-:recette_grand_titre:
+:generalites_deux_fichiers_de_base:
+  :page: 15
+  :paragraph:
+  :text: generalites_deux_fichiers_de_base
+:generalites_doubles_parentheses:
   :page: 16
   :paragraph:
-  :text: recette_grand_titre
-:pages_speciales_grand_titre:
+  :text: generalites_doubles_parentheses
+:recette_grand_titre:
   :page: 17
+  :paragraph:
+  :text: recette_grand_titre
+:recette_recette_livre:
+  :page: 17
+  :paragraph:
+  :text: recette_recette_livre
+:recette_recette_collection:
+  :page: 17
+  :paragraph:
+  :text: recette_recette_collection
+:definition_marges:
+  :page: 19
+  :paragraph:
+  :text: definition_marges
+:recette_definition_fonte:
+  :page: 21
+  :paragraph:
+  :text: recette_definition_fonte
+:recette_publisher:
+  :page: 21
+  :paragraph:
+  :text: recette_publisher
+:texte_grand_titre:
+  :page: 22
+  :paragraph:
+  :text: texte_grand_titre
+:format_markdown_du_texte:
+  :page: 22
+  :paragraph:
+  :text: format_markdown_du_texte
+:pages_speciales_grand_titre:
+  :page: 23
   :paragraph:
   :text: pages_speciales_grand_titre
 :pages_speciales_pages_speciales:
-  :page: 17
+  :page: 23
   :paragraph:
   :text: pages_speciales_pages_speciales
 :pages_speciales_table_des_matieres:
-  :page: 17
+  :page: 23
   :paragraph:
   :text: pages_speciales_table_des_matieres
 :pages_speciales_credits_page:
-  :page: 21
+  :page: 27
   :paragraph:
   :text: pages_speciales_credits_page
 :pages_speciales_title_page:
-  :page: 24
+  :page: 30
   :paragraph:
   :text: pages_speciales_title_page
 :pages_speciales_faux_titre:
-  :page: 26
+  :page: 32
   :paragraph:
   :text: pages_speciales_faux_titre
 :pages_speciales_index_page:
-  :page: 28
+  :page: 34
   :paragraph:
   :text: pages_speciales_index_page
+:header_footer_grand_titre:
+  :page: 36
+  :paragraph:
+  :text: header_footer_grand_titre
+:header_footer_par_defaut:
+  :page: 36
+  :paragraph:
+  :text: header_footer_par_defaut
+:header_footer_exemple_complexe:
+  :page: 39
+  :paragraph:
+  :text: header_footer_exemple_complexe
 :aide_grand_titre:
-  :page: 30
+  :page: 42
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 30
+  :page: 42
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_erreurs_et_notices:
-  :page: 30
+  :page: 42
   :paragraph:
   :text: aide_erreurs_et_notices
+:texte_detail_grand_titre:
+  :page: 44
+  :paragraph:
+  :text: texte_detail_grand_titre
+:texte_detail_indentation:
+  :page: 44
+  :paragraph:
+  :text: texte_detail_indentation
+:puces_puces:
+  :page: 45
+  :paragraph:
+  :text: puces_puces
+:puces_losange:
+  :page: 45
+  :paragraph:
+  :text: puces_losange
+:puces_black_losange:
+  :page: 46
+  :paragraph:
+  :text: puces_black_losange
+:puces_square:
+  :page: 46
+  :paragraph:
+  :text: puces_square
+:puces_black_square:
+  :page: 47
+  :paragraph:
+  :text: puces_black_square
+:puces_bullet:
+  :page: 47
+  :paragraph:
+  :text: puces_bullet
+:puces_black_bullet:
+  :page: 48
+  :paragraph:
+  :text: puces_black_bullet
+:puces_finger:
+  :page: 48
+  :paragraph:
+  :text: puces_finger
+:puces_black_finger:
+  :page: 49
+  :paragraph:
+  :text: puces_black_finger
+:puces_big_hyphen:
+  :page: 50
+  :paragraph:
+  :text: puces_big_hyphen
+:puces_custom_image:
+  :page: 50
+  :paragraph:
+  :text: puces_custom_image
+:images_grand_titre:
+  :page: 52
+  :paragraph:
+  :text: images_grand_titre
+:images_inserer_images:
+  :page: 53
+  :paragraph:
+  :text: images_inserer_images
+:exemple_image_18:
+  :page: 65
+  :paragraph: 853
+  :text: exemple_image_18
+:exemple_image_19:
+  :page: 66
+  :paragraph: 854
+  :text: exemple_image_19
+:images_images_flottantes:
+  :page: 67
+  :paragraph:
+  :text: images_images_flottantes
+:images_format_legende:
+  :page: 76
+  :paragraph:
+  :text: images_format_legende
 :bibliographies_grand_titre:
-  :page: 32
+  :page: 79
   :paragraph:
   :text: bibliographies_grand_titre
 :bibliographies_introduction:
-  :page: 32
+  :page: 79
   :paragraph:
   :text: bibliographies_introduction
 :bibliographies_customisation:
-  :page: 35
+  :page: 82
   :paragraph:
   :text: bibliographies_customisation
+:expert_grand_titre:
+  :page: 87
+  :paragraph:
+  :text: expert_grand_titre
+:expert_mode_expert:
+  :page: 87
+  :paragraph:
+  :text: expert_mode_expert
+:expert_contexte_erreurs:
+  :page: 87
+  :paragraph:
+  :text: expert_contexte_erreurs
+:expert_injection_code:
+  :page: 87
+  :paragraph:
+  :text: expert_injection_code
+:expert_evaluation_code_ruby:
+  :page: 88
+  :paragraph:
+  :text: expert_evaluation_code_ruby
+:expert_bibliographies:
+  :page: 89
+  :paragraph:
+  :text: expert_bibliographies
+:tutoriel_grand_titre:
+  :page: 89
+  :paragraph:
+  :text: tutoriel_grand_titre
+:tutoriel_installation:
+  :page: 92
+  :paragraph:
+  :text: tutoriel_installation
 :annexe_grand_titre:
-  :page: 39
+  :page: 94
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 42
+  :page: 98
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 42
+  :page: 98
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 42
-  :paragraph: 526
+  :page: 98
+  :paragraph: 1137
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 42
+  :page: 98
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 43
+  :page: 99
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 43
+  :page: 99
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 44
+  :page: 100
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 48
+  :page: 104
   :paragraph:
   :text: annexe_synopsis_creation
+:annexe_installation_application:
+  :page: 104
+  :paragraph:
+  :text: annexe_installation_application
 :annexe__liste_exhaustive_features_:
-  :page: 48
+  :page: 104
   :paragraph:
   :text: annexe__liste_exhaustive_features_

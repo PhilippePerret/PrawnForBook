@@ -45,7 +45,6 @@ module Prawn4book
     def epure(str)
       # -- Retirer toutes les balises HTML --
       str = str.gsub(/<(.+?)>/,'')
-
       return str
     end
 
@@ -71,7 +70,7 @@ module Prawn4book
         car = "\n"
       end
       str = "#{car}#{str}"
-      ref.write str
+      ref.write str.force_encoding('utf-8')
     end
     alias :<< :add
 
@@ -125,29 +124,5 @@ module Prawn
       Prawn4book.exported_book.export_text(text)
       read_draw_text!(text, options)
     end
-
-    # alias :real_text_box :text_box
-    # def text_box(string, options = {})
-    #   puts "Je dois écrire: #{string.inspect}".jaune
-    #   exit 100
-    #   real_text_box(string, options = {})
-    # end
-
-    # alias :real_formatted_text :formatted_text
-    # def formatted_text(array, options = {})
-    #   puts "Je dois écrire: #{array.inspect}".jaune
-    #   exit 100
-    #   real_formatted_text(array, options)
-    # end
-
-    # module Formatted
-    #   alias :real_formatted_text_box :formatted_text_box
-    #   def formatted_text_box(array, options = {})
-    #     puts "Je dois écrire: #{array.inspect}".jaune
-    #     exit 100
-    #     real_formatted_text_box(array, options)
-    #   end
-    # end #/module Prawn::Text::Formatted
-    # 
   end #/module Text
 end #/module Prawn
