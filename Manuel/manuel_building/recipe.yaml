@@ -81,9 +81,8 @@ inserted_pages:
       logo:
         height: 40
 
-#</inserted_pages>
+#/inserted_pages
 
-#<headers_footers>
 headers_footers:
   dispositions:
     default:
@@ -93,9 +92,8 @@ headers_footers:
       footer: "| -NUM  || NUM-  |"
       header_font: "Numito/light/10/999999"
       footer_font: "Numito/bold/13/333333"
-#</headers_footers>
+#/headers_footers
 
-#<table_of_content>
 table_of_content:
   # title: "Table des matières"
   no_title: true
@@ -114,10 +112,8 @@ table_of_content:
     caps: none
   level3:
     caps: none
-#</table_of_content>
+#/table_of_content
 
-
-#<book_making>
 book_making:
   conception:
     patro: "Philippe PERRET"
@@ -130,15 +126,13 @@ book_making:
     patro: "Marion MICHEL"
   printing:
     name: "Prawn-For-Book"
-#</book_making>
+#/book_making
 
-#<publisher>
 publisher:
   name: "Icare Éditions"
   logo_path: "logo/couleur.jpg"
-#</publisher>
+#/publisher
 
-#<bibliographies>
 bibliographies:
   article:
     title: "Articles de presse"
@@ -158,4 +152,4 @@ bibliographies:
     main_key: nom
     format: "%{nom|transforme_nom}"
 
-#</bibliographies>
+#/bibliographies

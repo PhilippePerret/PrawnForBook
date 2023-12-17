@@ -53,7 +53,7 @@ class PageDeTitre
 
     # - SOUS-TITRE -
     # (if any)
-    print_element(:subtitle, pdf) if book.subtitle
+    print_element(:subtitle, pdf) if subtitle?
 
     # - AUTEURS -
     # 
@@ -265,11 +265,16 @@ class PageDeTitre
     @default_lines = {}
     line_count = pdf.line_count.freeze
     @default_lines.merge!(collection: 2)
-    @default_lines.merge!(title: line_count / 3)
-    @default_lines.merge!(subtitle: line_count / 3 + 2)
-    lineauthor = line_count / 3 + 2
-    lineauthor += 2 if subtitle?
-    @default_lines.merge!(author: lineauthor)
+    # - Hauteur de la ligne de titre -
+    cur_top = (data_title[:line] || line_count / 3) + book.title.count("\n")
+    @default_lines.merge!(title: cur_top.freeze)
+    # - Hauteur d’un sous-titre éventuel -
+    if subtitle?
+      cur_top = data_subtitle[:line] || (cur_top + (3 + book.subtitle.count("\n")))      
+      @default_lines.merge!(subtitle: cur_top.freeze)
+    end
+    cur_top = data_author[:line] || (cur_top + 4)
+    @default_lines.merge!(author: cur_top.freeze)
     @default_lines.merge!(logo: line_count - 1)
     @default_lines.merge!(publisher: logo? ? line_count - 4 : line_count - 1)
   end
