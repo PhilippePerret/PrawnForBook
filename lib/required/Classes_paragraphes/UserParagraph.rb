@@ -69,26 +69,9 @@ class UserParagraph < AnyParagraph
       @print_it = false
     end
 
-    # 
-    # TODO: Peut-être qu’il faudra aussi faire quelque chose comme :
-    # (c’est ce qu’on trouve dans book.inject)
-    # Mais il faudra faire attention à ce que les index ne s’emmêlent
-    # pas les crayons. Car pour rappel, ces index doivent permettre 
-    # de localiser rapidement un texte dans un fichier, pour trouver
-    # et corriger une erreur. Il faut aussi s’assurer, pour que les
-    # index soient bons, que l’instanciation de ces paragraphes user
-    # se fassent bien dans le flux général du parsing du texte, ce 
-    # qui n’est pas toujours évident si, par exemple, on écrit quel-
-    # que chose sur une page particulière (cas qui ne s’est pas en-
-    # core posé concrètement).
-    # 
-    # @regular_paragraph.abs_index = @book.paragraphes.count
-    # @book.paragraphes << @regular_paragraph
-
   end
 
   # --- Predicate Methods ---
-
 
   # Return true si le paragraphe doit être imprimé. C’est-à-dire s’il
   # n’est pas un élément de table ou de commentaire (pour le moment,
@@ -105,6 +88,7 @@ class UserParagraph < AnyParagraph
   class << self
 
     attr_accessor :current_table
+    # attr_accessor :current_multi_columns
     attr_accessor :current_comment
 
     # @return [Integer] L’index suivant pour un paragraphe utilisa-

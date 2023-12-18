@@ -169,6 +169,8 @@ class AnyParagraph
 
   attr_reader :type
 
+  attr_reader :raw_code
+
   def initialize(book, pindex)
     @book   = book
     @pindex = pindex

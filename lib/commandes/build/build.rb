@@ -244,6 +244,8 @@ class PdfBook
     # 
     PrawnView::Error.reset
     
+    self.columns_box = nil
+
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #
     # @note
@@ -338,11 +340,9 @@ class PdfBook
     # 
     # @note
     #   On ne peut le faire que lorsque les fontes sont définies et
-    #   qu’on se trouve déjà sur une page
+    #   qu’on se trouve déjà sur une page, donc ici
     # 
-    if recipe.text_indent
-      PdfBook::NTextParagraph.calc_string_indentation(pdf, recipe.text_indent)
-    end
+    PdfBook::NTextParagraph.calc_string_indentation(pdf, recipe.text_indent)
 
     # ========================
     # - TOUS LES PARAGRAPHES -

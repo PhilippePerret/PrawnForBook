@@ -35,6 +35,8 @@ class PFBCode < AnyParagraph
     case @raw_code.strip
     when REG_NEXT_PARAG_STYLE
       treat_as_next_parag_code 
+    when /^(?:colonne|column)s?\((.+?)\)$/ 
+      change_nombre_colonnes($1, nil)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Rien
     end
@@ -63,6 +65,8 @@ class PFBCode < AnyParagraph
       AnyParagraph.stop_numerotation_paragraphs
     when 'restart_numerotation_paragraphs'
       AnyParagraph.restart_numerotation_paragraphs
+    when /^(?:colonne|column)s?\((.+?)\)$/ 
+      change_nombre_colonnes($1, pdf)
     when /^notice\((.+?)\)$/.freeze
       add_notice($1, self)
     when /^(?:erreur|error)\((.+?)\)$/.freeze
@@ -96,6 +100,64 @@ class PFBCode < AnyParagraph
     else
       raise PFBFatalError.new(1001, {code:raw_code, page: pdf.page_number})
     end
+  end
+
+  # Pour changer le nombre de colonnes dans la page
+  # 
+  # @params params_str [String]
+  #   Les paramètres bruts tels qu’ils sont dans les parenthèses.
+  # 
+  # @params pdf [Prawn::PrawnView]
+  #   Le document PDF en construction
+  # 
+  def change_nombre_colonnes(params_str, pdf)
+    # return
+    spy(:on)
+    spy "-> Changement de colonne demandé : #{params_str}".jaune
+    if params_str.match?(',')
+      params_str = params_str.split(',').map { |e| e.strip }
+      nombre_colonnes = params_str.shift.to_i.freeze
+      options = eval(params_str.join(', '))
+    else
+      nombre_colonnes = params_str.to_i.freeze
+      options = {}
+    end
+
+    # Si le nombre de colonnes demandé correspond au nombre de colonnes
+    # déjà en cours, on ne fait rien
+    if book.columns_box && book.columns_box.column_count == nombre_colonnes
+      spy "Aucun changement de colonnes. Je m’en retourne".jaune
+      return
+    end
+
+    # Si le nombre de colonnes est 1 mais qu’on n’est pas en multi-
+    # colonnage, on ne fait rien
+    if nombre_colonnes == 1 && book.columns_box.nil?
+      spy "Pas de colonne et pas de bloc colonne. Je m’en retourne.".jaune
+      return
+    end
+    
+    # # S’il y a déjà un multi colonnage en route
+    if not(book.columns_box.nil?)
+      spy "Il y a un multi-colonnage en cours (que je dois imprimer)".jaune
+      if pdf.nil?
+        puts "\npdf est malheureusement nil, je ne peux pas imprimer".rouge
+        return
+      end
+      book.columns_box.print(pdf)
+      book.columns_box = nil
+    end
+
+    # Si on veut plus d’une colonne, on indique que le prochain
+    # paragraphe devra tenir sur ce nombre de colonnes
+    if nombre_colonnes > 1
+      spy "INSTANCIATION DE BOITE COLONNES (#{nombre_colonnes})".jaune
+      options.merge!(column_count:nombre_colonnes)
+      book.columns_box = ColumnsBox.new(book, **options)
+    else
+      book.columns_box = nil
+    end
+
   end
 
   def force_fonte_change(pdf, font_data)

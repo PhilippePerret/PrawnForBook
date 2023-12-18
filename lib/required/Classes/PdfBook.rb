@@ -5,21 +5,26 @@ class PdfBook
 
   attr_reader :folder
 
+  # [PdfBook::ColumnsBox] Quand un affichage par colonne est en 
+  # cours, cette propriété est déinie.
+  attr_accessor :columns_box # noter le "s" (il n’y en a pas dans Prawn::ColumnBox)
+
   ##
   # Instanciation du PdfBook qui va permettre de générer le fichier
   # PDF prêt à l'impression.
   # 
   # @param [String] folder Path to folder book.
   def initialize(folder)
-    @folder     = folder
+    @folder       = folder
+    @columns_box  = nil
   end
 
   def reset
     # Pour mettre absolument tous les paragraphs rencontrés (même
     # les lignes vides)
-    @paragraphes      = []
-    @current_table    = nil
-    @current_comment  = nil
+    @paragraphes            = []
+    @current_table          = nil
+    @current_comment        = nil
   end
 
 
@@ -66,6 +71,8 @@ class PdfBook
       end
     end
 
+    # TODO Bloc de code (ou d’autre chose ?)
+
     # Si un commentaire est ouvert (par <!-- sur une ligne)
     if @current_comment
       if paragraph_str.match?(AnyParagraph::REG_END_COMMENT)
@@ -99,6 +106,23 @@ class PdfBook
 
     # - Ajout à la liste des paragraphes -
     @paragraphes << par
+
+    # - S’il y a une impression en colonnes multiples, il ne faut
+    #   pas graver tout de suite -
+    unless columns_box.nil?
+      if par.pfbcode?
+        puts "Paragraphe par.text #{(par.text).inspect}".orange
+        puts "Paragraphe par.raw_code #{(par.raw_code).inspect}".orange
+        if par.raw_code == 'colonnes(1)'
+          self.columns_box.print(pdf)
+          self.columns_box = nil
+       end
+      else
+        puts "Zappé car bloc colonne: Paragraphe #{(par.text||par.raw_code).inspect}"
+        columns_box.add_paragraph(par)
+      end
+      return
+    end
 
     ###########################################
     ### IMPRESSION DU (WHATEVER) PARAGRAPHE ###

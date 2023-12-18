@@ -39,7 +39,7 @@ class PageManager
     pages << Page.new(Marshal.load(Marshal.dump(data_page)))
     if pages[-1].number != pages.count
       puts "Mauvais numéro de page dans add. Ne devrait jamais arriver".rouge
-      exit 114
+      exit 1
     end
   end
   alias :<< :add

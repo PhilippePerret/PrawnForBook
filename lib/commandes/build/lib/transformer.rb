@@ -415,7 +415,7 @@ private
       # sleep 0.5
       str = str.gsub(REG_CIBLE_REFERENCE) do
         cible = $1.freeze
-        spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
+        # spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
         book.table_references.add(cible, **{
           page:       first_page, 
           paragraph:  numero_par,
@@ -433,7 +433,7 @@ private
     if str.match?(REG_AMORCE_APPEL)
       str = str.gsub(REG_APPEL_REFERENCE) do
         appel = $1.freeze
-        spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
+        # spy "[REFERENCES] Consignation de l'appel à la référence #{appel.inspect}".bleu
         book.table_references.get(appel, context)
       end
     end

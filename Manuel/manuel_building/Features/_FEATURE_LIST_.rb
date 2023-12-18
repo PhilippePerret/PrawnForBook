@@ -1,7 +1,7 @@
 module Prawn4book
 
-  TOUT = true # ou nil, attention ! (pas false)
-  # TOUT = nil
+  # TOUT = true # ou nil, attention ! (pas false)
+  TOUT = nil
   TOUT_RECETTE = TOUT || nil
   # TOUT_RECETTE = TOUT || true
   TOUT_PAGES_SPECS = TOUT || nil
@@ -16,10 +16,16 @@ module Prawn4book
   # TOUT_EXPERT = TOUT || true
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
-  #TOUT_ANNEXE = TOUT || nil
-  TOUT_ANNEXE = TOUT || true
   # TOUT_AIDE = TOUT || nil
   TOUT_AIDE = TOUT || true
+  TOUT_REFS = TOUT || nil
+  # TOUT_REFS = TOUT || true
+  TOUT_BIBLIO = TOUT || nil
+  # TOUT_BIBLIO = TOUT || true
+  # TOUT_FORMAT = TOUT || nil # format livre/page
+  TOUT_FORMAT = TOUT || true
+  TOUT_ANNEXE = TOUT || nil
+  # TOUT_ANNEXE = TOUT || true
 
   #
   # @note
@@ -92,16 +98,20 @@ module Prawn4book
     TOUT_IMAGE && 'images/images_flottantes',
     TOUT_IMAGE && 'images/format_legende',
     
-    # 'references/cross_references'
-    # 'hyperlinks',
-    # 'notes_de_page',
-    # 'notes_de_page_formatage',
-    # 'tables/tables',
+    TOUT_REFS && 'references/cross_references',
+    TOUT_REFS && 'hyperlinks',
+    TOUT_REFS && 'notes_de_page',
+    TOUT_REFS && 'notes_de_page_formatage',
+    TOUT_REFS && 'tables/tables',
 
     #---Bibliographies---#
-    'bibliographies/grand_titre',
-    'bibliographies/introduction',
-    'bibliographies/customisation',
+    TOUT_BIBLIO && 'bibliographies/grand_titre',
+    TOUT_BIBLIO && 'bibliographies/introduction',
+    TOUT_BIBLIO && 'bibliographies/customisation',
+
+    #---Format précis livre et pages ---
+    TOUT_FORMAT && 'format/grand_titre',
+    TOUT_FORMAT && 'format/double_colonnes',
 
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',
@@ -116,6 +126,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/bibliographies',
 
     #---Tutoriel de prise en main---#
+    # Note : en faire plutôt un livre séparé
     TOUT_TUTORIEL && 'tutoriel/grand_titre',
     TOUT_TUTORIEL && 'tutoriel/installation',
 

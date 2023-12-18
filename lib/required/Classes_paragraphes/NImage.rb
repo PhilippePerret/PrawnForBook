@@ -166,24 +166,24 @@ class NImage < AnyParagraph
       @data_image.merge!(color_mode: :cmyk)
     end
 
-    spy "Image:       #{filename}".bleu
-    spy "Légende:     #{legend}".bleu if legend
-    spy <<~EOD.bleu
-      (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
-      Original W: #{original_width.inspect}
-      Original H: #{original_height.inspect}
-      Explicit W: #{width.inspect}
-      Explicit H: #{height.inspect}
-      Calc W:     #{calc_width} 
-      Calc H:     #{calc_height} 
-      Scale:      #{scale.inspect}
-      left:       #{left.inspect}
-      right:      #{right.inspect}
-      position legend: #{position_legend}
-      left legend: #{left_legend}
-      -----------
-      Data image: #{@data_image}
-      EOD
+    # spy "Image:       #{filename}".bleu
+    # spy "Légende:     #{legend}".bleu if legend
+    # spy <<~EOD.bleu
+    #   (taille page : #{pdf.bounds.width.round(2)} x #{pdf.bounds.height.round(2)})
+    #   Original W: #{original_width.inspect}
+    #   Original H: #{original_height.inspect}
+    #   Explicit W: #{width.inspect}
+    #   Explicit H: #{height.inspect}
+    #   Calc W:     #{calc_width} 
+    #   Calc H:     #{calc_height} 
+    #   Scale:      #{scale.inspect}
+    #   left:       #{left.inspect}
+    #   right:      #{right.inspect}
+    #   position legend: #{position_legend}
+    #   left legend: #{left_legend}
+    #   -----------
+    #   Data image: #{@data_image}
+    #   EOD
 
 
     # Propriété à sortir (pour le scope dans pdf)
@@ -327,16 +327,7 @@ class NImage < AnyParagraph
         ###################################
         my.print_text_around_image(floating_data)
         # Où faut-il se placer (cursor) ensuite ?
-        spy <<~EOT
-          Pour trouver la position de curseur (best_cursor)
-          -----------------------------------
-          image_top = #{image_top}
-          image_height = #{image_height}
-          image_top - image_height = #{image_top - image_height}
-          cursor = #{cursor}
-          floating_data[:textbox3_top] = #{floating_data[:textbox3_top]}          
-          last_cursor = #{last_cursor}  
-          EOT
+
         best_cursor = [
           image_top - image_height - line_height, 
           cursor, 
@@ -348,7 +339,6 @@ class NImage < AnyParagraph
         move_to_closest_line
         # update_current_line
         move_to_next_line
-        spy "Donc se placer sur la line suivant : #{cursor.freeze}".jaune
 
       else
 

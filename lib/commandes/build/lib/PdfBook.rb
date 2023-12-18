@@ -52,7 +52,7 @@ class PdfBook
         infos:              recipe.credits_page,
         template:           recipe.template,
       }.tap do |h|
-        spy "options pour #generate : #{h.pretty_inspect}"
+        # spy "options pour #generate : #{h.pretty_inspect}"
       end
   end
 

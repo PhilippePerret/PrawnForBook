@@ -471,9 +471,6 @@ class << self
         snap = snap / 10 # cran, p.e. 0.001 -> 0.0001
       end
 
-      spy "CS trouvé pour le paragraphe « #{str[0..60]} […] » : #{cs}".bleu
-
-
       # NOUVELLE MÉTHODE : ON RETOURNE SEULEMENT L'ESPACE
       return cs # character_spacing
 
