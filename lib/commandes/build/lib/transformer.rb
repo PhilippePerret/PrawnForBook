@@ -393,7 +393,7 @@ private
 
     return str    
   end
-  REG_APPEL_CROSS_REFERENCE = /#{EXCHAR}\->\((.+?):(.+?)\)/.freeze
+  REG_APPEL_CROSS_REFERENCE = /#{EXCHAR}\->\(([^:\)]+?):(.+?)\)/.freeze
 
   ##
   # Traitement des références interne (seulement interne)

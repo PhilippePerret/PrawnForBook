@@ -80,6 +80,7 @@ class ReferencesTable
   # @param [String] cible     L'identifiant de la cible dans le livre
   # 
   def add_and_get_cross_reference(book_id, cible_id)
+    puts "book_id: #{book_id.inspect} / cible_id: #{cible_id.inspect}".jaune
     book = Bibliography::Livres.get(book_id) || begin
       # - quand le livre n'existe pas -
       raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
