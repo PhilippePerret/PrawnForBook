@@ -478,16 +478,16 @@ class NImage < AnyParagraph
   end
 
   # Le texte à enrouler autour de l’image (cf. [002])
-  # Rapel : ce sont tous les paragraphes qui suivent l’image, qui 
-  # sont précédés de "!"
+  # Rapel : ce sont tous les paragraphes qui suivent l’image, 
+  # précédés de "!"
   # 
   def wrapped_text
     s = []
     pp = self.prev_printed_paragraph
-    s << pp.raw_text
+    s << "#{pp.string_indentation}#{pp.raw_text}"
     while pp.prev_printed_paragraph.wrapped?
       pp = pp.prev_printed_paragraph
-      s  << pp.raw_text
+      s  << "#{pp.string_indentation}#{pp.raw_text}"
     end
     s = AnyParagraph.__parse(s.reverse.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
       # @note : peut-être faudra-t-il simplement appeler __parse sur 

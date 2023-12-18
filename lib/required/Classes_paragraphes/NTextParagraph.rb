@@ -213,6 +213,8 @@ class NTextParagraph < AnyParagraph
 
   class << self
     # Création de l’indentation artificielle à l’aide d’espaces
+    # Noter qu’elle est toujours définie, même lorsqu’il n’y a pas
+    # d’indentation (elle est alors mise à "")
     def string_indentation
       @string_indentation ||= calc_string_indentation(pdf, expected_length)
     end
@@ -221,6 +223,7 @@ class NTextParagraph < AnyParagraph
       @string_indentation = calc_indentation(pdf, expected_length)
     end
     def calc_indentation(pdf, expected_length)
+      return '' if expected_length.nil? || expected_length == 0
       # Au départ, j’essayais vraiment de calculer la vraie longueur,
       # avec width_of. Seulement, ça ne collait pas du tout. Maintenant
       # je pars du principe qu’un caractère insécable, dans la police
