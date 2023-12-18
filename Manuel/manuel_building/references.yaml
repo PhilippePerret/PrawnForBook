@@ -160,106 +160,106 @@
   :paragraph:
   :text: images_inserer_images
 :exemple_image_18:
-  :page: 65
+  :page: 66
   :paragraph: 853
   :text: exemple_image_18
 :exemple_image_19:
-  :page: 66
+  :page: 67
   :paragraph: 854
   :text: exemple_image_19
 :images_images_flottantes:
-  :page: 67
+  :page: 68
   :paragraph:
   :text: images_images_flottantes
 :images_format_legende:
-  :page: 76
+  :page: 77
   :paragraph:
   :text: images_format_legende
 :bibliographies_grand_titre:
-  :page: 79
+  :page: 80
   :paragraph:
   :text: bibliographies_grand_titre
 :bibliographies_introduction:
-  :page: 79
+  :page: 80
   :paragraph:
   :text: bibliographies_introduction
 :bibliographies_customisation:
-  :page: 82
+  :page: 83
   :paragraph:
   :text: bibliographies_customisation
 :expert_grand_titre:
-  :page: 87
+  :page: 88
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 87
+  :page: 88
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 87
+  :page: 88
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 87
+  :page: 88
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 88
+  :page: 89
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 89
+  :page: 90
   :paragraph:
   :text: expert_bibliographies
 :tutoriel_grand_titre:
-  :page: 89
+  :page: 90
   :paragraph:
   :text: tutoriel_grand_titre
 :tutoriel_installation:
-  :page: 92
+  :page: 94
   :paragraph:
   :text: tutoriel_installation
 :annexe_grand_titre:
-  :page: 94
+  :page: 96
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 98
+  :page: 100
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 98
+  :page: 100
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 98
-  :paragraph: 1137
+  :page: 100
+  :paragraph: 1158
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 98
+  :page: 100
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 99
+  :page: 101
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 99
+  :page: 101
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 100
+  :page: 102
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 104
+  :page: 106
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 104
+  :page: 106
   :paragraph:
   :text: annexe_installation_application
 :annexe__liste_exhaustive_features_:
-  :page: 104
+  :page: 106
   :paragraph:
   :text: annexe__liste_exhaustive_features_

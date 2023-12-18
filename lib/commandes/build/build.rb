@@ -256,6 +256,10 @@ class PdfBook
     pdf = PrawnView.new(self, pdf_config)
     @pdf = pdf
 
+    # Pour définir la constante Prawn4book::LINE_HEIGHT
+    # (qui pourra être utilisé dans les codes utilisateur)
+    pdf.line_height = recipe.line_height
+
     # Détruire le fichier PDF final s'il existe déjà
     # (note : il existe toujours si c'est un deuxième tour)
     # 

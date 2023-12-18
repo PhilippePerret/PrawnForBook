@@ -200,14 +200,6 @@ class NImage < AnyParagraph
 
     pdf.update do
 
-      # On passe à la ligne, sauf quand l’image occupe toute la
-      # page
-      unless (my.calc_height + my.legend_height + my.vadjust) >= bounds.height
-        final_line = line_height - line_height / 2
-        move_down(final_line)
-        data_image[:at][1] += final_line if data_image.key?(:at)
-      end
-
       # S’il y a de l’espace à laisser avant
       if my.space_before != 0
         data_image[:at][1] -= my.space_before if data_image.key?(:at)

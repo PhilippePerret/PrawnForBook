@@ -60,13 +60,20 @@ class PrawnView
     # puts "Current line updatée : #{current_line}".bleu
   end
 
-  # - raccourci -
+  # @return la hauteur de ligne courante 
+  # 
+  # @note
+  #   Noter la tournure de la définition, qui permet de définir
+  #   la constante LINE_HEIGHT
+  # 
   def line_height
-    @line_height ||= book.recipe.line_height
+    @line_height ||= line_height=(book.recipe.line_height)
   end
   def line_height=(value)
     @line_height = value
     leadings.merge!(page_number => {line_height: value})
+    Prawn4book.send(:remove_const, 'LINE_HEIGHT') if defined?(LINE_HEIGHT)
+    Prawn4book.const_set('LINE_HEIGHT', value)
   end
 
   def leading
