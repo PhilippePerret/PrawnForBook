@@ -49,6 +49,9 @@ class InputTextFile
     book.reset
     PdfBook::NTextParagraph.reset
     File.readlines(path, **{chomp:true}).map.with_index do |par_str, idx|
+
+      PFBFatalError.context = "Parse du paragraphe #{par_str.inspect} [idx:#{idx}]"
+
       if par_str.match?(REG_INCLUSION)
         # -- Fichier inclus --
         InputTextFile.new(book, included_file_path(par_str.match(REG_INCLUSION)[:code])).parse_and_write(pdf)

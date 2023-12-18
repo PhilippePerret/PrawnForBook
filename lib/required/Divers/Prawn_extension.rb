@@ -38,83 +38,11 @@
 
 require 'prawn/table'
 
-class Prawn::Document
-  
-  def add_content_length_to_current_page(len)
-    @book ||= Prawn4book::PdfBook.ensure_current
-    page = @book.pages[page_number] || begin
-      @book.add_page(page_number)
-    end
-    page.add_content_length(len)
-    page[:first_par] = 1 # sinon n'imprime pas le numéro
-  end
-
-  # #text utilise forcément formatted_text, donc c'est seulement
-  # dans la seconde méthode qu'on regarde s'il faut ajouter du
-  # contenu. Mais on garde quand même ce wrapper, au cas où, pour
-  # l'avenir.
-  alias_method :__real_text, :text
-  def text(str, **params)
-    __real_text(str, **params)
-  end
-
-  alias_method :__real_draw_text, :draw_text
-  def draw_text(str, **params)
-    # puts "-> draw_text".bleu
-    add_content_length_to_current_page(str.to_s.length)
-    __real_draw_text(str, **params)
-  end
-  alias_method :__real_formatted_text, :formatted_text
-  def formatted_text(str, **params)
-    # puts "-> formatted_text".bleu
-    is_titre = params.delete(:is_title)
-    add_content_length_to_current_page(str.to_s.length) unless is_titre
-    __real_formatted_text(str, **params)
-  end
-  alias_method :__real_formatted_text_box, :formatted_text_box
-  def formatted_text_box(str, **params)
-    # puts "-> formatted_text_box".bleu
-    add_content_length_to_current_page(str.to_s.length)
-    __real_formatted_text_box(str, **params)
-  end
-  alias_method :__real_text_box, :text_box
-  def text_box(str, **params)
-    # puts "-> text_box".bleu
-    add_content_length_to_current_page(str.to_s.length)
-    __real_text_box(str, **params)
-  end
-  alias_method :__real_image, :image
-  def image(ipath, **params)
-    add_content_length_to_current_page(100)
-    __real_image(ipath, **params)
-  end
-  # TODO IDEM AVEC : text_box, formatted_text,
-  # formatted_text_box,
-end
-
-
-module PrawnTableCellTextExtension
-  def keep_with_next=(value)
-    value = nil if value === false
-    @_keep_with_next = value
-  end
-  def keep_with_next?
-    not(@_keep_with_next.nil?)
-  end
-  def keep_with_next
-    if @_keep_with_next === true
-      1
-    else 
-      @_keep_with_next
-    end
-  end
-end
-
-
 module Prawn
 module Text
 
   # Narrow no-break-space
+  # (ne semble pas exploitable)
   NNBSP = "\u202F"
   
   module Formatted
@@ -124,16 +52,6 @@ module Text
       end
     end #/class Box
   end #/module Formatted
-
-  # # Méthode #text surclassée pour que le leading soit toujours
-  # # appliqué en fonction de la hauteur de ligne courante (grille de
-  # # référence).
-  # # 
-  # alias :real_text :text
-  # def text(str, **options)
-  #   options.merge!(leading: current_leading)
-  #   real_text(str, **options)
-  # end
 
   def at=(coor)
     @at = coor
@@ -240,3 +158,59 @@ module Prawn
     end #/class Cell
   end #/class Table
 end #/module Prawn
+
+
+class Prawn::Document
+  
+  def add_content_length_to_current_page(len)
+    @book ||= Prawn4book::PdfBook.ensure_current
+    page = @book.pages[page_number] || begin
+      @book.add_page(page_number)
+    end
+    page.add_content_length(len)
+    page[:first_par] = 1 # sinon n'imprime pas le numéro
+  end
+
+  # #text utilise forcément formatted_text, donc c'est seulement
+  # dans la seconde méthode qu'on regarde s'il faut ajouter du
+  # contenu. Mais on garde quand même ce wrapper, au cas où, pour
+  # l'avenir.
+  alias_method :__real_text, :text
+  def text(str, **params)
+    __real_text(str, **params)
+  end
+
+  alias_method :__real_draw_text, :draw_text
+  def draw_text(str, **params)
+    # puts "-> draw_text".bleu
+    add_content_length_to_current_page(str.to_s.length)
+    __real_draw_text(str, **params)
+  end
+  alias_method :__real_formatted_text, :formatted_text
+  def formatted_text(str, **params)
+    # puts "-> formatted_text".bleu
+    is_titre = params.delete(:is_title)
+    add_content_length_to_current_page(str.to_s.length) unless is_titre
+    __real_formatted_text(str, **params)
+  end
+  alias_method :__real_formatted_text_box, :formatted_text_box
+  def formatted_text_box(str, **params)
+    # puts "-> formatted_text_box".bleu
+    add_content_length_to_current_page(str.to_s.length)
+    __real_formatted_text_box(str, **params)
+  end
+  alias_method :__real_text_box, :text_box
+  def text_box(str, **params)
+    # puts "-> text_box".bleu
+    add_content_length_to_current_page(str.to_s.length)
+    __real_text_box(str, **params)
+  end
+  alias_method :__real_image, :image
+  def image(ipath, **params)
+    add_content_length_to_current_page(100)
+    __real_image(ipath, **params)
+  end
+  # TODO IDEM AVEC : text_box, formatted_text,
+  # formatted_text_box,
+end
+

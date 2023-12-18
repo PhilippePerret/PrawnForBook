@@ -28,6 +28,10 @@ class PFBFatalError < StandardError
   # Pour ajouter du contexte (c'est-à-dire mieux savoir où se 
   # déclenche et surtout "pour quoi" se déclenche une erreur)
   # 
+  # @syntax
+  #     
+  #   PFBFatalError.context = "<le contexte>"
+  # 
   @@context = nil
 
   def self.context=(value)
