@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Page en double-colonnes"
+  titre "Page en multi-colonnes"
 
   description <<~EOT
     On peut provisoirement passer en double colonnes grâce à la marque :
@@ -17,11 +17,16 @@ Prawn4book::Manual::Feature.new do
 
     On peut définir la goutière (espace entre chaque colonne) grâce à la propriété `gutter` à mettre en deuxième paramètre :
     (( line ))
-    {-}`\\(( colonnes\\(2, 40) ))`
+    {-}`\\(( colonnes\\(2, gutter: 40) ))`
+    (( line ))
+    On peut définir aussi sur quelle largeur les colonnes devront tenir, par exemple la moitié de la page :
+    {-}`\\(( colonnes\\(2, width: PAGE_WIDTH/2) ))^^`
+    (( line ))
+    ^^ Vous remarquez ci-dessus l’utilisation d’une constante (cf. [[annexe/constantes]]).
 
     #### Précaution pour les colonnes
 
-    Attention à toujours terminer par `\\(( colonnes\\(1) ))`, surtout si c’est la dernière page, dans le cas contraire les pages multi-colonnes se seraient pas gravées.
+    Attention à toujours terminer par `\\(( colonnes\\(1) ))`, surtout si c’est la dernière page, dans le cas contraire les pages multi-colonnes ne seraient pas gravées.
     EOT
 
   # sample_texte <<~EOT #, "Autre entête"
@@ -29,11 +34,16 @@ Prawn4book::Manual::Feature.new do
   #   EOT
 
   texte <<~EOT
+    Un premier paragraphe qui commence en simple colonne. Juste sous ce paragraphe, on a inscrit le code (invisible ici) : `\\(( colonnes\\(3) ))` qui permet de passer la suite en triple colonnes.
     (( colonnes(3) ))
-    Juste avant cette ligne on trouve la marque `\\(( colonnes\\(3) ))` qui permet de faire passer ce texte en trois colonnes.
-    #{"In mollit anim veniam est ut officia sit mollit est est dolor consequat cillum. " * 20}
+    #{"In mollit anim veniam est ut officia sit mollit est dolor consequat cillum. " * 20}
     (( colonnes(1) ))
     On revient ensuite à un texte sur une colonne avec la marque `\\(( colonnes\\(1) ))`. Et c’est la fin de l’usage des colonnes multiples, on revient sur une page normale.
+    La double colonne suivante est obtenue quant à elle grâce au code : `\\(( colonnes\\(2, width:PAGE_WIDTH/1.5, gutter:50) ))` qui est placé juste sous cette ligne.
+    (( colonnes(2, width:PAGE_WIDTH/1.5, gutter:50) ))
+    #{"In mollit anim veniam est ut officia sit mollit est dolor consequat cillum. " * 30}
+    (( colonnes(1) ))
+    On revient à nouveau à un texte sur une colonne avec la marque `\\(( colonnes\\(1) ))`.
     EOT
 
 end

@@ -31,3 +31,51 @@
   :page: 19
   :paragraph:
   :text: format_double_colonnes
+:annexe_grand_titre:
+  :page: 23
+  :paragraph:
+  :text: annexe_grand_titre
+:annexe_reconstruction_manuel:
+  :page: 26
+  :paragraph:
+  :text: annexe_reconstruction_manuel
+:annexe_markdown_all_marks:
+  :page: 26
+  :paragraph:
+  :text: annexe_markdown_all_marks
+:all_markdown:
+  :page: 26
+  :paragraph: 78
+  :text: all_markdown
+:annexe_format_yaml:
+  :page: 26
+  :paragraph:
+  :text: annexe_format_yaml
+:annexe_font_string:
+  :page: 27
+  :paragraph:
+  :text: annexe_font_string
+:annexe_definition_couleur:
+  :page: 27
+  :paragraph:
+  :text: annexe_definition_couleur
+:images_rogner_svg:
+  :page: 28
+  :paragraph:
+  :text: images_rogner_svg
+:annexe_synopsis_creation:
+  :page: 32
+  :paragraph:
+  :text: annexe_synopsis_creation
+:annexe_installation_application:
+  :page: 32
+  :paragraph:
+  :text: annexe_installation_application
+:annexe_constantes:
+  :page: 32
+  :paragraph:
+  :text: annexe_constantes
+:annexe__liste_exhaustive_features_:
+  :page: 33
+  :paragraph:
+  :text: annexe__liste_exhaustive_features_

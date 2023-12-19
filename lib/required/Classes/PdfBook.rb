@@ -110,15 +110,10 @@ class PdfBook
     # - S’il y a une impression en colonnes multiples, il ne faut
     #   pas graver tout de suite -
     unless columns_box.nil?
-      if par.pfbcode?
-        puts "Paragraphe par.text #{(par.text).inspect}".orange
-        puts "Paragraphe par.raw_code #{(par.raw_code).inspect}".orange
-        if par.raw_code == 'colonnes(1)'
-          self.columns_box.print(pdf)
-          self.columns_box = nil
-       end
+      if par.pfbcode? && par.multi_columns_end?
+        self.columns_box.print(pdf)
+        self.columns_box = nil
       else
-        puts "Zappé car bloc colonne: Paragraphe #{(par.text||par.raw_code).inspect}"
         columns_box.add_paragraph(par)
       end
       return

@@ -35,8 +35,6 @@ class PFBCode < AnyParagraph
     case @raw_code.strip
     when REG_NEXT_PARAG_STYLE
       treat_as_next_parag_code 
-    when /^(?:colonne|column)s?\((.+?)\)$/ 
-      change_nombre_colonnes($1, nil)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Rien
     end
@@ -112,12 +110,12 @@ class PFBCode < AnyParagraph
   # 
   def change_nombre_colonnes(params_str, pdf)
     # return
-    spy(:on)
-    spy "-> Changement de colonne demandé : #{params_str}".jaune
     if params_str.match?(',')
       params_str = params_str.split(',').map { |e| e.strip }
       nombre_colonnes = params_str.shift.to_i.freeze
-      options = eval(params_str.join(', '))
+      options = params_str.join(', ')
+      options = "{#{options}}" unless options.start_with?('{')
+      options = eval(options)
     else
       nombre_colonnes = params_str.to_i.freeze
       options = {}
@@ -137,17 +135,6 @@ class PFBCode < AnyParagraph
       return
     end
     
-    # # S’il y a déjà un multi colonnage en route
-    if not(book.columns_box.nil?)
-      spy "Il y a un multi-colonnage en cours (que je dois imprimer)".jaune
-      if pdf.nil?
-        puts "\npdf est malheureusement nil, je ne peux pas imprimer".rouge
-        return
-      end
-      book.columns_box.print(pdf)
-      book.columns_box = nil
-    end
-
     # Si on veut plus d’une colonne, on indique que le prochain
     # paragraphe devra tenir sur ce nombre de colonnes
     if nombre_colonnes > 1
@@ -353,6 +340,10 @@ class PFBCode < AnyParagraph
 
   def for_next_paragraph?
     @is_for_next_paragraph === true
+  end
+
+  def multi_columns_end?
+    raw_code.match?(/^(colonne|column)s?\((|1)\)$/.freeze)
   end
 
   def line_height(new_height, dfonte = nil)

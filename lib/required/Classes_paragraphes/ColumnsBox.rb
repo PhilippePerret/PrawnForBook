@@ -20,17 +20,27 @@ class ColumnsBox
   end
 
   def print(pdf)
+    my = self
     @pdf = pdf
 
     options = {
       width: width||pdf.bounds.width, 
+      columns: column_count,
       spacer: gutter,
     }
 
-    pdf.column_box([0, pdf.cursor], **options) do
-      paragraphs.each do |paragraph|
-        # paragraph.print(pdf)
-        puts "Je dois écrire le paragraphe #{paragraph.pindex}"
+    text_options = {
+      align: :justify,
+      inline_format: true
+    }
+
+    pdf.update do
+      column_box([0, cursor], **options) do
+        my.paragraphs.each do |par|
+          # par.print(pdf)
+          par.prepare_and_formate_text(pdf)
+          text("#{par.string_indentation}#{par.text}", **text_options)
+        end
       end
     end
 

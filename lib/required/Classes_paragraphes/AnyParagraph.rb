@@ -42,7 +42,7 @@ class AnyParagraph
       # 
       context = { pdf:pdf, paragraph:self }
 
-      @text = AnyParagraph.__parse(text, context)
+      @text = AnyParagraph.__parse(text||raw_code||raw_text, context)
 
     end
   end
@@ -245,6 +245,7 @@ class AnyParagraph
   end
 
   # - Alignement du texte -
+
   def text_align
     @text_align || styles[:align] || styles[:text_align] || :justify 
   end
@@ -293,6 +294,11 @@ class AnyParagraph
 
   def width
     @width ||= styles[:width]
+  end
+
+  # Par défaut
+  def string_indentation
+    ""
   end
 
   # --- Volatile Data ---

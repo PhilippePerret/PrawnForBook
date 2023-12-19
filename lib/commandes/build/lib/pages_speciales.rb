@@ -21,12 +21,10 @@ class PrawnView
       1 => "Table des matières", 2 => nil, 3 => nil, 4 => nil, 5 => nil, 6 => nil, 
     }
     require 'lib/pages/table_of_content'
-    spy(:on)
     self.table_of_content = Prawn4book::Pages::TableOfContent.new(self)
     tdm.pages_number.each do |pnumber|
       self.table_of_content.build(self, pnumber) # mais seulement si elle est définie
     end
-    spy(:off)
   end
 
   ##

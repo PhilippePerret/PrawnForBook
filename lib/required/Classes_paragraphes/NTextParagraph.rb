@@ -244,7 +244,10 @@ class NTextParagraph < AnyParagraph
 
   def paragraph?; true  end
   def printed?  ; true  end
-  def some_text? ; true  end # seulement ceux qui contiennent du texte
+  
+  def some_text?
+    not(raw_text.nil? || raw_text.empty?) || not(raw_code.nil? || raw_code.empty?)
+  end
 
   def citation?     ; @is_citation      end
   def note_page?    ; @is_note_page     end

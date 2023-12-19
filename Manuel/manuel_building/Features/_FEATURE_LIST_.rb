@@ -24,8 +24,8 @@ module Prawn4book
   # TOUT_BIBLIO = TOUT || true
   # TOUT_FORMAT = TOUT || nil # format livre/page
   TOUT_FORMAT = TOUT || true
-  TOUT_ANNEXE = TOUT || nil
-  # TOUT_ANNEXE = TOUT || true
+  # TOUT_ANNEXE = TOUT || nil
+  TOUT_ANNEXE = TOUT || true
 
   #
   # @note
@@ -141,6 +141,7 @@ module Prawn4book
     TOUT_ANNEXE && 'images/rogner_svg',
     TOUT_ANNEXE && 'annexe/synopsis_creation',
     TOUT_ANNEXE && 'annexe/installation_application',
+    TOUT_ANNEXE && 'annexe/constantes',
     TOUT_ANNEXE && 'annexe/_liste_exhaustive_features_',
 
   ].compact
