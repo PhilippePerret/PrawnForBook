@@ -19,6 +19,15 @@ Voir `ghi`
 
 ## Réflexion
 
-Réflexion sur les indentations de paragraphe.
+### Réflexion sur les multi-colonnes
 
-Principe : puisqu’il ne faut qu’une longueur, on va toujours calculer l’indentation avec la même police et la même taille. Il pourra y avoir des erreurs ponctuelles mais pour le moment, je ne vois pas laquelle. Cette indentation est calculée avant même la construction, dès la définition dans la recette, ou bien lorsqu’elle est changée par du pfb-code.
+Il faudrait là aussi faire un traitement à part de Prawn pour pouvoir ajouter des fonctionnalités :
+* le reflow_margin à true par défaut (quand on passe à la page suivante, on repart automatiquement en haut de page)
+* le calcul automatique de la hauteur des multi-colonnes en fonction du contenu, pour prendre toujours le moins de place possible, au lieu d’aller toujours au bout de la page comme le fait Prawn de base
+
+Pour ce faire, on crée une nouvelle instance `Prawn::MultiColumns`
+
+Principe adopté : 
+1. On calcule la hauteur obtenue avec le nombre de colonnes voulues, et la gouttière, dans l’absolu, en fonction du texte donné.
+2. On regarde la place restante en bas de la page et l’on crée les premières colonnes (peut-être qu’elles suffiront si la place suffit)
+3. S’il y a un excédent, on passe à l’autre page et l’on poursuit la même chose, jusqu’à ce que tout le texte soit traité.
