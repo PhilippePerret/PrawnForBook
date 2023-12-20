@@ -50,26 +50,22 @@ class ColumnsBox
     # utiliser dans l’absolue, en fonction de la longueur du texte.
     # 
     hauteur_total = calc_height(pdf)
+    column_height = hauteur_total / column_count
+    h = column_height
+    unless params[:no_extra_line_height]
+      h += (column_count - 1) * pdf.line_height
+    end
+    ColumnData.height = h
 
-    # Largeur d’une colonne, avec sa gouttière
-    column_fullwidth = width / column_count
-    # Largeur d’une colonne, hors gouttière
-    column_width     = column_fullwidth - gutter
-    # Hauteur pour une des colonnes, dans l’absolu
-    column_height = (hauteur_total / column_count) #+ 6 * pdf.line_height
-    # Pour récupérer plus facilement les données
-    ColumnData.count      = column_count
-    ColumnData.full_width = column_fullwidth
-    ColumnData.width      = column_width
-    ColumnData.height     = column_height
-    ColumnData.gutter     = gutter
-
-
-    if space_before > 0
-      pdf.update do
-        move_down(my.space_before)
-        move_to_next_line
-      end
+    if space_before != 0
+      pdf.move_down(space_before)
+      pdf.update_current_line
+    end
+    pdf.move_to_next_line
+    if lines_before > 0
+      lines_before.times { pdf.move_to_next_line }
+    elsif lines_before < 0
+      lines_before.abs.times { pdf.move_to_previous_line }
     end
 
     # Maintenant qu’on a la hauteur que prend le texte avec les
@@ -81,7 +77,7 @@ class ColumnsBox
     # @noter que ça peut tenir sur des dizaines de pages, voire
     # tout le livre (même si ça ne serait pas très heureux…)
     # 
-    hrest = column_height.dup
+    hrest = ColumnData.height.dup
     while hrest > 0
       required_height = [hrest, pdf.cursor].min
       # required_height =
@@ -91,35 +87,50 @@ class ColumnsBox
       #     hrest + pdf.line_height * 4
       #   end
 
-      if Prawn4book.second_turn?
-        puts <<~EOT
+      # if Prawn4book.second_turn?
+      #   puts <<~EOT
 
-          Hauteur total (1 colonne) : #{hauteur_total}
-          Nombre de colonnes : #{column_count}
-          Hauteur de colonne : #{column_height}
-          hrest   : #{hrest}
-          Hauteur requise pour ce tour : #{required_height}
-          Cursor : #{pdf.cursor}
-          Nombre de segments restants : #{segments.count}
-          EOT
-        # exit 12 if Q.no?("Dois-je poursuivre ?".jaune)
-      end
+      #     Hauteur total (1 colonne) : #{hauteur_total}
+      #     Nombre de colonnes : #{ColumnData.count}
+      #     Hauteur de colonne : #{ColumnData.height}
+      #     hrest   : #{hrest}
+      #     Hauteur requise pour ce tour : #{required_height}
+      #     Cursor : #{pdf.cursor}
+      #     Nombre de segments restants : #{segments.count}
+      #     EOT
+      #   # exit 12 if Q.no?("Dois-je poursuivre ?".jaune)
+      # end
+
       build_columns_for_height(required_height)
       hrest = hrest - required_height
-      pdf.start_new_page
-      pdf.move_to_first_line
-    end
-
-
-    # S’il doit y avoir du texte après
-    if space_after > 0
-      pdf.update do
-        move_down(my.space_after)
-        move_to_closest_line
+      if hrest > 0
+        pdf.start_new_page
+        pdf.move_to_first_line
       end
     end
+    pdf.update_current_line
 
-  end
+    if lines_after > 0
+      lines_after.times { pdf.move_to_next_line }
+    elsif lines_after == 0
+      pdf.move_to_previous_line
+    elsif lines_after < 0
+      lines_after.abs.times { pdf.move_to_previous_line }
+    end
+
+    # Reste-t-il des segments ?
+    if segments.any?
+      puts "Il reste des segments dans un texte en double colonnes : #{segments.inspect}…".rouge
+      exit 12
+    end
+
+    # S’il doit y avoir du texte après
+    if space_after != 0
+      pdf.move_down(space_after)
+      pdf.move_to_closest_line
+    end
+
+  end #/print
 
   def build_columns_for_height(required_height)
     init_cursor = pdf.cursor.freeze
@@ -165,6 +176,26 @@ class ColumnsBox
     @gutter ||= (params[:gutter] || pdf.line_height).freeze
   end
 
+  def lines_before
+    @lines_before ||= begin
+      if params[:lines_before] === false
+        0
+      else
+        params[:lines_before] || 1
+      end
+    end
+  end
+
+  def lines_after
+    @lines_after ||= begin
+      if params[:lines_after] === false
+        0
+      else
+        params[:lines_after] || 1
+      end
+    end
+  end
+
   def space_before
     @space_before ||= (params[:space_before] || 0.0).freeze
   end
@@ -193,15 +224,10 @@ class ColumnsBox
       column_width = (width - (gutter * (column_count - 1)) ) # largeur en retirant les gouttières
       column_width = (column_width / column_count).freeze
 
-      # TODO: Je ne sais pas où, mais il y a une erreur quelque part
-      # car il ne faut compter la gouttière qu’entre les colonnes
-      # intérieures. Pour le moment, si on regarde la première triple
-      # colonne, on voit que la largeur de la dernière colonne n’atteint
-      # pas le bout (parce qu’on compte aussi la gouttière).
-      # Pourtant, ci-dessus, j’enlève bien le nombre - 1 de colonnes
-      # multiplié à la gouttière. Donc, s’il y a deux colonnes, 
-      # j’enlève seulement une fois la gouttière à la largeur 
-      # totale…
+      ColumnData.count      = column_count
+      ColumnData.width      = column_width
+      ColumnData.full_width = column_width + gutter
+      ColumnData.gutter     = gutter
 
       pdf.update do
         current_cursor = cursor.freeze

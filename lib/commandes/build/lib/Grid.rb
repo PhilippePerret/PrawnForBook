@@ -157,6 +157,7 @@ class PrawnView
   def move_to_prev_line
     move_to_line(current_line - 1)
   end
+  alias :move_to_previous_line :move_to_prev_line
 
   # # Ligne courante
   # # --------------
