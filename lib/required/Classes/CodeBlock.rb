@@ -5,7 +5,7 @@ class CodeBlock < ParagraphAccumulator
   attr_reader :language
 
   def initialize(book:, pindex:, language:)
-    super(book: book)
+    super(book)
     @pindex   = pindex # juste pour le situer en cas d’erreur
     @language = language
   end
@@ -20,6 +20,7 @@ class CodeBlock < ParagraphAccumulator
   #   codeur…
   # 
   def print(pdf)
+    super
     pdf.update do 
       font(Fonte.code_fonte)
     end

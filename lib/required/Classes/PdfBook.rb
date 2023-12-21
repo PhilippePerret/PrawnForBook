@@ -124,7 +124,7 @@ class PdfBook
         self.columns_box.print(pdf)
         self.columns_box = nil
       else
-        columns_box.add_paragraph(par)
+        columns_box << par
       end
       return
     end

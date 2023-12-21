@@ -2,6 +2,8 @@ module Prawn4book
 class PdfBook
 class ParagraphAccumulator
 
+  attr_reader :book, :pdf
+
   # @api stable group
   # 
   # Accumulateur de paragraphes
@@ -11,7 +13,7 @@ class ParagraphAccumulator
   # ou un bloc de commentaires.
   # 
 
-  def initialize(book:)
+  def initialize(book)
     @book       = book
     @paragraphs = []
   end
@@ -21,13 +23,19 @@ class ParagraphAccumulator
   end
   alias :<< :add
 
+  def print(pdf)
+    # Exposer
+    @pdf = pdf
+  end
+
   def count
     @paragraphs.count
   end
 
   def each_paragraph(&block)
     if block_given?
-      @paragraphs.each do |par, idx|
+      @paragraphs.each do |par|
+        pdf && par.prepare_and_formate_text(pdf)
         yield par
       end
     end

@@ -223,6 +223,10 @@ class AnyParagraph
 
   def text=(value); @text = value end
 
+  # Texte avec son indentation
+  def indented_text
+    @indented_text ||= "#{string_indentation}#{text}"
+  end
 
   # --- Méthodes d'aspect et de positionnement ---
 

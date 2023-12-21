@@ -1,8 +1,7 @@
 module Prawn4book
 class PdfBook
-class ColumnsBox
+class ColumnsBox < ParagraphAccumulator
 
-  attr_reader :book, :pdf
   #[Hash] La table des paramètres tels qu’ils ont été transmis
   attr_reader :params
   attr_reader :column_count, :gutter, :width
@@ -24,10 +23,12 @@ class ColumnsBox
   #     space_before:   Espace vide à laisser avant les colonnes
   #     space_after:    Espace vide à laisser après les colonnes
   # 
+  #     lines_before:   Nombre de lignes avant (default: 1)
+  #     lines_after:    Nombre de lignes après (default: 1)
+  # 
   def initialize(book, **params)
-    @book       = book
+    super(book)
     @params     = params
-    @paragraphs = []
   end
 
   def inspect
@@ -43,8 +44,9 @@ class ColumnsBox
   #   colonnes en fonction du texte pour avoir un traitement optimal.
   # 
   def print(pdf)
+    super
+
     my = self
-    @pdf = pdf
 
     # Dans un premier temps, il faut calculer la hauteur qu’il faudra
     # utiliser dans l’absolue, en fonction de la longueur du texte.
@@ -80,12 +82,6 @@ class ColumnsBox
     hrest = ColumnData.height.dup
     while hrest > 0
       required_height = [hrest, pdf.cursor].min
-      # required_height =
-      #   if pdf.cursor < hrest
-      #     pdf.cursor
-      #   else
-      #     hrest + pdf.line_height * 4
-      #   end
 
       # if Prawn4book.second_turn?
       #   puts <<~EOT
@@ -144,15 +140,6 @@ class ColumnsBox
         @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate))
       end
     end #/x nombre de colonnes
-  end
-
-  # Ajoute un paragraphe à cet affichage par colonne au cours
-  # du parsing du texte.
-  # 
-  # @param par [PfbBook::AnyParagraph]
-  #   Le paragraphe ajouté
-  def add_paragraph(par)
-    paragraphs << par
   end
 
   def text_options
@@ -232,9 +219,10 @@ class ColumnsBox
       pdf.update do
         current_cursor = cursor.freeze
         bounding_box([0,bounds.top], width: column_width, height: 1000000) do
-          my.paragraphs.each do |par|
-            par.prepare_and_formate_text(pdf)
-            str = "#{par.string_indentation}#{par.text}"
+          # my.paragraphs.each do |par|
+          my.each_paragraph do |par|
+            # par.prepare_and_formate_text(pdf)
+            str = par.indented_text
             p = []
             text_ary += text_formatter.format(str, *p)
           end

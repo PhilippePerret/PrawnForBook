@@ -286,7 +286,7 @@ private
       end
     end
   end
-  REG_CODE_RUBY_PROTECTED = /#\{\{\{(?<tiret>\-)?(?<code>.+)\}\}\}/.freeze
+  REG_CODE_RUBY_PROTECTED = /#{EXCHAR}#\{\{\{(?<tiret>\-)?(?<code>.+)\}\}\}/.freeze
   REG_CODE_RUBY = /#{EXCHAR}#\{(?<tiret>\-)?(?<code>.+?)\}/.freeze
 
 

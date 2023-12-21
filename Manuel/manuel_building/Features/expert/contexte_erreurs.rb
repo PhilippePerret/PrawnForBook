@@ -14,7 +14,7 @@ Prawn4book::Manual::Feature.new do
         # Indiquer le contexte
         PFBError.context = <<~EOC
           Dans la boucle de calcul et d’écriture du 
-          chiffre, avec i = \\\#{i}
+          chiffre, avec i = \\\\#\{i}
           EOC
         ecrire_ce_chiffre(i)
       end
