@@ -3,8 +3,15 @@ module Prawn4book
 
   FEATURES_TO_PAGE = {}
 
-  def self.consigne_page_feature(fname, page_title, page_number)
-    FEATURES_TO_PAGE.merge!(fname => {title:page_title, page:page_number})    
+  # On consigne cette fonctionnalité (son fichier)
+  # 
+  # @note
+  #   On le fait à son instanciation, alors que sa page n’est pas 
+  #   encore définie. Cette page sera définie pendant le premier
+  #   tour
+  def self.consigne_page_feature(fname, page_title)
+    # puts "Consignation de #{fname.inspect} (#{page_title})".jaune
+    FEATURES_TO_PAGE.merge!(fname => {title:page_title, page_number:nil})    
   end
   # = main =
   # 
@@ -25,7 +32,14 @@ module Prawn4book
           # 
           PFBError.context = "Chargement de la feature #{fname}"
           load fpath
-          Manual::Feature.last.filename = fname
+          # On prend l’instance
+          feat = Manual::Feature.last
+          # On indique le nom/chemin relatif
+          feat.filename = fname
+          # Pour les liens de type [[path/feature]], on mémorise la page
+          # courante avec le fichier (plus tard, on règlera aussi 
+          # le numéro de page)
+          consigne_page_feature(fname, feat.feature_title)
           PFBError.context = "Première impression de la feature #{fname}"
           Manual::Feature.last.print_with(pdf, book)
         else

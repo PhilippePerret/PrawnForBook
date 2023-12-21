@@ -3,111 +3,143 @@
   :page: 15
   :paragraph:
   :text: generalites_grand_titre
+:generalites_quick_overlook:
+  :page: 15
+  :paragraph:
+  :text: generalites_quick_overlook
 :generalites_forces_de_prawn:
   :page: 15
   :paragraph:
   :text: generalites_forces_de_prawn
+:minimales_grand_titre:
+  :page: 17
+  :paragraph:
+  :text: minimales_grand_titre
+:minimales_definition_marges:
+  :page: 18
+  :paragraph:
+  :text: minimales_definition_marges
 :recette_grand_titre:
-  :page: 16
+  :page: 21
   :paragraph:
   :text: recette_grand_titre
+:recette_recette_livre:
+  :page: 21
+  :paragraph:
+  :text: recette_recette_livre
+:recette_recette_collection:
+  :page: 21
+  :paragraph:
+  :text: recette_recette_collection
+:recette_definition_fonte:
+  :page: 22
+  :paragraph:
+  :text: recette_definition_fonte
+:recette_publisher:
+  :page: 22
+  :paragraph:
+  :text: recette_publisher
 :aide_grand_titre:
-  :page: 17
+  :page: 23
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 17
+  :page: 23
   :paragraph:
   :text: aide_manuel_et_autres_aides
+:aide_snippets:
+  :page: 23
+  :paragraph:
+  :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 17
+  :page: 24
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_exporter_texte:
-  :page: 18
+  :page: 25
   :paragraph:
   :text: aide_exporter_texte
 :format_grand_titre:
-  :page: 20
+  :page: 27
   :paragraph:
   :text: format_grand_titre
 :format_double_colonnes:
-  :page: 20
+  :page: 27
   :paragraph:
   :text: format_double_colonnes
 :expert_grand_titre:
-  :page: 23
+  :page: 30
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 23
+  :page: 30
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 23
+  :page: 30
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 23
+  :page: 30
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 24
+  :page: 31
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 25
+  :page: 32
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 25
+  :page: 32
   :paragraph:
   :text: expert_multi_colonnes
 :annexe_grand_titre:
-  :page: 26
+  :page: 33
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 30
+  :page: 36
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 30
+  :page: 36
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 30
-  :paragraph: 249
+  :page: 36
+  :paragraph: 350
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 30
+  :page: 36
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 31
+  :page: 37
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 31
+  :page: 37
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 32
+  :page: 38
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 36
+  :page: 42
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 36
+  :page: 42
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 36
+  :page: 42
   :paragraph:
   :text: annexe_constantes
 :annexe__liste_exhaustive_features_:
-  :page: 37
+  :page: 43
   :paragraph:
   :text: annexe__liste_exhaustive_features_

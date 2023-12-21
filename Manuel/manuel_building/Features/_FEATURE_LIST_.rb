@@ -2,32 +2,46 @@ module Prawn4book
 
   # TOUT = true # ou nil, attention ! (pas false)
   TOUT = nil
-  TOUT_RECETTE = TOUT || nil
-  # TOUT_RECETTE = TOUT || true
+
+  # TOUT_RECETTE = TOUT || nil
+  TOUT_RECETTE = TOUT || true
+  # 
+  # TOUT_DEF_MINI = TOUT || nil
+  TOUT_DEF_MINI = TOUT || true
+
   TOUT_PAGES_SPECS = TOUT || nil
   # TOUT_PAGES_SPECS = TOUT || true
+  # 
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
+  # 
   TOUT_PUCES = TOUT || nil
   # TOUT_PUCES = TOUT || true
+  # 
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
+  # 
   # TOUT_EXPERT = TOUT || nil
   TOUT_EXPERT = TOUT || true
+
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
+
   # TOUT_AIDE = TOUT || nil
   TOUT_AIDE = TOUT || true
+
   TOUT_REFS = TOUT || nil
   # TOUT_REFS = TOUT || true
+
   TOUT_BIBLIO = TOUT || nil
   # TOUT_BIBLIO = TOUT || true
+
   # TOUT_FORMAT = TOUT || nil # format livre/page
   TOUT_FORMAT = TOUT || true
+
   # TOUT_ANNEXE = TOUT || nil
   TOUT_ANNEXE = TOUT || true
 
-  #
   # @note
   #   Avec ’##’ devant, ce sont les fonctionnalités qui étaient "en
   #   route avant le changement du traitement de la recette"
@@ -36,16 +50,20 @@ module Prawn4book
 
     # -- Généralités --
     'generalites/grand_titre',
+    'generalites/quick_overlook',
     'generalites/forces_de_prawn',
     TOUT && 'generalites/deux_fichiers_de_base',
     TOUT && 'generalites/doubles_parentheses',
+
+    #--- Définitions minimales ---#
+    TOUT_DEF_MINI && 'minimales/grand_titre',
+    TOUT_DEF_MINI && 'minimales/definition_marges',
 
     #---Recette---#
     'recette/grand_titre',
     TOUT_RECETTE && 'recette/recette_livre',
     TOUT_RECETTE && 'recette/recette_collection',
     TOUT_RECETTE && 'recette/book_data',
-    TOUT_RECETTE && 'definition_marges',
     TOUT_RECETTE && 'definir_format_livre',
     TOUT_RECETTE && 'recette/definition_fonte',
     TOUT_RECETTE && 'recette/publisher',
@@ -71,6 +89,7 @@ module Prawn4book
     #---Aides conception---#
     TOUT_AIDE && 'aide/grand_titre',
     TOUT_AIDE && 'aide/manuel_et_autres_aides',
+    TOUT_AIDE && 'aide/snippets',
     TOUT_AIDE && 'aide/assistants',
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
@@ -111,6 +130,7 @@ module Prawn4book
     TOUT_BIBLIO && 'bibliographies/customisation',
 
     #---Format précis livre et pages ---
+    # 
     TOUT_FORMAT && 'format/grand_titre',
     TOUT_FORMAT && 'format/double_colonnes',
 

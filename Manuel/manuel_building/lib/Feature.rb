@@ -173,6 +173,7 @@ class Feature
   # 
   # Faire référence à une autre fonctionnalités
   # -------------------------------------------
+  # 
   # On peut faire très facilement référence à une autre fonction-
   # nalités, c’est-à-dire afficher son titre et sa page, en mettant
   # le chemin relatif au fichier entre doubles-crochets :
@@ -202,6 +203,26 @@ class Feature
   # 
   #     "les forces de prawn-for-book"
   # 
+  # Si on veut un titre tout à fait différent du titre de la fonctionnalité :
+  # 
+  #     [[titre particulier|dossier/feature]]
+  # 
+  # =>
+  # 
+  #     "titre particulier (page xxx)"
+  # 
+  # Et enfin, si l’on veut un autre format que "(page xxx)" pour 
+  # indiquer la page, on utile la marque '__page__' pour dire où
+  # doit être inscrit le numéro de la page :
+  # 
+  #     [["Le beau titre", page __page__|path/recette]]
+  # 
+  # =>
+  # 
+  #     "« Le beau titre », page 23"
+  # 
+  # (noter les apostrophes remplacés).
+  # 
   ################################################################
 
 
@@ -226,14 +247,14 @@ class Feature
     @book = book
 
 
-    if code_before
-      eval(code_before)
-    end
+    eval(code_before) if code_before
 
     saut_page if new_page?
 
-    # Mémoriser la première page de cette fonctionnalité
-    first_page_texte = pdf.page_number
+    # Mémoriser la première page de cette fonctionnalité et l’indiquer
+    # dans la liste
+    Prawn4book::FEATURES_TO_PAGE[filename][:page_number] = first_page_texte = pdf.page_number
+
     # L’exposer pour pouvoir l’utiliser dans les codes
     @first_page = first_page_texte
 
@@ -453,7 +474,8 @@ class Feature
       instance_eval(&block)
     end
     self.class.last = self
-  end
+  
+  end #/initialize
 
 
   # === BUILDING METHODS ===
@@ -709,9 +731,6 @@ class Feature
     str = "#{str}<-(#{filename_cible})"
     return str if @anchor_already_printed
     @anchor_already_printed = true
-    # Pour les liens de type [[path/feature]], on mémorise la page
-    # courante avec le fichier
-    Prawn4book.consigne_page_feature(filename, feature_title, pdf.page_number)
 
     # On retourne le titre avec ancre, mais pour le moment ça ne
     # fait rien.
@@ -882,9 +901,12 @@ class Feature
 
     def set_or_get(key, value = nil, entete = nil)
       if value.nil?
-        instance_variable_get("@#{key}")
+        # instance_variable_get("@#{key}")
+        val = instance_variable_get("@#{key}")
+        val = correct_string_value(val) if val.is_a?(String)
+        return val
       else
-        value   = correct_string_value(value) if value.is_a?(String)
+        # value = correct_string_value(value) if value.is_a?(String)
         if entete
           entete  = correct_string_value(entete) 
           instance_variable_set("@#{key}_entete", entete)
@@ -932,6 +954,10 @@ end #/<< self
 private
 
     def correct_string_value(v)
+      # if Prawn4book.second_turn?
+      #   puts "\nJe fais bien un second tour".jaune
+      #   exit 12
+      # end
       v = v.strip
       VARIABLES.each do |key, val|
         v = v.gsub(key, val)
@@ -940,26 +966,38 @@ private
         v = v.gsub(REG_LIEN_FEATURE){
           tirets = $~['tirets'].freeze
           path = $~['filename'].freeze
-          tit = $~['titre'].freeze # nil souvent
-          if tirets
-            if tit = Prawn4book::FEATURES_TO_PAGE[path]
-              tit = tit[:title].dup
+          feat_data = 
+            if Prawn4book.first_turn?
+              {}
             else
-              tit = "Unknown Title"
+               Prawn4book::FEATURES_TO_PAGE[path] || {} # quand page encore inexistante 
             end
+          # unless Prawn4book.first_turn?
+          #   puts "feat_data = #{feat_data.inspect}".bleu
+          #   sleep 4
+          # end
+          tit = $~['titre'] || feat_data[:title] || path
+          if tirets
             case tirets.length
             when 2 then tit = tit.downcase
             when 1 then tit[0] = tit[0].downcase
             end
             tit = "|#{tit}"
           end
-          "->(#{path.gsub('/','_')}#{tit})"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
+          if Prawn4book.first_turn?
+            "#{path.gsub('/','_')}#{tit}"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
+          else
+            if tit.match?('__page__')
+              tit.gsub('__page__', feat_data[:page_number].to_s)
+            else
+              "#{tit} (p. #{feat_data[:page_number]})"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
+            end
+          end
         }
       end
       return v    
     end
     REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?:(?<titre>.+?)\|)?(?<filename>.+?)\]\]/.freeze
-    # REG_LIEN_FEATURE = /\[\[(?<tirets>-+?)?(?<filename>.+?)\]\]/.freeze
 
     # @private
     def define_if_last_is_title
