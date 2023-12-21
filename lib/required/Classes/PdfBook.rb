@@ -71,10 +71,10 @@ class PdfBook
       end
     end
 
-    # TODO Bloc de code (ou d’autre chose ?)
     # Si un bloc de code est ouvert (par ~~~[langage])
     if @current_code_block && paragraph_str == '~~~'
-      # => C’est la fin du bloc de code
+      # <= fin du bloc de code
+      # => On doit l’imprimer
       @current_code_block.print(pdf)
       @current_code_block = nil
       return
@@ -97,7 +97,12 @@ class PdfBook
     # (ça a pu être fait avant avec une table)
 
     par || begin
-      par = AnyParagraph.instance_type_from_string(book:self, string:paragraph_str, indice:idx)
+      par = AnyParagraph.instance_type_from_string(
+        book:self, 
+        string:paragraph_str, 
+        indice:idx,
+        options: {is_code: not(@current_code_block.nil?)}
+      )
       if par.is_a?(NTable)
         @current_table = par
         return

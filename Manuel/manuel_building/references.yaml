@@ -23,87 +23,91 @@
   :page: 17
   :paragraph:
   :text: aide_erreurs_et_notices
+:aide_exporter_texte:
+  :page: 18
+  :paragraph:
+  :text: aide_exporter_texte
 :format_grand_titre:
-  :page: 19
+  :page: 20
   :paragraph:
   :text: format_grand_titre
 :format_double_colonnes:
-  :page: 19
+  :page: 20
   :paragraph:
   :text: format_double_colonnes
 :expert_grand_titre:
-  :page: 22
+  :page: 23
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 22
+  :page: 23
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 22
+  :page: 23
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 22
+  :page: 23
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 23
+  :page: 24
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 24
+  :page: 25
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 24
+  :page: 25
   :paragraph:
   :text: expert_multi_colonnes
 :annexe_grand_titre:
-  :page: 25
+  :page: 26
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 28
+  :page: 30
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 28
+  :page: 30
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 28
-  :paragraph: 241
+  :page: 30
+  :paragraph: 249
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 28
+  :page: 30
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 29
+  :page: 31
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 29
+  :page: 31
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 30
+  :page: 32
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 34
+  :page: 36
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 34
+  :page: 36
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 34
+  :page: 36
   :paragraph:
   :text: annexe_constantes
 :annexe__liste_exhaustive_features_:
-  :page: 35
+  :page: 37
   :paragraph:
   :text: annexe__liste_exhaustive_features_

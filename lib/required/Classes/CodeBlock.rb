@@ -28,10 +28,14 @@ class CodeBlock < ParagraphAccumulator
       par.prepare_and_formate_text(pdf)
       # Tous les espaces en début de texte doivent être remplacés
       # par des espaces insécables
-      str = par.text.gsub(/^( +)/.freeze){ ' ' * $1.length}
+      # str = par.text.gsub(/^( +)/.freeze){ ' ' * $1.length}
+      # Pour un code, on prend plutôt le texte original, sans le
+      # toucher
+      str = par.raw_text.gsub(/^( +)/.freeze){ ' ' * $1.length}
       pdf.text(str)
     end
     pdf.update_current_line
+    pdf.move_to_next_line
   end
 
 end #/class CodeBlock

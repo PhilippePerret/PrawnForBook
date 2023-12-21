@@ -18,6 +18,12 @@ class AnyParagraph
   # d’une image (s’il commence, donc, par un "!")
   def wrapped?  ; false end
 
+  # @return true si le paragraphe fait partie d’un bloc de code
+  # (sauf, normalement, si amorce ou fin)
+  def code?
+    self.is_code === true
+  end
+
   def has_unknown_target?
     @unknown_targets.any?
   end

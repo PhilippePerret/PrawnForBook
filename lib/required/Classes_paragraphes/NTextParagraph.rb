@@ -7,15 +7,18 @@ class NTextParagraph < AnyParagraph
   attr_reader :raw_text
   attr_reader :numero
 
-  def initialize(book:, raw_text:, pindex:)
+  def initialize(book:, raw_text:, pindex:, options: {})
     super(book, pindex)
     @type = 'paragraph'
     @raw_text = raw_text
-    #
-    # On regarde tout de suite la nature du paragraphe (item
-    # de liste ? citation ? etc. pour pouvoir faire un pré-traitement
-    # de son texte et pré-définir ses styles)
-    pre_parse_text_paragraph
+    if options[:is_code]
+      self.is_code = true
+    else
+      # On regarde tout de suite la nature du paragraphe (item
+      # de liste ? citation ? etc. pour pouvoir faire un pré-traitement
+      # de son texte et pré-définir ses styles)
+      pre_parse_text_paragraph
+    end
   end
 
   ##

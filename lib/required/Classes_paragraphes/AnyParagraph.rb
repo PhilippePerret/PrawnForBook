@@ -171,6 +171,10 @@ class AnyParagraph
 
   attr_reader :raw_code
 
+  # Pour indiquer que c’est un paragraphe de code (dans un bloc de
+  # code)
+  attr_accessor :is_code
+
   def initialize(book, pindex)
     @book   = book
     @pindex = pindex
@@ -385,7 +389,6 @@ class AnyParagraph
       end
     end
   end
-
 
   private
 

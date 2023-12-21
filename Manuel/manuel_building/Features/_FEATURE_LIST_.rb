@@ -74,6 +74,7 @@ module Prawn4book
     TOUT_AIDE && 'aide/assistants',
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
+    TOUT_AIDE && 'aide/exporter_texte',
 
     #__Texte_Details___#
     TOUT && 'texte_detail/grand_titre',
@@ -167,7 +168,6 @@ module Prawn4book
       placement_sur_ligne_quelconque
       change_margins_on_the_fly
       export_livre_numerique
-      export_text
 
       annexe/couleur_hexadecimale
 

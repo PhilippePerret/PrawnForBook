@@ -23,7 +23,7 @@ class << self
   # Par exemple, un +string+ commençant par "### " est un titre donc
   # une instance NTitre. Un string commençant par "| " et terminant
   # par " |" est une table, etc.
-  def instance_type_from_string(book:, string:, indice:)
+  def instance_type_from_string(book:, string:, indice:, options: {})
     case string
     when "" 
       EmptyParagraph.new(book:book, pindex:indice)
@@ -47,7 +47,7 @@ class << self
     when REG_TABLE
       NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
     else # sinon un paragraphe
-      NTextParagraph.new(book:book, raw_text:string, pindex:indice)
+      NTextParagraph.new(book:book, raw_text:string, pindex:indice, options: options)
     end    
   end
 

@@ -8,58 +8,6 @@
 
 
 
-<a name="init-book-pdf"></a>
-
-## Créer un livre
-
-Créer un livre avec ***Prawn-for-book*** consiste à créer deux choses [1], deux fichiers :
-
-* le **[fichier recette](#recipe) `recipe.yaml`** qui définit tous les aspects du livre, en dehors du contenu textuel lui-même,
-* le **[fichier texte](#text-file) `texte.pfb.md`** qui contient le texte du livre.
-
-> **[1]**
->
-> En réalité, il suffit même d’un seul fichier : le fichier texte avec le nom exact `texte.pfb.md`, et toutes les autres valeurs seront définies par défaut.
-
-Pour créer ces deux éléments de façon assistée, suivez simplement cette procédure :
-
-* Choisir le dossier dans lequel doit être créé le livre,
-* ouvrir une fenêtre Terminal dans ce dossier,
-* jouer la commande <console>pfb init</console>,
-* choisir de construire un nouveau livre,
-* suivre l’assistant pour définir les données du livre (ou n’en définissez aucune, vous aurez toujours le loisir de le faire plus tard).
-
-<a name="init-collection"></a>
-
-## Création d’une collection
-
-Avec **Prawn-for-book**, on peut aussi créer des collections, c’est-à-dire un ensemble de livres qui partageront les mêmes éléments, à commencer par la charte graphique. Plutôt que d’avoir à la copier-coller les informations de livre en livre (informations de mise en forme, de collaborateurs, d’édition, etc.), entrainant des opérations lourdes à chaque changement, on crée une collection qui définira les éléments communs et on met les livres dedans.
-
-Pour créer une collection :
-
-* Choisir le dossier dans lequel doit être créée la collection,
-* ouvrir une fenêtre Terminal à ce dossier,
-* jouer la commande <console>pfb init</console>,
-* choisir de construire une collection,
-* suivre l’assistant de création.
-
-> Tous les livres de la collection devront se trouver dans le dossier de la collection, à la racine.
->
-> ~~~bash
-> dossier_collection
-> 				|
-> 				|____ dossier_livre_1
-> 				|
-> 				|____ dossier_livre_2
-> 				|
-> 				|____ recipe_collection.yaml
-> 				|
-> 				|____ dossier_ressources
-> ~~~
->
-
-
-
 ---
 
 <a name="exporter-texte"></a>
