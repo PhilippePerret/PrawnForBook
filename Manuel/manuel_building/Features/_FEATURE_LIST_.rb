@@ -11,7 +11,10 @@ module Prawn4book
 
   TOUT_PAGES_SPECS = TOUT || nil
   # TOUT_PAGES_SPECS = TOUT || true
-  # 
+
+  TOUT_BOOK_FORMAT = TOUT || nil
+  # TOUT_BOOK_FORMAT = TOUT || true
+
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
   # 
@@ -36,8 +39,8 @@ module Prawn4book
   TOUT_BIBLIO = TOUT || nil
   # TOUT_BIBLIO = TOUT || true
 
-  # TOUT_FORMAT = TOUT || nil # format livre/page
-  TOUT_FORMAT = TOUT || true
+  # FORMAT_PRECIS = TOUT || nil # format livre/page
+  FORMAT_PRECIS = TOUT || true
 
   # TOUT_ANNEXE = TOUT || nil
   TOUT_ANNEXE = TOUT || true
@@ -57,7 +60,6 @@ module Prawn4book
 
     #--- Définitions minimales ---#
     TOUT_DEF_MINI && 'minimales/grand_titre',
-    TOUT_DEF_MINI && 'minimales/definition_marges',
 
     #---Recette---#
     'recette/grand_titre',
@@ -65,7 +67,8 @@ module Prawn4book
     TOUT_RECETTE && 'recette/recette_collection',
     TOUT_RECETTE && 'recette/book_data',
     TOUT_RECETTE && 'definir_format_livre',
-    TOUT_RECETTE && 'recette/definition_fonte',
+    TOUT_RECETTE && 'recette/definition_fontes',
+    TOUT_RECETTE && 'recette/fonte_par_defaut',
     TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#
@@ -131,8 +134,9 @@ module Prawn4book
 
     #---Format précis livre et pages ---
     # 
-    TOUT_FORMAT && 'format/grand_titre',
-    TOUT_FORMAT && 'format/double_colonnes',
+    FORMAT_PRECIS && 'format_precis/grand_titre',
+    FORMAT_PRECIS && 'format_precis/definition_marges',
+    FORMAT_PRECIS && 'format_precis/double_colonnes',
 
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',

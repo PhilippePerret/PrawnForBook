@@ -972,7 +972,7 @@ private
             else
                Prawn4book::FEATURES_TO_PAGE[path] || {} # quand page encore inexistante 
             end
-          tit = $~['titre'] || feat_data[:title] || path
+          tit = $~['titre'] || (feat_data[:title] && "« #{feat_data[:title]} »") || path
           if tirets
             case tirets.length
             when 2 then tit = tit.downcase
