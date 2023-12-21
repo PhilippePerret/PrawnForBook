@@ -24,31 +24,35 @@ class << self
   # une instance NTitre. Un string commençant par "| " et terminant
   # par " |" est une table, etc.
   def instance_type_from_string(book:, string:, indice:, options: {})
-    case string
-    when "" 
-      EmptyParagraph.new(book:book, pindex:indice)
-    when REG_TITRE
-      NTitre.new(book:book, titre:$2, level:$1.length, pindex:indice)
-    when REG_AMORCE_IMAGE
-      unless d = string.match(REG_OLD_IMAGE)
-        d = string.match(REG_NEW_IMAGE)
-      end
-      NImage.new(book:book, path:d[1], data_str:d[2], pindex:indice)
-    when REG_PFBCODE
-      PFBCode.new(book:book, raw_code:$1.strip, pindex:indice)
-    when REG_COMMENTS
-      EmptyParagraph.new(book:book, pindex:indice, text:$1.strip)
-    when REG_START_COMMENT
-      EmptyParagraph.new(book:book, pindex:indice, text:$1.strip).tap do |pa|
-        pa.is_comment= true
-      end
-    when REG_START_CODE_BLOCK
-      CodeBlock.new(book:book, pindex:indice, language:$1)
-    when REG_TABLE
-      NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
-    else # sinon un paragraphe
+    if options[:is_code]
       NTextParagraph.new(book:book, raw_text:string, pindex:indice, options: options)
-    end    
+    else
+      case string
+      when "" 
+        EmptyParagraph.new(book:book, pindex:indice)
+      when REG_TITRE
+        NTitre.new(book:book, titre:$2, level:$1.length, pindex:indice)
+      when REG_AMORCE_IMAGE
+        unless d = string.match(REG_OLD_IMAGE)
+          d = string.match(REG_NEW_IMAGE)
+        end
+        NImage.new(book:book, path:d[1], data_str:d[2], pindex:indice)
+      when REG_PFBCODE
+        PFBCode.new(book:book, raw_code:$1.strip, pindex:indice)
+      when REG_COMMENTS
+        EmptyParagraph.new(book:book, pindex:indice, text:$1.strip)
+      when REG_START_COMMENT
+        EmptyParagraph.new(book:book, pindex:indice, text:$1.strip).tap do |pa|
+          pa.is_comment= true
+        end
+      when REG_START_CODE_BLOCK
+        CodeBlock.new(book:book, pindex:indice, language:$1)
+      when REG_TABLE
+        NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
+      else # sinon un paragraphe
+        NTextParagraph.new(book:book, raw_text:string, pindex:indice, options: options)
+      end
+    end
   end
 
   # Méthodes utiles pour la numérotation
