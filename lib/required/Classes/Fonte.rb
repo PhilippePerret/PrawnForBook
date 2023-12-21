@@ -291,6 +291,12 @@ class << self
   def title7 ; @title7 ||= titre_default(7, 12.5) end
   alias :titre7 :title7
 
+  # [Prawn4book::Fonte] Fonte pour du code
+  # 
+  def code_fonte
+    @code_fonte ||= Fonte.new(name:'Courier', style: :regular, size: 12, hname: 'Code Fonte')  
+  end
+
   # @return [Prawn4book::Fonte] l'instance fonte par défaut ultime,
   # c'est-à-dire qu'elle existe toujours. 
   # 

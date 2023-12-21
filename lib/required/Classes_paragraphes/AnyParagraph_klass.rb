@@ -14,6 +14,7 @@ class AnyParagraph
   REG_COMMENTS      = /^<\!\-\-(.+)\-\-\>$/.freeze
   REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
   REG_END_COMMENT   = /(.*)\-\-\>$/.freeze
+  REG_START_CODE_BLOCK = /^#{EXCHAR}\~\~\~([a-zA-Z]+)?$/
 
 class << self
 
@@ -41,6 +42,8 @@ class << self
       EmptyParagraph.new(book:book, pindex:indice, text:$1.strip).tap do |pa|
         pa.is_comment= true
       end
+    when REG_START_CODE_BLOCK
+      CodeBlock.new(book:book, pindex:indice, language:$1)
     when REG_TABLE
       NTable.new(book:book, raw_lines:[$1.strip], pindex:indice)
     else # sinon un paragraphe

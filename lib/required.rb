@@ -27,6 +27,8 @@ require_relative 'required/Divers/PrawnOwner'
 module Prawn4book; class PdfBook < PrawnOwner; end; end
 module Prawn4book; class Collection < PrawnOwner; end; end
 
+require_relative 'required/Classes/ParagraphAccumulator'
+
 # - Tous les modules fonctionnels -
 Dir["#{__dir__}/required/**/*.rb"].each{|m|require(m)}
 

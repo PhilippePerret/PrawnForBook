@@ -72,6 +72,13 @@ class PdfBook
     end
 
     # TODO Bloc de code (ou d’autre chose ?)
+    # Si un bloc de code est ouvert (par ~~~[langage])
+    if @current_code_block && paragraph_str == '~~~'
+      # => C’est la fin du bloc de code
+      @current_code_block.print(pdf)
+      @current_code_block = nil
+      return
+    end 
 
     # Si un commentaire est ouvert (par <!-- sur une ligne)
     if @current_comment
@@ -93,6 +100,9 @@ class PdfBook
       par = AnyParagraph.instance_type_from_string(book:self, string:paragraph_str, indice:idx)
       if par.is_a?(NTable)
         @current_table = par
+        return
+      elsif par.is_a?(CodeBlock)
+        @current_code_block = par
         return
       elsif par.is_a?(EmptyParagraph) && par.comment?
         @current_comment = par
@@ -116,6 +126,13 @@ class PdfBook
       else
         columns_box.add_paragraph(par)
       end
+      return
+    end
+
+    # - Si le paragraphe appartient à un bloc de code -
+    # (pas d’impression immédiate)
+    if @current_code_block
+      @current_code_block << par
       return
     end
 

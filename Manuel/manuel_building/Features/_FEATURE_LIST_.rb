@@ -12,8 +12,8 @@ module Prawn4book
   # TOUT_PUCES = TOUT || true
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
-  TOUT_EXPERT = TOUT || nil
-  # TOUT_EXPERT = TOUT || true
+  # TOUT_EXPERT = TOUT || nil
+  TOUT_EXPERT = TOUT || true
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
   # TOUT_AIDE = TOUT || nil
@@ -124,6 +124,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/injection_code',
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
     TOUT_EXPERT && 'expert/bibliographies',
+    TOUT_EXPERT && 'expert/multi_colonnes',
 
     #---Tutoriel de prise en main---#
     # Note : en faire plutôt un livre séparé
