@@ -12,6 +12,9 @@ module Prawn4book
   TOUT_PAGES_SPECS = TOUT || nil
   # TOUT_PAGES_SPECS = TOUT || true
 
+  # TOUT_COMPORTEMENT = TOUT || nil
+  TOUT_COMPORTEMENT = TOUT || true
+
   TOUT_BOOK_FORMAT = TOUT || nil
   # TOUT_BOOK_FORMAT = TOUT || true
 
@@ -59,7 +62,7 @@ module Prawn4book
     TOUT && 'generalites/doubles_parentheses',
 
     #--- Définitions minimales ---#
-    TOUT_DEF_MINI && 'minimales/grand_titre',
+    TOUT_DEF_MINI && 'minimales/grand_titre', # Long texte
 
     #---Recette---#
     'recette/grand_titre',
@@ -74,6 +77,13 @@ module Prawn4book
     #---Contenu_textuel_(intro)---#
     TOUT && 'texte/grand_titre',
     TOUT && 'format_markdown_du_texte',
+
+    #--- Comportement de Prawn-for-book ---#
+    TOUT_COMPORTEMENT && 'comportement/grand_titre',
+    TOUT_COMPORTEMENT && 'comportement/align_on_reference_lines',
+    # Ajouter :
+    #  - colonnes multiples
+    #  - typographies (espaces avant ponctuation doubles, guillemets)
 
     #---PagesSpeciales---#
     TOUT_PAGES_SPECS && 'pages_speciales/grand_titre',
@@ -101,6 +111,7 @@ module Prawn4book
     #__Texte_Details___#
     TOUT && 'texte_detail/grand_titre',
     TOUT && 'texte_detail/indentation',
+    TOUT && 'texte_detail/hauteur_de_ligne',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',
@@ -178,7 +189,7 @@ module Prawn4book
       pagination/numeroter_pages_vierges
       pagination/aspect_numero
       pagination/numerotation
-      align_on_reference_lines
+      
       pages_initiales
       numerotation_des_paragraphes
       definir_police_par_defaut

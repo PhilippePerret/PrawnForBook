@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Les \"Fontes-Strings\""
+  titre "Les \"Fontes-String\""
 
   description <<~EOT
     Pour définir les polices dans les éléments, à commencer par la recette, on utilise de préférence ce qu’on appelle dans _PFB_ les "**fonte-string**" ("string" signifie quelque chose comme "caractère" en anglais).

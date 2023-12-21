@@ -49,10 +49,81 @@ Prawn4book::Manual::Feature.new do
     À titre de rappel, dans un livre, on ne définit pas les marges gauche et droite, entendu qu’elles sont différentes suivant qu’on se trouve sur une page gauche ou une page droite. On définit à la place les marges intérieures (`int`) et les marges extérieures (`ext`).
     Vous pouvez trouver tout ce qui concerne les marges dans la section [[format_precis/definition_marges]].
 
-    #### Polices du livre
+    #### Polices embarquées dans le livre
 
     Il y a fort à penser que la police par défaut de _PFB_, pour les textes et les titres, ne vous conviennent pas tout à fait. Il convient de la définir.
     Cette définition se fait en deux étapes : d’abord, il faut **informer** _PFB_ **des polices que vous voulez utiliser**, si elles ne font pas partie des polices par défaut, et ensuite indiquer **quelle police sera utilisée** pour tel ou tel élément du texte (texte général, titre de niveau 1, de niveau 2, etc.).
     Pour la définition des polices, nous vous renvoyons à la section [[recette/definition_fontes]] qui est parfaitement détaillée.
+    Brièvement, voilà ce qu’il faut définir quand on veut changer un minimum de choses :
+    (( line ))
+    ~~~yaml
+    #./recipe.yaml ou ../recipe_collection.yaml
+    fonts:
+      # Définition d’une fonte à embarquer
+      <nom utilisé pour la fonte>:
+        <style un>: "path/to/fichier/ttf"
+        <style deux>: "path/to/autrefichier/ttf"
+        etc.
+    ~~~
+    (( line ))
+    Par exemple :
+    (( line ))
+    ~~~yaml
+    #./recipe.yaml ou ../recipe_collection.yaml
+    fonts:
+      TexteDefaut:
+        normal: "fontes/MaFonte/regular.ttf"
+        italic: "fontes/MaFonte/italic.ttf"
+        bold: "fontes/MaFonte/gras.ttf"
+        bold_italic: "fontes/MaFonte/gras-italic.ttf"
+    ~~~
+    (( line ))
+    Noter, ci-dessus, les chemins relatifs. Cela signifie que les fontes seront recherchées dans un dossier `fontes` dans le dossier du livre (ou le dossier de la collection si c’est une collection).
+    Le nom défini (ci-dessus "TexteDefaut") sera le nom repris soit dans la définition des éléments (cf. ci-dessous) soit dans le texte, lorsqu’on voudra appliquer une fonte à du texte.
+
+    #### Police appliquée au texte normal
+
+    Le premier élément à définir, au niveau de la police à utiliser est bien évidemment le texte par défaut. Ça relève du texte (`text`) dans le format du livre (`book_format`). On définit simplement :
+    (( line ))
+    ~~~yaml
+    book_format:
+      text:
+        font: "TexteDefaut/normal/11/222222"
+    ~~~
+    (( line ))
+    C’est une définition qu’on appelle "fonte string" (prononcer "strine’gue"). Voir [[annexe/font_string]]. Noter qu’on utilise la police embarquée plus haut.
+
+    #### Fontes appliquées aux titres
+
+    On peut définir de la même manière les polices/styles/taille/couleur des niveaux de titre dont on a besoin. On le fait toujours dans `book_format`, puisque ça relève du format du livre, dans la section `titles` ("titres" en anglais).
+    (( line ))
+    ~~~yaml
+    book_format:
+      titles:
+        # Fonte générale qui servira pour tous les titres
+        font: "Numito/regular//555555"
+        title1:
+          font: "/regular/20"
+        title2:
+          font: "//16"
+        title3:
+          font: "/italic/14"
+        etc.
+    ~~~
+    (( line ))
+    Noter que les "fontes-string" n’ont jamais besoin de définir les quatre données fonte, style, taille et couleur. Une donnée non définie prendra toujours la valeur par défaut. Pour les titres, ci-dessus, par exemple, la police sera toujours *Numito*, police définie de façon générale pour les titres. De même que la couleur sera toujours `555555`, donc un noir un peu clair.
+
+
+    #### Hauteur de ligne
+
+    La *hauteur de ligne* (`line_height` en anglais) est une valeur très importante puisqu’elle va déterminer le positionnement de toutes les lignes de texte, entendu que, comme cela est expliqué dans la section [[comportement/align_on_reference_lines]].
+    Elle relève du format du livre donc se trouve dans `book_format`, et relève précisément du texte (`text`). On la définit donc ainsi :
+    (( line ))
+    ~~~yaml
+    book_format:
+      text:
+        line_height: <valeur en point-postscript>
+    ~~~
+    Cette valeur dépendra bien entendu de la taille de fonte utilisée par défaut dans le livre (cf. plus haut).
     EOT
 end
