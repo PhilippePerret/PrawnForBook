@@ -972,10 +972,6 @@ private
             else
                Prawn4book::FEATURES_TO_PAGE[path] || {} # quand page encore inexistante 
             end
-          # unless Prawn4book.first_turn?
-          #   puts "feat_data = #{feat_data.inspect}".bleu
-          #   sleep 4
-          # end
           tit = $~['titre'] || feat_data[:title] || path
           if tirets
             case tirets.length
