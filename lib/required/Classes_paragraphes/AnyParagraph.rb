@@ -309,6 +309,9 @@ class AnyParagraph
     ""
   end
 
+  def indentation; nil end
+  
+
   # --- Volatile Data ---
 
   ##

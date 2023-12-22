@@ -161,6 +161,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
+    TOUT_EXPERT && 'expert/formaters',
 
     #---Tutoriel de prise en main---#
     # Note : en faire plutôt un livre séparé

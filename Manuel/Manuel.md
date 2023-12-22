@@ -6,16 +6,6 @@
 
 [TOC]
 
-Pendant la conception du livre, on peut aussi définir dans la recette que cette grille doit être définie :
-
-~~~yaml
-book_format:
-	page:
-		show_grid: true # false par défaut
-~~~
-
-
-
 #### Toujours aligner les textes sur la grille de référence
 
 > Rappel : pour afficher la grille de référence, ajouter l'option `-grid` à la commande de construction du livre (ne pas oublier de l'enlever pour la version finale…)

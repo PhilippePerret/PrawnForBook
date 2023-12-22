@@ -56,7 +56,7 @@ class UserParagraph < AnyParagraph
       return
     end
 
-    @regular_paragraph = AnyParagraph.instance_type_from_string(@pdf, text, @index)
+    @regular_paragraph = AnyParagraph.instance_type_from_string(book:book, string:text, indice:@index, options:{pdf:@pdf})
     # Par défaut, il faut l’imprimer
     @print_it = true
 
@@ -64,7 +64,7 @@ class UserParagraph < AnyParagraph
     # vraiment pour le moment (c’est tiré de book.inject)
     if @regular_paragraph.is_a?(NTable)
       UserParagraph.current_table = @regular_paragraph
-    elsif @regular_paragraph.is_a?(Empty_paragraph) && @regular_paragraph.comment?
+    elsif @regular_paragraph.is_a?(EmptyParagraph) && @regular_paragraph.comment?
       UserParagraph.current_comment = @regular_paragraph
       @print_it = false
     end
