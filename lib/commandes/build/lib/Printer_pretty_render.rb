@@ -503,14 +503,25 @@ class << self
     end
     left ||= 0
 
-    right = options.delete(:right) || options.delete(:margin_right)
-    if options[:width]
-      right ||= left + options[:width]
-    end
-    right ||= pdf.bounds.width
+    # - Étude de :right et :width -
+    # Normalement, on ne doit pas pouvoir avoir les deux en même
+    # temps, car les deux définissent la même chose : la largeur du
+    # texte. Donc, si :width est défini, c’est elle seule qui fait
+    # autorité même si :right est défini, si :right seul est défini,
+    # il faut autorité
+    right = options.delete(:right) || options.delete(:margin_right) || 0
+    # - Largeur résultante -
+    width = 
+      if 
+        options[:width]
+      elsif right
+      elsif left
+        pdf.bounds.width - left
+      else
+        pdf.bounds.width
+      end
 
-    width = options[:width]
-    width ||= right - left
+    width = options[:width] || (pdf.bounds.width - (left + right))
 
     # Ce qu'il va rester dans les options
     # 
@@ -521,6 +532,7 @@ class << self
     # 
     options.merge!(
       at: [left, pdf.bounds.height],
+      align: options[:align] || :justify,
       width: width
     )
 

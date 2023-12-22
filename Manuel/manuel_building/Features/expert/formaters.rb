@@ -12,17 +12,16 @@ Prawn4book::Manual::Feature.new do
     def mon_helper(pdf)
 
       # On définit une fonte particulière
-      mafonte = Prawn4book::Fonte.new(name:'Garamond', size:13, \
+      mafonte = Prawn4book::Fonte.new(name:'Arial', size:8, \
         style: :normal)
 
       # On écrit le texte voulu dans le document.
       Printer.pretty_render(
-        pdf: pdf, 
-        fonte:mafonte, 
-        text: "Mon texte qui sera bien disposé sur les lignes \
-          de référence.",
-        options: {left: 20},
-        owner:nil,
+        pdf:      pdf, 
+        fonte:    mafonte, 
+        text:     "Mon texte qui sera bien disposé [etc.]",
+        options:  {left: 40, right: 80},
+        owner:    nil,
       )
     end
     ~~~
@@ -50,17 +49,17 @@ class PdfBook::NTextParagraph
         "lignes de référence malgré sa taille plus petite "+
         "que le texte normal de ce mode d’emploi. C’est une police "+
         "Arial, de taille 8, qui va se placer à 40 points de la " +
-        "marge gauche et à 30 points de la marge droite, car "+
+        "marge gauche et à 80 points de la marge droite, car "+
         "le :left des options a été mis à 40 et le :right a été "+
-        "mis à 30. Ça permet d’avoir un texte qui se place où on "+
-        "veut dans la page."
+        "mis à 80. Ça permet d’avoir un texte qui se place où on "+
+        "veut dans la page, plus serré que les marges."
 
     # On écrit le texte voulu dans le document.
     Printer.pretty_render(
       pdf: pdf, 
       fonte:mafonte, 
       text: str,
-      options: {left: 40, align: :justify},
+      options: {left: 40, right: 80},
       owner:nil,
     )
   end
