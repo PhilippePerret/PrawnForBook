@@ -87,7 +87,7 @@ class Recipe
   end
 
   def show_margins?
-    format_page[:show_margins] || CLI.option(:display_margins)
+    format_page[:show_margins] || CLI.option(:display_margins) || CLI.option(:margins)
   end
 
 end #/class Recipe

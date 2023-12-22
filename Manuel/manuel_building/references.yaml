@@ -63,8 +63,12 @@
   :page: 29
   :paragraph:
   :text: aide_erreurs_et_notices
-:aide_exporter_texte:
+:aide_afficher_grille_reference_et_marges:
   :page: 30
+  :paragraph:
+  :text: aide_afficher_grille_reference_et_marges
+:aide_exporter_texte:
+  :page: 31
   :paragraph:
   :text: aide_exporter_texte
 :format_precis_grand_titre:
@@ -76,11 +80,11 @@
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 37
+  :page: 36
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 40
+  :page: 39
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
@@ -100,58 +104,58 @@
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 42
+  :page: 43
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 42
+  :page: 43
   :paragraph:
   :text: expert_multi_colonnes
 :annexe_grand_titre:
-  :page: 43
+  :page: 44
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 46
+  :page: 48
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 46
+  :page: 48
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 46
-  :paragraph: 476
+  :page: 48
+  :paragraph: 491
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 46
+  :page: 48
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 47
+  :page: 49
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 47
+  :page: 49
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 48
+  :page: 50
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: annexe_constantes
 :annexe__liste_exhaustive_features_:
-  :page: 53
+  :page: 55
   :paragraph:
   :text: annexe__liste_exhaustive_features_

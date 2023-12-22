@@ -7,7 +7,7 @@ class PrawnView
 
   # Pour dessiner les marges sur toutes les pages (ou seulement
   # celles choisies)
-  # Option : -display_margins
+  # Option : -display_margins ou simplement -margins
   def draw_margins
     line_width(0.3)
 

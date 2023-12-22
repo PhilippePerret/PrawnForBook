@@ -7,7 +7,7 @@ Prawn4book::Manual::Feature.new do
     Cela se fait en utilisant le code `PFBError.context = \\"Le contexte\\"`.
     (( line ))
     ~~~ruby
-    \\# ruby
+    # ruby
     def monHelper(pdf, book)
 
       12.times do |i|

@@ -3,7 +3,7 @@ Prawn4book::Manual::Feature.new do
   show_margins(1..-1)
   new_page_before(:feature)
   # new_page_before(:recipe)
-  # new_page_before(:next)
+  new_page_before(:next)
 
   titre "Définition des marges"
 

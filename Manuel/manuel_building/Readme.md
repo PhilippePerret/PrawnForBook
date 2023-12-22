@@ -129,7 +129,7 @@ Prawn4book::Manual::Feature.new do
   
   # Si on doit définir une nouvelle hauteur de ligne
   line_height 30
-  # Si on doit afficher la ligne de référence
+  # Si on doit afficher les lignes de référence
   show_grid true
   
 end
