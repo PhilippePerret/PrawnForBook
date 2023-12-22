@@ -8,17 +8,19 @@ Prawn4book::Manual::Feature.new do
   titre "Définition des marges"
 
   description <<~EOT
+    ![marges.svg]
     Des marges par défaut sont proposées, mais vous pouvez tout à fait définir celles que vous voulez très précisément, dans la recette du livre ou de la collection.
-    La seule chose à comprendre, par rapport aux documents dont vous avez l'habitude, c'est qu'ici les pages sont doubles, en vis-à-vis, et définissent donc :
+    La seule chose à comprendre, par rapport aux documents dont vous avez l'habitude, c'est qu'ici les pages sont paire ou impaire, en vis-à-vis, et définissent donc :
 
     * une marge haute et une marge basse (traditionnelle),
 
-    * une marge intérieure, qui comme son nom l'indique est à l'intérieur du livre, contre le dos,
+    * une marge *intérieure*, qui comme son nom l'indique est à l'intérieur du livre, près de la reliure, de la *charnière*, du *dos du livre* (souvent confondu avec la *tranche du livre*),
 
-    * une marge extérieure, qui comme son nom l'indique est tournée vers l'extérieur du livre, vers la tranche (attention, la tranche du livre, ça n'est pas la partie qui reprend le titre du livre et son auteur, qu'on appelle le « dos »).
+    * une marge *extérieure*, qui comme son nom l'indique est tournée vers l'extérieur du livre, vers la tranche (la vraie cette fois).
 
-    Ces marges sont donc définies par les propriétés `top` (haut) `bot` (pour « bottom », bas), `ext` (pour « extérieur ») et `int` (pour « intérieur »).
+    Ces marges sont donc définies par les propriétés `top` ("haut" en anglais) `bot` (pour « bottom », "bas" en anglais), `ext` (pour « extérieur ») et `int` (pour « intérieur »).
 
+    NB : Quels que soient les réglages, il y aura toujours un *fond perdu* ("bleeding" en anglais) de 10 pps (points-postscript) autour de la page. C’est la "marge" que s’accorde l’imprimerie pour découper le livre.
     Traditionnellement, la marge intérieure est plus large que la marge extérieure, car une bonne partie de cette marge est prise dans la reliure.
     De la même manière, la marge basse est plus large que la marge haute car elle contient le numéro de page. Il peut cependant arriver que la marge haute contienne un entête.
 
