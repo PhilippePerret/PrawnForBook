@@ -3444,7 +3444,7 @@ book_format:
 >
 > **[7]**
 >
-> Si `true`, les marges sont dessinées à titre d’essai (`false` par défaut). Correspond à l’’option `-display_margins`.
+> Si `true`, les marges sont dessinées à titre d’essai (`false` par défaut). Correspond à l’’option `-margins`.
 >
 > **[8]**
 >

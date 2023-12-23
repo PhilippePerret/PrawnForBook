@@ -24,7 +24,7 @@ Prawn4book::Manual::Feature.new do
     Traditionnellement, la marge intérieure est plus large que la marge extérieure, car une bonne partie de cette marge est prise dans la reliure.
     De la même manière, la marge basse est plus large que la marge haute car elle contient le numéro de page. Il peut cependant arriver que la marge haute contienne un entête.
 
-    Pour régler parfaitement les marges, vous pouvez soit ajouter l'option `-display_margins` à la commande `pfb build` qui construit le livre, soit mettre le `show_margins` de la recette à true, comme nous l'avons fait ci-dessous.
+    Pour régler parfaitement les marges, vous pouvez soit ajouter l'option `-margins` à la commande `pfb build` qui construit le livre, soit mettre le `show_margins` de la recette à true, comme nous l'avons fait ci-dessous.
 
     Dans l'exemple ci-dessous nous avons volontaire *pousser* les valeurs pour rendre bien visibles les changements. 
     EOT

@@ -14,15 +14,16 @@ Prawn4book::Manual::Feature.new do
     **`pfb build -t#{' '*5}`** Exportation du livre
     **`pfb open#{' '*9}`** Ouvrir un élément quelconque.
     **`pfb install#{' '*6}`** Installer le livre (les snippets).
+    **`pfb calc#{' '*9}`** Pour effectuer des calculs (marges, couverture…).
 
     #### Options de la commande `build`
 
     La commande de construction du livre (**`build`**) supporte plusieurs options qui affectent son comportement :
     (( line ))
-    **`-open#{' '*13}`** Ouvrir le livre une fois construit.
-    **`-display_margins#{' '*2}`** Construit le livre avec les marges visibles.
-    **`-grid#{' '*13}`** Construit le livre avec les lignes de référence.
-    **`-debug#{' '*12}`** Affiche des messages d’erreur plus précis.
+    **`-open#{' '*9}`** Ouvrir le livre une fois construit.
+    **`-margins#{' '*6}`** Construit le livre avec les marges visibles.
+    **`-grid#{' '*9}`** Construit le livre avec les lignes de référence.
+    **`-debug#{' '*8}`** Affiche des messages d’erreur plus précis.
 
 
     EOT
