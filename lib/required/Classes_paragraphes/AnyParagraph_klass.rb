@@ -14,7 +14,9 @@ class AnyParagraph
   REG_COMMENTS      = /^<\!\-\-(.+)\-\-\>$/.freeze
   REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
   REG_END_COMMENT   = /(.*)\-\-\>$/.freeze
-  REG_START_CODE_BLOCK = /^#{EXCHAR}\~\~\~([a-zA-Z]+)?$/
+  REG_CODE_BLOCK    = /#{EXCHAR}(?:\~\~\~|\`\`\`)/.freeze
+  REG_END_CODE_BLOCk   = /^#{REG_CODE_BLOCK}$/.freeze 
+  REG_START_CODE_BLOCK = /^#{REG_CODE_BLOCK}([a-zA-Z]+)?$/.freeze
 
 class << self
 
