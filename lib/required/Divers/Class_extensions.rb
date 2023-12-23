@@ -91,3 +91,9 @@ class Symbol
   end
 
 end #/class Symbol
+
+class NilClass
+  def to_pps # quand une dimension n’est pas définie
+    nil
+  end
+end #/class NilClass

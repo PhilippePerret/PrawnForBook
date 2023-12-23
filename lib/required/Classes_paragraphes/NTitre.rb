@@ -183,7 +183,18 @@ class NTitre < AnyParagraph
       ###############################
       ###   IMPRESSION DU TITRE   ###
       ###############################
-      text(ftitre, **my.title_options)
+      if my.left || my.right
+        # --- CAS OÙ left OU right EST DÉFINI ---
+        lf = my.left || bounds.width - my.right - width_of(ftitre, **my.title_options)
+        w  = bounds.width - lf
+        sup_data = {at: [lf, cursor], width: w}
+        formatted_text_box([my.title_options.merge({text:ftitre})], sup_data)
+        # @note: Il peut y avoir des comportements imprévus, ici, en
+        # cas ce titre sur plusieurs lignes
+      else
+        # --- CAS NORMAL (sans left ni right) ---
+        text(ftitre, **my.title_options)
+      end
       move_to_next_line
 
       if me.alone?
@@ -265,13 +276,22 @@ class NTitre < AnyParagraph
   #   Cf. les wrappers Prawn créés.
   # 
   def title_options
-    @title_options ||= {
-      is_title: true, 
-      inline_format: true,
-      size:  self.size,
-      color: color,
-      align: align,
-    }.freeze
+    @title_options ||= begin
+      tbl = {
+        is_title: true, 
+        inline_format: true,
+        size:  self.size,
+        color: color,
+      }
+      if align 
+        tbl.merge!(align: align)
+      elsif right
+        tbl.merge!(right: right)
+      elsif left
+        tbl.merge!(left: left)
+      end
+      tbl.freeze
+    end
   end
 
   # --- Data Methods ---
@@ -291,6 +311,14 @@ class NTitre < AnyParagraph
 
   def align
     @align ||= PdfBook::NTitre.align(level)
+  end
+
+  def left
+    @left ||=  PdfBook::NTitre.left(level)
+  end
+
+  def right
+    @right ||=  PdfBook::NTitre.right(level)
   end
 
   def caps
@@ -408,7 +436,15 @@ class NTitre < AnyParagraph
   end
 
   def self.align(level)
-    get_data(:align, level, :left).to_sym
+    get_data(:align, level, nil).to_sym
+  end
+
+  def self.left(level)
+    get_data(:left, level, nil).to_pps
+  end
+
+  def self.right(level)
+    get_data(:right, level, nil).to_pps
   end
 
   def self.caps(level)
