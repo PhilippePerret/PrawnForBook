@@ -160,6 +160,19 @@ module Prawn
 end #/module Prawn
 
 
+module Prawn::Measurements
+  # Conversion manquante
+  def pt2in
+    self.to_f / 72
+  end
+  def pt2cm
+    self.pt2mm / 10
+  end
+  # def pt2in(pt)
+  #   pt.to_f / 72
+  # end
+end
+
 class Prawn::Document
   
   def add_content_length_to_current_page(len)

@@ -1,5 +1,8 @@
 module Prawn4book
 
+TYPO = {
+  colon: ' :', # pas d’espace en anglais  
+}
 TERMS = {
   A_class_method: "Une méthode de classe",
   Authors: 'Auteurs',
@@ -9,11 +12,13 @@ TERMS = {
   biblios: 'bibliographies',
   book_data: 'du livre',
   book_infos: 'informations (last page) sur le livre',
+  cm: 'centimètres',
+  coll_in_ide: 'La collection dans l’IDE',
+  coll_in_finder: 'La collection dans le Finder',
+  cover: 'la couverture',
   curbook_pdf: 'Le livre courant en PDF',
   curbook_in_ide: 'Le livre dans l’IDE (dossier)',
   curbook_in_finder: 'Le livre dans le Finder (dossier)',
-  coll_in_ide: 'La collection dans l’IDE',
-  coll_in_finder: 'La collection dans le Finder',
   custom: 'personnalisé',
   Custom: 'Personnalisé',
   date: 'date',
@@ -29,16 +34,21 @@ TERMS = {
   header: 'entête',
   headers_and_footers:'entêtes et pieds de page',
   Id: 'Identifiant',
+  inch:  'pouce',
+  in:  'pouce',
   inserted_pages: 'Page à insérer (faux-titre, etc.)',
   A_instance_method: 'Une méthode d’instance',
   int: 'Entier',
   Int: 'Entier',
+  int_margin: 'la marge intérieure',
   invalid_if: 'invalide si',
   Invalid_method: 'Méthode d’invalidation',
   ISBN: 'ISBN',
   manual_pfb: 'Le manuel de Prawn-For-Book',
   manual_prawn: 'Le manuel de Prawn',
   manual_prawn_table: 'Le manuel de Prawn::Table',
+  margins: 'les marges',
+  mm: 'millimètres',
   Name: 'Nom',
   no:   'non',
   other_default_values:'autres valeurs par défaut',
@@ -48,6 +58,7 @@ TERMS = {
   people: 'personne(s)',
   A_procedure: "Une procédure",
   Property_key: 'Clé de propriété',
+  pt: 'point',
   publisher:    'éditeur/maison d’édition',
   recipe_options: 'options (pagination, etc.)',
   required: 'requis',
@@ -71,6 +82,7 @@ PROMPTS = {
   # --- Généralités ---
   Abandon: 'Abandonner', # plus fort que "Renoncer"
   Action_to_run: "Action à accomplir",
+  Calc_: "Calculer…",
   cancel: 'Renoncer',
   choose_un: 'Choisir un %s',
   choose_le: 'Choisir le %s',
@@ -92,8 +104,10 @@ PROMPTS = {
   finir: 'Finir',
   Folder: 'Dossier : ',
   New: 'Nouveau',
+  Page_count: 'Nombre de pages',
   save: 'Enregistrer ',
   Type_of_data: 'Type de la donnée ',
+  Unit: 'Unité',
   Value: 'Valeur ',
 
   by_default: "par défaut",

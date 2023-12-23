@@ -181,6 +181,9 @@ ERRORS = {
     open: {
       dont_know_how_to: 'Je ne sais pas comment ouvrir %{ca}.'
     },
+    calc: {
+      dont_know_how_to: 'Je ne sais pas comment calculer %{ca}.'
+    },
   },
 
   # --- Aide ---

@@ -127,6 +127,7 @@ class PFBFatalError < StandardError
       252   => Prawn4book::ERRORS[:images][:logo_page_title_unfound],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
+      301   => Prawn4book::ERRORS[:commands][:calc][:dont_know_how_to],
       # -- Recette (voir aussi en 800) ---
       499   => Prawn4book::ERRORS[:recipe][:missing_even_default_data],
       500   => Prawn4book::ERRORS[:recipe][:credits_page][:require_info],
