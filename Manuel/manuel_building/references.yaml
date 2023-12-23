@@ -11,10 +11,10 @@
   :page: 15
   :paragraph:
   :text: generalites_forces_de_prawn
-:minimales_grand_titre:
+:minimales_definitions_minimales:
   :page: 17
   :paragraph:
-  :text: minimales_grand_titre
+  :text: minimales_definitions_minimales
 :recette_grand_titre:
   :page: 22
   :paragraph:
@@ -39,127 +39,139 @@
   :page: 24
   :paragraph:
   :text: recette_publisher
-:comportement_grand_titre:
+:texte_grand_titre:
   :page: 25
+  :paragraph:
+  :text: texte_grand_titre
+:format_markdown_du_texte:
+  :page: 25
+  :paragraph:
+  :text: format_markdown_du_texte
+:titres_titres:
+  :page: 25
+  :paragraph:
+  :text: titres_titres
+:comportement_grand_titre:
+  :page: 28
   :paragraph:
   :text: comportement_grand_titre
 :comportement_align_on_reference_lines:
-  :page: 26
+  :page: 29
   :paragraph:
   :text: comportement_align_on_reference_lines
 :aide_grand_titre:
-  :page: 28
+  :page: 31
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 28
+  :page: 31
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 28
+  :page: 31
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 29
+  :page: 32
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 30
+  :page: 33
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 31
+  :page: 34
   :paragraph:
   :text: aide_exporter_texte
 :format_precis_grand_titre:
-  :page: 32
+  :page: 35
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 33
+  :page: 36
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 36
+  :page: 39
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 39
+  :page: 42
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 40
+  :page: 43
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 40
+  :page: 43
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 40
+  :page: 43
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 41
+  :page: 44
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 43
+  :page: 46
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 43
+  :page: 46
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 44
+  :page: 47
   :paragraph:
   :text: expert_formaters
 :annexe_grand_titre:
-  :page: 45
+  :page: 48
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 48
+  :page: 52
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 48
+  :page: 52
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 48
-  :paragraph: 526
+  :page: 52
+  :paragraph: 594
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 48
+  :page: 52
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 49
+  :page: 53
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 49
+  :page: 53
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 50
+  :page: 54
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 54
+  :page: 58
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 54
+  :page: 58
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 54
+  :page: 58
   :paragraph:
   :text: annexe_constantes
 :annexe__liste_exhaustive_features_:
-  :page: 55
+  :page: 59
   :paragraph:
   :text: annexe__liste_exhaustive_features_

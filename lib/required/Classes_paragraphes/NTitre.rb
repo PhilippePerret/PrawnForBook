@@ -462,14 +462,6 @@ class NTitre < AnyParagraph
     def fonte(level)
       @fontes ||= {}
       @fontes[level] ||= data_fonte_level(level)
-      # puts <<~EOT.jaune
-
-      #   Level titre : #{level.inspect}
-      #   #{@fontes[level].inspect}
-      #   data_titles[#{level}] = #{data_titles['level'+level.to_s].inspect}
-      #   data_titles = #{data_titles.inspect}
-      #   EOT
-      # exit 12
     end
 
     # Retourne les données de fonte pour le titre de niveau +level+

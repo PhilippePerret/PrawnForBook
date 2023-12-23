@@ -5,7 +5,10 @@ module Prawn4book
 
   # TOUT_RECETTE = TOUT || nil
   TOUT_RECETTE = TOUT || true
-  # 
+
+  # TOUT_TEXTE = TOUT || nil
+  TOUT_TEXTE = TOUT || true
+
   # TOUT_DEF_MINI = TOUT || nil
   TOUT_DEF_MINI = TOUT || true
 
@@ -62,7 +65,7 @@ module Prawn4book
     TOUT && 'generalites/doubles_parentheses',
 
     #--- Définitions minimales ---#
-    TOUT_DEF_MINI && 'minimales/grand_titre', # Long texte
+    TOUT_DEF_MINI && 'minimales/definitions_minimales', # Long texte
 
     #---Recette---#
     'recette/grand_titre',
@@ -75,8 +78,9 @@ module Prawn4book
     TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#
-    TOUT && 'texte/grand_titre',
-    TOUT && 'format_markdown_du_texte',
+    TOUT_TEXTE && 'texte/grand_titre',
+    TOUT_TEXTE && 'format_markdown_du_texte',
+    TOUT_TEXTE && 'titres/titres',
 
     #--- Comportement de Prawn-for-book ---#
     TOUT_COMPORTEMENT && 'comportement/grand_titre',
@@ -185,7 +189,6 @@ module Prawn4book
   ].compact
 
 =begin
-      titres/titres
       pagination
       pagination/numeroter_pages_vierges
       pagination/aspect_numero

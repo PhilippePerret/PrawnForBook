@@ -102,11 +102,11 @@ Prawn4book::Manual::Feature.new do
       titles:
         # Fonte générale qui servira pour tous les titres
         font: "Numito/regular//555555"
-        title1:
+        level1:
           font: "/regular/20"
-        title2:
+        level2:
           font: "//16"
-        title3:
+        level3:
           font: "/italic/14"
         etc.
     ~~~

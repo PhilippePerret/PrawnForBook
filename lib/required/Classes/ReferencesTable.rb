@@ -59,6 +59,7 @@ class ReferencesTable
     end
     ref_id = ref_id.to_sym
     ref_data.merge!(text: ref_text)
+    # Double définition de référence
     if table.key?(ref_id)
       raise PFBFatalError.new(2001, {id: ref_id, page: ref_data[:page]})
     else

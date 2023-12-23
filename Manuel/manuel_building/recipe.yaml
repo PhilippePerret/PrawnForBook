@@ -51,10 +51,12 @@ book_format:
       alone: false
     level3:
       color: '0000AA'
+      left: 2cm
     level4:
       lines_before: 2
       lines_after:  1
       color: '00AA00'
+      right: 2cm
     level5:
       lines_before: 2
       lines_after: 1

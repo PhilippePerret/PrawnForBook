@@ -44,6 +44,9 @@ class Feature
   # 
   # On peut utiliser les méthode `titre’ ou `grand_titre’ pour défi-
   # nir le titre de la fonctionnalité.
+  # ATTENTION : utiliser seulement l’un ou l’autre, sinon, il y aura
+  # une erreur de double définition de référence. Si vraiment l’un et
+  # l’autre sont nécessaire, faire un fichier ’grand_titre’ à part.
   # 
   # Si l’on veut un "très grand titre", c’est-à-dire un titre qui se
   # placera sur une belle page et seul, il faut utiliser :
@@ -492,11 +495,22 @@ class Feature
 
   # === DEFINE METHODS (DSL) ===
 
+  ERREUR_DOUBLE_REF_TITRE = <<~EOT
+    On ne peut pas utiliser grand_titre et titre dans la même fonctionnalité !"
+    (faire un fichier séparé pour le grand titre, si indispensable)
+    EOT
+
   def grand_titre(value = nil)
+    if not(value.nil?) && not(@titre.nil?)
+      raise ERREUR_DOUBLE_REF_TITRE
+    end
     set_or_get(:grand_titre, value)
   end
 
   def titre(value = nil, level = 3)
+    if not(value.nil?) && not(@grand_titre.nil?)
+      raise ERREUR_DOUBLE_REF_TITRE
+    end
     return @titre if value.nil?
     @titre = {titre: correct_string_value(value), level: level}
   end
