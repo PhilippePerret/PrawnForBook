@@ -40,6 +40,16 @@ def reset
   @leadings = {}
 end
 
+# La fonte comme table de ses valeurs
+def values
+  {
+    name:   self.name,
+    style:  self.style,
+    size:   self.size,
+    color:  self.color
+  }
+end
+
 # Retourne les données pour la donnée :styles utilisée par exemple
 # dans formatted_text
 # 
@@ -201,15 +211,21 @@ class << self
   #   @option :name   [String]  Nom de la fonte
   #   @option :style  |Symbol]  Style de la fonte (tel que défini dans la recette)
   #   @option :size   [Numeric] Taille de la fonte (chaque taille possède sa propre instance)
+  #   @option :color  [String]  La couleur
   # 
-  def get_or_instanciate(dfont)
+  # @param return_default [Book]
+  #   Si true, on retourne une fonte par défaut en cas de fonte 
+  #   introuvable, sinon, on retourne nil (la méthode fournira alors
+  #   sa propre méthode par défaut)
+  # 
+  def get_or_instanciate(dfont, return_default = true)
 
     @fonts ||= {}
 
     # - Clé de consignation de la fonte -
     key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}:#{dfont[:color]}"
 
-    return @fonts[key_font] if @fonts.key?(key_font)
+    return @fonts[key_font] if @fonts.key?(key_font) || not(return_default)
 
     #
     # La fonte n'existe pas encore, il faut l'instancier et la
@@ -259,38 +275,6 @@ class << self
     new(name:fonte.name.dup, size:fonte.size.dup, style: fonte.style.dup, color: default.color.dup)
   end
 
-
-
-
-
-
-  # @return [Prawn4book::Fonte] L'instance fonte pour le niveau
-  # de titre +level+
-  def title(level)
-    self.send("title#{level}".to_sym)
-  end
-  alias :titre :title
-
-  # @return [Prawn4book::Fonte] Les instances fonte pour les titres
-  # des différents niveau, soit définis dans la recette du livre
-  # courant (livre ou collection) soit par défaut.
-  # 
-  # @api public
-  def title1 ; @title1 ||= titre_default(1, 24.5) end
-  alias :titre1 :title1
-  def title2 ; @title2 ||= titre_default(2, 22.5) end
-  alias :titre2 :title2
-  def title3 ; @title3 ||= titre_default(3, 20.5) end
-  alias :titre3 :title3
-  def title4 ; @title4 ||= titre_default(4, 18.5) end
-  alias :titre4 :title4
-  def title5 ; @title5 ||= titre_default(5, 16.5) end
-  alias :titre5 :title5
-  def title6 ; @title6 ||= titre_default(6, 14.5) end
-  alias :titre6 :title6
-  def title7 ; @title7 ||= titre_default(7, 12.5) end
-  alias :titre7 :title7
-
   # [Prawn4book::Fonte] Fonte pour du code
   # 
   def code_fonte
@@ -301,8 +285,10 @@ class << self
   # c'est-à-dire qu'elle existe toujours. 
   # 
   # @note
-  #   Soit elle retourne la première fonte définie dans la recette
-  #   Soit elle retourne la première fonte par défaut de Prawn
+  #   - Soit elle retourne la première fonte définie dans la recette
+  #     Soit elle retourne la première fonte par défaut de Prawn
+  #   - Pour obtenir tout de suite une duplication de cette fonte,
+  #     utiliser la méthode ::dup_default
   # 
   # @api public
   def default_fonte
@@ -398,30 +384,6 @@ class << self
   end
 
 
-  # @return [Prawn4book::Fonte] Instance pour un titre de niveau
-  # +level+ dont la taille sera mise à +size+ si le titre n'est pas
-  # défini dans la recette du livre ou de la collection.
-  # 
-  # @api private
-  def titre_default(level, size)
-    key_level = "level#{level}".to_sym
-    font_name, font_style, font_size =
-      if book && recipe.format_titles && (df = recipe.format_titles[key_level])
-        # spy "df (data titre level #{level}) : #{df.inspect}".orange
-        # 
-        # Si le style n'est pas défini, on prend le premier existant
-        # 
-        df[:style] || get_style_default_for_font(df[:font])
-        # 
-        # Array des données retourné
-        # 
-        [df[:font], df[:style], (df[:size]||size)]
-      else
-        ["Helvetica", :bold, size]
-      end
-    new(name:font_name, style:font_style, size:font_size, hname: "Fonte de titre ##{level}")
-  end
-
   # Pour les tests
   def reset
     (1..7).each do |niveau|
@@ -474,34 +436,38 @@ class FonteGetter
     @font = nil # @semantic
     data_font = table[:font]||table[:fonte]
     nom, style, taille, couleur = [nil, nil, nil, nil]
+    # Pour mettre les valeurs qui seraient exprimées en supplément,
+    # par valeur explicite (size: 12 par exemple)
+    spec_name, spec_style, spec_size, spec_color = [nil, nil, nil, nil]
     if data_font.is_a?(String)
       if data_font.match?('/')
-        nom, style, taille, couleur = data_font.split('/').map do |v|
-          v = nil if v == ''
-          v
-        end
+        nom, style, taille, couleur = data_font.split('/').map { |v| v.empty? ? nil : v }
         taille = taille && taille.to_pps
       else
         nom = data_font
       end
     else
+      # Old fashion
+      if table[:font_name]
+        spec_name = table[:font_name]
+      end
       if table[:size] || table[:font_size]
-        taille = (table[:size] || table[:font_size]).to_pps
+        spec_size = (table[:size] || table[:font_size]).to_pps
       end
       if table[:style] || table[:font_style]
-        style = table[:style] || table[:font_style]
+        spec_style = table[:style] || table[:font_style]
       end
       if table[:color] || table[:font_color]
-        couleur = table[:color] || table[:font_color]
+        spec_color = table[:color] || table[:font_color]
       end
     end
+    # On comble les manques avec les valeurs par défaut
+    nom     ||= spec_name  || default_name
+    taille  ||= spec_size  || default_size
+    style   ||= spec_style || default_style
+    couleur ||= spec_color || default_color
     # Si rien n’est défini, on renonce
     return nil if nom.nil? && style.nil? && taille.nil? && couleur.nil?
-    # Sinon, on comble par les valeurs par défaut
-    nom     ||= default_name
-    taille  ||= default_size
-    style   ||= default_style
-    couleur ||= default_color
     # On instancie la fonte
     @font = Fonte.get_or_instanciate(name:nom, style:style, size:taille, color:couleur)
   end

@@ -63,7 +63,7 @@ book_format:
       belle_page: false
       caps: "all-caps"
 
-  #</titles>
+  #/titles
 #/book_format
 
 inserted_pages:

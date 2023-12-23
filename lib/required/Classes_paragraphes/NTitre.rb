@@ -279,7 +279,7 @@ class NTitre < AnyParagraph
   # @return [Prawn4book::Fonte] Instance Fonte pour ce niveau de
   # titre
   def fonte
-    @fonte ||= Prawn4book::Fonte.title(level)
+    @fonte ||= PdfBook::NTitre.fonte(level)
   end
   def size
     @size ||= fonte.size
@@ -446,9 +446,56 @@ class NTitre < AnyParagraph
     end
   end
 
-  def self.data_titles
-    @@data_titles ||= PdfBook.current.recette.format_titles
-  end
+  DEFAULT_SIZES = {
+    1 => 24.5,
+    2 => 22.5,
+    3 => 20.5,
+    4 => 18.5,
+    5 => 16.5,
+    6 => 14.5,
+    7 => 12.5
+  }.freeze
+
+  class << self
+
+    # @return La fonte instanciée pour le titre de niveau +level+
+    def fonte(level)
+      @fontes ||= {}
+      @fontes[level] ||= data_fonte_level(level)
+      # puts <<~EOT.jaune
+
+      #   Level titre : #{level.inspect}
+      #   #{@fontes[level].inspect}
+      #   data_titles[#{level}] = #{data_titles['level'+level.to_s].inspect}
+      #   data_titles = #{data_titles.inspect}
+      #   EOT
+      # exit 12
+    end
+
+    # Retourne les données de fonte pour le titre de niveau +level+
+    def data_fonte_level(level)
+      dtitle = data_titles["level#{level}".to_sym]||{}
+      default_values = default_fonte.values.merge(size: DEFAULT_SIZES[level])
+      Fonte.get_in(dtitle, default_values).or_default
+    end
+
+    # @return la fonte par défaut pour tous les titres
+    # 
+    def default_fonte
+      @default_fonte ||= Fonte.get_in(data_titles).or_default
+    end
+
+    def data_titles
+      @data_titles ||= recipe.format_titles
+    end
+
+    # - Raccourci -
+    def recipe
+      PdfBook.current.recette
+    end
+
+  end #/<< self
+
 
 end #/class NTitre
 end #/class PdfBook

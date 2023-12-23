@@ -65,13 +65,14 @@ page_data:
   auteurs:    null
   isbn:       null
 #</page_data>
-#<publisher>
+
 publisher:
   logo_path:    null
-#</publisher>
-#
+#/publisher
+
+
 # --- FORMAT DU LIVRE ---
-#<book_format>
+
 book_format:
   book:
     width:        127mm
@@ -138,10 +139,8 @@ book_format:
       paragraph_format: '§ %{paragraph}'
       hybrid_format:  'p. %{page} § %{paragraph}'
   titles:
+    font: 'Helvetica/normal//000000'
     level1:
-      font_n_style:   *default2_font_n_style
-      font:           *default_font2
-      style:          *default_style2
       size:           30
       align:          left
       lines_before:   0
@@ -151,9 +150,6 @@ book_format:
       belle_page:     true
       alone:          true
     level2:
-      font_n_style:   *default2_font_n_style
-      font:           *default_font2
-      style:          *default_style2
       size:           22
       align:          left
       lines_before:   5
@@ -163,9 +159,6 @@ book_format:
       belle_page:     false
       alone:          false
     level3:
-      font_n_style:   *default2_font_n_style
-      font:           *default_font2
-      style:          *default_style2
       size:           18
       align:          left
       lines_before:   4
@@ -175,9 +168,6 @@ book_format:
       next_page:      false
       alone:          false
     level4:
-      font_n_style:   *default2_font_n_style
-      font:           *default_font2
-      style:          *default_style2
       size:           14
       align:          left
       lines_before:   3
@@ -187,9 +177,6 @@ book_format:
       belle_page:     false
       alone:          false
     level5:
-      font_n_style:   *default2_font_n_style
-      font:           *default_font2
-      style:          *default_style2
       size:           12
       align:          left
       lines_before:   2
@@ -199,9 +186,7 @@ book_format:
       belle_page:     false
       alone:          false
     level6:
-      font_n_style:   *default3_font_n_style
-      font:           *default_font2
-      style:          *default_style4
+      style:          :bold
       size:           11
       align:          left
       lines_before:   1
@@ -211,10 +196,7 @@ book_format:
       belle_page:     false
       alone:          false
     level7:
-      font_n_style:   *default3_font_n_style
-      font:           *default_font2
-      style:          *default_style4
-      size:           20
+      font:           '/italic/20'
       align:          center
       lines_before:   4
       lines_after:    0
@@ -223,7 +205,7 @@ book_format:
       belle_page:     false
       alone:          true
 
-#</book_format>
+#/book_format
 
 #
 # --- PAGES INSÉRÉES ---
