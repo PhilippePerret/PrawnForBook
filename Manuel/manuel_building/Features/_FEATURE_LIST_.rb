@@ -166,6 +166,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
     TOUT_EXPERT && 'expert/formaters',
+    TOUT_EXPERT && 'expert/modifier_line_height',
 
     #---Tutoriel de prise en main---#
     # Note : en faire plutôt un livre séparé

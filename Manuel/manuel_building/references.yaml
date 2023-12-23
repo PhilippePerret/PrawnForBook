@@ -127,8 +127,12 @@
   :page: 47
   :paragraph:
   :text: expert_formaters
-:annexe_grand_titre:
+:expert_modifier_line_height:
   :page: 48
+  :paragraph:
+  :text: expert_modifier_line_height
+:annexe_grand_titre:
+  :page: 49
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
@@ -141,7 +145,7 @@
   :text: annexe_markdown_all_marks
 :all_markdown:
   :page: 52
-  :paragraph: 594
+  :paragraph: 619
   :text: all_markdown
 :annexe_format_yaml:
   :page: 52
