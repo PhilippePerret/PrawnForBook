@@ -21,7 +21,6 @@ class ParagraphAccumulator
   def add(paragraph)
     @paragraphs << paragraph
   end
-  alias :<< :add
 
   def print(pdf)
     # Exposer
