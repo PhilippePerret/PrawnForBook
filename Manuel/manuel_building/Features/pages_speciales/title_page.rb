@@ -26,7 +26,6 @@ Prawn4book::Manual::Feature.new do
     * **`author`** | Définit l’aspect de l’affichage de l’*auteur* (ou des auteurs) par les propriétés `font` et `line` (ligne sur laquelle imprimer l’auteur)
     * **`collection`** | Définit l’aspect du titre de la collection à l’aide des propriété `font` et `line`.
     * **`publisher`** | Définit l’aspect de la maison d’édition ou de l’éditeur ("publisher" = éditeur). En plus des propriétés `font` et `line`, on trouve la propriété `logo` qui doit définir la taille en hauteur (`height`) et la ligne (`line`) du logo. On peut trouver aussi la propriété `path` qui conduit au logo si c’est une autre image que celle définie dans la recette (cf. [[recette/publisher]]).
-    * **`copyright`**
 
     #### Choix des lignes
 
@@ -59,8 +58,6 @@ Prawn4book::Manual::Feature.new do
             path: "chemin/vers/autre/logo"
             height: <hauteur>
             line:  <ligne>
-        copyright: |
-          <mention du copyright>
 
     YAML
 

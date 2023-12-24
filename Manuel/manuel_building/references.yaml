@@ -1,181 +1,205 @@
 ---
 :generalites_grand_titre:
-  :page: 15
+  :page: 17
   :paragraph:
   :text: generalites_grand_titre
 :generalites_quick_overlook:
-  :page: 15
+  :page: 17
   :paragraph:
   :text: generalites_quick_overlook
 :generalites_forces_de_prawn:
-  :page: 15
+  :page: 17
   :paragraph:
   :text: generalites_forces_de_prawn
 :minimales_definitions_minimales:
-  :page: 17
+  :page: 19
   :paragraph:
   :text: minimales_definitions_minimales
 :recette_grand_titre:
-  :page: 22
+  :page: 24
   :paragraph:
   :text: recette_grand_titre
 :recette_recette_livre:
-  :page: 22
+  :page: 24
   :paragraph:
   :text: recette_recette_livre
 :recette_recette_collection:
-  :page: 22
+  :page: 24
   :paragraph:
   :text: recette_recette_collection
 :recette_definition_fontes:
-  :page: 23
+  :page: 25
   :paragraph:
   :text: recette_definition_fontes
 :recette_fonte_par_defaut:
-  :page: 23
+  :page: 25
   :paragraph:
   :text: recette_fonte_par_defaut
 :recette_publisher:
-  :page: 24
+  :page: 26
   :paragraph:
   :text: recette_publisher
 :texte_grand_titre:
-  :page: 25
+  :page: 27
   :paragraph:
   :text: texte_grand_titre
 :format_markdown_du_texte:
-  :page: 25
+  :page: 27
   :paragraph:
   :text: format_markdown_du_texte
 :titres_titres:
-  :page: 25
+  :page: 27
   :paragraph:
   :text: titres_titres
 :comportement_grand_titre:
-  :page: 28
+  :page: 30
   :paragraph:
   :text: comportement_grand_titre
 :comportement_align_on_reference_lines:
-  :page: 29
+  :page: 31
   :paragraph:
   :text: comportement_align_on_reference_lines
 :aide_grand_titre:
-  :page: 31
+  :page: 33
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 31
+  :page: 33
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 31
+  :page: 33
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 32
+  :page: 34
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 33
+  :page: 35
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 34
+  :page: 36
   :paragraph:
   :text: aide_exporter_texte
+:pagination_titre_section:
+  :page: 37
+  :paragraph:
+  :text: pagination_titre_section
+:pagination_pagination:
+  :page: 37
+  :paragraph:
+  :text: pagination_pagination
+:pagination_aspect_numero:
+  :page: 37
+  :paragraph:
+  :text: pagination_aspect_numero
+:pagination_arret_pagination:
+  :page: 37
+  :paragraph:
+  :text: pagination_arret_pagination
+:pagination_numeroter_pages_vierges:
+  :page: 40
+  :paragraph:
+  :text: pagination_numeroter_pages_vierges
 :format_precis_grand_titre:
-  :page: 35
+  :page: 41
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 36
+  :page: 42
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 39
+  :page: 45
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 42
+  :page: 48
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 43
+  :page: 49
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 43
+  :page: 49
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 43
+  :page: 49
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 44
+  :page: 50
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 46
+  :page: 52
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 46
+  :page: 52
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 47
+  :page: 53
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 48
+  :page: 54
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 49
+  :page: 55
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 52
+  :page: 58
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 52
+  :page: 58
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 52
-  :paragraph: 619
+  :page: 58
+  :paragraph: 652
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 52
+  :page: 58
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 53
+  :page: 59
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 53
+  :page: 59
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 54
+  :page: 60
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 58
+  :page: 64
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 58
+  :page: 64
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 58
+  :page: 64
   :paragraph:
   :text: annexe_constantes
+:annexe_pages_dun_livre:
+  :page: 65
+  :paragraph:
+  :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 59
+  :page: 65
   :paragraph:
   :text: annexe__liste_exhaustive_features_

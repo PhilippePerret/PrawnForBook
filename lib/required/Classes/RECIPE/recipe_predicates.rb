@@ -31,6 +31,10 @@ class Recipe
     !!(inserted_pages[:page_de_titre]||inserted_pages[:title_page])
   end
 
+  def copyright?
+    :TRUE == @hascopyright ||= true_or_false(copyright && copyright.length > 10)
+  end
+
   def credits_page?
     !!(inserted_pages[:credits_page]||inserted_pages[:page_credits])
   end

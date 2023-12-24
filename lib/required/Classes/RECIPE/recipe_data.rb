@@ -492,6 +492,10 @@ class Recipe
     @page_index    ||= DATA[:page_index]||inserted_pages[:page_index]||inserted_pages[:index_page]
   end
 
+  def copyright
+    @copyright ||= inserted_pages[:copyright]
+  end
+
   def credits_page
     @credits_page   ||= inserted_pages[:credits_page]||inserted_pages[:page_credits]
   end

@@ -129,7 +129,7 @@ class PdfBook
         self.columns_box.print(pdf)
         self.columns_box = nil
       else
-        columns_box << par
+        columns_box.add(par)
       end
       return
     end
@@ -137,7 +137,7 @@ class PdfBook
     # - Si le paragraphe appartient à un bloc de code -
     # (pas d’impression immédiate)
     if @current_code_block
-      @current_code_block << par
+      @current_code_block.add(par)
       return
     end
 

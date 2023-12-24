@@ -22,13 +22,6 @@ class PageDeTitre
     # - Toujours sur une belle page -
     pdf.start_new_page if not(pdf.belle_page?)
 
-    # - Copyright -
-    # 
-    # S’il y a un copyright, il faut le mettre en regard de la 
-    # page de titre. Donc il faut revenir à la page précédente
-    # et le copier
-    print_copyright(pdf) if copyright?
-
     #
     # On indique qu'il ne faudra pas numéroter cette page, sauf
     # indication contraire dans la recette
@@ -78,7 +71,13 @@ class PageDeTitre
 
     pdf.update do
       fill_color(current_color)     # couleur originale
-    end #/pdf.update
+    end
+
+    # - Copyright -
+    # 
+    # S’il y a un copyright, il faut le mettre sur la page suivante
+    # 
+    print_copyright(pdf) if copyright?
 
   end
   # /build
@@ -146,8 +145,7 @@ class PageDeTitre
   # Écriture du COPYRIGHT
   # 
   # @note
-  #   On se trouve sur la page de titre, déjà. Donc il faut remonter
-  #   d’une page puis retourner ensuite à la page de titre.
+  #   On se trouve après la page de titre.
   # 
   def print_copyright(pdf)
     my = self
@@ -155,14 +153,13 @@ class PageDeTitre
     content = copyright_content
     copyright_options = {size:fonte.size - 3, align: :left}
     pdf.update do
-      current_page = page_number.freeze
-      go_to_page(current_page - 1)
-      book.page(current_page - 1).pagination = false
+      start_new_page
+      # La page de copyright n’est jamais numérotée
+      book.page(page_number).pagination = false
       font(fonte)
       h = height_of(content, **copyright_options)
       move_cursor_to(h + line_height)
       text(content, **copyright_options)
-      go_to_page(current_page)
     end
   end
 
@@ -174,7 +171,7 @@ class PageDeTitre
 
   # @return true s’il faut écrire un copyright
   def copyright?
-    data.key?(:copyright) && copyright_content && copyright_content.length > 10
+    book.recipe.copyright?
   end
 
   # Concernant le logo
@@ -246,7 +243,7 @@ class PageDeTitre
   end
 
   def copyright_content
-    @copyright_content ||= data[:copyright]
+    @copyright_content ||= book.recipe.copyright
   end
 
   # -- Calc Methods --

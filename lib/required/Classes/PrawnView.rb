@@ -149,8 +149,29 @@ class PrawnView
       PdfBook::AnyParagraph.reset_numero
     end
 
+  end #/start_newt_page
+
+  # Appelé pour suspendre la pagination des pages
+  # 
+  # @note
+  #   - Appelant en-ligne par (( stop_pagination ))
+  #   - La pagination sera reprise quand la méthode 
+  #     #restart_pagination sera invoquée.
+  # 
+  def stop_pagination
+    @pagination_is_stopped = true
   end
 
+  # Appelée pour reprendre une pagination interrompue par 
+  # #stop_pagination
+  # 
+  def restart_pagination
+    @pagination_is_stopped = false
+  end
+
+  def pagination_stopped?
+    @pagination_is_stopped === true
+  end
 
   # = Définition de la police courante =
   # 

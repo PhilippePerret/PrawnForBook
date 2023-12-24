@@ -1,6 +1,5 @@
 module Prawn4book
 
-
   def self.first_turn?
     @@turn == 1
   end
@@ -9,6 +8,10 @@ module Prawn4book
   end
   def self.third_turn?
     @@turn == 3
+  end
+
+  def self.turn
+    @@turn
   end
   def self.turn=(value)
     @@turn = value

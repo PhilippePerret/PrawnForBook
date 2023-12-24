@@ -57,8 +57,13 @@ class PFBCode < AnyParagraph
         start_new_page
         start_new_page if page_number.even?
       end
-    when 'tdm', 'toc', 'table_des_matieres','table_of_contents','table_of_content'
+    when 'tdm', 'toc', 'table_des_matieres','table_of_contents', \
+      'table_of_content'
       pdf.init_table_of_contents
+    when 'stop_pagination'
+      pdf.stop_pagination
+    when 'start_pagination', 'restart_pagination'
+      pdf.restart_pagination
     when 'stop_numerotation_paragraphs'
       AnyParagraph.stop_numerotation_paragraphs
     when 'restart_numerotation_paragraphs'

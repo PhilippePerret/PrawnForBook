@@ -283,11 +283,18 @@ class PdfBook
     if first_turn?
       pdf.on_page_create do
         my.add_page(pdf.page_number)
+        if pdf.pagination_stopped?
+          page(pdf.page_number).pagination = false
+        end
         export_text("\n#{'-'*15}PAGE ##{pdf.page_number}#{'-'*15}\n\n") if export_text?
       end
     else
       pdf.on_page_create do
         pages[pdf.page_number].init_content
+        # page(pdf.page_number).pagination = false if pdf.pagination_stopped?
+        if pdf.pagination_stopped?
+          page(pdf.page_number).pagination = false
+        end
       end
     end
 

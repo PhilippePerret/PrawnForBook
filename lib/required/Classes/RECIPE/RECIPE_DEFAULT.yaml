@@ -220,7 +220,7 @@ inserted_pages:
       font: "Times-Roman//12/000000"
       logo:
         height: 10
-    copyright: "@Tous droits réservés"
+  copyright: "@Tous droits réservés"
   # Colophon
   credits_page:   false
     # disposition: 'distribute' # 'bottom', 'top'

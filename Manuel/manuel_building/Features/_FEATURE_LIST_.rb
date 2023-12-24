@@ -39,6 +39,9 @@ module Prawn4book
   # TOUT_AIDE = TOUT || nil
   TOUT_AIDE = TOUT || true
 
+  # TOUT_PAGINATION = TOUT || nil
+  TOUT_PAGINATION = TOUT || true
+
   TOUT_REFS = TOUT || nil
   # TOUT_REFS = TOUT || true
 
@@ -111,6 +114,13 @@ module Prawn4book
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
     TOUT_AIDE && 'aide/exporter_texte',
+
+    TOUT_PAGINATION && 'pagination/titre_section',
+    TOUT_PAGINATION && 'pagination/pagination',
+    TOUT_PAGINATION && 'pagination/types_numerotation',
+    TOUT_PAGINATION && 'pagination/aspect_numero',
+    TOUT_PAGINATION && 'pagination/arret_pagination',
+    TOUT_PAGINATION && 'pagination/numeroter_pages_vierges',
 
     #__Texte_Details___#
     TOUT && 'texte_detail/grand_titre',
@@ -185,15 +195,12 @@ module Prawn4book
     TOUT_ANNEXE && 'annexe/synopsis_creation',
     TOUT_ANNEXE && 'annexe/installation_application',
     TOUT_ANNEXE && 'annexe/constantes',
+    TOUT_ANNEXE && 'annexe/pages_dun_livre',
     TOUT_ANNEXE && 'annexe/_liste_exhaustive_features_',
 
   ].compact
 
 =begin
-      pagination
-      pagination/numeroter_pages_vierges
-      pagination/aspect_numero
-      pagination/numerotation
       
       pages_initiales
       numerotation_des_paragraphes
