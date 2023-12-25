@@ -519,6 +519,7 @@ class Feature
   def subtitle(value = nil)
     set_or_get(:subtitle, value)
   end
+  alias :sous_titre :subtitle
 
   def description(value = nil)
     set_or_get(:description, value)
@@ -986,7 +987,7 @@ private
             else
                Prawn4book::FEATURES_TO_PAGE[path] || {} # quand page encore inexistante 
             end
-          tit = $~['titre'] || (feat_data[:title] && "« #{feat_data[:title]} »") || path
+          tit = ($~['titre'] || (feat_data[:title] && "« #{feat_data[:title]} »") || path).dup
           if tirets
             case tirets.length
             when 2 then tit = tit.downcase

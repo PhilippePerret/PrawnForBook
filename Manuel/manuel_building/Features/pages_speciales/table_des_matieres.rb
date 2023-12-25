@@ -3,12 +3,16 @@ Prawn4book::Manual::Feature.new do
   titre "Table des matières"
 
   description <<~EOT
-    On imprime la table des matières à l’endroit voulu à l’aide de la marque :
+    Page 11, dans notre comptage intégral, on imprime la table des matières à l’endroit voulu à l’aide de la marque :
     **`\(( tdm \))`** pour "T"able "D"es "M"atières
     ou :
-    **`\(( toc \))`** pour "T"able "Of" "C"ontent, la table des matières en anglais.
+    **`\(( toc \))`** pour "T"able "Of" "C"ontent ("table des matières" en anglais).
 
-    Noter que la table des matières, sauf indication contraire, se placera toujours sur une page paire, c’est-à-dire sur une fausse-page (page gauche). Cela part du principe qu’une table des matières fait en général au moins deux pages et qu’il est préférable de l’avoir sur une double page.
+    Noter que la table des matières, sauf indication contraire, se placera toujours sur une *belle page*, c’est-à-dire sur une page de droite.
+
+    La *table des matières*, contrairement aux autres pages d’un livre _PFB_, va nécessité une attention particulière, en tout cas lorsqu’elle tient sur plusieurs pages.
+
+    {{À REPRENDRE PAR RAPPORT À LA NOUVELLE APPROCHE}}
     On peut cependant empêcher ce comportement en mettant la propriété `not_on_even` ("pas sur la paire" en anglais) à true dans la recette.
 
     #### Table des matières en début d’ouvrage

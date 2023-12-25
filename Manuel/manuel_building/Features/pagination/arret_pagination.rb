@@ -3,7 +3,7 @@ Prawn4book::Manual::Feature.new do
   titre "Suspension de la pagination"
 
   description <<~EOT
-    Il est nécessaire parfois de suspendre la pagination sur quelques pages. Nous l’avons vu par exemple pour la *page de dédicace* (->(page_dedicace)).
+    Il est nécessaire parfois de suspendre la pagination sur quelques pages. Nous l’avons vu par exemple pour [[pages_speciales/dedicace]].
     Pour ce faire, il suffit d’utiliser, seul sur une ligne, les marques `\\(( stop_pagination ))` pour interrompre la pagination et la marque `\\(( restart_pagination ))` pour la reprendre ("restart" signifie "redémarrer" en anglais).
     EOT
 

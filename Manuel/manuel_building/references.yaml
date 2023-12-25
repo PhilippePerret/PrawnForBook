@@ -59,147 +59,195 @@
   :page: 31
   :paragraph:
   :text: comportement_align_on_reference_lines
-:aide_grand_titre:
+:pages_speciales_titre_section:
   :page: 33
+  :paragraph:
+  :text: pages_speciales_titre_section
+:pages_speciales_introduction:
+  :page: 33
+  :paragraph:
+  :text: pages_speciales_introduction
+:pages_speciales_pages_speciales:
+  :page: 33
+  :paragraph:
+  :text: pages_speciales_pages_speciales
+:pages_speciales_faux_titre:
+  :page: 33
+  :paragraph:
+  :text: pages_speciales_faux_titre
+:pages_speciales_page_de_garde:
+  :page: 34
+  :paragraph:
+  :text: pages_speciales_page_de_garde
+:pages_speciales_title_page:
+  :page: 35
+  :paragraph:
+  :text: pages_speciales_title_page
+:pages_speciales_mention_legale:
+  :page: 37
+  :paragraph:
+  :text: pages_speciales_mention_legale
+:pages_speciales_dedicace:
+  :page: 37
+  :paragraph:
+  :text: pages_speciales_dedicace
+:pages_speciales_table_des_matieres:
+  :page: 40
+  :paragraph:
+  :text: pages_speciales_table_des_matieres
+:pages_speciales_remerciements:
+  :page: 43
+  :paragraph:
+  :text: pages_speciales_remerciements
+:pages_speciales_credits_page:
+  :page: 44
+  :paragraph:
+  :text: pages_speciales_credits_page
+:pages_speciales_index_page:
+  :page: 47
+  :paragraph:
+  :text: pages_speciales_index_page
+:aide_grand_titre:
+  :page: 49
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 33
+  :page: 49
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 33
+  :page: 49
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 34
+  :page: 50
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 35
+  :page: 51
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 36
+  :page: 52
   :paragraph:
   :text: aide_exporter_texte
 :pagination_titre_section:
-  :page: 37
+  :page: 53
   :paragraph:
   :text: pagination_titre_section
 :pagination_pagination:
-  :page: 37
+  :page: 53
   :paragraph:
   :text: pagination_pagination
 :pagination_aspect_numero:
-  :page: 37
+  :page: 53
   :paragraph:
   :text: pagination_aspect_numero
 :pagination_arret_pagination:
-  :page: 37
+  :page: 53
   :paragraph:
   :text: pagination_arret_pagination
 :pagination_numeroter_pages_vierges:
-  :page: 40
+  :page: 56
   :paragraph:
   :text: pagination_numeroter_pages_vierges
 :format_precis_grand_titre:
-  :page: 41
+  :page: 57
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 42
+  :page: 58
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 45
+  :page: 61
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 48
+  :page: 64
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 49
+  :page: 65
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 49
+  :page: 65
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 49
+  :page: 65
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 50
+  :page: 66
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 52
+  :page: 68
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 52
+  :page: 68
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 53
+  :page: 69
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 54
+  :page: 70
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 55
+  :page: 71
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 58
+  :page: 74
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 58
+  :page: 74
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 58
-  :paragraph: 652
+  :page: 74
+  :paragraph: 1105
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 58
+  :page: 74
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 59
+  :page: 75
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 59
+  :page: 75
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 60
+  :page: 76
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 64
+  :page: 80
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 64
+  :page: 80
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 64
+  :page: 80
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 65
+  :page: 81
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 65
+  :page: 81
   :paragraph:
   :text: annexe__liste_exhaustive_features_

@@ -1,5 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
+  # ANNEXE
   titre "Les pages d’un livre"
 
 

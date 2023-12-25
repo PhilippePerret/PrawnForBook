@@ -12,8 +12,8 @@ module Prawn4book
   # TOUT_DEF_MINI = TOUT || nil
   TOUT_DEF_MINI = TOUT || true
 
-  TOUT_PAGES_SPECS = TOUT || nil
-  # TOUT_PAGES_SPECS = TOUT || true
+  # TOUT_PAGES_SPECS = TOUT || nil
+  TOUT_PAGES_SPECS = TOUT || true
 
   # TOUT_COMPORTEMENT = TOUT || nil
   TOUT_COMPORTEMENT = TOUT || true
@@ -93,12 +93,17 @@ module Prawn4book
     #  - typographies (espaces avant ponctuation doubles, guillemets)
 
     #---PagesSpeciales---#
-    TOUT_PAGES_SPECS && 'pages_speciales/grand_titre',
+    TOUT_PAGES_SPECS && 'pages_speciales/titre_section',
+    TOUT_PAGES_SPECS && 'pages_speciales/introduction',
     TOUT_PAGES_SPECS && 'pages_speciales/pages_speciales',
-    TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
-    TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
-    TOUT_PAGES_SPECS && 'pages_speciales/title_page',
     TOUT_PAGES_SPECS && 'pages_speciales/faux_titre',
+    TOUT_PAGES_SPECS && 'pages_speciales/page_de_garde',
+    TOUT_PAGES_SPECS && 'pages_speciales/title_page',
+    TOUT_PAGES_SPECS && 'pages_speciales/mention_legale',
+    TOUT_PAGES_SPECS && 'pages_speciales/dedicace',
+    TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
+    TOUT_PAGES_SPECS && 'pages_speciales/remerciements',
+    TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
     TOUT_PAGES_SPECS && 'pages_speciales/index_page',
 
     #---Entetes/Pied-de-page---#

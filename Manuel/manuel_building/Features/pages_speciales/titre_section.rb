@@ -1,5 +1,5 @@
 Prawn4book::Manual::Feature.new do
 
-  grand_titre "Les Pages spéciales"
-  
+  grand_titre "Les pages du livres"
+
 end
