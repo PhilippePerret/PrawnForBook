@@ -544,6 +544,7 @@ private
     str = __traite_ponctuations_doubles(str, context)
     str = __traite_points_suspensions(str, context)
     str = __traite_tirets_exergue(str,context)
+    str = __traite_exposants(str,context)
     str = str.gsub(REG_ANTESLASHED,'\1')
     return str
   end
@@ -811,11 +812,38 @@ private
     str = str.gsub(REG_TIRET_EXERGUE) {
       signe   = $1.freeze
       content = $2.strip.freeze
-      "#{signe} #{content} #{signe}"
+      signe_fin = $3.freeze
+      signe_fin = " #{BON_LONG_TIRET}" if signe_fin == signe
+      "#{BON_LONG_TIRET} #{content}#{signe_fin}"
     }
     return str
   end
-  REG_TIRET_EXERGUE = /#{EXCHAR}([—–])[ ]?(.+?) ?\2/.freeze
+
+  BON_LONG_TIRET = '—' # TODO Pouvoir mettre les demi-longs en recette
+  # REG_TIRET_EXERGUE = /#{EXCHAR}([—–])[ ]?(.+?) ?\2/.freeze
+  REG_TIRET_EXERGUE = /#{EXCHAR}([—–\-])[ ]?(.+?) ?(\1|\.|\!|\?)/.freeze
+
+
+  def self.__traite_exposants(str, context)
+    str = str.gsub(REG_EXPOSANTS) do
+      amorce = $1.freeze
+      nombre = $2.freeze
+      if amorce.length == 5 && amorce.match?(/^[1-9C]$/.freeze)
+        # C’est une couleur, en fait
+        "#{amorce}#{nombre}"
+      else
+        case nombre
+        when 'ème', 'eme' then 'e'
+        when 'ère' then 're'
+        else nombre
+        end
+        "#{amorce}<sup>#{nombre}</sup>"
+      end
+    end
+    return str
+  end
+
+  REG_EXPOSANTS = /([1-9XVICM]+)#{EXCHAR}(ème|eme|ère|re|er|e)\b/.freeze
 
 end #/class AnyParagraph
 end #/class PdfBook

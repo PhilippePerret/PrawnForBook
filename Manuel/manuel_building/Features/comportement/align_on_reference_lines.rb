@@ -24,6 +24,8 @@ Prawn4book::Manual::Feature.new do
     
     (( font(name:"Numito", size:8, style: :normal) ))
     Un autre paragraphe dans une police de taille. Lorem #{'ipsum lorem ipsum ' * 60}
+    \#{-pdf.update_current_line}
+    (( new_page ))
     EOT
 
 end

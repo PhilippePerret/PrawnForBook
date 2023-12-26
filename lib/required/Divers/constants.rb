@@ -107,5 +107,9 @@ YAML_OPTIONS = {symbolize_names:true, aliases: true, permitted_classes: [Date, S
 # Pour dire de ne pas interpréter s’il y a un caractère échappement
 # Par exemple, si on veut trouver le caractère "(" dans 
 # "blabal (bla) bla" mais pas dans "blabla \(bla) bla"
+# 
+# @note
+#   Ce groupe ne compte pas. L’expression commencera donc avec 
+#   \1 ou $1
 EXCHAR = /(?<!\\)/
 

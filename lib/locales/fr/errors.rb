@@ -619,8 +619,8 @@ ERRORS = {
       ERR
 
     missing_item_treatment_method: <<~ERR,
-      Aucune méthode de traitement des items de cet index personnalisé n’est
-      implémenté.
+      Aucune méthode de traitement des items de d’index personnalisé %{id} 
+      n’est implémenté.
       Pour y remédier, dans un fichier `parser.rb’ ou `prawn4book.rb’,
       implémenter la méthode #index_%{id} dans un module CustomIndexModule:
 
@@ -640,6 +640,11 @@ ERRORS = {
         end
 
       end
+
+      Notez que si "%{id}(" n’est pas un index mais un mot suivi d’une
+      parenthèse collée, alors il faut échapper la parenthèse pour que
+      le mot ne soit pas pris pour un index. Écrivez "%{id}\\(" au
+      lieu de "%{id}(".
       ERR
 
     bad_params_count_in_item_treatment_method: <<~ERR,

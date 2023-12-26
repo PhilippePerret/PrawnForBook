@@ -59,176 +59,180 @@
   :page: 31
   :paragraph:
   :text: comportement_align_on_reference_lines
-:pages_speciales_titre_section:
+:comportement_corrections_typographiques:
   :page: 33
+  :paragraph:
+  :text: comportement_corrections_typographiques
+:pages_speciales_titre_section:
+  :page: 35
   :paragraph:
   :text: pages_speciales_titre_section
 :pages_speciales_introduction:
-  :page: 33
+  :page: 35
   :paragraph:
   :text: pages_speciales_introduction
 :pages_speciales_pages_speciales:
-  :page: 33
+  :page: 35
   :paragraph:
   :text: pages_speciales_pages_speciales
 :pages_speciales_faux_titre:
-  :page: 33
+  :page: 35
   :paragraph:
   :text: pages_speciales_faux_titre
 :pages_speciales_page_de_garde:
-  :page: 34
+  :page: 36
   :paragraph:
   :text: pages_speciales_page_de_garde
 :pages_speciales_title_page:
-  :page: 35
+  :page: 37
   :paragraph:
   :text: pages_speciales_title_page
 :pages_speciales_mention_legale:
-  :page: 37
+  :page: 39
   :paragraph:
   :text: pages_speciales_mention_legale
 :pages_speciales_dedicace:
-  :page: 37
+  :page: 39
   :paragraph:
   :text: pages_speciales_dedicace
 :pages_speciales_table_des_matieres:
-  :page: 40
+  :page: 42
   :paragraph:
   :text: pages_speciales_table_des_matieres
 :pages_speciales_table_illustrations:
-  :page: 43
+  :page: 45
   :paragraph:
   :text: pages_speciales_table_illustrations
 :pages_speciales_liste_abreviations:
-  :page: 43
+  :page: 45
   :paragraph:
   :text: pages_speciales_liste_abreviations
 :pages_speciales_glossaire:
-  :page: 44
+  :page: 46
   :paragraph:
   :text: pages_speciales_glossaire
 :pages_speciales_remerciements:
-  :page: 45
+  :page: 47
   :paragraph:
   :text: pages_speciales_remerciements
 :pages_speciales_credits_page:
-  :page: 46
+  :page: 48
   :paragraph:
   :text: pages_speciales_credits_page
 :pages_speciales_index_page:
-  :page: 50
+  :page: 51
   :paragraph:
   :text: pages_speciales_index_page
 :aide_grand_titre:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 52
+  :page: 54
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 53
+  :page: 55
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 54
+  :page: 56
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 55
+  :page: 57
   :paragraph:
   :text: aide_exporter_texte
 :pagination_titre_section:
-  :page: 56
+  :page: 58
   :paragraph:
   :text: pagination_titre_section
 :pagination_pagination:
-  :page: 56
+  :page: 58
   :paragraph:
   :text: pagination_pagination
 :pagination_aspect_numero:
-  :page: 56
+  :page: 58
   :paragraph:
   :text: pagination_aspect_numero
 :pagination_arret_pagination:
-  :page: 56
+  :page: 58
   :paragraph:
   :text: pagination_arret_pagination
 :pagination_no_pagination:
-  :page: 59
+  :page: 61
   :paragraph:
   :text: pagination_no_pagination
 :pagination_numeroter_pages_vierges:
-  :page: 61
+  :page: 63
   :paragraph:
   :text: pagination_numeroter_pages_vierges
 :texte_detail_grand_titre:
-  :page: 62
+  :page: 64
   :paragraph:
   :text: texte_detail_grand_titre
 :texte_detail_indentation:
-  :page: 62
+  :page: 64
   :paragraph:
   :text: texte_detail_indentation
 :texte_detail_stylisation_in_line:
-  :page: 63
+  :page: 65
   :paragraph:
   :text: texte_detail_stylisation_in_line
 :format_precis_grand_titre:
-  :page: 64
+  :page: 66
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 65
+  :page: 67
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 68
+  :page: 70
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 71
+  :page: 73
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 72
+  :page: 74
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 72
+  :page: 74
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 72
+  :page: 74
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 73
+  :page: 75
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 76
+  :page: 77
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 77
+  :page: 78
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 78
+  :page: 79
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
@@ -241,7 +245,7 @@
   :text: annexe_markdown_all_marks
 :all_markdown:
   :page: 82
-  :paragraph: 1221
+  :paragraph: 1245
   :text: all_markdown
 :annexe_format_yaml:
   :page: 82

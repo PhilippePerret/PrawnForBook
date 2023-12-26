@@ -91,6 +91,7 @@ module Prawn4book
     #--- Comportement de Prawn-for-book ---#
     TOUT_COMPORTEMENT && 'comportement/grand_titre',
     TOUT_COMPORTEMENT && 'comportement/align_on_reference_lines',
+    TOUT_COMPORTEMENT && 'comportement/corrections_typographiques',
     # Ajouter :
     #  - colonnes multiples
     #  - typographies (espaces avant ponctuation doubles, guillemets)
