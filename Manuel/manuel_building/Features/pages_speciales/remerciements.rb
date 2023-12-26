@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "La page des remerciements"
+  titre "Page des remerciements"
 
 
   description <<~EOT    

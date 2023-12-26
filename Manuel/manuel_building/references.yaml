@@ -95,159 +95,171 @@
   :page: 40
   :paragraph:
   :text: pages_speciales_table_des_matieres
-:pages_speciales_remerciements:
+:pages_speciales_table_illustrations:
   :page: 43
+  :paragraph:
+  :text: pages_speciales_table_illustrations
+:pages_speciales_liste_abreviations:
+  :page: 43
+  :paragraph:
+  :text: pages_speciales_liste_abreviations
+:pages_speciales_glossaire:
+  :page: 44
+  :paragraph:
+  :text: pages_speciales_glossaire
+:pages_speciales_remerciements:
+  :page: 45
   :paragraph:
   :text: pages_speciales_remerciements
 :pages_speciales_credits_page:
-  :page: 44
+  :page: 46
   :paragraph:
   :text: pages_speciales_credits_page
 :pages_speciales_index_page:
-  :page: 47
+  :page: 50
   :paragraph:
   :text: pages_speciales_index_page
 :aide_grand_titre:
-  :page: 49
+  :page: 52
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 49
+  :page: 52
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 49
+  :page: 52
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 50
+  :page: 53
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 51
+  :page: 54
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 52
+  :page: 55
   :paragraph:
   :text: aide_exporter_texte
 :pagination_titre_section:
-  :page: 53
+  :page: 56
   :paragraph:
   :text: pagination_titre_section
 :pagination_pagination:
-  :page: 53
+  :page: 56
   :paragraph:
   :text: pagination_pagination
 :pagination_aspect_numero:
-  :page: 53
+  :page: 56
   :paragraph:
   :text: pagination_aspect_numero
 :pagination_arret_pagination:
-  :page: 53
+  :page: 56
   :paragraph:
   :text: pagination_arret_pagination
 :pagination_numeroter_pages_vierges:
-  :page: 56
+  :page: 59
   :paragraph:
   :text: pagination_numeroter_pages_vierges
 :format_precis_grand_titre:
-  :page: 57
+  :page: 60
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 58
+  :page: 61
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 61
+  :page: 64
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 64
+  :page: 67
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 65
+  :page: 68
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 65
+  :page: 68
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 65
+  :page: 68
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 66
+  :page: 69
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 68
+  :page: 71
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 68
+  :page: 71
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 69
+  :page: 72
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 70
+  :page: 73
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 71
+  :page: 74
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 74
+  :page: 78
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 74
+  :page: 78
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 74
-  :paragraph: 1105
+  :page: 78
+  :paragraph: 1173
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 74
+  :page: 78
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 75
+  :page: 79
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 75
+  :page: 79
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 76
+  :page: 80
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 80
+  :page: 84
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 80
+  :page: 84
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 80
+  :page: 84
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 81
+  :page: 85
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 81
+  :page: 89
   :paragraph:
   :text: annexe__liste_exhaustive_features_

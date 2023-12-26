@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="2298.5825"
-   height="4691.0718"
-   viewBox="0 0 2298.5825 4691.0718"
+   height="4548.9717"
+   viewBox="0 0 2298.5825 4548.9717"
    version="1.1"
    xml:space="preserve"
    style="clip-rule:evenodd;fill-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5"
@@ -69,7 +69,7 @@
             </g>
         </g>
         <g
-   transform="matrix(2.74384,0,0,1.14795,-278.416,1440.76)"
+   transform="matrix(2.74384,0,0,1.14795,-278.416,1397.76)"
    id="g44">
             <g
    id="g32">
@@ -124,7 +124,7 @@
             </g>
         </g>
         <g
-   transform="matrix(2.74384,0,0,1.1522,-278.416,2235.37)"
+   transform="matrix(2.74384,0,0,1.1522,-278.416,2172.37)"
    id="g66">
             <g
    id="g54">
@@ -234,7 +234,7 @@
             </g>
         </g>
         <g
-   transform="matrix(2.74384,0,0,1.14795,-278.416,3847.23)"
+   transform="matrix(2.74384,0,0,1.14795,-278.416,3704.26)"
    id="g98">
             <g
    transform="matrix(0.461424,0,0,0.481925,-73.5674,-193.813)"
@@ -260,7 +260,7 @@
             </g>
         </g>
         <g
-   transform="matrix(2.74384,0,0,1.14795,-278.416,3049.22)"
+   transform="matrix(2.74384,0,0,1.14795,-278.416,2956.22)"
    id="g120">
             <g
    id="g108">
@@ -444,7 +444,7 @@
             </g>
         </g>
         <g
-   transform="matrix(1.13207,0,0,1.13207,810.372,350.34)"
+   transform="matrix(1.13207,0,0,1.13207,810.372,307.34)"
    id="g200">
             <g
    transform="matrix(0.71,0,0,1,225.693,0)"
@@ -461,274 +461,274 @@
             </g>
         </g>
         <g
-   transform="matrix(1.3668,0,0,1.3668,409.826,-376.724)"
-   id="g208">
-            <g
-   transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g206">
-                <g
-   transform="matrix(72.98,0,0,72.98,1589.34,1358.34)"
-   id="g202">
-                </g>
-                <text
-   x="778.25299"
-   y="1358.34"
-   style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text204">Pages de bibliogaphies</text>
-            </g>
-        </g>
-        <g
-   transform="matrix(1.3668,0,0,1.3668,358.264,442.081)"
-   id="g216">
-            <g
-   transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g214">
-                <g
-   transform="matrix(72.98,0,0,72.98,1548.71,1358.34)"
-   id="g210">
-                </g>
-                <text
-   x="778.25299"
-   y="1358.34"
-   style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text212">Biographie de l’auteur</text>
-            </g>
-        </g>
-        <g
-   transform="matrix(1.3668,0,0,1.3668,501.928,1236.92)"
-   id="g224">
-            <g
-   transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g222">
-                <g
-   transform="matrix(72.98,0,0,72.98,1350.19,1358.34)"
+   transform="translate(-121.959,-870.012)"
    id="g218">
-                </g>
-                <text
-   x="778.25299"
-   y="1358.34"
-   style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text220">Pages des index</text>
-            </g>
-        </g>
-        <g
-   transform="matrix(1.3668,0,0,1.3668,306.753,2052.7)"
-   id="g232">
-            <g
-   transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g230">
-                <g
-   transform="matrix(72.98,0,0,72.98,1755.54,1358.34)"
-   id="g226">
-                </g>
-                <text
-   x="778.25299"
-   y="1358.34"
-   style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text228">Page des crédits (colophon)</text>
-            </g>
-        </g>
-        <g
-   transform="matrix(1.3668,0,0,1.3668,-895.185,2832.85)"
-   id="g240">
-            <g
-   transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g238">
-                <g
-   transform="matrix(72.98,0,0,72.98,1784.04,1358.34)"
-   id="g234">
-                </g>
-                <text
-   x="778.25299"
-   y="1358.34"
-   style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text236">Page de marque d’imprimeur</text>
-            </g>
-        </g>
-        <g
-   transform="translate(-121.959,-827.012)"
-   id="g258">
             <g
    transform="matrix(0.815105,0,0,0.815105,987.067,1449.9)"
-   id="g248">
+   id="g208">
                 <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g246">
+   id="g206">
                     <g
    transform="matrix(72.98,0,0,72.98,1049.97,1358.34)"
-   id="g242">
+   id="g202">
                     </g>
                     <text
    x="778.25299"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text244">Prénom</text>
+   id="text204">Prénom</text>
                 </g>
             </g>
             <g
    transform="matrix(1.3668,0,0,1.3668,729.057,699.995)"
-   id="g256">
+   id="g216">
                 <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g254">
+   id="g214">
                     <g
    transform="matrix(72.98,0,0,72.98,948.516,1358.34)"
-   id="g250">
+   id="g210">
                     </g>
                     <text
    x="778.25299"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text252">NOM</text>
+   id="text212">NOM</text>
                 </g>
             </g>
         </g>
         <g
-   transform="matrix(0.529645,0,0,0.529645,1304.69,2634.1)"
-   id="g290">
+   transform="matrix(0.529645,0,0,0.529645,1304.69,2541.1)"
+   id="g250">
             <g
    transform="matrix(0.71,0,0,1,282.487,0)"
-   id="g262">
+   id="g222">
                 <text
    x="974.09302"
    y="1433.71"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text260">Éditeur</text>
+   id="text220">Éditeur</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,278.716,0)"
-   id="g266">
+   id="g226">
                 <text
    x="961.08801"
    y="1509.08"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text264">Adresse</text>
+   id="text224">Adresse</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g270">
+   id="g230">
                 <text
    x="778.25299"
    y="1584.4399"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text268">Directrice de collection</text>
+   id="text228">Directrice de collection</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,245.324,0)"
-   id="g274">
+   id="g234">
                 <text
    x="845.94501"
    y="1659.8101"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text272">Metteuse en page</text>
+   id="text232">Metteuse en page</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,268.278,0)"
-   id="g278">
+   id="g238">
                 <text
    x="925.09802"
    y="1735.1801"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text276">Correctrice</text>
+   id="text236">Correctrice</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,267.875,0)"
-   id="g282">
+   id="g242">
                 <text
    x="923.70599"
    y="1810.55"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text280">Dépôt légal</text>
+   id="text240">Dépôt légal</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,290.418,0)"
-   id="g288">
+   id="g248">
                 <g
    transform="matrix(72.98,0,0,72.98,1175.8,1885.91)"
-   id="g284">
+   id="g244">
                 </g>
                 <text
    x="1001.44"
    y="1885.91"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text286">ISBN</text>
+   id="text246">ISBN</text>
             </g>
         </g>
         <g
-   transform="matrix(0.529645,0,0,0.529645,-143.213,3723.19)"
-   id="g302">
+   transform="matrix(0.529645,0,0,0.529645,-143.213,3630.19)"
+   id="g262">
             <g
    transform="matrix(0.71,0,0,1,231.559,0)"
-   id="g294">
+   id="g254">
                 <text
    x="798.48102"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text292">Imprimé chez Zouzou</text>
+   id="text252">Imprimé chez Zouzou</text>
             </g>
             <g
    transform="matrix(0.71,0,0,1,235.272,0)"
-   id="g300">
+   id="g260">
                 <g
    transform="matrix(72.98,0,0,72.98,1521.31,1433.71)"
-   id="g296">
+   id="g256">
                 </g>
                 <text
    x="811.28302"
    y="1433.71"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text298">le 25 décembre 2023</text>
+   id="text258">le 25 décembre 2023</text>
             </g>
         </g>
         <g
    transform="matrix(0.957949,0,0,0.957949,744.83,-433.683)"
-   id="g310">
+   id="g270">
             <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g308">
+   id="g268">
                 <g
    transform="matrix(72.98,0,0,72.98,1285.12,1358.34)"
-   id="g304">
+   id="g264">
                 </g>
                 <text
    x="778.25299"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text306">Bibliographies</text>
+   id="text266">Bibliographies</text>
             </g>
         </g>
         <g
-   transform="matrix(0.880125,0,0,0.880125,816.737,1323.63)"
-   id="g318">
+   transform="matrix(0.880125,0,0,0.880125,816.737,1260.63)"
+   id="g278">
             <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g316">
+   id="g276">
                 <g
    transform="matrix(72.98,0,0,72.98,968.863,1358.34)"
-   id="g312">
+   id="g272">
                 </g>
                 <text
    x="778.25299"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text314">Index</text>
+   id="text274">Index</text>
             </g>
         </g>
         <g
    transform="matrix(0.880125,0,0,0.880125,1083.56,-660.8)"
-   id="g326">
+   id="g286">
             <g
    transform="matrix(0.71,0,0,1,225.693,0)"
-   id="g324">
+   id="g284">
                 <g
    transform="matrix(72.98,0,0,72.98,1098.57,1358.34)"
-   id="g320">
+   id="g280">
                 </g>
                 <text
    x="778.25299"
    y="1358.34"
    style="font-weight:700;font-size:72.98px;font-family:Arial-BoldMT, Arial, sans-serif;fill:#231f20"
-   id="text322">THE END</text>
+   id="text282">THE END</text>
+            </g>
+        </g>
+        <g
+   transform="translate(8.42045,-2438.91)"
+   id="g294">
+            <g
+   transform="matrix(0.71,0,0,1,435.107,0)"
+   id="g292">
+                <g
+   transform="matrix(83.3333,0,0,83.3333,2362.15,3900.78)"
+   id="g288">
+                </g>
+                <text
+   x="1500.37"
+   y="3900.78"
+   style="font-style:italic;font-size:83.333px;font-family:Arial-ItalicMT, Arial, sans-serif;fill:#231f20"
+   id="text290">Pages de bibliogaphies</text>
+            </g>
+        </g>
+        <g
+   transform="translate(8.42045,-1656.24)"
+   id="g302">
+            <g
+   transform="matrix(0.71,0,0,1,440.36,0)"
+   id="g300">
+                <g
+   transform="matrix(83.3333,0,0,83.3333,2329.23,3900.78)"
+   id="g296">
+                </g>
+                <text
+   x="1518.48"
+   y="3900.78"
+   style="font-style:italic;font-size:83.333px;font-family:Arial-ItalicMT, Arial, sans-serif;fill:#231f20"
+   id="text298">Biographie de l’auteur</text>
+            </g>
+        </g>
+        <g
+   transform="translate(8.42045,-878.784)"
+   id="g310">
+            <g
+   transform="matrix(0.71,0,0,1,460.392,0)"
+   id="g308">
+                <g
+   transform="matrix(83.3333,0,0,83.3333,2203.73,3900.78)"
+   id="g304">
+                </g>
+                <text
+   x="1587.5601"
+   y="3900.78"
+   style="font-style:italic;font-size:83.333px;font-family:Arial-ItalicMT, Arial, sans-serif;fill:#231f20"
+   id="text306">Pages des index</text>
+            </g>
+        </g>
+        <g
+   transform="translate(8.42045,-97.7905)"
+   id="g318">
+            <g
+   transform="matrix(0.71,0,0,1,417.002,0)"
+   id="g316">
+                <g
+   transform="matrix(83.3333,0,0,83.3333,2475.58,3900.78)"
+   id="g312">
+                </g>
+                <text
+   x="1437.9399"
+   y="3900.78"
+   style="font-style:italic;font-size:83.333px;font-family:Arial-ItalicMT, Arial, sans-serif;fill:#231f20"
+   id="text314">Page des crédits (colophon)</text>
+            </g>
+        </g>
+        <g
+   transform="translate(-1154.9,650.248)"
+   id="g326">
+            <g
+   transform="matrix(0.71,0,0,1,413.199,0)"
+   id="g324">
+                <g
+   transform="matrix(83.3333,0,0,83.3333,2499.41,3900.78)"
+   id="g320">
+                </g>
+                <text
+   x="1424.8199"
+   y="3900.78"
+   style="font-style:italic;font-size:83.333px;font-family:Arial-ItalicMT, Arial, sans-serif;fill:#231f20"
+   id="text322">Page de marque d’imprimeur</text>
             </g>
         </g>
     </g>

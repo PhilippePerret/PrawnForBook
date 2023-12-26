@@ -2,6 +2,16 @@ module Prawn4book
 module Manual
 class Feature
 
+  # Variables utilisables dans les textes (description, texte, 
+  # sample_texte, etc.)
+  # 
+  VARIABLES = {
+    '_PFB_'       => '***Prawn-For-Book***',
+    '_expert_'    => '[[expert (cf. p. __page__)|expert/mode_expert]]',
+    '_index_'     => '[[index (cf. p. __page__)|expert/bibliographies]]',
+
+  }
+
   # DESCRIPTION
   # ===========
   # 
@@ -229,12 +239,6 @@ class Feature
   ################################################################
 
 
-  # Les variables utilisables dans les textes (description, texte, 
-  # sample_texte, etc.)
-  # 
-  VARIABLES = {
-    '_PFB_' => '***Prawn-For-Book***'
-  }
 
   attr_reader :pdf, :book
   attr_accessor :filename # chemin relatif (souvent le nom)

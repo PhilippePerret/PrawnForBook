@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  sous_titre "La page de garde"
+  sous_titre "Page de garde"
 
 
   description <<~EOT

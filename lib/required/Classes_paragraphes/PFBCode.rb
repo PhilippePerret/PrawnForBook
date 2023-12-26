@@ -60,6 +60,14 @@ class PFBCode < AnyParagraph
     when 'tdm', 'toc', 'table_des_matieres','table_of_contents', \
       'table_of_content'
       pdf.init_table_of_contents
+    when 'tdi', 'loi', 'table_des_illustrations', \
+      'list_of_illustrations'
+      pdf.build_list_of_illustrations
+    when 'list_of_abbreviations', 'liste_des_abreviations', 'loa', \
+      'lda'
+      pdf.build_list_of_abbreviations
+    when 'glossaire', 'glossary'
+      pdf.build_glossary
     when 'stop_pagination'
       pdf.stop_pagination
     when 'start_pagination', 'restart_pagination'

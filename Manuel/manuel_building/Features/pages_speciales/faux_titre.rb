@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "La page de Faux-titre"
+  titre "Page de Faux-titre"
 
 
   description <<~EOT
