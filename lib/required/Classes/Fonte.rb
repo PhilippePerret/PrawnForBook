@@ -90,6 +90,10 @@ def style=(value)
   @style = value
   reset
 end
+def color=(value)
+  @color = value
+  reset
+end
 def hname=(value)
   @hname = value
   reset

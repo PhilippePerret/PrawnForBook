@@ -7,8 +7,9 @@ class Feature
   # 
   VARIABLES = {
     '_PFB_'       => '***Prawn-For-Book***',
-    '_expert_'    => '[[expert (cf. p. __page__)|expert/mode_expert]]',
-    '_index_'     => '[[index (cf. p. __page__)|expert/bibliographies]]',
+    '_expert_'    => '[[expert (cf. page __page__)|expert/mode_expert]]',
+    '_index_'     => '[[index (cf. page __page__)|expert/bibliographies]]',
+    '_stylisation_inline_' => '[[stylisation en ligne (cf. page __page__)|texte_detail/stylisation_in_line]]'
 
   }
 

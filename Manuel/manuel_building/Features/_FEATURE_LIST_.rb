@@ -23,13 +23,16 @@ module Prawn4book
 
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
-  # 
+
+  # TOUT_TEXT_DETAIL = TOUT || nil
+  TOUT_TEXT_DETAIL = TOUT || true
+
   TOUT_PUCES = TOUT || nil
   # TOUT_PUCES = TOUT || true
-  # 
+
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
-  # 
+
   # TOUT_EXPERT = TOUT || nil
   TOUT_EXPERT = TOUT || true
 
@@ -131,9 +134,10 @@ module Prawn4book
     TOUT_PAGINATION && 'pagination/numeroter_pages_vierges',
 
     #__Texte_Details___#
-    TOUT && 'texte_detail/grand_titre',
-    TOUT && 'texte_detail/indentation',
-    TOUT && 'texte_detail/hauteur_de_ligne',
+    TOUT_TEXT_DETAIL && 'texte_detail/grand_titre',
+    TOUT_TEXT_DETAIL && 'texte_detail/indentation',
+    TOUT_TEXT_DETAIL && 'texte_detail/stylisation_in_line',
+    TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',

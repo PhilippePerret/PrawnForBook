@@ -37,6 +37,10 @@ class String
     end
   end
 
+  def colorize_in(html_color)
+    "<color rgb=\"#{html_color}\">#{self}</color>"
+  end
+
 end #/class String
 
 class Array

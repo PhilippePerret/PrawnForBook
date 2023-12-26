@@ -296,6 +296,10 @@ class AnyParagraph
     styles[:kerning]
   end
 
+  def color
+    styles[:color]
+  end
+
   def character_spacing
     styles[:character_spacing]
   end
@@ -409,9 +413,10 @@ class AnyParagraph
               when :right   then :margin_right
               when :top     then :margin_top
               when :bottom  then :margin_bottom
+              when :color   then :color
               else 
                 case k
-                when :indentation
+                when :indentation, :indent
                   self.indentation = v.to_pps
                   v = :NOT_STYLE_VALUE
                 when :no_indentation

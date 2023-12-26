@@ -18,7 +18,7 @@ Prawn4book::Manual::Feature.new do
 
   recipe <<~EOT #, "Autre entête"
     ---
-      # ...
+    # Cette recette doit être supprimée ou utilisée
     EOT
 
   # init_recipe([:custom_cached_var_key])

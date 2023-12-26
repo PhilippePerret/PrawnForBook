@@ -134,7 +134,14 @@ class << self
     # - Faut-il se passer du numéro de paragraphe ? -
     # TODO
     no_num = options[:no_num] === true # || pas par recette
-     
+
+    # Un SPARADRAP pour gérer la couleur directement en html dans
+    # le texte, car la propriété :color dans les options ne semble
+    # pas fonctionner
+    if owner.is_a?(PdfBook::NTextParagraph) && owner.color
+      text = text.colorize_in(owner.color)
+    end
+
     begin
 
       pdf.update do
