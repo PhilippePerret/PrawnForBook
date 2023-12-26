@@ -92,9 +92,10 @@ module Prawn4book
     TOUT_COMPORTEMENT && 'comportement/grand_titre',
     TOUT_COMPORTEMENT && 'comportement/align_on_reference_lines',
     TOUT_COMPORTEMENT && 'comportement/corrections_typographiques',
+    # TOUT_COMPORTEMENT && 'comportement/book_in_collection',
+    # TOUT_COMPORTEMENT && 'comportement/veuves_orphelines_et_lignes_de_voleur',
     # Ajouter :
     #  - colonnes multiples
-    #  - typographies (espaces avant ponctuation doubles, guillemets)
 
     #---PagesSpeciales---#
     TOUT_PAGES_SPECS && 'pages_speciales/titre_section',
@@ -130,6 +131,7 @@ module Prawn4book
     TOUT_PAGINATION && 'pagination/titre_section',
     TOUT_PAGINATION && 'pagination/pagination',
     TOUT_PAGINATION && 'pagination/types_numerotation',
+    # TOUT_PAGINATION && 'pagination/numerotation_paragraphes',
     TOUT_PAGINATION && 'pagination/aspect_numero',
     TOUT_PAGINATION && 'pagination/arret_pagination',
     TOUT_PAGINATION && 'pagination/no_pagination',
@@ -140,6 +142,8 @@ module Prawn4book
     TOUT_TEXT_DETAIL && 'texte_detail/indentation',
     TOUT_TEXT_DETAIL && 'texte_detail/stylisation_in_line',
     TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
+    TOUT_TEXT_DETAIL && 'texte_detail/gestion_tirets_conditionnels',
+    TOUT_TEXT_DETAIL && 'texte_detail/placement_sur_ligne_quelconque',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',
@@ -161,6 +165,7 @@ module Prawn4book
     TOUT_IMAGE && 'images/format_legende',
     
     TOUT_REFS && 'references/cross_references',
+    # TOUT_REFS && 'references/references_autres_livres',
     TOUT_REFS && 'hyperlinks',
     TOUT_REFS && 'notes_de_page',
     TOUT_REFS && 'notes_de_page_formatage',
@@ -180,6 +185,8 @@ module Prawn4book
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',
     # 'alignement_du_texte',
+    # 'change_margins_on_the_fly'
+    # 'export_as_document_pdf'
 
     #---Mode_Expert---#
     TOUT_EXPERT && 'expert/grand_titre',
@@ -213,25 +220,5 @@ module Prawn4book
     TOUT_ANNEXE && 'annexe/_liste_exhaustive_features_',
 
   ].compact
-
-=begin
-      
-      pages_initiales
-      numerotation_des_paragraphes
-      definir_police_par_defaut
-      pseudo_format_markdown
-      guils_et_apos
-      les_fontes
-      book_in_collection
-      gestion_tirets_conditionnels
-      veuves_orphelines_et_lignes_de_voleur
-      references_autres_livres
-      placement_sur_ligne_quelconque
-      change_margins_on_the_fly
-      export_livre_numerique
-
-      annexe/couleur_hexadecimale
-
-=end
  
 end

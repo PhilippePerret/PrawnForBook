@@ -5,7 +5,7 @@ Prawn4book::Manual::Feature.new do
   new_page_before(:feature)
 
   description <<~EOT
-    Grâce aux code *pfb* on peut se placer sur une ligne quelconque du texte à l'aide des méthodes `move_to_line(x)`.
+    Grâce aux *codes en ligne* de _PFB_, on peut se placer sur une ligne quelconque de la page à l'aide de : `move_to_line(<x>)`.
     EOT
 
   sample_texte <<~EOT

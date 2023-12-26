@@ -183,103 +183,107 @@
   :page: 65
   :paragraph:
   :text: texte_detail_stylisation_in_line
+:texte_detail_gestion_tirets_conditionnels:
+  :page: 65
+  :paragraph:
+  :text: texte_detail_gestion_tirets_conditionnels
 :format_precis_grand_titre:
-  :page: 66
+  :page: 67
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 67
+  :page: 68
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 70
+  :page: 71
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 73
+  :page: 74
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 74
+  :page: 75
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 74
+  :page: 75
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 74
+  :page: 75
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 76
+  :page: 77
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 76
+  :page: 77
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 77
+  :page: 78
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 78
+  :page: 79
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 79
+  :page: 80
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 82
+  :page: 84
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 82
+  :page: 84
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 82
-  :paragraph: 1245
+  :page: 84
+  :paragraph: 1257
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 82
+  :page: 85
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 83
+  :page: 85
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 83
+  :page: 86
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 84
+  :page: 87
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 88
+  :page: 90
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 88
+  :page: 90
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 88
+  :page: 90
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 89
+  :page: 91
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 93
+  :page: 95
   :paragraph:
   :text: annexe__liste_exhaustive_features_

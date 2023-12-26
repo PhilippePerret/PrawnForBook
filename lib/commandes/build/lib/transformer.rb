@@ -149,7 +149,8 @@ module ParserFormaterClass
 
     #
     # Traitement des autres signes
-    # (méthode inaugurée pour traiter les tirets conditionnels)
+    # (méthode inaugurée pour traiter les tirets conditionnels, mais 
+    #  en fait, ils doivent être traités avant les tirets d’exergue)
     # 
     str = __traite_other_signs(str, context)
 
@@ -543,18 +544,20 @@ private
     str = __traite_apos_and_guils(str, context)
     str = __traite_ponctuations_doubles(str, context)
     str = __traite_points_suspensions(str, context)
+    str = __traite_tirets_conditionnels(str,context)
     str = __traite_tirets_exergue(str,context)
     str = __traite_exposants(str,context)
     str = str.gsub(REG_ANTESLASHED,'\1')
     return str
   end
 
+  def self.__traite_tirets_conditionnels(str, context)
+    str = str.gsub('{-}'.freeze, Prawn::Text::SHY)
+    return str
+  end
 
   def self.__traite_other_signs(str, context)
     
-    # # - Trait d’union conditionnel -
-    str = str.gsub('{-}'.freeze, Prawn::Text::SHY)
-
     return str
   end
 
@@ -820,7 +823,6 @@ private
   end
 
   BON_LONG_TIRET = '—' # TODO Pouvoir mettre les demi-longs en recette
-  # REG_TIRET_EXERGUE = /#{EXCHAR}([—–])[ ]?(.+?) ?\2/.freeze
   REG_TIRET_EXERGUE = /#{EXCHAR}([—–\-])[ ]?(.+?) ?(\1|\.|\!|\?)/.freeze
 
 
@@ -844,6 +846,10 @@ private
   end
 
   REG_EXPOSANTS = /([1-9XVICM]+)#{EXCHAR}(ème|eme|ère|re|er|e)\b/.freeze
+  # Note : on pourrait aussi séparer les chiffres arabes et les 
+  # chiffres romains puisqu’ils ne doivent jamais être utilisés en
+  # même temps. Mais ça ne résoudrait pas le problème des couleurs,
+  # donc on laisse comme ça.
 
 end #/class AnyParagraph
 end #/class PdfBook

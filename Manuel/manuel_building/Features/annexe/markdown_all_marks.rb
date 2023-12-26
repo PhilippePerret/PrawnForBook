@@ -25,6 +25,24 @@ Prawn4book::Manual::Feature.new do
     |        | 2\\^e             | 2^e                   |
     |        | X\\^e             | X^e                   |
     |/|
+    (( new_page ))
+
+    #### Les items de liste
+
+    Si le texte non formaté contient :
+    (( line ))
+    \\* Premier item
+    \\* Second item
+    \\* Troisième item
+    (( line ))
+    deviendra…
+    (( line ))
+    * Premier item
+    * Second item
+    * Troisième item
+    (( line ))
+    Pour le détail sur l’utilisation des puces, voir [[puces/puces]].
+
     EOT
 
 end
