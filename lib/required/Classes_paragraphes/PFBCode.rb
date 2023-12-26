@@ -68,6 +68,8 @@ class PFBCode < AnyParagraph
       pdf.build_list_of_abbreviations
     when 'glossaire', 'glossary'
       pdf.build_glossary
+    when 'no_pagination'
+      book.page(pdf.page_number).pagination = false
     when 'stop_pagination'
       pdf.stop_pagination
     when 'start_pagination', 'restart_pagination'

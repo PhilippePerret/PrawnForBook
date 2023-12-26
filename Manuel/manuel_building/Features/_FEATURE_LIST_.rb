@@ -131,6 +131,7 @@ module Prawn4book
     TOUT_PAGINATION && 'pagination/types_numerotation',
     TOUT_PAGINATION && 'pagination/aspect_numero',
     TOUT_PAGINATION && 'pagination/arret_pagination',
+    TOUT_PAGINATION && 'pagination/no_pagination',
     TOUT_PAGINATION && 'pagination/numeroter_pages_vierges',
 
     #__Texte_Details___#
