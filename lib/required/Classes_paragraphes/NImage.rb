@@ -435,8 +435,15 @@ class NImage < AnyParagraph
           page_width - (text_w + image_w) # 0 en cas normal
         end
       image_height  = ((float_data[:textbox3_top] - pdf.line_height) - float_data[:textbox2_top]).abs
+      
       pdf.move_cursor_to(float_data[:textbox2_top])
       pdf.move_to_closest_line
+
+      if pdf.cursor - image_height < 0
+        # Avec la hauteur de l’image, on passerait sous la page
+        add_fatal_error("PROBLÈME AVEC #{exces} / PASSAGE SOUS LA PAGE")
+      end
+
       options_textbox2 = {
         width:  text_w,
         height: image_height,
@@ -465,8 +472,7 @@ class NImage < AnyParagraph
       # écrire la suite.
       pdf.move_cursor_to(float_data[:textbox3_top])
       if pdf.cursor < 0
-        puts "Problème de texte sous le zéro (sans box 3 à faire)".rouge
-        # exit 13
+        add_fatal_error( "Problème de texte sous le zéro (sans box 3 à faire) avec #{wrapped_text}")
       end
       pdf.move_to_next_line
       return true

@@ -14,6 +14,13 @@ MESSAGES = {
       #{'(in %{path})'.gris}
       #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
+
+    success_but_unfinished: <<~EOT,
+      🍺 Le Book PDF a bien été produit mais des erreurs fatales
+        indiquent qu’il ne peut pas être imprimé tel quel.
+      #{'(in %{path})'.gris}
+      #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
+      EOT
   },
 
   # --- Table des matières --- #

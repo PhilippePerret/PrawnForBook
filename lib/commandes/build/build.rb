@@ -193,24 +193,38 @@ class PdfBook
     @end_time = Time.now
 
     # Message tout final
+    return print_bilan_final
+  end
+  #/generate_pdf_book
+
+
+  # Composition et écriture du bilan final
+  # 
+  def print_bilan_final
     if File.exist?(pdf_path)
       pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
-      puts "#{MESSAGES[:building][:success] % {
+
+      nombre_erreurs_fatales_signalees = PrawnView::Error.fatal_errors.count
+
+      ok = nombre_erreurs_fatales_signalees == 0
+
+      msg_id  = ok ? :success : :success_but_unfinished
+      methode = ok ? :vert : :orange
+
+      puts "#{MESSAGES[:building][msg_id] % {
         path: pdf_relpath,
         nombre_paragraphes: paragraphes.count,
         nombre_pages: pages.count,
         duree_traitement: (@end_time.to_f - @start_time.to_f).round(2)
-      }}".vert
+      }}".send(methode)
       puts "\n"
       return true
     else
       puts ERRORS[:building][:book_not_built].rouge
       return false
-    end
-
-
+    end    
   end
-  #/generate_pdf_book
+
 
   # @return true s'il faut exporter le texte (par exemple pour une
   # correction dans Antidote)
