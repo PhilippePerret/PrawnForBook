@@ -812,6 +812,21 @@ private
   end
 
   def self.__traite_tirets_exergue(str, context)
+    # Dans un premier temps, on cherche tous les tirets courts (les
+    # moins) qui peuvent être remplacés par des tirets longs (pour
+    # pouvoir préserver les moins dans "jusque-là" pour exemple 
+    # Correction du bug #206)
+    # 
+    str = str.gsub(REG_TIRET_MOINS) do
+      char_before = $1.freeze
+      char_after  = $2.freeze
+      if "#{char_before}#{char_after}".match?(/[  \n]/.freeze)
+        "#{char_before}—#{char_after}"
+      else
+        $&
+      end
+    end
+
     str = str.gsub(REG_TIRET_EXERGUE) {
       signe   = $1.freeze
       content = $2.strip.freeze
@@ -823,8 +838,8 @@ private
   end
 
   BON_LONG_TIRET = '—' # TODO Pouvoir mettre les demi-longs en recette
-  REG_TIRET_EXERGUE = /#{EXCHAR}([—–\-])[ ]?(.+?) ?(\1|\.|\!|\?)/.freeze
-
+  REG_TIRET_EXERGUE = /#{EXCHAR}([—–])[ ]?(.+?) ?(\1|\.|\!|\?)/.freeze
+  REG_TIRET_MOINS   = /(.)\-(.)/.freeze
 
   def self.__traite_exposants(str, context)
     str = str.gsub(REG_EXPOSANTS) do
