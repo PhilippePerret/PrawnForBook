@@ -14,25 +14,25 @@ Prawn4book::Manual::Feature.new do
     * **`float`** | Définit que l’image est flottante. Ce paramètre peut avoir la valeur `:left` ("gauche" en anglais) pour "flottante à gauche" (l’image sera donc à gauche du texte) ou `:right` ("droite" en anglais) pour "flottante à droite" (l’image sera donc à droite du texte).
     * **`lines_before`** | Définit le nombre de lignes qui vont passer au-dessus de l’image. Par défaut à 0, la première ligne de texte est alignée au haut de l’image (en fonction de ligne de référence du texte).
     * **`margin_top`** | Définit la hauteur à laisser au-dessus de l’image, qu’il y ait ou non des lignes au-dessus. En ne jouant que sur ce paramètre, on ne peut pas faire passer de lignes au-dessus de l’image (utiliser `lines_before` pour ça).
-    * **`vadjust`** | Lorsque le `margin_top` ne permet pas de positionner l’image verticalement, on peut se servir de cette propriété *traditionnelle*.
+    * **`vadjust`** | Cette propriété permet d’ajuster l’image en dernier recours (c’est-à-dire lorsque toutes les autres propriétés restent impuissantes. La grande différence est ici que, quelle que soit la situation, seule l’image (et son éventuelle légende) sera affectée par cette propriété. Elle permet donc un placement ultime parfait à l’endroit voulu.
     * **`margin_left`** | Marge à gauche. Quand l’image est flottante à gauche, détermine la distance de l’image avec la marge gauche. Quand l’image est flottante à droite, détermine la distance de l’image avec le texte à gauche. Cette valeur peut être déterminée par défaut dans la recette comme indiqué ci-dessous.
     * **`margin_right`** | Marge à droite. Quand l’image est flottante à gauche, détermine la distance de l’image avec le texte à droite. Quand l’image est flottante à droite, déterminer la distance entre l’image et la marge droite. Cette valeur peut être déterminée par défaut dans la recette comme indiqué ci-dessous.
     * **`margin_bottom`** | Marge en bas entre le bas de l’image et la première ligne du texte associé à l’image. Attention : il s’agit bien du *texte associé à l’image* et non pas d’un paragraphe suivant qu’il faut éloigner de l’image soit avec `space_after` soit avec des `\\(( line ))`.
     * **`text_width`** | Largeur que doit occuper le texte à côté de l’image. Si non défini, tout l’espace possible.
     Note : on ne permet pas l’utilisation d’une image flottante au milieu, ce qui se fait rarement dans un livre qui n’est pas purement graphique.
 
-    ##### Positionnement exact de l’image
+    #### Positionnement exact de l’image
 
     On peut déterminer le positionnement exact de l’image de façon générale, dans le recette (pour que toutes les images disposent de la même présentation) ou pour chaque image en particulier.
 
-    ##### Passage naturel à la page suivante
+    #### Passage naturel à la page suivante
 
     Pour le moment, _PFB_ ne gère pas le passage naturel à la page suivante lorsque l’image et son texte enroulé ne tiennent pas dans la page. Il faut donc le gérer *manuellement*, à l’aide de `\\(( line \\))` et de `\\(( new_page \\))` par exemple.
 
-    ##### Rotation de l’image
+    #### Rotation de l’image
 
-    Pour le moment, en mode simple, _PFB_ ne permet pas d’effectuer une rotation de l’image. Mais cette fonctionnalité sera implémentée plus tard.
-    Pour le moment, la solution consiste à faire une image déjà tournée et à jouer sur des valeurs négatives pour bien placer le texte. Ou, en mode expert, à l’imprimer explicitement avec du code ruby.
+    Pour le moment, en mode simple, _PFB_ ne permet pas d’effectuer une rotation de l’image. Mais cette fonctionnalité sera implémentée plus tard. Si vous êtes *expert*, vous pouvez le faire en programmant une méthode.
+    Pour le moment, pour un non expert, la solution consiste à faire une image déjà tournée et à jouer sur des valeurs négatives pour bien placer le texte. Ou, en mode expert, à l’imprimer explicitement avec du code ruby.
 
     EOT
 
