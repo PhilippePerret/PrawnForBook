@@ -1,5 +1,6 @@
 module Prawn4book
 
+  # TOUT
   # TOUT = true # ou nil, attention ! (pas false)
   TOUT = nil
 

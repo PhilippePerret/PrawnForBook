@@ -332,7 +332,7 @@ class AnyParagraph
   #   appelée dans #print (pour NTextParagraph et NImage)
   # 
   def styles
-    @styles #||= get_and_calc_styles
+    @styles || {} #||= get_and_calc_styles
   end
 
   # Pour ajouter du style à la volée

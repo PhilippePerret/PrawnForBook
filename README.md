@@ -2,7 +2,7 @@
 
 Comme son nom l'indique, cette application permet de produire des livres prêts-à-l'impression (PDF) à l'aide de [Prawn](https://github.com/justchilinp/prawnpdf).
 
-Voir le [mode d’emploi complet](Manuel/manuel_building/book.pdf)
+Voir le [mode d’emploi complet](Manuel/manuel_building/full_book.pdf) (c’est un livre produit par l’application elle-même, il commence donc par plusieurs pages blanche — le mieux est de le télécharger pour le consulter)
 
 Elle peut fonctionner de façon rudimentaire, à partir d'un simple fichier pseudo-markdown ou de façon très complexe et complète, avec des références croisées, des bibliographies de toutes sortes, des mises en forme complexes grâce à une recette et des parseurs/formateurs, une collection de livres partageant les mêmes éléments, à commencer par la charte graphique.
 
