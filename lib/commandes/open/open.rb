@@ -19,6 +19,7 @@ module Prawn4book
       when :package         then open_sublime_text_package
       when :pfb_manual      then open_manual_prawn_for_book
       when :folder_manuel   then open_manual_folder
+      when :auto_manual     then open_auto_manual
       when :prawn_manual    then open_prawn_manual
       when :prawntbl_manual then open_prawn_table_manual
       end
@@ -72,8 +73,11 @@ module Prawn4book
     `open "#{PRAWN_MANUEL_PATH}"`
   end
 
+  def self.open_auto_manual
+    `open "#{APP_FOLDER}/Manuel/MANUEL_BUILDING/book.pdf"`
+  end
   def self.open_manual_folder
-    `open -a "Finder" "#{APP_FOLDER}/Manuel/manuel_building"`
+    `open -a "Finder" "#{APP_FOLDER}/Manuel/MANUEL_BUILDING"`
   end
 
   def self.open_prawn_table_manual
@@ -94,6 +98,7 @@ module Prawn4book
       {name:TERMS[:coll_in_finder],     value: :cffolder},
       {name:TERMS[:package_subtext],    value: :package},
       {name:TERMS[:manual_pfb],         value: :pfb_manual},
+      {name:TERMS[:auto_manual],        value: :auto_manual},
       {name:TERMS[:manual_prawn],       value: :prawn_manual},
       {name:TERMS[:manual_prawn_table], value: :prawntbl_manual},
       {name:TERMS[:folder_manuel]     , value: :folder_manuel}

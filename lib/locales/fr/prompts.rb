@@ -6,6 +6,7 @@ TYPO = {
 TERMS = {
   A_class_method: "Une méthode de classe",
   Authors: 'Auteurs',
+  auto_manual: 'manuel auto-produit',
   bibliography: 'bibliographie',
   biblio_item: 'item de bibliographie',
   book_format: 'format (taille livre, marges, etc.)',
