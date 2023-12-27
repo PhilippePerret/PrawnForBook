@@ -211,11 +211,16 @@ class NImage < AnyParagraph
         move_down(my.space_before)
       end
 
-      # S’il y a un ajustement vertical
-      if my.vadjust > 0
+      # S’il y a un ajustement vertical précis
+      # (mais en vérité, cet ajustement ne doit absolument concerner
+      #  que l’image et sa légende, donc il ne faut pas le traiter
+      #  ici mais au tout dernier moment — cf. plus bas)
+      # Le premier résultat (seulement l’image) a été obtenu en 
+      # commentant la ligne [L1] ci-dessous
+      if my.vadjust != 0
         data_image[:at][1] -= my.vadjust if data_image.key?(:at)
         # Dans tous les cas, on se déplace vers le bas
-        move_down(my.vadjust)
+        # move_down(my.vadjust) # [L1]
       end
 
       # Si l’image est flottante
