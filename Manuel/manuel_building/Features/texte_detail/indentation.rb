@@ -23,6 +23,10 @@ Prawn4book::Manual::Feature.new do
 
     Noter que pour le moment il est impossible d’utiliser d’indentation négative (à cause des limitations actuelles de  `Prawn`.
 
+    #### Forcer l’identation du paragraphe
+
+    Il peut arriver, parfois, que l’identation d’un paragraphe soit supprimée, sans raison apparente. Cela tient aux calculs parfois très compliqués que doit effectuer _PFB_. Le cas échéant, il suffit d’ajouter la marque `\\(( {indentation:true} ))` juste avant le paragraphe en question pour forcer son indentation.
+
     #### Note sur l’indentation pour les experts
 
     Le cas échéant, sachez que l’indentation des paragraphes dans _PFB_ n’utilise pas, en vérité, la propriété `:indent_paragraphs`. Tout simplement parce cette propriété, à l’heure où l’on écrit ces lignes, n’est pas utilisable pour calculer la hauteur d’un bloc. On serait donc contraint de la supprimer, obtenant donc des résultats faux.

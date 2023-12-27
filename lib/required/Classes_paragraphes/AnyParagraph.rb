@@ -426,8 +426,17 @@ class AnyParagraph
                   if v === false
                     # Quand indent:false ou indentation:false
                     self.no_indentation = true
+                  elsif v === true
+                    # Quand indentation est mis à true pour forcer
+                    # une indentation qui a peut-être été supprimée
+                    # par un code précédent. Ça arrive par exemple 
+                    # avec le texte flottant autour d’une image, dans
+                    # la version 2.1
+                    self.no_indentation = false
+                    self.indentation = book.recipe.text_indent
                   else
                     # Quand indentation: <valeur>
+                    self.no_indentation = false
                     self.indentation = v.to_pps
                   end
                   v = :NOT_STYLE_VALUE

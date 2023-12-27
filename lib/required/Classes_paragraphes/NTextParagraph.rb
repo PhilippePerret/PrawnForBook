@@ -203,13 +203,14 @@ class NTextParagraph < AnyParagraph
   end
   # Pour supprimer dynamiquement l’indentation s’il y en a
   def no_indentation=(value); @no_indentation = value end
-  def no_indentation; @no_indentation || false end
+  def no_indentation; @no_indentation end # 3 valeurs possibles, true, false et nil
 
   def indented?
     # Un paragraphe n’est pas indenté si :
     # - le paragraphe précédent est un titre 
     # - le paragraphe précédent est vide de texte
     # - on a forcé la suppression de l’indentation
+    return true if no_indentation === false # vraiment forcé avec une valeur
     not(no_indentation || prev_printed_paragraph&.title? || not(prev_printed_paragraph&.some_text?))
   end
 

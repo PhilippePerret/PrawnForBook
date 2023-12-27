@@ -336,19 +336,28 @@ class NImage < AnyParagraph
         ###   TEXTE AUTOUR DE L’IMAGE   ###
         ###################################
 
-        my.print_text_around_image(floating_data)
+        # Écriture du texte autour de l’image
+        # 
+        # @note
+        #   Dans certains cas, lorsque le texte se finit sur l’autre
+        #   page par exemple, il ne faut pas déplacer le curseur ici
+        #   Dans ces cas-là, la méthode retourne false qui est mis 
+        #   dans +move_after+
+        move_after = my.print_text_around_image(floating_data)
         # Où faut-il se placer (cursor) ensuite ?
 
-        best_cursor = [
-          image_top - image_height - line_height, 
-          cursor, 
-          floating_data[:textbox3_top], 
-          last_cursor
-        ].min.freeze
-        # spy "Meilleur curseur obtenu : #{best_cursor}".bleu
-        move_cursor_to(best_cursor)
-        move_to_closest_line
-        # update_current_line
+        if move_after
+          best_cursor = [
+            image_top - image_height - line_height, 
+            cursor, 
+            floating_data[:textbox3_top], 
+            last_cursor
+          ].min.freeze
+          # spy "Meilleur curseur obtenu : #{best_cursor}".bleu
+          move_cursor_to(best_cursor)
+          move_to_closest_line
+        end
+        # Dans tous les cas, on passe à la ligne suivante ?
         move_to_next_line
 
       else
@@ -412,7 +421,7 @@ class NImage < AnyParagraph
       add_erreur("Une image flottante ne possède aucun texte à côté d’elle. Il est défini, mais trop court.")
       pdf.move_cursor_to(float_data[:textbox3_top])
       pdf.move_to_next_line
-      return
+      return true
     end
 
     # Le texte restant doit être mis à côté de l’image
@@ -441,6 +450,11 @@ class NImage < AnyParagraph
       else
         exces = pdf.formatted_text_box(exces, **options_textbox2)
       end
+      # LE CODE SUIVANT DÉTECTE DES ERREURS QUI N’EN SONT PAS…
+      # if pdf.cursor < 0
+      #   puts "Problème de texte sous le zéro avec #{exces.inspect}".rouge
+      #   exit 12
+      # end
       exces = nil if exces.empty?
     end
 
@@ -450,11 +464,16 @@ class NImage < AnyParagraph
       # l’image. Dans ce cas, on passe sous l’image pour continuer à
       # écrire la suite.
       pdf.move_cursor_to(float_data[:textbox3_top])
+      if pdf.cursor < 0
+        puts "Problème de texte sous le zéro (sans box 3 à faire)".rouge
+        # exit 13
+      end
       pdf.move_to_next_line
-      return
+      return true
     end
 
     # Le texte restant doit être mis en dessous de l’image
+    # 
     if exces && exces.any?
       pdf.move_cursor_to(float_data[:textbox3_top])
       pdf.move_to_closest_line
@@ -470,10 +489,30 @@ class NImage < AnyParagraph
       fbox.render(dry_run: true)
       hauteur_reste = fbox.height
       # - Écriture du reste -
-      pdf.formatted_text_box(exces, **options_textbox3)
-      # - Déplacement du curseur -
-      pdf.move_down(hauteur_reste)
+      if pdf.cursor < 0
+        # Quand le texte à mettre sous l’image doit être passé à la
+        # page suivante dès le premier mot. On se place alors en haut
+        # de la page suivante.
+        pdf.start_new_page
+        pdf.move_to_line(1)
+        options_textbox3[:at][1] = pdf.cursor
+      end
+      # - Écriture du texte sous l’image -
+      exces = pdf.formatted_text_box(exces, **options_textbox3)
+      if exces.empty?
+        # - Déplacement du curseur -
+        pdf.move_down(hauteur_reste)
+      else
+        # Il reste du texte (à cause d’un passage à la page suivante, 
+        # on l’écrit
+        pdf.start_new_page
+        pdf.move_to_line(1)
+        cursor_start = pdf.cursor.freeze
+        pdf.formatted_text(exces, **{align: :justify, inline_format: true})
+        cursor_end = pdf.cursor.freeze
+      end
       pdf.update_current_line
+      return false # pour ne pas déplacer le curseur
     end
 
   end
