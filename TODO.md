@@ -2,9 +2,9 @@
 
 ## Maintenant
 
-* Régler le problème d’une multicolonne qui a du texte en rab ("Il reste des segments dans…").
-* Corriger le problème des textes enroulés non traités
+* Corriger leS problèmeS des textes enroulés non traités
   (peut-être faudra-t-il implémenter une méthode `as_formatted_text` qui retourne un texte quelconque sous forme de texte formaté Praw, c’est-à-dire une table ruby avec :text, :styles, etc. — il y a une méthode de Praw qui fait ça, avec le nom `format`)
+    * maintenant que le texte est traité, il reste ce problème : le paragraphe ne devrait pas être indenté, mais il l’est (essai : indiquer explicitement qu’il ne doit pas l’être)
 
 Reprise de tous les éléments un par un en construisant le manuel de façon automatisé avec l’application elle-même.
 

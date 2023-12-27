@@ -227,7 +227,7 @@ class AnyParagraph
 
   def text=(value); @text = value end
 
-  # Texte avec son indentation
+  # Texte avec son indentation (ou pas)
   def indented_text
     @indented_text ||= "#{string_indentation}#{text}"
   end
@@ -325,8 +325,14 @@ class AnyParagraph
   # à commencer par les styles définis par un paragraphe précédent 
   # de type PfbCode qui contiendrait (( {<key>: <value}, ... ))
   # 
+  # @note
+  #   Avant, c’est ici qu’on appelait #get_and_calc_styles, 
+  #   c’est-à-dire au premier appel de @styles (trop imprécis) mais
+  #   depuis les textes enroulés autour des images, la méthode est
+  #   appelée dans #print (pour NTextParagraph et NImage)
+  # 
   def styles
-    @styles ||= get_and_calc_styles
+    @styles #||= get_and_calc_styles
   end
 
   # Pour ajouter du style à la volée
@@ -417,7 +423,13 @@ class AnyParagraph
               else 
                 case k
                 when :indentation, :indent
-                  self.indentation = v.to_pps
+                  if v === false
+                    # Quand indent:false ou indentation:false
+                    self.no_indentation = true
+                  else
+                    # Quand indentation: <valeur>
+                    self.indentation = v.to_pps
+                  end
                   v = :NOT_STYLE_VALUE
                 when :no_indentation
                   self.no_indentation = v
@@ -428,7 +440,9 @@ class AnyParagraph
           sty.merge!(k => real_value_for(v)) unless v == :NOT_STYLE_VALUE
         end
       end
-      return sty
+      @styles = sty
+
+      return sty # on l’avait avant, on le garde
     end
 
     # Traite la valeur +value+ qu'elle soit une valeur numérique ou

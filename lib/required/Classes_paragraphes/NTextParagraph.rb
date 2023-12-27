@@ -68,10 +68,14 @@ class NTextParagraph < AnyParagraph
 
     @pdf = pdf
 
+    # Si des styles propres ont été définis dans le paragraphe
+    # précédent, on les traite ici.
+    get_and_calc_styles
 
     # À chaque tour, on doit corriger le texte, le préparer 
     # entièrment (et le mettre dans @text).
     @text = raw_text.dup
+
     #
     # Tous les traitements communs, comme la retenue du numéro de
     # la page ou le préformatage pour les éléments textuels.
@@ -123,15 +127,10 @@ class NTextParagraph < AnyParagraph
         width:  pdf.bounds.width - left,
         no_num: true,
       })
-    elsif indentation
-      # Si ce n’est pas un item de liste et qu’il y a une indentation,
-      # on ajoute l’espace voulu
-      if no_indentation || prev_printed_paragraph.title? || not(prev_printed_paragraph.some_text?)
-        # Rien à faire
-      else
-        @text = "#{string_indentation}#{text}"
-      end
+    elsif indented?
+      @text = "#{string_indentation}#{text}"
     end
+
 
     ###########################
     #  ÉCRITURE DU PARAGRAPHE #
@@ -186,7 +185,11 @@ class NTextParagraph < AnyParagraph
     @indentation ||= book.recipe.text_indent
   end
   def string_indentation
-    @string_indentation ||= self.class.string_indentation
+    if indented?
+      self.class.string_indentation
+    else
+      ''
+    end
   end
   # Pour modifier dynamiquement l’indentation
   def indentation=(value)
@@ -201,6 +204,14 @@ class NTextParagraph < AnyParagraph
   # Pour supprimer dynamiquement l’indentation s’il y en a
   def no_indentation=(value); @no_indentation = value end
   def no_indentation; @no_indentation || false end
+
+  def indented?
+    # Un paragraphe n’est pas indenté si :
+    # - le paragraphe précédent est un titre 
+    # - le paragraphe précédent est vide de texte
+    # - on a forcé la suppression de l’indentation
+    not(no_indentation || prev_printed_paragraph&.title? || not(prev_printed_paragraph&.some_text?))
+  end
 
   class << self
     # Création de l’indentation artificielle à l’aide d’espaces

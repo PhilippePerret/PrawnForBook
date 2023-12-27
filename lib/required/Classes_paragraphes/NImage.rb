@@ -119,6 +119,10 @@ class NImage < AnyParagraph
     # Exposer à toute l’instance
     @pdf = pdf
 
+    # Si des styles propres ont été définis dans le paragraphe
+    # précédent l’image, on les traite ici.
+    get_and_calc_styles
+
     # Pour surveiller l’erreur de page (cf. page_number_fin plus
     # bas)
     page_number_debut = pdf.page_number.freeze
@@ -322,9 +326,11 @@ class NImage < AnyParagraph
         end
         floating_data.merge!(textbox3_top: cursor.freeze)
         rule(:jaune) if debugit
+
         ###################################
         ###   TEXTE AUTOUR DE L’IMAGE   ###
         ###################################
+
         my.print_text_around_image(floating_data)
         # Où faut-il se placer (cursor) ensuite ?
 
@@ -476,6 +482,7 @@ class NImage < AnyParagraph
     pp = self.prev_printed_paragraph
     # s << "#{pp.string_indentation}#{pp.raw_text}"
     s << "#{pp.string_indentation}#{pp.text}"
+    # s << "#{pp.text}"
     while pp.prev_printed_paragraph.wrapped?
       pp = pp.prev_printed_paragraph
       # s  << "#{pp.string_indentation}#{pp.raw_text}"
