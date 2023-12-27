@@ -187,56 +187,60 @@
   :page: 65
   :paragraph:
   :text: texte_detail_gestion_tirets_conditionnels
-:format_precis_grand_titre:
+:texte_detail_placement_sur_ligne_quelconque:
   :page: 67
+  :paragraph:
+  :text: texte_detail_placement_sur_ligne_quelconque
+:format_precis_grand_titre:
+  :page: 68
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 68
+  :page: 69
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 71
+  :page: 72
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 74
+  :page: 75
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 75
+  :page: 76
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 76
+  :page: 77
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 77
+  :page: 78
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 77
+  :page: 78
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 78
+  :page: 79
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 79
+  :page: 80
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 80
+  :page: 81
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
@@ -249,7 +253,7 @@
   :text: annexe_markdown_all_marks
 :all_markdown:
   :page: 84
-  :paragraph: 1257
+  :paragraph: 1265
   :text: all_markdown
 :annexe_format_yaml:
   :page: 85

@@ -28,7 +28,7 @@ class ColumnsBox < ParagraphAccumulator
   # 
   def initialize(book, **params)
     super(book)
-    @params     = params
+    @params = params
   end
 
   def inspect
@@ -83,20 +83,6 @@ class ColumnsBox < ParagraphAccumulator
     while hrest > 0
       required_height = [hrest, pdf.cursor].min
 
-      # if Prawn4book.second_turn?
-      #   puts <<~EOT
-
-      #     Hauteur total (1 colonne) : #{hauteur_total}
-      #     Nombre de colonnes : #{ColumnData.count}
-      #     Hauteur de colonne : #{ColumnData.height}
-      #     hrest   : #{hrest}
-      #     Hauteur requise pour ce tour : #{required_height}
-      #     Cursor : #{pdf.cursor}
-      #     Nombre de segments restants : #{segments.count}
-      #     EOT
-      #   # exit 12 if Q.no?("Dois-je poursuivre ?".jaune)
-      # end
-
       build_columns_for_height(required_height)
       hrest = hrest - required_height
       if hrest > 0
@@ -106,18 +92,42 @@ class ColumnsBox < ParagraphAccumulator
     end
     pdf.update_current_line
 
+    # Reste-t-il des segments ? (pour le moment, lorsque ça se 
+    # produisait, il en restait toujours un seul)
+    # Je ne sais pas vraiment comment m’y prendre, j’essaie de 
+    # l’ajouter à la dernière colonne
+    # 
+    # TODO Un jour, il faudra vraiment s’attaquer au problème et
+    # voir d’où il vient, afin de le corriger proprement. Pour le
+    # moment, tout ce qu’il me semble, c’est que ça survient en bas
+    # de page, quand il reste une seule ligne. L’application devrait
+    # logiquement y poser un segment de plus (une ligne de plus) mais
+    # curieusement ne le fait pas.
+    # 
+    if segments.any?
+      cursor_init = pdf.cursor.freeze
+      pdf.move_to_line(pdf.current_line)
+      icursor = pdf.cursor
+      build_a_column_for_height(column_count - 1, icursor, pdf.line_height)
+      pdf.start_new_page if cursor_init < pdf.line_height
+      if segments.any?
+        raise PFBFatalError.new(180, [column_count, @debug_start_column, segments.count])
+      else
+        add_erreur(PFBError[181] % [column_count, @debug_start_column])
+      end
+      pdf.update_current_line
+    end
+
+    pdf.update_current_line
+
+    # S’il faut ajouter des lignes après
+    # 
     if lines_after > 0
       lines_after.times { pdf.move_to_next_line }
     elsif lines_after == 0
       pdf.move_to_previous_line
     elsif lines_after < 0
       lines_after.abs.times { pdf.move_to_previous_line }
-    end
-
-    # Reste-t-il des segments ?
-    if segments.any?
-      puts "Il reste des segments dans un texte en double colonnes : #{segments.inspect}…".rouge
-      exit 12
     end
 
     # S’il doit y avoir du texte après
@@ -128,18 +138,31 @@ class ColumnsBox < ParagraphAccumulator
 
   end #/print
 
+  # Construction de toutes les colonnes de texte
+  # 
   def build_columns_for_height(required_height)
     init_cursor = pdf.cursor.freeze
     column_count.times do |itime|
-      left = ColumnData.full_width * itime
-      bb_options = {
-        height: required_height,
-        width:  ColumnData.width,
-      }
-      pdf.bounding_box([left, init_cursor], **bb_options) do
-        @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate))
-      end
+      build_a_column_for_height(itime, init_cursor, required_height)
     end #/x nombre de colonnes
+  end
+
+  # Construction d’un des colonnes de texte
+  # 
+  # @note
+  #   La méthode est aussi utilisée pour graver le segment qui peut
+  #   rester à la fin de l’opération.
+  # 
+  def build_a_column_for_height(column_index, icursor, required_height)
+    left = ColumnData.full_width * column_index
+    bb_options = {
+      height: required_height,
+      width:  ColumnData.width,
+    }
+    # Pour le débuggage, on mémorise le début de la colonne
+    pdf.bounding_box([left, icursor], **bb_options) do
+      @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate))
+    end
   end
 
   def text_options
@@ -205,6 +228,8 @@ class ColumnsBox < ParagraphAccumulator
 
       # Liste pour mettre tous les textes obtenus
       text_ary = []
+      # Pour le texte de debuggage
+      debug_txt = []
 
       # Pour calculer, on met tout dans une colonne qui fait
       # la taille de colonne voulue
@@ -225,6 +250,7 @@ class ColumnsBox < ParagraphAccumulator
             str = par.indented_text
             p = []
             text_ary += text_formatter.format(str, *p)
+            debug_txt << par.text if debug_txt.count < 10
           end
           h = height_of_formatted(text_ary, my.text_options)
         end
@@ -232,6 +258,9 @@ class ColumnsBox < ParagraphAccumulator
         # On se remet en place
         move_cursor_to(current_cursor)
       end #/pdf.update
+      
+      # Pour le débuggage
+      @debug_start_column = debug_txt.join('').gsub(/\n/," ¶ ")
       
       return h
     end

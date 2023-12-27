@@ -474,15 +474,17 @@ class NImage < AnyParagraph
   def wrapped_text
     s = []
     pp = self.prev_printed_paragraph
-    s << "#{pp.string_indentation}#{pp.raw_text}"
+    # s << "#{pp.string_indentation}#{pp.raw_text}"
+    s << "#{pp.string_indentation}#{pp.text}"
     while pp.prev_printed_paragraph.wrapped?
       pp = pp.prev_printed_paragraph
-      s  << "#{pp.string_indentation}#{pp.raw_text}"
+      # s  << "#{pp.string_indentation}#{pp.raw_text}"
+      s  << "#{pp.string_indentation}#{pp.text}"
     end
-    s = AnyParagraph.__parse(s.reverse.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
+    # s = AnyParagraph.__parse(s.reverse.join("\n"), **{pdf:pdf, paragraph:self.prev_printed_paragraph})
       # @note : peut-être faudra-t-il simplement appeler __parse sur 
       # chaque paragraphe
-    return s
+    return s.reverse.join("\n")
   end
 
   # --- Calcul Methods ---

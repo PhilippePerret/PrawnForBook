@@ -117,6 +117,9 @@ class PFBFatalError < StandardError
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      # -- Multi-colonnes --
+      180   => Prawn4book::ERRORS[:multicolumns][:extra_segment_unresolved],
+      181   => Prawn4book::ERRORS[:multicolumns][:extra_segment_resolved],
       # -- Pages --
       200   => Prawn4book::ERRORS[:pages][:unfound],
       201   => Prawn4book::ERRORS[:pages][:credits][:notfit],

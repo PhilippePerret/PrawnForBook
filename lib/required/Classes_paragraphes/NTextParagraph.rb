@@ -33,8 +33,8 @@ class NTextParagraph < AnyParagraph
     @is_list_item   = raw_text.match?(REG_LIST_ITEM)
     @is_wrapped     = raw_text.start_with?('!')
 
-    # En cas de citation ou d'item de liste, on retire la marque
-    # de début du paragraphe ("> " ou "* ")
+    # En cas de citation, de texte enroulé ou d'item de liste, on 
+    # retire la marque de début du paragraphe (’!’, "> " ou "* ")
     @raw_text = raw_text[1..-1].strip if citation? || list_item? || wrapped?
 
     recup = {}
@@ -42,12 +42,12 @@ class NTextParagraph < AnyParagraph
     self.class_tags = recup[:class_tags]
     @raw_text = tx
     
-    # 
     # Pré-définition des styles en fonction de la nature du paragra-
     # phe de texte
     # 
     if citation?
-      @text = "<i>#{@text}</i>"
+      # Est-ce vraiment la meilleure formule ?
+      @raw_text = "<i>#{@raw_text}</i>"
       add_style({size: font_size + 1, left: 1.cm, right: 1.cm, top: 0.5.cm, bottom: 0.5.cm, no_num:true})
     end
 
@@ -59,17 +59,12 @@ class NTextParagraph < AnyParagraph
 
   # --- Printing Methods ---
 
-  ##
   # Méthode principale d'écriture du paragraphe
   # @note
   #   C'est vraiment cette méthode qui écrit un paragraphe texte,
   #   en plaçant le curseur, en réglant les propriétés, etc.
   # 
   def print(pdf)
-
-    # Si c’est un paragraphe enroulé (sous-entendu : autour d’une
-    # image), on ne l’imprime pas ici.
-    return if wrapped?
 
     @pdf = pdf
 
@@ -82,6 +77,10 @@ class NTextParagraph < AnyParagraph
     # la page ou le préformatage pour les éléments textuels.
     # 
     super
+
+    # Si c’est un paragraphe enroulé (sous-entendu : autour d’une
+    # image), on ne l’imprime pas ici.
+    return if wrapped?
     
     #
     # Si le paragraphe possède son propre builder, on utilise ce

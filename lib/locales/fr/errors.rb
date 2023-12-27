@@ -274,6 +274,27 @@ ERRORS = {
         ERR
     }
   },
+
+  multicolumns: {
+    extra_segment_unresolved: <<~EOT,
+    Dans la multicolonne de %s colonnes commençant par…
+    <<< %s… >>>
+    … il reste %s segment(s) de textes qui n’ont pas pu être traité, malgré
+    tous nos efforts. 
+    Essayez peut-être d’ajouter un item vide (avec une espace insécable)
+    pour palier le problème.
+    EOT
+    
+    extra_segment_resolved: <<~EOT,
+    Dans la multicolonne de %s colonnes commençant par…
+    <<< %s… >>>
+    … j’ai pu remettre le segment qui restait non gravé, mais le
+    résultat sera peut-être imparfait (avec une dernière colonne plus
+    longue que les précédentes).
+    Le problème pourrait se corriger de soi-même avec des éléments 
+    supplémentaires.
+    EOT
+  },
   
   textfile: {
     unfound_text_file: <<~EOT,
