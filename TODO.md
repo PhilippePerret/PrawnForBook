@@ -3,7 +3,7 @@
 ## Maintenant
 
 * Corriger leS problèmeS des textes enroulés non traités
-  (peut-être faudra-t-il implémenter une méthode `as_formatted_text` qui retourne un texte quelconque sous forme de texte formaté Praw, c’est-à-dire une table ruby avec :text, :styles, etc. — il y a une méthode de Praw qui fait ça, avec le nom `format`)
+  bug #201
 
 Reprise de tous les éléments un par un en construisant le manuel de façon automatisé avec l’application elle-même.
 
