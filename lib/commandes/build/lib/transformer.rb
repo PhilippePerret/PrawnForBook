@@ -843,18 +843,21 @@ private
 
   def self.__traite_exposants(str, context)
     str = str.gsub(REG_EXPOSANTS) do
-      amorce = $1.freeze
-      nombre = $2.freeze
+      entier  = $&.freeze
+      amorce  = $1.freeze
+      nieme   = $2.freeze
       if amorce.length == 5 && amorce.match?(/^[1-9C]$/.freeze)
         # C’est une couleur, en fait
-        "#{amorce}#{nombre}"
+        "#{amorce}#{nieme}"
+      elsif nieme == 'e' && ['ce','me'].include?(entier.downcase)
+        entier
       else
-        case nombre
+        case nieme
         when 'ème', 'eme' then 'e'
         when 'ère' then 're'
-        else nombre
+        else nieme
         end
-        "#{amorce}<sup>#{nombre}</sup>"
+        "#{amorce}<sup>#{nieme}</sup>"
       end
     end
     return str
