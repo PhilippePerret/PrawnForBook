@@ -41,7 +41,14 @@ class << self
   end
 
   def add_building_fatal_error(err_message, **params)
-    @fatal_errors << {message: err_message, params: params}
+    err_data = {message: err_message, params: params}
+    if Prawn4book.bat?
+      # En mode "bon à tirer" aucune erreur fatale ne doit survenir
+      err_msg = compose_message_from_data(err_data)
+      raise PFBFatalError.new(150, {err: err_msg})
+    else
+      @fatal_errors << err_data
+    end
   end
 
   def add_building_notice(msg, **params)

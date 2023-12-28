@@ -2,9 +2,6 @@
 
 ## Maintenant
 
-* Corriger leS problèmeS des textes enroulés non traités
-  bug #201
-
 Reprise de tous les éléments un par un en construisant le manuel de façon automatisé avec l’application elle-même.
 
 Voir `ghi`

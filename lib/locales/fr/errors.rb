@@ -54,6 +54,24 @@ ERRORS = {
     too_much_errors_on_properties: "Trop d'erreurs rencontrées sur la propriété '%s'. Réglez le problème avant de reprendre la fabrication du livre.",
     unfound_included_file: "Le fichier à inclure '%s' est introuvable (même dans le dossier du livre ou de la collection).",
     book_not_built: "Malheureusement le book PDF ne semble pas avoir été produit.",
+  
+    bat_fatal_error: <<~ERR,
+      Pour produire un livre BAT (Bon À Tirer) il faut absolument corriger
+      l’erreur fatale suivante (ou retirer l’option -bat) :
+      %{err}
+      ERR
+
+    bat_no_margins: <<~ERR,
+      Les marges ne doivent pas être demandées (en tout cas pas par
+      l’option -margins)
+      ERR
+    bat_no_grid: <<~ERR,
+      La grille de référence ne doit pas être affichée dans le livre
+      en B.A.T. (en tout cas pas par l’option -grid). Si vraiment vous souhaitez
+      imprimer un livre avec la grille de référence, pour voir, alors retirez 
+      l’option -bat (je m’en voudrais trop de produire un BAT avec ce genre 
+      d’artefact…)
+      ERR
   },
 
   # --- Parsing ---
@@ -744,6 +762,37 @@ ERRORS = {
       L’image pour le logo de la page de titre, à l’adresse :
       %{path}
       est introuvable.
+      ERR
+
+    passage_sous_page: <<~ERR, 
+      L’image flottante '%{img}' (page #%{page}) qui doit apparaitre
+      aux côtés du texte « %{text} »
+      est trop basse, elle passe sous la page.
+      Il faut soit la mettre avec un texte plus haut, soit la mettre avec un
+      texte de la page suivante. Je ne peux pas prendre cette décision pour
+      vous.
+      ERR
+
+    floating_text_under_zero: <<~ERR,
+      Problème de texte passant sous le zéro (sans box 3 à faire) avec
+      l’image flottante '%{img}' (page #%{page}). Le texte est le suivant :
+      %{text}
+      ERR
+
+    floating_image_too_big: <<~ERR,
+      L’image flottante '%{img}' (page #%{page}) prend trop de place,
+      il n’en reste pas assez pour le texte (erreur Prawn::Errors::CannotFit
+      générée).
+      Peut-être avez-vous simplement oublié de définir le 'width' de cette 
+      image flottante ? (par exemple 'width:"50%"')
+      ERR
+
+    floating_image_with_no_text: <<~ERR,
+      L’image flottante '%{img}' (page #%{page}) n’a aucun texte à côté
+      elle.
+      Il faut soit retirer des lignes au-dessus (si lines_before est défini
+      et supérieur à 0), soit ajouter des "!" devant un ou deux paragraphes
+      supplémentaires avant l’image pour les enrouler autour de cette image.
       ERR
   },
 }

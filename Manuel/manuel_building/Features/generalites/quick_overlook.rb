@@ -24,8 +24,10 @@ Prawn4book::Manual::Feature.new do
     **`-margins#{' '*6}`** Construit le livre avec les marges visibles.
     **`-grid#{' '*9}`** Construit le livre avec les lignes de référence.
     **`-debug#{' '*8}`** Affiche des messages d’erreur plus précis.
+    **`-bat#{' '*10}`** Pour "Bon À Tirer (cf. ci-dessous)"
 
-
+    L’option **`-bat`** assure de produire le document "bon à tirer", c’est-à-dire prêt à être envoyé à l’imprimeur (ou à être déposé dans la bibliothèque KDP). Par exemple, elle s’assure que les marges ou la grille de référence n’ait pas été affichée (par les options) ou elle s’assure que les problèmes d’images (signalées en erreur fatale dans le rapport final, mais sans interrompre la construction quand `-bat` n’est pas utilisé) ont tous été réglés.
+    **Moralité : produisez toujours le document final avec cette option `-bat`.**
     EOT
 
 end

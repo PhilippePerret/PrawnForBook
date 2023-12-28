@@ -273,7 +273,7 @@ class PageInfos
     @value_color ||= value_fonte.color
   end
   def value_data
-    @value_data ||= credits_page[:value]
+    @value_data ||= credits_page[:value]||{}
   end
 
   # --- General Data ---
@@ -411,12 +411,15 @@ class PageInfos
   # 
   # @api private
   def traite_people_in(dpeople)
-    people = dpeople[:patro] || return
-    people = people.match?(',') ?
-                people.split(',').map{|n|n.strip} : [people]
-    mails  = dpeople[:mail]
-    mails  = mails.to_s.match?(',') ?
-                mails.split(',').map{|n|n.strip} : [mails]
+    people = dpeople[:patro] || dpeople[:patronyme] || dpeople[:name] || return
+    unless people.is_a?(Array)
+      people = people.split(',').map { |n| n.strip }
+    end
+    mails  = dpeople[:mail] || []
+    unless mails.is_a?(Array)
+      mails = mails.split(',').map { |n| n.strip }
+    end
+    
     people.map.with_index do |patro, idx|
       patro = human_for_patro(patro)
       patro = "#{patro}#{LINEAR_DELIMITOR}(#{mails[idx]})" unless mails[idx].nil?

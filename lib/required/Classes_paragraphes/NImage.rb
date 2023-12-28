@@ -391,6 +391,8 @@ class NImage < AnyParagraph
   # Méthode principale qui écrit le texte autour d’une image 
   # flottante
   def print_text_around_image(float_data)
+    @erreur_passage_sous_page_signaled = false
+
     # S’il y a un margin_top, il faut écrire du texte avant
     if lines_before > 0
       # L’image est un peu décalée du haut, il faut donc écrire le
@@ -414,11 +416,13 @@ class NImage < AnyParagraph
       exces = wrapped_text
     end
 
-    if exces.nil?
+    if exces.to_s.length == 0
+      # - ERREUR PSEUDO-FATALE -
       # Cela se produit lorsqu’il y a des lignes de texte à écrire
       # au-dessus, mais qu’aucun texte n’est à écrire à côté de 
       # l’image. On signale une erreur.
-      add_erreur("Une image flottante ne possède aucun texte à côté d’elle. Il est défini, mais trop court.")
+      err_msg = PFBError[256] % {img: imgname, page: pdf.page_number}
+      add_fatal_erreur(err_msg)
       pdf.move_cursor_to(float_data[:textbox3_top])
       pdf.move_to_next_line
       return true
@@ -440,8 +444,20 @@ class NImage < AnyParagraph
       pdf.move_to_closest_line
 
       if pdf.cursor - image_height < 0
-        # Avec la hauteur de l’image, on passerait sous la page
-        add_fatal_error("PROBLÈME AVEC #{exces} / PASSAGE SOUS LA PAGE")
+        # - ERREUR PSEUDO-FATALE -
+        # Avec la hauteur de l’image, on passe sous la page. On 
+        # n’imterrompt pas la construction (sauf avec l’option -bat)
+        # mais on met une forte alerte (rouge dans le rapport final)
+        letexte = 
+          if exces.is_a?(Hash)
+            exces.map { |h| h[:text] }.join(' ')
+          else
+            exces.to_s
+          end
+        letexte = "#{letexte[0..70]} […]" if letexte.length > 70 && not(debug?)
+        err_msg = PFBError[253] % {img: imgname, page: pdf.page_number, text: letexte}
+        add_fatal_error(err_msg)
+        @erreur_passage_sous_page_signaled = true
       end
 
       options_textbox2 = {
@@ -452,12 +468,17 @@ class NImage < AnyParagraph
         align:    :justify,
         inline_format: true
       }
-      if exces.is_a?(String)
-        exces = pdf.text_box(exces, **options_textbox2)
-      else
-        exces = pdf.formatted_text_box(exces, **options_textbox2)
+      begin
+        if exces.is_a?(String)
+          exces = pdf.text_box(exces, **options_textbox2)
+        else
+          exces = pdf.formatted_text_box(exces, **options_textbox2)
+        end
+      rescue Prawn::Errors::CannotFit => e
+        raise PFBFatalError.new(255, {img:imgname,page:pdf.page_number})
       end
-      # LE CODE SUIVANT DÉTECTE DES ERREURS QUI N’EN SONT PAS…
+      # LE CODE SUIVANT DÉTECTE DES ERREURS QUI N’EN SONT PAS… NE PAS
+      # L’UTILISER
       # if pdf.cursor < 0
       #   puts "Problème de texte sous le zéro avec #{exces.inspect}".rouge
       #   exit 12
@@ -471,8 +492,9 @@ class NImage < AnyParagraph
       # l’image. Dans ce cas, on passe sous l’image pour continuer à
       # écrire la suite.
       pdf.move_cursor_to(float_data[:textbox3_top])
-      if pdf.cursor < 0
-        add_fatal_error( "Problème de texte sous le zéro (sans box 3 à faire) avec #{wrapped_text}")
+      if pdf.cursor < 0 && not(@erreur_passage_sous_page_signaled)
+        err_msg = PFBError[254] % {page: pdf.page_number, img: imgname, text: wrapped_text.gsub(/<.+?>/,'').gsub(/ +/,' ').scan(/[^ ]{1,70}/).join("\n")}
+        add_fatal_error(err_msg)
       end
       pdf.move_to_next_line
       return true
@@ -832,6 +854,10 @@ class NImage < AnyParagraph
 
   def extname
     @extname ||= File.extname(filename)
+  end
+
+  def imgname
+    @imgname ||= File.basename(path)
   end
 
   def path

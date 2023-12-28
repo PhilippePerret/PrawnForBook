@@ -4,6 +4,31 @@
 module Prawn4book
 class Recipe
 
+
+  # Pour "défautiser" une valeurs quelconque
+  # 
+  # @exemple
+  #   On envoie une table [Hash] et des valeurs à trouver, dans
+  #   +values+ et la méthode s’assure que soit elles sont définies
+  #   dans la table, soit on les met.
+  #   Par exemple, si 
+  #     +foo+ = {a: "Première"} 
+  #   et que 
+  #     +values+ = {a: "First", b: "Deuxième"}
+  #   alors
+  #     defaultize retournera : {a:"Première", b:"Deuxième"}
+  # 
+  def defaultize(foo, values)
+    case foo
+    when Hash
+      values.each do |k, v|
+        foo[k] || foo.merge!(k => v)
+      end
+    else
+      foo || values
+    end
+  end
+
   #
   # La table dans laquelle seront mises toutes les données récupérées
   # de tous les fichiers recette relevés, même les valeurs par
@@ -496,9 +521,18 @@ class Recipe
     @copyright ||= inserted_pages[:copyright]
   end
 
+  # Données de mise en forme pour la page de crédit
+  # 
+  # On met des valeurs par défaut, mais qui ne peuvent être prises de
+  # la recette par défaut puisque la valeur est juste false.
   def credits_page
-    @credits_page   ||= inserted_pages[:credits_page]||inserted_pages[:page_credits]
+    @credits_page ||= begin
+      tbl = inserted_pages[:credits_page]||inserted_pages[:page_credits]
+      tbl = {} if tbl === true
+      defaultize(tbl, {disposition: 'distribute'})
+    end
   end
+
 
   def book_making
     @book_making   ||= DATA[:book_making]

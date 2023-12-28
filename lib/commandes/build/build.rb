@@ -33,7 +33,20 @@ class PdfBook
   ###############################
   ### GÉNÉRATION DU LIVRE PDF ###
   ###############################
+
   def generate_pdf_book
+
+    # Avant toute chose, il faut s’assurer, en mode "Bon À Tirer", 
+    # que l’utilisateur n’a pas demandé l’affichage des marges ou
+    # de la grille de référence (par les options, car il pourrait
+    # très bien imprimer un livre avec cette grille et ces marges, 
+    # pour voir)
+    if Prawn4book.bat?
+      raise PFBFatalError.new(150, {err:PFBError[151]}) \
+        if recipe.show_margins?
+      raise PFBFatalError.new(150, {err:PFBError[152]}) \
+        if recipe.show_grid?
+    end
     
     # Initialiser le suivi des titres par niveau
     # 

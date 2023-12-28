@@ -117,6 +117,10 @@ class PFBFatalError < StandardError
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      # -- Construction --
+      150   => Prawn4book::ERRORS[:building][:bat_fatal_error],
+      151   => Prawn4book::ERRORS[:building][:bat_no_margins],
+      152   => Prawn4book::ERRORS[:building][:bat_no_grid],
       # -- Multi-colonnes --
       180   => Prawn4book::ERRORS[:multicolumns][:extra_segment_unresolved],
       181   => Prawn4book::ERRORS[:multicolumns][:extra_segment_resolved],
@@ -128,6 +132,10 @@ class PFBFatalError < StandardError
       # -- Images --
       250   => Prawn4book::ERRORS[:images][:unfound],
       252   => Prawn4book::ERRORS[:images][:logo_page_title_unfound],
+      253   => Prawn4book::ERRORS[:images][:passage_sous_page],
+      254   => Prawn4book::ERRORS[:images][:floating_text_under_zero],
+      255   => Prawn4book::ERRORS[:images][:floating_image_too_big],
+      256   => Prawn4book::ERRORS[:images][:floating_image_with_no_text],
       # -- Commandes (divers) --
       300   => Prawn4book::ERRORS[:commands][:open][:dont_know_how_to],
       301   => Prawn4book::ERRORS[:commands][:calc][:dont_know_how_to],
