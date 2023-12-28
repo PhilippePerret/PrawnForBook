@@ -448,13 +448,7 @@ class NImage < AnyParagraph
         # Avec la hauteur de l’image, on passe sous la page. On 
         # n’imterrompt pas la construction (sauf avec l’option -bat)
         # mais on met une forte alerte (rouge dans le rapport final)
-        letexte = 
-          if exces.is_a?(Hash)
-            exces.map { |h| h[:text] }.join(' ')
-          else
-            exces.to_s
-          end
-        letexte = "#{letexte[0..70]} […]" if letexte.length > 70 && not(debug?)
+        letexte = extract_text_for_error(exces, debug? ? nil : 70)
         err_msg = PFBError[253] % {img: imgname, page: pdf.page_number, text: letexte}
         add_fatal_error(err_msg)
         @erreur_passage_sous_page_signaled = true
@@ -564,6 +558,21 @@ class NImage < AnyParagraph
       # @note : peut-être faudra-t-il simplement appeler __parse sur 
       # chaque paragraphe
     return s.reverse.join("\n")
+  end
+
+
+  # Juste pour retourner un texte (le texte enroulé autour de l’image,
+  # en gros, mais quelquefois seulement un extrait) en le simplifiant
+  # pour qu’il s’affiche mieux.
+  def extract_text_for_error(str, max_len)
+    str = 
+      if str.is_a?(Array)
+        str.map { |h| h[:text] }.join(' ')
+      else
+        str.to_s
+      end.gsub(/<.+>/,'').gsub(/ +/,' ').strip
+    str = "#{str[0..max_len]} […]" if str.length > max_len && not(debug?)
+    return str
   end
 
   # --- Calcul Methods ---
