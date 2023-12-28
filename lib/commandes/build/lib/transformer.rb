@@ -846,10 +846,11 @@ private
       entier  = $&.freeze
       amorce  = $1.freeze
       nieme   = $2.freeze
-      if amorce.length == 5 && amorce.match?(/^[1-9C]$/.freeze)
+      len_amo = amorce.length
+      if len_amo == 5 && amorce.match?(/^[1-9C]$/.freeze)
         # C’est une couleur, en fait
         "#{amorce}#{nieme}"
-      elsif nieme == 'e' && ['ce','me'].include?(entier.downcase)
+      elsif len_amo == 1 && ['ce','me'].include?(entier.downcase)
         entier
       else
         case nieme
