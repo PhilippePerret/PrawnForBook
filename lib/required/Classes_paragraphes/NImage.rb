@@ -783,15 +783,36 @@ class NImage < AnyParagraph
   def margin_bottom
     @margin_bottom ||= data[:margin_bottom] || 0
   end
+
   def margin_left
-    @margin_left ||= data[:margin_left] || begin
-      float_left? ? 0 : book.recipe.right_margin_with_floating_image
+    @margin_left ||= data[:margin_left]||data[:left_margin]||begin
+      if float_left?
+        margin_distance || 0
+      elsif float_right? && text_distance
+        # - image flottante à droite avec :text_distance définie -
+        text_distance
+      else
+        book.recipe.right_margin_with_floating_image
+      end
     end
   end
   def margin_right
-    @margin_right ||= data[:margin_right] || begin
-      float_right? ? 0 : book.recipe.left_margin_with_floating_image
+    @margin_right ||= data[:margin_right]||data[:right_margin]||begin
+      if float_right?
+        margin_distance || 0
+      elsif float_left? && text_distance
+        # - image flottante à gauche avec :text_distance définie -
+        text_distance
+      else
+        book.recipe.left_margin_with_floating_image
+      end
     end
+  end
+  def text_distance
+    @text_distance ||= data[:text_distance]||data[:margin_text]||data[:text_margin]
+  end
+  def margin_distance
+    @margin_distance ||= data[:margin_distance]
   end
 
   def space_before

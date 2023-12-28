@@ -177,7 +177,8 @@ class NTitre < AnyParagraph
         move_to_line(current_line + 1 + lines_before_calc)
       end
 
-      # Ajout du titre courant à la page courante
+      # Ajout du titre courant à la donnée de la page courante du 
+      # livre (book.pages)
       my.add_this_titre_in_page(self)
 
       ###############################
@@ -198,7 +199,9 @@ class NTitre < AnyParagraph
       move_to_next_line
 
       if me.alone?
+        
         start_new_page
+
       else
 
         ###################################
@@ -209,8 +212,9 @@ class NTitre < AnyParagraph
         # On ajoute toujours les lignes après. C’est avant qu’on
         # traite le problème de titres successifs.
         move_down( my.lines_after * line_height )
-
       end
+
+      update_current_line
 
     end #/pdf.update
 
