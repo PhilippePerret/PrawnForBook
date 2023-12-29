@@ -189,42 +189,23 @@ class PageInfos
   # --- Données crédits --- #
 
   def conception
-    @conception ||= begin
-      if book_making[:conception] && book_making[:conception][:patro]
-        traite_people_in(book_making[:conception])
-      end
-    end
+    @conception ||= traite_people_in(book_making[:conception])
   end
   def redaction
-    @redaction ||= begin
-      if book_making[:writing] && book_making[:writing][:patro]
-        traite_people_in(book_making[:writing])
-      end
-    end
+    @redaction ||= traite_people_in(book_making[:writing])
   end
 
+  # Metteur en page
   def page_design
-    @page_design ||= begin
-      if book_making[:page_design] && book_making[:page_design][:patro]
-        traite_people_in(book_making[:page_design])
-      end
-    end
+    @page_design ||= traite_people_in(book_making[:page_design])
   end
 
   def cover_design
-    @cover_design ||= begin
-      if book_making[:cover] && book_making[:cover][:patro]
-        traite_people_in(book_making[:cover])
-      end
-    end
+    @cover_design ||= traite_people_in(book_making[:cover])
   end
 
   def correction
-    @correction ||= begin
-      if book_making[:correction] && book_making[:correction][:patro]
-        traite_people_in(book_making[:correction])
-      end
-    end
+    @correction ||= traite_people_in(book_making[:correction])
   end
 
   def imprimerie
@@ -408,9 +389,11 @@ class PageInfos
   # un ou des mails et compose la donnée en ajoutant les mails aux
   # noms
   # @return [String] Les données des noms et mails
+  #         [NilClass] Si +dpeople+ est nil
   # 
   # @api private
   def traite_people_in(dpeople)
+    return if dpeople.nil?
     people = dpeople[:patro] || dpeople[:patronyme] || dpeople[:name] || return
     unless people.is_a?(Array)
       people = people.split(',').map { |n| n.strip }
@@ -419,7 +402,10 @@ class PageInfos
     unless mails.is_a?(Array)
       mails = mails.split(',').map { |n| n.strip }
     end
-    
+    # 
+    # À partir d’ici, les patronymes (Prénom NOM) sont vraiment dans
+    # une liste, ainsi que les mails s’ils sont définis
+    # 
     people.map.with_index do |patro, idx|
       patro = human_for_patro(patro)
       patro = "#{patro}#{LINEAR_DELIMITOR}(#{mails[idx]})" unless mails[idx].nil?
@@ -430,6 +416,7 @@ class PageInfos
   # Méthode qui transforme "Philippe PERRET" en "Philippe Perret"
   # (sauf si +patro+ commence par un signe égal, ce qui signifie 
   #  qu’il faut le garder tel quel)
+  # 
   def human_for_patro(patro)
     if patro.start_with?('=')
       patro[1..-1]

@@ -7,21 +7,6 @@ book_data:
   url:  null
 #/book_data
 
-book_making:
-  conception:
-    patro: "Philippe PERRET"
-    mail:  "philippe.perret@icare-editions.fr"
-  page_design:
-    patro: "Prawn-For-Book"
-    mail: null
-  cover:
-    patro: "MM & PP"
-    mail: null
-  correction:
-    patro: ["Marion MICHEL"]
-    mail:  [null]
-#/book_making
-
 book_format:
   page:
     show_grid: false
@@ -117,13 +102,13 @@ table_of_content:
 book_making:
   conception:
     patro: "Philippe PERRET"
-    mail: "philippe.perret@icare-editions.fr"
+    mail:  "philippe.perret@icare-editions.fr"
   page_design:
-    patro: "Prawn-For-Book"
+    patronyme: "=Prawn-For-Book"
   cover:
-    patro: "=MM & PP"
+    name: "=MM & PP"
   correction:
-    patro: "Marion MICHEL"
+    patro: ["Marion MICHEL", "Philippe PERRET"]
   printing:
     name: "Prawn-For-Book"
 #/book_making

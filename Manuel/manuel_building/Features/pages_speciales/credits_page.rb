@@ -17,6 +17,7 @@ Prawn4book::Manual::Feature.new do
     Toutes les informations requises pour la page des informations se trouvent dans les données `book_making` ("fabrication du livre" en anglais) et `credits_page` de la recette du livre et/ou de la collection.
     Toutes les données de `book_making` — le ou les concepteurs du livre, le ou les rédacteurs, le ou les metteurs en page, graphiste, concepteurs de la couverture ou correcteurs — comprennent deux informations :
     * **`patro`** | Pour le patronyme, seul ou une liste. Le patronyme s’écrit toujours avec la même convention : le prénom en minuscule avec capitale au début, le nom tout en capitales. S’il y en a plusieurs, on les met entre crochets (cf. l’exemple ci-dessous). Par défaut, les noms seront corrigés pour être corrects au niveau de la typographie ("Philippe PERRET" dans la donnée recette s’affichera "Philippe Perret"). Pour que le nom reste identique, il suffit de le faire précéder d’un signe égal).
+    * **`patronyme`**, **`name`** | Peuvent être employés à la place de `patro`.
     * **`mail`** | Le mail du *patro* ci-dessus. S’il y a plusieurs personnes, on indique les mails dans le même ordre, entre crochets (comme ci-dessous).
     (( line ))
     La page des crédits contient aussi les informations sur l’éditeur ou la maison d’édition, qui doivent se trouver dans la section `publisher` de la recette. La seule information requise est le nom de l’éditeur (`publisher: name:`).
@@ -27,6 +28,12 @@ Prawn4book::Manual::Feature.new do
 
     Les crédits du colophon peuvent se placer en haut, en bas ou au milieu de la page. On définit cette position grâce à la propriété `credits_page: disposition:` qui peut prendre les valeurs `\\"distribute\\"` (ou `\\"middle\\"`, milieu), `\\"top\\"` (haut de page) ou `\\"bottom\\"` (bas de page).
     La valeur par défaut des `\\"distribute\\"`.
+
+    #### Garder un nom tel quel dans la liste des crédits
+
+    Comme indiqué plus haut, un nom restera tel quel, c’est-à-dire tel qu’il a été défini dans les données recette, s’il est précédé d’un signe égal "=" qui sera bien entendu retiré.
+    Vous pourrez noter, dans la *page de crédits* de ce manuel, que "Prawn-For-Book", le metteur en page, n’a pas été transformé en "Prawn-for-book" comme ça aurait dû être le cas.
+
 
     EOT
 
@@ -44,13 +51,13 @@ Prawn4book::Manual::Feature.new do
         patro: "Prenom NOM"
         mail:  "mail@chez.lui"
       writing:
-        patro: "Prenom NOM"
+        patronyme: "Prenom NOM"
         mail:  "mail@chez.lui"
       page_design: # Mise en page
-        patro: ["Prénom NOM", "Prénom NOM"]
+        patro: ["=Prawn-For-Book", "=Phil PERRET"]
         mail:  ["premier@chez.lui", "deuxieme@chez.lui"]
       cover:  #  Couverture
-        patro: "=MM & PP" # '=' => non transformé
+        name: "=MM & PP" # '=' => non transformé
         mail: null
       correction:
         patro: .\\..
