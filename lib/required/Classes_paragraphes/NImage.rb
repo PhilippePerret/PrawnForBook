@@ -218,7 +218,14 @@ class NImage < AnyParagraph
       # Le premier résultat (seulement l’image) a été obtenu en 
       # commentant la ligne [L1] ci-dessous
       if my.vadjust != 0
-        data_image[:at][1] -= my.vadjust if data_image.key?(:at)
+        if data_image.key?(:at)
+          @not_vadjusted = false
+          data_image[:at][1] -= my.vadjust
+        else
+          @not_vadjusted = true
+          # puts "vadjust à #{my.vadjust} mais pas bougée".rouge
+          # exit 16
+        end
         # Dans tous les cas, on se déplace vers le bas
         # move_down(my.vadjust) # [L1]
       end
@@ -264,6 +271,16 @@ class NImage < AnyParagraph
 
       cursor_before = cursor.freeze
       image_top = (data_image.key?(:at) ? data_image[:at][1] : cursor_before).freeze
+
+      if my.vadjust != 0 && @not_vadjusted
+        if data_image.key?(:at)
+          data_image[:at][1] -= my.vadjust
+        else
+          # Tentative très dangereuse par move_down (qui risque de
+          # tout déplacer n’importe comment)
+          move_down(my.vadjust)
+        end
+      end
 
       #######################
       ###      IMAGE      ###
