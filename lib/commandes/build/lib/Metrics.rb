@@ -35,12 +35,6 @@
     
 #   end
 
-#   def default_font_and_style
-#     @default_font_and_style ||= begin
-#       recipe.default_font_and_style
-#     end
-#   end
-
 # end #/class Metric
 
 # Metric = MetricClass.instance

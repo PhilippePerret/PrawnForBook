@@ -301,8 +301,8 @@ class << self
 
   def default_size
     @default_size ||= begin
-      if book && recipe.default_font_size
-        recipe.default_font_size
+      if book
+        recipe.default_font.size
       else
         11
       end
@@ -310,7 +310,7 @@ class << self
   end
 
   def default_fonte_times
-    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :roman})
+    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :roman, color: '000000'})
   end
 
   # @return [Array<Hash>] La liste des Q-choices pour pouvoir choisir
@@ -428,6 +428,7 @@ class FonteGetter
   attr_reader :table, :default_values
   attr_reader :font
   def initialize(table, default_values)
+    table = {font: table} if table.is_a?(String)
     @table = table
     @default_values = default_values
     # On recherche la fonte dans la table fournie

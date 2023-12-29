@@ -33,8 +33,7 @@ class BookFormat
       skip_page_creation:       {name:'Passer la page de création'      , default: true, type: :bool},
     },
     text: {
-      default_font_and_style:   {name:'Fonte/style par défaut'            , default: nil, values: Prawn4book::Fonte.method(:as_choices)},
-      default_size:             {name:'Taille de fonte par défaut'        , default: 12},
+      default_font:             {name:'Fonte/style/taille/couleur par défaut'            , default: nil, values: Prawn4book::Fonte.method(:as_choices)},
       indent:                   {name:'Indentation du premier paragraphe' , default: '0mm'},
       line_height:              {name:'Hauteur de lignes (en points-pdf)' , default: 14.0},
       leading:                  {name:'Espace entre paragraphes'          , default: 0.0},

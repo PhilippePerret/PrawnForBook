@@ -113,15 +113,10 @@ class << self
     @numparagisstopped = false
   end
 
-  # @return la Fonte spécifique pour les paragraphes
+  # @return la Fonte spécifique pour les numéros de paragraphes
   def parag_num_fonte
     @parag_num_fonte ||= begin
-      r = Prawn4book::PdfBook.current.recipe
-      Fonte.new(
-        name:   r.parag_num_font_name,
-        size:   r.parag_num_font_size,
-        style:  r.parag_num_font_style
-      )
+      Prawn4book::PdfBook.current.recipe.parag_num_font
     end
   end
 
@@ -143,12 +138,8 @@ class << self
       # pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
         parag_height = pdf.height_of("Mot")
       end
-      parnum_font = Fonte.new(
-        name:  recipe.parag_num_font_name,
-        style: recipe.parag_num_font_style,
-        size:  recipe.parag_num_font_size
-      )
-      pdf.font(parnum_font) do
+
+      pdf.font(recipe.parag_num_font) do
         numer_height = pdf.height_of("194")
       end
       diff = (parag_height - numer_height).round(3)

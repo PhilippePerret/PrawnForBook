@@ -47,13 +47,10 @@ class PageInfos < SpecialPage
     },
     aspect: {
       libelle: {
-        font_n_style: {name:'Police/style pour les libellés (p.e. "Mise en page")', default: Fonte.method(:as_choices)},
-        size:   {name:'Taille pour les libellés', default: 10},
-        color:  {name:'Couleur des libellés', default: nil},
+        font: {name:'Police/style/taille/couleur pour les libellés', default: Fonte.method(:as_choices)},
       },
       value: {
-        font_n_style: {name:'Police/style pour la valeur (p.e. le nom)', default: Fonte.method(:as_choices)},
-        size:   {name:'Taille pour la valeur', default: 11}
+        font: {name:'Police/style/taille/couleur pour la valeur', default: Fonte.method(:as_choices)},
       },
       disposition: {name: 'Disposition', default: 'distribute', values: :dispositions}
     },

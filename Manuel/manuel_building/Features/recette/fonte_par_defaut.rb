@@ -9,19 +9,18 @@ Prawn4book::Manual::Feature.new do
   font_name  = "Times-Roman"
   font_style = ''
   font_size  = 20
+  font_color = '000000'
 
   recipe <<~EOT
     book_format:
       text:
-        default_font_and_style: "#{font_name}/#{font_style}"
-        default_font_style: "#{font_style}"
-        default_font_size: #{font_size}
+        default_font: "#{font_name}/#{font_style}/#{font_size}/#{font_color}"
     EOT
 
-  init_recipe([:default_font_n_style])
+  init_recipe([:default_font])
 
   texte <<~EOT
-    (( font(name: "#{font_name}", size: #{font_size}, style: "#{font_style}") ))
+    (( font(name: "#{font_name}", size: #{font_size}, style: "#{font_style}", color: "#{font_color}") ))
     Pour écrire ce texte, nous avons ponctuellement modifié la police par défaut en utilisant la fonte #{font_name} avec une taille de #{font_size} et le style #{font_style}.
     EOT
 

@@ -10,16 +10,10 @@ Prawn4book::Manual::Feature.new do
 
   sample_recipe <<~EOT
     ---
-    # Définition des variables
-    define: &default_fonte "Times-Roman"
-
     # Recette du livre
     book_format:
       page:
-        num_font_name: *default_fonte   # Police
-        num_font_style: ''              # style
-        num_font_size: 13               # taille (points)
-        num_font_color: '555555'        # couleur
+        num_font: "<police>/<style>/<taille>/<couleur>"
     EOT
 
 end

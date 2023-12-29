@@ -159,7 +159,7 @@ class PdfBook
     end
 
     def color
-      book.recipe.notes_page[:color]
+      fonte.color
     end
 
     def border_color
@@ -171,7 +171,7 @@ class PdfBook
     end
 
     def fonte
-      book.recipe.fonte_note_page
+      book.recipe.note_page_fonte
     end
 
     # Pour le "test de limite basse" (test qui vérifie dans 

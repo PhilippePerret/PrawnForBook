@@ -62,13 +62,8 @@ class Recipe
   # @rappel : les notes de page sont des notes comme les notes de bas
   # de page ou de fin d'ouvrage mais qui s'insèrent au fil du texte,
   # pour une lecture plus aisée.
-  def fonte_note_page
-    @fonte_note_page ||= begin
-      fname = notes_page[:font]  || default_font_name
-      fsize = notes_page[:size]  || default_font_size - 2
-      fstyl = notes_page[:style] || :italic
-      Fonte.new(name:fname, size:fsize, style:fstyl, hname:'Fonte de note de page')
-    end
+  def note_page_fonte
+    @note_page_fonte ||= Fonte.get_in(notes_page, **{size: default_font.size - 2}).or_default
   end
 
   def notes_page_borders
@@ -297,21 +292,9 @@ class Recipe
     @pagination_format ||= format_page[:pagination_format]
   end
 
-  def pagination_font_n_style
-    @pagination_font_n_style ||= begin
-      "#{pagination_font_name}/#{pagination_font_style}"
-    end
+  def pagination_fonte
+    @pagination_fonte ||= Fonte.get_in(format_page[:num_font]).or_default
   end
-  def pagination_font_name
-    @pagination_font_name   ||= format_page[:num_font_name]
-  end
-  def pagination_font_size
-    @pagination_font_size   ||= format_page[:num_font_size]
-  end
-  def pagination_font_style
-    @pagination_font_style   ||= format_page[:num_font_style]
-  end
-
 
   def references_key
     @references_key ||= begin
@@ -342,15 +325,12 @@ class Recipe
   def page_num_type
     @page_num_type          ||= format_page[:numerotation]
   end
-  def parag_num_font_name
-    @parag_num_font_name    ||= format_text[:parag_num_font]
+
+  # Fonte pour les numéros de paragraphes
+  def parag_num_font
+    @parag_num_font ||= Fonte.get_in(format_text[:parag_num_font]).or_default
   end
-  def parag_num_font_size
-    @parag_num_font_size    ||= format_text[:parag_num_size]
-  end
-  def parag_num_font_style
-    @parag_num_font_style    ||= format_text[:parag_num_style]
-  end
+
   def parag_num_vadjust
     @parag_num_vadjust      ||= format_text[:parag_num_vadjust]
   end
@@ -391,33 +371,24 @@ class Recipe
 
   # -- Polices --
 
-  def default_font_n_style
-    @default_font_n_style ||= begin
-      (format_text[:default_font_n_style]||format_text[:default_font_and_style])#.tap {|n| puts(n); exit 100 }
+  def default_font
+    @default_font ||= begin
+      if format_text[:default_font]
+        Fonte.get_in(format_text[:default_font]).or_default
+      else
+        Fonte.default_fonte_times.dup
+      end
     end
   end
-  alias :default_font_and_style :default_font_n_style
 
   def default_font_name
-    @default_font_name ||= begin
-      if default_font_n_style
-        default_font_n_style.split('/')[0]
-      else
-        format_text[:default_font]
-      end
-    end
+    default_font.name
   end
   def default_font_size
-    @default_font_size ||= format_text[:default_size]
+    default_font.size
   end
   def default_font_style
-    @default_font_style ||= begin
-      if default_font_n_style
-        default_font_n_style.split('/')[1].to_sym
-      else
-        format_text[:default_style]
-      end
-    end
+    default_font.style
   end
 
   # --- Page d'index ---
@@ -435,19 +406,6 @@ class Recipe
       tbl = tbl[:number] || {}
       Fonte.get_in(tbl).or_default
     end
-  end
-
-  def index_canon_font_n_style
-    @index_canon_font_n_style ||= page_index[:aspect][:canon][:font_n_style]
-  end
-  def index_canon_font_size
-    @index_canon_font_size ||= page_index[:aspect][:canon][:size]
-  end
-  def index_number_font_n_style
-    @index_number_font_n_style ||= page_index[:aspect][:number][:font_n_style]
-  end
-  def index_number_font_size
-    @index_number_font_size ||= page_index[:aspect][:number][:size]
   end
 
   # -- Modèle --

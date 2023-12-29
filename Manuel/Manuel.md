@@ -3337,8 +3337,7 @@ book_format:
 		show_grid: false # cf. [6]
 		show_margins: false # cf. [7]
 	text:
-		default_font_and_style: "Helvetica/normal"
-		default_size: 11.2
+		default_font: "Helvetica/normal/11.2/000000"
 		line_height: 14 # hauteur de ligne cf. [4]
 		indent: 0 # indentation
 		leading: 0 # espace entre paragraphes

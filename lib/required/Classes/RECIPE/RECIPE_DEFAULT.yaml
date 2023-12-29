@@ -3,22 +3,6 @@
 # Valeurs par défaut de tout prawn-book
 #
 
-#
-# --- Définition des variables ---
-#
-define: &default_font1 "Times-Roman"
-define: &default_font2 "Helvetica"
-define: &default_font3 "Courier"
-define: &default_style3 ""
-define: &default_style1 "Roman"
-define: &default_style2 "normal"
-define: &default_style3 "italic"
-define: &default_style4 "bold"
-
-define: &default1_font_n_style "Times-Roman/"
-define: &default2_font_n_style "Helvetica/"
-define: &default3_font_n_style "Helvetica/Bold"
-
 #<fonts>
 fonts:
   PictoPhil:
@@ -90,9 +74,7 @@ book_format:
     numerotation:               'pages' # ou 'parags', 'hybrid'
     pagination_format:          'first-last'
     no_num_if_empty:            true
-    num_font_name:              *default_font2
-    num_font_style:             *default_style1
-    num_font_size:              10
+    num_font:                   "Helvetica/Roman/10/000000"
     num_only_if_num:            true
     num_page_if_no_num_parag:   true
     no_headers_footers:         false
@@ -100,9 +82,7 @@ book_format:
     show_grid:                  false
     show_margins:               false
   text:
-    default_font:             *default_font1
-    default_style:            *default_style1
-    default_size:             12
+    default_font:             "Times-Roman/normal/12/000000"
     indent:                   0
     line_height:              14
     numerotation:             false
@@ -111,9 +91,7 @@ book_format:
     # - Numérotation du paragraphe -
     parag_num_vadjust:        1
     parag_num_dist_from_text: 5
-    parag_num_font:           *default_font2
-    parag_num_size:           8
-    parag_num_style:          *default_style2
+    parag_num_font:           "Helvetica/normal/8/555555"
     parag_num_strength:       75
     # - Image flottante -
     left_margin_with_floating_image:   10
@@ -126,10 +104,7 @@ book_format:
       left: 6mm
     # - Notes de page -
     notes_page:
-      font:           *default_font1
-      size:           10
-      style:          :italic
-      color:          "000000"
+      font:           "Times-Roman/italic/10/000000"
       borders:        0.3
       border_color:   "999999"
       left:           0
@@ -237,7 +212,6 @@ inserted_pages:
 #
 # --- TABLE DES MATIÈRES ---
 #
-#<table_of_content>
 table_of_content:
   not_on_even:          false
   pages_count:          2
@@ -253,30 +227,26 @@ table_of_content:
   dash_line:      {length: 1, space: 3}
   vadjust_line:         0
   level1:
-    font_n_style: *default1_font_n_style
-    caps:         "all-caps"
-    size:         12
+    font:         "Times-Roman/normal/12/000000"
     numero_size:  10
+    caps:         "all-caps"
     indent:       0
   level2:
-    font_n_style: *default1_font_n_style
-    size:         10
+    font:         "Times-Roman/normal/10/000000"
     numero_size:  10
     indent:       '10mm'
     separator:    null
   level3:
-    font_n_style: *default1_font_n_style
-    size:         9
+    font:         "Times-Roman/normal/9/000000"
     numero_size:  10
     indent:       '20mm'
     separator:    null
   level4:
-    font_n_style: *default1_font_n_style
-    size:         8
+    font:         "Times-Roman/normal/8/000000"
     numero_size:  10
     indent:       '30mm'
     separator:    null
-#</table_of_content>
+#/table_of_content
 
 #<headers_footers>
 headers_footers:

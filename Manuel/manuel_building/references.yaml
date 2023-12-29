@@ -16,302 +16,302 @@
   :paragraph:
   :text: minimales_definitions_minimales
 :recette_grand_titre:
-  :page: 23
+  :page: 22
   :paragraph:
   :text: recette_grand_titre
 :recette_recette_livre:
-  :page: 23
+  :page: 22
   :paragraph:
   :text: recette_recette_livre
 :recette_recette_collection:
-  :page: 23
+  :page: 22
   :paragraph:
   :text: recette_recette_collection
 :recette_definition_fontes:
-  :page: 24
+  :page: 23
   :paragraph:
   :text: recette_definition_fontes
 :recette_fonte_par_defaut:
-  :page: 24
+  :page: 23
   :paragraph:
   :text: recette_fonte_par_defaut
 :recette_publisher:
-  :page: 25
+  :page: 24
   :paragraph:
   :text: recette_publisher
 :texte_grand_titre:
-  :page: 26
+  :page: 25
   :paragraph:
   :text: texte_grand_titre
 :format_markdown_du_texte:
-  :page: 26
+  :page: 25
   :paragraph:
   :text: format_markdown_du_texte
 :titres_titres:
-  :page: 26
+  :page: 25
   :paragraph:
   :text: titres_titres
 :comportement_grand_titre:
-  :page: 29
+  :page: 28
   :paragraph:
   :text: comportement_grand_titre
 :comportement_align_on_reference_lines:
-  :page: 30
+  :page: 29
   :paragraph:
   :text: comportement_align_on_reference_lines
 :comportement_corrections_typographiques:
-  :page: 32
+  :page: 31
   :paragraph:
   :text: comportement_corrections_typographiques
 :pages_speciales_titre_section:
-  :page: 34
+  :page: 33
   :paragraph:
   :text: pages_speciales_titre_section
 :pages_speciales_introduction:
-  :page: 34
+  :page: 33
   :paragraph:
   :text: pages_speciales_introduction
 :pages_speciales_pages_speciales:
-  :page: 34
+  :page: 33
   :paragraph:
   :text: pages_speciales_pages_speciales
 :pages_speciales_faux_titre:
-  :page: 34
+  :page: 33
   :paragraph:
   :text: pages_speciales_faux_titre
 :pages_speciales_page_de_garde:
-  :page: 35
+  :page: 34
   :paragraph:
   :text: pages_speciales_page_de_garde
 :pages_speciales_title_page:
-  :page: 36
+  :page: 35
   :paragraph:
   :text: pages_speciales_title_page
 :pages_speciales_mention_legale:
-  :page: 38
+  :page: 37
   :paragraph:
   :text: pages_speciales_mention_legale
 :pages_speciales_dedicace:
-  :page: 38
+  :page: 37
   :paragraph:
   :text: pages_speciales_dedicace
 :pages_speciales_table_des_matieres:
-  :page: 41
+  :page: 40
   :paragraph:
   :text: pages_speciales_table_des_matieres
 :pages_speciales_table_illustrations:
-  :page: 44
+  :page: 43
   :paragraph:
   :text: pages_speciales_table_illustrations
 :pages_speciales_liste_abreviations:
-  :page: 45
+  :page: 43
   :paragraph:
   :text: pages_speciales_liste_abreviations
 :pages_speciales_glossaire:
-  :page: 45
+  :page: 44
   :paragraph:
   :text: pages_speciales_glossaire
 :pages_speciales_remerciements:
-  :page: 47
+  :page: 45
   :paragraph:
   :text: pages_speciales_remerciements
 :pages_speciales_credits_page:
-  :page: 49
+  :page: 46
   :paragraph:
   :text: pages_speciales_credits_page
 :pages_speciales_index_page:
-  :page: 53
+  :page: 50
   :paragraph:
   :text: pages_speciales_index_page
 :aide_grand_titre:
-  :page: 55
+  :page: 53
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 55
+  :page: 53
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 55
+  :page: 53
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 56
+  :page: 54
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 57
+  :page: 55
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 58
+  :page: 56
   :paragraph:
   :text: aide_exporter_texte
 :pagination_titre_section:
-  :page: 59
+  :page: 57
   :paragraph:
   :text: pagination_titre_section
 :pagination_pagination:
-  :page: 59
+  :page: 57
   :paragraph:
   :text: pagination_pagination
 :pagination_aspect_numero:
-  :page: 59
+  :page: 57
   :paragraph:
   :text: pagination_aspect_numero
 :pagination_arret_pagination:
-  :page: 59
+  :page: 57
   :paragraph:
   :text: pagination_arret_pagination
 :pagination_no_pagination:
-  :page: 62
+  :page: 60
   :paragraph:
   :text: pagination_no_pagination
 :pagination_numeroter_pages_vierges:
-  :page: 64
+  :page: 62
   :paragraph:
   :text: pagination_numeroter_pages_vierges
 :texte_detail_grand_titre:
-  :page: 65
+  :page: 63
   :paragraph:
   :text: texte_detail_grand_titre
 :texte_detail_indentation:
-  :page: 65
+  :page: 63
   :paragraph:
   :text: texte_detail_indentation
 :texte_detail_stylisation_in_line:
-  :page: 66
+  :page: 64
   :paragraph:
   :text: texte_detail_stylisation_in_line
 :texte_detail_gestion_tirets_conditionnels:
-  :page: 67
+  :page: 66
   :paragraph:
   :text: texte_detail_gestion_tirets_conditionnels
 :texte_detail_placement_sur_ligne_quelconque:
-  :page: 68
+  :page: 67
   :paragraph:
   :text: texte_detail_placement_sur_ligne_quelconque
 :images_grand_titre:
-  :page: 69
+  :page: 68
   :paragraph:
   :text: images_grand_titre
 :images_inserer_images:
-  :page: 70
+  :page: 69
   :paragraph:
   :text: images_inserer_images
 :exemple_image_18:
-  :page: 83
-  :paragraph: 1045
+  :page: 82
+  :paragraph: 1038
   :text: exemple_image_18
 :exemple_image_19:
-  :page: 84
-  :paragraph: 1046
+  :page: 83
+  :paragraph: 1039
   :text: exemple_image_19
 :images_images_flottantes:
-  :page: 85
+  :page: 84
   :paragraph:
   :text: images_images_flottantes
 :images_format_legende:
-  :page: 94
+  :page: 93
   :paragraph:
   :text: images_format_legende
 :format_precis_grand_titre:
-  :page: 97
+  :page: 96
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 98
+  :page: 97
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 100
+  :page: 99
   :paragraph:
   :text: format_precis_double_colonnes
 :expert_grand_titre:
-  :page: 103
+  :page: 102
   :paragraph:
   :text: expert_grand_titre
 :expert_mode_expert:
-  :page: 104
+  :page: 103
   :paragraph:
   :text: expert_mode_expert
 :expert_contexte_erreurs:
-  :page: 104
+  :page: 103
   :paragraph:
   :text: expert_contexte_erreurs
 :expert_injection_code:
-  :page: 104
+  :page: 103
   :paragraph:
   :text: expert_injection_code
 :expert_evaluation_code_ruby:
-  :page: 105
+  :page: 104
   :paragraph:
   :text: expert_evaluation_code_ruby
 :expert_bibliographies:
-  :page: 107
+  :page: 105
   :paragraph:
   :text: expert_bibliographies
 :expert_multi_colonnes:
-  :page: 107
+  :page: 105
   :paragraph:
   :text: expert_multi_colonnes
 :expert_formaters:
-  :page: 108
+  :page: 106
   :paragraph:
   :text: expert_formaters
 :expert_modifier_line_height:
-  :page: 109
+  :page: 107
   :paragraph:
   :text: expert_modifier_line_height
 :annexe_grand_titre:
-  :page: 110
+  :page: 108
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 114
+  :page: 112
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 114
+  :page: 112
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 114
-  :paragraph: 1426
+  :page: 112
+  :paragraph: 1419
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 115
+  :page: 113
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 115
+  :page: 113
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 116
+  :page: 114
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 117
+  :page: 115
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 120
+  :page: 118
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 120
+  :page: 118
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 120
+  :page: 118
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 121
+  :page: 119
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 125
+  :page: 123
   :paragraph:
   :text: annexe__liste_exhaustive_features_

@@ -23,7 +23,7 @@ Prawn4book::Manual::Feature.new do
           left: 40
     EOT
 
-  init_recipe([:fonte_note_page])
+  init_recipe([:note_page_fonte])
 
   texte <<~EOT
     Ceci est une note automatique^^ avec une autre note auto-incrémentée^^ et une troisième note^^ pour voir.
