@@ -119,13 +119,13 @@ def print(pdf)
       pages_count:  book.pages.count,
     })
     
-    # --- Construction du Header ---
+    # --- Gravure du Header ---
 
     if header = headers[number.odd? ? :right : :left]
       print_header(header, page_data)
     end
 
-    # --- Construction du Footer ---
+    # --- Gravure du Footer ---
 
     if footer = footers[number.odd? ? :right : :left]
       print_footer(footer, page_data)
@@ -155,14 +155,18 @@ def print_footer(portions_footer, page_data)
   end
 end
 
-# = Impression du Header ou du Footer =
-# (méthode générique)
+#
+# = Graveur général du Header ou du Footer =
+#
+# @generic method
+# 
 def print_portion(portion_data, page_data)
   pdata = portion_data.dup 
   text = pdata.delete(:text) % page_data
   pdata = pdata.merge({
     height: 20,
     overflow: :shrink_to_fit,
+    inline_format: true
   })
   pdf.update do
     # puts "Écriture de #{text.inspect} sur page ##{page_number} avec #{pdata}".jaune
