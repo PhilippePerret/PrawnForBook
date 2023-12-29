@@ -221,7 +221,7 @@ class PdfBook
 
       ok = nombre_erreurs_fatales_signalees == 0
 
-      msg_id  = ok ? :success : :success_but_unfinished
+      msg_id  = ok ? (Prawn4book.bat? ? :success_bat : :success) : :success_but_unfinished
       methode = ok ? :vert : :orange
 
       puts "#{MESSAGES[:building][msg_id] % {
