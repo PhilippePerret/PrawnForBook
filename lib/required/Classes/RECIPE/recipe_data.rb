@@ -493,11 +493,11 @@ class Recipe
 
 
   def book_making
-    @book_making   ||= DATA[:book_making]
+    @book_making ||= DATA[:book_making]
   end
 
   def book_data
-    @book_data     ||= DATA[:book_data]
+    @book_data ||= DATA[:book_data]
   end
 
   def publisher
