@@ -25,6 +25,10 @@ MESSAGES = {
       #{'(in %{path})'.gris}
       #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
+
+    verify_book_conformity: <<~EOT.strip,
+    Vérification de la conformité du livre et de la recette.
+    EOT
   },
 
   # --- Table des matières --- #

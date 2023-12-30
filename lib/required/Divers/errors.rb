@@ -148,7 +148,7 @@ class PFBFatalError < StandardError
       651   => Prawn4book::ERRORS[:fonts][:require_property],
       652   => Prawn4book::ERRORS[:fonts][:bad_formatted_data],
       653   => Prawn4book::ERRORS[:fonts][:bad_formatted_color],
-
+      654   => Prawn4book::ERRORS[:fonts][:line_height_smaller_than_default_size],
       # -- Bibliographies --
       700   => Prawn4book::ERRORS[:biblio][:unfound],
       701   => Prawn4book::ERRORS[:biblio][:biblio_undefined],

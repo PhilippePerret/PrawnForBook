@@ -461,6 +461,14 @@ ERRORS = {
       0-126 de Magenta, J est la valeur 0-126 de Jaune et N est la
       valeur 0-126 de Noir.
       EOT
+
+    line_height_smaller_than_default_size: <<~EOT,
+      La hauteur de ligne ’line_height’ défini dans le recette à 
+      %{lh} devrait être plus grande ou au moins égale à la taille de
+      la police par défaut qui est de %{fs}.
+      Mettez un ’line_height’ plus grand dans la recette, par exemple
+      à %{glh}.
+      EOT
   },
 
   # --- Table des matières ---

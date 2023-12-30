@@ -679,25 +679,18 @@ class PdfBook
   # C'est un peu de l'intrusion, mais on en profite aussi, ici, pour
   # instancier les bibliographies qui sont définies.
   def conforme?
+    PFBError.context = MESSAGES[:building][:verify_book_conformity]
     if recipe.page_de_titre?
       not(recipe.title.nil?)     || raise(PFBFatalError.new(800))
       not(recipe.authors.nil?)   || raise(PFBFatalError.new(801))
-      unless recipe.logo_defined? == recipe.logo_exists?
-         raise(PFBFatalError.new(802, {path: recipe.logo_path}))
-      end
+      raise PFBFatalError.new(802, {path: recipe.logo_path}) \
+        unless recipe.logo_defined? == recipe.logo_exists?
     end
-  rescue PFBFatalError => e
-    raise e
-  rescue PrawnBuildingError => e
-    formated_error(e)
-    spy "👎 Le livre n'est pas conforme.".rouge
-    return false
-  rescue Exception => e
-    formated_error(e)
-    spy "🤪 ERREUR SYSTÉMIQUE.".rouge
-    return false
-  else
-    spy "👍 Le livre est conforme".vert
+    # Le line_height ne doit pas être inférieur à la taille 
+    # de la police par défaut
+    raise PFBFatalError.new(654, {lh: recipe.line_height, fs: recipe.default_font.size, glh: (recipe.default_font.size.to_i + 1).to_s}) \
+      if recipe.line_height < recipe.default_font.size
+
     return true
   end
 
