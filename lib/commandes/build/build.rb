@@ -67,6 +67,12 @@ class PdfBook
       Prawn4book.exported_book = self
     end
 
+    # Pour consigner les erreurs mineures et pseudo-fatales en cours 
+    # de construction
+    # (on remettra à zéro aussi à chaque tour, sauf pour les erreurs
+    #  verrouillées)
+    PrawnView::Error.reset
+
     #
     # Le livre doit être conforme, c'est-à-dire posséder tous les 
     # éléments requis en fonction de la définition de la recette
@@ -690,6 +696,9 @@ class PdfBook
     # de la police par défaut
     raise PFBFatalError.new(654, {lh: recipe.line_height, fs: recipe.default_font.size, glh: (recipe.default_font.size.to_i + 1).to_s}) \
       if recipe.line_height < recipe.default_font.size
+
+    # Les marges doivent être définies
+    recipe.get_margin(:top)
 
     return true
   end

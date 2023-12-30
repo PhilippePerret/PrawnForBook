@@ -109,7 +109,7 @@ class PFBFatalError < StandardError
       2     => Prawn4book::ERRORS[:errors][:bad_custom_errid],
       # -- Book --
       10    => Prawn4book::ERRORS[:book][:not_in_collection],
-
+      11    => Prawn4book::ERRORS[:book][:require_margins_definition],
       # -- Fichier texte --
       50    => Prawn4book::ERRORS[:textfile][:unfound_text_file],
       # -- Paragraphes --

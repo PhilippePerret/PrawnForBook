@@ -156,16 +156,64 @@ class Recipe
   end
 
   def top_margin
-    @top_margin         ||= format_page[:margins][:top].proceed_unit
+    @top_margin ||= get_margin(:top)
+    # format_page[:margins][:top].proceed_unit
   end
   def ext_margin
-    @ext_margin         ||= format_page[:margins][:ext].proceed_unit
+    @ext_margin ||= get_margin(:ext)
   end
   def int_margin
-    @int_margin         ||= format_page[:margins][:int].proceed_unit
+    @int_margin ||= get_margin(:int)
   end
   def bot_margin
-    @bot_margin         ||= format_page[:margins][:bot].proceed_unit
+    @bot_margin ||= get_margin(:bot)
+  end
+
+  # Méthode générique pour obtenir les valeurs des marges
+  def get_margin(side)
+    if format_page[:margins] && format_page[:margins][side]
+      format_page[:margins][side].to_pps
+    else
+      # Si on doit prendre une marge par défaut, c’est qu’une marge
+      # n’est pas définie. On conseille à l’utilisateur de la définir
+      # pour ne pas avoir ensuite de problèmes de mise en page.
+      unless @message_missing_margins_done === true
+        puts "\nJe n’ai pas donné le message".jaune
+        sleep 1
+        missings      = []
+        margs_setting = {}
+        if format_page[:margins]
+          TERMS[:les_marges_] % [:top, :bot, :ext, :int].select do |s|
+            v =
+              if format_page[:margins][s].nil?
+                missings << s
+                default_margins[s]
+              else
+                format_page[:margins][s]
+              end
+            margs_setting.merge!(s => v)
+          end
+          missings = missings.join(', ')
+        else
+          # Les 4 sont manquantes
+          missings = TERMS[:four_margins]
+          margs_setting = default_margins.dup
+        end
+        puts "\nPFBError[11] : #{PFBError[11].inspect}".bleu
+        sleep 2
+        add_fatal_error(PFBError[11] % {
+          missings: missings, margins: margs_setting.inspect
+        }, nil)
+        @message_missing_margins_done = true
+      end
+      default_margins[side]
+    end
+  end
+
+  # Les marges par défaut en fonction de la taille du livre
+  # 
+  def default_margins
+    @default_margins ||= Metrics.calc_margins_for(owner)
   end
 
   # -- Guillemets --

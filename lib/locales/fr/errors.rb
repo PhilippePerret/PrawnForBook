@@ -44,6 +44,29 @@ ERRORS = {
 
   book: {
     not_in_collection: 'Le livre « %{title} » n’appartient pas à une collection.',
+
+    require_margins_definition: <<~EOT,
+      Les marges du livre doivent être toutes définies. Dans le cas 
+      contraire, la mise en page risque de changer lorsque vous les
+      définirez explicitement.
+      Pour le moment, elles sont mises à :
+      %{margins}
+      Il faut définir %{missings} dans la recette,
+      de cette manière :
+
+      ---
+      book_format:
+        page:
+          margins:
+            top: ...
+            bot: ...
+            ext: ...
+            int: ...
+
+      Consultez le mode d’emploi pour avoir une explication sur ces
+      définitions de marge.
+      EOT
+
   },
 
   # --- FABRICATION DU LIVRE ---
