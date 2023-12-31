@@ -18,8 +18,8 @@ end
 # fatale au cours de la construction. Une erreur fatale de ce type
 # n’interrompt pas le programme mais doit absolument être corrigée
 # lorsqu’on veut produire la version finale du livre.
-def add_fatal_error(err_message, owner = nil)
-  Prawn4book::PrawnView::Error.add_building_fatal_error(err_message, **{owner:owner})
+def add_fatal_error(err_message, owner = nil, keep_it = false)
+  Prawn4book::PrawnView::Error.add_building_fatal_error(err_message, **{owner:owner, keep: keep_it})
 end
 alias :add_erreur_fatale :add_fatal_error
 
@@ -47,7 +47,11 @@ class << self
       err_msg = compose_message_from_data(err_data)
       raise PFBFatalError.new(150, {err: err_msg})
     else
-      @fatal_errors << err_data
+      if params[:keep]
+        @fatal_errors_kept << err_data
+      else
+        @fatal_errors << err_data
+      end
     end
   end
 
@@ -76,18 +80,23 @@ class << self
         puts "[#{idx + 1}] NOTICE : #{msg}".bleu
       end
     end
-    unless @fatal_errors.empty?
-      num_len = @fatal_errors.count.to_s.length
-      titre = "\nERREURS FATALES (#{@fatal_errors.count})"
+    unless @fatal_errors.empty? && @fatal_errors_kept.empty?
+      fatalerrs = @fatal_errors + @fatal_errors_kept
+      num_len = fatalerrs.count.to_s.length
+      titre = "\nERREURS FATALES (#{fatalerrs.count})"
       puts "#{titre}\n#{'-'*titre.length}".rouge
-      @fatal_errors.each_with_index do |derror, idx|
+      fatalerrs.each_with_index do |derror, idx|
         msg = compose_message_from_data(derror)
         puts "[#{(idx + 1).to_s.rjust(num_len,'0')}] #{msg}".rouge
       end
       line_fin = line_fin.rouge
     end
-    line_fin = line_fin.bleu if @fatal_errors.empty? && @errors.empty? 
+    line_fin = line_fin.bleu if no_error?
     puts line_fin
+  end
+
+  def no_error?
+    @fatal_errors_kept.empty? && @fatal_errors.empty? && @errors.empty?
   end
 
   def compose_message_from_data(dmsg)
@@ -113,6 +122,9 @@ class << self
   def reset
     @errors       = []
     @fatal_errors = []
+    if @fatal_errors_kept.nil?
+      @fatal_errors_kept = [] 
+    end
     @notices      = []
   end
 

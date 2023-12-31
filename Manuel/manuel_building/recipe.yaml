@@ -9,6 +9,11 @@ book_data:
 
 book_format:
   page:
+    margins:
+      top:    20mm
+      ext:    15mm
+      bot:    25mm
+      int:    25mm
     show_grid: false
     show_margins: false
   book:

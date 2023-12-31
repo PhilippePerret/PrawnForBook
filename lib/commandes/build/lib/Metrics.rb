@@ -81,7 +81,37 @@ class << self
       marges.merge!(top: mm175, bot: mm175)
     end
 
+    make_error_message(book, marges)
+
     return marges
+  end
+
+  def make_error_message(book, default_margins)
+    return if @message_missing_margins_done === true
+    missings      = []
+    margs_setting = {}
+    format_page = book.recipe.format_page
+    if format_page[:margins]
+      TERMS[:les_marges_] % [:top, :bot, :ext, :int].select do |s|
+        v =
+          if format_page[:margins][s].nil?
+            missings << s
+            default_margins[s]
+          else
+            format_page[:margins][s]
+          end
+        margs_setting.merge!(s => v)
+      end
+    else
+      # Les 4 sont manquantes
+      missings = [:top, :bot, :ext, :int]
+      margs_setting = default_margins.dup
+    end
+    add_fatal_error(PFBError[11] % {
+      missings: missings.join(', '), margins: margs_setting.inspect,
+      missings_yaml: missings.map{|s| "      #{s}: ..."}.join("\n")
+    }, nil, true)
+    @message_missing_margins_done = true
   end
 
 end #<< self

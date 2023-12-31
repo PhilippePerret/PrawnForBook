@@ -66,11 +66,11 @@ book_format:
     format:       publishing # :pdf 
   page:
     background:   null
-    margins:
-      top:    20mm
-      ext:    15mm
-      bot:    15mm
-      int:    25mm
+    # margins:
+    #   top:    20mm
+    #   ext:    15mm
+    #   bot:    15mm
+    #   int:    25mm
     numerotation:               'pages' # ou 'parags', 'hybrid'
     pagination_format:          'first-last'
     no_num_if_empty:            true

@@ -177,35 +177,6 @@ class Recipe
       # Si on doit prendre une marge par défaut, c’est qu’une marge
       # n’est pas définie. On conseille à l’utilisateur de la définir
       # pour ne pas avoir ensuite de problèmes de mise en page.
-      unless @message_missing_margins_done === true
-        puts "\nJe n’ai pas donné le message".jaune
-        sleep 1
-        missings      = []
-        margs_setting = {}
-        if format_page[:margins]
-          TERMS[:les_marges_] % [:top, :bot, :ext, :int].select do |s|
-            v =
-              if format_page[:margins][s].nil?
-                missings << s
-                default_margins[s]
-              else
-                format_page[:margins][s]
-              end
-            margs_setting.merge!(s => v)
-          end
-          missings = missings.join(', ')
-        else
-          # Les 4 sont manquantes
-          missings = TERMS[:four_margins]
-          margs_setting = default_margins.dup
-        end
-        puts "\nPFBError[11] : #{PFBError[11].inspect}".bleu
-        sleep 2
-        add_fatal_error(PFBError[11] % {
-          missings: missings, margins: margs_setting.inspect
-        }, nil)
-        @message_missing_margins_done = true
-      end
       default_margins[side]
     end
   end

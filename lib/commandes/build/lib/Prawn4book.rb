@@ -6,6 +6,7 @@ module Prawn4book
   end
 
   def self.first_turn?
+    @@turn ||= 1
     @@turn == 1
   end
   def self.second_turn?

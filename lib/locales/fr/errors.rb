@@ -51,17 +51,13 @@ ERRORS = {
       définirez explicitement.
       Pour le moment, elles sont mises à :
       %{margins}
-      Il faut définir %{missings} dans la recette,
-      de cette manière :
+      Il faut définir %{missings} dans la recette, de cette manière :
 
       ---
       book_format:
         page:
           margins:
-            top: ...
-            bot: ...
-            ext: ...
-            int: ...
+      %{missings_yaml}
 
       Consultez le mode d’emploi pour avoir une explication sur ces
       définitions de marge.
