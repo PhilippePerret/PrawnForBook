@@ -33,6 +33,7 @@ TERMS = {
   footer: 'pied de page',
   format: 'format',
   given_values: 'valeurs proprosées',
+  Glossary: 'Glossaire',
   header: 'entête',
   headers_and_footers:'entêtes et pieds de page',
   Id: 'Identifiant',

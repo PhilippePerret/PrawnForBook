@@ -117,13 +117,5 @@ class PrawnView
     add_erreur(msg)
   end
 
-  # Méthode qui produit le GLOSSAIRE du livre
-  # 
-  def build_glossary
-    msg = "Je dois apprendre à produire un glossaire"
-    puts "\n#{msg.rouge}"
-    add_erreur(msg)
-  end
-
 end #/PrawnView
 end #/Prawn4book

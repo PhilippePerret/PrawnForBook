@@ -1,0 +1,7 @@
+Pagination
+  Ou "foliotage", consiste à numéroter les pages.
+  Dans un livre **Prawn-for-book**, on peut numéroter les pages normalement, ou par paragraphe.
+Fonte-string
+  On appelle "*Fonte-string*" la définition d’une fonte (d’une police) comportant la police, le style, la taille et la couleur. Exemple :
+  `fonte = "Garamond/italic/14/555555"`
+  Dans cette définition, on remarquera que la couleur est exprimée en valeur hexadécimale — cf. en annexe.

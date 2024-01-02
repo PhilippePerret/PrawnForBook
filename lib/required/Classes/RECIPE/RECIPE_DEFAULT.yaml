@@ -209,7 +209,16 @@ inserted_pages:
     title_level:  2
     page_count:   2
     font:         null
-
+  glossary:
+    belle_page:   true
+    path:         null
+    title:        "Glossaire"
+    title_level:  2
+    font:         null
+    term:
+      font: null
+    definition:
+      font: null
 #</inserted_pages>
 
 #

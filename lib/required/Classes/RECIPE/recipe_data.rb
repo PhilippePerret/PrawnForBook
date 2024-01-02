@@ -490,6 +490,10 @@ class Recipe
     @abbreviations ||= inserted_pages[:abbreviations]
   end
 
+  def glossary
+    @glossary ||= inserted_pages[:glossary]
+  end
+
   def faux_titre
     @faut_titre ||= inserted_pages[:faux_titre] || inserted_pages[:half_title]
   end

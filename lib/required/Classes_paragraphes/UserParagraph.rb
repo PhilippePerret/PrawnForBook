@@ -85,6 +85,10 @@ class UserParagraph < AnyParagraph
   def title?; regular_paragraph.titre? end
   def table?; regular_paragraph.table? end
     
+  def numero
+    @index
+  end
+
   class << self
 
     attr_accessor :current_table

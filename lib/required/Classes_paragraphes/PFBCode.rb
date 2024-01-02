@@ -67,7 +67,7 @@ class PFBCode < AnyParagraph
       'lda'
       book.abbreviations.print(pdf, first_turn?)
     when 'glossaire', 'glossary'
-      pdf.build_glossary
+      book.glossary.print(pdf)
     when 'no_pagination'
       book.page(pdf.page_number).pagination = false
     when 'stop_pagination'

@@ -180,6 +180,21 @@ class PdfBook
 
   # --- Usefull Methods ---
 
+  # @api stable
+  # 
+  # Retourne le premier path du livre/collection trouvé dans la
+  # liste de propositions fournies, qui peuvent être des simples noms
+  # de fichier ou des chemins relatifs.
+  # 
+  def file_exist?(ary)
+    ary = ary.compact 
+    ary.each do |fname|
+      fpath = existing_path(fname)
+      return fpath unless fpath.nil?
+    end
+    return nil
+  end
+
   # @api
   # 
   # Retourne le chemin d'accès complet à un fichier appartenant au
@@ -192,9 +207,11 @@ class PdfBook
   def existing_path(rpath)
     rpath = File.expand_path(rpath)
     return rpath if File.exist?(rpath)
-    if in_collection? && (fpath = exist?([collection.folder, rpath]))
+    # Un fichier dans le dossier du livre a toujours la priorité sur
+    # le même fichier dans la collection
+    if (fpath = exist?([folder,rpath]))
       return fpath
-    elsif (fpath = exist?([folder,rpath]))
+    elsif in_collection? && (fpath = exist?([collection.folder, rpath]))
       return fpath
     else
       nil
@@ -314,6 +331,10 @@ class PdfBook
   #
   def abbreviations
     @abbreviations ||= PdfBook::AbbreviationsManager.new(self)
+  end
+
+  def glossary
+    @glossary ||= PdfBook::Glossary.new(self)
   end
 
   def collection
