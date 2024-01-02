@@ -178,6 +178,8 @@ class PFBFatalError < StandardError
       2000  => Prawn4book::ERRORS[:references][:no_lien_seul_on_line],
       2001  => Prawn4book::ERRORS[:references][:target_already_exists],
       2002  => Prawn4book::ERRORS[:references][:target_undefined],
+      # -- Abréviations --
+      2100  => Prawn4book::ERRORS[:abbreviations][:two_definitions],
       # -- Index Personnalisés --
       2500  => Prawn4book::ERRORS[:index][:invalid],
       2501  => Prawn4book::ERRORS[:index][:missing_item_treatment_method],

@@ -65,7 +65,7 @@ class PFBCode < AnyParagraph
       pdf.build_list_of_illustrations
     when 'list_of_abbreviations', 'liste_des_abreviations', 'loa', \
       'lda'
-      pdf.build_list_of_abbreviations
+      book.abbreviations.print(pdf, first_turn?)
     when 'glossaire', 'glossary'
       pdf.build_glossary
     when 'no_pagination'

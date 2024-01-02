@@ -779,6 +779,16 @@ ERRORS = {
       ERR
   }, #/:references
 
+  abbreviations: {
+
+    two_definitions: <<~ERR,
+      Deux définitions différentes existent pour l’abréviation ’%{abbr}’
+      à la page %{page} du livre :
+      %{premiere} ≠ %{seconde}
+      Il faut en choisir une seule.
+      ERR
+  },
+
   images: {
     unfound: <<~ERR,
       L'image '%{filename}' est introuvable (ni dans le dossier de la 

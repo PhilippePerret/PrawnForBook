@@ -109,7 +109,7 @@ module Prawn4book
     TOUT_PAGES_SPECS && 'pages_speciales/dedicace',
     TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
     TOUT_PAGES_SPECS && 'pages_speciales/table_illustrations',
-    TOUT_PAGES_SPECS && 'pages_speciales/liste_abreviations',
+    TOUT_PAGES_SPECS && 'pages_speciales/abreviations',
     TOUT_PAGES_SPECS && 'pages_speciales/glossaire',
     TOUT_PAGES_SPECS && 'pages_speciales/remerciements',
     TOUT_PAGES_SPECS && 'pages_speciales/credits_page',

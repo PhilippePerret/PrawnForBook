@@ -18,6 +18,21 @@ end
 # fatale au cours de la construction. Une erreur fatale de ce type
 # n’interrompt pas le programme mais doit absolument être corrigée
 # lorsqu’on veut produire la version finale du livre.
+# 
+# @param err_message [String]
+#   Le texte du message
+# 
+# @param owner [AnyClass]
+#   Le propriétaire de l’erreur, souvent celui qui l’a provoquée.
+#   Rappel : on peut aussi utiliser PFBError.context = .... pour 
+#   préciser dans quel contexte se produit l’erreur
+# 
+# @param keep_it [Bool]
+#   Pour conserver l’erreur même au cours d’un tour suivant. Il faut
+#   utiliser cette propriété lorsque l’erreur n’est déclenché qu’une
+#   seule fois et au premier tour (rappel : les autres erreurs sont 
+#   effacées à chaque nouveau tour).
+# 
 def add_fatal_error(err_message, owner = nil, keep_it = false)
   Prawn4book::PrawnView::Error.add_building_fatal_error(err_message, **{owner:owner, keep: keep_it})
 end
@@ -47,11 +62,7 @@ class << self
       err_msg = compose_message_from_data(err_data)
       raise PFBFatalError.new(150, {err: err_msg})
     else
-      if params[:keep]
-        @fatal_errors_kept << err_data
-      else
-        @fatal_errors << err_data
-      end
+      @fatal_errors << err_data
     end
   end
 
@@ -80,12 +91,11 @@ class << self
         puts "[#{idx + 1}] NOTICE : #{msg}".bleu
       end
     end
-    unless @fatal_errors.empty? && @fatal_errors_kept.empty?
-      fatalerrs = @fatal_errors + @fatal_errors_kept
-      num_len = fatalerrs.count.to_s.length
-      titre = "\nERREURS FATALES (#{fatalerrs.count})"
+    unless @fatal_errors.empty?
+      num_len = @fatal_errors.count.to_s.length
+      titre = "\nERREURS FATALES (#{@fatal_errors.count})"
       puts "#{titre}\n#{'-'*titre.length}".rouge
-      fatalerrs.each_with_index do |derror, idx|
+      @fatal_errors.each_with_index do |derror, idx|
         msg = compose_message_from_data(derror)
         puts "[#{(idx + 1).to_s.rjust(num_len,'0')}] #{msg}".rouge
       end
@@ -96,7 +106,7 @@ class << self
   end
 
   def no_error?
-    @fatal_errors_kept.empty? && @fatal_errors.empty? && @errors.empty?
+    @fatal_errors.empty? && @errors.empty?
   end
 
   def compose_message_from_data(dmsg)
@@ -121,10 +131,8 @@ class << self
 
   def reset
     @errors       = []
-    @fatal_errors = []
-    if @fatal_errors_kept.nil?
-      @fatal_errors_kept = [] 
-    end
+    @fatal_errors ||= []
+    @fatal_errors = @fatal_errors.select { |e| e[:params][:keep] }
     @notices      = []
   end
 

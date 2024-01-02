@@ -69,6 +69,8 @@ inserted_pages:
       font: "Numito/normal/12/FF8000"
       logo:
         height: 40
+  abbreviations:
+    belle_page: true
 
 #/inserted_pages
 

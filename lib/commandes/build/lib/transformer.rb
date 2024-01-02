@@ -111,6 +111,11 @@ module ParserFormaterClass
     str = __traite_mots_indexed_in(str, context)
 
     #
+    # Traitement des abréviations
+    #
+    str = __traite_abbreviations_in(str, context)
+
+    #
     # Traitement des autres mots indexés [001]
     # 
     str = __traite_other_mots_indexed_in(str, context)
@@ -356,6 +361,23 @@ private
 
     return str
   end
+
+  # Relève les abréviations qui seraient définies dans +str+
+  # 
+  # @note
+  #   Ce sont les textes définissant `abbr(...|...)`
+  # 
+  def self.__traite_abbreviations_in(str,context)
+    return str unless str.match?('r\(')
+    str = str.gsub(REG_ABBREVIATION) do
+      abbr = $1.freeze
+      sign = $2.freeze
+      book.abbreviations.add(abbr, sign, **context)
+      abbr
+    end
+    return str
+  end
+  REG_ABBREVIATION = /abbr#{EXCHAR}\((.+?)\|(.+?)\)/.freeze
 
   # Traitement des index personnalisés
   # cf. [001]

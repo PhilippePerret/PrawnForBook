@@ -125,13 +125,5 @@ class PrawnView
     add_erreur(msg)
   end
 
-  # Méthode qui produit la LISTE DES ABBRÉVIATIONS du livre
-  # 
-  def build_list_of_abbreviations
-    msg = "Je dois apprendre à produire la liste des abréviations"
-    puts "\n#{msg.rouge}"
-    add_erreur(msg)
-  end
-
 end #/PrawnView
 end #/Prawn4book

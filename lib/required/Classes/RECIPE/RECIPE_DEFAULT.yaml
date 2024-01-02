@@ -66,7 +66,7 @@ book_format:
     format:       publishing # :pdf 
   page:
     background:   null
-    # margins:
+    # margins:    # Ne pas mettre de marge par défaut
     #   top:    20mm
     #   ext:    15mm
     #   bot:    15mm
@@ -203,6 +203,12 @@ inserted_pages:
     #   font: "Times-Roman/italic/9/777777"
     # value:
     #   font: "Times-Roman//11/000000"
+  abbreviations:
+    belle_page:   true
+    title:        "Liste des abréviations"
+    title_level:  2
+    page_count:   2
+    font:         null
 
 #</inserted_pages>
 
@@ -232,12 +238,12 @@ table_of_content:
     caps:         "all-caps"
     indent:       0
   level2:
-    font:         "Times-Roman/normal/10/000000"
+    font:         "Times-Roman/normal/12/000000"
     numero_size:  10
     indent:       '10mm'
     separator:    null
   level3:
-    font:         "Times-Roman/normal/9/000000"
+    font:         "Times-Roman/normal/11/000000"
     numero_size:  10
     indent:       '20mm'
     separator:    null

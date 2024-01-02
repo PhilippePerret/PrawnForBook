@@ -432,6 +432,7 @@ class PdfBook
       # =========================
       draw_margins if my.recipe.show_margins?
 
+
       #
       # Enregistrement du code du livre dans son fichier pour produire
       # le document PDF final.
@@ -450,21 +451,6 @@ class PdfBook
     # Afficher les erreurs mineures si on en a rencontrées
     # 
     PrawnView::Error.report_building_errors
-
-    # À l’origine, le message final était écrit ici
-    # if File.exist?(pdf_path)
-    #   pdf_relpath = pdf_path.sub("#{Dir.home}/",'')
-    #   puts "#{MESSAGES[:building][:success] % {
-    #     path: pdf_relpath,
-    #     nombre_paragraphes: paragraphes.count,
-    #     duree_traitement:   
-    #   }}".vert
-    #   puts "\n"
-    #   return true
-    # else
-    #   puts ERRORS[:building][:book_not_built].rouge
-    #   return false
-    # end
   
   end
 

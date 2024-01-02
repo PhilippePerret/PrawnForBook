@@ -310,6 +310,12 @@ class PdfBook
     index_manager.get(index_id)
   end
 
+  # Instance pour gérer les abréviations
+  #
+  def abbreviations
+    @abbreviations ||= PdfBook::AbbreviationsManager.new(self)
+  end
+
   def collection
     @collection ||= in_collection? ? Collection.new(self) : nil
   end

@@ -2,6 +2,14 @@ module Prawn4book
 class PdfBook
 class AnyParagraph
 
+  # - raccourci -
+  def first_turn?
+    Prawn4book.first_turn?
+  end
+  def second_turn?
+    Prawn4book.second_turn?
+  end
+
   def title?    ; false end
   def paragraph?; false end
   def printed?  ; false end 

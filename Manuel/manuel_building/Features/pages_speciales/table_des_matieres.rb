@@ -18,7 +18,7 @@ Prawn4book::Manual::Feature.new do
     #### Table des matières en début d’ouvrage
 
     Si on inscrit la table des matières en début d’ouvrage, il faut calculer le nombre de pages qu’elle va occuper et le définir dans la propriété `page_count` de la section `table_of_content` ("table des matières" en anglais). Ce nombre doit être pair et il vaut 2 par défaut.
-    Dans la pratique, estimez grossièrement la longueur de la table des matières en fonction de la taille de l’ouvrage et du nombre de titres et ajoutez 2 pour garder une certaine latitude. Ajustez le nombre final une fois l’ouvrage presque achevé pour supprimez les pages superflues (ou ajoutez-en de nouvelles si la table des matières "mange" sur le texte).
+    Dans la pratique, estimez grossièrement la longueur de la table des matières en fonction de la taille de l’ouvrage et du nombre de titres et ajoutez 2 pour garder une certaine latitude. Ajustez le nombre final une fois l’ouvrage presque achevé pour supprimer les pages superflues (ou ajoutez-en de nouvelles si la table des matières "mange" sur le texte).
 
     #### Table des matières en fin d’ouvrage
 

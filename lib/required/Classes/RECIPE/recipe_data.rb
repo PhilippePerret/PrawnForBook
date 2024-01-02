@@ -486,6 +486,10 @@ class Recipe
     @page_de_titre ||= inserted_pages[:page_de_titre]||inserted_pages[:title_page]
   end
 
+  def abbreviations
+    @abbreviations ||= inserted_pages[:abbreviations]
+  end
+
   def faux_titre
     @faut_titre ||= inserted_pages[:faux_titre] || inserted_pages[:half_title]
   end
