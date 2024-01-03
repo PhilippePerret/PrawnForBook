@@ -195,7 +195,11 @@
   :page: 86
   :paragraph:
   :text: annexe_pages_dun_livre
-:annexe__liste_exhaustive_features_:
+:annexe_erreurs_possibles:
   :page: 90
+  :paragraph:
+  :text: annexe_erreurs_possibles
+:annexe__liste_exhaustive_features_:
+  :page: 91
   :paragraph:
   :text: annexe__liste_exhaustive_features_

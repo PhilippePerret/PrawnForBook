@@ -40,7 +40,7 @@ class TableIllustrations < SpecialTable
     
       @has_print_mark = true # pour requérir un second tour
 
-      2.times { pdf.start_new_page }
+      page_count.times { pdf.start_new_page }
 
       return # On s’arrête là pour la premier tour
     end
@@ -77,7 +77,10 @@ class TableIllustrations < SpecialTable
     not(@is_not_required) && @has_print_mark
   end
 
-
+  # Nombre de pages prévues pour la table des illustrations
+  def page_count
+    @page_count ||= recipe[:page_count] || 2
+  end
 
 end #/class Glossary
 end #/class PdfBook

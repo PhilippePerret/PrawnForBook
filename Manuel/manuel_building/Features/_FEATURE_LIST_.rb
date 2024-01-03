@@ -218,6 +218,7 @@ module Prawn4book
     TOUT_ANNEXE && 'annexe/installation_application',
     TOUT_ANNEXE && 'annexe/constantes',
     TOUT_ANNEXE && 'annexe/pages_dun_livre',
+    TOUT_ANNEXE && 'annexe/erreurs_possibles',
     TOUT_ANNEXE && 'annexe/_liste_exhaustive_features_',
 
   ].compact
