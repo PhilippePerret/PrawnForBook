@@ -19,8 +19,6 @@ class TableIllustrations < SpecialTable
     super
     return unless required? || premier_tour
 
-    puts "\nNuméro de page en arrivant : #{pdf.page_number} (premier tour: #{premier_tour.inspect})".jaune
-
     # On passe toujours à la page suivante
     pdf.start_new_page
 
@@ -44,9 +42,6 @@ class TableIllustrations < SpecialTable
 
       2.times { pdf.start_new_page }
 
-      puts "Numéro de page en repartant : #{pdf.page_number}".jaune
-      sleep 1
-
       return # On s’arrête là pour la premier tour
     end
 
@@ -61,9 +56,6 @@ class TableIllustrations < SpecialTable
 
       start_new_page
     end
-
-    puts "\nNuméro de page en repartant : #{pdf.page_number}".jaune
-    sleep 2
 
   end #/print
 

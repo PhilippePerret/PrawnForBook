@@ -41,13 +41,7 @@ class TableAbbreviations < SpecialTable
   # Graver la liste des abréviations
   # 
   def print(pdf, premier_tour)
-
-    if premier_tour
-      init_pages(pdf)
-      return
-    end
-
-    my = self
+    super
 
     # On calcule le numéro de la page qui suivra la liste des
     # abréviations
@@ -62,6 +56,13 @@ class TableAbbreviations < SpecialTable
       pdf.start_new_page
       next_page_number += 1
     end
+
+    # Au premier tour, on se contente de créer autant de pages que
+    # voulues
+    return init_pages_first_turn if premier_tour
+
+    my = self
+
 
     # - Écriture du titre sur une nouvelle page -
     unless recipe[:title_level] < 1
@@ -146,7 +147,7 @@ class TableAbbreviations < SpecialTable
   #   On peut écrire plusieurs fois la liste des abréviations, donc
   #   la liste peut contenir plusieurs numéros de page
   # 
-  def init_pages(pdf)
+  def init_pages_first_turn
     page_count.times do 
       pdf.start_new_page
     end

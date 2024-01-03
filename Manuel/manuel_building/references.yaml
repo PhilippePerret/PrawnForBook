@@ -72,130 +72,130 @@
   :paragraph:
   :text: pages_speciales_abreviations
 :pages_speciales_glossaire:
-  :page: 46
+  :page: 47
   :paragraph:
   :text: pages_speciales_glossaire
 :pages_speciales_remerciements:
-  :page: 50
+  :page: 52
   :paragraph:
   :text: pages_speciales_remerciements
 :pages_speciales_credits_page:
-  :page: 50
+  :page: 52
   :paragraph:
   :text: pages_speciales_credits_page
 :pages_speciales_index_page:
-  :page: 54
+  :page: 56
   :paragraph:
   :text: pages_speciales_index_page
 :aide_grand_titre:
-  :page: 57
+  :page: 59
   :paragraph:
   :text: aide_grand_titre
 :aide_manuel_et_autres_aides:
-  :page: 57
+  :page: 59
   :paragraph:
   :text: aide_manuel_et_autres_aides
 :aide_snippets:
-  :page: 58
+  :page: 60
   :paragraph:
   :text: aide_snippets
 :aide_erreurs_et_notices:
-  :page: 59
+  :page: 61
   :paragraph:
   :text: aide_erreurs_et_notices
 :aide_afficher_grille_reference_et_marges:
-  :page: 59
+  :page: 61
   :paragraph:
   :text: aide_afficher_grille_reference_et_marges
 :aide_exporter_texte:
-  :page: 60
+  :page: 62
   :paragraph:
   :text: aide_exporter_texte
 :pagination_titre_section:
-  :page: 61
+  :page: 63
   :paragraph:
   :text: pagination_titre_section
 :pagination_pagination:
-  :page: 61
+  :page: 63
   :paragraph:
   :text: pagination_pagination
 :pagination_aspect_numero:
-  :page: 61
+  :page: 63
   :paragraph:
   :text: pagination_aspect_numero
 :pagination_arret_pagination:
-  :page: 61
+  :page: 63
   :paragraph:
   :text: pagination_arret_pagination
 :pagination_no_pagination:
-  :page: 64
+  :page: 66
   :paragraph:
   :text: pagination_no_pagination
 :pagination_numeroter_pages_vierges:
-  :page: 66
+  :page: 68
   :paragraph:
   :text: pagination_numeroter_pages_vierges
 :format_precis_grand_titre:
-  :page: 67
+  :page: 69
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 68
+  :page: 70
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 70
+  :page: 72
   :paragraph:
   :text: format_precis_double_colonnes
 :annexe_grand_titre:
-  :page: 72
+  :page: 74
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 76
+  :page: 78
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 76
+  :page: 78
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 76
+  :page: 78
   :paragraph: 844
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 77
+  :page: 79
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 77
+  :page: 79
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 78
+  :page: 80
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 79
+  :page: 81
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 83
+  :page: 85
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 83
+  :page: 85
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 83
+  :page: 85
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 84
+  :page: 86
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe__liste_exhaustive_features_:
-  :page: 88
+  :page: 90
   :paragraph:
   :text: annexe__liste_exhaustive_features_
