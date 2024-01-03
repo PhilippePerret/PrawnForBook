@@ -4,14 +4,14 @@ module Prawn4book
   # TOUT = true # ou nil, attention ! (pas false)
   TOUT = nil
 
-  # TOUT_RECETTE = TOUT || nil
-  TOUT_RECETTE = TOUT || true
+  TOUT_RECETTE = TOUT || nil
+  # TOUT_RECETTE = TOUT || true
 
-  # TOUT_TEXTE = TOUT || nil
-  TOUT_TEXTE = TOUT || true
+  TOUT_TEXTE = TOUT || nil
+  # TOUT_TEXTE = TOUT || true
 
-  # TOUT_DEF_MINI = TOUT || nil
-  TOUT_DEF_MINI = TOUT || true
+  TOUT_DEF_MINI = TOUT || nil
+  # TOUT_DEF_MINI = TOUT || true
 
   # TOUT_PAGES_SPECS = TOUT || nil
   TOUT_PAGES_SPECS = TOUT || true
@@ -25,17 +25,17 @@ module Prawn4book
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
 
-  # TOUT_TEXT_DETAIL = TOUT || nil
-  TOUT_TEXT_DETAIL = TOUT || true
+  TOUT_TEXT_DETAIL = TOUT || nil
+  # TOUT_TEXT_DETAIL = TOUT || true
 
   TOUT_PUCES = TOUT || nil
   # TOUT_PUCES = TOUT || true
 
-  # TOUT_IMAGE = TOUT || nil
-  TOUT_IMAGE = TOUT || true
+  TOUT_IMAGE = TOUT || nil
+  # TOUT_IMAGE = TOUT || true
 
-  # TOUT_EXPERT = TOUT || nil
-  TOUT_EXPERT = TOUT || true
+  TOUT_EXPERT = TOUT || nil
+  # TOUT_EXPERT = TOUT || true
 
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true

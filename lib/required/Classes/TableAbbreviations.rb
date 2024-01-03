@@ -12,7 +12,9 @@ class TableAbbreviations < SpecialTable
   def initialize(book)
     super
     @items    = {}
+    PROTECTED_PROPERTIES << :@items
     @on_pages = []
+    PROTECTED_PROPERTIES << :@on_pages
   end
 
   # Ajoute une abréviation (si elle n’existe pas)

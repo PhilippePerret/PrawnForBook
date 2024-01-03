@@ -8,7 +8,9 @@ class TableIllustrations < SpecialTable
   def initialize(book)
     super
     @images = []
+    PROTECTED_PROPERTIES << :@images
     @has_print_mark = false # sera mis à true si (( tdi )) dans texte
+    PROTECTED_PROPERTIES << :@has_print_mark
   end
 
   # Gravure de la table des illustration
@@ -18,7 +20,6 @@ class TableIllustrations < SpecialTable
     return unless required? || premier_tour
 
     puts "\nNuméro de page en arrivant : #{pdf.page_number} (premier tour: #{premier_tour.inspect})".jaune
-    sleep 2
 
     # On passe toujours à la page suivante
     pdf.start_new_page
@@ -43,8 +44,8 @@ class TableIllustrations < SpecialTable
 
       2.times { pdf.start_new_page }
 
-      puts "\nNuméro de page en repartant : #{pdf.page_number}".jaune
-      sleep 2
+      puts "Numéro de page en repartant : #{pdf.page_number}".jaune
+      sleep 1
 
       return # On s’arrête là pour la premier tour
     end
