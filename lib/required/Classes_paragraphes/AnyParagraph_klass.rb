@@ -55,7 +55,9 @@ class << self
         NTextParagraph.new(book:book, raw_text:string, pindex:indice, options: options)
       end
     end
-  end
+  rescue Exception => e
+    raise PFBFatalError.new(104, {s:string, i: indice, e: e.message})
+  end #/ instance_type_from_string
 
   # Méthodes utiles pour la numérotation
   # 
