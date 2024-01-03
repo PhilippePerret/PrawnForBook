@@ -12,7 +12,7 @@ Prawn4book::Manual::Feature.new do
 
     La suite va présenter toutes les propriétés utilisables avec les images, mais les pages suivantes reprendront toutes ces propriétés pour en donner des exemples concrets et illustrés.
 
-    ##### Chemin d’accès à l’image
+    #### Chemin d’accès à l’image
 
     Le chemin d’accès à l’image peut se donner…
     * relativement au dossier du livre,
@@ -21,34 +21,41 @@ Prawn4book::Manual::Feature.new do
     * relativement au dossier 'images' de la collection s’il y a collection.
     Les formats (jpg, tiff, png, svg)
 
-    ##### Positionnement de l’image
+    #### Positionnement de l’image
 
     Par défaut, l’image est placée au centre. Pour la mettre à droite ou à gauche, utiliser respectivement `align: right`, `align: :left` et/ou la définition de `left` (décalage avec la marge gauche) et `right` (décalage avec la marge droite), comme dans les exemples ci-dessous.
     Par défaut, l’image s’insère de façon fluide et naturelle avec le texte qui la précède et qui la suit. Mais on peut définir l’espacement de façon très précise avec les propriétés `space_before` ("espace avant") et `space_after` ("espace après"), comme dans les exemples suivant (voir l’exemple 18, par exemple, à la page ->(exemple_image_18)).
 
     Pour un placement optimum, on peut ajuster la position de l’image verticalement à l’aide de `vadjust` ("ajustement vertical"). L’ajustement horizontal, bien entendu, peut se faire avec `right` et `left`. Bien sûr, il est raisonnable de ne faire ces aajustements qu’à la dernière minute, lorsque le livre est presque finalisé.
 
-    ##### Taille de l’image
+    #### Taille de l’image
 
     La taille de l’image peut être définie avec `width:` (largeur), `height:` (hauteur) et/ou `scale:` (échelle). 
     Notez que la largeur sera ramenée par défaut à la largeur de la page du livre si elle est supérieure, et la hauteur de la page si sa hauteur l’excède. Mais si l’on sait ce que l’on veut obtenir et qu’on désire tout contrôler soi-même, on peut ajouter l’option `no_resize: true` qui empêchera le redimensionnement naturel (à vos risques et péril comme dans l’exemple 19 à la page ->(exemple_image_19)).
 
-    ##### Légende de l’image
+    #### Nom de l’image
+
+    Si une [[pages_speciales/table_illustrations]] est demandée, on peut définir précisément le nom de l’image grâce à la propriété `name` :
+    `\\!\\[monimage.jpg]\\(name: "Nom dans la table des illustrations")`
+    (( line ))
+    Si cette donnée n’est pas fournie, _PFB_ utilisera la légende et en dernier recours, si cette dernière n’est pas fournie, le nom du fichier qui sera un peu arrangé pour être présentable.
+
+    #### Légende de l’image
 
     Une légende peut être définie en renseignant la donnée `legend: \\"La légende de l’image\\"`. Par défaut, cette légende sera inscrite avec la même police que la police courante, avec une taille de une unité inférieure, en noir et en italique.
     Mais on peut régler tous ces aspects :
     * soit pour tout le livre (ou toute la collection) dans le fichier recette, dans `book_format > images > legend` (avec les propriétés `font`, `size`, `style` et `color`) — comme ce sera illustré dans la partie [[images/format_legende]].
     * soit de façon ponctuelle pour une seule image/légende en définissant dans les données de l’image les propriétés `legend_font` (nom de la police), `legend_style` (style de la police, par exemple `:regular`), `legend_size` (taille de la police) et `legend_color` (couleur de la légende).
 
-    ##### Image SVG
+    #### Image SVG
 
     Les images SVG sont incontestablement les meilleures images pour l’impression dans le sens où elles conservent leurs qualités quelle que soit la taille adoptée. On peut le voir sur les exemples ci-dessous. Elles sont donc à privilégier.
 
-    ##### Rogner une image SVG
+    #### Rogner une image SVG
 
     Pour savoir comment rogner une image svg, voir [[images/rogner_svg]].
 
-    ##### Exemples
+    #### Exemples d’insertion d’images
 
     Les exemples ci-dessous sont tous construits à partir du code exact donné en exemple. Vous pouvez donc lui faire pleinement confiance.
     EOT

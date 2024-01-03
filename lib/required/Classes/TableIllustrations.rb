@@ -51,7 +51,7 @@ class TableIllustrations < SpecialTable
     pdf.update do
       font(my.fonte)
       my.images.each do |image|
-        text("#{image.filename} p. #{image.page}")
+        text("#{image.picture_name} p. #{image.page}")
       end
 
       start_new_page

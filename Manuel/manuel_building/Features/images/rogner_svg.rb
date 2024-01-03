@@ -14,10 +14,10 @@ Prawn4book::Manual::Feature.new do
 
   texte <<~EOT
     Image non rognée :
-    ![exemples/rogned_non.svg](width:200)
+    ![exemples/rogned_non.svg](width:200, name: "Image non rognée")
     *(note : la page vide précédente est occupée par le blanc de l’image rognée)*
     La même image, rognée cette fois :
-    ![exemples/rogned.svg](width:200)
+    ![exemples/rogned.svg](width:200, name: "Image rognée")
     Amet exercitation ut dolore in in nulla adipisicing laborum.
     EOT
 

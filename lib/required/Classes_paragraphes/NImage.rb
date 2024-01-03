@@ -45,7 +45,7 @@ class NImage < AnyParagraph
   # --- Printer Methods ---
 
   def me
-    @me ||= "Image #{filename} (#{legend.to_s.gsub('<br>',' ')}"
+    @me ||= "Image #{picture_name} (#{legend.to_s.gsub('<br>',' ')}"
   end
 
   def reset
@@ -681,6 +681,19 @@ class NImage < AnyParagraph
     pdf.bounds.height.to_f
   end
 
+  # --- Helper Methods ---
+
+  # Nom de l’image dans la table des illustrations (si elle est
+  # affichée)
+  # 
+  # On prendra par ordre de précédence :
+  #   - le nom défini par :name dans les données
+  #   - la légende (sans br)
+  #   - le nom du fichier (sans trait plat)
+  def picture_name
+    self.name || self.legend&.gsub(/<br( \/)?>/,' ') || self.affixe.gsub(/[_\-]/,' ').titleize
+  end
+
   # --- Legend methods ---
 
   # def wrap_in_color(str)
@@ -906,12 +919,22 @@ class NImage < AnyParagraph
     @legend ||= data[:legend] || data[:legende]
   end
 
+  # @warning: ça n’est pas le nom du fichier, mais le nom pour la
+  # table des illustrations
+  def name
+    @name ||= data[:name] || data[:picture_name]
+  end
+
   def vadjust_legend
     @vadjust_legend ||= data[:vadjust_legend] || 0.0
   end
 
   def extname
     @extname ||= File.extname(filename)
+  end
+
+  def affixe
+    @affixe ||= File.basename(imgname, extname)
   end
 
   def imgname

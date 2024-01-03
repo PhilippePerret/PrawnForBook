@@ -8,7 +8,7 @@ Prawn4book::Manual::Feature.new do
   titre "Définition des marges"
 
   description <<~EOT
-    ![marges.svg]
+    ![marges.svg](name: "Définition des marges, entêtes et pieds de page")
     Des marges par défaut sont proposées, mais vous pouvez tout à fait définir celles que vous voulez très précisément, dans la recette du livre ou de la collection.
     La seule chose à comprendre, par rapport aux documents dont vous avez l'habitude, c'est qu'ici les pages sont paire ou impaire, en vis-à-vis, et définissent donc :
 

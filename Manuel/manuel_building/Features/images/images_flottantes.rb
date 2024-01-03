@@ -101,7 +101,7 @@ Prawn4book::Manual::Feature.new do
 
     (( new_page ))
 
-    #### Autre cas d’utilisation
+    #### Image flottante : autre cas d’utilisation
 
     Le paragraphe précédent.
     !Pour une image qui flotte à gauche (`float: :left`), éloignement de la marge gauche avec un `margin_left` à 40. Le texte est éloigné de l’image avec un `margin_right` à 20 au lieu de la valeur par défaut 10.
@@ -116,7 +116,7 @@ Prawn4book::Manual::Feature.new do
     ![exemples/moins_large_border.jpg](float: :left, width: 100, text_width: 200, margin_left: 40, margin_right: 40)
     (( new_page ))
 
-    #### Adaptations naturelles du texte
+    #### Image flottante : adaptations naturelles du texte
 
     Montrons quelques cas d’adaptation du texte à l’image en fonction de quelques propriétés comme les marges et la largeur du texte.
     !Un largeur de texte normale, un simple `float: :left` avec dimensionnement de l’image (pour avoir moins de lignes)
@@ -135,7 +135,7 @@ Prawn4book::Manual::Feature.new do
     ![exemples/moins_large_border.jpg](float: :left, width: 150, height:44, text_width: 200, lines_before: 1, margin_bottom: 8, margin_left: 30, margin_right: 45, vadjust: 5)
     (( line ))
 
-    #### Cas spéciaux
+    #### Images flottantes : cas spéciaux
 
     (( line ))
     (( line ))

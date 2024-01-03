@@ -135,71 +135,95 @@
   :page: 68
   :paragraph:
   :text: pagination_numeroter_pages_vierges
-:format_precis_grand_titre:
+:images_grand_titre:
   :page: 69
+  :paragraph:
+  :text: images_grand_titre
+:images_inserer_images:
+  :page: 70
+  :paragraph:
+  :text: images_inserer_images
+:exemple_image_18:
+  :page: 82
+  :paragraph: 825
+  :text: exemple_image_18
+:exemple_image_19:
+  :page: 83
+  :paragraph: 826
+  :text: exemple_image_19
+:images_images_flottantes:
+  :page: 84
+  :paragraph:
+  :text: images_images_flottantes
+:images_format_legende:
+  :page: 93
+  :paragraph:
+  :text: images_format_legende
+:format_precis_grand_titre:
+  :page: 96
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 70
+  :page: 97
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 72
+  :page: 99
   :paragraph:
   :text: format_precis_double_colonnes
 :annexe_grand_titre:
-  :page: 74
+  :page: 101
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 78
+  :page: 104
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 78
+  :page: 104
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 78
-  :paragraph: 844
+  :page: 104
+  :paragraph: 997
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 79
+  :page: 105
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 79
+  :page: 105
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 80
+  :page: 106
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 81
+  :page: 107
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 85
+  :page: 111
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 85
+  :page: 111
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 85
+  :page: 111
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 86
+  :page: 112
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe_erreurs_possibles:
-  :page: 90
+  :page: 116
   :paragraph:
   :text: annexe_erreurs_possibles
 :annexe__liste_exhaustive_features_:
-  :page: 91
+  :page: 117
   :paragraph:
   :text: annexe__liste_exhaustive_features_
