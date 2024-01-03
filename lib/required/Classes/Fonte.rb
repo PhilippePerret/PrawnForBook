@@ -177,10 +177,16 @@ class << self
 
   # Pour récupérer une fonte dans une table de valeur quelconque
   # 
+  # @usages
+  # 
+  #     Fonte.get_in(<table>).or_default
+  # 
+  #     Fonte.get_in(<table>).or(<fonte alternative>)
+  # 
   # @note
   #   Toutes les méthodes de fonte doivent maintenant utiliser cette
-  #   méthode pour définir la fonte. La définition par :
-  #   "name/style/size/couleur" doit se généraliser dans la recette.
+  #   méthode pour définir la fonte. En "font-string" :
+  #   "name/style/size/couleur"
   # 
   # @param table [Hash|Nil]
   #   La table qui peut contenir :font définie en tant que string
@@ -436,6 +442,9 @@ class FonteGetter
   end
   def or_default
     font || Fonte.default
+  end
+  def or(alt_font)
+    font || alt_font
   end
   def search_font
     @font = nil # @semantic
