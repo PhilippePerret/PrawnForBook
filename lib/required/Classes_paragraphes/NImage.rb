@@ -9,7 +9,7 @@ class NImage < AnyParagraph
   # 
   # Méthode qui parse le code contenu à l'intérieur d'un ![...]
   # dans le fichier source (ou IMAGE[...] pour la régression).
-  # @note : ce code doit se trouve seul sur la ligne où l’image
+  # @note : ce code doit se trouver seul sur la ligne où l’image
   # doit être insérée
   # 
   # @param dimg [String] Intérieur de IMAGE[...]
@@ -30,6 +30,9 @@ class NImage < AnyParagraph
   attr_reader :filename
   attr_reader :data
   attr_reader :pdf
+
+  # [Integer] Numéro de page de l’image/illustration
+  attr_accessor :page
 
   def initialize(book:, path:, data_str:, pindex:)
     super(book, pindex)
@@ -282,6 +285,10 @@ class NImage < AnyParagraph
         end
       end
 
+      # Consigner le numéro de page, on en aura besoin pour la
+      # liste des illustrations
+      my.page = page_number.freeze
+
       #######################
       ###      IMAGE      ###
       #######################
@@ -390,12 +397,16 @@ class NImage < AnyParagraph
         # Je ne sais absolument pourquoi je dois faire ça, mais si 
         # je ne le fais pas, avec une image trop grande, ça crée une
         # nouvelle page qui n’est pas comptabilisée et ça décale tout,
-        # ce qui génère une erreur de une page dans la suite.
+        # ce qui génère une erreur de page dans la suite.
         # Problème à surveiller : car si ce bug est corrigé, ça ne
         # sera plus le cas.
         start_new_page
         start_new_page
       end
+
+      # Consignation de l’image dans la table des illustrations
+      # du livre (que cette table doive être imprimée ou non)
+      book.table_illustrations.add(my)
 
     end #/pdf.update
     

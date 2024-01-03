@@ -1,9 +1,7 @@
+require_relative 'SpecialTable'
 module Prawn4book
 class PdfBook
-class AbbreviationsManager
-
-  # [Prawn4book::PdfBook] Le livre en construction
-  attr_reader :book
+class TableAbbreviations < SpecialTable
 
   # [Hash] Table de toutes les abréviations
   attr_reader :items
@@ -12,7 +10,7 @@ class AbbreviationsManager
   attr_reader :on_pages
 
   def initialize(book)
-    @book     = book
+    super
     @items    = {}
     @on_pages = []
   end
@@ -160,19 +158,6 @@ class AbbreviationsManager
     end
   end
 
-  # Fonte
-  # 
-  def fonte
-    @fonte ||= Fonte.get_in(recipe).or_default
-  end
-
-  # Donnée en recette
-  # 
-  def recipe
-    @recipe ||= book.recipe.abbreviations
-  end
-
-
-end #/class AbbreviationsManager
+end #/class TableAbbreviations
 end #/class PdfBook
 end #/module Prawn4book

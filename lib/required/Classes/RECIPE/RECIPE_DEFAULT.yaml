@@ -175,9 +175,6 @@ book_format:
 
 #/book_format
 
-#
-# --- PAGES INSÉRÉES ---
-#<inserted_pages>
 inserted_pages:
   page_de_garde:  true
   faux_titre:     false
@@ -219,7 +216,11 @@ inserted_pages:
       font: null
     definition:
       font: null
-#</inserted_pages>
+  illustrations:
+    belle_page: true
+    title:          "Table des illustrations"
+    title_level:    2
+#/inserted_pages
 
 #
 # --- PAGE DE TITRE ---
@@ -229,7 +230,7 @@ inserted_pages:
 #
 table_of_content:
   not_on_even:          false
-  pages_count:          2
+  pages_count:          4
   title:                "Table des matières"
   no_title:             false
   title_level:          1

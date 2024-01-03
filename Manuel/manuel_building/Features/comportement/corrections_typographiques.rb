@@ -16,13 +16,13 @@ Prawn4book::Manual::Feature.new do
     texte <<~EOT, "Les corrections en action"
     #### Les Exposants
     **1\\er** deviendra **1er**.
-    **1\\ère** deviendra **1re**.
+    **1\\ère** (fautif) deviendra **1re**.
     **12\\e** deviendra **12e**.
-    **12\\ème** deviendra **12e**.
-    **12\\eme** deviendra **12e**.
+    **12\\ème** (fautif) deviendra **12e**.
+    **12\\eme** (fautif) deviendra **12e**.
     **XIV\\e** deviendra **XIVe**.
-    **XIV\\ème** deviendra **XIVe**.
-    **XIV\\eme** deviendra **XIVe**.
+    **XIV\\ème** (fautif) deviendra **XIVe**.
+    **XIV\\eme** (fautif) deviendra **XIVe**.
     
     #### Les guillemets et apostrophes
     **\\"mauvais guillemets\\"** deviendra** "mauvais guillemets" **avec de beaux chevrons.

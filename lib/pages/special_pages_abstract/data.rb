@@ -37,6 +37,12 @@ class SpecialPage
     self.class.first_police_name
   end
 
+  # --- Propriétés ajoutées en version 2.0 ---
+
+  def title
+    @title ||= recipe[:title]
+  end
+
   # @return [Any] Valeur pour la clé +simple_key+ défini dans le
   # fichier recette ou par défaut dans les données PAGE_DATA
   # 
@@ -66,7 +72,7 @@ class SpecialPage
   # 
   def get_current_value_for(simple_key)
     dkey = simple_key.split('-').map {|n| n.to_sym}
-    cval = recipe_data
+    cval = recipe
     while key = dkey.shift
       cval = cval[key] 
       return nil if cval === nil # non définie
@@ -108,7 +114,7 @@ class SpecialPage
 
   def set_current_value_for(simple_key, value)
     dkey = simple_key.split('-').map {|n| n.to_sym}
-    cprop = recipe_data
+    cprop = recipe
     while key = dkey.shift
       cprop.key?(key) || cprop.merge!(key => {})
       if dkey.empty?
@@ -121,7 +127,7 @@ class SpecialPage
 
   # En fin de définition, on peut sauver la recette
   def save_recipe_data
-    set_data_in_recipe(recipe_data)
+    set_data_in_recipe(recipe)
     # puts "Données recette pour #{page_name.downcase} enregistrées avec succès.".vert
   end
 
@@ -143,9 +149,10 @@ class SpecialPage
 
 
   # @return [Hash] Les données recette POUR CETTE PAGE
-  def recipe_data
-    @recipe_data ||= get_data_in_recipe[tag_name.to_sym] || {}
+  def recipe
+    @recipe ||= get_data_in_recipe[tag_name.to_sym] || {}
   end
+  alias :recipe_data :recipe # régression
 
   # @return [Hash] Les données de la page dans le fichier de
   # données ou une table vide en cas d'absence de données

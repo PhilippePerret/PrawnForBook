@@ -309,7 +309,13 @@ ERRORS = {
         end
         end
         ERR
-    }
+    },
+
+    unable_to_instantiate_with_type: <<~ERR,
+      Impossible de formater le paragraphe :
+      %{s} (index: %{i})
+      Erreur rencontrée : %{e}
+      ERR
   },
 
   multicolumns: {

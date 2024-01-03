@@ -194,36 +194,6 @@ class TableOfContent
     # On s’en retourne joyeux
   end #/next_page_in_natural_mode
 
-  # Nombre de pages ajoutées à la table des matières
-  # (pour le mode automatique — qui n’est pas en cours d’utilisation
-  # dans cette version de l’application)
-  attr_reader :nombre_pages_ajouted
-
-  # def next_page_in_automatic_mode(pdf)
-  #   @nombre_pages_ajouted ||= 0
-
-  #   my = self
-
-  #   pdf.update do 
-  #     if my.nombre_pages_ajouted.odd?
-  #       # On se trouve sur une page paire ajoutée, rien à faire que
-  #       # passer à la page suivante
-  #       go_to_page(page_number + 1)
-  #     else
-  #       # On doit ajouter deux nouvelles pages pour ne pas chambouler
-  #       # le livre 
-  #       # + renuméroter toutes les pages suivantes
-  #       start_new_page
-  #       start_new_page
-  #       book.pages.renumber_from_with(page_number, 2)
-  #       # On revient à la page précédente
-  #       go_to_page(page_number - 1)
-  #     end
-  #     # On se place au bon endroit vertical de la page
-  #     move_down(my.lines_top * my.tdm_line_height)
-  #   end #/pdf.update
-  # end 
-  # #/next_page_in_automatic_mode
 
   ##
   # Méthode qui définit dans recipe_tdm[:level<+level+>] les données

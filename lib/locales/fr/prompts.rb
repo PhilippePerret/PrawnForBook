@@ -70,6 +70,8 @@ TERMS = {
   requise: 'requise',
   string: 'String',
   Subtitle: 'Sous-titre',
+  table_table_of_content: 'Table des matières',
+  table_illustrations: 'Table des illustrations',
   Title: 'Titre',
   titles: 'titres',
   Type: 'Type',

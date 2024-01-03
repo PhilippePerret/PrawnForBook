@@ -274,6 +274,9 @@ class PdfBook
     return pages.page(number)
   end
 
+  def table_of_content
+    @table_of_content ||= PdfBook::TableOfContent.new(self)
+  end
   ##
   # Instance pour gérer les références (internes et croisées) 
   # du livre courant.
@@ -330,11 +333,15 @@ class PdfBook
   # Instance pour gérer les abréviations
   #
   def abbreviations
-    @abbreviations ||= PdfBook::AbbreviationsManager.new(self)
+    @abbreviations ||= PdfBook::TableAbbreviations.new(self)
   end
 
   def glossary
     @glossary ||= PdfBook::Glossary.new(self)
+  end
+
+  def table_illustrations
+    @table_illustrations ||= PdfBook::TableIllustrations.new(self)
   end
 
   def collection

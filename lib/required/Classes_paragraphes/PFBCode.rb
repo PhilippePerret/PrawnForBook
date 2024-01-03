@@ -57,22 +57,19 @@ class PFBCode < AnyParagraph
         start_new_page
         start_new_page if page_number.even?
       end
-    when 'tdm', 'toc', 'table_des_matieres','table_of_contents', \
-      'table_of_content'
-      pdf.init_table_of_contents
-    when 'tdi', 'loi', 'table_des_illustrations', \
-      'list_of_illustrations'
-      pdf.build_list_of_illustrations
-    when 'list_of_abbreviations', 'liste_des_abreviations', 'loa', \
-      'lda'
+    when 'tdm','toc','table_des_matieres','table_of_contents','table_of_content'
+      book.table_of_content.prepare_pages(pdf, first_turn?)
+    when 'tdi','loi','table_des_illustrations','list_of_illustrations'
+      book.table_illustrations.print(pdf, first_turn?)
+    when 'list_of_abbreviations','liste_des_abreviations','loa','lda'
       book.abbreviations.print(pdf, first_turn?)
-    when 'glossaire', 'glossary'
+    when 'glossaire','glossary'
       book.glossary.print(pdf)
     when 'no_pagination'
       book.page(pdf.page_number).pagination = false
     when 'stop_pagination'
       pdf.stop_pagination
-    when 'start_pagination', 'restart_pagination'
+    when 'start_pagination','restart_pagination'
       pdf.restart_pagination
     when 'stop_numerotation_paragraphs'
       AnyParagraph.stop_numerotation_paragraphs

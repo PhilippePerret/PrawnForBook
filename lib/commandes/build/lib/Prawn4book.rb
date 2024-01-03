@@ -24,7 +24,9 @@ module Prawn4book
   end
 
   def self.second_turn_required?
-    PdfBook.current.table_references.appels_sans_reference?
+    curbook = PdfBook.current
+    curbook.table_references.appels_sans_reference? || \
+    curbook.table_illustrations.required?
   end
 
   def self.requires_third_turn

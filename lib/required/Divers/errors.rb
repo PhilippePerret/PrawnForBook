@@ -117,6 +117,7 @@ class PFBFatalError < StandardError
       101   => Prawn4book::ERRORS[:paragraph][:bad_ruby_code],
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
+      104   => Prawn4book::ERRORS[:paragraph][:unable_to_instantiate_with_type],
       # -- Construction --
       150   => Prawn4book::ERRORS[:building][:bat_fatal_error],
       151   => Prawn4book::ERRORS[:building][:bat_no_margins],
