@@ -135,95 +135,135 @@
   :page: 68
   :paragraph:
   :text: pagination_numeroter_pages_vierges
-:images_grand_titre:
+:puces_puces:
+  :page: 68
+  :paragraph:
+  :text: puces_puces
+:puces_losange:
+  :page: 68
+  :paragraph:
+  :text: puces_losange
+:puces_black_losange:
   :page: 69
+  :paragraph:
+  :text: puces_black_losange
+:puces_square:
+  :page: 69
+  :paragraph:
+  :text: puces_square
+:puces_black_square:
+  :page: 70
+  :paragraph:
+  :text: puces_black_square
+:puces_bullet:
+  :page: 70
+  :paragraph:
+  :text: puces_bullet
+:puces_black_bullet:
+  :page: 71
+  :paragraph:
+  :text: puces_black_bullet
+:puces_finger:
+  :page: 72
+  :paragraph:
+  :text: puces_finger
+:puces_big_hyphen:
+  :page: 72
+  :paragraph:
+  :text: puces_big_hyphen
+:puces_custom_image:
+  :page: 73
+  :paragraph:
+  :text: puces_custom_image
+:images_grand_titre:
+  :page: 74
   :paragraph:
   :text: images_grand_titre
 :images_inserer_images:
-  :page: 70
+  :page: 75
   :paragraph:
   :text: images_inserer_images
 :exemple_image_18:
-  :page: 82
-  :paragraph: 825
+  :page: 87
+  :paragraph: 991
   :text: exemple_image_18
 :exemple_image_19:
-  :page: 83
-  :paragraph: 826
+  :page: 88
+  :paragraph: 992
   :text: exemple_image_19
 :images_images_flottantes:
-  :page: 84
+  :page: 89
   :paragraph:
   :text: images_images_flottantes
 :images_format_legende:
-  :page: 93
+  :page: 98
   :paragraph:
   :text: images_format_legende
 :format_precis_grand_titre:
-  :page: 96
+  :page: 101
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 97
+  :page: 102
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 99
+  :page: 104
   :paragraph:
   :text: format_precis_double_colonnes
 :annexe_grand_titre:
-  :page: 101
+  :page: 106
   :paragraph:
   :text: annexe_grand_titre
 :annexe_reconstruction_manuel:
-  :page: 104
+  :page: 110
   :paragraph:
   :text: annexe_reconstruction_manuel
 :annexe_markdown_all_marks:
-  :page: 104
+  :page: 110
   :paragraph:
   :text: annexe_markdown_all_marks
 :all_markdown:
-  :page: 104
-  :paragraph: 997
+  :page: 110
+  :paragraph: 1163
   :text: all_markdown
 :annexe_format_yaml:
-  :page: 105
+  :page: 111
   :paragraph:
   :text: annexe_format_yaml
 :annexe_font_string:
-  :page: 105
+  :page: 111
   :paragraph:
   :text: annexe_font_string
 :annexe_definition_couleur:
-  :page: 106
+  :page: 112
   :paragraph:
   :text: annexe_definition_couleur
 :images_rogner_svg:
-  :page: 107
+  :page: 113
   :paragraph:
   :text: images_rogner_svg
 :annexe_synopsis_creation:
-  :page: 111
+  :page: 117
   :paragraph:
   :text: annexe_synopsis_creation
 :annexe_installation_application:
-  :page: 111
+  :page: 117
   :paragraph:
   :text: annexe_installation_application
 :annexe_constantes:
-  :page: 111
+  :page: 117
   :paragraph:
   :text: annexe_constantes
 :annexe_pages_dun_livre:
-  :page: 112
+  :page: 118
   :paragraph:
   :text: annexe_pages_dun_livre
 :annexe_erreurs_possibles:
-  :page: 116
+  :page: 122
   :paragraph:
   :text: annexe_erreurs_possibles
 :annexe__liste_exhaustive_features_:
-  :page: 117
+  :page: 123
   :paragraph:
   :text: annexe__liste_exhaustive_features_

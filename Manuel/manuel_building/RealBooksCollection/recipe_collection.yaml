@@ -1,0 +1,75 @@
+# Recette principale pour tous les "real-book" qui permettent de
+# produire de "vrais" livres dont on extrait les pages pour les
+# mettre dans le manuel autoproduit.
+#
+# Pour l’utiliser :
+#   - composer le code de la recette propre
+#   - composer le texte du livre
+#   - indiquer les données réelles :
+#       - name: Le nom du livre (dossier)
+#       - images: [x, y, z] Liste des images à extraire
+#
+---
+:app_name: Prawn-For-Book
+:app_version: 2.0.0
+:created_at: '2023-12-11'
+
+collection:
+  name: "Manuel Autoproduit Collection"
+
+publisher:
+  name: "Icare Éditions"
+
+book_format:  
+  page:
+    margins:
+      top:    20mm
+      ext:    15mm
+      bot:    25mm
+      int:    25mm
+    show_grid: false
+    show_margins: false
+  book:
+    width:  '210mm'
+    height: '297mm'
+    orientation: 'portrait'
+    format: :pdf
+  text:
+    default_font: 'Numito/light/11/000000'
+    line_height:  14
+    guillemets:   ['« ',' »']
+    indent:       0
+  #<titles>
+  titles:
+    level1:
+      lines_before: 10
+      size:         30
+      align: :right
+      alone: true
+    level2:
+      lines_before: 10
+      size:         22
+      align: :right
+      alone: false
+    level3:
+      color: '0000AA'
+    level4:
+      lines_before: 2
+      lines_after:  1
+      color: '00AA00'
+    level5:
+      lines_before: 2
+      lines_after: 1
+      alone: false
+      next_page: false
+      belle_page: false
+      caps: "all-caps"
+
+  #/titles
+#/book_format
+
+inserted_pages:
+  faux_titre:     false
+  page_de_titre:  false
+  page_de_garde:  false
+  credits_page:   false

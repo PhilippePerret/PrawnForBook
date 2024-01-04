@@ -243,7 +243,49 @@ class Feature
 
   attr_reader :pdf, :book
   attr_accessor :filename # chemin relatif (souvent le nom)
+  attr_accessor :filepath
   attr_reader :first_page
+
+  # FONCTIONNALITÉ EN REAL BOOK 
+
+  def real_book?
+    @is_real_book === true
+  end
+
+  def is_real_book
+    @is_real_book = true
+  end
+
+  def produce_real_book
+    # 
+    # L’instance qui permettra de créer le real book
+    # 
+    real_book = RealBook.new(name: filename.gsub(/\//,'_'))
+    # 
+    # Ici on doit tester pour voir s’il est nécessaire de recréer le
+    # livre. Pour ça, il suffit de comparer la date du fichier 
+    # feature avec la date du fichier PDF.
+    # 
+    if real_book.exist? && last_modified_time > real_book.last_time
+      return
+    end
+    #
+    # === Mise en place du real-book ===
+    # 
+    real_book.prepare(real_text, real_recipe)
+    #
+    # === Fabrication du PDF du real-book ===
+    # 
+    real_book.produce || return
+    #
+    # Extraction des pages voulues
+    # 
+    real_book.extract_pages([1, 2])
+  end
+
+  def last_modified_time
+    File.stat(filepath).mtime
+  end
 
   # == IMPRESSION DE LA FONCTIONNALITÉ ==
 
@@ -254,6 +296,10 @@ class Feature
     @pdf  = pdf
     @book = book
 
+    if real_book?
+      puts "\nJe ne sais pas encore produire le résultat d’un real book".jaune
+      return
+    end
 
     eval(code_before) if code_before
 
@@ -441,10 +487,14 @@ class Feature
     # Quand c’est seulement un exemple de recette, qui ne doit pas
     # être interprété
     @sample_recipe = nil
+    # La recette réelle d’un real-book
+    @real_recipe = nil
     # Le texte donné en exemple
     # Si @texte n'est pas fourni, c'est lui qui sera injecté dans le
     # document (et donc interprété).
     @sample_texte   = nil
+    # Le texte réel d’un real book
+    @real_texte = nil
     # Lorsque @sample_texte ne peut pas produire exactement le rendu
     # attendu, on utilise @texte pour définir exactement le texte qui
     # devra être injecté (interprété et imprimé) dans le document.
@@ -534,6 +584,10 @@ class Feature
     set_or_get(:recipe, value, entete)
   end
 
+  def real_recipe(value = nil, entete = nil)
+    set_or_get(:real_recipe, value, entete)
+  end
+
   def sample_real_recipe(value = nil, entete = "Extrait de la recette actuelle")
     value = extract_from_recipe(value) unless value.nil?
     set_or_get(:sample_real_recipe, value, entete)
@@ -547,6 +601,11 @@ class Feature
   def sample_texte(value = nil, entete = nil)
     set_or_get(:sample_texte, value, entete)
   end
+
+  def real_texte(value = nil, entete = nil)
+    set_or_get(:real_texte, value, entete)
+  end
+  alias :real_text :real_texte
 
   def texte(value = nil, entete = nil)
     if value == :as_sample

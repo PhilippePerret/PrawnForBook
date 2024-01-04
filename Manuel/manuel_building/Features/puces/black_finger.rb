@@ -1,5 +1,8 @@
 Prawn4book::Manual::Feature.new do
 
+  is_real_book
+
+
   # titre "Les puces"
   # SUITE DES PUCES
   # 
@@ -11,8 +14,7 @@ Prawn4book::Manual::Feature.new do
   size    = 20
   left    = 7
 
-  recipe <<~YAML
-    #<book_format>
+  real_recipe <<~YAML
     book_format:
       text:
         puce:
@@ -27,7 +29,7 @@ Prawn4book::Manual::Feature.new do
 
   _ps = vadjust > 1 ? 's' : ''
   
-  sample_texte <<~EOT
+  real_texte <<~EOT
     * Ceci est une puce `#{puce.inspect}` de #{size} points, remontée de #{vadjust} point#{_ps}, avec les autres paramètres laissés intacts,
     * Le second item identique,
     * Le troisième.

@@ -28,8 +28,8 @@ module Prawn4book
   TOUT_TEXT_DETAIL = TOUT || nil
   # TOUT_TEXT_DETAIL = TOUT || true
 
-  TOUT_PUCES = TOUT || nil
-  # TOUT_PUCES = TOUT || true
+  # TOUT_PUCES = TOUT || nil
+  TOUT_PUCES = TOUT || true
 
   # TOUT_IMAGE = TOUT || nil
   TOUT_IMAGE = TOUT || true

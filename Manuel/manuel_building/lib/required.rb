@@ -1,6 +1,7 @@
 
 require_relative 'constants'
 require_relative 'Feature'
+require_relative 'RealBook'
 
 if debug?
   spy(:off)

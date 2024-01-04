@@ -24,27 +24,42 @@ module Prawn4book
 
     if first_turn?
 
-      FEATURE_LIST.each do |fname|
+      all_features = FEATURE_LIST.map do |fname|
         next if fname.start_with?('#')
         fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
         if File.exist?(fpath)
-          # puts "Traitement de #{fname.inspect}".bleu
-          # 
           PFBError.context = "Chargement de la feature #{fname}"
+          # --- Chargement du fichier ---
           load fpath
           # On prend l’instance
           feat = Manual::Feature.last
           # On indique le nom/chemin relatif
           feat.filename = fname
+          feat.filepath = fpath
           # Pour les liens de type [[path/feature]], on mémorise la page
-          # courante avec le fichier (plus tard, on règlera aussi 
-          # le numéro de page)
+          # courante avec le fichier (plus tard dans le flux du 
+          # programme, on règlera aussi le numéro de page)
           consigne_page_feature(fname, feat.feature_title)
-          PFBError.context = "Première impression de la feature #{fname}"
-          Manual::Feature.last.print_with(pdf, book)
+          # --- Un real-book ---
+          if feat.real_book?
+            feat.produce_real_book
+          end
+          # --- Pour map ---
+          feat
         else
           add_erreur "Le fichier feature #{fname.inspect} est à écrire.".orange
+          nil
         end
+      end.compact
+
+      # --- On attend que toutes les images soient prêtes ---
+      RealBook.wait_for_images_ready || begin
+        raise "Impossible de produire les images des real-books."
+      end
+
+      all_features.each do |feat|
+        PFBError.context = "Première impression de la feature #{feat.filename}"
+        feat.print_with(pdf, book) unless feat.real_book?
       end
 
 
