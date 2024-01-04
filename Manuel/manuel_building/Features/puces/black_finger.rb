@@ -35,4 +35,10 @@ Prawn4book::Manual::Feature.new do
     * Le troisième.
     EOT
 
+  texte <<~EOT
+    (( new_page ))
+    ![page-1](align: :center)
+    (( new_page ))
+    EOT
+
 end

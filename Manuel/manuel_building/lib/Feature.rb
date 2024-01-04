@@ -256,11 +256,11 @@ class Feature
     @is_real_book = true
   end
 
+  def real_book
+    @real_book ||= RealBook.new(name: filename.gsub(/\//,'_'))
+  end
+
   def produce_real_book
-    # 
-    # L’instance qui permettra de créer le real book
-    # 
-    real_book = RealBook.new(name: filename.gsub(/\//,'_'))
     # 
     # Ici on doit tester pour voir s’il est nécessaire de recréer le
     # livre. Pour ça, il suffit de comparer la date du fichier 
@@ -277,10 +277,6 @@ class Feature
     # === Fabrication du PDF du real-book ===
     # 
     real_book.produce || return
-    #
-    # Extraction des pages voulues
-    # 
-    real_book.extract_pages([1, 2])
   end
 
   def last_modified_time
@@ -296,10 +292,10 @@ class Feature
     @pdf  = pdf
     @book = book
 
-    if real_book?
-      puts "\nJe ne sais pas encore produire le résultat d’un real book".jaune
-      return
-    end
+    # if real_book?
+    #   puts "\nJe ne sais pas encore produire le résultat d’un real book".jaune
+    #   return
+    # end
 
     eval(code_before) if code_before
 
@@ -608,14 +604,34 @@ class Feature
   alias :real_text :real_texte
 
   def texte(value = nil, entete = nil)
-    if value == :as_sample
-      value = sample_texte
-        .gsub('\\\\','_DOBLEANTISLASHES_')
-        .gsub('\\','')
-        .gsub('_DOBLEANTISLASHES_','\\')
+    unless value.nil?
+      if value == :as_sample
+        value = sample_texte
+          .gsub('\\\\','_DOBLEANTISLASHES_')
+          .gsub('\\','')
+          .gsub('_DOBLEANTISLASHES_','\\')
+      end
     end
     set_or_get(:texte, value, entete)
   end
+
+  # Traitement du texte d’une fonctionnalité de type real-book
+  # 
+  def traite_texte_for_real_book
+    pages_to_export = []
+    str = self.texte.dup
+    str = str.gsub(REG_IMAGES_REAL_BOOK) do
+      page_numero = $1.freeze
+      pages_to_export << page_numero.to_i
+      "![RealBooksCollection/#{real_book.name}/page-#{page_numero}.jpg]"
+    end
+    unless pages_to_export.empty?
+      # - Extraction des pages voulues -
+      real_book.extract_pages(pages_to_export)
+    end
+    @texte = str
+  end
+  REG_IMAGES_REAL_BOOK = /\!\[page\-([0-9]+)\]/.freeze
 
   def sample_code(value = nil, entete = nil)
     set_or_get(:sample_code, value, entete)

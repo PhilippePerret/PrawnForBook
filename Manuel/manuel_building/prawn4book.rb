@@ -43,6 +43,7 @@ module Prawn4book
           # --- Un real-book ---
           if feat.real_book?
             feat.produce_real_book
+            feat.traite_texte_for_real_book
           end
           # --- Pour map ---
           feat

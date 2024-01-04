@@ -2,6 +2,38 @@
 # Cette classe permet de faire des essais réels de livre et
 # d’extraire des images.
 # 
+# @USAGE
+# 
+# Dans un fichier feature, utiliser :
+# 
+#   # Pour dire que c’est un real book
+#   # NE PAS OUBLIER CETTE MARQUE
+#   is_real_book
+# 
+#   # Pour définir le contenu exact du fichier texte.pfb.md
+#   real_texte <<~EOT
+#   
+#     EOT
+# 
+#   # Pour définir le contenu exact du fichier recipe.yaml
+#   real_recipe <<~EOT
+#     ---
+#     # ...
+#     EOT
+# 
+#   # Pour définir ce qui sera utilisé dans le manuel
+#   #
+#   # C’est par rapport aux codes ’![page-<x>]’ qu’on déterminera
+#   # les pages à changer en images.
+#   #
+#   # Dans le texte ci-dessous, les ’page-<x>’ seront automatiquement
+#   # remplacé par la bonne adresse de l’image, dans le dossier
+#   # RealBooksCollection/<dossier du livre>/
+#   texte <<~EOT
+#     On pourra voir l’image suivante :
+#     ![page-1](width:'100%')
+#     EOT
+# 
 module Prawn4book
 class RealBook
 
@@ -50,7 +82,10 @@ class RealBook
 
   end #/ class << self
 
-  EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg"'.freeze
+  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg"'.freeze
+  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" -mattecolor peru -frame 15x15+5+5 "page-%{numero}.jpg"'.freeze
+  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert -resize %{width}!x%{height}! "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
+  EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
   PRODUCTION_COMMAND = '/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb build'.freeze
 
   attr_reader :name
@@ -95,6 +130,7 @@ class RealBook
   # = main =
   # 
   # Méthode principale qui extrait les images voulues du livre
+  # dès que le book est prêt.
   # 
   def extract_pages(numeros)
     # Il faut d’abord attendre que le fichier PDF exist
@@ -110,7 +146,12 @@ class RealBook
   def extract_page(numero_page)
     image_fullpath = "#{folder}/page-#{numero_page}.jpg"
     index_page = numero_page - 1
-    cmd = EXTRACTION_COMMAND % {page: index_page, numero: numero_page}
+    cmd = EXTRACTION_COMMAND % {
+      page:   index_page, 
+      numero: numero_page,
+      # width:  ("150mm".to_pps * 13.3).round,
+      # height: ("100mm".to_pps * 13.3).round,
+    }
     Dir.chdir(folder) do
       res = `#{cmd} 2>&1`
       if res.match?('Requested FirstPage is greater than the number of pages')

@@ -1,4 +1,4 @@
-# Recette principale pour tous les "real-book" qui permettent de
+# Recette principale pour tous les "real-books" qui permettent de
 # produire de "vrais" livres dont on extrait les pages pour les
 # mettre dans le manuel autoproduit.
 #
@@ -21,19 +21,19 @@ publisher:
   name: "Icare Éditions"
 
 book_format:  
+  book:
+    width:  150mm
+    height: 100mm
+    orientation: 'portrait'
+    format: :publishing
   page:
     margins:
-      top:    20mm
+      top:    10mm
       ext:    15mm
-      bot:    25mm
+      bot:    10mm
       int:    25mm
     show_grid: false
     show_margins: false
-  book:
-    width:  '210mm'
-    height: '297mm'
-    orientation: 'portrait'
-    format: :pdf
   text:
     default_font: 'Numito/light/11/000000'
     line_height:  14
