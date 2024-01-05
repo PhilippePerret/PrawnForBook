@@ -1,18 +1,14 @@
 Prawn4book::Manual::Feature.new do
 
-
-  # titre "Les puces"
-  # SUITE DES PUCES
-  # 
-
   subtitle "Puce doigt tendu noir"
 
   puce    = :black_finger
-  vadjust = 5
+  vadjust = 3
   size    = 20
   left    = 7
 
   real_recipe <<~YAML
+    ---
     book_format:
       text:
         puce:
@@ -32,8 +28,8 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   texte <<~EOT
-    (( new_page ))
     ![page-1](align: :center)
+    *(Noter dans la recette l’ajustement vertical du doigt grâce à la propriété `vadjust` mise à `#{vadjust}`)*
     (( new_page ))
     EOT
 

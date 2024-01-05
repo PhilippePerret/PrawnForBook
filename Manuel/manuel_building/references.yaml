@@ -185,11 +185,11 @@
   :text: images_inserer_images
 :exemple_image_18:
   :page: 87
-  :paragraph: 991
+  :paragraph: 1303
   :text: exemple_image_18
 :exemple_image_19:
   :page: 88
-  :paragraph: 992
+  :paragraph: 1304
   :text: exemple_image_19
 :images_images_flottantes:
   :page: 89
@@ -225,7 +225,7 @@
   :text: annexe_markdown_all_marks
 :all_markdown:
   :page: 110
-  :paragraph: 1163
+  :paragraph: 1501
   :text: all_markdown
 :annexe_format_yaml:
   :page: 111

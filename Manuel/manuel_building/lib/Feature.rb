@@ -270,7 +270,7 @@ class Feature
     #
     # === Mise en place du real-book ===
     # 
-    real_book.prepare(real_text, real_recipe)
+    real_book.prepare(real_texte, real_recipe)
     #
     # === Fabrication du PDF du real-book ===
     # 
@@ -289,11 +289,6 @@ class Feature
 
     @pdf  = pdf
     @book = book
-
-    # if real_book?
-    #   puts "\nJe ne sais pas encore produire le résultat d’un real book".jaune
-    #   return
-    # end
 
     eval(code_before) if code_before
 
@@ -588,13 +583,19 @@ class Feature
   end
 
   def sample_recipe(value = nil, entete = nil)
-    return sample_real_recipe(value, entete) if value.is_a?(Symbol) || value.is_a?(Array)
+    if value.is_a?(Symbol) || value.is_a?(Array)
+      return sample_real_recipe(value, entete) 
+    elsif real_book? && @sample_recipe.nil? && value.nil?
+      value  = get_sample_recipe_from_real_recipe
+      entete = "SI la recette du livre contient…"
+    end
     set_or_get(:sample_recipe, value, entete)
   end
 
   def sample_texte(value = nil, entete = nil)
     if real_book? && value.nil? && @sample_texte.nil?
-      value = get_sample_texte_from_real_texte
+      value   = get_sample_texte_from_real_texte
+      entete  = "ET que le texte du livre contient…"
     end
     set_or_get(:sample_texte, value, entete)
   end
@@ -614,7 +615,21 @@ class Feature
           .gsub('_DOBLEANTISLASHES_','\\')
       end
     end
+    # Si c’est une définition du texte et que c’est un real-book,
+    # on passe toujours à la page suivante avant de marquer que c’est
+    # le texte final.
+    if value && real_book?
+      new_page_before(:texte)
+      entete ||= "ALORS le livre contiendra…"
+    end
     set_or_get(:texte, value, entete)
+  end
+
+  def get_sample_recipe_from_real_recipe
+    return nil if @real_recipe.nil?
+    str = @real_recipe.dup
+    # str = "```yaml\n---\n#{str}\n```"
+    return str
   end
 
   # Méthode utilisée pour mettre le code réel en exemple de code
@@ -623,10 +638,10 @@ class Feature
   def get_sample_texte_from_real_texte
     return nil if @real_texte.nil?
     str = @real_texte.dup
-    str = str.gsub(REG_ESCAPED_CHARS, '\\\1'.freeze)
+    str = str.gsub(REG_ESCAPED_CHARS, '\\\\'+'\1')
     return str
   end
-  REG_ESCAPED_CHARS = /#{EXCHAR}[\*\#\{\[\!\(]/
+  REG_ESCAPED_CHARS = /#{EXCHAR}([\*\#\{\[\!\(])/
 
   # Traitement du texte d’une fonctionnalité de type real-book
   # 
@@ -919,13 +934,12 @@ class Feature
   # Courrier, comme la recette ou de l’exemple de code)
   # 
   def print_as_code(str, entete)
-    str = str.gsub(/\n( +)/){
-      fois = $1.length
-      "\n" + (' ' * fois)
-    }.gsub('<','&lt;').gsub(/"/,'\\"').gsub('# ', '# ')
-    fontline1 = "(( font(name:'Courier', size:12, style: :normal, hname:'recipe') ))\n"
-    fontline  = "(( font('recipe') ))\n"
-    str = fontline1 + str.split("\n").join("\n#{fontline}")
+    # str = str.gsub(/\n( +)/){
+    #   fois = $1.length
+    #   "\n" + (' ' * fois)
+    # }.gsub('<','&lt;').gsub(/"/,'\\"').gsub('# ', '# ')
+    # str = fontline1 + str.split("\n").join("\n#{fontline}")
+    str = "~~~\n#{str}\n~~~"
     __print_texte(str, entete, 2)
   end
 

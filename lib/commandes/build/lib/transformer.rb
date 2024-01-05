@@ -388,7 +388,14 @@ private
       indexId = $~[:index_id].to_sym.freeze
       output  = $~[:mot].freeze
       motId   = ($~[:id_mot] || output).freeze
-      book.index(indexId).add(motId, output, **context)
+      begin
+        book.index(indexId).add(motId, output, **context)
+      rescue PFBFatalError => e
+        par = context[:paragraph]
+        puts "\n### Problème avec le Paragraphe #{par.pindex}".rouge
+        puts "### de texte : #{str.inspect}".rouge
+        raise e
+      end
     end
 
     return str    
