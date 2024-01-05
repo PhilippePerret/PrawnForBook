@@ -1,38 +1,63 @@
-#
-# Cette classe permet de faire des essais réels de livre et
-# d’extraire des images.
+# USAGE
+# -----
 # 
-# @USAGE
+# Dans la définition de la feature, il faut mettre :
 # 
-# Dans un fichier feature, utiliser :
+# #real_texte
+#   Contenu exact du fichier texte.pfb.md
 # 
-#   # Pour dire que c’est un real book
-#   # NE PAS OUBLIER CETTE MARQUE
-#   is_real_book
+# @note
+#   C’est à partir du moment où #real_texte est invoquée que
+#   le programme sait qu’il s’agit d’un real book
 # 
-#   # Pour définir le contenu exact du fichier texte.pfb.md
 #   real_texte <<~EOT
-#   
+#     <ici le code réel à interpréter>
 #     EOT
 # 
-#   # Pour définir le contenu exact du fichier recipe.yaml
+# #real_recipe
+#   Contenu exact du fichier recipe.yaml (et entièrement,
+#   en tenant compte du code de la collection)
+# 
 #   real_recipe <<~EOT
 #     ---
 #     # ...
 #     EOT
 # 
-#   # Pour définir ce qui sera utilisé dans le manuel
-#   #
-#   # C’est par rapport aux codes ’![page-<x>]’ qu’on déterminera
-#   # les pages à changer en images.
-#   #
-#   # Dans le texte ci-dessous, les ’page-<x>’ seront automatiquement
-#   # remplacé par la bonne adresse de l’image, dans le dossier
-#   # RealBooksCollection/<dossier du livre>/
+# #sample_texte
+#   N’a pas besoin d’être défini, car c’est toujours le code défini
+#   dans @real_texte qui sera repris et échappé.
+# 
+# #texte
+#   Définit ce qui sera utilisé dans le manuel, et principalement
+#   quelle(s) images et avec quel(s) texte(s)
+#
+#   C’est par rapport aux codes ’![page-<x>]’ qu’on déterminera
+#   les pages à changer en images. Ce qui signifie que seules les
+#   images définies dans @texte seront produites.
+#   Astuce : il suffit de mettre le code entre ’<!-- ... -->’ pour
+#   que l’image soit produite sans être insérée dans le document.
+#   Cela permet de produire l’image pour un autre endroit du manuel
+# 
+#   Dans le texte ci-dessous, les ’page-<x>’ seront automatiquement
+#   remplacé par la bonne adresse de l’image, dans le dossier
+#   RealBooksCollection/<dossier du livre>/
+# 
 #   texte <<~EOT
 #     On pourra voir l’image suivante :
 #     ![page-1](width:'100%')
 #     EOT
+# 
+# 
+# 
+# ===========================================================
+# 
+# class Prawn4book::RealBook
+# 
+# Cette classe permet de faire des essais réels de livre et
+# d’extraire des images.
+# 
+# @USAGE
+#   Cf. ci-dessus   
 # 
 module Prawn4book
 class RealBook
@@ -42,6 +67,10 @@ class RealBook
   class << self
 
     # Méthode qui attend que toutes les images soient prêtes
+    # 
+    # @note
+    #   Le Timeout est adapté au nombre d’images.
+    # 
     def wait_for_images_ready
       # - Calcul du timeout -
       # On le fixe en comptant 2 secondes pour produire chaque 
@@ -111,6 +140,7 @@ class RealBook
   # Méthode principale qui produit le livre avec PFB
   # 
   def produce
+    # logif("- Production du real-book ’#{name}’ -") # dans le loginfile principal
     File.delete(book_pdf_path) if exist?
     delete_all_images
     Dir.chdir(folder) do
@@ -119,8 +149,9 @@ class RealBook
         # OK
       else
         puts "Erreur au cours de la conversion du real-book #{name} :".rouge
-        puts "res = #{res.inspect}".rouge
-        return false
+        raise "res = #{res.inspect}".rouge
+        # exit 14
+        # return false
       end
     end
     return true
@@ -164,6 +195,12 @@ class RealBook
     return true # pour passer à l’image suivante
   end
 
+  # @return true si le real-book n’a pas changé
+  # 
+  def up_to_date?(last_modified_time)
+    return false if Prawn4book.force?
+    exist? && last_modified_time < last_time
+  end
 
   def exist?
     File.exist?(book_pdf_path)

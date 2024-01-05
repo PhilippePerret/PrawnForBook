@@ -1,7 +1,5 @@
 Prawn4book::Manual::Feature.new do
 
-  is_real_book
-
 
   # titre "Les puces"
   # SUITE DES PUCES
@@ -10,7 +8,7 @@ Prawn4book::Manual::Feature.new do
   subtitle "Puce doigt tendu noir"
 
   puce    = :black_finger
-  vadjust = 1
+  vadjust = 5
   size    = 20
   left    = 7
 
@@ -24,8 +22,6 @@ Prawn4book::Manual::Feature.new do
           left: #{left}mm
     #</book_format>
     YAML
-
-  init_recipe([:format_text])
 
   _ps = vadjust > 1 ? 's' : ''
   

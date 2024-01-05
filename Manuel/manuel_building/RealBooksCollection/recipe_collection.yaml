@@ -35,7 +35,7 @@ book_format:
     show_grid: false
     show_margins: false
   text:
-    default_font: 'Numito/light/11/000000'
+    default_font: 'Times-Roman/normal/11/000000'
     line_height:  14
     guillemets:   ['« ',' »']
     indent:       0

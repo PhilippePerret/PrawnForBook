@@ -266,9 +266,7 @@ class Feature
     # livre. Pour ça, il suffit de comparer la date du fichier 
     # feature avec la date du fichier PDF.
     # 
-    if real_book.exist? && last_modified_time > real_book.last_time
-      return
-    end
+    return if real_book.up_to_date?(last_modified_time)
     #
     # === Mise en place du real-book ===
     # 
@@ -595,10 +593,14 @@ class Feature
   end
 
   def sample_texte(value = nil, entete = nil)
+    if real_book? && value.nil? && @sample_texte.nil?
+      value = get_sample_texte_from_real_texte
+    end
     set_or_get(:sample_texte, value, entete)
   end
 
   def real_texte(value = nil, entete = nil)
+    is_real_book unless value.nil?
     set_or_get(:real_texte, value, entete)
   end
   alias :real_text :real_texte
@@ -614,6 +616,17 @@ class Feature
     end
     set_or_get(:texte, value, entete)
   end
+
+  # Méthode utilisée pour mettre le code réel en exemple de code
+  # Elle prendre le code réel (@real_code) et échappe tous les
+  # caractère qui pourraient être interprétés
+  def get_sample_texte_from_real_texte
+    return nil if @real_texte.nil?
+    str = @real_texte.dup
+    str = str.gsub(REG_ESCAPED_CHARS, '\\\1'.freeze)
+    return str
+  end
+  REG_ESCAPED_CHARS = /#{EXCHAR}[\*\#\{\[\!\(]/
 
   # Traitement du texte d’une fonctionnalité de type real-book
   # 
@@ -994,6 +1007,7 @@ class Feature
       pdf.instance_variable_set("@gridded_pages", gp)
     end
 
+    # @return toujours la valeur (possiblement corrigée)
     def set_or_get(key, value = nil, entete = nil)
       if value.nil?
         # instance_variable_get("@#{key}")
@@ -1007,6 +1021,7 @@ class Feature
           instance_variable_set("@#{key}_entete", entete)
         end
         instance_variable_set("@#{key}", value)
+        return value
       end
     end
 

@@ -8,6 +8,11 @@ book_data:
 #/book_data
 
 book_format:
+  book:
+    width:  '210mm'
+    height: '297mm'
+    orientation: 'portrait'
+    format: :pdf
   page:
     margins:
       top:    20mm
@@ -16,11 +21,6 @@ book_format:
       int:    25mm
     show_grid: false
     show_margins: false
-  book:
-    width:  '210mm'
-    height: '297mm'
-    orientation: 'portrait'
-    format: :pdf
   text:
     default_font: 'Numito/light/11/000000'
     line_height:  14

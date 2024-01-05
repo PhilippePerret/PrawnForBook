@@ -93,7 +93,7 @@ class PdfBook
     PdfBook::AnyParagraph.init_first_turn
     # - table de références -
     # (il faut absolument l'initier une seule fois, car sinon, on 
-    #  perdra les références ultérieures)
+    #  perdra les références se trouvant après le texte courant)
     table_references.init
 
     #
@@ -278,6 +278,30 @@ class PdfBook
     PrawnView::Error.reset
     
     self.columns_box = nil
+
+    # Pour débugger les dimensions du livre
+    # 
+    # À titre de repère           book
+    #                             width
+    #   RECIPE_DEFAULT.yaml       127 mm
+    #   recipe du manuel auto     211 mm
+    #   recipe collection Real-B  152 mm
+    #   recipe puce black finger  203 mm
+    # 
+    # if filename == "puces_black_finger"
+    # if true #filename == "puces_black_finger"
+    #   pagew = pdf_config[:page_size][0].pt2mm.round(2)
+    #   pageh = pdf_config[:page_size][1].pt2mm.round(2)
+    #   logif <<~LOG
+    #     \nConfiguration PDF de #{filename} : #{pdf_config}
+    #     Page size    : [#{pagew}mm, #{pageh}mm]
+    #     Left margin  : #{pdf_config[:left_margin].pt2mm.round(2)}mm
+    #     Right margin : #{pdf_config[:right_margin].pt2mm.round(2)}mm
+    #     Top margin   : #{pdf_config[:top_margin].pt2mm.round(2)}mm
+    #     Bot margin   : #{pdf_config[:bot_margin].pt2mm.round(2)}mm
+    #     LOG
+    #   # exit 12
+    # end
 
     # Avec Prawn::View au lieu d'étendre Prawn::Document
     #

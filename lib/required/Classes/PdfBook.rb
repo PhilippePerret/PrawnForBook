@@ -376,7 +376,11 @@ class PdfBook
     @subtitle ||= recipe.subtitle
   end
 
-  # --- Paths Methods ---
+  # --- Paths & Names Methods ---
+
+  def filename
+    @filename ||= File.basename(File.dirname(text_file))
+  end
 
   def text_file
     @text_file ||= inputfile.path

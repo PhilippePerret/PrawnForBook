@@ -5,6 +5,10 @@ module Prawn4book
     :TRUE == @modebonatirer ||= true_or_false(CLI.option(:bat))
   end
 
+  def self.force?
+    :TRUE == @modeforce ||= true_or_false(CLI.option(:force))
+  end
+
   def self.first_turn?
     @@turn ||= 1
     @@turn == 1
