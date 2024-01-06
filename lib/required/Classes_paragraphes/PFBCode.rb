@@ -46,7 +46,7 @@ class PFBCode < AnyParagraph
     case raw_code
     when 'new_page', 'nouvelle_page', 'saut_de_page'
       pdf.start_new_page
-    when 'new_even_page', 'nouvelle_page_paire'
+    when 'new_even_page','nouvelle_page_paire','fausse_page'
       pdf.update do
         start_new_page
         start_new_page if page_number.odd?
