@@ -179,6 +179,9 @@ class PdfBook
     # 
     def title?; false end
 
+    # Pour ne pas traiter la numérotation par exemple
+    def paragraph?; false end
+
     # Pour compatibilité avec NTextParagraph
     def indentation
       nil

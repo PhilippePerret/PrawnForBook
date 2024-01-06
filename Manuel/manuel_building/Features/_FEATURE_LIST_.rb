@@ -46,8 +46,8 @@ module Prawn4book
   TOUT_AIDE = TOUT || nil
   # TOUT_AIDE = TOUT || true
 
-  TOUT_PAGINATION = TOUT || nil
-  # TOUT_PAGINATION = TOUT || true
+  # TOUT_PAGINATION = TOUT || nil
+  TOUT_PAGINATION = TOUT || true
 
   TOUT_REFS = TOUT || nil
   # TOUT_REFS = TOUT || true
@@ -135,7 +135,7 @@ module Prawn4book
     TOUT_PAGINATION && 'pagination/titre_section',
     TOUT_PAGINATION && 'pagination/pagination',
     TOUT_PAGINATION && 'pagination/types_numerotation',
-    # TOUT_PAGINATION && 'pagination/numerotation_paragraphes',
+    TOUT_PAGINATION && 'pagination/numerotation_paragraphes',
     TOUT_PAGINATION && 'pagination/aspect_numero',
     TOUT_PAGINATION && 'pagination/arret_pagination',
     TOUT_PAGINATION && 'pagination/no_pagination',

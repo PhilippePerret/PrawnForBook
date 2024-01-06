@@ -2,6 +2,8 @@ module Prawn4book
 class PdfBook
 class AnyParagraph
 
+  attr_accessor :numero
+
   #
   # Attention : ça n'est QUE le début commun de l'impression. Voir
   # dans chaque class les traitements particuliers.
@@ -22,15 +24,7 @@ class AnyParagraph
   #   des méthodes personnalisées (à commencer par le Printer)
   # 
   def prepare_and_formate_text(pdf)
-    #
-    # Définir le numéro du paragraphe ici, pour que
-    # le format :hybrid (n° page + n° paragraphe) fonctionne
-    # 
-    if paragraph? && not(AnyParagraph.numerotation_paragraphs_stopped?)
-      @numero = AnyParagraph.get_next_numero
-    end
 
-    # 
     # Indication de la première page du paragraphe (titre, images,
     # etc.)
     # 
@@ -48,7 +42,7 @@ class AnyParagraph
   end
 
   ##
-  # Impression du numéro de paragraphe en regard du paragraphe
+  # IMPRESSION DU NUMÉRO DE PARAGRAPHE en regard du paragraphe
   # 
   # @param pdf [Prawn::View] Le pdf en construction
   # 
@@ -70,29 +64,27 @@ class AnyParagraph
 
     num = numero.to_s
     
-    #
-    # Pour l'intérieur de pdf.update
+    # À l'intérieur du DSL pdf.update
     # 
     me = self
 
 
     # -- Hauteur pour le numéro --
-    # (peut-être rectifié localement par options[:voffset])
     # 
-    num_top = me.class.diff_height_num_parag_and_parag(pdf)
+    # Peut être rectifié localement par options[:voffset]
+    # 
+    num_top = 0
     if options && options[:voffset]
-      num_top += options[:voffset]
+      num_top += options.delete(:voffset)
     end
 
 
     pdf.update do
 
-      # 
       # Fonte spécifique pour cette numérotation
       # 
       font(me.class.parag_num_fonte) do
       
-        # 
         # Calcul de la position du numéro de paragraphe en fonction du
         # fait qu'on se trouve sur une page gauche ou une page droite
         # 
@@ -115,13 +107,12 @@ class AnyParagraph
         spy "    @span_number_width = #{@span_number_width.inspect}".orange
         spy "    position: #{span_pos_num.inspect}".orange
 
-        float {
-          move_down(num_top)
+        float do
           span(@span_number_width, position: span_pos_num) do
             text "#{num}", **{color: me.parag_numero_color}
           end
-        }
-      end #/font
+        end
+      end
     end    
   end
 

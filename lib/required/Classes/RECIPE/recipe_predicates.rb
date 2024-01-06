@@ -5,7 +5,7 @@ module Prawn4book
 class Recipe
 
   def hybrid_numerotation?
-    :TRUE == @numhybride ||= true_or_false(page_num_type == 'hybrid')
+    :TRUE == @numhybride ||= true_or_false(page_num_type.to_s == 'hybrid')
   end
   # @return true s'il faut numéroter les pages
   def numeroration?

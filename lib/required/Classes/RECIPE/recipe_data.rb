@@ -342,7 +342,7 @@ class Recipe
   #   - 'parags'    Par paragraphe. Tous les paragraphes sont numérotés et le pied de page contient le numéro du premier et dernier paragraphe de la page
   #   - 'hybrid'    Par page et paragraphe. La pagination se fait par le numéro de page, et chaque paragraphe est numéroté en recommençant à 1 à chaque double-page.
   def page_num_type
-    @page_num_type          ||= format_page[:numerotation]
+    @page_num_type          ||= format_page[:pagination]||format_page[:numerotation]
   end
 
   # Fonte pour les numéros de paragraphes

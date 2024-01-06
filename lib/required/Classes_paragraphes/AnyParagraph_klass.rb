@@ -122,31 +122,10 @@ class << self
     end
   end
 
-
   def paragraph_numero_color(strength)
     @paragraph_numero_color ||= begin
       (((100 - strength) * 255 / 100).to_s(16).upcase.rjust(2,'0') * 3 )#.tap { |n| add_notice("Couleur : #{n}") }
       # => p.e. "030303" ou "CCCCCC"
-    end
-  end
-
-
-  def diff_height_num_parag_and_parag(pdf)
-    @diff_height_num_parag_and_parag ||= begin
-      recipe = pdf.book.recipe
-      parag_height = nil
-      numer_height = nil
-      pdf.font(Prawn4book::Fonte.default_fonte) do
-      # pdf.font(recipe.default_font_name, **{size:recipe.default_font_size}) do
-        parag_height = pdf.height_of("Mot")
-      end
-
-      pdf.font(recipe.parag_num_font) do
-        numer_height = pdf.height_of("194")
-      end
-      diff = (parag_height - numer_height).round(3)
-      diff - recipe.parag_num_vadjust
-      diff - recipe.parag_num_vadjust
     end
   end
 

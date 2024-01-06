@@ -313,12 +313,29 @@ class << self
           str = str.sub(/^<font(.+?)<\/font>/,'')
         end
 
+        # Numérotation du paragraphe
+        # --------------------------
+        # C’est ici et seulement ici que le paragraphe peut être
+        # numéroté, car on sait sur quelle page il va se trouver
+        # (avant, on le numérotait dans #prepare_and_formate_text
+        #  qui ne tenait donc pas compte du fait que le paragraphe 
+        #  pouvait passer à la page suivante en cas de veuve, etc.)
+        # 
+        if owner.paragraph? && not(PdfBook::AnyParagraph.numerotation_paragraphs_stopped?)
+          owner.numero = PdfBook::AnyParagraph.get_next_numero
+        end
+
         # 
         # Dans tous les cas, on écrit le texte en récupérant 
         # l'excédant (qui peut ne pas exister)
         # 
         # puts "Options (1er) : #{options.inspect}".bleu
         excedent = text_box(str, **options)
+
+        # Écriture du numéro du paragraphe (si besoin)
+        if owner.paragraph? && not(no_num)
+          owner.print_paragraph_number(self)
+        end
 
         # puts "excedent = #{excedent.inspect}".jaune
 

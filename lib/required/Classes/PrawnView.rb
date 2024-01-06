@@ -149,7 +149,7 @@ class PrawnView
       PdfBook::AnyParagraph.reset_numero
     end
 
-  end #/start_newt_page
+  end #/start_new_page
 
   # Appelé pour suspendre la pagination des pages
   # 

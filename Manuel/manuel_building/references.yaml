@@ -3,15 +3,43 @@
   :page: 19
   :paragraph:
   :text: recette_grand_titre
-:format_precis_grand_titre:
+:pagination_titre_section:
   :page: 20
+  :paragraph:
+  :text: pagination_titre_section
+:pagination_pagination:
+  :page: 20
+  :paragraph:
+  :text: pagination_pagination
+:pagination_numerotation_paragraphes:
+  :page: 20
+  :paragraph:
+  :text: pagination_numerotation_paragraphes
+:pagination_aspect_numero:
+  :page: 25
+  :paragraph:
+  :text: pagination_aspect_numero
+:pagination_arret_pagination:
+  :page: 26
+  :paragraph:
+  :text: pagination_arret_pagination
+:pagination_no_pagination:
+  :page: 28
+  :paragraph:
+  :text: pagination_no_pagination
+:pagination_numeroter_pages_vierges:
+  :page: 30
+  :paragraph:
+  :text: pagination_numeroter_pages_vierges
+:format_precis_grand_titre:
+  :page: 31
   :paragraph:
   :text: format_precis_grand_titre
 :format_precis_definition_marges:
-  :page: 20
+  :page: 31
   :paragraph:
   :text: format_precis_definition_marges
 :format_precis_double_colonnes:
-  :page: 22
+  :page: 33
   :paragraph:
   :text: format_precis_double_colonnes
