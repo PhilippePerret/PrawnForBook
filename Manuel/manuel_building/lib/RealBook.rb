@@ -7,7 +7,7 @@
 #   Contenu exact du fichier texte.pfb.md
 # 
 # @note
-#   C’est à partir du moment où #real_texte est invoquée que
+#   C’est à partir du moment où #real_texte est invoqué que
 #   le programme sait qu’il s’agit d’un real book
 # 
 #   real_texte <<~EOT

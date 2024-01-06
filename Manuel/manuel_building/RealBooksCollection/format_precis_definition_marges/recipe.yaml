@@ -1,0 +1,8 @@
+book_format:
+  page:
+    margins:
+      top: 40mm
+      bot: 20mm
+      ext: 2mm
+      int: 35mm
+    show_margins: true

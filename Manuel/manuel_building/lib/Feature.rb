@@ -25,9 +25,51 @@ class Feature
   # Cela est valable pour le texte du livre (texte.pfb.md) aussi bien
   # que pour le code de la recette.
   # 
+  # NOUVELLE FONCTIONNALITÉ
+  # =======================
+  # Pour créer une nouvelle fonctionnalité :
+  # - déterminer la place où la mettre dans le dossier "Features"
+  #     Pe: le dossier "generalites"
+  # - déterminer son nom
+  #     Pe: "belle_fonction"
+  # - ajouter la fonctionnalité à la constante FEATURE_LIST dans le
+  #   fichier _FEATURE_LIST_.rb, à l’endroit voulu
+  #     Pe: Ajouter "generalites/belle_fonction"
+  # - créer le fichier ruby de la fonctionnalité en dupliquant le
+  #   fichier _MODELE_A_DUPLIQUER_.rb en lui appliquant le son nom
+  # - dans ce fichier, déterminer le titre et les autres éléments qui
+  #   seront utilisés. Cf. ci-dessous.
+  # - relancer la fabrication du manuel en ouvrant une console au 
+  #   dossier "MANUEL_BUILDING"
   # 
-  # TRAITEMENT D’UNE FONCTIONNALITÉ
-  # ===============================
+  # 
+  # MODE REAL BOOK
+  # ==============
+  # Le "mode real book" est un mode particulier d’utilisation de
+  # cette instance Feature qui permet de produire un "vrai" livre
+  # PFB à titre d’exemple et d’en insérer les pages voulues dans le
+  # manuel autoproduit.
+  # Dans le fichier de la fonctionnalité créé ci-dessus, déterminer :
+  # - real_texte    Le "vrai" texte du real book (c’est une fonction)
+  # - real_recipe   La "vraie" recette du real book (voir dans le
+  #                 fichier recette de la collection les éléments qui
+  #                 sont déjà définis, comme la taille du livre)
+  #                 (c’est une fonction aussi)
+  # - texte         Le texte qui va être traduit et affiché dans le
+  #                 manuel autoproduit. Les "![page-<x>]" qu’il 
+  #                 contient seront les pages à tirer du real book.
+  # 
+  # Pour le reste, voir dans :
+  #   - lib/RealBook.rb le détail de l’utilisation
+  #   - RealBooksCollection/recipe_collection.yaml les définitions de
+  #     recette généraux propres aux real books.
+  # 
+  # MODE NORMAL DU TRAITEMENT D’UNE FONCTIONNALITÉ
+  # ==============================================
+  # 
+  # Si on n’utilise pas le mode real-book (cf. ci-dessus), on utilise
+  # le mode normal où les exemples sont évalués à l’intérieur du 
+  # manuel, au fur et à mesure de sa construction.
   # 
   # Quand on veut donner un exemple de texte (dans texte.pfb.md), on
   # utilise (**) :

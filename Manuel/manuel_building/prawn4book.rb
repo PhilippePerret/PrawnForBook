@@ -59,8 +59,10 @@ module Prawn4book
       end
 
       all_features.each do |feat|
-        PFBError.context = "Première impression de la feature #{feat.filename}"
-        feat.print_with(pdf, book) unless feat.real_book?
+        msg = "Première impression de la feature #{feat.filename}"
+        # puts msg.jaune
+        PFBError.context = msg
+        feat.print_with(pdf, book)
       end
 
 

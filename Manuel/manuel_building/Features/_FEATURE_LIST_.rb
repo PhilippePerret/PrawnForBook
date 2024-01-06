@@ -1,8 +1,11 @@
 module Prawn4book
 
-  # TOUT
+
   # TOUT = true # ou nil, attention ! (pas false)
   TOUT = nil
+
+  TOUT_GENE = TOUT || nil
+  # TOUT_GENE = TOUT || true
 
   TOUT_RECETTE = TOUT || nil
   # TOUT_RECETTE = TOUT || true
@@ -13,14 +16,14 @@ module Prawn4book
   TOUT_DEF_MINI = TOUT || nil
   # TOUT_DEF_MINI = TOUT || true
 
-  # TOUT_PAGES_SPECS = TOUT || nil
-  TOUT_PAGES_SPECS = TOUT || true
+  TOUT_PAGES_SPECS = TOUT || nil
+  # TOUT_PAGES_SPECS = TOUT || true
 
-  # TOUT_COMPORTEMENT = TOUT || nil
-  TOUT_COMPORTEMENT = TOUT || true
+  TOUT_COMPORTEMENT = TOUT || nil
+  # TOUT_COMPORTEMENT = TOUT || true
 
-  TOUT_BOOK_FORMAT = TOUT || nil
-  # TOUT_BOOK_FORMAT = TOUT || true
+  # TOUT_BOOK_FORMAT = TOUT || nil
+  TOUT_BOOK_FORMAT = TOUT || true
 
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
@@ -28,11 +31,11 @@ module Prawn4book
   TOUT_TEXT_DETAIL = TOUT || nil
   # TOUT_TEXT_DETAIL = TOUT || true
 
-  # TOUT_PUCES = TOUT || nil
-  TOUT_PUCES = TOUT || true
+  TOUT_PUCES = TOUT || nil
+  # TOUT_PUCES = TOUT || true
 
-  # TOUT_IMAGE = TOUT || nil
-  TOUT_IMAGE = TOUT || true
+  TOUT_IMAGE = TOUT || nil
+  # TOUT_IMAGE = TOUT || true
 
   TOUT_EXPERT = TOUT || nil
   # TOUT_EXPERT = TOUT || true
@@ -40,11 +43,11 @@ module Prawn4book
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
 
-  # TOUT_AIDE = TOUT || nil
-  TOUT_AIDE = TOUT || true
+  TOUT_AIDE = TOUT || nil
+  # TOUT_AIDE = TOUT || true
 
-  # TOUT_PAGINATION = TOUT || nil
-  TOUT_PAGINATION = TOUT || true
+  TOUT_PAGINATION = TOUT || nil
+  # TOUT_PAGINATION = TOUT || true
 
   TOUT_REFS = TOUT || nil
   # TOUT_REFS = TOUT || true
@@ -55,8 +58,8 @@ module Prawn4book
   # FORMAT_PRECIS = TOUT || nil # format livre/page
   FORMAT_PRECIS = TOUT || true
 
-  # TOUT_ANNEXE = TOUT || nil
-  TOUT_ANNEXE = TOUT || true
+  TOUT_ANNEXE = TOUT || nil
+  # TOUT_ANNEXE = TOUT || true
 
   # @note
   #   Avec ’##’ devant, ce sont les fonctionnalités qui étaient "en
@@ -65,11 +68,11 @@ module Prawn4book
   FEATURE_LIST = [
 
     # -- Généralités --
-    'generalites/grand_titre',
-    'generalites/quick_overlook',
-    'generalites/forces_de_prawn',
-    TOUT && 'generalites/deux_fichiers_de_base',
-    TOUT && 'generalites/doubles_parentheses',
+    TOUT_GENE && 'generalites/grand_titre',
+    TOUT_GENE && 'generalites/quick_overlook',
+    TOUT_GENE && 'generalites/forces_de_prawn',
+    TOUT_GENE && 'generalites/deux_fichiers_de_base',
+    TOUT_GENE && 'generalites/doubles_parentheses',
 
     #--- Définitions minimales ---#
     TOUT_DEF_MINI && 'minimales/definitions_minimales', # Long texte

@@ -54,6 +54,25 @@ Prawn4book::Manual::Feature.new do
     ```
     (( line ))
 
+    erreur::Problème d’affichage de deux images
+
+    Il arrive que lorsqu’on enchaine deux images sur deux lignes consécutives, de la manière suivante :
+    (( line ))
+    ```
+    \\!\\[premiere_image.jpg](... propriétés ...)
+    \\!\\[deuxième_image.png](... propriétés ...)
+    ```
+    (( line ))
+    … un problème peut être généré. Pour l’éviter, il devrait suffire de passer une ligne entre les deux images :
+    (( line ))
+    ```
+    \\!\\[premiere_image.jpg](... propriétés ...)
+
+    \\!\\[deuxième_image.png](... propriétés ...)
+    ```
+    (( line ))
+
+
     EOT
 
 
