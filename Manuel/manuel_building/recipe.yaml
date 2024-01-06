@@ -19,6 +19,7 @@ book_format:
       ext:    15mm
       bot:    25mm
       int:    25mm
+    pagination: pages
     show_grid: false
     show_margins: false
   text:

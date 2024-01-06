@@ -105,6 +105,13 @@ class << self
     @@custom_paragraph_parser_exists = value
   end
 
+  def numerotage_paragraph?
+    return false if numerotation_paragraphs_stopped?
+    return recipe.paragraph_number?
+  end
+  def numerotation_paragraph?
+    
+  end
   def numerotation_paragraphs_stopped?
     @numparagisstopped
   end

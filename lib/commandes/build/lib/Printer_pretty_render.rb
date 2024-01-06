@@ -321,7 +321,7 @@ class << self
         #  qui ne tenait donc pas compte du fait que le paragraphe 
         #  pouvait passer à la page suivante en cas de veuve, etc.)
         # 
-        if owner.paragraph? && not(PdfBook::AnyParagraph.numerotation_paragraphs_stopped?)
+        if owner.paragraph? && PdfBook::AnyParagraph.numerotage_paragraph?
           owner.numero = PdfBook::AnyParagraph.get_next_numero
         end
 

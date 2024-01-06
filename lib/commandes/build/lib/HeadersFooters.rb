@@ -61,19 +61,28 @@ end
 # 
 def print(pdf)
 
+  # Exposition
   @pdf = pdf
+
+  # Dans DSL pdf.update
+  my = self
 
   @current_filled_color = pdf.fill_color
 
   parse # il dépend de pdf
 
   # Appliquer la fonte générale si elle est définie
-  pdf.font(fonte) if font
+  pdf.font(fonte) if fonte
+
+  # Format des numéros de page
+  numerote_with_page_number = book.recipe.page_num_type != 'parags'
   
   options = {dynamic: true}
   # puts "Disposition: #{name}".jaune
   # puts "Pages à header/footer : #{pages.inspect}".jaune
-  pdf.repeat(pages, **options) do 
+  pdf.repeat(pages, **options) do
+
+    # Numéro de page
     number = pdf.page_number
 
     # Une page ne peut recevoir qu’un seul entête/pied de page
@@ -90,6 +99,17 @@ def print(pdf)
     # La passer si elle ne doit pas être paginée
     next if curpage.no_pagination?
     # puts "La page ##{number} est paginée"
+
+    # Pagination qui sera imprimée
+    # 
+    # Dépend du format de pagination. Si ’parags’ (pas hybrid)
+    # il faudrait traiter autrement, en prenant le numéro du premier
+    # paragraphe de la page
+    folio =  if numerote_with_page_number
+                pdf.page_number
+              else
+                curpage.data[:first_par]&.numero
+              end
 
     # --- Page Data ---
     # Pour pouvoir faire le test avec une page au milieu :
@@ -115,7 +135,7 @@ def print(pdf)
       page_data.merge!("title#{n}".to_sym => tit.downcase)
     end
     page_data.merge!({
-      number:       number,
+      number:       folio,
       pages_count:  book.pages.count,
     })
     
