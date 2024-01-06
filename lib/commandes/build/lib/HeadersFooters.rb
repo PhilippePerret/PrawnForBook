@@ -253,6 +253,8 @@ def pages
       (1..nombre_pages)
     else
       first_page, last_page = (raw_pages||'-').split('-').map{|n|n.to_i}
+      # puts "raw_pages: #{raw_pages.inspect}".jaune
+      # puts "first_page:#{first_page}, last_page:#{last_page}".bleu
       first_page = 1 if first_page == 0
       last_page = nombre_pages if last_page.nil? || last_page == 0
       (first_page..last_page)

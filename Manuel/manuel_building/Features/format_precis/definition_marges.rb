@@ -24,10 +24,10 @@ Prawn4book::Manual::Feature.new do
     Dans l'exemple ci-dessous nous avons volontaire *pousser* les valeurs pour rendre bien visibles les changements. 
     EOT
 
-  top_margin = 40 # '30mm'
-  bot_margin = 20 # '30mm'
-  int_margin = 35 # '30mm'
-  ext_margin = 2  # '2mm'
+  top_margin = 40
+  bot_margin = 20
+  int_margin = 35
+  ext_margin = 2
 
   top_mg_mm = "#{top_margin}mm".to_pps
   bot_mg_mm = "#{bot_margin}mm".to_pps
