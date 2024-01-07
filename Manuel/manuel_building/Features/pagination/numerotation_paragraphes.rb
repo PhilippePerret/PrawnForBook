@@ -18,7 +18,7 @@ Prawn4book::Manual::Feature.new do
 
     #### Format de la numérotation du paragraphe
 
-    Comme tout autre élément de _PFB_, on peut en garder les valeurs par défaut, qui sont déjà tout à fait adaptées au livre, ou on peut les définir très précisément, dans les moindres détails.
+    Comme tout autre élément de _PFB_, on peut en garder les valeurs par défaut, qui sont déjà tout à fait adaptées au livre, ou l’on peut les définir très précisément. Voir [[pagination/types_numerotation]].
 
     EOT
 
@@ -27,6 +27,9 @@ Prawn4book::Manual::Feature.new do
     book_format:
       page:
         pagination: hybrid
+      text:
+        references:
+          hybrid_format: '§ %{paragraph} de p. %{page}'
     YAML
 
   new_page_before(:texte)
@@ -34,12 +37,13 @@ Prawn4book::Manual::Feature.new do
   # Ci-dessous, on dispose les pages comme dans le livre, avec la
   # première page à droite, la deuxième page à gauche plus bas et la
   # troisième page sous la première.
+  # 
   texte <<~EOT
     (( fausse_page ))
     Les pages d’un livre dont les paragraphes sont numérotés ressemblent aux pages ci-dessous.
     Remarquez comment la numérotation recommence à la page 2 (sur la double page 2-3 donc) et comment elle se poursuit sur la page 3.
-    Notez également la référence qui est fait, dans le paragraphe 6 de la page 3, à une référence du paragraphe 5 de la page 2 ("p. 2 § 5").
-    Pour savoir comment modifier le format de cette référence voir [[pagination/types_numerotation]].
+    Notez également la référence qui est fait, dans le paragraphe 6 de la page 3, à une référence du paragraphe 5 de la page 2 ("§ 5 de p. 2").
+    Le format de la référence ("§ 5 de p. 2") est défini dans la recette ci-dessus, dans `book_format: text: references: hybrid_format:`.
     (( move_to_line(25) ))
     ![page-2](width:"100%")
     (( new_page ))
@@ -56,7 +60,6 @@ Prawn4book::Manual::Feature.new do
     Aliquip deserunt consequat irure minim tempor in laboris sint nisi nulla officia cillum sint dolore dolore do consectetur exercitation aliquip enim incididunt minim cillum quis dolore consectetur voluptate fugiat cupidatat deserunt eiusmod dolor in.
     Deserunt voluptate aute consectetur eiusmod dolor in amet cupidatat sint eiusmod commodo excepteur sit ullamco occaecat commodo minim ad veniam labore.
     Nulla irure sunt irure consectetur labore irure culpa deserunt occaecat ut aliqua ullamco aliquip et aute veniam ut dolore tempor.
-    (( <-(BAD_REFERENCE) ))
     Dolor labore consectetur REFERENCE<-(REFERENCE) ut veniam nostrud ut dolore commodo proident laboris nostrud anim quis ex amet proident pariatur do incididunt excepteur eiusmod aliquip ullamco officia consequat ex exercitation ea cupidatat ea ut consequat pariatur do dolor id.
     Dolore reprehenderit sit nostrud voluptate dolore ex consectetur dolore voluptate tempor magna proident est in qui sint tempor dolor non occaecat velit (cf. ->(REFERENCE)). 
     Lorem ipsum id commodo tempor laboris reprehenderit dolore tempor velit elit adipisicing qui sed elit in eiusmod proident id consequat voluptate amet voluptate cupidatat aute aliquip commodo adipisicing eu in anim quis id deserunt.

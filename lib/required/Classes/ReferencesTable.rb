@@ -166,7 +166,7 @@ class ReferencesTable
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
       unless ref_text.match?(/_(ref|page|paragraph)_/)
-        ref_text = "#{ref_text} (_ref_)"
+        ref_text = "#{ref_text} _ref_"
       end
       # - Transformation de la marque -
       ref_text
@@ -174,6 +174,7 @@ class ReferencesTable
         .gsub(/_page_/, ref[:paragraph].page.to_s)
         .gsub(/_paragraph_/, ref[:paragraph].numero.to_s)
     elsif second_turn?
+      # Second tour et l’on ne connait toujours pas la référence
       err_msg = PFBError[2002] % {id: ref_id}
       unless @_key_table_list_has_been_done === true
         # Pour ne donner le message qu’une seule fois
@@ -243,10 +244,10 @@ class ReferencesTable
     when 'pages'
       book.recipe.reference_page_format % {page:num_page}
     when 'parags'
-      if ref[:paragraph]
+      if num_para
         book.recipe.reference_paragraph_format % {paragraph:num_para}
       else
-        "#{ref[:page]}"
+        "#{num_page}"
       end
     when 'hybrid'
       book.recipe.reference_hybrid_format % {page:num_page, paragraph:num_para}

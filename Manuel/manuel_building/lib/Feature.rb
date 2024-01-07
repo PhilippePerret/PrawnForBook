@@ -663,6 +663,9 @@ class Feature
     if value && real_book?
       new_page_before(:texte)
       entete ||= "ALORS le livre contiendra…"
+      if value.match?(/\[\[/)
+        value = value.gsub(/\[\[.+?\]\]/,"{{Pas de référence par [[...]] dans un “real book”}}")
+      end
     end
     set_or_get(:texte, value, entete)
   end
@@ -1071,7 +1074,6 @@ class Feature
         val = correct_string_value(val) if val.is_a?(String)
         return val
       else
-        # value = correct_string_value(value) if value.is_a?(String)
         if entete
           entete  = correct_string_value(entete) 
           instance_variable_set("@#{key}_entete", entete)
@@ -1128,6 +1130,8 @@ private
       VARIABLES.each do |key, val|
         v = v.gsub(key, val)
       end
+
+      # - Lien vers une autre fonctionnalité -
       if v.match?(/\[\[/)
         v = v.gsub(REG_LIEN_FEATURE){
           tirets = $~['tirets'].freeze
@@ -1146,6 +1150,7 @@ private
             end
             tit = "|#{tit}"
           end
+          # @return :
           if Prawn4book.first_turn?
             "#{path.gsub('/','_')}#{tit}"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
           else

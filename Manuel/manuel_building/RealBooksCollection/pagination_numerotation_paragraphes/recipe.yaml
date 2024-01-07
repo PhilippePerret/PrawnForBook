@@ -2,3 +2,6 @@
 book_format:
   page:
     pagination: hybrid
+  text:
+    references:
+      hybrid_format: '§ %{paragraph} de p. %{page}'

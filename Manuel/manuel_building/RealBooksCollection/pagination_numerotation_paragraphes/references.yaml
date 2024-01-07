@@ -93,7 +93,7 @@
             :references:
               :page_format: page %{page}
               :paragraph_format: "§ %{paragraph}"
-              :hybrid_format: p. %{page} § %{paragraph}
+              :hybrid_format: "§ %{paragraph} de p. %{page}"
           :titles:
             :font: Helvetica/normal//000000
             :level1:
@@ -253,7 +253,7 @@
               :footer: "| -NUM  || NUM-  |"
               :header_font: Numito/light/10/999999
               :footer_font: Helvetica/normal/10/777777
-      start_time: 2024-01-07 05:46:11.106136000 +01:00
+      start_time: 2024-01-07 06:35:13.986556000 +01:00
       isincollection: :TRUE
       collection: !ruby/object:Prawn4book::Collection
         folder: "/Users/philippeperret/Programmes/Prawn4book/Manuel/MANUEL_BUILDING/RealBooksCollection"
@@ -627,7 +627,7 @@
                                               list:
                                               - - :FlateDecode
                                                 -
-                                          offset: 4383
+                                          offset: 4385
                                         :FontBBox: &64
                                         - -950
                                         - -480
@@ -645,7 +645,7 @@
                                         stream:
                                         filters: !ruby/object:PDF::Core::FilterList
                                           list: []
-                                      offset: 8604
+                                      offset: 8606
                                     :FirstChar: 32
                                     :LastChar: 255
                                     :Widths: &23 !ruby/object:PDF::Core::Reference
@@ -881,7 +881,7 @@
                                         stream:
                                         filters: !ruby/object:PDF::Core::FilterList
                                           list: []
-                                      offset: 10169
+                                      offset: 10171
                                     :ToUnicode: &22 !ruby/object:PDF::Core::Reference
                                       identifier: 16
                                       gen: 0
@@ -1172,7 +1172,7 @@
                                           list:
                                           - - :FlateDecode
                                             -
-                                      offset: 8815
+                                      offset: 8817
                                   stream: !ruby/object:PDF::Core::Stream
                                     filtered_stream: ''
                                     stream:
@@ -1513,7 +1513,7 @@
                               data: {}
                               stream: !ruby/object:PDF::Core::Stream
                                 filtered_stream: !binary |-
-                                  eJyVVMlqHDEQvesr9AVtlZaqFgxzsLOAD4HEfTM+DL1AfAgYQ/z7eaWepaeXSUKj1l567+mV3oyJVXQpBtt8GHPfGHFVzUzR+kgVUU1km87cffGVs9oezPMuRh645UE8J+/0L+XPNUrPEX3PWSLmwlhjdJAgUbwk1nHeW+/sTuOI7o5MKIjGV7E57S0lu5Ma7YCZHhETB12LaDhn/2KbR/O5McY4QFQWVAVPvCTkZYvQ9aHb4PTPnThdCUAdEwuoEWZUgIGzkgdIpZyUMOrMPeYJxPMoyDg/i3VGsELoigWFTRa9CoRYA6QKwJb0L0e5VUaMtOOF+Bpz7LE6+Zgix1TqPoaYDpgV5/uDC0B2ENTJZ3z9Bdvdp/73z7b/8fXetu8A6iOY2Hn93v6arnx42lz59PCt8Ay1VCxQC/7zFQc6ESUQrZXnLoBM81pQqECnohGmfT1bj0vep4WKlPOmuY8+4E7vDvca5NhW4xYTdvgGvbHFLbZQ3Zf9WcLt1Jh5bhJnxQG+gtlXaNRpi8byyictwuGgpiBBq1iS5cqkJUsnO4qJ0c9IiDDSXzX9RaSSqSUiLLiapSQifslJNt+dG68GAVOS2y9L0H5BS+Oo7sPYKYJyLQrA/IuLXtfsL8lKafvJSZLOuhJiZTXZ8fxwVlINozrqu6kKT1LwVtL9R5o5t5Fm8s9pNu+/3VyhEch+GGcfUV7N84t1tsOSyMxi53XJY4UsqqVCJq5qvFh8QUxuhBzOkL/j+wOfrXh+
+                                  eJyVVMtu2zAQvPMr+AUKd0nuSoDhQ9IHkEOBNr4FORh6AM2hQBCg+f3OUn7IluS2ECi+lzPDWb45l6oUcop+9+Hc/c5pqGoRSp4TVUQ1kd917u4LV8Fbe3DPm5RkkFYGZckc7K/lLzVKLwl9lkYT5uJYY3TQqElZs9i4bD0Hv7E4aruTEAqiyUVsyVtP2W+0RjtipkfELNHWIhrO2b743aP7vHPOBUA0FlRFJpkTYl0jdHnoOjj7S6fBVgJQJyQKaoQZE2CQxsgDpFHORhh1Iz3mCcSbUZBx/irWCcECoQsWFFdZ9CYQYg2QKgJbtr8e5DYZMdKOF8I15oSxOnPKSVIudZ9iyvuw132I42UY68A9+swN92d0d5/63z/b/sfXe9++AyoncPHX9Xv7a7ry4Wl15dPDt8I01lqJQi84kCuJdKRKoFob000End1rQWESHYtFmPbtbDsuM+eZjtQ0q/Y+OEE6uz3cbNRD26xbbNjhG+zOZvfYQncu+xuNt5PjynWTOAse4Ap2X6BR5zUa80uftAiHg5qBBK1iStELm5Y8newoNka/QUrEkf6i7c8ilVwtEWHCxTwlVeU5J119eW68GwRMWW+/LdH6BS2No7YPY8cIxrUoAMvPLnpZs7+kK+X1RydrPulKiNWYyQ7nx5OSZhjT0V5OU3iSgreS7j/SLISVNNN/TrPr/tvNFRaB/IcL/hHl1T2/+OA7LEkiov66LnlskNW0NMgkVY03S86IKYyQ4wnyd3x/AF40eOA=
                                 stream: |
                                   q
 
@@ -1542,7 +1542,7 @@
                                   BT
                                   70.86614 213.11811 Td
                                   /F2.0 11 Tf
-                                  [<6e6f6e206f636361656361742076> 15 <656c6974202863662e205245464552454e4345a028702ea03220a7a03529292e>] TJ
+                                  [<6e6f6e206f636361656361742076> 15 <656c6974202863662e205245464552454e4345a0a7a03520646520702ea032292e>] TJ
                                   ET
 
                                   /DeviceRGB cs
@@ -1647,7 +1647,7 @@
                             stream:
                             filters: !ruby/object:PDF::Core::FilterList
                               list: []
-                          offset: 4043
+                          offset: 4045
                       stream: !ruby/object:PDF::Core::Stream
                         filtered_stream: ''
                         stream:
@@ -1843,7 +1843,7 @@
           renderer: !ruby/object:PDF::Core::Renderer
             state: *28
             page_number: 3
-            xref_offset: 11083
+            xref_offset: 11085
           font_families:
             Courier:
               :bold: Courier-Bold
@@ -35807,20 +35807,26 @@
                 font: *66
                 options:
                   :kerning: true
-                string: REFERENCE (p. 2
-              : 85.866
+                string: REFERENCE § 5
+              : 79.45299999999999
               ? !ruby/struct:Prawn::FontMetricCache::CacheEntry
                 font: *66
                 options:
                   :kerning: true
-                string: "§ 5))."
-              : 23.825999999999997
+                string: de
+              : 10.383999999999999
               ? !ruby/struct:Prawn::FontMetricCache::CacheEntry
                 font: *66
                 options:
                   :kerning: true
-                string: non occaecat velit (cf. REFERENCE (p. 2 § 5)).
-              : 212.15699999999998
+                string: p. 2).
+              : 22.913
+              ? !ruby/struct:Prawn::FontMetricCache::CacheEntry
+                font: *66
+                options:
+                  :kerning: true
+                string: non occaecat velit (cf. REFERENCE § 5 de p. 2).
+              : 217.96499999999997
               ? !ruby/struct:Prawn::FontMetricCache::CacheEntry
                 font: *65
                 options: {}
@@ -36044,7 +36050,7 @@
             :number: 3
             :first_par: 1
             :last_par:
-            :content_length: 851
+            :content_length: 853
             :titres: &71
               1:
               2:
@@ -36371,7 +36377,7 @@
         styles: {}
         text: 'Dolore reprehenderit sit nostrud voluptate dolore ex consectetur dolore
           voluptate tempor magna proident est in qui sint tempor dolor non occaecat
-          velit (cf. REFERENCE (p. 2 § 5)). '
+          velit (cf. REFERENCE § 5 de p. 2). '
         first_page: 2
         prev_printed_paragraph: *80
         fonte: *74

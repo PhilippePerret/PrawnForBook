@@ -6,6 +6,7 @@ Prawn4book::Manual::Feature.new do
     L'aspect du numéro (sa police, son style, sa taille, sa couleur) peut être défini très précisément dans la recette. On utilise pour cela les paramètres suivant.
     La couleur est exprimée de façon hexadécimale (voir l'explication page (( ->(couleur) )) ).
     *(remarquez que ci-dessous nous pouvons utiliser des *variables* au lieu de répéter plusieurs fois la même information. Ici, c'est la fonte par défaut que nous avons mise dans une variable)*
+    Note : pour voir l’aspect d’un numéro de page et/ou de paragraphe dans une référence, voir [[pagination/types_numerotation]].
     EOT
 
   sample_recipe <<~EOT
