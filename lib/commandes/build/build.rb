@@ -264,6 +264,9 @@ class PdfBook
   #   PrawnView hérite de Prawn::View (comme conseillé par le code 
   #   de Prawn.
   # 
+  # @return true en cas de succès pour savoir que tout s’est bien
+  # passé.
+  # 
   def build_pdf_book
     clear unless debug? || ENV['TEST']
 
@@ -476,6 +479,7 @@ class PdfBook
     # 
     PrawnView::Error.report_building_errors
   
+    return true # pour l’ouvrir, le cas échéant
   end
 
 
