@@ -783,6 +783,16 @@ ERRORS = {
       Un « appel » à une cible de référence ne doit jamais se trouver
       seul sur une ligne. Mettre le texte (( %{code} )) à un meilleur endroit.
       ERR
+
+    no_num_parag_in_pfbcode: <<~ERR,
+      En mode de pagination ’%{pagin}’ on ne peut pas avoir de ligne 
+      de code PFB (entre doubles parenthèses) contenant une définition de
+      cible de référence. Une telle ligne ne possède pas de numéro de 
+      paragraphe et elle n’existe donc pas physiquement dans le livre).
+      
+      Solution : définir la cible ’%{cible}’ dans le texte d’un 
+      vrai paragraphe, avant ou après.
+      ERR
   }, #/:references
 
   abbreviations: {

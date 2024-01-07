@@ -5,6 +5,6 @@ Lorem ipsum excepteur amet qui labore ut elit ea adipisicing enim dolore volupta
 Aliquip deserunt consequat irure minim tempor in laboris sint nisi nulla officia cillum sint dolore dolore do consectetur exercitation aliquip enim incididunt minim cillum quis dolore consectetur voluptate fugiat cupidatat deserunt eiusmod dolor in.
 Deserunt voluptate aute consectetur eiusmod dolor in amet cupidatat sint eiusmod commodo excepteur sit ullamco occaecat commodo minim ad veniam labore.
 Nulla irure sunt irure consectetur labore irure culpa deserunt occaecat ut aliqua ullamco aliquip et aute veniam ut dolore tempor.
-Dolor labore consectetur ut veniam nostrud ut dolore commodo proident laboris nostrud anim quis ex amet proident pariatur do incididunt excepteur eiusmod aliquip ullamco officia consequat ex exercitation ea cupidatat ea ut consequat pariatur do dolor id.
-Dolore reprehenderit sit nostrud voluptate dolore ex consectetur dolore voluptate tempor magna proident est in qui sint tempor dolor non occaecat velit.
+Dolor labore consectetur REFERENCE<-(REFERENCE) ut veniam nostrud ut dolore commodo proident laboris nostrud anim quis ex amet proident pariatur do incididunt excepteur eiusmod aliquip ullamco officia consequat ex exercitation ea cupidatat ea ut consequat pariatur do dolor id.
+Dolore reprehenderit sit nostrud voluptate dolore ex consectetur dolore voluptate tempor magna proident est in qui sint tempor dolor non occaecat velit (cf. ->(REFERENCE)). 
 Lorem ipsum id commodo tempor laboris reprehenderit dolore tempor velit elit adipisicing qui sed elit in eiusmod proident id consequat voluptate amet voluptate cupidatat aute aliquip commodo adipisicing eu in anim quis id deserunt.

@@ -327,13 +327,21 @@ class PFBCode < AnyParagraph
     Bibliography.print(raw_code.match(/^biblio.*?\((.+?)\)$/)[1], book, pdf)
   end
 
-  #
+  ##
   # Noter qu'on ne passe ici que lorsque la balise de référence 
   # "occupe" toute la ligne (lorsqu'il n'y a pas d'autre texte). Ça
   # arrive surtout lorsque c'est une cible qu'il faut définir.
+  # 
+  # Si on est en format paragraphe ou hybride, on doit générer une
+  # erreur fatale car on n’aura pas de numéro de paragraphe.
+  # 
   def treate_as_cible_references(pdf, book)
     cible  = raw_code[3...-1]
-    book.table_references.add(cible, {page:first_page, paragraph:numero})
+    if book.recipe.paragraph_number?
+      params = {pagin:book.recipe.page_num_type, cible:cible, idx:pindex, str:raw_code}
+      raise PFBFatalError.new(2003, **params)
+    end
+    book.table_references.add(cible, {paragraph:self})
   end
 
   # Pour pouvoir obtenir une valeur de style "inline" en faisant

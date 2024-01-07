@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2304 650" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(2.74384,0,0,1.14795,-363.673,-123.116)">
+        <g>
+            <g transform="matrix(0.461424,0,0,0.481925,-73.5674,-193.813)">
+                <rect x="446.681" y="624.705" width="894.329" height="1170.12" style="fill:rgb(231,232,233);stroke:rgb(35,31,32);stroke-width:2.35px;"/>
+            </g>
+            <g transform="matrix(0.430696,0,0,0.489017,-65.0769,-204.804)">
+                <rect x="549.633" y="732.568" width="680.883" height="969.6" style="fill:white;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,-69.6469,0)">
+            <g transform="matrix(0.461424,0,0,0.481925,420.055,-193.813)">
+                <rect x="446.681" y="624.705" width="894.329" height="1170.12" style="fill:rgb(231,232,233);stroke:rgb(35,31,32);stroke-width:2.35px;"/>
+            </g>
+            <g transform="matrix(0.430696,0,0,0.489017,468.546,-204.804)">
+                <rect x="549.633" y="732.568" width="680.883" height="969.6" style="fill:white;"/>
+            </g>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,140.218,-3666.67)">
+        <g transform="matrix(0.71,0,0,1,433.406,0)">
+            <text x="1494.5px" y="3900.78px" style="font-family:'Arial-BoldItalicMT', 'Arial', sans-serif;font-weight:700;font-style:italic;font-size:83.333px;fill:rgb(35,31,32);">Belle page</text>
+        </g>
+        <g transform="matrix(0.71,0,0,1,448.189,0)">
+            <g transform="matrix(83.3333,0,0,83.3333,1818.71,4072.9)">
+            </g>
+            <text x="1545.48px" y="4072.9px" style="font-family:'Arial-ItalicMT', 'Arial', sans-serif;font-style:italic;font-size:83.333px;fill:rgb(35,31,32);">impaire</text>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,-1132.86,-3666.67)">
+        <g transform="matrix(0.71,0,0,1,424.345,0)">
+            <text x="1463.26px" y="3900.78px" style="font-family:'Arial-BoldItalicMT', 'Arial', sans-serif;font-weight:700;font-style:italic;font-size:83.333px;fill:rgb(35,31,32);">Fausse page</text>
+        </g>
+        <g transform="matrix(0.71,0,0,1,457.241,0)">
+            <g transform="matrix(83.3333,0,0,83.3333,1762,4072.9)">
+            </g>
+            <text x="1576.69px" y="4072.9px" style="font-family:'Arial-ItalicMT', 'Arial', sans-serif;font-style:italic;font-size:83.333px;fill:rgb(35,31,32);">paire</text>
+        </g>
+    </g>
+    <g transform="matrix(1.3668,0,0,1.3668,1172.96,-1231.32)">
+        <g transform="matrix(0.71,0,0,1,225.693,0)">
+            <g transform="matrix(54.8728,0,0,54.8728,808.77,1358.34)">
+            </g>
+            <text x="778.253px" y="1358.34px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:54.873px;fill:rgb(35,31,32);">7</text>
+        </g>
+    </g>
+    <g transform="matrix(1.3668,0,0,1.3668,-1043.94,-1232.23)">
+        <g transform="matrix(0.71,0,0,1,225.693,0)">
+            <g transform="matrix(54.8728,0,0,54.8728,808.77,1358.34)">
+            </g>
+            <text x="778.253px" y="1358.34px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:54.873px;fill:rgb(35,31,32);">6</text>
+        </g>
+    </g>
+</svg>

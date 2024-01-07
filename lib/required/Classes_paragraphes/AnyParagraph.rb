@@ -137,6 +137,7 @@ class AnyParagraph
 
   # @prop Première et dernière page du paragraphe
   attr_accessor :first_page
+  alias :page :first_page
   attr_accessor :last_page
   alias :page_numero :first_page
   alias :page_number :first_page

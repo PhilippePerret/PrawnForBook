@@ -447,8 +447,7 @@ private
         cible = $1.freeze
         # spy "[REFERENCES] Consignation de la référence #{cible.inspect} ({page:#{first_page}, paragraph:#{numero_par}})".bleu
         book.table_references.add(cible, **{
-          page:       first_page, 
-          paragraph:  numero_par,
+          paragraph:  context[:paragraph],
         })
         ''
       end

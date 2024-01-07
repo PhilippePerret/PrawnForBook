@@ -11,6 +11,10 @@
   :page: 20
   :paragraph:
   :text: pagination_pagination
+:pagination_types_numerotation:
+  :page: 20
+  :paragraph:
+  :text: pagination_types_numerotation
 :pagination_numerotation_paragraphes:
   :page: 20
   :paragraph:

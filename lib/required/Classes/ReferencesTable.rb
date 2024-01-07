@@ -47,23 +47,44 @@ class ReferencesTable
   #   et le deuxième terme est l’identifiant proprement dit.
   # 
   # @param ref_data {Hash} 
-  #   Données de la référence, contient {:page, :paragraph, :hybrid}
+  #   Données de la référence, contient {:paragraph} où :paragraph
+  #   est l’instance du paragraphe où se trouve la cible. En règle
+  #   général, c’est un PdfBook::NTextParagraph, mais ça peut être
+  #   aussi un PfbBook::PFBCode ou une table (?).
+  # 
+  #   Noter que dans le cas d’un PFBCode, cela signifie que la cible
+  #   de la référence a été définie sur une ligne seule. Mais comme
+  #   c’est une ligne identifiée comme ligne de code, elle ne sera
+  #   pas numérotée (puisqu’elle n’existera pas en tant que paragra-
+  #   phe physique dans le livre), donc si la référence est hybride
+  #   ou doit utiliser le numéro du paragraphe, on se retrouvera avec
+  #   une erreur. D’où l’erreur fatale #2003 générée dans la méthode
+  #   #treate_as_cible_references du fichier PFBCode.rb
   # 
   def add(ref_id, ref_data)
-    return if second_turn?
-    if ref_id.match?('\|')
-      ref_text, ref_id = ref_id.split('|') 
+    if second_turn?
+      # Au second tour, on peut vérifier que la référence soit 
+      # toujours placée au même endroit. Sinon, on provoque une
+      # erreur.
+
+      # {TODO}
+
     else
-      ref_text  = ref_id.dup.freeze
-      ref_id    = ref_id.gsub(/<.+?>/,'')
-    end
-    ref_id = ref_id.to_sym
-    ref_data.merge!(text: ref_text)
-    # Double définition de référence
-    if table.key?(ref_id)
-      raise PFBFatalError.new(2001, {id: ref_id, page: ref_data[:page]})
-    else
-      table.merge!(ref_id => ref_data)
+      if ref_id.match?('\|')
+        ref_text, ref_id = ref_id.split('|') 
+      else
+        ref_text  = ref_id.dup.freeze
+        ref_id    = ref_id.gsub(/<.+?>/,'')
+      end
+      ref_id = ref_id.to_sym
+      ref_data.merge!(text: ref_text)
+      if table.key?(ref_id)
+        # ERROR: Double définition de référence
+        raise PFBFatalError.new(2001, {id: ref_id, page: ref_data[:page]})
+      else
+        # - Bonne référence -
+        table.merge!(ref_id => ref_data)
+      end
     end
   end
 
@@ -81,7 +102,7 @@ class ReferencesTable
   # @param [String] cible     L'identifiant de la cible dans le livre
   # 
   def add_and_get_cross_reference(book_id, cible_id)
-    puts "book_id: #{book_id.inspect} / cible_id: #{cible_id.inspect}".jaune
+    # puts "book_id: #{book_id.inspect} / cible_id: #{cible_id.inspect}".jaune
     book = Bibliography::Livres.get(book_id) || begin
       # - quand le livre n'existe pas -
       raise PrawnBuildingError.new(ERRORS[:references][:cross_book_undefined] % book_id)
@@ -116,7 +137,7 @@ class ReferencesTable
   # 
   def get(ref_id, context = nil)
     paragraph = context[:paragraph]
-    pdf = context[:pdf]
+    pdf       = context[:pdf]
     #
     # Traitement particulier des références croisées
     # TODO: Ici, apparemment, on ne traite pas le problème du texte
@@ -137,7 +158,7 @@ class ReferencesTable
       ref_id = ref_id.gsub(/<.+?>/,'') # on supprime les éventuels formatages
     end
     ref_id = ref_id.to_sym
-    if ref = table[ref_id]
+    if (ref = table[ref_id])
       #
       # - Référence définie -
       # (2e tour ou référence à un élément déjà traité)
@@ -150,8 +171,8 @@ class ReferencesTable
       # - Transformation de la marque -
       ref_text
         .gsub(/_ref_/, endroit_to(ref))
-        .gsub(/_page_/, ref[:page].to_s)
-        .gsub(/_paragraph_/, ref[:paragraph].to_s)
+        .gsub(/_page_/, ref[:paragraph].page.to_s)
+        .gsub(/_paragraph_/, ref[:paragraph].numero.to_s)
     elsif second_turn?
       err_msg = PFBError[2002] % {id: ref_id}
       unless @_key_table_list_has_been_done === true
@@ -206,21 +227,29 @@ class ReferencesTable
 
   # @return [String] la texte qui doit remplacer la balise target 
   # dans le texte
+  # 
   # @note
   #   Les références croisées utilisent une autre méthode.
   # 
+  # @param ref [Hash]
+  #     Table contenant (pour le moment) :paragraph, l’instance
+  #     AnyParagraph (NTextParagraph, NTable, etc.) du paragraphe
+  #     où se trouve la définition de la cible.
+  # 
   def endroit_to(ref)
+    num_page = ref[:paragraph].page
+    num_para = ref[:paragraph].numero
     case book.recipe.page_num_type
     when 'pages'
-      book.recipe.reference_page_format % {page: ref[:page]}
+      book.recipe.reference_page_format % {page:num_page}
     when 'parags'
       if ref[:paragraph]
-        book.recipe.reference_paragraph_format % {paragraph: ref[:paragraph]}
+        book.recipe.reference_paragraph_format % {paragraph:num_para}
       else
         "#{ref[:page]}"
       end
     when 'hybrid'
-      book.recipe.reference_hybrid_format % {page: ref[:page], paragraph: ref[:paragraph]}
+      book.recipe.reference_hybrid_format % {page:num_page, paragraph:num_para}
     end
   end
 
@@ -233,9 +262,9 @@ class ReferencesTable
   # jamais…)
   def ref_default_length
     case book.recipe.page_num_type
-    when 'pages'      then 3
-    when 'paragraphs' then 5
-    when 'hybrid'     then 10
+    when 'pages'  then 3
+    when 'parags' then 5
+    when 'hybrid' then 10
     end
   end
 
