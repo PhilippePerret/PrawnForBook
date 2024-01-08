@@ -307,8 +307,8 @@ class << self
         # indenté (*), il faut supprimer l’indentation
         # 
         # (*) Dans PFB, l’indentation se gère avec des espaces car
-        # Prawn ne sait pas calculer les dimensions avec une indenta-
-        # tionsinon des paragraphes
+        # Prawn ne sait pas calculer les dimensions avec une vraie
+        # indentation des paragraphes
         if current_line == 1 && owner.indentation && owner.indentation > 0 && str.start_with?('<font name="Courier"')
           str = str.sub(/^<font(.+?)<\/font>/,'')
         end
@@ -382,11 +382,12 @@ class << self
     rescue PrawnFatalError => e
       raise e
     rescue Exception => e
+      err_line = e.backtrace[0].split(':')[1]
       raise PFBFatalError.new(100, {
         text: text.inspect, 
         err:  e.message,
         error: e,
-        backtrace:(debug? ? true : '(ajouter -debug pour voir le backtrace)')
+        backtrace:(debug? ? true : "Err Line: #{err_line} (ajouter -debug pour voir le backtrace)")
       })
     end
     
@@ -402,8 +403,10 @@ class << self
     # Si la puce doit être marquée après le passage à la page
     # suivante
     return false if pdf.cursor < 0
+    puce_vadjust = (puce[:vadjust]||0).to_pps
+    puce_hadjust = (puce[:hadjust]||0).to_pps
     puce_options = {
-      at: [ (puce[:hadjust]||0), pdf.cursor + (puce[:vadjust]||0)]
+      at: [ puce_hadjust, pdf.cursor + puce_vadjust ]
     }
     if puce[:text].downcase.match?(REG_IMG_EXTENSION)
       puce_image_path = book.existing_path(puce[:text]) || raise(PFBFatalError.new(102, {path:puce[:text]}))
@@ -421,7 +424,7 @@ class << self
           inline_format: true,
           size:   puce[:size],
           width:  puce[:left],
-          at: [ (puce[:hadjust]||0), cursor + (puce[:vadjust]||0)]
+          at: [ puce_hadjust, cursor + puce_vadjust ]
         })
         float do
           text_box(puce[:text], **puce_options) 
