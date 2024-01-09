@@ -387,9 +387,12 @@ class PdfBook
   end
 
   def pdf_path
-    @pdf_path ||= File.join(folder,'book.pdf')
+    @pdf_path ||= File.join(folder, book_pdf_name)
   end
 
+  def book_pdf_name
+    @book_pdf_name ||= "book#{"_bat" if Prawn4book.bat?}.pdf"
+  end
 
   private
 

@@ -7,6 +7,7 @@ TERMS = {
   A_class_method: "Une méthode de classe",
   Authors: 'Auteurs',
   auto_manual: 'manuel auto-produit',
+  auto_manual_bat: 'manuel auto-produit (version BAT)',
   BAT_version: 'version BAT',
   bibliography: 'bibliographie',
   biblio_item: 'item de bibliographie',
