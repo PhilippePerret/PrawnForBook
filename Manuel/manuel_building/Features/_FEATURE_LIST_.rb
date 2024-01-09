@@ -184,7 +184,7 @@ module Prawn4book
     # 
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
-    # FORMAT_PRECIS && 'format_precis/double_colonnes',
+    FORMAT_PRECIS && 'format_precis/double_colonnes',
 
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',

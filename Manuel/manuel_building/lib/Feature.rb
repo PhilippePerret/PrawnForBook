@@ -987,11 +987,6 @@ class Feature
   # Courrier, comme la recette ou de l’exemple de code)
   # 
   def print_as_code(str, entete)
-    # str = str.gsub(/\n( +)/){
-    #   fois = $1.length
-    #   "\n" + (' ' * fois)
-    # }.gsub('<','&lt;').gsub(/"/,'\\"').gsub('# ', '# ')
-    # str = fontline1 + str.split("\n").join("\n#{fontline}")
     str = "~~~\n#{str}\n~~~"
     __print_texte(str, entete, 2)
   end
@@ -1158,7 +1153,7 @@ private
             end
             tit = "|#{tit}"
           end
-          # @return :
+          # @return:
           if Prawn4book.first_turn?
             "#{path.gsub('/','_')}#{tit}"#.tap { |str| spy "Appel = #{str.inspect}".bleu }
           else

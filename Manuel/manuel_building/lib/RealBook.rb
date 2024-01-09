@@ -62,6 +62,11 @@
 module Prawn4book
 class RealBook
 
+  # Pour produire le livre PDF
+  PRODUCTION_COMMAND = '/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb build'.freeze
+  # Pour extraire une page du livre en image JPEG
+  EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
+
   IMAGE_STACK = []
 
   class << self
@@ -116,9 +121,6 @@ class RealBook
 
   end #/ class << self
 
-  EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
-  PRODUCTION_COMMAND = '/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb build'.freeze
-
   attr_reader :name
   alias :affixe :name
 
@@ -164,6 +166,11 @@ class RealBook
   # Méthode principale qui extrait les images voulues du livre
   # dès que le book est prêt.
   # 
+  # @note
+  #   On ne le fait que :
+  #   1) lorsque l’image n’existe pas encore
+  #   2) lorsque l’image est plus vieille que le book
+  # 
   def extract_pages(numeros)
     # Il faut d’abord attendre que le fichier PDF exist
     wait_until_exist || return
@@ -178,6 +185,7 @@ class RealBook
   def extract_page(numero_page)
     wait_until_exist
     image_fullpath = "#{folder}/page-#{numero_page}.jpg"
+    return if File.exist?(image_fullpath) && (last_time < ctime_image(image_fullpath))
     index_page = numero_page - 1
     cmd = EXTRACTION_COMMAND % {
       page:   index_page, 
@@ -195,6 +203,10 @@ class RealBook
     return true # pour passer à l’image suivante
   end
 
+  def ctime_image(ipath)
+    File.stat(ipath).ctime
+  end
+
   # @return true si le real-book n’a pas changé
   # 
   def up_to_date?(last_modified_time)
@@ -208,7 +220,7 @@ class RealBook
 
   # Time de la dernière fabrication du PDF
   def last_time
-    File.stat(book_pdf_path).mtime
+    File.stat(book_pdf_path).ctime
   end
 
 
