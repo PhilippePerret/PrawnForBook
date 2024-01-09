@@ -1,6 +1,6 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Page en multi-colonnes"
+  titre "Section en multi-colonnes"
 
   description <<~EOT
     On peut provisoirement passer en double colonnes grâce à la marque :
@@ -55,17 +55,20 @@ Prawn4book::Manual::Feature.new do
 
     Parfois il peut arriver que _PFB_ compte une ligne de trop dans les colonnes, ce qui produit cet alignement pas très heureux :
     (( line ))
-    {-}`Premier#{' '*12}Deuxième en regard`
-    {-}`Deuxième#{' '*11}Troisième en regard`
-    {-}`Troisième`
-    {-}`Premier en regard`
+    ```
+    Premier#{' '*12}Deuxième en regard
+    Deuxième#{' '*11}Troisième en regard
+    Troisième
+    Premier en regard
+    ```
     (( line ))
     Pour palier cet écueil, on met la propriété `no_extra_line_height` à true dans la définition des colonnes. On obtient alors :
     (( line ))
-    {-}`Premier#{' '*12}Premier en regard`
-    {-}`Deuxième#{' '*11}Deuxième en regard`
-    {-}`Troisième#{' '*10}Troisième en regard`
-
+    ```
+    Premier#{' '*12}Premier en regard
+    Deuxième#{' '*11}Deuxième en regard
+    Troisième#{' '*10}Troisième en regard
+    ```
     EOT
 
 end
