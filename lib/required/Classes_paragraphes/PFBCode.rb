@@ -284,9 +284,9 @@ class PFBCode < AnyParagraph
           begin
             Prawn4book.send(methode, *params)
           rescue Exception => e
-            puts "methode défectueuse : #{methode.inspect}".rouge
-            puts "Backtrace:\n#{e.backtrace.join("\n")}".orange
-            exit 12
+            msg = "methode défectueuse : #{methode.inspect}".rouge + \
+                "\nBacktrace:\n#{e.backtrace.join("\n")}".orange
+            raise msg
           end
         end
       else

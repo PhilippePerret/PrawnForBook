@@ -81,6 +81,16 @@ Prawn4book::Manual::Feature.new do
     * **`caps`** | Si `true` ("vrai" en anglais), les titres du niveau concerné seront toujours mis en capitales.
     * **`leading`** | ("interlignage" en anglais) Permet de définir l’interlignage, quand le titre tient sur plusieurs lignes et qu’il faut le définir précisément. Cette valeur peut être négative, pour rapprocher les lignes du titre.
 
+    #### Titres dans les entêtes/pieds de page
+
+    Les titres peuvent être repris dans les entêtes ou pieds de page du livre. Pour savoir comment procéder, voir [[header_footer/exemple_complexe]].
+
+    #### Exclure un titre de la table des matières
+
+    Pour exclure un titre de la table des matières, le précéder ou le faire suivre par `{no-tdm}`. Par exemple :
+     `### {no-tdm} Un titre hors table des matières`
+    ou :
+     `### Un titre hors table des matières {no-tdm}`
     EOT
 
 end

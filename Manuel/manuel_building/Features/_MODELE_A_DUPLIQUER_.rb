@@ -21,6 +21,4 @@ Prawn4book::Manual::Feature.new do
     # Cette recette doit être supprimée ou utilisée
     EOT
 
-  # init_recipe([:custom_cached_var_key])
-
 end

@@ -37,8 +37,11 @@ module Prawn4book
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
 
-  TOUT_EXPERT = TOUT || nil
-  # TOUT_EXPERT = TOUT || true
+  TOUT_TABLE = TOUT || nil
+  # TOUT_TABLE = TOUT || true
+
+  # TOUT_EXPERT = TOUT || nil
+  TOUT_EXPERT = TOUT || true
 
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
@@ -89,6 +92,7 @@ module Prawn4book
 
     #---Contenu_textuel_(intro)---#
     TOUT_TEXTE && 'texte/grand_titre',
+    TOUT_TEXTE && 'texte/types_paragraphes',
     TOUT_TEXTE && 'format_markdown_du_texte',
     TOUT_TEXTE && 'titres/titres',
 
@@ -96,10 +100,8 @@ module Prawn4book
     TOUT_COMPORTEMENT && 'comportement/grand_titre',
     TOUT_COMPORTEMENT && 'comportement/align_on_reference_lines',
     TOUT_COMPORTEMENT && 'comportement/corrections_typographiques',
-    # TOUT_COMPORTEMENT && 'comportement/book_in_collection',
-    # TOUT_COMPORTEMENT && 'comportement/veuves_orphelines_et_lignes_de_voleur',
-    # Ajouter :
-    #  - colonnes multiples
+    TOUT_COMPORTEMENT && 'comportement/book_in_collection',
+    TOUT_COMPORTEMENT && 'comportement/veuves_orphelines_et_lignes_de_voleur',
 
     #---PagesSpeciales---#
     TOUT_PAGES_SPECS && 'pages_speciales/titre_section',
@@ -167,6 +169,9 @@ module Prawn4book
     TOUT_IMAGE && 'images/inserer_images',
     TOUT_IMAGE && 'images/images_flottantes',
     TOUT_IMAGE && 'images/format_legende',
+
+    #-Les Tables-#
+    TOUT_TABLE && 'tables/titre_section',
     
     TOUT_REFS && 'references/cross_references',
     TOUT_REFS && 'references/references_autres_livres',
@@ -196,6 +201,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/grand_titre',
     TOUT_EXPERT && 'expert/mode_expert',
     TOUT_EXPERT && 'expert/contexte_erreurs',
+    TOUT_EXPERT && 'expert/reference_a_paragraphe',
     TOUT_EXPERT && 'expert/injection_code',
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
     TOUT_EXPERT && 'expert/bibliographies',
