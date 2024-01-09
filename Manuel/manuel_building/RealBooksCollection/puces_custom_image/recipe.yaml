@@ -1,0 +1,9 @@
+---
+book_format:
+  text:
+    puce:
+      text: "images/custom_bullet.png"
+      size: 14
+      left: 8mm
+      
+      vadjust: 2

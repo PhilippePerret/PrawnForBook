@@ -72,6 +72,10 @@ class RealBook
     #   Le Timeout est adapté au nombre d’images.
     # 
     def wait_for_images_ready
+      # Si toutes les images sont prêtes, on peut s’en retourner
+      return true if images_ready?
+      # Log
+      logif "On doit attendre sur les images suivantes : #{IMAGE_STACK.inspect}"
       # - Calcul du timeout -
       # On le fixe en comptant 2 secondes pour produire chaque 
       # image, et on ajoute encore 10 secondes au total, ce qui est
@@ -81,7 +85,8 @@ class RealBook
       # - On n’ira pas au-delà de ce temps -
       max_time = Time.now.to_i + time_out
       # - Message d’attente -
-      STDOUT.write "Attente de préparation des images “real books”…".jaune
+      puts "\nAttente préparation des images des real books…".jaune
+      sleep 1
       # - Attente des images -
       while not(images_ready?) && Time.now.to_i < max_time
         sleep 0.5
@@ -111,9 +116,6 @@ class RealBook
 
   end #/ class << self
 
-  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg"'.freeze
-  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" -mattecolor peru -frame 15x15+5+5 "page-%{numero}.jpg"'.freeze
-  # EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert -resize %{width}!x%{height}! "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
   EXTRACTION_COMMAND = '/opt/homebrew/bin/convert -density 300 "book.pdf[%{page}]" "page-%{numero}.jpg";convert "page-%{numero}.jpg" -bordercolor grey -border 8 "page-%{numero}.jpg"'.freeze
   PRODUCTION_COMMAND = '/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb build'.freeze
 
@@ -140,17 +142,16 @@ class RealBook
   # Méthode principale qui produit le livre avec PFB
   # 
   def produce
-    # logif("- Production du real-book ’#{name}’ -") # dans le loginfile principal
-    File.delete(book_pdf_path) if exist?
-    delete_all_images
+    logif("- Production du real-book ’#{name}’") # dans le loginfile principal
+    delete_all # pdf et images
     Dir.chdir(folder) do
       res = `#{PRODUCTION_COMMAND} 2>&1`
       if res.match('produit avec succès')
         # OK
       else
         puts "Erreur au cours de la conversion du real-book #{name} :".rouge
-        raise "res = #{res.inspect}".rouge
-        # exit 14
+        raise "Retour de la commande build du real-book) =\n#{res.inspect}".jaune
+        exit 16
         # return false
       end
     end
@@ -175,13 +176,12 @@ class RealBook
   # Extraction de l’image +numero_page+
   # 
   def extract_page(numero_page)
+    wait_until_exist
     image_fullpath = "#{folder}/page-#{numero_page}.jpg"
     index_page = numero_page - 1
     cmd = EXTRACTION_COMMAND % {
       page:   index_page, 
       numero: numero_page,
-      # width:  ("150mm".to_pps * 13.3).round,
-      # height: ("100mm".to_pps * 13.3).round,
     }
     Dir.chdir(folder) do
       res = `#{cmd} 2>&1`
@@ -240,6 +240,11 @@ class RealBook
     end
     puts "[Timeout] Le PDF de #{name} n’a pas été produit…".rouge
     return nil # erreur
+  end
+
+  def delete_all
+    File.delete(book_pdf_path) if exist?
+    delete_all_images
   end
 
   def delete_all_images

@@ -18,7 +18,7 @@ Prawn4book::Manual::Feature.new do
 
     #### Format de la numérotation du paragraphe
 
-    Comme tout autre élément de _PFB_, on peut en garder les valeurs par défaut, qui sont déjà tout à fait adaptées au livre, ou l’on peut les définir très précisément. Voir [[pagination/types_numerotation]].
+    Comme tout autre élément de _PFB_, on peut en garder les valeurs par défaut, qui sont déjà tout à fait adaptées au livre, ou l’on peut les redéfinir. Voir [[pagination/types_numerotation]].
 
     EOT
 

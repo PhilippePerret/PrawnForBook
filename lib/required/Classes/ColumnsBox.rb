@@ -111,7 +111,8 @@ class ColumnsBox < ParagraphAccumulator
       build_a_column_for_height(column_count - 1, icursor, pdf.line_height)
       pdf.start_new_page if cursor_init < pdf.line_height
       if segments.any?
-        raise PFBFatalError.new(180, [column_count, @debug_start_column, segments.count])
+        # raise PFBFatalError.new(180, [column_count, @debug_start_column, segments.count])
+        add_erreur(PFBError[180] % [column_count, @debug_start_column, segments.count])
       else
         add_erreur(PFBError[181] % [column_count, @debug_start_column])
       end

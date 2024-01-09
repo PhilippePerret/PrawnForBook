@@ -1,0 +1,8 @@
+---
+book_format:
+  text:
+    puce:
+      text: :black_bullet
+      size: 30
+      vadjust: 10
+      left: 6.5mm

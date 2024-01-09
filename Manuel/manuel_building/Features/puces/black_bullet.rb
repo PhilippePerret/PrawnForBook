@@ -1,36 +1,11 @@
 Prawn4book::Manual::Feature.new do
 
-  # titre "Les puces"
-  # SUITE DES PUCES
-  # 
-
-  subtitle "Puce ronde noire"
-
-  puce    = :black_bullet
-  vadjust = 6
-  size    = 30
-  left    = 6.5
-
-  recipe <<~YAML
-    #<book_format>
-    book_format:
-      text:
-        puce:
-          text: #{puce.inspect}
-          size: #{size}
-          vadjust: #{vadjust}
-          left: #{left}mm
-    #</book_format>
-    YAML
-
-  init_recipe([:format_text])
-
-  _ps = vadjust > 1 ? 's' : ''
+  data_for_puce(
+    subtitle:   "Puce ronde noire",
+    puce:       :black_bullet,
+    size:       30,
+    left:       6.5,
+    vadjust:    10
+    )
   
-  sample_texte <<~EOT
-    * Ceci est une puce `#{puce.inspect}` de #{size} points, remontée de #{vadjust} point#{_ps}, avec les autres paramètres laissés intacts,
-    * Le second item identique,
-    * Le troisième.
-    EOT
-
 end

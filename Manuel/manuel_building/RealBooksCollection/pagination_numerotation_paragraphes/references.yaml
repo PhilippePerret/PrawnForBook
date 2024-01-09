@@ -50,7 +50,7 @@
             :format: :publishing
           :page: &3
             :background:
-            :numerotation: pages
+            :pagination: hybrid
             :pagination_format: first-last
             :no_num_if_empty: true
             :num_font: Helvetica/Roman/10/000000
@@ -65,7 +65,6 @@
               :ext: 15mm
               :bot: 10mm
               :int: 25mm
-            :pagination: hybrid
           :text: &2
             :default_font: Times-Roman/normal/11/000000
             :indent: 0
@@ -253,7 +252,7 @@
               :footer: "| -NUM  || NUM-  |"
               :header_font: Numito/light/10/999999
               :footer_font: Helvetica/normal/10/777777
-      start_time: 2024-01-07 06:35:13.986556000 +01:00
+      start_time: 2024-01-07 08:27:14.600439000 +01:00
       isincollection: :TRUE
       collection: !ruby/object:Prawn4book::Collection
         folder: "/Users/philippeperret/Programmes/Prawn4book/Manuel/MANUEL_BUILDING/RealBooksCollection"

@@ -309,16 +309,24 @@ class Feature
     # feature avec la date du fichier PDF.
     # 
     return if real_book.up_to_date?(last_modified_time)
+
+    logif "Le real book #{real_book.name} doit être actualisé"
+
+    STDOUT.write "\rPréparation du livre #{real_book.name}…#{' '*10}".jaune
     #
     # === Mise en place du real-book ===
     # 
     real_book.prepare(real_texte, real_recipe)
+    STDOUT.write "\rProduction du livre #{real_book.name}…#{' '*10}".jaune
     #
     # === Fabrication du PDF du real-book ===
     # 
     real_book.produce || return
+    STDOUT.write "\r" # on reprend
   end
 
+  # @return la date de dernière modification du fichier ruby 
+  # définissant la fonctionnalité
   def last_modified_time
     File.stat(filepath).mtime
   end
@@ -661,7 +669,7 @@ class Feature
     # on passe toujours à la page suivante avant de marquer que c’est
     # le texte final.
     if value && real_book?
-      new_page_before(:texte)
+      # new_page_before(:texte) # NON, le fait explicitement
       entete ||= "ALORS le livre contiendra…"
       if value.match?(/\[\[/)
         value = value.gsub(/\[\[.+?\]\]/,"{{Pas de référence par [[...]] dans un “real book”}}")

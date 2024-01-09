@@ -1,0 +1,8 @@
+---
+book_format:
+  text:
+    puce:
+      text: :losange
+      size: 18
+      left: 20mm
+      vadjust: 2mm

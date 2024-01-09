@@ -1,0 +1,9 @@
+---
+book_format:
+  text:
+    puce:
+      text: :square
+      size: 20
+      
+      
+      vadjust: 2mm

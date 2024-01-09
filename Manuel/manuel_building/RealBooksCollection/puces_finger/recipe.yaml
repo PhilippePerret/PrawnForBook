@@ -1,0 +1,8 @@
+---
+book_format:
+  text:
+    puce:
+      text: :finger
+      size: 20
+      left: 6.5mm
+      vadjust: 1mm

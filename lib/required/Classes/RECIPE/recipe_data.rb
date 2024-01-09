@@ -328,13 +328,17 @@ class Recipe
   # -- Format des références --
 
   def reference_page_format
-    format_text[:references][:page_format]
+    underscore_to_template_variable(format_text[:references][:page_format]||'page _page_')
   end
   def reference_paragraph_format
-    format_text[:references][:paragraph_format]
+    underscore_to_template_variable(format_text[:references][:paragraph_format]||'§ _paragraph_')
   end
   def reference_hybrid_format
-    format_text[:references][:hybrid_format]
+    underscore_to_template_variable(format_text[:references][:hybrid_format]||'p. _page_ § _paragraph_')
+  end
+
+  def underscore_to_template_variable(str)
+    str.gsub(/_(.+?)_/.freeze, '%{\1}')
   end
 
   # Type de numérotation (des pages et de tout)

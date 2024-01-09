@@ -281,7 +281,13 @@ class PFBCode < AnyParagraph
         else
           params.unshift(pdf)       if params_count > params.count
           params.insert(1, book) if params_count > params.count
-          Prawn4book.send(methode, *params)
+          begin
+            Prawn4book.send(methode, *params)
+          rescue Exception => e
+            puts "methode défectueuse : #{methode.inspect}".rouge
+            puts "Backtrace:\n#{e.backtrace.join("\n")}".orange
+            exit 12
+          end
         end
       else
         raise 'méthode inconnue'

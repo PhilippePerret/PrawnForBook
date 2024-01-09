@@ -4,6 +4,6 @@ book_format:
     puce:
       text: :black_finger
       size: 20
-      vadjust: 3
       left: 7mm
-#</book_format>
+      
+      vadjust: 3

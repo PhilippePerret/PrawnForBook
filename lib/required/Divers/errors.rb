@@ -40,7 +40,7 @@ class PFBFatalError < StandardError
   def self.context; @@context || '' end
 
   def initialize(err_id, temp_data = {})
-    if temp_data[:backtrace] === true
+    if temp_data.is_a?(Hash) && temp_data[:backtrace] === true
       temp_data.merge!(backtrace: self.class.backtracize(temp_data[:error]))
     end
     err_msg = build_message(err_id, temp_data)

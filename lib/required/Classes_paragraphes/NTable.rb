@@ -90,7 +90,7 @@ class NTable < AnyParagraph
     # Application de la fonte par défaut
     # (utile par exemple si la table est placée après un titre)
     # 
-    pdf.font(Fonte.default_fonte)
+    pdf.font(Fonte.default)
 
     # - Réglage de l'espace avant la table -
     if options.key?(:space_before) || @space_before
@@ -112,15 +112,17 @@ class NTable < AnyParagraph
     # 
     @lines = self.class.desafeize_lines(lines) unless lines.nil?
 
-    #
-    # --- ÉCRITURE DE LA TABLE ---
-    # 
+    ############################
+    ### ÉCRITURE DE LA TABLE ###
+    ############################
+
     begin
       if code_block.nil?
         pdf.table(lines, table_style)
       else
         pdf.table(lines, table_style, &code_block)
       end
+      pdf.update_current_line
     rescue Prawn::Errors::CannotFit => e
       raise PFBFatalError.new(3000, {err: e.message})
     end
@@ -287,6 +289,14 @@ class NTable < AnyParagraph
             self.instance_variable_set("@#{prop}", ps.delete(prop))
             # p.e. @col_count et @vadjust
           end
+          # - Les propriétés dont il faut changer les noms -
+          {
+            align: :position
+          }.each do |k, v|
+            if ps.key?(k)
+              ps.merge!(v => ps.delete(k))
+            end
+          end
         end
         ps
       end
@@ -410,7 +420,7 @@ class NTable < AnyParagraph
     @raw_lines << raw_string
   end
 
-REG_IMAGE_IN_CELL = /^IMAGE\[(.+?)(?:\|(.+?))\]$/
+REG_IMAGE_IN_CELL = /^(IMAGE|\!)\[(.+?)(?:\|(.+?))\]$/
 
 end #/class NTable
 end #/class PdfBook

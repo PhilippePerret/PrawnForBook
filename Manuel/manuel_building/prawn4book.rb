@@ -24,12 +24,15 @@ module Prawn4book
 
     if first_turn?
 
+      puts "Chargement des features…".bleu
       all_features = FEATURE_LIST.map do |fname|
         next if fname.start_with?('#')
         fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
+        dname = File.basename(fname)
         if File.exist?(fpath)
           PFBError.context = "Chargement de la feature #{fname}"
           # --- Chargement du fichier ---
+          STDOUT.write "\rChargement de #{dname}…#{' '*20}".bleu
           load fpath
           # On prend l’instance
           feat = Manual::Feature.last
@@ -42,8 +45,22 @@ module Prawn4book
           consigne_page_feature(fname, feat.feature_title)
           # --- Un real-book ---
           if feat.real_book?
-            feat.produce_real_book
-            feat.traite_texte_for_real_book
+            begin
+              feat.produce_real_book
+            rescue Exception => e
+              puts "# Problème à la production du real book de #{fname} : #{e.message}".rouge
+              puts "Backtrace:".rouge
+              puts e.backtrace.join("\n").orange
+              exit 13
+            end
+            begin
+              feat.traite_texte_for_real_book
+            rescue Exception => e
+              puts "# Problème en traitant le texte du real book de #{fname} : #{e.message}".rouge
+              puts "Backtrace:".rouge
+              puts e.backtrace.join("\n").orange
+              exit 14
+            end
           end
           # --- Pour map ---
           feat
@@ -59,8 +76,8 @@ module Prawn4book
       end
 
       all_features.each do |feat|
-        msg = "Première impression de la feature #{feat.filename}"
-        # puts msg.jaune
+        msg = "Première impression feature ’#{feat.filename}’"
+        logif msg
         PFBError.context = msg
         feat.print_with(pdf, book)
       end
@@ -71,7 +88,7 @@ module Prawn4book
       # = Deuxième Tour =
       
       Manual::Feature.each do |feature|
-        PFBError.context = "Seconde impression de la feature #{feature.filename}"
+        PFBError.context = "Seconde impression feature #{feature.filename}"
         feature.print_with(pdf, book)
       end
 

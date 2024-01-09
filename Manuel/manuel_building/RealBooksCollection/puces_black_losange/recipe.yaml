@@ -1,0 +1,7 @@
+---
+book_format:
+  text:
+    puce:
+      text: :black_losange
+      size: 14
+      vadjust: 2

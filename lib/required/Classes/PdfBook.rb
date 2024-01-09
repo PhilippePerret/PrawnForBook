@@ -71,7 +71,7 @@ class PdfBook
       end
     end
 
-    # Si un bloc de code est ouvert (par ~~~[langage])
+    # Si un bloc de code est ouvert (par ~~~[langage] ou ```[langage])
     if @current_code_block && paragraph_str.match?(AnyParagraph::REG_END_CODE_BLOCk)
       # <= fin du bloc de code
       # => On doit l’imprimer

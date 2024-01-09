@@ -31,8 +31,8 @@ module Prawn4book
   TOUT_TEXT_DETAIL = TOUT || nil
   # TOUT_TEXT_DETAIL = TOUT || true
 
-  TOUT_PUCES = TOUT || nil
-  # TOUT_PUCES = TOUT || true
+  # TOUT_PUCES = TOUT || nil
+  TOUT_PUCES = TOUT || true
 
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
@@ -169,7 +169,7 @@ module Prawn4book
     TOUT_IMAGE && 'images/format_legende',
     
     TOUT_REFS && 'references/cross_references',
-    # TOUT_REFS && 'references/references_autres_livres',
+    TOUT_REFS && 'references/references_autres_livres',
     TOUT_REFS && 'hyperlinks',
     TOUT_REFS && 'notes_de_page',
     TOUT_REFS && 'notes_de_page_formatage',
@@ -184,7 +184,7 @@ module Prawn4book
     # 
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
-    FORMAT_PRECIS && 'format_precis/double_colonnes',
+    # FORMAT_PRECIS && 'format_precis/double_colonnes',
 
     #---Changements_comportements_par_default---#
     # 'change_fonte_for_next_paragraph',

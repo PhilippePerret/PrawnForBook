@@ -71,7 +71,7 @@ book_format:
     #   ext:    15mm
     #   bot:    15mm
     #   int:    25mm
-    numerotation:               'pages' # ou 'parags', 'hybrid'
+    pagination:                 'pages' # ou 'parags', 'hybrid'
     pagination_format:          'first-last'
     no_num_if_empty:            true
     num_font:                   "Helvetica/Roman/10/000000"
@@ -110,9 +110,9 @@ book_format:
       left:           0
     # - Référrences -
     references:
-      page_format:    'page %{page}'
-      paragraph_format: '§ %{paragraph}'
-      hybrid_format:  'p. %{page} § %{paragraph}'
+      page_format:    'page _page_'
+      paragraph_format: '§ _paragraph_'
+      hybrid_format:  'p. _page_ § _paragraph_'
   titles:
     font: 'Helvetica/normal//000000'
     level1:

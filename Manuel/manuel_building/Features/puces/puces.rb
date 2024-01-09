@@ -12,6 +12,4 @@ Prawn4book::Manual::Feature.new do
     
     EOT
 
-  init_recipe([:format_text])
-
 end

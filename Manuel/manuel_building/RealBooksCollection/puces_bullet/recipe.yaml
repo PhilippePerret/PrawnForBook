@@ -1,0 +1,8 @@
+---
+book_format:
+  text:
+    puce:
+      text: :bullet
+      size: 20
+      
+      vadjust: 4
