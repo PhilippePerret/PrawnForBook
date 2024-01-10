@@ -8,7 +8,7 @@ Prawn4book::Manual::Feature.new do
     * un fichier définissant le *texte du livre*, donc le **contenu**,
     * un fichier définissant l’*aspect du livre*, appelé "recette".
 
-    #### Le fichier contenu
+    #### Le fichier contenu (fichier *texte*)
 
     Le fichier du texte porte impérativement le nom `texte.pfb.md` et contient l’ensemble du contenu du livre. Il peut aussi faire appel à des *helpers* qui produiront du contenu dynamique.
     Par exemple, si c’est un dictionnaire, on peut imaginer que le livre travaille en parallèle avec une base de données contenant la définition des mots. 

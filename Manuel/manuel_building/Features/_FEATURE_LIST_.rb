@@ -31,6 +31,9 @@ module Prawn4book
   TOUT_TEXT_DETAIL = TOUT || nil
   # TOUT_TEXT_DETAIL = TOUT || true
 
+  # TOUT_INLINE_STYLE = TOUT || nil
+  TOUT_INLINE_STYLE = TOUT || true
+
   # TOUT_PUCES = TOUT || nil
   TOUT_PUCES = TOUT || true
 
@@ -60,6 +63,9 @@ module Prawn4book
 
   # FORMAT_PRECIS = TOUT || nil # format livre/page
   FORMAT_PRECIS = TOUT || true
+
+  CHANGE_DEF_BEHAVIOR = TOUT || nil
+  # CHANGE_DEF_BEHAVIOR = TOUT || true
 
   TOUT_ANNEXE = TOUT || nil
   # TOUT_ANNEXE = TOUT || true
@@ -93,7 +99,7 @@ module Prawn4book
     #---Contenu_textuel_(intro)---#
     TOUT_TEXTE && 'texte/grand_titre',
     TOUT_TEXTE && 'texte/types_paragraphes',
-    TOUT_TEXTE && 'format_markdown_du_texte',
+    TOUT_TEXTE && 'texte/format_markdown_du_texte',
     TOUT_TEXTE && 'titres/titres',
 
     #--- Comportement de Prawn-for-book ---#
@@ -146,10 +152,14 @@ module Prawn4book
     #__Texte_Details___#
     TOUT_TEXT_DETAIL && 'texte_detail/grand_titre',
     TOUT_TEXT_DETAIL && 'texte_detail/indentation',
-    TOUT_TEXT_DETAIL && 'texte_detail/stylisation_in_line',
     TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
     TOUT_TEXT_DETAIL && 'texte_detail/gestion_tirets_conditionnels',
     TOUT_TEXT_DETAIL && 'texte_detail/placement_sur_ligne_quelconque',
+
+    #-Stylisation inline -*
+    TOUT_INLINE_STYLE && 'inline_style/titre_section',
+    TOUT_INLINE_STYLE && 'inline_style/stylisation_in_line',
+    TOUT_INLINE_STYLE && 'inline_style/change_fonte_for_next_paragraph',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',
@@ -175,9 +185,9 @@ module Prawn4book
     
     TOUT_REFS && 'references/cross_references',
     TOUT_REFS && 'references/references_autres_livres',
-    TOUT_REFS && 'hyperlinks',
-    TOUT_REFS && 'notes_de_page',
-    TOUT_REFS && 'notes_de_page_formatage',
+    TOUT_REFS && 'references/hyperlinks',
+    TOUT_REFS && 'references/notes_de_page',
+    TOUT_REFS && 'references/notes_de_page_formatage',
     TOUT_REFS && 'tables/tables',
 
     #---Bibliographies---#
@@ -192,10 +202,11 @@ module Prawn4book
     FORMAT_PRECIS && 'format_precis/double_colonnes',
 
     #---Changements_comportements_par_default---#
-    # 'change_fonte_for_next_paragraph',
-    # 'alignement_du_texte',
-    # 'change_margins_on_the_fly'
-    # 'export_as_document_pdf'
+    # 
+    CHANGE_DEF_BEHAVIOR && 'undef_behavior/titre_section',
+    CHANGE_DEF_BEHAVIOR && 'undef_behavior/alignement_du_texte',
+    CHANGE_DEF_BEHAVIOR && 'undef_behavior/change_margins_on_the_fly',
+    CHANGE_DEF_BEHAVIOR && 'undef_behavior/export_as_document_pdf',
 
     #---Mode_Expert---#
     TOUT_EXPERT && 'expert/grand_titre',

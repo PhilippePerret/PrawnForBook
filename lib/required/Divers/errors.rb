@@ -20,6 +20,10 @@ class PFBError
   def self.context=(value)
     PFBFatalError.context = value
   end
+  def self.context_add(value)
+    PFBFatalError.context ||= ""
+    PFBFatalError.context = "#{PFBFatalError.context}\n#{value}"
+  end
 end
 
 # Pour produire une erreur fatale par son numéro d'erreur

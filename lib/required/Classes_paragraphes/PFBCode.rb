@@ -286,7 +286,8 @@ class PFBCode < AnyParagraph
           rescue Exception => e
             msg = "methode défectueuse : #{methode.inspect}".rouge + \
                 "\nBacktrace:\n#{e.backtrace.join("\n")}".orange
-            raise msg
+            PFBError.context_add(msg)
+            raise e
           end
         end
       else
