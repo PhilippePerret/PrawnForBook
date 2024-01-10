@@ -1,17 +1,4 @@
-Le `nil` ci-dessus permet de ne rien écrire dans le texte final (le code n’est pas censé produire du texte). Pour le faire de façon encore plus correcte, on peut utiliser un `-` (tiret court) après les trois crochets pour signifier qu’il n’y aura aucun sortie à ce code.
 
-~~~markdown
-En coulisses je peux même avoir un bloc de code.#{{{- ma_table = {un: "1", deux: "2"};ma_table.each do |k, v|;end}}}
-~~~
-
-> Noter bien le moins dans `#{{{-`
-
-**Précautions**
-
-* Noter que contrairement à `#{...}`, il ne peut y avoir qu’une seule utilisation de `#{{{...}}}` par paragraphe.
-* Tout le code doit se trouver sur le même paragraphe, sinon il ne sera pas pris en compte. Séparer les lignes habituelles par des points-virgules (`(1...10).each do |i|; puts i; end`).
-
-<a name="stylisation-paragraphe"></a>
 
 #### Stylisation du paragraphe
 

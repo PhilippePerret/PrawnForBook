@@ -6,6 +6,15 @@ Prawn4book::Manual::Feature.new do
     Tous les codes qui se trouveront entre "`\\#\\{..\\.}`" (ou entre "`\\#\\{\{\{.\\..}}}`" lorsque le code contient des accolades) seront évalués en tant que code ruby, dans le cadre du livre (c'est-à-dire qu'ils pourront faire appel à des méthodes personnalisées).
     Typiquement, on peut par exemple obtenir la date courante ou le numéro de version du livre pour l’insérer dans les premières pages à titre de repère, comme vous pouvez le voir dans l’exemple ci-dessous.
 
+    #### Code ruby sans retour chariot
+
+    Pour le moment, on ne peut pas utiliser de retours chariot dans le code ruby à évaluer. Les remplacer par des points virgules pour utiliser plusieurs lignes. Par exemple :
+     `Ce code \\#\\{n = 3; 12.times do |i|; n += i; end\\}` 
+
+    #### Utilisation unique des triples accolades
+
+    Noter que contrairement à l’utilisation simple `\\#\\{..\\.}` qu’on peut trouver plusieurs fois par paragraphe, l’utilisation des triples accolades `\\#\\{\\{{..\\.}\\}}` ne doit se faire impérativement qu’une seule fois dans un même paragraphe.
+
     #### Retour du code
 
     Il faut garder en tête que le retour du code produit s’inscrit dans la page. Si vous voulez exécuter une opération qui ne doit pas produire de texte à inscrire, vous avez la solution…
