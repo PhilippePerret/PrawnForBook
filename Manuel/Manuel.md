@@ -1,39 +1,3 @@
-
-
-<a name="code-ruby-in-paragraph"></a>
-
-#### Code ruby dans le paragraphe [expert]
-
-Du code ruby peut se trouver à l'intérieur même du paragraphe, qui sera évalué à la volée.
-
-~~~markdown
-J'utilise pour travailler la version #{RUBY_VERSION} de ruby. Et aujourd'hui, nous somme le #{Time.now.wday}^e jour de la semaine.
-~~~
-
-Produira :
-
-«««««««««««««««««««
-
-J'utilise pour travailler la version 3.0.1 de ruby. Et aujourd'hui, nous somme le 4<sup>e</sup> jour de la semaine.
-
-»»»»»»»»»»»»»»»»»»»»
-
-Si le code a évaluer contient des crochets, il faut utiliser des délimitateurs qui protègent le code : `#{{{ ... code avec crochets ... }}}`. Dans le cas contraire, un erreur sera produite.
-
-> Pourquoi ? Tout simplement parce que si l'on donne ce texte : 
-> ~~~markdown
-> Je suis du code #{book.recipe.credits_page={paginate:false}} qui ne doit pas être utilisé
-> ~~~
-> alors c'est le texte suivant qui sera interprété (depuis le `#{` jusqu'au premier crochet fermant trouvé) : `book.recipe.credits_page={paginate:false`
-
-Par exemple : 
-
-~~~markdown
-En coulisses je définis une table avec ruby.#{{{ matable = {un:"1", deux:"2"}; nil }}}
-~~~
-
-C’est particulièrement utile avec un bloc de code (car `#{ ... }` ne permet pas de contenir des crochets.
-
 Le `nil` ci-dessus permet de ne rien écrire dans le texte final (le code n’est pas censé produire du texte). Pour le faire de façon encore plus correcte, on peut utiliser un `-` (tiret court) après les trois crochets pour signifier qu’il n’y aura aucun sortie à ce code.
 
 ~~~markdown

@@ -3,7 +3,16 @@ Prawn4book::Manual::Feature.new do
   titre "Évaluation du code ruby"
 
   description <<~EOT
-    Tous les codes qui se trouveront entre "`\\#\\{..\\.}`" (ou entre "`\\#\\{\{\{.\\..}}}`" lorsque le code contient des accolades) seront évalués en tant que code ruby, dans le cadre du livre (c'est-à-dire qu'ils pourront faire appel à des méthodes personnalisées). Typiquement, on peut par exemple obtenir la date courante ou le numéro de version du livre pour l’insérer dans les premières pages à titre de repère.
+    Tous les codes qui se trouveront entre "`\\#\\{..\\.}`" (ou entre "`\\#\\{\{\{.\\..}}}`" lorsque le code contient des accolades) seront évalués en tant que code ruby, dans le cadre du livre (c'est-à-dire qu'ils pourront faire appel à des méthodes personnalisées).
+    Typiquement, on peut par exemple obtenir la date courante ou le numéro de version du livre pour l’insérer dans les premières pages à titre de repère, comme vous pouvez le voir dans l’exemple ci-dessous.
+
+    #### Retour du code
+
+    Il faut garder en tête que le retour du code produit s’inscrit dans la page. Si vous voulez exécuter une opération qui ne doit pas produire de texte à inscrire, vous avez la solution…
+    … soit d’ajouter `nil` ou `""` à la suite du code (après ";" évidemment) :
+     `ce code \\#\\{2 + 2;nil} n’écrira rien.`
+    … soit de commencer le code par le signe moins :
+     `ce code \\#\\{\\- 2 + 2} n’écrira rien.`
 
     #### Évaluation au second tour
 
@@ -25,12 +34,12 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   sample_texte <<~EOT
-    Une opération simple permet de savoir que 2 + 2 est égal à \#{'#'}{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{'#'}{Time.now.strftime('%d %m %Y')}.
+    J’utilise actuellement la version \\\#{RUBY_VERSION} de ruby. Une opération simple permet de savoir que 2 + 2 est égal à \#{'#'}{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{'#'}{Time.now.strftime('%d %m %Y')}. Je suis juste un calcul sans écriture\\\#{\\- 2 + 2}.
 
     EOT
   
   texte <<~EOT
-    Une opération simple permet de savoir que 2 + 2 est égal à \#{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{Time.now.strftime('%d %m %Y')}.
+    J’utilise actuellement la version \#{RUBY_VERSION} de ruby. Une opération simple permet de savoir que 2 + 2 est égal à \#{2+2} et que le jour courant (au moment de l'impression de ce livre) est le \#{Time.now.strftime('%d %m %Y')}. Je suis juste un calcul sans écriture\#{- 2 + 2}.
 
     EOT
 

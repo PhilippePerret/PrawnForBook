@@ -848,7 +848,9 @@ private
     str = str.gsub(REG_TIRET_MOINS) do
       char_before = $1.freeze
       char_after  = $2.freeze
-      if "#{char_before}#{char_after}".match?(/[  \n]/.freeze)
+      if char_before == '\\'
+        $&
+      elsif "#{char_before}#{char_after}".match?(/[  \n]/.freeze)
         "#{char_before}—#{char_after}"
       else
         $&
