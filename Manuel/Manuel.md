@@ -1,40 +1,4 @@
-<style style="text/css">console {background-color: #333333;color:white;font-family:courier;font-size:11pt;display:inline-block;padding:0 12px;}console:before{content:"$> "}</style>
 
-# Prawn For Book<br />Manuel
-
-#### Référence au paragraphe [Expert]
-
-Dans les annexes, on a souvent besoin de faire référence à une partie du livre, c’est en général le numéro de page. *Prawn-for-book* permettant d’utiliser [trois sortes de pagination](#pagination), une méthode permet d’obtenir la référence au paragraphe sans s’en soucier :
-
-~~~ruby
-<paragraph>.reference
-# => "pg. 29" 		si pagination par page
-#    "par. 5623" 	si pagination par numéro de paragraphe
-#    "pg. 29-7"   si pagination hybride
-
-<paragraph>.reference(false)
-# => "29" 		si pagination par page
-#    "5623" 	si pagination par numéro de paragraphe
-#    "29-7"   si pagination hybride
-~~~
-
-#### Évaluation du texte du paragraphe (interprétation des variables)
-
-Un texte de paragraphe est souvent constitué de variables qui dépendent du contexte ou sont définis pour un livre. En règle générale, ces variables sont estimées au cours de la fabrication du livre.
-
-Mais parfois, il est nécessaire de forcer cette interprétation des variables. C’est le cas, par exemple, pour le Paradigme de Field Augmenté fabriqué dans les analyses de film des éditions Icare.
-
-Dans ce cas, il faut explicitement appeler la méthode `Prawn4book::PdfBook::AnyParagraph.__parse` en lui fournissant les bons arguments :
-
-~~~ruby
-str_corriged = Prawn4book::PdfBook::AnyParagraph.__parse(<string>, <context>)
-
-# avec <context> qui doit absolument définir :
-# 		:pdf [Prawn::PrawnView] Le document en cours de fabrication
-#     :paragraph [NTextParagraph|PFBCode] Instance du paragraphe contenant le texte
-~~~
-
-> Rappel : pour obtenir `:pdf`, se souvenir que plusieurs méthodes de parsing et de formatage personnalisées peuvent utiliser leur nombre de paramètres pour déterminer les informations qui seront transmises.
 
 <a name="code-ruby-in-paragraph"></a>
 

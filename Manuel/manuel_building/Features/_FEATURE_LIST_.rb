@@ -215,6 +215,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/reference_a_paragraphe',
     TOUT_EXPERT && 'expert/injection_code',
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
+    TOUT_EXPERT && 'expert/parse_du_paragraphe',
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
     TOUT_EXPERT && 'expert/formaters',

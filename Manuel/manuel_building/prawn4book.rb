@@ -70,6 +70,8 @@ module Prawn4book
         end
       end.compact
 
+      clear
+
       # --- On attend que toutes les images soient prêtes ---
       RealBook.wait_for_images_ready || begin
         raise "Impossible de produire les images des real-books."
