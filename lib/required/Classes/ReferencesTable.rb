@@ -219,12 +219,31 @@ class ReferencesTable
   #   chaque fois.
   # 
   def save
-    File.write(path, table.to_yaml)
+    File.write(path, saved_yaml_table)
   end
 
 
 
   # --- Helpers Methods ---
+
+  # @return [Code YAML] La table des références pour le fichier 
+  # references.yaml qui permet de faire référence à des parties du 
+  # livre.
+  # 
+  # @note
+  #   Avant, quand la donnée @table ne contenait qu’un numéro de 
+  #   page et de paragraphe, on pouvait l’enregistrer directement.
+  #   Maintenant qu’on a une instance paragraphe, il faut en extraire
+  #   la table à enregistrer
+  # 
+  def saved_yaml_table
+    tbl = {}
+    table.each do |key, ref|
+      par = ref[:paragraph]
+      tbl.merge!(key => {page: par.page, paragraph: par.numero})
+    end
+    return tbl.to_yaml
+  end
 
   # @return [String] la texte qui doit remplacer la balise target 
   # dans le texte

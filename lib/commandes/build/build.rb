@@ -188,6 +188,7 @@ class PdfBook
     # 
     table_references.save if table_references.any?
 
+
     #
     # S'il faut ouvrir le livre
     # 
