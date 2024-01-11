@@ -21,7 +21,7 @@ Prawn4book::Manual::Feature.new do
 
     #### Pas d’indentation négative
 
-    Noter que pour le moment il est impossible d’utiliser d’indentation négative (à cause des limitations actuelles de  `Prawn`.
+    Noter que pour le moment il est impossible d’utiliser une indentation négative (à cause des limitations actuelles de  `Prawn`.
 
     #### Forcer l’identation du paragraphe
 

@@ -10,13 +10,16 @@ Prawn4book::Manual::Feature.new do
     \\(( \\{... ici la stylisation en ligne ...} \\))
     Ici le paragraphe qui sera "touché" par la stylisation.
     ```
+    (( line ))
+    Pour une description détaillée de cette fonctionnalité, voir [[texte_detail/inline_styling]].
     EOT
 
   couleur = "FF9F00"
+  fsize   = 8
 
   sample_texte <<~EOT
-    \\(( \\{indentation: 100, color: '#{couleur}'} ))
-    Un paragraphe qui va se retrouver indenté de 100 points-postscript et dans une couleur hexadécimale #{couleur}.
+    \\(( \\{indentation: 100, color: '#{couleur}', size: #{fsize}} ))
+    Un paragraphe qui va se retrouver indenté de 100 points-postscript, une taille de police de #{fsize} pts et dans une couleur hexadécimale #{couleur}.
     EOT
   texte(:as_sample)
 

@@ -28,11 +28,8 @@ module Prawn4book
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
 
-  TOUT_TEXT_DETAIL = TOUT || nil
-  # TOUT_TEXT_DETAIL = TOUT || true
-
-  # TOUT_INLINE_STYLE = TOUT || nil
-  TOUT_INLINE_STYLE = TOUT || true
+  # TOUT_TEXT_DETAIL = TOUT || nil
+  TOUT_TEXT_DETAIL = TOUT || true
 
   # TOUT_PUCES = TOUT || nil
   TOUT_PUCES = TOUT || true
@@ -153,15 +150,11 @@ module Prawn4book
 
     #__Texte_Details___#
     TOUT_TEXT_DETAIL && 'texte_detail/grand_titre',
+    TOUT_TEXT_DETAIL && 'texte_detail/inline_styling',
     TOUT_TEXT_DETAIL && 'texte_detail/indentation',
     TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
     TOUT_TEXT_DETAIL && 'texte_detail/gestion_tirets_conditionnels',
     TOUT_TEXT_DETAIL && 'texte_detail/placement_sur_ligne_quelconque',
-
-    #-Stylisation inline -*
-    TOUT_INLINE_STYLE && 'inline_style/titre_section',
-    TOUT_INLINE_STYLE && 'inline_style/stylisation_in_line',
-    TOUT_INLINE_STYLE && 'inline_style/change_fonte_for_next_paragraph',
 
     #---Puces---#
     TOUT_PUCES && 'puces/puces',

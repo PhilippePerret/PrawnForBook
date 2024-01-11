@@ -59,87 +59,93 @@
 :pagination_numeroter_pages_vierges:
   :page: 42
   :paragraph:
-:inline_style_titre_section:
+:texte_detail_grand_titre:
   :page: 43
   :paragraph:
-:inline_style_stylisation_in_line:
+:texte_detail_inline_styling:
   :page: 43
   :paragraph:
-:inline_style_change_fonte_for_next_paragraph:
+:texte_detail_indentation:
   :page: 43
   :paragraph:
-:puces_puces:
-  :page: 44
-  :paragraph:
-:puces_losange:
-  :page: 44
-  :paragraph:
-:puces_black_losange:
+:texte_detail_gestion_tirets_conditionnels:
   :page: 46
   :paragraph:
-:puces_square:
-  :page: 47
-  :paragraph:
-:puces_black_square:
+:texte_detail_placement_sur_ligne_quelconque:
   :page: 48
   :paragraph:
-:puces_bullet:
+:puces_puces:
+  :page: 48
+  :paragraph:
+:puces_losange:
   :page: 49
   :paragraph:
-:puces_black_bullet:
-  :page: 50
-  :paragraph:
-:puces_finger:
+:puces_black_losange:
   :page: 51
   :paragraph:
-:puces_black_finger:
+:puces_square:
   :page: 52
   :paragraph:
-:puces_big_hyphen:
+:puces_black_square:
   :page: 53
   :paragraph:
-:puces_custom_image:
+:puces_bullet:
   :page: 54
   :paragraph:
-:format_precis_grand_titre:
+:puces_black_bullet:
+  :page: 55
+  :paragraph:
+:puces_finger:
+  :page: 56
+  :paragraph:
+:puces_black_finger:
   :page: 57
   :paragraph:
-:format_precis_definition_marges:
-  :page: 57
+:puces_big_hyphen:
+  :page: 58
   :paragraph:
-:format_precis_double_colonnes:
+:puces_custom_image:
   :page: 59
   :paragraph:
+:format_precis_grand_titre:
+  :page: 62
+  :paragraph:
+:format_precis_definition_marges:
+  :page: 62
+  :paragraph:
+:format_precis_double_colonnes:
+  :page: 64
+  :paragraph:
 :expert_grand_titre:
-  :page: 63
+  :page: 68
   :paragraph:
 :expert_mode_expert:
-  :page: 64
+  :page: 69
   :paragraph:
 :expert_contexte_erreurs:
-  :page: 64
+  :page: 69
   :paragraph:
 :expert_reference_a_paragraphe:
-  :page: 64
+  :page: 69
   :paragraph:
 :expert_injection_code:
-  :page: 66
-  :paragraph:
-:expert_evaluation_code_ruby:
-  :page: 66
-  :paragraph:
-:expert_parse_du_paragraphe:
-  :page: 69
-  :paragraph:
-:expert_bibliographies:
-  :page: 69
-  :paragraph:
-:expert_multi_colonnes:
-  :page: 70
-  :paragraph:
-:expert_formaters:
   :page: 71
   :paragraph:
+:expert_evaluation_code_ruby:
+  :page: 71
+  :paragraph:
+:expert_parse_du_paragraphe:
+  :page: 74
+  :paragraph:
+:expert_bibliographies:
+  :page: 74
+  :paragraph:
+:expert_multi_colonnes:
+  :page: 75
+  :paragraph:
+:expert_formaters:
+  :page: 76
+  :paragraph:
 :expert_modifier_line_height:
-  :page: 72
+  :page: 77
   :paragraph:
