@@ -2,111 +2,126 @@
 :recette_grand_titre:
   :page: 19
   :paragraph:
-:pagination_titre_section:
+:recette_recette_livre:
+  :page: 19
+  :paragraph:
+:recette_recette_collection:
+  :page: 19
+  :paragraph:
+:recette_fonte_par_defaut:
   :page: 20
+  :paragraph:
+:recette_definition_fontes:
+  :page: 21
+  :paragraph:
+:recette_publisher:
+  :page: 22
+  :paragraph:
+:pagination_titre_section:
+  :page: 24
   :paragraph:
 :pagination_pagination:
-  :page: 20
+  :page: 24
   :paragraph:
 :pagination_types_numerotation:
-  :page: 20
+  :page: 24
   :paragraph:
 :pagination_numerotation_paragraphes:
-  :page: 23
+  :page: 26
   :paragraph:
 :pagination_aspect_numero:
-  :page: 29
+  :page: 31
   :paragraph:
 :pagination_arret_pagination:
-  :page: 30
-  :paragraph:
-:pagination_no_pagination:
   :page: 32
   :paragraph:
-:pagination_numeroter_pages_vierges:
+:pagination_no_pagination:
   :page: 34
   :paragraph:
+:pagination_numeroter_pages_vierges:
+  :page: 36
+  :paragraph:
 :inline_style_titre_section:
-  :page: 35
+  :page: 37
   :paragraph:
 :inline_style_stylisation_in_line:
-  :page: 35
+  :page: 37
   :paragraph:
 :inline_style_change_fonte_for_next_paragraph:
-  :page: 35
+  :page: 37
   :paragraph:
 :puces_puces:
-  :page: 36
-  :paragraph:
-:puces_losange:
-  :page: 36
-  :paragraph:
-:puces_black_losange:
   :page: 38
   :paragraph:
-:puces_square:
-  :page: 39
+:puces_losange:
+  :page: 38
   :paragraph:
-:puces_black_square:
+:puces_black_losange:
   :page: 40
   :paragraph:
-:puces_bullet:
+:puces_square:
   :page: 41
   :paragraph:
-:puces_black_bullet:
+:puces_black_square:
   :page: 42
   :paragraph:
-:puces_finger:
+:puces_bullet:
   :page: 43
   :paragraph:
-:puces_black_finger:
+:puces_black_bullet:
   :page: 44
   :paragraph:
-:puces_big_hyphen:
+:puces_finger:
   :page: 45
   :paragraph:
-:puces_custom_image:
+:puces_black_finger:
   :page: 46
   :paragraph:
+:puces_big_hyphen:
+  :page: 47
+  :paragraph:
+:puces_custom_image:
+  :page: 48
+  :paragraph:
 :format_precis_grand_titre:
-  :page: 49
-  :paragraph:
-:format_precis_definition_marges:
-  :page: 49
-  :paragraph:
-:format_precis_double_colonnes:
   :page: 51
   :paragraph:
+:format_precis_definition_marges:
+  :page: 51
+  :paragraph:
+:format_precis_double_colonnes:
+  :page: 53
+  :paragraph:
 :expert_grand_titre:
-  :page: 55
+  :page: 57
   :paragraph:
 :expert_mode_expert:
-  :page: 56
+  :page: 58
   :paragraph:
 :expert_contexte_erreurs:
-  :page: 56
+  :page: 58
   :paragraph:
 :expert_reference_a_paragraphe:
-  :page: 56
+  :page: 58
   :paragraph:
 :expert_injection_code:
-  :page: 57
+  :page: 60
   :paragraph:
 :expert_evaluation_code_ruby:
-  :page: 57
+  :page: 60
   :paragraph:
 :expert_parse_du_paragraphe:
-  :page: 59
+  :page: 63
   :paragraph:
 :expert_bibliographies:
-  :page: 59
+  :page: 63
   :paragraph:
 :expert_multi_colonnes:
-  :page: 59
+  :page: 64
   :paragraph:
 :expert_formaters:
-  :page: 61
+  :page: 65
   :paragraph:
 :expert_modifier_line_height:
-  :page: 62
+  :page: 66
   :paragraph:

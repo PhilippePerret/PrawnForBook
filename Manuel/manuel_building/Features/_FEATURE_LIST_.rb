@@ -7,8 +7,8 @@ module Prawn4book
   TOUT_GENE = TOUT || nil
   # TOUT_GENE = TOUT || true
 
-  TOUT_RECETTE = TOUT || nil
-  # TOUT_RECETTE = TOUT || true
+  # TOUT_RECETTE = TOUT || nil
+  TOUT_RECETTE = TOUT || true
 
   TOUT_TEXTE = TOUT || nil
   # TOUT_TEXTE = TOUT || true
@@ -91,9 +91,9 @@ module Prawn4book
     TOUT_RECETTE && 'recette/recette_livre',
     TOUT_RECETTE && 'recette/recette_collection',
     TOUT_RECETTE && 'recette/book_data',
-    TOUT_RECETTE && 'definir_format_livre',
-    TOUT_RECETTE && 'recette/definition_fontes',
+    TOUT_RECETTE && 'recette/definir_format_livre',
     TOUT_RECETTE && 'recette/fonte_par_defaut',
+    TOUT_RECETTE && 'recette/definition_fontes',
     TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#

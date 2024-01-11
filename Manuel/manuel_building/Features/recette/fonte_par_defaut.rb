@@ -1,27 +1,35 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Définition de la fonte par défaut"
+  titre "Définition de la fonte par défaut du texte"
 
   description <<~EOT
     Bien que l'application propose, clé en main, une fonte qui peut être utilisée pour imprimer un livre, on peut définir n'importe quelle fonte comme fonte par défaut, et même une fonte personnelle dont on aura au préalable acheté la licence (c'est presque toujours nécessaire si le livre doit être vendu).
     EOT
 
-  font_name  = "Times-Roman"
-  font_style = ''
-  font_size  = 20
-  font_color = '000000'
+  real_texte <<~EOT
+    Un texte avec la police par défaut. C’est celle définie dans la recette, avec les autres données. Vous pouvez par exemple remarquer la hauteur de ligne (`line_height`) particulièrement haute ici.
+    EOT
 
-  recipe <<~EOT
+  real_recipe <<~YAML
+    ---
+    # Définition des fontes
+    # ---------------------
+    fonts:
+      Reenie:
+        normal: "assets/fontes/Reenie_Beanie/ReenieBeanie-Regular.ttf"
+    #
+    # Format du livre (texte, page, etc.)
+    # -----------------------------------
     book_format:
       text:
-        default_font: "#{font_name}/#{font_style}/#{font_size}/#{font_color}"
-    EOT
+        font: "Reenie/normal/20/000077"
+        line_height: 32
 
-  init_recipe([:default_font])
+    YAML
+
+  new_page_before(:texte)
 
   texte <<~EOT
-    (( font(name: "#{font_name}", size: #{font_size}, style: "#{font_style}", color: "#{font_color}") ))
-    Pour écrire ce texte, nous avons ponctuellement modifié la police par défaut en utilisant la fonte #{font_name} avec une taille de #{font_size} et le style #{font_style}.
+    ![page-1]
     EOT
-
 end

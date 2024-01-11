@@ -396,8 +396,8 @@ class Recipe
 
   def default_font
     @default_font ||= begin
-      if format_text[:default_font]
-        Fonte.get_in(format_text[:default_font]).or_default
+      if format_text[:font]||format_text[:default_font]
+        Fonte.get_in(format_text).or_default
       else
         Fonte.default_fonte_times.dup
       end

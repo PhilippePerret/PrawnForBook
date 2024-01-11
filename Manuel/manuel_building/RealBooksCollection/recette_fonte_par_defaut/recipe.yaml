@@ -1,0 +1,13 @@
+---
+# Définition des fontes
+# ---------------------
+fonts:
+  Reenie:
+    normal: "assets/fontes/Reenie_Beanie/ReenieBeanie-Regular.ttf"
+#
+# Format du livre (texte, page, etc.)
+# -----------------------------------
+book_format:
+  text:
+    font: "Reenie/normal/20/000077"
+    line_height: 32

@@ -699,6 +699,7 @@ class Feature
   # Traitement du texte d’une fonctionnalité de type real-book
   # 
   def traite_texte_for_real_book
+    return if texte.nil?
     pages_to_export = []
     str = self.texte.dup
     str = str.gsub(REG_IMAGES_REAL_BOOK) do

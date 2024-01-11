@@ -1,17 +1,5 @@
 
 
-#### Stylisation du paragraphe
-
-Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
-
-* [stylisation par défaut](style-parag-par-defaut),
-* [stylisation en ligne de portion de textes dans le paragraphe](#style-parag-dans-texte),
-* [stylisation *inline* (en ligne)](#style-parag-inline),
-* [stylisation d’un extrait par helper](#style-extrait-with-helper),
-* [stylisation par balise initiale](#style-parag-balise).
-
-<a name="style-parag-par-defaut"></a>
-
 **STYLE PAR DÉFAUT DU PARAGRAPHE**
 
 | <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                  | valeurs possibles                                 |                   |
