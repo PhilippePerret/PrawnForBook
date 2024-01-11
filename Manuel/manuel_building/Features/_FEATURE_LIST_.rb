@@ -10,8 +10,8 @@ module Prawn4book
   # TOUT_RECETTE = TOUT || nil
   TOUT_RECETTE = TOUT || true
 
-  TOUT_TEXTE = TOUT || nil
-  # TOUT_TEXTE = TOUT || true
+  # TOUT_TEXTE = TOUT || nil
+  TOUT_TEXTE = TOUT || true
 
   TOUT_DEF_MINI = TOUT || nil
   # TOUT_DEF_MINI = TOUT || true
@@ -100,6 +100,8 @@ module Prawn4book
     TOUT_TEXTE && 'texte/grand_titre',
     TOUT_TEXTE && 'texte/types_paragraphes',
     TOUT_TEXTE && 'texte/format_markdown_du_texte',
+    TOUT_TEXTE && 'texte/styles_inline_format', # <i>, <b>, ...
+    TOUT_TEXTE && 'texte/intro_inline_styling', # prev paragraph
     TOUT_TEXTE && 'titres/titres',
 
     #--- Comportement de Prawn-for-book ---#

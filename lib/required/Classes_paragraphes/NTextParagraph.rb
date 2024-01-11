@@ -185,10 +185,12 @@ class NTextParagraph < AnyParagraph
     @indentation ||= book.recipe.text_indent
   end
   def string_indentation
-    if indented?
-      self.class.string_indentation
-    else
-      ''
+    @string_indentation ||= begin
+      if indented?
+        self.class.string_indentation
+      else
+        ''
+      end
     end
   end
   # Pour modifier dynamiquement l’indentation

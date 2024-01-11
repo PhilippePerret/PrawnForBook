@@ -1,29 +1,3 @@
-
-
-**STYLE PAR DÉFAUT DU PARAGRAPHE**
-
-| <span style="width:200px;display:inline-block;"> </span> | Recette | propriété                  | valeurs possibles                                 |                   |
-| -------------------------------------------------------- | ------- | -------------------------- | ------------------------------------------------- | ----------------- |
-|                                                          |         | **:default_font_n_style:** | Nom de fonte (police) chargée et le style utilisé | “Garamond/italic” |
-|                                                          |         | **:default_font_size:**    | Nombre entier ou flottant                         | 12.4              |
-|                                                          |         | **:default_font_style**    | [OBSOLÈTE] Un des styles défini pour la fonte     |                   |
-
-On définit le style du paragraphe par défaut dans la [recette du livre ou de la collection][] en définissant les propriétés `:default_font` (nom de la fonte, qui [doit être chargé dans le document](#fontes)), `:default_font_size`  (taille de la police) et `:default_font_style` (style défini pour la fonte, en général ‘:nomal’.
-
-<a name="style-parag-dans-texte"></a>
-
-**STYLE DE PORTIONS DE TEXTES DANS LE PARAGRAPHE **
-
-Le paragraphe peut contenir de la mise en forme simple, "en ligne", comme le gras ou l'italique, en entourant les mots avec `<i>...</i>` ou `<b>...</b>`. Par exemple :
-
-~~~
-Un mot en <b>gras</b> et un mot en <i>italique</i>. Une expression en <i><b>gras et italique</b></i>.
-
-<!-- Ou, en pseudo-markdown -->
-
-Un mot en **gras** et un mot en *italique*. Une expression __soulignée__. Noter les deux traits plats de chaque côté.
-~~~
-
 <a name="style-parag-inline"></a>
 
 **STYLISATION “INLINE” DU PARAGRAPHE — `(( {<hash} ))`**

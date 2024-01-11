@@ -17,111 +17,129 @@
 :recette_publisher:
   :page: 22
   :paragraph:
-:pagination_titre_section:
+:texte_grand_titre:
   :page: 24
+  :paragraph:
+:texte_types_paragraphes:
+  :page: 24
+  :paragraph:
+:texte_format_markdown_du_texte:
+  :page: 24
+  :paragraph:
+:texte_styles_inline_format:
+  :page: 24
+  :paragraph:
+:texte_intro_inline_styling:
+  :page: 25
+  :paragraph:
+:titres_titres:
+  :page: 25
+  :paragraph:
+:pagination_titre_section:
+  :page: 29
   :paragraph:
 :pagination_pagination:
-  :page: 24
+  :page: 29
   :paragraph:
 :pagination_types_numerotation:
-  :page: 24
+  :page: 29
   :paragraph:
 :pagination_numerotation_paragraphes:
-  :page: 26
-  :paragraph:
-:pagination_aspect_numero:
   :page: 31
   :paragraph:
+:pagination_aspect_numero:
+  :page: 37
+  :paragraph:
 :pagination_arret_pagination:
-  :page: 32
+  :page: 38
   :paragraph:
 :pagination_no_pagination:
-  :page: 34
-  :paragraph:
-:pagination_numeroter_pages_vierges:
-  :page: 36
-  :paragraph:
-:inline_style_titre_section:
-  :page: 37
-  :paragraph:
-:inline_style_stylisation_in_line:
-  :page: 37
-  :paragraph:
-:inline_style_change_fonte_for_next_paragraph:
-  :page: 37
-  :paragraph:
-:puces_puces:
-  :page: 38
-  :paragraph:
-:puces_losange:
-  :page: 38
-  :paragraph:
-:puces_black_losange:
   :page: 40
   :paragraph:
-:puces_square:
-  :page: 41
-  :paragraph:
-:puces_black_square:
+:pagination_numeroter_pages_vierges:
   :page: 42
   :paragraph:
-:puces_bullet:
+:inline_style_titre_section:
   :page: 43
   :paragraph:
-:puces_black_bullet:
+:inline_style_stylisation_in_line:
+  :page: 43
+  :paragraph:
+:inline_style_change_fonte_for_next_paragraph:
+  :page: 43
+  :paragraph:
+:puces_puces:
   :page: 44
   :paragraph:
-:puces_finger:
-  :page: 45
+:puces_losange:
+  :page: 44
   :paragraph:
-:puces_black_finger:
+:puces_black_losange:
   :page: 46
   :paragraph:
-:puces_big_hyphen:
+:puces_square:
   :page: 47
   :paragraph:
-:puces_custom_image:
+:puces_black_square:
   :page: 48
   :paragraph:
-:format_precis_grand_titre:
+:puces_bullet:
+  :page: 49
+  :paragraph:
+:puces_black_bullet:
+  :page: 50
+  :paragraph:
+:puces_finger:
   :page: 51
   :paragraph:
-:format_precis_definition_marges:
-  :page: 51
+:puces_black_finger:
+  :page: 52
   :paragraph:
-:format_precis_double_colonnes:
+:puces_big_hyphen:
   :page: 53
   :paragraph:
-:expert_grand_titre:
+:puces_custom_image:
+  :page: 54
+  :paragraph:
+:format_precis_grand_titre:
   :page: 57
   :paragraph:
+:format_precis_definition_marges:
+  :page: 57
+  :paragraph:
+:format_precis_double_colonnes:
+  :page: 59
+  :paragraph:
+:expert_grand_titre:
+  :page: 63
+  :paragraph:
 :expert_mode_expert:
-  :page: 58
-  :paragraph:
-:expert_contexte_erreurs:
-  :page: 58
-  :paragraph:
-:expert_reference_a_paragraphe:
-  :page: 58
-  :paragraph:
-:expert_injection_code:
-  :page: 60
-  :paragraph:
-:expert_evaluation_code_ruby:
-  :page: 60
-  :paragraph:
-:expert_parse_du_paragraphe:
-  :page: 63
-  :paragraph:
-:expert_bibliographies:
-  :page: 63
-  :paragraph:
-:expert_multi_colonnes:
   :page: 64
   :paragraph:
+:expert_contexte_erreurs:
+  :page: 64
+  :paragraph:
+:expert_reference_a_paragraphe:
+  :page: 64
+  :paragraph:
+:expert_injection_code:
+  :page: 66
+  :paragraph:
+:expert_evaluation_code_ruby:
+  :page: 66
+  :paragraph:
+:expert_parse_du_paragraphe:
+  :page: 69
+  :paragraph:
+:expert_bibliographies:
+  :page: 69
+  :paragraph:
+:expert_multi_colonnes:
+  :page: 70
+  :paragraph:
 :expert_formaters:
-  :page: 65
+  :page: 71
   :paragraph:
 :expert_modifier_line_height:
-  :page: 66
+  :page: 72
   :paragraph:
