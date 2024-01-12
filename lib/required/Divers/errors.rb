@@ -122,6 +122,7 @@ class PFBFatalError < StandardError
       102   => Prawn4book::ERRORS[:paragraph][:unfound_puce_image],
       103   => Prawn4book::ERRORS[:paragraph][:formate][:unknown_method],
       104   => Prawn4book::ERRORS[:paragraph][:unable_to_instantiate_with_type],
+      105   => Prawn4book::ERRORS[:paragraph][:note_undefined],
       # -- Construction --
       150   => Prawn4book::ERRORS[:building][:bat_fatal_error],
       151   => Prawn4book::ERRORS[:building][:bat_no_margins],

@@ -22,9 +22,16 @@ class PdfBook
       @flux_opened = false
       @last_indice_note = 0
       @last_indice_mark = 0
-      @last_unnumbering_note_def_index = 0
+      @last_unnumbering_note_def_index  = 0
       @last_unnumbering_note_mark_index = 0
       @unnumbering_notes = {}
+      # Propriété qui permet de savoir quand on recommence de poser
+      # des marques (des appels de notes). Si c’est un nouveau premier
+      # appel (donc après avoir écrit les définitions des notes 
+      # précédentes) alors il faut impérativement que toutes les notes
+      # précédentes aient été définie. Sinon, on génère une erreur
+      # fatale.
+      @last_operation = nil
     end
 
     # Pour obtenir le prochain numéro pour un APPEL DE NOTE
@@ -43,6 +50,7 @@ class PdfBook
     def init_bloc_notes(pdf)
       @flux_opened = false
       write_line(pdf) if borders?
+      @last_operation = 'ecriture_definitions'
     end
 
 
@@ -53,17 +61,25 @@ class PdfBook
     def add(index_mark_note)
       index_mark_note = 
         if index_mark_note == :auto
-          # Une vérification
-          if @last_unnumbering_note_mark_index != @last_unnumbering_note_def_index
-            raise "Problème avec numéro de note : mark ##{@last_unnumbering_note_mark_index} / def ##{@last_unnumbering_note_def_index}".rouge
-          end
-          next_unnumbering_note_mark_index
+          # Une vérification s’impose pour voir si toutes les notes
+          # déclarée par des appels ont été inscrites en tant que
+          # notes.
+          check_definitions_notes_or_raise
+          @last_operation = 'pose_appel_notes'
+          # On prend le numéro de marque suivant
+          next_unnumbering_note_mark_index # valeur retournée
         else
           index_mark_note.to_i
         end
       @current_items << index_mark_note
       @items.merge!(index_mark_note => Note.new(self, index_mark_note))
       return index_mark_note
+    end
+
+    def check_definitions_notes_or_raise
+      return if @last_operation == 'pose_appel_notes' # cf. l’initialisatin pour savoir ce que c’est
+      return if @last_unnumbering_note_mark_index == @last_unnumbering_note_def_index
+      raise PFBFatalError.new(105, {last_mark:@last_unnumbering_note_mark_index, last_def:@last_unnumbering_note_def_index})
     end
 
     # Pour traiter la note d'indice +indice+

@@ -12,7 +12,7 @@ Prawn4book::Manual::Feature.new do
 
     #### Styles obligatoires pour les fontes
 
-    Pour pouvoir utiliser la mise en forme de base du texte, c’est-à-dire les italiques, les gras, les soulignés, vous devez impérativement définir ces styles de police.^^
+    Pour pouvoir utiliser la mise en forme de base du texte, c’est-à-dire les italiques, les gras, les soulignés, vous devez impérativement définir ces styles de police.
     Il faut comprendre qu’en impression professionnelle, il n’y a pas de *magie* au niveau des polices, si vous utilisez de l’italique par exemple, _PFB_ utilise la forme *italic* de votre police, si vous utiliser de l’italique et du gras, _PFB_ utilise la forme *italic_bold* de votre police. Ces *formes* doivent toutes être définies.
 
     #### Définition des fontes dans la section *:fonts*

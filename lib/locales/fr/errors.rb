@@ -316,6 +316,22 @@ ERRORS = {
       %{s} (index: %{i})
       Erreur rencontrée : %{e}
       ERR
+
+    note_undefined: <<~ERR,
+      Note de page indéfinie. Une marque de note appelée a été placée,
+      (de numéro #%{last_mark}) mais sa définition n’a pas été posée
+      (la dernière définition porte le numéro #%{last_def}) comme dans 
+      le code exemple ci-dessous.
+
+          Un texte avec un appel de note^^ qui devra être 
+          défini plus loin pour savoir à quoi fait référence
+          la note en question. On peut en avoir une deuxième^^
+          avec la même marque.
+          ^^ La note doit être définie de cette manière.
+          ^^ La définition de la deuxième marque, car ça va 
+          toujours dans l’ordre, quand le numéro n’est pas 
+          explicitement donné.
+      ERR
   },
 
   multicolumns: {
