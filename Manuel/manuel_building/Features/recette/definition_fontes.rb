@@ -41,6 +41,42 @@ Prawn4book::Manual::Feature.new do
     ~~~
     (( line ))
 
+    #### Style personnalisé pour une fonte embarquée
+
+    Si `regular`, `italic` etc. sont des styles conventionnels qu’on peut trouver pour chaque police (et qui vont *réagir* aux marques markdown/HTML), on peut néanmoins définir un nom de style personnalisé qu’on pourra utiliser ensuite dans le texte grâce à la *stylisation en ligne* ou la programmation si vous êtes un ou une experte. Cela peut arriver, par exemple, si vous avez acheté la licence d’une police et qu’elle contient des styles particuliers comme `demi-bold` ou `rounded`, etc.
+    Le style propre sera alors défini tout simplement de cette manière (comme les autres, en fait, avec un nom de style particulier et un fichier ttf/otf associé) :
+    (( line ))
+    ```yaml
+    ---
+    fonts: 
+      NTime:
+        monstyle: "fontes/New-Time-mes-glyphes-a-moi.ttf"
+    ```
+    (( line ))
+    Alors on pourra utiliser dans le texte :
+    (( line ))
+    ```
+    (( { font:'NTime', style: :monstyle } ))
+    Ce texte sera dans le style `monstyle`, c’est-à-dire avec
+    les glyphes de `New-Time-mes-glyphes-a-moi.ttf`.
+    ```
+    (( line ))
+    On pourrait imaginer par exemple que vous avez besoin de votre police, mais avec chaque lettre dans un rond. Il suffit alors de créer le fichier `New-Time-rounded.tff` avec ces glyphes, puis de l’utiliser pour un style `rounded` :
+    (( line ))
+    ```yaml
+    ---
+    fonts: 
+      NTime:
+        rounded: "fontes/New-Time-mes-rounded.ttf"
+    ```
+    (( line ))
+    … et vous voilà dans la possibilité d’utiliser même localement ce style avec :
+    (( line ))
+    ```
+    Un mot aux <font name="NTime" style="rounded">lettres entourées</font>.
+    ```
+
+
     #### Fonte par défaut
 
     Noter que la fonte ci-dessus étant la toute première fonte définie dans la table `fonts`, c’est elle qui sera considérée comme la fonte par défaut et sera utilisée lorsque des polices ne seront pas définies pour des éléments du livre.

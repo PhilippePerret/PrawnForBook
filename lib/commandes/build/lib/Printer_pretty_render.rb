@@ -174,6 +174,10 @@ class << self
 
         debugit = false # str.match?('Le grand titre à utiliser pour la table des matières')
 
+        if (lbefore = options.delete(:lines_before))
+          lbefore.times { move_to_next_line }
+        end
+
         e, b = text_box(str, options.merge(dry_run: true))
 
         boxheight = b.height
@@ -375,8 +379,12 @@ class << self
           update_current_line
         end
 
-        # On passe à la ligne suivante
-        move_to_next_line
+        # On passe à la ligne suivante (ou aux lignes suivantes)
+        unless current_line == 1
+          lafter = options.delete(:lines_after) || 1
+          lafter.times { move_to_next_line }
+        end
+
 
       end #/pdf
 
@@ -562,6 +570,13 @@ class << self
       align: options[:align] || :justify,
       width: width
     )
+
+    # On retire les propriétés pour les lignes avant et après si 
+    # elles sont égales à zéro. Nécessaire surtout pour lines_after,
+    # pour savoir s’il faut passer à la ligne suivante à la fin ou 
+    # à un nombre de lignes déterminé.
+    options.delete(:lines_before) if options.key?(:lines_before) && options[:lines_before] == 0
+    options.delete(:lines_after)  if options.key?(:lines_after) && options[:lines_after] == 0
 
     # - Puce -
     # 

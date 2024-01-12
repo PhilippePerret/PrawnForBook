@@ -1,23 +1,7 @@
 
 
-
-
-~~~text
-(( {margin_left: 40, margin_top: 50} ))
-IMAGE[images/mon_image.svg]
-~~~
-
-L’image ci-dessus se retrouvera à 40 [points-pdf][] de la marge gauche et à 50 [points-pdf][] de son contenu précédent.
-
 Les propriétés qu’on peut définir sont les suivantes :
 
-| <span style="display:inline-block;width:200px;">Propriété</span> | <span style="display:inline-block;width:300px;">Description</span> | <span style="display:inline-block;width:250px;">Valeurs</span> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **font_family** / **font**                                   | Nom de la fonte (qui doit exister dans le document)          | String (chaine), par exemple `font_famiily:"Garamond"`       |
-| **font_size** / **size**                                     | Taille de la police                                          | Entier ou valeurs. P.e. `font_size:12`                       |
-| **font_style** / **style**                                   | Style de la police à utiliser (doit être défini pour la police) | Symbol (mot commençant par “:”). P.e. : `font_style: :italic` |
-| **kerning**                                                  | Éloignement des lettres                                      | Entier ou flottant. P.e. `kernel:2`                          |
-| **word_space**                                               | Espacement entre les mots                                    | Entier ou flottant. P.e. `word_space: 1.6`                   |
 | **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
 | **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
 | **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |

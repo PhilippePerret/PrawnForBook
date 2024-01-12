@@ -284,6 +284,14 @@ class AnyParagraph
    @margin_right = real_value_for(mg)
   end
 
+  def lines_after
+    styles[:lines_after]
+  end
+
+  def lines_before
+    styles[:lines_before]
+  end
+
   def kerning
     styles[:kerning]
   end
@@ -294,6 +302,10 @@ class AnyParagraph
 
   def character_spacing
     styles[:character_spacing]
+  end
+
+  def word_space
+    styles[:word_space]
   end
 
   def width
@@ -413,7 +425,10 @@ class AnyParagraph
               when :bottom  then :margin_bottom
               when :color   then :color
               when :kerning then :kerning
+              when :lines_before      then :lines_before
+              when :lines_after       then :lines_after
               when :character_spacing then :character_spacing
+              when :word_space        then :word_space
               else 
                 case k
                 when :indentation, :indent

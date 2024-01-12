@@ -164,7 +164,8 @@ class NTextParagraph < AnyParagraph
         # indent_paragraphs: indentation, 
         align: text_align
       }
-      [:character_spacing, :kerning].each do |prop|
+      [:character_spacing, :kerning, :lines_before, :lines_after, \
+        :word_space].each do |prop|
         v = self.send(prop) || next
         tbl.merge!( prop => v)
       end

@@ -32,12 +32,15 @@ Prawn4book::Manual::Feature.new do
 
     Voici la liste des propriétés qui peuvent être appliquées au paragraphe suivant (et seulement le paragraphe suivant) :
     * **`size`** | Taille de la police du paragraphe suivant.
-    * **`indent`** (ou `indentation`) | Indentation du paragraphe suivant, avec ou sans unité (p.e. '100' ou '8mm').
     * **`font`** | Nom de la police à utiliser. Elle doit bien sûr être définie et embarquée (voir [[recette/definition_fontes]]).
+    * **`style`** | Le style à appliquer, parmi `normal`, `italic`, `bold`, `[:italic, :bold]` ou tout autre style défini explictement pour les fontes embarquées. Voir [[recette/definition_fontes]].
+    * **`indent`** (ou `indentation`) | Indentation du paragraphe suivant, avec ou sans unité (p.e. '100' ou '8mm').
     * **`align`** | Alignement du paragraphe. Peut avoir l’une des valeurs *Symbol* suivante : `:left` ("gauche" en anglais, donc alignement à gauche), `:right` ("droite" en anglais, donc alignement à droite), `:center` ("centre" en anglais, donc centré) ou `:justify` ("justifié" en anglais donc justifié — noter que par défaut, un paragraphe est justifié, dans _PFB_, donc cette marque ne serait utile que dans un contexte où le paragraphe ne serait plus centré, un tableau par exemple).
     * **`margin_left`** | ("marge gauche" en anglais) définit la marge gauche.
-    * **`margin_right`** |
+    * **`margin_right`** | ("marge droite" en anglais) définit la marge droite suplémentaire laissée après le texte.
+    * **`kerning`** | ("crénage" en anglais) si la valeur est à `true` (elle l’est par défaut), Prawn gèrera de façon intelligente les espaces entre les lettres pour avoir le meilleur rendu.
     * **`character_spacing`** | ("espace entre les lettres" en anglais)
+    * **`word_space`** | ("espace entre mots" en anglais) définit explicitement l’espace qu’on veut trouver entre deux mots. À utiliser discrètement et parcimonieusement.
     EOT
 
   @segments = []
@@ -76,7 +79,25 @@ Prawn4book::Manual::Feature.new do
   add_to_segments <<~EOT
   (( { character_spacing: 4, kerning: true, align: :left } ))
   Un texte avec les lettres espacées.
-  (le *kerning* à `true` indique de tenir compte des ligatures définies dans la fonte)
+  (le *kerning* à `true` indique de gérer les espaces entres les lettres pour avoir le meilleur rendu)
+  EOT
+
+  # - Pas pris en compte pour le moment -
+  # wspace = 40
+
+  # add_to_segments <<~EOT
+  # (( { word_space: #{wspace} } ))
+  # Un texte dont tous les mots ont été séparés de #{wspace} points-postscript.
+  # EOT
+
+  lbef = 4
+  laft = 3
+  
+  add_to_segments <<~EOT
+  Le paragraphe avant pour voir les lignes vides après.
+  (( { lines_before: #{lbef}, lines_after: #{laft} } ))
+  Un texte avec un `lines_before` de #{lbef} (donc #{lbef} lignes vides avant)  et un `lines_after` de #{laft} (donc avec #{laft} lignes vides après.
+  Le paragraphe après pour voir les lignes vides avant.
   EOT
 
   # On assemble le texte
