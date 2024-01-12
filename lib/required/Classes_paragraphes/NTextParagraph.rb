@@ -155,14 +155,21 @@ class NTextParagraph < AnyParagraph
   end #/print
 
   def dry_options
-    @dry_options ||= {
-      inline_format:true, 
-      overflow: :truncate, 
-      at:    [margin_left, nil],
-      width: width || (@pdf.bounds.width - margin_left),
-      # indent_paragraphs: indentation, 
-      align: text_align
-    }
+    @dry_options ||= begin
+      tbl = {
+        inline_format:true, 
+        overflow: :truncate, 
+        at:    [margin_left, nil],
+        width: width || (@pdf.bounds.width - (margin_left + margin_right)),
+        # indent_paragraphs: indentation, 
+        align: text_align
+      }
+      [:character_spacing, :kerning].each do |prop|
+        v = self.send(prop) || next
+        tbl.merge!( prop => v)
+      end
+      tbl
+    end
   end
 
   # La fonte pour la paragraphe

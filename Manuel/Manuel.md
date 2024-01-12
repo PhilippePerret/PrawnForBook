@@ -1,45 +1,6 @@
-<a name="style-parag-inline"></a>
 
-**STYLISATION “INLINE” DU PARAGRAPHE — `(( {<hash} ))`**
 
-Un paragraphe peut être complètement modifié en utilisant ce qu’on appelle la *stylisation inline* qui consiste à ajouter une ligne juste au-dessus du paragraphe qui contient ses propriétés modifiées. Par exemple :
 
-~~~text
-Un paragraphe au style par défaut.
-
-(( {<data>} ))
-Le paragraphe influencé par les <data> ci-dessus.
-~~~
-
-> Noter les `(( ... ))` (doubles-parenthèses) qui sont la marque de Prawn-for-book et les crochets qui vont définir une table de propriété (un *dictionnaire*, comme dans un langage de programmation.
-
-On peut, à la base, changer par exemple la taille du texte pour ce paragraphe avec la propriété `:font_size`.
-
-~~~text
-(( {font_size:22} ))
-Ce paragraphe aura une taille de 22 pour la police courante.
-
-Ce paragraphe aura la taille par défaut.
-
-(( {size: 22} ))
-Ce paragraphe aura aussi une taille de 22 points.
-~~~
-
-La propriété `font_family` permet de changer de fonte (à nouveau il faut que cette [fonte soit accessible](#fontes)).
-
-~~~text
-(( {font_family: "Arial"} ))
-Ce paragraphe sera en Arial, dans la taille par défaut de la police par défaut.
-
-Ce paragraphe sera dans la police par défaut.
-
-(( {font: "Arial", size: 23} ))
-Ce paragraphe sera en Arial, 23 points. Mais pas le paragraphe suivant.
-
-Paragraphe avec police par défaut.
-~~~
-
-On peut mettre plusieurs propriétés en les séparant par des virgules :
 
 ~~~text
 (( {margin_left: 40, margin_top: 50} ))

@@ -412,6 +412,8 @@ class AnyParagraph
               when :top     then :margin_top
               when :bottom  then :margin_bottom
               when :color   then :color
+              when :kerning then :kerning
+              when :character_spacing then :character_spacing
               else 
                 case k
                 when :indentation, :indent
@@ -454,10 +456,16 @@ class AnyParagraph
         return value
       elsif value.is_a?(Numeric)
         return value
-      elsif value.is_a?(String) && value.numeric?
-        return value.to_i
-      elsif value.match?(/\%$/)
-        pourcentage_to_pdfpoints(value)
+      elsif value.is_a?(String) 
+        if value.numeric?
+          return value.to_i
+        elsif value.match?(/^[0-9\.]+(mm|cm|pt|po|inch|in)$/.freeze)
+          return value.to_pps
+        elsif value.match?(/\%$/.freeze)
+          pourcentage_to_pdfpoints(value)
+        else
+          return value
+        end
       else
         value
       end

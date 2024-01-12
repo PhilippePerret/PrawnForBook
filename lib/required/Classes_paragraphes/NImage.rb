@@ -338,6 +338,8 @@ class NImage < AnyParagraph
 
       if my.space_after != 0
         move_down(my.space_after)
+        update_current_line
+        move_to_closest_line
       end
 
       if my.floating?

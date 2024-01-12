@@ -102,7 +102,7 @@ module Prawn4book
     TOUT_TEXTE && 'titres/titres',
 
     #--- Comportement de Prawn-for-book ---#
-    TOUT_COMPORTEMENT && 'comportement/grand_titre',
+    TOUT_COMPORTEMENT && 'comportement/titre_section',
     TOUT_COMPORTEMENT && 'comportement/align_on_reference_lines',
     TOUT_COMPORTEMENT && 'comportement/corrections_typographiques',
     TOUT_COMPORTEMENT && 'comportement/book_in_collection',

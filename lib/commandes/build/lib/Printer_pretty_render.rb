@@ -88,8 +88,9 @@ class << self
   # @param options [Hash]
   # 
   #   Table des options telles qu'envoyée à pdf.box_text.
-  #   En plus des options régulières, propres à Prawn on peut trouver
-  #   aussi :
+  #   En plus des options régulières, propres à Prawn on peut 
+  #   trouver :
+  # 
   #   :puce     qui définit une puce (typiquement utilisé pour les
   #             paragraphe qui sont des items de liste). C'est soit
   #             un caractère seul, soit une table définissant :
@@ -538,17 +539,16 @@ class << self
     # il faut autorité
     right = options.delete(:right) || options.delete(:margin_right) || 0
     # - Largeur résultante -
-    width = 
-      if 
-        options[:width]
-      elsif right
-      elsif left
-        pdf.bounds.width - left
-      else
-        pdf.bounds.width
-      end
-
-    width = options[:width] || (pdf.bounds.width - (left + right))
+    if options[:width]
+      # - définie explicitement, on n’y touche pas -
+      width = options[:width]
+    else
+      # - non définie explicitement, elle va dépendre des marges
+      #   droite et gauche ajoutées -
+      width = pdf.bounds.width
+      width -= left   if left
+      width -= right  if right
+    end
 
     # Ce qu'il va rester dans les options
     # 
