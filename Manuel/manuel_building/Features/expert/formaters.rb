@@ -4,7 +4,7 @@ Prawn4book::Manual::Feature.new do
 
 
   description <<~EOT
-    En mode expert, on a un accès complet à toutes les possibilités qu’offrent _PFB_, c’est-à-dire, n’ayant pas peur de le dire, *un monde infini, sans limite*.
+    En mode expert, on a un accès complet à toutes les possibilités qu’offrent _PFB_, c’est-à-dire, n’ayons pas peur de le dire, *un monde infini, sans aucune limite*.
     Pour se faciliter la vie, certaines méthodes propres permettent une implémentation plus rapide. C’est le cas de la méthode `Printer#pretty_render` qui, comme son nom l’indique, permet d’obtenir un bon rendu dans le livre sans effort (et, notamment, un traitement du texte sur les lignes de référence — cf. [[page__page__|comportement/align_on_reference_lines]])
     Voici un code exemple :
     ~~~ruby

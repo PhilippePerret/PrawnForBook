@@ -116,7 +116,7 @@
 :format_precis_double_colonnes:
   :page: 66
   :paragraph:
-:expert_grand_titre:
+:expert__titre_section_:
   :page: 70
   :paragraph:
 :expert_mode_expert:
@@ -134,18 +134,21 @@
 :expert_evaluation_code_ruby:
   :page: 73
   :paragraph:
+:expert_helpers_methods:
+  :page: 76
+  :paragraph:
 :expert_parse_du_paragraphe:
-  :page: 76
-  :paragraph:
-:expert_bibliographies:
-  :page: 76
-  :paragraph:
-:expert_multi_colonnes:
   :page: 77
   :paragraph:
-:expert_formaters:
+:expert_bibliographies:
+  :page: 77
+  :paragraph:
+:expert_multi_colonnes:
   :page: 78
   :paragraph:
-:expert_modifier_line_height:
+:expert_formaters:
   :page: 79
+  :paragraph:
+:expert_modifier_line_height:
+  :page: 80
   :paragraph:

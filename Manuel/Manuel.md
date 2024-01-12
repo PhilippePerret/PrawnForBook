@@ -1,45 +1,6 @@
 
 
-Les propriétés qu’on peut définir sont les suivantes :
 
-| **margin_top**                                               | Distance avec l’élément au-dessus                            | Entier en [points-pdf][] ou valeur. P.e. `margin-top: 2.mm`  |
-| **margin_right**                                             | Distance avec la marge droite                                | Idem                                                         |
-| **margin_bottom**                                            | Distance avec l’élément inférieur                            | Idem                                                         |
-| **margin_left**                                              | Distance de la marge gauche                                  | Idem                                                         |
-| **width**                                                    | Largeur de l’image (si c’est une image) ou largeur du texte. | Pourcentage ou valeur avec unité. P.e. `width: "100%"` ou `width: 3.cm` (notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn. |
-| **height**                                                   | Pour une image, la hauteur qu’elle doit faire.               |                                                              |
-
-<a name="style-extrait-with-helper"></a>
-
-##### Stylisation d’un extrait du paragraphe par helper [Expert]
-
-[Expert] On peut créer une méthode ruby pour mettre en forme (ou tout autre chose) en la définissant en helper. Par exemple, si je veux mettre dans une forme spéciale des horloges, je peux utiliser :
-
-~~~markdown
-Je suis arrivé à #{time('0:12:25')} et je repartirai à #{time('0,30,0')}.
-~~~
-
-Pour ce faire, on implémente dans le fichier `helpers.rb` de la collection ou du livre :
-
-~~~ruby
-# in ./helpers.rb
-module Prawn4book
-  class PdfBook::NTextParagraph # ou AnyParagraph
-    def time(str)
-      # ... traitement de +str+...
-      return str
-    end
-  end
-end
-~~~
-
-> Attention aux collisions de nom, le nom de la méthode utilisée ne doit pas exister dans le programme.
->
-> TIP : pour s’en assurer, il suffit d’appeler la méthode dans le texte avant de l’implémenter. Si une erreur est produite, informant que la méthode n’existe pas, alors c’est bon.
-
----
-
-<a name="style-parag-balise"></a>
 
 ##### Stylisation du paragraphe par balise initiale
 

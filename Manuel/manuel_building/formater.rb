@@ -16,3 +16,24 @@ module ParserFormaterClass
   end
 
 end
+
+module Prawn4book
+class PdfBook::AnyParagraph
+  # @param time [String]
+  #     Le temps, au format "H:MM:SS" où "H" sont les heures,
+  #     MM sont les minutes et SS les secondes.
+  #
+  # @return l’horloge formatée
+  #
+  def horloge time
+    h, m, s = time.split(':').map { |n| n.to_i.to_s }
+    [h + __s(h), m + __s(m), s + __s(s)].join(' ')
+    # "#{h} heure#{__s(h)} #{m} minute#{__s(m)} et #{s} seconde#{__s(s)}"
+  end
+
+  def __s(val)
+    val.to_i > 1 ? "s" : ""
+  end
+end
+end
+

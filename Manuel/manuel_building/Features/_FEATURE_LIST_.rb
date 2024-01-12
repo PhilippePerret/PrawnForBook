@@ -204,12 +204,13 @@ module Prawn4book
     CHANGE_DEF_BEHAVIOR && 'undef_behavior/export_as_document_pdf',
 
     #---Mode_Expert---#
-    TOUT_EXPERT && 'expert/grand_titre',
+    TOUT_EXPERT && 'expert/_titre_section_',
     TOUT_EXPERT && 'expert/mode_expert',
     TOUT_EXPERT && 'expert/contexte_erreurs',
     TOUT_EXPERT && 'expert/reference_a_paragraphe',
     TOUT_EXPERT && 'expert/injection_code',
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
+    TOUT_EXPERT && 'expert/helpers_methods',
     TOUT_EXPERT && 'expert/parse_du_paragraphe',
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
