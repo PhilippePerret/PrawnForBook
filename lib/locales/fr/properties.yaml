@@ -1,0 +1,8 @@
+# Ce fichier contient la correspondance entre les noms des
+# propriété en anglais et leur équivalent dans la langue de l’app
+# Version : FR
+---
+font: fonte (police)
+margin_left:  marge gauche
+margin_right: marge droite
+size: taille (de police)

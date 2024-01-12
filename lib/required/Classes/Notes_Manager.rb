@@ -27,10 +27,12 @@ class PdfBook
       @unnumbering_notes = {}
     end
 
+    # Pour obtenir le prochain numéro pour un APPEL DE NOTE
     def next_unnumbering_note_mark_index
       @last_unnumbering_note_mark_index += 1
     end
 
+    # Pour obtenir le prochain numéro pour une DÉFINITION DE NOTE
     def next_unnumbering_note_def_index
       @last_unnumbering_note_def_index += 1
     end
@@ -51,6 +53,10 @@ class PdfBook
     def add(index_mark_note)
       index_mark_note = 
         if index_mark_note == :auto
+          # Une vérification
+          if @last_unnumbering_note_mark_index != @last_unnumbering_note_def_index
+            raise "Problème avec numéro de note : mark ##{@last_unnumbering_note_mark_index} / def ##{@last_unnumbering_note_def_index}".rouge
+          end
           next_unnumbering_note_mark_index
         else
           index_mark_note.to_i
