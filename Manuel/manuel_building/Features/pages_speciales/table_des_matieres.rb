@@ -52,6 +52,7 @@ Prawn4book::Manual::Feature.new do
     * **`font`**. Sa fonte/style/taille/couleur,
     * **`size`** ou seulement sa taille, en gardant la police par défaut de la table des matières,
     * **`indent`**. Indentation du titre, donc son décalage à droite par rapport à la marge gauche.
+    * **`number_font`** | ("fonte du nombre" en anglais) Si le nombre de tel ou tel niveau doit vraiment être très différent. En général, `number_size` suffit.
     * **`number_size`**. La taille du numéro (mais pour un meilleur aspect, il vaut mieux garder la taille générale).
     * **`caps`**. La modification (casse) du titre. Les valeurs possibles sont `all-caps` (tout en majuscule), `all-min` (tout en minustule), `title` (titre normal, en fonction de la langue du livre) ou `none` pour le laisser tel quel.
     * **`number_font`**. La police fonte/style/taille/couleur à utiliser pour les numéros de ce niveau de titre (mais il vaut mieux une grande cohérence avec l’ensemble et éviter de la définir).

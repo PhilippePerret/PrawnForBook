@@ -96,7 +96,7 @@ class TableOfContent < SpecialTable
             number_width = width_of(titre.numero.to_s, **number_options)
 
             # Largeur (longueur) pour la ligne
-            line_width = bounds.width - (indent + title_width + number_width + 10)
+            line_width = bounds.width - (indent + title_width + number_width) - 10
 
             ####################################
             ### Impression du NUMÉRO DE PAGE ###
@@ -354,7 +354,7 @@ class TableOfContent < SpecialTable
 
       # - TITRE -
       # Fonte pour le titre de ce niveau de titre
-      title_fonte = Prawn4book.fnss2Fonte(title_rdata[:font]) || font
+      title_fonte = Fonte.get_in(title_rdata).or_default
       # Les options de titre pour ce niveau de titre
       title_opts = {
         at: [indent, nil],
@@ -369,13 +369,13 @@ class TableOfContent < SpecialTable
 
       # - NUMÉRO -
       # Fonte pour le numéro de ce niveau de titre
-      number_fonte = Prawn4book.fnss2Fonte(title_rdata[:number_font]) || number_font
+      number_fonte = Fonte.get_in(title_rdata[:number_font]).or(title_fonte) 
       # Les options de numéro pour ce niveau de titre
       number_opts = {
         at:         [nil,nil], # fonction de title-width
         font_name:  number_fonte.name,
         style:      number_fonte.style,
-        size:       number_fonte.size,
+        size:       title_rdata[:numero_size]||number_fonte.size,
         color:      number_fonte.color,
         align:      :right,
         inline_format: true # utile ?
