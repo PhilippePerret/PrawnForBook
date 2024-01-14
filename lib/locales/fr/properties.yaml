@@ -2,7 +2,19 @@
 # propriété en anglais et leur équivalent dans la langue de l’app
 # Version : FR
 ---
+bot_margin: marge bas
+bottom_margin: marge bas
+center: centre
 font: fonte (police)
+justify: justifier
+left: gauche
+left_margin: marge gauche
+margin_bottom: marge bas
 margin_left:  marge gauche
 margin_right: marge droite
-size: taille (de police)
+margin_top: marge haut
+right: droite
+rigth_margin: marge droite
+size: taille (de police), dimension
+top_margin: margin haut
+width: largeur
