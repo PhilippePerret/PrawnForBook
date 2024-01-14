@@ -721,12 +721,12 @@ safe_str = Prawn4book::PdfBook::NTable.safeize(bad_str)
 
 ##### Insérer une image dans une cellule
 
-Pour insérer une image dans une cellule, utiliser **`IMAGE[path|style]`** où `path` est le chemin absolu ou relatif de l’image et `style` est optionnellement le style à appliquer à l’’image. Par exemple :
+Pour insérer une image dans une cellule, utiliser **`IMAGE[path](style)`** où `path` est le chemin absolu ou relatif de l’image et `style` est optionnellement le style à appliquer à l’’image. Par exemple :
 
 ~~~
 Ci-dessous un table qui contient une image.
 
-| La belle image | IMAGE[images/mon_image.jpg|scale:0.5] |
+| La belle image | IMAGE[images/mon_image.jpg](scale:0.5) |
 |/|
 ~~~
 
@@ -736,13 +736,31 @@ Les attributs des styles peuvent être :
 :scale 					Échelle de transformation
 :fit 						[<largeur>, <hauteur>] à remplir
 :image_height 	Hauteur de l’image
+:height 				idem
 :image_width 		Largeur de l’image
+:width 					idem
 :position 			:center, :left, :right
 :vposition 			:center, :top, :bottom
 
 ~~~
 
 > On peut aussi utiliser toutes les [définitions attributs des cellules](#cell-attributes).
+
+
+
+##### Suppression des bordures
+
+Si une table sert à afficher des images, on a souvent besoin de supprimer les bordures de la table. On peut le faire très simplement en mettant `:borders` à `nil` :
+
+~~~
+Ci-dessous une table sans bordures.
+
+(( {borders: nil} ))
+| Ma | table | sans | bordures |
+|/|
+~~~
+
+
 
 ##### Fusion de cellules (spans)
 

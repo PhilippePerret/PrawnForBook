@@ -62,123 +62,126 @@
 :pages_speciales_table_des_matieres:
   :page: 38
   :paragraph:
-:pages_speciales_table_illustrations:
+:pages_speciales_table_des_matieres_2:
   :page: 41
   :paragraph:
+:pages_speciales_table_illustrations:
+  :page: 42
+  :paragraph:
 :pages_speciales_abreviations:
-  :page: 45
+  :page: 47
   :paragraph:
 :pages_speciales_glossaire:
-  :page: 49
+  :page: 51
   :paragraph:
 :pages_speciales_remerciements:
-  :page: 52
+  :page: 54
   :paragraph:
 :pages_speciales_credits_page:
-  :page: 52
+  :page: 54
   :paragraph:
 :pages_speciales_index_page:
-  :page: 56
+  :page: 58
   :paragraph:
 :aide__titre_section_:
-  :page: 59
-  :paragraph:
-:aide_manuel_et_autres_aides:
-  :page: 59
-  :paragraph:
-:aide_correspondance_lang_anglais:
-  :page: 60
-  :paragraph:
-:aide_snippets:
-  :page: 60
-  :paragraph:
-:aide_erreurs_et_notices:
   :page: 61
   :paragraph:
-:aide_afficher_grille_reference_et_marges:
+:aide_manuel_et_autres_aides:
+  :page: 61
+  :paragraph:
+:aide_correspondance_lang_anglais:
   :page: 62
   :paragraph:
-:aide_exporter_texte:
+:aide_snippets:
   :page: 63
   :paragraph:
-:pagination__titre_section_:
+:aide_erreurs_et_notices:
   :page: 64
+  :paragraph:
+:aide_afficher_grille_reference_et_marges:
+  :page: 65
+  :paragraph:
+:aide_exporter_texte:
+  :page: 65
+  :paragraph:
+:pagination__titre_section_:
+  :page: 68
   :paragraph:
 :pagination_pagination:
-  :page: 64
+  :page: 68
   :paragraph:
 :pagination_types_numerotation:
-  :page: 64
+  :page: 68
   :paragraph:
 :pagination_numerotation_paragraphes:
-  :page: 66
+  :page: 70
   :paragraph:
 :pagination_aspect_numero:
-  :page: 71
+  :page: 75
   :paragraph:
 :pagination_arret_pagination:
-  :page: 72
-  :paragraph:
-:pagination_no_pagination:
-  :page: 74
-  :paragraph:
-:pagination_numeroter_pages_vierges:
   :page: 76
   :paragraph:
+:pagination_no_pagination:
+  :page: 78
+  :paragraph:
+:pagination_numeroter_pages_vierges:
+  :page: 80
+  :paragraph:
 :texte_detail_grand_titre:
-  :page: 77
+  :page: 81
   :paragraph:
 :texte_detail_inline_styling:
-  :page: 77
+  :page: 81
   :paragraph:
 :texte_detail_indentation:
-  :page: 79
+  :page: 83
   :paragraph:
 :texte_detail_gestion_tirets_conditionnels:
-  :page: 82
+  :page: 86
   :paragraph:
 :texte_detail_placement_sur_ligne_quelconque:
-  :page: 84
-  :paragraph:
-:puces_puces:
-  :page: 84
-  :paragraph:
-:puces_losange:
-  :page: 85
-  :paragraph:
-:puces_black_losange:
-  :page: 87
-  :paragraph:
-:puces_square:
   :page: 88
   :paragraph:
-:puces_black_square:
+:puces_puces:
+  :page: 88
+  :paragraph:
+:puces_losange:
   :page: 89
   :paragraph:
-:puces_bullet:
-  :page: 90
-  :paragraph:
-:puces_black_bullet:
+:puces_black_losange:
   :page: 91
   :paragraph:
-:puces_finger:
+:puces_square:
   :page: 92
   :paragraph:
-:puces_black_finger:
+:puces_black_square:
   :page: 93
   :paragraph:
-:puces_big_hyphen:
+:puces_bullet:
   :page: 94
   :paragraph:
-:puces_custom_image:
+:puces_black_bullet:
   :page: 95
   :paragraph:
-:format_precis_grand_titre:
+:puces_finger:
+  :page: 96
+  :paragraph:
+:puces_black_finger:
+  :page: 97
+  :paragraph:
+:puces_big_hyphen:
   :page: 98
+  :paragraph:
+:puces_custom_image:
+  :page: 99
+  :paragraph:
+:format_precis_grand_titre:
+  :page: 102
   :paragraph:
 :format_precis_definition_marges:
-  :page: 98
+  :page: 102
   :paragraph:
 :format_precis_double_colonnes:
-  :page: 100
+  :page: 104
   :paragraph:

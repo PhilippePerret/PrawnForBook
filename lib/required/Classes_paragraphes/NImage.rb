@@ -452,7 +452,7 @@ class NImage < AnyParagraph
       # au-dessus, mais qu’aucun texte n’est à écrire à côté de 
       # l’image. On signale une erreur.
       err_msg = PFBError[256] % {img: imgname, page: pdf.page_number}
-      add_fatal_erreur(err_msg)
+      add_fatal_error(err_msg)
       pdf.move_cursor_to(float_data[:textbox3_top])
       pdf.move_to_next_line
       return true

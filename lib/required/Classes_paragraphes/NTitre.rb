@@ -89,6 +89,7 @@ class NTitre < AnyParagraph
 
       tstr = ftitre.inspect # débuggage
 
+
       # Il faut aussi passer à la page suivante quand il ne reste pas
       # assez de place pour mettre les lignes après (nous sommes trop
       # près du bas)
@@ -107,7 +108,6 @@ class NTitre < AnyParagraph
       #   lines before (calculées) : #{lines_before_calc}
       #   line_height: #{line_height}
       #   EOT
-
       start_new_page if limite_basse < line_height || my.on_new_page?
 
       # - Page seule sur la double page -

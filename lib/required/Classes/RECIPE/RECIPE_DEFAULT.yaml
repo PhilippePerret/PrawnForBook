@@ -118,7 +118,7 @@ book_format:
     level1:
       size:           30
       lines_before:   0
-      lines_after:    10
+      lines_after:    4
       leading:        0
       next_page:      true
       belle_page:     true

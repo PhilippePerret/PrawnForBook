@@ -140,29 +140,3 @@ Prawn4book::Manual::Feature.new do
     YAML
 
 end #/ Prawn4book::Manual::Feature.new
-
-
-# # Autre livre : pour montrer une table des matières particulière
-# Prawn4book::Manual::Feature.new do
-
-#   sous_titre "Exemple table des matières personnalisée"
-
-#   real_texte <<~EOT
-#     # Un grand titre
-#     (( new_page ))
-#     (( toc ))
-#   EOT
-
-#   real_recipe <<~YAML
-#   ---
-#   table_of_content:
-#     title: "Sommaire"
-#   YAML
-
-#   texte <<~EOT
-#   (( {align: :right} ))
-#   ![page-1](width:"40%")
-#   (( line ))
-#   ![page-2](width:"40%")
-#   EOT
-# end

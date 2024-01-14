@@ -707,6 +707,7 @@ class Feature
       pages_to_export << page_numero.to_i
       "![RealBooksCollection/#{real_book.name}/page-#{page_numero}.jpg]"
     end
+    pages_to_export = pages_to_export.uniq
     unless pages_to_export.empty?
       # - Extraction des pages voulues -
       real_book.extract_pages(pages_to_export)

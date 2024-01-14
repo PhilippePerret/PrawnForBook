@@ -5,6 +5,18 @@ Prawn4book::Manual::Feature.new do
   description <<~EOT
     Cette section liste les erreurs fréquentes ou possibles et donne leur solution.
     (( line ))
+
+    erreur::Une table ne s’affiche pas.
+
+    Avez-vous bien pensé à terminer la table par une dernière ligne contenant (et contenant seulement) "`\\[\\/]`" ?
+
+    (( line ))
+    
+    erreur::Une ligne de table ne s’affiche pas en table.
+
+    Vérifier qu’il n’y ait pas une espace malheureuse après le dernier trait droit ("|") définissant la ligne.
+
+    (( line ))
     
     erreur::La table des matières déborde sur les pages suivantes
 

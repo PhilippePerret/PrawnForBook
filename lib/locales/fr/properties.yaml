@@ -2,6 +2,9 @@
 # propriété en anglais et leur équivalent dans la langue de l’app
 # Version : FR
 ---
+after: après
+alone: seul (titre sur page)
+before: avant
 bot_margin: marge bas
 bottom_margin: marge bas
 center: centre
@@ -9,14 +12,19 @@ font: fonte (police)
 justify: justifier
 left: gauche
 left_margin: marge gauche
+level: niveau (de titre)
+lines_after: lignes après
+lines_before: lignes avant
 margin_bottom: marge bas
 margin_left:  marge gauche
 margin_right: marge droite
 margin_top: marge haut
+next_page: page suivante
 right: droite
 rigth_margin: marge droite
 size: taille (de police), dimension
 top_margin: margin haut
 table_of_content: table des matières
+title: titre
 toc: tdm (table des matières)
 width: largeur

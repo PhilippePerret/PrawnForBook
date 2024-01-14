@@ -25,6 +25,7 @@ class NTable < AnyParagraph
     end
   end
   def self._desafe(str)
+    return str if not(str.is_a?(String))
     str.gsub(/TRAITDROIT/,'|').gsub(/RETCHARIOT/,"\n").gsub(/OUVERTURECOL/,'(').gsub(/FERMETURECOL/,')')
   end
 
@@ -181,6 +182,7 @@ class NTable < AnyParagraph
         raw_lines.shift()
       end
       raw_lines.map do |rawline|
+
         rawline.split(/(?!\\)\|/).map do |cell|
           # 
           # Évaluation, si la cellule contient une table
@@ -192,11 +194,20 @@ class NTable < AnyParagraph
             # 
             # Traitement d'une image
             # 
-            found = cstrip.match(REG_IMAGE_IN_CELL)
-            _  = found[1]
-            image_style = found[2]
-            image_style = "{#{image_style}}" unless image_style.start_with?('{')
-            image_style = rationalise_pourcentages_in(eval(image_style))
+            image_path, image_style = nil, nil
+            cstrip.match(REG_IMAGE_IN_CELL) do
+              image_path = $~[:path]
+              image_style = $~[:properties]
+              image_style = "{#{image_style}}" unless image_style.start_with?('{')
+              image_style = rationalise_pourcentages_in(eval(image_style))
+            end
+
+            [:height, :width].each do |img_prop|
+              next unless image_style.key?(img_prop)
+              prop = "image_#{img_prop}".to_sym
+              image_style.merge!(prop => image_style.delete(img_prop))
+            end
+            image_style.merge!({image: image_path})
           else
             # 
             # Traitement d'un "simple" texte
@@ -251,6 +262,9 @@ class NTable < AnyParagraph
       st[:cell_style].merge!(inline_format: true)
       [:borders, :border_width].each do |cell_prop|
         if st.key?(cell_prop)
+          if cell_prop == :borders && st[:borders] === nil
+            st[:borders] = []
+          end
           st[:cell_style].merge!(cell_prop => st.delete(cell_prop))
         end
       end
@@ -420,7 +434,7 @@ class NTable < AnyParagraph
     @raw_lines << raw_string
   end
 
-REG_IMAGE_IN_CELL = /^(IMAGE|\!)\[(.+?)(?:\|(.+?))\]$/
+REG_IMAGE_IN_CELL = /^(IMAGE|\!)\[(?<path>.+?)\](?:\((?<properties>.+?)\))?$/
 
 end #/class NTable
 end #/class PdfBook
