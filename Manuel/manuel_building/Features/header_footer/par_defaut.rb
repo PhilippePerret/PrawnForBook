@@ -31,7 +31,7 @@ Prawn4book::Manual::Feature.new do
 
     ##### Définition des entêtes et pieds de page
 
-    Les *entêtes* et *pieds de page*, comme pour le reste, se définissent dans [[-recette/grand_titre]] du livre ou de la collection, dans une section qui s’appelle, on ne s’en étonnera pas : `headers_footers`.
+    Les *entêtes* et *pieds de page*, comme pour le reste, se définissent dans [[-recette/_titre_section_]] du livre ou de la collection, dans une section qui s’appelle, on ne s’en étonnera pas : `headers_footers`.
     (( line ))
     On peut définir autant de *dispositions* que l’on veut, même s’il est conseillé, toujours, de rester le plus sobre possible. On peut se contenter, pour un résultat optimum, d’une *disposition* pour le corps du livre, son contenu principal, et une *disposition* pour les annexes si elles existent.
     La propriété principale de la disposition est la valeur de son `header` (son "entête") et son `footer` ("pied de page"). Par défaut, les valeurs sont :

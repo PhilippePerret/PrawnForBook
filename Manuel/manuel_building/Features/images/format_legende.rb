@@ -6,7 +6,7 @@ Prawn4book::Manual::Feature.new do
 
   description <<~EOT
     Comme nous l’avons mentionné, par défaut, la légende d’une image se formate avec la police par défaut, la taille diminuée de une unité, le style *italique* et la couleur noire.
-    Mais cet aspect naturel, qui passera pour tous les livres, peut être modifié pour tout le livre, dans les [[recette/grand_titre]], ou de façon ponctuelle^^ grâce aux données avant le paragraphe définissant l’image.
+    Mais cet aspect naturel, qui passera pour tous les livres, peut être modifié pour tout le livre, dans les [[recette/_titre_section_]], ou de façon ponctuelle^^ grâce aux données avant le paragraphe définissant l’image.
     ^^ Ce genre de modification doit être absolument évitée pour garder une cohérence dans l’aspect général du livre.
     EOT
 

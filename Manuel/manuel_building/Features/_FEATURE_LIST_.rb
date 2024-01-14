@@ -16,8 +16,8 @@ module Prawn4book
   TOUT_DEF_MINI = TOUT || nil
   # TOUT_DEF_MINI = TOUT || true
 
-  TOUT_PAGES_SPECS = TOUT || nil
-  # TOUT_PAGES_SPECS = TOUT || true
+  # TOUT_PAGES_SPECS = TOUT || nil
+  TOUT_PAGES_SPECS = TOUT || true
 
   TOUT_COMPORTEMENT = TOUT || nil
   # TOUT_COMPORTEMENT = TOUT || true
@@ -40,8 +40,8 @@ module Prawn4book
   TOUT_TABLE = TOUT || nil
   # TOUT_TABLE = TOUT || true
 
-  # TOUT_EXPERT = TOUT || nil
-  TOUT_EXPERT = TOUT || true
+  TOUT_EXPERT = TOUT || nil
+  # TOUT_EXPERT = TOUT || true
 
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
@@ -84,7 +84,7 @@ module Prawn4book
     TOUT_DEF_MINI && 'minimales/definitions_minimales', # Long texte
 
     #---Recette---#
-    'recette/grand_titre',
+    TOUT_RECETTE && 'recette/_titre_section_',
     TOUT_RECETTE && 'recette/recette_livre',
     TOUT_RECETTE && 'recette/recette_collection',
     TOUT_RECETTE && 'recette/book_data',
@@ -109,7 +109,7 @@ module Prawn4book
     TOUT_COMPORTEMENT && 'comportement/veuves_orphelines_et_lignes_de_voleur',
 
     #---PagesSpeciales---#
-    TOUT_PAGES_SPECS && 'pages_speciales/titre_section',
+    TOUT_PAGES_SPECS && 'pages_speciales/_titre_section_',
     TOUT_PAGES_SPECS && 'pages_speciales/introduction',
     TOUT_PAGES_SPECS && 'pages_speciales/pages_speciales',
     TOUT_PAGES_SPECS && 'pages_speciales/faux_titre',
@@ -133,14 +133,14 @@ module Prawn4book
     #---Aides conception---#
     TOUT_AIDE && 'aide/_titre_section_',
     TOUT_AIDE && 'aide/manuel_et_autres_aides',
-    TOUT_AIDE && LANG != 'en' && 'aide/correspondance_lang_anglais',
+    TOUT_AIDE && LANG != 'en' && LANG != 'us' && 'aide/correspondance_lang_anglais',
     TOUT_AIDE && 'aide/snippets',
     TOUT_AIDE && 'aide/assistants',
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
     TOUT_AIDE && 'aide/exporter_texte',
 
-    TOUT_PAGINATION && 'pagination/titre_section',
+    TOUT_PAGINATION && 'pagination/_titre_section_',
     TOUT_PAGINATION && 'pagination/pagination',
     TOUT_PAGINATION && 'pagination/types_numerotation',
     TOUT_PAGINATION && 'pagination/numerotation_paragraphes',

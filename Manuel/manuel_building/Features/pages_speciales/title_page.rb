@@ -5,7 +5,7 @@ Prawn4book::Manual::Feature.new do
 
   description <<~EOT
     La *page de titre* présente un grand nombre d’informations au lecteur et notamment le titre, l’auteur et l’éditeur du livre.
-    Ses données sont définies dans la section `inserted_pages` de la recette du livre ou de la collection (cf. [[recette/grand_titre]]) grâce à la propriété `page_de_titre` (ou `title_page`).
+    Ses données sont définies dans la section `inserted_pages` de la recette du livre ou de la collection (cf. [[recette/_titre_section_]]) grâce à la propriété `page_de_titre` (ou `title_page`).
     Dans sa version la plus simple, utilisant les valeurs par défaut, on aura juste à indiquer :
       `inserted_pages:`
       `  page_de_titre: true`

@@ -26,7 +26,7 @@ Prawn4book::Manual::Feature.new do
     * **`title`** ("titre" en anglais) | Le titre de la bibliographie, qui sera imprimé avant d’afficher la bibliographie.
     * **`path`** ("chemin d’accès" en anglais) | qui indique le chemin jusqu’à la *banque des données bibliographiques* qui contient, comme son nom l’indique, toutes les données bibliographiques. C’est au mieux un dossier (contenant les *cartes* ou les *fiches* de données, une par *item*) ou un fichier (contenant toutes les données).
     * **`main_key`** ("clé principale" en anglais) | Si ce n’est pas la propriété `title` de l’item (à ne pas confondre avec le `title` dont nous venons de parler) qui doit être utilisée pour remplacer la marque de référence, c’est la valeur de cette clé principale qu’il faudra prendre (et qui doit donc impérativement être définie pour chaque item bibliographique)
-    Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable. Dans la recette (cf. [[recette/grand_titre]]), elles sont définies de cette manière :
+    Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable. Dans la recette (cf. [[recette/_titre_section_]]), elles sont définies de cette manière :
     (( line ))
     {-}`bibliographies:`
     {-}`  \\<tag>:`

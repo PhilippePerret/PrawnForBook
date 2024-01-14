@@ -27,7 +27,7 @@ Prawn4book::Manual::Feature.new do
 
     #### Aspect de la table des matières
 
-    Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/grand_titre]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
+    Comme les autres réglages, on peut définir précisément la table des matières dans [[-recette/_titre_section_]], dans la partie `table_of_content` (qui signifie "table des matières" en anglais).
     On trouve ces propriétés :
     * **`pages_count`** | Définit le nombre de pages réservées par la table des matières. Ce nombre doit impérativement être pair pour conserver l’agencement des *belles pages* (pages impaires) et des *fausses pages* (pages paires) dans le livre. Par défaut, on compte 2 pages pour la table des matières. Cette valeur vaut 2 par défaut. Noter que les pages supplémentaires (il y en aura toujours deux) peuvent aussi être ajoutées explicitement dans le livre par des `\\(( new_page ))`.
     * **`level_max`** | Niveau maximum. Le niveau de titre qui sera affiché dans la table des matières. Par défaut, il est à 3, ce qui signifie que les titres jusqu’à 3 dièses seront affichés dans la table des matières (sauf exclusion).
@@ -139,4 +139,30 @@ Prawn4book::Manual::Feature.new do
       line_height: 24
     YAML
 
-end
+end #/ Prawn4book::Manual::Feature.new
+
+
+# # Autre livre : pour montrer une table des matières particulière
+# Prawn4book::Manual::Feature.new do
+
+#   sous_titre "Exemple table des matières personnalisée"
+
+#   real_texte <<~EOT
+#     # Un grand titre
+#     (( new_page ))
+#     (( toc ))
+#   EOT
+
+#   real_recipe <<~YAML
+#   ---
+#   table_of_content:
+#     title: "Sommaire"
+#   YAML
+
+#   texte <<~EOT
+#   (( {align: :right} ))
+#   ![page-1](width:"40%")
+#   (( line ))
+#   ![page-2](width:"40%")
+#   EOT
+# end

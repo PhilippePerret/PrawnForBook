@@ -1,5 +1,5 @@
 ---
-:recette_grand_titre:
+:recette__titre_section_:
   :page: 19
   :paragraph:
 :recette_recette_livre:
@@ -35,141 +35,150 @@
 :titres_titres:
   :page: 26
   :paragraph:
-:aide__titre_section_:
+:pages_speciales__titre_section_:
   :page: 30
   :paragraph:
-:aide_manuel_et_autres_aides:
+:pages_speciales_introduction:
   :page: 30
   :paragraph:
-:aide_correspondance_lang_anglais:
+:pages_speciales_pages_speciales:
+  :page: 30
+  :paragraph:
+:pages_speciales_faux_titre:
+  :page: 30
+  :paragraph:
+:pages_speciales_page_de_garde:
   :page: 31
   :paragraph:
-:aide_snippets:
-  :page: 31
-  :paragraph:
-:aide_erreurs_et_notices:
+:pages_speciales_title_page:
   :page: 32
   :paragraph:
-:aide_afficher_grille_reference_et_marges:
-  :page: 33
-  :paragraph:
-:aide_exporter_texte:
-  :page: 34
-  :paragraph:
-:pagination_titre_section:
+:pages_speciales_mention_legale:
   :page: 35
   :paragraph:
-:pagination_pagination:
+:pages_speciales_dedicace:
   :page: 35
   :paragraph:
-:pagination_types_numerotation:
-  :page: 35
+:pages_speciales_table_des_matieres:
+  :page: 38
   :paragraph:
-:pagination_numerotation_paragraphes:
-  :page: 37
+:pages_speciales_table_illustrations:
+  :page: 41
   :paragraph:
-:pagination_aspect_numero:
-  :page: 43
+:pages_speciales_abreviations:
+  :page: 45
   :paragraph:
-:pagination_arret_pagination:
-  :page: 44
-  :paragraph:
-:pagination_no_pagination:
-  :page: 46
-  :paragraph:
-:pagination_numeroter_pages_vierges:
-  :page: 48
-  :paragraph:
-:texte_detail_grand_titre:
+:pages_speciales_glossaire:
   :page: 49
   :paragraph:
-:texte_detail_inline_styling:
-  :page: 49
+:pages_speciales_remerciements:
+  :page: 52
   :paragraph:
-:texte_detail_indentation:
-  :page: 51
+:pages_speciales_credits_page:
+  :page: 52
   :paragraph:
-:texte_detail_gestion_tirets_conditionnels:
-  :page: 54
-  :paragraph:
-:texte_detail_placement_sur_ligne_quelconque:
+:pages_speciales_index_page:
   :page: 56
   :paragraph:
-:puces_puces:
-  :page: 56
-  :paragraph:
-:puces_losange:
-  :page: 57
-  :paragraph:
-:puces_black_losange:
+:aide__titre_section_:
   :page: 59
   :paragraph:
-:puces_square:
+:aide_manuel_et_autres_aides:
+  :page: 59
+  :paragraph:
+:aide_correspondance_lang_anglais:
   :page: 60
   :paragraph:
-:puces_black_square:
+:aide_snippets:
+  :page: 60
+  :paragraph:
+:aide_erreurs_et_notices:
   :page: 61
   :paragraph:
-:puces_bullet:
+:aide_afficher_grille_reference_et_marges:
   :page: 62
   :paragraph:
-:puces_black_bullet:
+:aide_exporter_texte:
   :page: 63
   :paragraph:
-:puces_finger:
+:pagination__titre_section_:
   :page: 64
   :paragraph:
-:puces_black_finger:
-  :page: 65
+:pagination_pagination:
+  :page: 64
   :paragraph:
-:puces_big_hyphen:
+:pagination_types_numerotation:
+  :page: 64
+  :paragraph:
+:pagination_numerotation_paragraphes:
   :page: 66
   :paragraph:
-:puces_custom_image:
-  :page: 67
+:pagination_aspect_numero:
+  :page: 71
   :paragraph:
-:format_precis_grand_titre:
-  :page: 70
-  :paragraph:
-:format_precis_definition_marges:
-  :page: 70
-  :paragraph:
-:format_precis_double_colonnes:
+:pagination_arret_pagination:
   :page: 72
   :paragraph:
-:expert__titre_section_:
+:pagination_no_pagination:
+  :page: 74
+  :paragraph:
+:pagination_numeroter_pages_vierges:
   :page: 76
   :paragraph:
-:expert_mode_expert:
+:texte_detail_grand_titre:
   :page: 77
   :paragraph:
-:expert_contexte_erreurs:
+:texte_detail_inline_styling:
   :page: 77
   :paragraph:
-:expert_reference_a_paragraphe:
-  :page: 77
-  :paragraph:
-:expert_injection_code:
+:texte_detail_indentation:
   :page: 79
   :paragraph:
-:expert_evaluation_code_ruby:
-  :page: 79
-  :paragraph:
-:expert_helpers_methods:
+:texte_detail_gestion_tirets_conditionnels:
   :page: 82
   :paragraph:
-:expert_parse_du_paragraphe:
-  :page: 83
-  :paragraph:
-:expert_bibliographies:
-  :page: 83
-  :paragraph:
-:expert_multi_colonnes:
+:texte_detail_placement_sur_ligne_quelconque:
   :page: 84
   :paragraph:
-:expert_formaters:
+:puces_puces:
+  :page: 84
+  :paragraph:
+:puces_losange:
   :page: 85
   :paragraph:
-:expert_modifier_line_height:
-  :page: 86
+:puces_black_losange:
+  :page: 87
+  :paragraph:
+:puces_square:
+  :page: 88
+  :paragraph:
+:puces_black_square:
+  :page: 89
+  :paragraph:
+:puces_bullet:
+  :page: 90
+  :paragraph:
+:puces_black_bullet:
+  :page: 91
+  :paragraph:
+:puces_finger:
+  :page: 92
+  :paragraph:
+:puces_black_finger:
+  :page: 93
+  :paragraph:
+:puces_big_hyphen:
+  :page: 94
+  :paragraph:
+:puces_custom_image:
+  :page: 95
+  :paragraph:
+:format_precis_grand_titre:
+  :page: 98
+  :paragraph:
+:format_precis_definition_marges:
+  :page: 98
+  :paragraph:
+:format_precis_double_colonnes:
+  :page: 100
   :paragraph:
