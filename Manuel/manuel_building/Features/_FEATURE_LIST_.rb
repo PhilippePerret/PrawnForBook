@@ -7,23 +7,23 @@ module Prawn4book
   TOUT_GENE = TOUT || nil
   # TOUT_GENE = TOUT || true
 
-  # TOUT_RECETTE = TOUT || nil
-  TOUT_RECETTE = TOUT || true
+  TOUT_RECETTE = TOUT || nil
+  # TOUT_RECETTE = TOUT || true
 
-  # TOUT_TEXTE = TOUT || nil
-  TOUT_TEXTE = TOUT || true
+  TOUT_TEXTE = TOUT || nil
+  # TOUT_TEXTE = TOUT || true
 
   TOUT_DEF_MINI = TOUT || nil
   # TOUT_DEF_MINI = TOUT || true
 
-  # TOUT_PAGES_SPECS = TOUT || nil
-  TOUT_PAGES_SPECS = TOUT || true
+  TOUT_PAGES_SPECS = TOUT || nil
+  # TOUT_PAGES_SPECS = TOUT || true
 
   TOUT_COMPORTEMENT = TOUT || nil
   # TOUT_COMPORTEMENT = TOUT || true
 
-  # TOUT_BOOK_FORMAT = TOUT || nil
-  TOUT_BOOK_FORMAT = TOUT || true
+  TOUT_BOOK_FORMAT = TOUT || nil
+  # TOUT_BOOK_FORMAT = TOUT || true
 
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
@@ -31,8 +31,8 @@ module Prawn4book
   # TOUT_TEXT_DETAIL = TOUT || nil
   TOUT_TEXT_DETAIL = TOUT || true
 
-  # TOUT_PUCES = TOUT || nil
-  TOUT_PUCES = TOUT || true
+  TOUT_PUCES = TOUT || nil
+  # TOUT_PUCES = TOUT || true
 
   TOUT_IMAGE = TOUT || nil
   # TOUT_IMAGE = TOUT || true
@@ -46,11 +46,11 @@ module Prawn4book
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
 
-  # TOUT_AIDE = TOUT || nil
-  TOUT_AIDE = TOUT || true
+  TOUT_AIDE = TOUT || nil
+  # TOUT_AIDE = TOUT || true
 
-  # TOUT_PAGINATION = TOUT || nil
-  TOUT_PAGINATION = TOUT || true
+  TOUT_PAGINATION = TOUT || nil
+  # TOUT_PAGINATION = TOUT || true
 
   TOUT_REFS = TOUT || nil
   # TOUT_REFS = TOUT || true
@@ -197,6 +197,7 @@ module Prawn4book
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
     FORMAT_PRECIS && 'format_precis/double_colonnes',
+    FORMAT_PRECIS && 'format_precis/double_colonnes_erreurs',
 
     #---Changements_comportements_par_default---#
     # 

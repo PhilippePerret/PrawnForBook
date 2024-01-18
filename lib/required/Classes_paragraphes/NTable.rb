@@ -198,7 +198,7 @@ class NTable < AnyParagraph
             cstrip.match(REG_IMAGE_IN_CELL) do
               image_path = $~[:path]
               image_style = $~[:properties]
-              image_style = "{#{image_style}}" unless image_style.start_with?('{')
+              image_style = "{#{image_style}}" unless image_style.to_s.start_with?('{')
               image_style = rationalise_pourcentages_in(eval(image_style))
             end
 

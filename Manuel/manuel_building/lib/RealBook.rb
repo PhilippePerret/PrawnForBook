@@ -47,7 +47,16 @@
 #     ![page-1](width:'100%')
 #     EOT
 # 
+#   Retour du programme de construction
+#   -----------------------------------
+#   Dans ’texte’, on peut écrire le retour du message de construction
+#   du livre (lorsqu’on travaille le fichier) grâce à la marque
+#   “_building_resultat_“ qu’on place à l’endroit voulu.
 # 
+#   Journal de construction
+#   -----------------------
+#   À l’avenir, il faudrait aussi une marque qui permette de charger
+#   directement dans le livre le journal de construction.
 # 
 # ===========================================================
 # 
@@ -124,6 +133,9 @@ class RealBook
   attr_reader :name
   alias :affixe :name
 
+  # Retour de construction
+  attr_reader :building_resultat
+
   def initialize(data)
     @data = data
     @name = data[:name] || raise("Il faut le nom du dossier de l’image")
@@ -148,6 +160,7 @@ class RealBook
     delete_all # pdf et images
     Dir.chdir(folder) do
       res = `#{PRODUCTION_COMMAND} 2>&1`
+      @building_resultat = res
       if res.match('produit avec succès')
         # OK
       else

@@ -313,8 +313,11 @@ ERRORS = {
 
     unable_to_instantiate_with_type: <<~ERR,
       Impossible de formater le paragraphe :
-      %{s} (index: %{i})
-      Erreur rencontrée : %{e}
+      string: %{s} 
+      index: %{i}
+      options: %{opts}
+      Erreur: %{e}
+      Ligne: %{ln}
       ERR
 
     note_undefined: <<~ERR,

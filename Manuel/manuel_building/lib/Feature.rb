@@ -1007,8 +1007,26 @@ class Feature
 
   def print_texte(str)
     return if str == :none
+    str = last_corr_for_texte_real_book(str) if real_book?
     entete = @texte_entete || "Le livre final (document PDF) contiendra :"
     __print_texte(str, entete, 3)
+  end
+
+  # Juste avant d’inscrire le texte pour un real-book, on peut faire
+  # des corrections de dernière minutes
+  # (inauguré pour écrire le message de retour de la construction du
+  #  real book)
+  def last_corr_for_texte_real_book(str)
+    # 
+    # La marque qui permet d’inscrire le retour du livre réel
+    # 
+    if str.match?('_building_resultat_')
+      res = real_book.building_resultat || '(Aucun retour, tout s’est bien passé)'
+      res = res.gsub(/\e/, '').gsub(/\[0m/,'').gsub(/\[0;[0-9][0-9]m/,'').gsub(/(👍|🍺|🥂)/,'')
+      str = str.gsub('_building_resultat_', res)
+      # puts "str = #{str.inspect}".jaune
+    end
+    return str
   end
 
   # Méthode générique pour imprimer tous les textes

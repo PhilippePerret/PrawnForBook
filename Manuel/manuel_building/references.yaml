@@ -1,187 +1,28 @@
 ---
-:recette__titre_section_:
-  :page: 19
-  :paragraph:
-:recette_recette_livre:
-  :page: 19
-  :paragraph:
-:recette_recette_collection:
-  :page: 19
-  :paragraph:
-:recette_fonte_par_defaut:
-  :page: 20
-  :paragraph:
-:recette_definition_fontes:
-  :page: 21
-  :paragraph:
-:recette_publisher:
-  :page: 23
-  :paragraph:
-:texte_grand_titre:
-  :page: 25
-  :paragraph:
-:texte_types_paragraphes:
-  :page: 25
-  :paragraph:
-:texte_format_markdown_du_texte:
-  :page: 25
-  :paragraph:
-:texte_styles_inline_format:
-  :page: 25
-  :paragraph:
-:texte_intro_inline_styling:
-  :page: 26
-  :paragraph:
-:titres_titres:
-  :page: 26
-  :paragraph:
-:pages_speciales__titre_section_:
-  :page: 30
-  :paragraph:
-:pages_speciales_introduction:
-  :page: 30
-  :paragraph:
-:pages_speciales_pages_speciales:
-  :page: 30
-  :paragraph:
-:pages_speciales_faux_titre:
-  :page: 30
-  :paragraph:
-:pages_speciales_page_de_garde:
-  :page: 31
-  :paragraph:
-:pages_speciales_title_page:
-  :page: 32
-  :paragraph:
-:pages_speciales_mention_legale:
-  :page: 35
-  :paragraph:
-:pages_speciales_dedicace:
-  :page: 35
-  :paragraph:
-:pages_speciales_table_des_matieres:
-  :page: 38
-  :paragraph:
-:pages_speciales_table_des_matieres_2:
-  :page: 41
-  :paragraph:
-:pages_speciales_table_illustrations:
-  :page: 42
-  :paragraph:
-:pages_speciales_abreviations:
-  :page: 47
-  :paragraph:
-:pages_speciales_glossaire:
-  :page: 51
-  :paragraph:
-:pages_speciales_remerciements:
-  :page: 54
-  :paragraph:
-:pages_speciales_credits_page:
-  :page: 54
-  :paragraph:
-:pages_speciales_index_page:
-  :page: 58
-  :paragraph:
-:aide__titre_section_:
-  :page: 61
-  :paragraph:
-:aide_manuel_et_autres_aides:
-  :page: 61
-  :paragraph:
-:aide_correspondance_lang_anglais:
-  :page: 62
-  :paragraph:
-:aide_snippets:
-  :page: 63
-  :paragraph:
-:aide_erreurs_et_notices:
-  :page: 64
-  :paragraph:
-:aide_afficher_grille_reference_et_marges:
-  :page: 65
-  :paragraph:
-:aide_exporter_texte:
-  :page: 65
-  :paragraph:
-:pagination__titre_section_:
-  :page: 68
-  :paragraph:
-:pagination_pagination:
-  :page: 68
-  :paragraph:
-:pagination_types_numerotation:
-  :page: 68
-  :paragraph:
-:pagination_numerotation_paragraphes:
-  :page: 70
-  :paragraph:
-:pagination_aspect_numero:
-  :page: 75
-  :paragraph:
-:pagination_arret_pagination:
-  :page: 76
-  :paragraph:
-:pagination_no_pagination:
-  :page: 78
-  :paragraph:
-:pagination_numeroter_pages_vierges:
-  :page: 80
-  :paragraph:
 :texte_detail_grand_titre:
-  :page: 81
+  :page: 19
   :paragraph:
 :texte_detail_inline_styling:
-  :page: 81
+  :page: 19
   :paragraph:
 :texte_detail_indentation:
-  :page: 83
+  :page: 21
   :paragraph:
 :texte_detail_gestion_tirets_conditionnels:
-  :page: 86
+  :page: 24
   :paragraph:
 :texte_detail_placement_sur_ligne_quelconque:
-  :page: 88
-  :paragraph:
-:puces_puces:
-  :page: 88
-  :paragraph:
-:puces_losange:
-  :page: 89
-  :paragraph:
-:puces_black_losange:
-  :page: 91
-  :paragraph:
-:puces_square:
-  :page: 92
-  :paragraph:
-:puces_black_square:
-  :page: 93
-  :paragraph:
-:puces_bullet:
-  :page: 94
-  :paragraph:
-:puces_black_bullet:
-  :page: 95
-  :paragraph:
-:puces_finger:
-  :page: 96
-  :paragraph:
-:puces_black_finger:
-  :page: 97
-  :paragraph:
-:puces_big_hyphen:
-  :page: 98
-  :paragraph:
-:puces_custom_image:
-  :page: 99
+  :page: 26
   :paragraph:
 :format_precis_grand_titre:
-  :page: 102
+  :page: 27
   :paragraph:
 :format_precis_definition_marges:
-  :page: 102
+  :page: 27
   :paragraph:
 :format_precis_double_colonnes:
-  :page: 104
+  :page: 29
+  :paragraph:
+:format_precis_double_colonnes_erreurs:
+  :page: 32
   :paragraph:

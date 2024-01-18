@@ -84,6 +84,12 @@ Prawn4book::Manual::Feature.new do
     ```
     (( line ))
 
+    erreur::La section multi-colonnes en fin de livre ne s’affiche pas.
+
+    Assurez-vous d’avoir bien terminé cette section par la marque `(( colonnes(1) ))` sur une ligne seule.
+    
+    (( line ))
+
 
     EOT
 
