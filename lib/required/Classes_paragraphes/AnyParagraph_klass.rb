@@ -35,7 +35,7 @@ class << self
       when REG_TITRE
         NTitre.new(book:book, titre:$2, level:$1.length, pindex:indice)
       when REG_AMORCE_IMAGE
-        # string = string.strip
+        string = string.strip # généraliser à un moment ?
         unless (d = string.match(REG_OLD_IMAGE))
           d = string.match(REG_NEW_IMAGE)
         end
@@ -57,7 +57,6 @@ class << self
       end
     end
   rescue Exception => e
-    # errline = e.backtrace[0].split(":")[1]
     raise PFBFatalError.new(104, {ln: e.line, s:string, i: indice, e: e.message, opts:options.inspect})
   end #/ instance_type_from_string
 

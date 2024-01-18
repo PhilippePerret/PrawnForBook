@@ -23,6 +23,17 @@ Prawn4book::Manual::Feature.new do
     {-}`\\(( colonnes\\(2, width: PAGE_WIDTH/2) ))^^`
     (( line ))
     ^^ Vous remarquez ci-dessus l’utilisation d’une constante (cf. [[annexe/constantes]]).
+    (( line ))
+    Grâce à `lines_before` et `lines_after`, on peut définir le nombre de lignes vides à laisser respectivement avant et après la section multi-colonnes.
+    Avec :
+    (( line ))
+     `\\(( colonnes\\(2, {lines_before: 2, lines_after:3} ))`
+    (( line ))
+    … on laissera 2 lignes au-dessus et 3 lignes en dessous^^.
+    ^^ Noter qu’il s’agit du **nombre exact de lignes *vides*** qu’il y aura entre le paragraphe et la section multi-colonnes.
+    (( line ))
+    On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.) dans le cas où ces distances vous seraient connues (dans le cas contraire, le nombre de lignes vides est plus facile d’utilisation et plus sûr).
+
 
     #### Précaution pour les colonnes
 

@@ -48,6 +48,8 @@ class ColumnsBox < ParagraphAccumulator
 
     my = self
 
+    pdf.update_current_line
+
     # Dans un premier temps, il faut calculer la hauteur qu’il faudra
     # utiliser dans l’absolue, en fonction de la longueur du texte.
     # 
@@ -59,15 +61,17 @@ class ColumnsBox < ParagraphAccumulator
     end
     ColumnData.height = h
 
+    # Y a-t-il de l’espace avant ?
     if space_before != 0
       pdf.move_down(space_before)
       pdf.update_current_line
     end
-    pdf.move_to_next_line
+
+    # Y a-t-il des lignes de séparation ?
     if lines_before > 0
-      lines_before.times { pdf.move_to_next_line }
+      (lines_before + 1).times { pdf.move_to_next_line }
     elsif lines_before < 0
-      lines_before.abs.times { pdf.move_to_previous_line }
+      (lines_before.abs + 1).times { pdf.move_to_previous_line }
     end
 
     # Maintenant qu’on a la hauteur que prend le texte avec les
@@ -247,12 +251,27 @@ class ColumnsBox < ParagraphAccumulator
         bounding_box([0,bounds.top], width: column_width, height: 1000000) do
           # my.paragraphs.each do |par|
           my.each_paragraph do |par|
+            if par.pfbcode?
+              # Si c’est un pfbcode, c’est peut-être la définition
+              # de l’alignement d’un paragraphe, il faut le traiter
+              # TODO
+
+              next
+            end
             # par.prepare_and_formate_text(pdf)
-            str = par.indented_text
+            puts "par type : #{par.type}".bleu
+            str = par.indented_text + "\n"
             p = []
             text_ary += text_formatter.format(str, *p)
             debug_txt << par.text if debug_txt.count < 10
           end
+          # puts "text_ary[-1] = #{text_ary.inspect}"
+          # exit 12
+          # On retire le dernier item, qui contient le retour 
+          # chariot
+          text_ary.pop
+          puts "Premier : #{text_ary[0][:text].inspect}".jaune
+          # if text_ary[0][:text] == "\n"
           h = height_of_formatted(text_ary, my.text_options)
         end
         my.segments = text_ary
