@@ -35,7 +35,8 @@ class << self
       when REG_TITRE
         NTitre.new(book:book, titre:$2, level:$1.length, pindex:indice)
       when REG_AMORCE_IMAGE
-        unless d = string.match(REG_OLD_IMAGE)
+        # string = string.strip
+        unless (d = string.match(REG_OLD_IMAGE))
           d = string.match(REG_NEW_IMAGE)
         end
         NImage.new(book:book, path:d[1], data_str:d[2], pindex:indice)
@@ -56,7 +57,8 @@ class << self
       end
     end
   rescue Exception => e
-    raise PFBFatalError.new(104, {s:string, i: indice, e: e.message})
+    # errline = e.backtrace[0].split(":")[1]
+    raise PFBFatalError.new(104, {ln: e.line, s:string, i: indice, e: e.message, opts:options.inspect})
   end #/ instance_type_from_string
 
   # Méthodes utiles pour la numérotation
