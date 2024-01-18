@@ -101,3 +101,21 @@ class NilClass
     nil
   end
 end #/class NilClass
+
+
+class Exception
+  # Pour obtenir la ligne où s’est produite l’erreur (quand on
+  # n’affiche page le backtrace)
+  # 
+  # @usage
+  # 
+  #   begin
+  #     raise "Une erreur"
+  #   rescue Exception => e
+  #     puts "L’erreur s’est produite à la ligne #{e.line}"
+  #   end
+  # 
+  def line
+    backtrace[0].split(':')[1]
+  end
+end
