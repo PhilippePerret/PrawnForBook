@@ -133,6 +133,8 @@ class Index
         real_output.merge!(real_output: real_output.delete(:output))
       end
       data_item.merge!(real_output)
+    when NilClass # pour dire de ne rien écrire
+      data_item.merge!(real_output: '')
     else
       # Erreur
     end
