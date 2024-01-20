@@ -90,6 +90,12 @@ Prawn4book::Manual::Feature.new do
     
     (( line ))
 
+    erreur::Un code de type `\\(( \\{align: :right }))` n’est pas interprété.
+
+    *(il apparait "en dur" dans la page)*
+
+    Assurez-vous ne bien avoir laissé une espace avant le `\\))` final (et une après le `\\((` initial).
+
 
     EOT
 

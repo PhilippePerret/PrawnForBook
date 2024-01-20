@@ -210,8 +210,46 @@ class PrawnView
     @ascender || font.ascender
   end
 
+  # @return le leading courant à appliquer
+  # 
+  # @note
+  #   Il faut utiliser #calc_current_leading avant de pouvoir 
+  #   utiliser cette variable (et l’appeler chaque fois que quelque
+  #   chose change, comme la taille de la police)
+  # 
   def current_leading
-    line_height - height_of('X')
+    @current_leading
+  end
+
+  ##
+  # @return Le leading nécessaire pour que les lignes d’un texte
+  # se positionne bien sur la grille courante (dans la formule
+  # ci-dessous, c’est la donnée line_height)
+  # 
+  # Cette méthode, dans la version 2.1, n’est utilisée QUE pour les
+  # textes en multicolonnes qui, bizarrement, ne tiennent pas compte
+  # de la grille de référence.
+  # 
+  # @usage
+  #   Si on doit utiliser à répétition l’appel à cette méthode, on
+  #   l’appelle plutôt une fois et ensuite on appelle 
+  #   @current_leading qui contient la valeur calculée.
+  # 
+  # @note
+  #   J’aurais aimé utilisé #height_of('X') pour obtenir la hauteur
+  #   de X, mais malheureusement cette méthode renvoie toujours la
+  #   valeur de line_height, ce qui ferait que #current_leading
+  #   renverrait toujours de descender de la fonte.
+  # 
+  def calc_current_leading
+    fbox = ::Prawn::Text::Formatted::Box.new([{text:'Xp'}], {
+      # at: [bounds.left + 3.in, bounds.top - 0.7.in],
+      at: [bounds.left + 3.in, cursor],
+      width:100,
+      inline_format: true,
+      document: self})
+    fbox.render(dry_run: true)
+    @current_leading = (line_height - (fbox.height + font.descender)).freeze
   end
 
   def lines_down(x)

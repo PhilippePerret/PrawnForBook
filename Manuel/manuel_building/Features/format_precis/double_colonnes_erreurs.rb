@@ -46,12 +46,12 @@ Prawn4book::Manual::Feature.new do
 
     (( colonnes(2) ))
     Un premier paragraphe avec l’alignement par défaut, c’est-à-dire un texte justifié.
-    (( {align: :right }))
-    Le paragraphe suivant (celui-ci) est aligné à droite et il est de moyenne longueur.
+    (( {align: :right} ))
+    Le paragraphe suivant (celui-ci) est aligné à droite et il est de moyenne longueur. Il évalue 4 + 4 = \#{4 + 4}.
     (( {align: :left} ))
     On passe ensuite, ici, à un paragraphe aligné à gauche de la même longueur à peu près.
     (( {align: :center, size: 20, color: "FF0000"} ))
-    Ce paragraphe est plus différent, avec une taille de police et une couleur différente. Il est également plus long.
+    Ce paragraphe est plus différent, avec une taille de police et une couleur différente. Il est également plus long. Il comporte de l’*italique* et du ***gras italique***.
     (( colonnes(1) ))
     Ce paragraphe se trouve en dessous de la section à plusieurs colonnes. Il sert à s’assurer qu’il n’y a pas d’espace entre la section multi-colonne et le texte qui suit.
 
@@ -71,13 +71,17 @@ Prawn4book::Manual::Feature.new do
     ```
     _building_resultat_
     ```
-    Des items sur deux colonnes :
     ![page-1](width:"100%")
     (( line ))
-    Une longue phrase sur trois colonnes :
     ![page-2](width:"100%")
     (( line ))
     ![page-3](width:"100%")
+    (( line ))
+    ![page-4](width:"100%")
+    (( line ))
+    ![page-5](width:"100%")
+    (( line ))
+    ![page-6](width:"100%")
 
     EOT
 

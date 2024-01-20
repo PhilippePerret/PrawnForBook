@@ -48,7 +48,16 @@ class ColumnsBox < ParagraphAccumulator
 
     my = self
 
+    # Pour connaitre la ligne courante (sur la grille)
     pdf.update_current_line
+
+    # Pour connaitre le leading courant, en fonction de la fonte
+    # courante (attention : cette fonte peut changer en cours d’écri-
+    # ture car certains textes peuvent changer leur taille)
+    # 
+    # => Définit current_leading
+    # 
+    pdf.calc_current_leading
 
     # Dans un premier temps, il faut calculer la hauteur qu’il faudra
     # utiliser dans l’absolue, en fonction de la longueur du texte.
@@ -56,9 +65,9 @@ class ColumnsBox < ParagraphAccumulator
     hauteur_total = calc_height(pdf)
     column_height = hauteur_total / column_count
     h = column_height
-    unless params[:no_extra_line_height]
-      h += (column_count - 1) * pdf.line_height
-    end
+    puts "h au départ : #{h.dup.freeze.inspect}".jaune
+    h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
+    puts "h réduit    : #{h.dup.freeze.inspect}".bleu
     ColumnData.height = h
 
     # Y a-t-il de l’espace avant ?
@@ -86,8 +95,10 @@ class ColumnsBox < ParagraphAccumulator
     hrest = ColumnData.height.dup
     while hrest > 0
       required_height = [hrest, pdf.cursor].min
-
+      
+      # - Construction des colonnes pour la hauteur voulue -
       build_columns_for_height(required_height)
+
       hrest = hrest - required_height
       if hrest > 0
         pdf.start_new_page
@@ -128,11 +139,14 @@ class ColumnsBox < ParagraphAccumulator
     # S’il faut ajouter des lignes après
     # 
     if lines_after > 0
-      lines_after.times { pdf.move_to_next_line }
+      (lines_after + 1).times { pdf.move_to_next_line }
     elsif lines_after == 0
-      pdf.move_to_previous_line
+      # pdf.move_to_next_line
+      # pdf.move_to_closest_line
+      # pdf.move_to_previous_line
+      pdf.move_to_line(pdf.current_line)
     elsif lines_after < 0
-      lines_after.abs.times { pdf.move_to_previous_line }
+      (lines_after + 1).abs.times { pdf.move_to_previous_line }
     end
 
     # S’il doit y avoir du texte après
@@ -165,13 +179,17 @@ class ColumnsBox < ParagraphAccumulator
       width:  ColumnData.width,
     }
     # Pour le débuggage, on mémorise le début de la colonne
+    pdf.font(Fonte.default)
     pdf.bounding_box([left, icursor], **bb_options) do
       @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate))
+      pdf.stroke_bounds
     end
   end
 
   def text_options
     @text_options ||= {
+      # leading:        0,
+      leading:        pdf.current_leading,
       align:          :justify,
       inline_format:  true
     }
@@ -196,7 +214,7 @@ class ColumnsBox < ParagraphAccumulator
       if params[:lines_before] === false
         0
       else
-        params[:lines_before] || 1
+        params[:lines_before] || 0
       end
     end
   end
@@ -206,7 +224,7 @@ class ColumnsBox < ParagraphAccumulator
       if params[:lines_after] === false
         0
       else
-        params[:lines_after] || 1
+        params[:lines_after] || 0
       end
     end
   end
@@ -246,42 +264,66 @@ class ColumnsBox < ParagraphAccumulator
       ColumnData.full_width = column_width + gutter
       ColumnData.gutter     = gutter
 
+
+      # Récupération des paragraphes (en les mettant sous la forme
+      # de table de texte pour Prawn)
+      each_paragraph do |par|
+        if par.pfbcode?
+          if par.for_next_paragraph?
+            # TODO : plus tard il faudra prendre les styles à 
+            # appliquer, qui pourront faire varier la hauteur de la
+            # colonne et notamment le current_leading qui est très
+            # important ici
+          end
+          next
+        end #/si pfbcode
+        str = par.indented_text + "\n"
+        p = []
+        text_ary += pdf.text_formatter.format(str, *p)
+        debug_txt << par.text if debug_txt.count < 10
+      end
+      # On retire le dernier item, qui contient le retour 
+      # chariot
+      text_ary.pop
+      self.segments = text_ary
+
+
+      # MÉTHODE 1 (par dry_run)
+      # (la #1 mais celle qui a été fait après la #2)
+
+      fbox = ::Prawn::Text::Formatted::Box::new(text_ary, {
+        at: [0, 100000],
+        width: column_width,
+        inline_format: true,
+        document:pdf
+      })
+      fbox.render(dry_run: true)
+      h = fbox.height.freeze
+      
+      puts "h calc with method #1 : #{h.inspect}".bleu
+
+      return h # la valeur calculée
+
+
+      # MÉTHODE #2
+      # (la #2 mais faite avant la #1)
+
       pdf.update do
         current_cursor = cursor.freeze
         bounding_box([0,bounds.top], width: column_width, height: 1000000) do
-          # my.paragraphs.each do |par|
-          my.each_paragraph do |par|
-            if par.pfbcode?
-              # Si c’est un pfbcode, c’est peut-être la définition
-              # de l’alignement d’un paragraphe, il faut le traiter
-              # TODO
-
-              next
-            end
-            # par.prepare_and_formate_text(pdf)
-            puts "par type : #{par.type}".bleu
-            str = par.indented_text + "\n"
-            p = []
-            text_ary += text_formatter.format(str, *p)
-            debug_txt << par.text if debug_txt.count < 10
-          end
-          # puts "text_ary[-1] = #{text_ary.inspect}"
-          # exit 12
-          # On retire le dernier item, qui contient le retour 
-          # chariot
-          text_ary.pop
-          puts "Premier : #{text_ary[0][:text].inspect}".jaune
-          # if text_ary[0][:text] == "\n"
           h = height_of_formatted(text_ary, my.text_options)
         end
-        my.segments = text_ary
         # On se remet en place
         move_cursor_to(current_cursor)
       end #/pdf.update
       
       # Pour le débuggage
       @debug_start_column = debug_txt.join('').gsub(/\n/," ¶ ")
+
+      puts "h calc with method #2 : #{h.inspect}".bleu
       
+      exit 12
+
       return h
     end
 

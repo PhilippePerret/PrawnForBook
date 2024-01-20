@@ -73,6 +73,7 @@ Prawn4book::Manual::Feature.new do
     Premier en regard
     ```
     (( line ))
+    OBSOLÈTE
     Pour palier cet écueil, on met la propriété `no_extra_line_height` à true dans la définition des colonnes. On obtient alors :
     (( line ))
     ```

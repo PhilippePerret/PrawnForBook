@@ -30,11 +30,11 @@ Un texte au-dessus de la section à deux colonnes avec changement d’alignement
 (( colonnes(2) ))
 Un premier paragraphe avec l’alignement par défaut, c’est-à-dire un texte justifié.
 (( {align: :right }))
-Le paragraphe suivant (celui-ci) est aligné à droite et il est de moyenne longueur.
+Le paragraphe suivant (celui-ci) est aligné à droite et il est de moyenne longueur. Il évalue 4 * 4 = #{4 + 4}.
 (( {align: :left} ))
 On passe ensuite, ici, à un paragraphe aligné à gauche de la même longueur à peu près.
 (( {align: :center, size: 20, color: "FF0000"} ))
-Ce paragraphe est plus différent, avec une taille de police et une couleur différente. Il est également plus long.
+Ce paragraphe est plus différent, avec une taille de police et une couleur différente. Il est également plus long. Il comporte de l’*italique* et du ***gras italique***.
 (( colonnes(1) ))
 Ce paragraphe se trouve en dessous de la section à plusieurs colonnes. Il sert à s’assurer qu’il n’y a pas d’espace entre la section multi-colonne et le texte qui suit.
 
@@ -45,4 +45,4 @@ Une ligne
 Une autre ligne
 Une troisième ligne
 (( colonnes(1) ))
-Ce texte se trouve sous la section à 3 colonnes et à quatre lignes.
+Ce texte se trouve sous la section à 3 colonnes et séparé de 4 lignes de cette section.
