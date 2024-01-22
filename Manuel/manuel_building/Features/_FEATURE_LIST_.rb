@@ -28,8 +28,8 @@ module Prawn4book
   TOUT_HEADFOOT = TOUT || nil
   # TOUT_HEADFOOT = TOUT || true
 
-  # TOUT_TEXT_DETAIL = TOUT || nil
-  TOUT_TEXT_DETAIL = TOUT || true
+  TOUT_TEXT_DETAIL = TOUT || nil
+  # TOUT_TEXT_DETAIL = TOUT || true
 
   TOUT_PUCES = TOUT || nil
   # TOUT_PUCES = TOUT || true
@@ -58,8 +58,8 @@ module Prawn4book
   TOUT_BIBLIO = TOUT || nil
   # TOUT_BIBLIO = TOUT || true
 
-  # FORMAT_PRECIS = TOUT || nil # format livre/page
-  FORMAT_PRECIS = TOUT || true
+  FORMAT_PRECIS = TOUT || nil # format livre/page
+  # FORMAT_PRECIS = TOUT || true
 
   CHANGE_DEF_BEHAVIOR = TOUT || nil
   # CHANGE_DEF_BEHAVIOR = TOUT || true
@@ -72,6 +72,8 @@ module Prawn4book
   #   route avant le changement du traitement de la recette"
   # 
   FEATURE_LIST = [
+
+  ]; REMETTRE = [
 
     # -- Généralités --
     TOUT_GENE && 'generalites/grand_titre',

@@ -409,6 +409,8 @@ class Feature
     end
 
     if line_height
+      puts "Ne plus changer line_height, faire un real book"
+      exit 13
       cur_line_height = pdf.line_height.freeze
       pdf.line_height = line_height 
     end
@@ -472,6 +474,8 @@ class Feature
     retrieve_previous_state if recipe
 
     # Si on a modifié la hauteur de ligne, il faut la remettre
+    # NON, maintenant, on empêche la modification de la hauteur
+    # de ligne
     if line_height
       pdf.line_height = cur_line_height 
     end

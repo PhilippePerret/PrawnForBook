@@ -41,12 +41,6 @@ class PrawnView
       stroke_color(51, 0, 0, 3)  # bleu ciel
       fill_color(51, 0, 0, 3)    # bleu ciel
       line_width(0.1)
-      # -- Changement de hauteur de ligne --
-      if leadings.key?(page_number)
-        data_leading = leadings[page_number]
-        @line_height = data_leading[:line_height]
-        spy "Line Height à #{line_height} à partir de page #{page_number.inspect}".jaune
-      end
 
       # -- Impression de la grille de référence --
       h = bounds.top.dup

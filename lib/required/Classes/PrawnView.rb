@@ -67,6 +67,11 @@ class PrawnView
   # pression de +str+)
   # La méthode suivante, au contraire, permet de calculer la vraie
   # valeur dans le contexte courant.
+  # 
+  # @note
+  #   J’ai dû modifier la méthode #text_box pour pouvoir faire ça
+  #   De base, elle ne permet pas d’utiliser :dry_run
+  # 
   def real_height_of(str, **options)
     e, b = text_box(str, **options.merge(dry_run: true))
     return b.height
@@ -92,14 +97,6 @@ class PrawnView
   def ext_mg; @ext_mg ||= config[:ext_margin] end
   def int_mg; @int_mg ||= config[:int_margin] end
 
-  def font2leading(fonte)
-    curfonte = Prawn4book::Fonte.current
-    ld = nil
-    font(fonte) { ld = line_height - height_of('X') }
-    font(curfonte)
-    return ld
-  end
-
   ##
   # - NOUVELLE PAGE -
   # 
@@ -118,13 +115,9 @@ class PrawnView
     # Si une fonte est définie (c'est-à-dire si on n'en est pas au
     # tout début) On se place sur la première ligne
     if font
-      # move_to_first_line
-
-      # Je ne sais absolument pas pourquoi il faut se placer sur la
-      # seconde ligne. J’espère que ça n’est pas propre au manuel 
-      # auto-produit…
-      move_to_line(2)
-      cursor.round == (bounds.top - (2 * line_height) + ascender).round || begin
+      move_to_line(1)
+      cursor.round == (bounds.top - (1 * line_height) + ascender).round || begin
+      # cursor.round == (bounds.top - (1 * line_height) + ascender).round || begin
         puts "ON N'EST PAS SUR LA PREMIÈRE LIGNE".rouge
         puts <<~ERR.rouge
           La position du curseur (#{cursor.round}) devrait être égale
@@ -195,28 +188,21 @@ class PrawnView
   def font(fonte = nil, params = nil)
     return super if fonte.nil?
 
-    thefont   = nil
-    data_font = nil
-    case fonte
-    when Fonte
-      thefont = fonte
-    when String, Symbol
-      data_font = (params||{}).dup.merge({name:fonte})
-    when Hash
-      data_font = fonte.dup
-      data_font.merge!(name: fonte.delete(:font)) if fonte.key?(:font)
-    else
-      raise ERRORS[:fonts][:invalid_font_params]
-    end
 
-    # Si des données de fonte sont définies, il faut peut-être 
-    # instancier une nouvelle fonte.
-    # @note data_font est nil seulement lorsque c'est une Prawn::Fonte
-    # qui est transmise à la méthode courante.
-    # 
-    if data_font
-      thefont = Fonte.get_or_instanciate(data_font)      
-    end
+    thefont = 
+      case fonte
+      when Prawn4book::Fonte
+        fonte
+      when String, Symbol
+        Fonte.get_or_instanciate((params||{}).dup.merge({name:fonte}))
+      when Hash
+        data_font = fonte.dup
+        data_font.merge!(name: fonte.delete(:font)) if fonte.key?(:font)
+        Fonte.get_or_instanciate(data_font)
+      else
+        raise ERRORS[:fonts][:invalid_font_params]
+      end
+
 
     # On applique la fonte seulement si elle a changé. Sinon,
     # on s'en retourne aussitôt.
@@ -227,9 +213,7 @@ class PrawnView
     # [1] À chaque titre, et même à chaque paragraphe si on est en
     # numérotation de paragraphe.
     # 
-    if thefont == @current_fonte
-      return 
-    end
+    return if thefont == @current_fonte
 
     # spy "APPLICATION DE LA FONTE #{fonte.inspect}"
 
@@ -249,41 +233,22 @@ class PrawnView
       raise
     end
 
+    # - Calcul des valeurs propres à la fonte appliquée -
+
     # L'ascender courant, qui permet de savoir de combien on doit
     # décaler le texte verticalement pour qu'il repose exactement sur
     # une ligne de référence.
-    @ascender = @current_font.ascender
-    move_to_closest_line
+    @ascender         = @current_font.ascender
 
-    opts = {size:thefont.size, style:thefont.style, leading:0}
-    default_leading(line_height - self.height_of('X', **opts))
-    # puts "line_height: #{line_height}".jaune
-    # puts "default_leading = #{@default_leading.inspect}"
+    move_to_closest_line
 
     return @current_font
   end
 
-  #
-  # Calcul du leading pour la fonte +fonte+ en considérant une
-  # hauteur de ligne de +lineheight+
-  # 
-  def calc_leading_for(fonte, lineheight)
-    begin
-      opts = {size:fonte.size, style:fonte.style, leading:0}
-      font(fonte) do
-        return lineheight - self.height_of('H', **opts)
-      end
-    rescue Exception => e
-      # On passe ici par exemple quand la police n'existe pas
-      puts <<~EOT.rouge
-        Erreur en calculant le leading pour #{fonte.inspect}
-        Erreur : #{e.message}
-        EOT
-      exit
-    end
+  # [Prawn4book::Fonte] La fonte courante
+  def current_fonte
+    @current_fonte
   end
-  alias :leading_for :calc_leading_for
-
 
 
   # --- Predicate Methods ---

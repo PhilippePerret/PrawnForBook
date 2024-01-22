@@ -423,6 +423,8 @@ class NImage < AnyParagraph
   def print_text_around_image(float_data)
     @erreur_passage_sous_page_signaled = false
 
+    fleading = pdf.line_height - pdf.height_of('Xp')
+
     # S’il y a un margin_top, il faut écrire du texte avant
     if lines_before > 0
       # L’image est un peu décalée du haut, il faut donc écrire le
@@ -438,6 +440,7 @@ class NImage < AnyParagraph
         at: [0, pdf.cursor],
         overflow: :truncate,
         align:    :justify,
+        leading:  fleading,
         inline_format: true
       }
       exces = pdf.text_box(wrapped_text, **options_textbox1)
@@ -490,6 +493,7 @@ class NImage < AnyParagraph
         at:     [text_left, pdf.cursor],
         overflow: :truncate,
         align:    :justify,
+        leading:  fleading,
         inline_format: true
       }
       begin
@@ -534,6 +538,7 @@ class NImage < AnyParagraph
         width:  page_width,
         at:     [0, pdf.cursor],
         align:  :justify,
+        leading: fleading,
         inline_format: true
       }
       # - Calcul de la hauteur que prendra le reste -
@@ -560,7 +565,7 @@ class NImage < AnyParagraph
         pdf.start_new_page
         pdf.move_to_line(1)
         cursor_start = pdf.cursor.freeze
-        pdf.formatted_text(exces, **{align: :justify, inline_format: true})
+        pdf.formatted_text(exces, **{leading: fleading, align: :justify, inline_format: true})
         cursor_end = pdf.cursor.freeze
       end
       pdf.update_current_line

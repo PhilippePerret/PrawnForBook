@@ -23,8 +23,9 @@ book_format:
     show_grid: false
     show_margins: false
   text:
-    default_font: 'Numito/light/11/000000'
-    line_height:  14
+    font: 'Numito/light/11/000000'
+    # line_height:  14
+    line_height:  25
     guillemets:   ['« ',' »']
     indent:       0
   #<titles>

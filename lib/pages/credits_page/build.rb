@@ -39,7 +39,6 @@ class PageInfos
     # 
     pdf.update do
       2.times { start_new_page }
-      # start_new_page
       start_new_page while page_number.odd?
     end
 
@@ -304,7 +303,6 @@ class PageInfos
     def define_heights
       define_value_height
       define_label_height
-      define_line_height
     end
 
     # Calcul des hauteurs des labels et des valeurs en fonction de
@@ -331,7 +329,7 @@ class PageInfos
       my  = self
       pdf.update do 
         font(my.value_fonte)
-        my.value_height = height_of("Une valeur", **my.value_options) + 2
+        my.value_height = real_height_of("Une valeur", **my.value_options) + 2
       end
       value_height.is_a?(Float) || begin
         raise(PFBFatalError.new(610, {
@@ -341,13 +339,6 @@ class PageInfos
           o: value_options.inspect
         }))
       end
-    end
-
-    # On définit la hauteur de ligne
-    # (ne sert plus vraiment, à part pour les valeurs sur plusieurs
-    #  lignes comme les adresses physiques)
-    def define_line_height
-      pdf.line_height = value_fonte.size + 2      
     end
 
     # Calcul de la hauteur du bloc de crédits

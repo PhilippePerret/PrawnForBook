@@ -1,4 +1,6 @@
 ---
 book_format:
-  text:
-    font: "Times-Roman/normal/8/000000"
+  page:
+    margins:
+      top: 2mm
+      bot: 8mm

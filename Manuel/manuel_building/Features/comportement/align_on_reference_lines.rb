@@ -1,11 +1,14 @@
 Prawn4book::Manual::Feature.new do
 
+  puts "Faire un real book"
+  exit 12
+
   hline = 30
 
   titre "Alignement sur la grille de référence"
 
   show_grid(1..-1)
-  line_height hline
+  # line_height hline
   new_page_before(:texte)
 
   description <<~EOT

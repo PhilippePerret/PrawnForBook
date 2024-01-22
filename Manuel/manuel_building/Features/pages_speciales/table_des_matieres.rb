@@ -130,13 +130,6 @@ Prawn4book::Manual::Feature.new do
         .\\..
         indent: 15mm
     YAML
-  # # init_recipe([:custom_cached_var_key])
-  recipe <<~YAML
-    ---
-    table_of_content:
-      font: "Courier/regular/20/0000FF"
-      number_font: "Helvetica/italic/18/009900"
-      line_height: 24
-    YAML
+
 
 end #/ Prawn4book::Manual::Feature.new

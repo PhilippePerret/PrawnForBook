@@ -1,10 +1,5 @@
 module Prawn4book
 
-  # @return true si on est en mode BAT, c’est-à-dire "Bon à tirer"
-  def self.bat?
-    :TRUE == @modebonatirer ||= true_or_false(CLI.option(:bat))
-  end
-
   def self.force?
     :TRUE == @modeforce ||= true_or_false(CLI.option(:force))
   end

@@ -51,24 +51,16 @@ class ColumnsBox < ParagraphAccumulator
     # Pour connaitre la ligne courante (sur la grille)
     pdf.update_current_line
 
-    # Pour connaitre le leading courant, en fonction de la fonte
-    # courante (attention : cette fonte peut changer en cours d’écri-
-    # ture car certains textes peuvent changer leur taille)
-    # 
-    # => Définit current_leading
-    # 
-    pdf.calc_current_leading
-
     # Dans un premier temps, il faut calculer la hauteur qu’il faudra
     # utiliser dans l’absolue, en fonction de la longueur du texte.
     # 
     hauteur_total = calc_height(pdf)
+    puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
     column_height = hauteur_total / column_count
     h = column_height
-    puts "h au départ : #{h.dup.freeze.inspect}".jaune
     h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
-    puts "h réduit    : #{h.dup.freeze.inspect}".bleu
     ColumnData.height = h
+    puts "hauteur finale de colonne : #{h.inspect}".bleu
 
     # Y a-t-il de l’espace avant ?
     if space_before != 0
@@ -78,9 +70,9 @@ class ColumnsBox < ParagraphAccumulator
 
     # Y a-t-il des lignes de séparation ?
     if lines_before > 0
-      (lines_before + 1).times { pdf.move_to_next_line }
+      lines_before.times { pdf.move_to_next_line }
     elsif lines_before < 0
-      (lines_before.abs + 1).times { pdf.move_to_previous_line }
+      lines_before.abs.times { pdf.move_to_previous_line }
     end
 
     # Maintenant qu’on a la hauteur que prend le texte avec les
@@ -139,14 +131,14 @@ class ColumnsBox < ParagraphAccumulator
     # S’il faut ajouter des lignes après
     # 
     if lines_after > 0
-      (lines_after + 1).times { pdf.move_to_next_line }
+      lines_after.times { pdf.move_to_next_line }
     elsif lines_after == 0
       # pdf.move_to_next_line
       # pdf.move_to_closest_line
       # pdf.move_to_previous_line
       pdf.move_to_line(pdf.current_line)
     elsif lines_after < 0
-      (lines_after + 1).abs.times { pdf.move_to_previous_line }
+      lines_after.abs.times { pdf.move_to_previous_line }
     end
 
     # S’il doit y avoir du texte après
@@ -181,15 +173,20 @@ class ColumnsBox < ParagraphAccumulator
     # Pour le débuggage, on mémorise le début de la colonne
     pdf.font(Fonte.default)
     pdf.bounding_box([left, icursor], **bb_options) do
-      @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate))
-      pdf.stroke_bounds
+      @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate, leading: pdf.line_height - pdf.height_of('Xp')))
+      
+      if stroke?
+        pdf.transparent(0.4) { 
+          pdf.line_width 0.2
+          pdf.stroke_color '00AA00'
+          pdf.stroke_bounds 
+        }
+      end
     end
   end
 
   def text_options
     @text_options ||= {
-      # leading:        0,
-      leading:        pdf.current_leading,
       align:          :justify,
       inline_format:  true
     }
@@ -229,6 +226,20 @@ class ColumnsBox < ParagraphAccumulator
     end
   end
 
+  # Nombre forcé de lignes
+  def lines_count
+    @lines_count ||= begin
+      params[:lines_count] ? params[:lines_count].to_i.freeze : nil
+    end
+  end
+
+  # Hauteur forcée
+  def fixed_height
+    @fixed_height ||= begin
+      params[:height] ? params[:height].to_pps : nil
+    end
+  end
+
   def space_before
     @space_before ||= (params[:space_before] || 0.0).freeze
   end
@@ -240,22 +251,23 @@ class ColumnsBox < ParagraphAccumulator
   def segments ; @segments end
   def segments=(value); @segments = value end
 
+  # --- Predicate Methods ---
+
+  def stroke?
+    self.class.stroke?
+  end
+  def self.stroke?
+    :TRUE == @@strockcols ||= true_or_false(PdfBook.current.recipe.show_grid?)
+  end
+
   private
 
     # Principe de calcul simple : on fait une colonne unique qui 
     # contient tout le texte et l’on en demande la hauteur, qu’on
     # divise par le nombre de colonnes demandées.
     def calc_height(pdf)
-      h = nil # La valeur cherchée
-      my = self
 
-      # Liste pour mettre tous les textes obtenus
-      text_ary = []
-      # Pour le texte de debuggage
-      debug_txt = []
-
-      # Pour calculer, on met tout dans une colonne qui fait
-      # la taille de colonne voulue
+      # - Valeurs utiles -
       column_width = (width - (gutter * (column_count - 1)) ) # largeur en retirant les gouttières
       column_width = (column_width / column_count).freeze
 
@@ -264,6 +276,17 @@ class ColumnsBox < ParagraphAccumulator
       ColumnData.full_width = column_width + gutter
       ColumnData.gutter     = gutter
 
+      h = nil # La valeur cherchée
+      my = self
+
+      # Liste pour mettre tous les textes obtenus
+      text_ary = []
+      # Pour le texte de debuggage
+      debug_txt = []
+
+
+      # Pour calculer, on met tout dans une colonne qui fait
+      # la taille de colonne voulue
 
       # Récupération des paragraphes (en les mettant sous la forme
       # de table de texte pour Prawn)
@@ -272,7 +295,7 @@ class ColumnsBox < ParagraphAccumulator
           if par.for_next_paragraph?
             # TODO : plus tard il faudra prendre les styles à 
             # appliquer, qui pourront faire varier la hauteur de la
-            # colonne et notamment le current_leading qui est très
+            # colonne et notamment le leading qui est très
             # important ici
           end
           next
@@ -287,6 +310,14 @@ class ColumnsBox < ParagraphAccumulator
       text_ary.pop
       self.segments = text_ary
 
+      # Pour le débuggage
+      @debug_start_column = debug_txt.join('').gsub(/\n/," ¶ ")
+
+      # Si une hauteur est fixée ou un nombre fixe de lignes, on 
+      # renvoie la valeur correspondante
+      return fixed_height * column_count if fixed_height 
+      return lines_count * pdf.line_height * column_count if lines_count
+
 
       # MÉTHODE 1 (par dry_run)
       # (la #1 mais celle qui a été fait après la #2)
@@ -300,7 +331,7 @@ class ColumnsBox < ParagraphAccumulator
       fbox.render(dry_run: true)
       h = fbox.height.freeze
       
-      puts "h calc with method #1 : #{h.inspect}".bleu
+      # puts "h calc with method #1 : #{h.inspect}".bleu
 
       return h # la valeur calculée
 
@@ -311,18 +342,13 @@ class ColumnsBox < ParagraphAccumulator
       pdf.update do
         current_cursor = cursor.freeze
         bounding_box([0,bounds.top], width: column_width, height: 1000000) do
-          h = height_of_formatted(text_ary, my.text_options)
+          h = height_of_formatted(text_ary, my.text_options.merge!(leading: line_height - height_of('Xp')))
         end
         # On se remet en place
         move_cursor_to(current_cursor)
       end #/pdf.update
       
-      # Pour le débuggage
-      @debug_start_column = debug_txt.join('').gsub(/\n/," ¶ ")
-
-      puts "h calc with method #2 : #{h.inspect}".bleu
-      
-      exit 12
+      # puts "h calc with method #2 : #{h.inspect}".bleu
 
       return h
     end

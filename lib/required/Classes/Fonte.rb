@@ -99,9 +99,9 @@ def hname=(value)
   reset
 end
 
-# Leading à utiliser en fonction de la fonte et de la hauteur de
-# ligne courante. Sans argument, on retourne le leading qui a dû être
-# calculé avant. Avec les arguments, on le calcule.
+# Leading à utiliser en fonction de la hauteur de ligne courante. 
+# Sans argument, on retourne le leading qui a dû être calculé avant. 
+# Avec les arguments, on le calcule.
 # 
 # @note
 #   On pourrait aussi n'envoyer que +pdf+ et récupérer son 
@@ -110,17 +110,13 @@ end
 #   appliquée, par exemple pour faire un calcul en dehors de la 
 #   config courante.
 # 
-def leading(pdf, lineheight)
+def leading(pdf = nil, lineheight = nil)
+  return @leadings[LINE_HEIGHT] if pdf.nil? && lineheight.nil?
+  lineheight ||= pdf.line_height  || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
   @leadings[lineheight] ||= begin
-    pdf         || raise(PFBFatalError.new(650, {name:name, pms: params.inspect}))
-    line_height ||= pdf.line_height || raise(PrawnFatalError.new(ERRORS[:building][:require_line_height]))
-    # - par prudence -
-    cur_default_leading = pdf.default_leading
-    pdf.default_leading(0)
-    # - Calcul -
-    ld = lineheight - pdf.height_of('H', **params.merge!(font:self.name))
-    pdf.default_leading(cur_default_leading)
-    ld
+    # — Leading inconnu, on le calcule -
+    pdf || raise(PFBFatalError.new(650, {name:name, pms: params.inspect}))
+    lineheight - pdf.real_height_of('Xp', **{font:self.name, size:self.size, style:self.style})
   end
 end
 

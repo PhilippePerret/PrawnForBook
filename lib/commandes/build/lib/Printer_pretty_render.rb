@@ -149,26 +149,22 @@ class << self
 
         font(fonte) if fonte
 
-        # # /débug
-        # if page_number > 18 && text.match?(/Recette.+collection/i)
-        #   puts"\ncursor au tout départ : #{cursor.round(3)}".bleu
-        # end
-
         # Si le curseur est déjà sous le zéro, on passe directement
         # à la page suivante
-        # 
         # @rappel
         #   Les titres ne passent pas par cette méthode. Cf. 
         #   NTitre#build
-        #   
-        # if cursor < 0
-        if cursor < line_height
-          start_new_page
-          move_to_line(1)
-        end
+        start_new_page if cursor < line_height
 
-        # La fonte est définie, on peut définir le leading du texte
-        options.merge!(leading: default_leading)
+        # Avec le leading courant calculé. Le problème, c’est que ça
+        # fonctionne pour le manuel auto produit, mais pas pour le
+        # dictionnaire
+        # options.merge!(leading: current_leading)
+        # J’essaie une version forcée, calculée à chaque fois (donc
+        # hyper lourde — non, ça ne coute rien du tout) pour voir
+        # 
+        options.merge!(leading: line_height - height_of('Xp'))
+
 
         str = text.dup
 
@@ -192,7 +188,7 @@ class << self
         # 
         if puce && cursor - boxheight < 0 && str.count("\n") == 0
           start_new_page
-          move_to_line(1)
+          # move_to_line(1)
         end
 
         # if debugit

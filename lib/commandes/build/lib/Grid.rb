@@ -30,7 +30,7 @@ class PrawnView
   attr_accessor :current_line
 
   # Pour dessiner une ligne horizontale de repère de la couleur
-  # +color+ donnée
+  # +color+ donnée à la position actuelle du curseur (cursor)
   # 
   def rule(color, width = nil)
     color = color.to_html_color if color.is_a?(Symbol)
@@ -57,34 +57,23 @@ class PrawnView
   # curseur
   def update_current_line
     @current_line = ((bounds.top - cursor) / line_height).round
+    # @current_line = ((bounds.top - cursor) / line_height).round - 1
     # puts "Current line updatée : #{current_line}".bleu
   end
 
   # @return la hauteur de ligne courante 
   # 
+  def line_height
+    @line_height ||= line_height=(book.recipe.line_height)
+  end
   # @note
   #   Noter la tournure de la définition, qui permet de définir
   #   la constante LINE_HEIGHT
   # 
-  def line_height
-    @line_height ||= line_height=(book.recipe.line_height)
-  end
   def line_height=(value)
     @line_height = value
-    leadings.merge!(page_number => {line_height: value})
     Prawn4book.send(:remove_const, 'LINE_HEIGHT') if defined?(LINE_HEIGHT)
     Prawn4book.const_set('LINE_HEIGHT', value)
-  end
-
-  def leading
-    @leading ||= default_leading
-  end
-
-  # Mis provisoirement pour garder en mémoire les leadings par
-  # page (mais normalement, avec la version 2 LINE, on n'a plus 
-  # besoin du leading)
-  def leadings
-    @leadings ||= {}
   end
 
   # Déplace le curseur sur la ligne +x+
@@ -98,6 +87,7 @@ class PrawnView
   def move_to_line(x)
     x = last_line + x if x < 0
     move_cursor_to(bounds.top - (x * line_height) + ascender)
+    # move_cursor_to(bounds.top - ((x + 1) * line_height) + ascender)
     @current_line = x
     return x
   end
@@ -159,44 +149,6 @@ class PrawnView
   end
   alias :move_to_previous_line :move_to_prev_line
 
-  # # Ligne courante
-  # # --------------
-  # # C'est la distance entre la position actuelle du curseur et le
-  # # haut de la page (marge considérée), divisée par la hauteur de
-  # # ligne. On l'arrondit à la valeur supérieure
-  # def current_line
-  #   debugit = true
-  #   puts "Calcul current_line" if debugit
-  #   # On prend la position actuelle du curseur
-  #   c = cursor # position du curseur
-  #   puts "  cursor = #{c.inspect}" if debugit
-  #   if cursor < -line_height
-  #     puts "Curseur sous zéro => page suivante" if debugit
-  #     start_new_page
-  #     return 1
-  #   end
-  #   # Si le cursor est placé plus haut que la limite de la marge
-  #   # haute, on prend le bounds.top qui correspond à la valeur 
-  #   # maximale en haut.
-  #   if c > bounds.top
-  #     c = bounds.top
-  #     puts "  Rectif car trop haut. Mis à #{c.inspect}" if debugit
-  #   end
-  #   # On calcule la distance entre le bord haut maximum et la 
-  #   # position actuelle du curseur. Ça donne 0 si on est tout en
-  #   # haut.
-  #   d = bounds.top - c 
-  #   puts "  Distance du haut : #{d.inspect}" if debugit
-  #   # On calcule à combien de lignes cette distance correspond.
-  #   # Normalement, ça doit donner un compte à peu près rond, mais
-  #   # on l'arrondit quand même
-  #   cl = (d / line_height).round
-  #   puts "  (#{d} / line_heigh(#{line_height}).round = #{cl}"  if debugit
-  #   puts "  Valeur renvoyée : #{cl.inspect}"  if debugit
-  #   return cl
-  #   # ((bounds.to - cursor).to_f / line_height).ceil
-  # end
-
   # @ascender
   # 
   # Il permet de savoir de combien on doit remonter la ligne pour
@@ -208,48 +160,6 @@ class PrawnView
   # 
   def ascender
     @ascender || font.ascender
-  end
-
-  # @return le leading courant à appliquer
-  # 
-  # @note
-  #   Il faut utiliser #calc_current_leading avant de pouvoir 
-  #   utiliser cette variable (et l’appeler chaque fois que quelque
-  #   chose change, comme la taille de la police)
-  # 
-  def current_leading
-    @current_leading
-  end
-
-  ##
-  # @return Le leading nécessaire pour que les lignes d’un texte
-  # se positionne bien sur la grille courante (dans la formule
-  # ci-dessous, c’est la donnée line_height)
-  # 
-  # Cette méthode, dans la version 2.1, n’est utilisée QUE pour les
-  # textes en multicolonnes qui, bizarrement, ne tiennent pas compte
-  # de la grille de référence.
-  # 
-  # @usage
-  #   Si on doit utiliser à répétition l’appel à cette méthode, on
-  #   l’appelle plutôt une fois et ensuite on appelle 
-  #   @current_leading qui contient la valeur calculée.
-  # 
-  # @note
-  #   J’aurais aimé utilisé #height_of('X') pour obtenir la hauteur
-  #   de X, mais malheureusement cette méthode renvoie toujours la
-  #   valeur de line_height, ce qui ferait que #current_leading
-  #   renverrait toujours de descender de la fonte.
-  # 
-  def calc_current_leading
-    fbox = ::Prawn::Text::Formatted::Box.new([{text:'Xp'}], {
-      # at: [bounds.left + 3.in, bounds.top - 0.7.in],
-      at: [bounds.left + 3.in, cursor],
-      width:100,
-      inline_format: true,
-      document: self})
-    fbox.render(dry_run: true)
-    @current_leading = (line_height - (fbox.height + font.descender)).freeze
   end
 
   def lines_down(x)

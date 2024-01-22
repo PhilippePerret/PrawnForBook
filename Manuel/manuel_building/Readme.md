@@ -137,7 +137,7 @@ Prawn4book::Manual::Feature.new do
   RUBY
   
   # Si on doit définir une nouvelle hauteur de ligne
-  line_height 30
+  # NON NE PAS LE FAIRE (utiliser un real book plutôt)
   # Si on doit afficher les lignes de référence
   show_grid true
   
