@@ -51,16 +51,16 @@ class ColumnsBox < ParagraphAccumulator
     # Pour connaitre la ligne courante (sur la grille)
     pdf.update_current_line
 
+    # On transforme le texte des colonnes en segments avec format
+    divide_text_in_segments(pdf)
+
+    # Premiers calcul (largeur colonnes, etc.)
+    calc_dimensions(pdf)
+
     # Dans un premier temps, il faut calculer la hauteur qu’il faudra
     # utiliser dans l’absolue, en fonction de la longueur du texte.
     # 
-    hauteur_total = calc_height(pdf)
-    # puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
-    column_height = hauteur_total / column_count
-    h = column_height
-    h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
-    ColumnData.height = h
-    # puts "hauteur finale de colonne : #{h.inspect}".bleu
+    calc_column_height(pdf)
 
     # Y a-t-il de l’espace avant ?
     if space_before != 0
@@ -91,18 +91,17 @@ class ColumnsBox < ParagraphAccumulator
       # - Construction des colonnes pour la hauteur voulue -
       build_columns_for_height(required_height)
 
-      hrest = hrest - required_height
-      if hrest > 0
-        pdf.start_new_page
-        pdf.move_to_first_line
-      end
+      hrest -= required_height
+      pdf.start_new_page if hrest > 0
     end
     pdf.update_current_line
 
-    # Reste-t-il des segments ? (pour le moment, lorsque ça se 
-    # produisait, il en restait toujours un seul)
-    # Je ne sais pas vraiment comment m’y prendre, j’essaie de 
-    # l’ajouter à la dernière colonne
+    # Reste-t-il des segments ?
+    # Je ne sais pas vraiment comment m’y prendre.
+    # La solution pourrait être : faire une première passe en dry_run
+    # juste pour voir (mais comment gérer les changements de page =>
+    # en se remettant au-dessus). S’il reste quelque chose, on ajoute
+    # une ligne en dessous. Sinon, on imprime vraiment.
     # 
     # TODO Un jour, il faudra vraiment s’attaquer au problème et
     # voir d’où il vient, afin de le corriger proprement. Pour le
@@ -175,6 +174,7 @@ class ColumnsBox < ParagraphAccumulator
     pdf.bounding_box([left, icursor], **bb_options) do
       @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate, leading: pdf.line_height - pdf.height_of('Xp')))
       
+      # - Pour voir encadré la colonne (si options -grid)
       if stroke?
         pdf.transparent(0.4) { 
           pdf.line_width 0.2
@@ -249,7 +249,9 @@ class ColumnsBox < ParagraphAccumulator
   end
 
   def segments ; @segments end
-  def segments=(value); @segments = value end
+  def segments=(value)
+    @segments = value
+  end
 
   # --- Predicate Methods ---
 
@@ -262,22 +264,48 @@ class ColumnsBox < ParagraphAccumulator
 
   private
 
-    # Principe de calcul simple : on fait une colonne unique qui 
-    # contient tout le texte et l’on en demande la hauteur, qu’on
-    # divise par le nombre de colonnes demandées.
-    def calc_height(pdf)
+    ##
+    # Première méthode pour calculer les dimensions générales du 
+    # mode multicolonnes, hors hauteur des colonnes (qui fera l’objet
+    # d’une méthode spéciale, ci-dessous)
+    def calc_dimensions(pdf)
+      col_x = column_count.freeze
+      col_w = (width - (gutter * (col_x - 1)) ) # largeur en retirant les gouttières
+      col_w = (col_w / col_x).freeze
 
-      # - Valeurs utiles -
-      column_width = (width - (gutter * (column_count - 1)) ) # largeur en retirant les gouttières
-      column_width = (column_width / column_count).freeze
-
-      ColumnData.count      = column_count
-      ColumnData.width      = column_width
-      ColumnData.full_width = column_width + gutter
+      ColumnData.count      = col_x
+      ColumnData.width      = col_w
+      ColumnData.full_width = col_w + gutter
       ColumnData.gutter     = gutter
+      
+      # Vérification, le calcul doit être bon
+      pagew = pdf.bounds.width.round(2)
+      surfw = (col_w * col_x + (col_x - 1) * gutter).round(2)
+      pagew == surfw || begin
+        raise "Mauvais calcul de la largeur des colonnes du mode multicolonnes…"
+      end
 
-      h = nil # La valeur cherchée
-      my = self
+      # Débuggage
+      if false #true
+        puts <<~EOT.bleu
+          Largeur page : #{pagew}
+          Nombre cols  : #{col_x}
+          Gouttière    : #{gutter}
+          =>
+          Largeur col  : #{col_w}
+          Vérification (doit être égale à largeur page)
+          Check: col-width x col-count + (col-count - 1) x gutter = largeur page
+          Résultat : #{surfw}
+          EOT
+      end
+
+    end
+
+    ##
+    # Diviser, après l’avoir récupéré, le texte des colonnes en
+    # segments (@segments)
+    # 
+    def divide_text_in_segments(pdf)
 
       # Liste pour mettre tous les textes obtenus
       text_ary = []
@@ -312,37 +340,60 @@ class ColumnsBox < ParagraphAccumulator
 
       # Pour le débuggage
       @debug_start_column = debug_txt.join('').gsub(/\n/," ¶ ")
+      
+    end
+
+    # Principe de calcul simple : on fait une colonne unique qui 
+    # contient tout le texte et l’on en demande la hauteur, qu’on
+    # divise par le nombre de colonnes demandées.
+    def calc_column_height(pdf)
+
+      # On a besoin de la largeur de colonne
+      colw = ColumnData.width
+
+      h = nil # La valeur cherchée
+      my = self
 
       # Si une hauteur est fixée ou un nombre fixe de lignes, on 
       # renvoie la valeur correspondante
-      return fixed_height * column_count if fixed_height 
-      return lines_count * pdf.line_height * column_count if lines_count
+      if fixed_height
+        h = fixed_height * column_count
+      elsif lines_count
+        h = lines_count * pdf.line_height * column_count 
+      else
+        puts "\nNombre de segments : #{segments.count}".jaune
+        puts "Segments : #{segments}"
+        fbox = ::Prawn::Text::Formatted::Box::new(segments, {
+          at: [0, 10000],
+          width: colw - 1,
+          inline_format: true,
+          document:pdf
+        })
+        fbox.render(dry_run: true)
+        h = fbox.height.freeze
+        puts "height totale calculée : #{h.inspect}".bleu
+        # h = (fbox.height - (fbox.line_gap + fbox.leading)).freeze
+        h = (fbox.height - (fbox.line_gap + 4)).freeze
+        h = (fbox.height + pdf.line_height).freeze
+        puts "height totale recalculée : #{h.inspect}".bleu
+        puts "Nombre de lignes : #{(h / pdf.line_height)}"
 
+      end      
 
-      # MÉTHODE 1 (par dry_run)
-      # (la #1 mais celle qui a été fait après la #2)
+    # puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
+      h = h / column_count
+      h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
+      ColumnData.height = h
 
-      fbox = ::Prawn::Text::Formatted::Box::new(text_ary, {
-        at: [0, 100000],
-        width: column_width,
-        inline_format: true,
-        document:pdf
-      })
-      fbox.render(dry_run: true)
-      h = fbox.height.freeze
-      
-      # puts "h calc with method #1 : #{h.inspect}".bleu
-
-      return h # la valeur calculée
-
+      return
 
       # MÉTHODE #2
       # (la #2 mais faite avant la #1)
 
       pdf.update do
         current_cursor = cursor.freeze
-        bounding_box([0,bounds.top], width: column_width, height: 1000000) do
-          h = height_of_formatted(text_ary, my.text_options.merge!(leading: line_height - height_of('Xp')))
+        bounding_box([0,bounds.top], width: colw, height: 1000000) do
+          h = height_of_formatted(segments, my.text_options.merge!(leading: line_height - height_of('Xp')))
         end
         # On se remet en place
         move_cursor_to(current_cursor)

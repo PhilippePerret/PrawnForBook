@@ -14,10 +14,12 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     Vous l’aurez déjà compris, grâce à cette marque, on peut avoir autant de colonnes que l’on désire, comme ci-dessous.
     <!-- \\(( colonnes\\(3, {lines_count: 3}) )) -->
+    Un paragraphe au-dessus de la section multi-colonnes.
     (( colonnes(3) ))
     (( {align: :left} ))
     Ce texte se trouve en mode multi-colonnes, avec trois colonnes, grâce à la marque `\\(( colonnes\\(3) ))` qui se trouve au-dessus et la marque `\\(( colonnes\\(1) ))` qui se trouve en dessous. On peut forcer le nombre de lignes.
     (( colonnes(1) ))
+    Un paragraphe au-dessous de la section multi-colonnes.
 
     #### Définition plus précise des colonnes
 
@@ -55,6 +57,11 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     … on laissera 2 lignes vides entre le paragraphe précédent et le début de la section à 2 colonnes, et 3 lignes vides entre la fin de la section multi-colonnes et le paragraphe suivant.
 
+    #### Très long texte en multi-colonnes
+
+    Si vous avez un extrêmement long texte en multi-colonnes (par exemple tout votre livre), il est préférable de le diviser en plusieurs sections plutôt que de le faire tenir dans une seule section (ce qui entrainement fatalement des problèmes).
+    Par exemple, renouvelez la marque `\\(( colonnes\\(2) ))` à chaque nouveau chapitre (sans oublier de terminer la section précédente par `\\(( colonnes\\(1) ))`.
+    
     #### Espace avant et après la section multi-colonnes
 
     On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.).
