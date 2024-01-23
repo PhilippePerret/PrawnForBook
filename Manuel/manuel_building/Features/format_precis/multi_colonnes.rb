@@ -3,23 +3,31 @@ Prawn4book::Manual::Feature.new do
   titre "Section en multi-colonnes"
 
   description <<~EOT
-    On peut provisoirement passer en double colonnes grâce à la marque :
+    On peut provisoirement passer en double colonnes (ou plus) grâce à la marque :
     (( line ))
-    {-}`\\(\\( colonnes\\(2) ))`
+    {-}`\\(\\( colonnes\\(<nombre de colonnes>) ))`
     (( line ))
-    Pour arrêter d’être en double colonnes, il suffit d’utiliser :
+    C’est ce qu’on appelle le *mode multi-colonnes*.
+    Pour quitter le mode multi colonnes, il suffit de revenir à une seule colonne :
     (( line ))
     {-}`\\(( colonnes\\(1) ))`
     (( line ))
-    Vous l’aurez déjà compris, grâce à cette marque, on peut avoir autant de colonnes que l’on désire.
+    Vous l’aurez déjà compris, grâce à cette marque, on peut avoir autant de colonnes que l’on désire, comme ci-dessous.
+    <!-- \\(( colonnes\\(3, {lines_count: 3}) )) -->
+    (( colonnes(3) ))
+    (( {align: :left} ))
+    Ce texte se trouve en mode multi-colonnes, avec trois colonnes, grâce à la marque `\\(( colonnes\\(3) ))` qui se trouve au-dessus et la marque `\\(( colonnes\\(1) ))` qui se trouve en dessous. On peut forcer le nombre de lignes.
+    (( colonnes(1) ))
 
     #### Définition plus précise des colonnes
 
     Comme pour tout élément _PFB_, le comportement par défaut est harmonieux et devrait apporter satisfaction à tout utilisateur. Mais comme pour tout élément, on peut néanmoins redéfinir de façon précise de nombreux élément, simplement en ajoutant un deuxième paramètre à la méthode `colonnes` après le nombre de colonnes.
     Ce paramètre est une table ruby, donc entre accolades, avec des paires "`propriété: valeur`". Par exemple :
     (( line ))
-    (( {align: :center} ))
-     `(( colonnes\\(3, {lines_before:4})) ))` 
+    ~~~
+    (( colonnes\\(<nombre cols>, {\\<prop>: \\<valeur>, \\
+         \\<prop>: \\<valeur>, etc.}) ))
+    ~~~
 
     #### Gouttière entre les colonnes
 
@@ -52,7 +60,7 @@ Prawn4book::Manual::Feature.new do
     On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.).
     Mais les propriétés `lines_before` et `lines_after` doivent être préférées, sauf dans le cas où vous connaissez les distances précisément, en pouce, millimètre ou autre, à avoir entre le texte et la section multi-colonnes.
 
-    #### Nombre de lignes en multi-colonnes
+    #### Nombre fixe de lignes en multi-colonnes
 
     Malgré tous nos efforts, ou pour des besoins propres, il est possible que les colonnes ne correspondent pas à ce que l’on attend au niveau de leur hauteur.
     On peut utiliser soit la propriété `lines_count` pour définir le nombre de lignes (c’est la valeur) que doit avoir la section multi-colonnes, soit la propriété `height` pour définir la hauteur avec un unité de mesure (pouces, millimètre, etc.).

@@ -24,8 +24,8 @@ book_format:
     show_margins: false
   text:
     font: 'Numito/light/11/000000'
-    # line_height:  14
-    line_height:  25
+    line_height:  14
+    # line_height:  25
     guillemets:   ['« ',' »']
     indent:       0
   #<titles>
@@ -89,6 +89,7 @@ headers_footers:
 
 table_of_content:
   # title: "Table des matières"
+  page_count: 4
   no_title: true
   level_max: 3
   lines_top: 4

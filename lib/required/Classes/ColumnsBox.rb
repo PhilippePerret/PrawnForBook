@@ -55,12 +55,12 @@ class ColumnsBox < ParagraphAccumulator
     # utiliser dans l’absolue, en fonction de la longueur du texte.
     # 
     hauteur_total = calc_height(pdf)
-    puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
+    # puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
     column_height = hauteur_total / column_count
     h = column_height
     h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
     ColumnData.height = h
-    puts "hauteur finale de colonne : #{h.inspect}".bleu
+    # puts "hauteur finale de colonne : #{h.inspect}".bleu
 
     # Y a-t-il de l’espace avant ?
     if space_before != 0

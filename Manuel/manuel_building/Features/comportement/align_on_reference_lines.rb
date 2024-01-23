@@ -1,7 +1,7 @@
 Prawn4book::Manual::Feature.new do
 
-  puts "Faire un real book"
-  exit 12
+  # puts "Faire un real book"
+  # exit 12
 
   hline = 30
 

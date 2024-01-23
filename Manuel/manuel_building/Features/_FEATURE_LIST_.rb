@@ -58,8 +58,8 @@ module Prawn4book
   TOUT_BIBLIO = TOUT || nil
   # TOUT_BIBLIO = TOUT || true
 
-  FORMAT_PRECIS = TOUT || nil # format livre/page
-  # FORMAT_PRECIS = TOUT || true
+  # FORMAT_PRECIS = TOUT || nil # format livre/page
+  FORMAT_PRECIS = TOUT || true
 
   CHANGE_DEF_BEHAVIOR = TOUT || nil
   # CHANGE_DEF_BEHAVIOR = TOUT || true
@@ -73,7 +73,9 @@ module Prawn4book
   # 
   FEATURE_LIST = [
 
-  ]; REMETTRE = [
+  # Il suffit de commenter/excommenter la ligne suivante pour vider
+  # la liste des features à afficher
+  # ]; REMETTRE = [
 
     # -- Généralités --
     TOUT_GENE && 'generalites/grand_titre',
@@ -198,7 +200,7 @@ module Prawn4book
     # 
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
-    FORMAT_PRECIS && 'format_precis/double_colonnes',
+    FORMAT_PRECIS && 'format_precis/multi_colonnes',
     FORMAT_PRECIS && 'format_precis/double_colonnes_erreurs',
 
     #---Changements_comportements_par_default---#

@@ -40,10 +40,11 @@ Prawn4book::Manual::Feature.new do
   sample_recipe <<~YAML
     ---
     inserted_pages:
-      credits_page: true # pour qu’elle soit imprimée
+      credits_page: true  # pour qu’elle soit imprimée
+                          # mais sans personnalisation
 
     book_data:
-      isbn: .\\..
+      isbn: .\..
       url:  "https://url/du/livre"
 
     book_making:
@@ -60,10 +61,10 @@ Prawn4book::Manual::Feature.new do
         name: "=MM & PP" # '=' => non transformé
         mail: null
       correction:
-        patro: .\\..
-        mail: .\\..
+        patro: .\..
+        mail: .\..
       acknowledgements: # remerciements
-        patro: .\\..
+        patro: .\..
 
     publisher:
       name: "<nom éditeur ou édition>"

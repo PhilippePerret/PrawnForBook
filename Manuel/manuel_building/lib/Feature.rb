@@ -1213,7 +1213,7 @@ private
       # La méthode #to_yaml écrit les symboles avec :key: mais je 
       # n’aime pas cette tournure donc j’enlève les premiers ":" et
       # j’ajoute également un "# ..." en haut du fichier.
-      tbl.to_yaml.gsub(/:([a-zA-Z_0-9]+):/,'\1:').gsub(/^\-\-\-/,"---\n# .\\..")
+      tbl.to_yaml.gsub(/:([a-zA-Z_0-9]+):/,'\1:').gsub(/^\-\-\-/,"---\n# .\..")
     end
 
 end #/class Feature
