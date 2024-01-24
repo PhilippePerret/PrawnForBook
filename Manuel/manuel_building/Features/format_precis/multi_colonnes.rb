@@ -66,17 +66,19 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     * **`align`** | Alignement des paragraphes. Justifiés (`:justify`) par défaut, on peut les aligner à gauche (`:left` ou `LEFT`) ou à droite (`:right` ou `RIGHT`). La section ci-dessous est obtenue avec le code\n#{TAB_LIST}`\\(( colonnes\\(2, {align: RIGHT}) \\))`
     (( line ))
+    Un paragraphe normal situé au-dessus de la section à double colonnes.
     (( colonnes(2, {align: RIGHT}) ))
     Ce texte est aligné à droite dans la section double colonne grâce à la propriété `align` mise à `RIGHT`. Rappel : par défaut, le texte est justifié.
     (( colonnes(1) ))
-    Un paragraphe normal situé sous la sectoin à double colonnes.
+    Un paragraphe normal situé sous la section à double colonnes.
     (( line ))
     * **`font`** | Fonte utilisée pour le texte. C’est une [[annexe/font_string]] classique. La section ci-dessous est engendrée par le code\n#{TAB_LIST}`\\(( colonnes\\(2, {font:\\"Arial/bold/8.5/008800\\"}) \\))`.
     (( line ))
+    Un paragraphe normal situé au-dessus de la section à double colonnes.
     (( colonnes(2, {font:"Arial/bold/8.5/008800"}) ))
     Une section en double colonnes avec la police "Arial", le style "bold", une taille de 8.5 et une couleur vert foncé (008800). Par défaut, c’est la police du livre qui est utilisée.
     (( colonnes(1) ))
-    Un paragraphe normal situé sous la sectoin à double colonnes.
+    Un paragraphe normal situé sous la section à double colonnes.
     (( line ))
 
 
@@ -90,9 +92,21 @@ Prawn4book::Manual::Feature.new do
     On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.).
     Mais les propriétés `lines_before` et `lines_after` doivent être préférées, sauf dans le cas où vous connaissez les distances précisément, en pouce, millimètre ou autre, à avoir entre le texte et la section multi-colonnes.
 
-    #### Nombre fixe de lignes en multi-colonnes
+    #### Ajouter ou retrancher des lignes en multi-colonnes
 
     Malgré tous nos efforts, ou pour des besoins propres, il est possible que les colonnes ne correspondent pas à ce que l’on attend au niveau de leur hauteur.
+    Dans ce cas, grâce à la propriété `add_lines`, on peut ajouter ou retrancher un certain nombre de lignes. Par exemple, ci-dessous, on force l’affichage dans une seule colonne à l’aide de `\\(( colonnes\\(2, {add_lines: 3}) \\)`.
+    (( line ))
+    Un paragraphe normal situé au-dessus de la section à double colonnes.
+    (( colonnes(2,{add_lines:2}) ))
+    Un texte qui devrait tenir sur les deux colonnes mais qu’on a allongé en hauteur pour avoir 3 lignes de plus. Donc ce texte tient intégralement sur la première colonne comme voulu par le nombre.
+    (( colonnes(1) ))
+    Un paragraphe normal situé sous la section à double colonnes.
+    (( line ))
+
+    #### Nombre fixe de lignes en multi-colonnes
+
+    De la même manière et malgré tous nos efforts, il est possible de fixer de façon précise le nombre de lignes.
     On peut utiliser soit la propriété `lines_count` pour définir le nombre de lignes (c’est la valeur) que doit avoir la section multi-colonnes, soit la propriété `height` pour définir la hauteur avec un unité de mesure (pouces, millimètre, etc.).
     (( line ))
     (( {align: :center} ))

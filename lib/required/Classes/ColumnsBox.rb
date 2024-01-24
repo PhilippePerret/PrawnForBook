@@ -271,6 +271,12 @@ class ColumnsBox < ParagraphAccumulator
     end
   end
 
+  # Nombre de lignes ajoutées par colonne (propriété @add_lines)
+  # Toujours au moins égal à 0
+  def added_lines
+    @added_lines ||= (params[:add_lines]||0).to_i
+  end
+  
   # Nombre forcé de lignes
   def lines_count
     @lines_count ||= begin
@@ -414,16 +420,13 @@ class ColumnsBox < ParagraphAccumulator
         # puts "Segments : #{segments}"
         fbox = ::Prawn::Text::Formatted::Box::new(segments, {
           at: [0, 10000],
-          width: colw - 1,
+          width: colw,
           inline_format: true,
           document:pdf
         }.merge(general_font_style))
         fbox.render(dry_run: true)
         h = fbox.height.freeze
         puts "height totale calculée : #{h.inspect}".bleu
-        # h = (fbox.height + pdf.line_height).freeze
-        puts "height totale recalculée : #{h.inspect}".bleu
-        puts "Nombre de lignes : #{(h / pdf.line_height)}".jaune
         # On essaie de passer par le nombre de lignes pour fixer
         # la hauteur
 
@@ -438,13 +441,18 @@ class ColumnsBox < ParagraphAccumulator
 
       # En passant par le nombre de lignes
       nb_lignes = (h / pdf.line_height).floor
-      puts "Nombre ajusté de lignes ajusté : #{nb_lignes}".jaune
+      puts "Nombre ajusté de lignes : #{nb_lignes}".jaune
       lines_per_column = (nb_lignes.to_f / column_count).ceil
+      # On ajoute (ou on retire) éventuellement les lignes ajoutées
+      # ou à retirer
+      lines_per_column += added_lines
       puts "Nombre de lignes par colonne : #{lines_per_column}".bleu
       h = lines_per_column * pdf.line_height + 4.121 
                           # TODO Pourquoi ce nombre ? (ça semble être
                           # le nombre exact pour le texte arial en
                           # vert dans le manuel autoproduit)
+                          # NOTE : ça doit être faux maintenant que j’ai
+                          # enlevé le +1
       # puts "ascender: #{pdf.font.ascender}" pas ça
       # puts "descender: #{pdf.font.descender}" pas ça
       puts "Hauteur finale par colonne : #{h}"
