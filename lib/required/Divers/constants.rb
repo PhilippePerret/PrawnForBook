@@ -113,3 +113,8 @@ YAML_OPTIONS = {symbolize_names:true, aliases: true, permitted_classes: [Date, S
 #   \1 ou $1
 EXCHAR = /(?<!\\)/
 
+module Prawn4book
+  LEFT    = :left
+  RIGHT   = :right
+  JUSTIFY = :justify
+end #/module Prawn4book

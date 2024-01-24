@@ -208,6 +208,7 @@ class << self
   #   par défaut si des valeurs par défaut ont été envoyées)
   # 
   def get_in(table, default_values = {})
+    table = {font: table} if table.is_a?(String)
     FonteGetter.new(table || {}, default_values)
   end
 

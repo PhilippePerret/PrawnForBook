@@ -2,8 +2,10 @@ Prawn4book::Manual::Feature.new do
 
   titre "Section en multi-colonnes"
 
+  TAB_LIST = '     '
+
   description <<~EOT
-    On peut provisoirement passer en double colonnes (ou plus) grâce à la marque :
+    On peut provisoirement passer en double colonnes ou plus grâce à la marque :
     (( line ))
     {-}`\\(\\( colonnes\\(<nombre de colonnes>) ))`
     (( line ))
@@ -31,7 +33,7 @@ Prawn4book::Manual::Feature.new do
          \\<prop>: \\<valeur>, etc.}) ))
     ~~~
 
-    #### Gouttière entre les colonnes
+    #### Largeur de gouttière entre les colonnes
 
     On appelle *gouttière* l’espace vertical laissé entre deux colonnes. On peut le redéfinir avec la propriété `gutter` ("gouttière" en anglais).
     (( line ))
@@ -56,6 +58,27 @@ Prawn4book::Manual::Feature.new do
      `\\(( colonnes\\(2, {lines_before: 2, lines_after:3} ))`
     (( line ))
     … on laissera 2 lignes vides entre le paragraphe précédent et le début de la section à 2 colonnes, et 3 lignes vides entre la fin de la section multi-colonnes et le paragraphe suivant.
+
+    #### Styles du texte dans les multi-colonnes
+
+    On peut modifier les paragraphes de façon générale à l’intérieur d’une section multi-colonne grâce au deuxième paramètre.
+    Les propriétés modifiables sont :
+    (( line ))
+    * **`align`** | Alignement des paragraphes. Justifiés (`:justify`) par défaut, on peut les aligner à gauche (`:left` ou `LEFT`) ou à droite (`:right` ou `RIGHT`). La section ci-dessous est obtenue avec le code\n#{TAB_LIST}`\\(( colonnes\\(2, {align: RIGHT}) \\))`
+    (( line ))
+    (( colonnes(2, {align: RIGHT}) ))
+    Ce texte est aligné à droite dans la section double colonne grâce à la propriété `align` mise à `RIGHT`. Rappel : par défaut, le texte est justifié.
+    (( colonnes(1) ))
+    Un paragraphe normal situé sous la sectoin à double colonnes.
+    (( line ))
+    * **`font`** | Fonte utilisée pour le texte. C’est une [[annexe/font_string]] classique. La section ci-dessous est engendrée par le code\n#{TAB_LIST}`\\(( colonnes\\(2, {font:\\"Arial/bold/8.5/008800\\"}) \\))`.
+    (( line ))
+    (( colonnes(2, {font:"Arial/bold/8.5/008800"}) ))
+    Une section en double colonnes avec la police "Arial", le style "bold", une taille de 8.5 et une couleur vert foncé (008800). Par défaut, c’est la police du livre qui est utilisée.
+    (( colonnes(1) ))
+    Un paragraphe normal situé sous la sectoin à double colonnes.
+    (( line ))
+
 
     #### Très long texte en multi-colonnes
 

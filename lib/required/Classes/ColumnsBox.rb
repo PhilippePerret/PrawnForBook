@@ -75,6 +75,10 @@ class ColumnsBox < ParagraphAccumulator
       lines_before.abs.times { pdf.move_to_previous_line }
     end
 
+    # Police propre à appliquer à toute la section
+    # 
+    pdf.font(fonte) if fonte
+
     # Maintenant qu’on a la hauteur que prend le texte avec les
     # colonnes définies, on peut déterminer les blocs à faire. On les
     # fait et on met le texte au fur et à mesure
@@ -157,6 +161,9 @@ class ColumnsBox < ParagraphAccumulator
     end #/x nombre de colonnes
   end
 
+  def apply_color?
+    :TRUE == @generalcolorspec ||= true_or_false(fonte && fonte.color != Fonte.default.color)
+  end
   # Construction d’un des colonnes de texte
   # 
   # @note
@@ -169,9 +176,14 @@ class ColumnsBox < ParagraphAccumulator
       height: required_height,
       width:  ColumnData.width,
     }
-    # Pour le débuggage, on mémorise le début de la colonne
-    pdf.font(Fonte.default)
+    pdf.font(fonte || Fonte.default)
+    pdf.fill_color(fonte.color) if apply_color? 
     pdf.bounding_box([left, icursor], **bb_options) do
+
+      #####################################
+      ###     ÉCRITURE DES SEGMENTS     ###
+      #####################################
+
       @segments = pdf.formatted_text_box(segments, **text_options.merge(overflow: :truncate, leading: pdf.line_height - pdf.height_of('Xp')))
       
       # - Pour voir encadré la colonne (si options -grid)
@@ -183,16 +195,49 @@ class ColumnsBox < ParagraphAccumulator
         }
       end
     end
+    pdf.fill_color(Fonte.default.color) if apply_color? 
   end
 
   def text_options
     @text_options ||= {
-      align:          :justify,
+      align:          align,
       inline_format:  true
-    }
+    }.merge(general_font_style)
   end
 
   # -- Data Methods --
+
+  def align
+    @align ||= params[:align] || :justify
+  end
+
+  def fonte
+    @fonte ||= begin
+      ft = params[:font]||params[:fonte]
+      ft = Fonte.get_in(ft).or_default() unless ft.nil?
+      ft
+    end
+  end
+
+  # Le style général à appliquer à tous les paragraphes
+  # 
+  # @return [Hash] table à ajouter aux propriétés des text box et
+  # autres. La table est vide si aucune fonte n’est définie dans les
+  # propriétés du deuxième paramètre de la méthode #colonnes
+  # 
+  def general_font_style
+    @general_font_style ||= begin
+      if fonte
+        {
+          font_name:fonte.name, 
+          font_style:fonte.style,
+          font_size: fonte.size
+        }
+      else
+        {}
+      end
+    end
+  end
 
   def column_count
     @column_count ||= (params[:column_count] || 2).freeze
@@ -229,7 +274,9 @@ class ColumnsBox < ParagraphAccumulator
   # Nombre forcé de lignes
   def lines_count
     @lines_count ||= begin
-      params[:lines_count] ? params[:lines_count].to_i.freeze : nil
+      params[:lines_count] ? (params[:lines_count].to_i - 1).freeze : nil
+      # Pour le moment, je mets -1 parce qu’on en ajoute une chaque
+      # fois, mais quand les calculs seront bon, il faudra voir…
     end
   end
 
@@ -354,6 +401,8 @@ class ColumnsBox < ParagraphAccumulator
       h = nil # La valeur cherchée
       my = self
 
+      puts "\nDonnées pour section commençant par #{segments[0][:text].inspect}"
+
       # Si une hauteur est fixée ou un nombre fixe de lignes, on 
       # renvoie la valeur correspondante
       if fixed_height
@@ -361,47 +410,45 @@ class ColumnsBox < ParagraphAccumulator
       elsif lines_count
         h = lines_count * pdf.line_height * column_count 
       else
-        puts "\nNombre de segments : #{segments.count}".jaune
-        puts "Segments : #{segments}"
+        # puts "\nNombre de segments : #{segments.count}".jaune
+        # puts "Segments : #{segments}"
         fbox = ::Prawn::Text::Formatted::Box::new(segments, {
           at: [0, 10000],
           width: colw - 1,
           inline_format: true,
           document:pdf
-        })
+        }.merge(general_font_style))
         fbox.render(dry_run: true)
         h = fbox.height.freeze
         puts "height totale calculée : #{h.inspect}".bleu
-        # h = (fbox.height - (fbox.line_gap + fbox.leading)).freeze
-        h = (fbox.height - (fbox.line_gap + 4)).freeze
-        h = (fbox.height + pdf.line_height).freeze
+        # h = (fbox.height + pdf.line_height).freeze
         puts "height totale recalculée : #{h.inspect}".bleu
-        puts "Nombre de lignes : #{(h / pdf.line_height)}"
+        puts "Nombre de lignes : #{(h / pdf.line_height)}".jaune
+        # On essaie de passer par le nombre de lignes pour fixer
+        # la hauteur
 
       end      
 
     # puts "\nhauteur_total = #{hauteur_total.inspect} (LH: #{pdf.line_height}/LC: #{lines_count.inspect})".bleu
-      h = h / column_count
-      h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
+      # h = h / column_count
+      # h = ((h.to_i / pdf.line_height).to_f * pdf.line_height) + pdf.line_height
+      # puts "Hauteur finale par colonne (#{column_count}) : #{h}".orange
+      # h = nb_lignes * pdf.line_height
+      # puts "Nombre de lignes par colonne : #{h/pdf.line_height}".orange
+
+      # En passant par le nombre de lignes
+      nb_lignes = (h / pdf.line_height).floor
+      puts "Nombre ajusté de lignes ajusté : #{nb_lignes}".jaune
+      lines_per_column = (nb_lignes.to_f / column_count).ceil
+      puts "Nombre de lignes par colonne : #{lines_per_column}".bleu
+      h = lines_per_column * pdf.line_height + 4.121 
+                          # TODO Pourquoi ce nombre ? (ça semble être
+                          # le nombre exact pour le texte arial en
+                          # vert dans le manuel autoproduit)
+      # puts "ascender: #{pdf.font.ascender}" pas ça
+      # puts "descender: #{pdf.font.descender}" pas ça
+      puts "Hauteur finale par colonne : #{h}"
       ColumnData.height = h
-
-      return
-
-      # MÉTHODE #2
-      # (la #2 mais faite avant la #1)
-
-      pdf.update do
-        current_cursor = cursor.freeze
-        bounding_box([0,bounds.top], width: colw, height: 1000000) do
-          h = height_of_formatted(segments, my.text_options.merge!(leading: line_height - height_of('Xp')))
-        end
-        # On se remet en place
-        move_cursor_to(current_cursor)
-      end #/pdf.update
-      
-      # puts "h calc with method #2 : #{h.inspect}".bleu
-
-      return h
     end
 
 end #/class ColumnsBox
