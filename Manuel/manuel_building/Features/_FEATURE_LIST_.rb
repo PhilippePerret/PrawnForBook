@@ -201,7 +201,6 @@ module Prawn4book
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
     FORMAT_PRECIS && 'format_precis/multi_colonnes',
-    FORMAT_PRECIS && 'format_precis/double_colonnes_erreurs',
 
     #---Changements_comportements_par_default---#
     # 
@@ -237,6 +236,7 @@ module Prawn4book
     TOUT_ANNEXE && 'annexe/format_yaml',
     TOUT_ANNEXE && 'annexe/font_string',
     TOUT_ANNEXE && 'annexe/definition_couleur',
+    TOUT_ANNEXE && 'annexe/grille_reference',
     TOUT_ANNEXE && 'images/rogner_svg',
     TOUT_ANNEXE && 'annexe/synopsis_creation',
     TOUT_ANNEXE && 'annexe/installation_application',

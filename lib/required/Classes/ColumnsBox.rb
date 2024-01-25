@@ -248,7 +248,7 @@ class ColumnsBox < ParagraphAccumulator
   end
 
   def gutter
-    @gutter ||= (params[:gutter] || pdf.line_height).freeze
+    @gutter ||= (params[:gutter].to_pps || pdf.line_height).freeze
   end
 
   def lines_before
@@ -371,6 +371,7 @@ class ColumnsBox < ParagraphAccumulator
 
       # Récupération des paragraphes (en les mettant sous la forme
       # de table de texte pour Prawn)
+      styles_for_next = nil
       each_paragraph do |par|
         if par.pfbcode?
           if par.for_next_paragraph?
@@ -378,12 +379,32 @@ class ColumnsBox < ParagraphAccumulator
             # appliquer, qui pourront faire varier la hauteur de la
             # colonne et notamment le leading qui est très
             # important ici
+            styles_for_next = par.next_parag_style
+            if styles_for_next[:font]
+              ft = styles_for_next.delete(:font)
+              styles_for_next.merge!({
+                font_name: ft.name, size: ft.size, styles: [ft.style],
+                color: ft.color
+              })
+            end
           end
           next
         end #/si pfbcode
+        if styles_for_next && styles_for_next[:indent]
+          par.set_indentation(styles_for_next[:indent])
+        end
         str = par.indented_text + "\n"
         p = []
-        text_ary += pdf.text_formatter.format(str, *p)
+        par_segments = pdf.text_formatter.format(str, *p)
+        # - S’il y a du style inline -
+        if styles_for_next
+          par_segments.each do |thash|
+            thash.merge!(styles_for_next)
+          end
+          styles_for_next = nil
+        end
+        # - On ajoute ces segments -
+        text_ary += par_segments
         debug_txt << par.text if debug_txt.count < 10
       end
       # On retire le dernier item, qui contient le retour 
@@ -401,20 +422,24 @@ class ColumnsBox < ParagraphAccumulator
     # divise par le nombre de colonnes demandées.
     def calc_column_height(pdf)
 
+      debugit = false
+
       # On a besoin de la largeur de colonne
       colw = ColumnData.width
 
       h = nil # La valeur cherchée
       my = self
 
-      puts "\nDonnées pour section commençant par #{segments[0][:text].inspect}"
+      if debugit
+        puts "\nDonnées pour section commençant par #{segments[0][:text].inspect}"
+      end
 
       # Si une hauteur est fixée ou un nombre fixe de lignes, on 
       # renvoie la valeur correspondante
       if fixed_height
         h = fixed_height * column_count
       elsif lines_count
-        h = lines_count * pdf.line_height * column_count 
+        h = (lines_count * pdf.line_height * column_count) + pdf.line_height
       else
         # puts "\nNombre de segments : #{segments.count}".jaune
         # puts "Segments : #{segments}"
@@ -426,7 +451,7 @@ class ColumnsBox < ParagraphAccumulator
         }.merge(general_font_style))
         fbox.render(dry_run: true)
         h = fbox.height.freeze
-        puts "height totale calculée : #{h.inspect}".bleu
+        puts "height totale calculée : #{h.inspect}".bleu if debugit
         # On essaie de passer par le nombre de lignes pour fixer
         # la hauteur
 
@@ -441,21 +466,17 @@ class ColumnsBox < ParagraphAccumulator
 
       # En passant par le nombre de lignes
       nb_lignes = (h / pdf.line_height).floor
-      puts "Nombre ajusté de lignes : #{nb_lignes}".jaune
+      puts "Nombre ajusté de lignes : #{nb_lignes}".jaune if debugit
       lines_per_column = (nb_lignes.to_f / column_count).ceil
       # On ajoute (ou on retire) éventuellement les lignes ajoutées
       # ou à retirer
       lines_per_column += added_lines
-      puts "Nombre de lignes par colonne : #{lines_per_column}".bleu
+      puts "Nombre de lignes par colonne : #{lines_per_column}".bleu if debugit
       h = lines_per_column * pdf.line_height + 4.121 
-                          # TODO Pourquoi ce nombre ? (ça semble être
-                          # le nombre exact pour le texte arial en
-                          # vert dans le manuel autoproduit)
-                          # NOTE : ça doit être faux maintenant que j’ai
-                          # enlevé le +1
-      # puts "ascender: #{pdf.font.ascender}" pas ça
-      # puts "descender: #{pdf.font.descender}" pas ça
-      puts "Hauteur finale par colonne : #{h}"
+                          # TODO Pourquoi ce nombre ? (approximatif)
+                          # Il ne correspond ni à l’ascender ni au
+                          # descender de la fonte courante.
+      puts "Hauteur finale par colonne : #{h}" if debugit
       ColumnData.height = h
     end
 

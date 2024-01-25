@@ -1,27 +1,32 @@
 Prawn4book::Manual::Feature.new do
 
-  titre "Section en multi-colonnes"
+  titre "Multi-colonnage"
 
   TAB_LIST = '     '
 
   description <<~EOT
     On peut provisoirement passer en double colonnes ou plus grâce à la marque :
     (( line ))
-    {-}`\\(\\( colonnes\\(<nombre de colonnes>) ))`
+    {-}`\\(\\( colonnes\\(\\<nombre de colonnes>) ))`
     (( line ))
-    C’est ce qu’on appelle le *mode multi-colonnes*.
+    … où `\\<nombre de colonnes>` est, comme on le devine, à remplacer par le nombre de colonnes que l’ont veut obtenir.
+    C’est ce qu’on appelle le *mode multicolonnage*.
     Pour quitter le mode multi colonnes, il suffit de revenir à une seule colonne :
     (( line ))
     {-}`\\(( colonnes\\(1) ))`
     (( line ))
-    Vous l’aurez déjà compris, grâce à cette marque, on peut avoir autant de colonnes que l’on désire, comme ci-dessous.
+    Grâce à cette marque, on peut avoir autant de colonnes que l’on désire, comme ci-dessous.
     <!-- \\(( colonnes\\(3, {lines_count: 3}) )) -->
-    Un paragraphe au-dessus de la section multi-colonnes.
+    gris::Un paragraphe au-dessus de la section multi-colonnes.
     (( colonnes(3) ))
     (( {align: :left} ))
-    Ce texte se trouve en mode multi-colonnes, avec trois colonnes, grâce à la marque `\\(( colonnes\\(3) ))` qui se trouve au-dessus et la marque `\\(( colonnes\\(1) ))` qui se trouve en dessous. On peut forcer le nombre de lignes.
+    Ce texte se trouve en mode multi-colonnes, avec trois colonnes, grâce à la marque `\\(( colonnes\\(3) ))` qui se trouve au-dessus et la marque `\\(( colonnes\\(1) ))` qui se trouve en dessous. Il ne faut pas oublier la dernière marque.
     (( colonnes(1) ))
-    Un paragraphe au-dessous de la section multi-colonnes.
+    gris::Un paragraphe au-dessous de la section multi-colonnes.
+
+    #### Précaution pour les sections multi-colonnes
+
+    Attention à toujours terminer par `\\(( colonnes\\(1) ))`, même lorsque c’est la dernière page. Dans le cas contraire, en cas d’oubli, la section multi-colonnes — et tout son texte — ne sera tout simplement pas gravée dans votre livre.
 
     #### Définition plus précise des colonnes
 
@@ -29,7 +34,7 @@ Prawn4book::Manual::Feature.new do
     Ce paramètre est une table ruby, donc entre accolades, avec des paires "`propriété: valeur`". Par exemple :
     (( line ))
     ~~~
-    (( colonnes\\(<nombre cols>, {\\<prop>: \\<valeur>, \\
+    (( colonnes\\(\\<nombre cols>, {\\<prop>: \\<valeur>, \\
          \\<prop>: \\<valeur>, etc.}) ))
     ~~~
 
@@ -38,7 +43,16 @@ Prawn4book::Manual::Feature.new do
     On appelle *gouttière* l’espace vertical laissé entre deux colonnes. On peut le redéfinir avec la propriété `gutter` ("gouttière" en anglais).
     (( line ))
     (( {align: :center} ))
-     `\\(( colonnes\\(2, gutter: 40) ))` 
+     `\\(( colonnes\\(2, {gutter: 40}) ))` 
+    <!-- (( new_page )) -->
+    (( line ))
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
+    (( colonnes(2, {gutter: "4cm", add_lines:1}) ))
+    Une section en multi-colonnes (2) avec une gouttière de 4 centimètres. Une gouttière aussi large sépare très bien les deux colonnes. On peut utiliser cette fonctionnalité aussi pour placer une image entre les deux colonnes.
+    (( colonnes(1) ))
+    gris::Un paragraphe normal situé sous la section à double colonnes.
+    (( line ))
+
     
     #### Largeur totale occupée par les colonnes
 
@@ -59,6 +73,10 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     … on laissera 2 lignes vides entre le paragraphe précédent et le début de la section à 2 colonnes, et 3 lignes vides entre la fin de la section multi-colonnes et le paragraphe suivant.
 
+    #### Distance exacte avant et après la section multi-colonnes
+
+    On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.) mais les propriétés `lines_before` et `lines_after` ci-dessus doivent être préférées pour conserver un aspect impeccable par rapport à la [[annexe/grille_reference]].
+
     #### Styles du texte dans les multi-colonnes
 
     On peut modifier les paragraphes de façon générale à l’intérieur d’une section multi-colonne grâce au deuxième paramètre.
@@ -66,19 +84,19 @@ Prawn4book::Manual::Feature.new do
     (( line ))
     * **`align`** | Alignement des paragraphes. Justifiés (`:justify`) par défaut, on peut les aligner à gauche (`:left` ou `LEFT`) ou à droite (`:right` ou `RIGHT`). La section ci-dessous est obtenue avec le code\n#{TAB_LIST}`\\(( colonnes\\(2, {align: RIGHT}) \\))`
     (( line ))
-    Un paragraphe normal situé au-dessus de la section à double colonnes.
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
     (( colonnes(2, {align: RIGHT}) ))
     Ce texte est aligné à droite dans la section double colonne grâce à la propriété `align` mise à `RIGHT`. Rappel : par défaut, le texte est justifié.
     (( colonnes(1) ))
-    Un paragraphe normal situé sous la section à double colonnes.
+    gris::Un paragraphe normal situé sous la section à double colonnes.
     (( line ))
     * **`font`** | Fonte utilisée pour le texte. C’est une [[annexe/font_string]] classique. La section ci-dessous est engendrée par le code\n#{TAB_LIST}`\\(( colonnes\\(2, {font:\\"Arial/bold/8.5/008800\\"}) \\))`.
     (( line ))
-    Un paragraphe normal situé au-dessus de la section à double colonnes.
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
     (( colonnes(2, {font:"Arial/bold/8.5/008800"}) ))
     Une section en double colonnes avec la police "Arial", le style "bold", une taille de 8.5 et une couleur vert foncé (008800). Par défaut, c’est la police du livre qui est utilisée.
     (( colonnes(1) ))
-    Un paragraphe normal situé sous la section à double colonnes.
+    gris::Un paragraphe normal situé sous la section à double colonnes.
     (( line ))
 
 
@@ -87,21 +105,17 @@ Prawn4book::Manual::Feature.new do
     Si vous avez un extrêmement long texte en multi-colonnes (par exemple tout votre livre), il est préférable de le diviser en plusieurs sections plutôt que de le faire tenir dans une seule section (ce qui entrainement fatalement des problèmes).
     Par exemple, renouvelez la marque `\\(( colonnes\\(2) ))` à chaque nouveau chapitre (sans oublier de terminer la section précédente par `\\(( colonnes\\(1) ))`.
     
-    #### Espace avant et après la section multi-colonnes
-
-    On peut utiliser de la même manière `space_before` et `space_after`, en leur donnant comme valeur une distance (en points-postscript, en millimètre, etc.).
-    Mais les propriétés `lines_before` et `lines_after` doivent être préférées, sauf dans le cas où vous connaissez les distances précisément, en pouce, millimètre ou autre, à avoir entre le texte et la section multi-colonnes.
 
     #### Ajouter ou retrancher des lignes en multi-colonnes
 
     Malgré tous nos efforts, ou pour des besoins propres, il est possible que les colonnes ne correspondent pas à ce que l’on attend au niveau de leur hauteur.
     Dans ce cas, grâce à la propriété `add_lines`, on peut ajouter ou retrancher un certain nombre de lignes. Par exemple, ci-dessous, on force l’affichage dans une seule colonne à l’aide de `\\(( colonnes\\(2, {add_lines: 3}) \\)`.
     (( line ))
-    Un paragraphe normal situé au-dessus de la section à double colonnes.
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
     (( colonnes(2,{add_lines:2}) ))
     Un texte qui devrait tenir sur les deux colonnes mais qu’on a allongé en hauteur pour avoir 3 lignes de plus. Donc ce texte tient intégralement sur la première colonne comme voulu par le nombre.
     (( colonnes(1) ))
-    Un paragraphe normal situé sous la section à double colonnes.
+    gris::Un paragraphe normal situé sous la section à double colonnes.
     (( line ))
 
     #### Nombre fixe de lignes en multi-colonnes
@@ -113,36 +127,37 @@ Prawn4book::Manual::Feature.new do
      `(( colonnes\\(3, {lines_count: 10}) ))` 
      `# ..\\.` 
      `(( colonnes\\(3, {height: "4cm"}) ))` 
-
-    #### Précaution pour les sections multi-colonnes
-
-    Attention à toujours terminer par `\\(( colonnes\\(1) ))`, même lorsque c’est la dernière page. Dans le cas contraire, en cas d’oubli, la section multi-colonnes — et tout son texte — ne sera tout simplement pas gravée.
-    EOT
-
-
-  texte <<~EOT
-    (( new_page ))
-    Un premier paragraphe en haut de page qui commence en mode normal (sans colonne). Juste sous ce paragraphe, on a inscrit le code (invisible ici) : `\\(( colonnes\\(3) ))` qui permet de passer la suite en triple colonnes.
-    (( colonnes(3, {lines_count: 5}) ))
-    Début du texte. #{"In mollit anim veniam est ut officia sit mollit est dolor consequat cillum. " * 4} (il faudra remettre 20 fois) Fin du texte.
+    (( line ))
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
+    (( colonnes(2, {lines_count:5, gutter:50}) ))
+    Cette section multi-colonnes est obtenue en ajoutant la propriété `lines_count` à 5. On voit que cette colonne contient bien cinq lignes texte et qu’ensuite seulement on passe dans la colonne suivante pour écrire le reste du texte.
     (( colonnes(1) ))
-    EOT
+    gris::Un paragraphe normal situé sous la section à double colonnes.
+    (( line ))
 
-  extra_texte = <<~EOT
-    (( new_page ))
-    On revient ensuite à un texte sur une colonne avec la marque `\\(( colonnes\\(1) ))`. Et c’est la fin de l’usage des colonnes multiples, on revient sur une page normale.
-    La double colonne suivante est obtenue quant à elle grâce au code : `\\(( colonnes\\(2, width:PAGE_WIDTH/1.5, gutter:50) ))` qui est placé juste sous cette ligne.
-    (( colonnes(2, width:PAGE_WIDTH/1.5, gutter:50) ))
-    Début du texte. #{"In mollit anim veniam est ut officia sit mollit est dolor consequat cillum. " * 10}. Fin du texte.
+
+
+    #### Styles des paragraphes dans les sections multi-colonnes
+
+    On peut tout à fait utiliser la [[texte_detail/inline_styling]] pour styliser les paragraphes dans une section multi-colonnes.
+    (( line ))
+    gris::Un paragraphe normal situé au-dessus de la section à double colonnes.
+    (( colonnes(2) ))
+    Un premier paragraphe normal dans la section multi-colonnes.
+    (( {align: RIGHT, color:"FF0000"} ))
+    Ce paragraphe rouge avec de l’*italique* et du **gras** est aligné à droite.
+    (( {align: CENTER} ))
+    Paragraph centré.
+    (( {font:"Helvetica/light/9/0000DD", align: LEFT} ))
+    Paragraph aligné à gauche en Helvetica light de 9 en bleu.
+    (( {indent:"2cm"} ))
+    Un paragraphe indenté.
     (( colonnes(1) ))
-    On revient à nouveau à un texte sur une colonne avec la marque `\\(( colonnes\\(1) ))`.
-    Par défaut, _PFB_ laisse une ligne vide au-dessus et une ligne vide au-dessous d’un texte en multi-colonnes. On peut contrecarrer ce comportement à l’aide des propriétés `lines_before` et `lines_after`. À `false` ou 0, aucune ligne ne sera ajoutée.
-    On peut même mettre `line_after` à `-1` lorsqu’il arrive, parfois, qu’une ligne supplémentaire soit ajoutée par erreur (les calculs de Prawn sont parfois impénétrables). Avant les doubles colonnes suivantes, nous avons écrit le code : `\\(( columns\\(2, lines_before:0, space_after: -LINE_HEIGHT) \\))` (nous avons volontairement utilisé la traduction anglaise "columns").
-    (( columns(2, gutter:50, lines_before:0, space_after: -LINE_HEIGHT) ))
-    Début du texte en double colonnes. Un texte en double colonnes qui ne devrait pas présenter de ligne vide de séparation ni au-dessus avec le texte avant ni au-dessous avec le texte après. Tous ces textes devraient être collés. Fin du texte en double colonnes.
-    (( columns(1) ))
-    Paragraphe sous le texte en double colonnes collées. Ci-dessus, nous avons dû jouer sur `space_after`, avec une valeur négative, pour arriver à nos fins car `lines_after` restait inefficace. Au-dessus, on peut aussi jouer avec `space_before` si on veut définir l’espace avant. Notez que le texte est quand même remis sur des lignes de référence à chaque fois.
+    gris::Un paragraphe normal situé sous la section à double colonnes.
+    (( line ))
+    Pour le moment, seules les propriétés `lines_before`, `lines_after`, `margin_left` et `margin_right` ne sont pas prises en compte. Pour les premières, il suffit d’ajouter des lignes vides avec le caractère "espace insécable" ([ALT] [ESPACE]).
 
     EOT
+
 
 end

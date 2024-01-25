@@ -319,6 +319,15 @@ class PFBCode < AnyParagraph
     @is_for_next_paragraph = true
     @isnotprinted = true # pour ne pas l'imprimer
     @next_parag_style = eval(raw_code)
+    # S’il y a une fonte définie, on l’étudie pour en faire vraiment
+    # une fonte PFB
+    if (ft = @next_parag_style[:font]||@next_parag_style.delete(:fonte))
+      @next_parag_style.merge!(font: Fonte.get_in(ft).or_default())
+    end
+    # Rationnalisatin de la propriété d’identation
+    if (ind = @next_parag_style.delete(:indentation))
+      @next_parag_style.merge!(indent: ind)
+    end
   end
 
   # --- Formatage Methods ---

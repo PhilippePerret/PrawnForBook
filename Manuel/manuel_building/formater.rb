@@ -1,5 +1,9 @@
 module ParserFormaterClass
   
+  def formate_gris(str, context)
+    '<color rgb="888888">%s</color>'.freeze % [str]
+  end
+
   def formate_erreur(str, context)
     my = self
     pdf = context[:pdf]

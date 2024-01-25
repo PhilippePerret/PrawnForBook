@@ -776,7 +776,7 @@ private
     #       laisse simplement tranquille les guillemets précédés par
     #       un échappement.
     #       FAUX : il reste les guillemets qu'on trouve dans le code
-    #       html, par exemple les <color rbg="CCFFJJ">...</color>
+    #       html, par exemple les <color rgb="CCFFJJ">...</color>
     #       Donc, au final, un guillemet droit n'est remplacé que
     #       si on trouve une espace avant ou une parenthèse, et
     #       une espace après le deuxième ou un point ou un point

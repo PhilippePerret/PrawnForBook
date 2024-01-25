@@ -117,4 +117,5 @@ module Prawn4book
   LEFT    = :left
   RIGHT   = :right
   JUSTIFY = :justify
+  CENTER  = :center
 end #/module Prawn4book
