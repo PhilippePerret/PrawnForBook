@@ -1,13 +1,13 @@
 ---
+:texte_detail_par_class_tag:
+  :page: 20
+  :paragraph:
 :format_precis_grand_titre:
-  :page: 21
-  :paragraph:
-:format_precis_definition_marges:
-  :page: 21
-  :paragraph:
-:format_precis_multi_colonnes:
   :page: 23
   :paragraph:
-:annexe_grille_reference:
-  :page: 27
+:format_precis_definition_marges:
+  :page: 23
+  :paragraph:
+:format_precis_multi_colonnes:
+  :page: 25
   :paragraph:

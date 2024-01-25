@@ -157,6 +157,8 @@ module Prawn4book
     #__Texte_Details___#
     TOUT_TEXT_DETAIL && 'texte_detail/grand_titre',
     TOUT_TEXT_DETAIL && 'texte_detail/inline_styling',
+    TOUT_TEXT_DETAIL && false,
+    'texte_detail/par_class_tag',
     TOUT_TEXT_DETAIL && 'texte_detail/indentation',
     TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
     TOUT_TEXT_DETAIL && 'texte_detail/gestion_tirets_conditionnels',
@@ -221,6 +223,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
     TOUT_EXPERT && 'expert/formaters',
+    TOUT_EXPERT && 'expert/class_tags_expert',
     TOUT_EXPERT && 'expert/modifier_line_height',
 
     #---Tutoriel de prise en main---#

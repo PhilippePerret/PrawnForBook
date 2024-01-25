@@ -171,7 +171,7 @@ class << self
         debugit = false # str.match?('Le grand titre à utiliser pour la table des matières')
 
         if (lbefore = options.delete(:lines_before))
-          lbefore.times { move_to_next_line }
+          (lbefore + 1).times { move_to_next_line }
         end
 
         e, b = text_box(str, options.merge(dry_run: true))
@@ -188,7 +188,6 @@ class << self
         # 
         if puce && cursor - boxheight < 0 && str.count("\n") == 0
           start_new_page
-          # move_to_line(1)
         end
 
         # if debugit
@@ -351,7 +350,6 @@ class << self
         else
           # - Impression de l'exédent -
           start_new_page
-          move_to_line(1)
           if puce && not(puce_printed)
             my.print_puce(self, puce)
             options[:at][0] = left
@@ -377,8 +375,8 @@ class << self
 
         # On passe à la ligne suivante (ou aux lignes suivantes)
         unless current_line == 1
-          lafter = options.delete(:lines_after) || 1
-          lafter.times { move_to_next_line }
+          lafter = options.delete(:lines_after) || 0
+          (lafter + 1).times { move_to_next_line }
         end
 
 

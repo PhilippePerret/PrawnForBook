@@ -252,6 +252,7 @@ class AnyParagraph
   def text_align=(value); @text_align = value     end
   alias :alignment :text_align
   alias :align :text_align
+  alias :align= :text_align=
 
   # - Marge haute du paragraphe (en nombre de lignes) -
   def margin_top
@@ -287,9 +288,15 @@ class AnyParagraph
   def lines_after
     styles[:lines_after]
   end
+  def lines_after=(value)
+    styles.merge!(lines_after: value)
+  end
 
   def lines_before
     styles[:lines_before]
+  end
+  def lines_before=(value)
+    styles.merge!(lines_before: value)
   end
 
   def kerning
