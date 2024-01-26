@@ -4,18 +4,10 @@ Ce dossier permet de produire le manuel de façon automatique à l’aide de ***
 
 ## Todo
 
-### Production d’un vrai document et insertion des pages
+### Production de plusieurs real books en une seule opération
 
-Le but est : à partir d’un code produit par le livre (donné en démonstration), pour la recette et pour le texte, produire un document PDF et en extraire les pages voulues en tant qu’image.
+Pour ne pas multiplier les fichiers, je voudais pouvoir créer plusieurs real books à partir d’un seul fichier. J’ai déjà essayé de mettre plusieurs instance Feature dans un seul fichier, mais c’est la merde. Non, il faut que je re-essaye quand même parce que c’est le plus simple.
 
-On en est là : il faut voir quel code on utilise pour insérer l’image résultat dans le manuel.
-Il faut :
-- un numéro de page (l’image s’appellera "page-<numéro>.jpg")
-- une taille à donner à l’image
-- peut-être un "scrop" pour ne prendre qu’une partie de l’image ? (même si je pense que c’est mieux d’avoir la page complète, même en plus petit)
--autre chose ?
-
-* Peut-être produire un livre plus petit, par défaut, pour avoir des pages plus petites ?
 
 ## Tâches de base
 

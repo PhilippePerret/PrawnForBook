@@ -30,3 +30,19 @@ Prawn4book::Manual::Feature.new do
   |/|
   EOT
 end
+
+Prawn4book::Manual::Feature.new do
+  sous_titre "Table des matières entièrement customisée"
+  real_texte <<~EOT
+    (( toc ))
+    # Un titre de niveau 1
+    ## Un titre de niveau 2
+    ## Autre titre de niveau 2
+    # Un titre de niveau 1
+    EOT
+
+  texte <<~EOT
+    Table des matières entièrement customisée (personnalisée).
+    ![page-1]
+    EOT
+end

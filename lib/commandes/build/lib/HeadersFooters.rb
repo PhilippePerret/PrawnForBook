@@ -182,7 +182,9 @@ end
 # 
 def print_portion(portion_data, page_data)
   pdata = portion_data.dup 
+  # - Le texte à écrire -
   text = pdata.delete(:text) % page_data
+  text = text.gsub(/<.+?>/,'')
   pdata = pdata.merge({
     height: 20,
     overflow: :shrink_to_fit,
@@ -231,15 +233,15 @@ end
 
 def fontes
   @fontes ||= {
-    header: Prawn4book.fnss2Fonte(header_font) || fonte,
-    footer: Prawn4book.fnss2Fonte(footer_font) || fonte,
+    header: Fonte.get_in(header_font).or(fonte),
+    footer: Fonte.get_in(footer_font).or(fonte)
   }
 end
 
 # [Prawn4book::Fonte] Fonte générale à utiliser (elle est définie 
 # dans tous les cas
 def fonte
-  @fonte ||= Prawn4book.fnss2Fonte(font) || Prawn4book::Fonte.default
+  @fonte ||= Fonte.get_in(font).or_default
 end
 
 def pages_count
