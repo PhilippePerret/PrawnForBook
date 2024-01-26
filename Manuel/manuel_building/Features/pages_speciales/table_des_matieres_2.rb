@@ -30,30 +30,41 @@ Prawn4book::Manual::Feature.new do
           alone: false
           align: :center
     #
+    # - Page à (ne pas) insérer -
+    #
+    inserted_pages:
+      page_de_garde: false
+      faux_titre: false
+      page_de_titre: false
+    #
     # - Table des matières -
     #
     table_of_content:
       title:      "Mon Sommaire"
       no_title:   false
+      lines_before: 8
       numeroter:  false
       level_max:  4
       line_height: 24
+      vadjust_number: 2
       level1:
         font: "Helvetica/light/20/55A200"
-        numero_size: 12
-      # level2:
-      #   numero_size: 15
+        numeroter: false
       level2:
         dash: {color: "0000FF"}
       level3:
         indent: 6cm
-        numero_size: 10
+        number_size: 10
+        number_indent: 40
         caps: "all-caps"
         dash: {length: 10, space: 2} 
       level4:
         font: "Reenie/normal/15/FF0000"
-        numero_size: 10
+        number_size: 10
+        number_color: "BBB000"
         dash: {length: 1, space: 3} 
+        vadjust_line: -5
+        vadjust_number: -2
     YAML
 
   texte <<~EOT
@@ -62,25 +73,28 @@ Prawn4book::Manual::Feature.new do
     * le titre original de la page (grâce à "`title: \\"Mon Sommaire\\"`"),
     * l’alignement au centre du titre de la page (grâce à "`align: :center`"),
     * l’absence de numérotation de la page,
+    * la table des matières proprement dite qui commence à 8 lignes du titre grâce au "`lines_before: 8`",
     * les quatre niveaux de titre, alors qu’il y en a 3 par défaut (grâce à "`level_max:  4`"),
-    * la taille, police et couleur du titre de niveau 1,
+    * l’ajustement vertical des numéros de page de tous les niveaux de titre sauf le 4, pour qu’ils soient bien alignés à la ligne pointillée, grâce au "`vadjust_number: 2`" général,
+    * la taille, police et couleur du titre de niveau 1 grâce à la définition de "`font:`",
+    * l’absence de numéro de page des titres de niveau 1 grâce à "`numeroter: false`",
     * la couleur spéciale pour la ligne de pointillé du titre de niveau 2 grâce à "`dash: {color: \\"0000FF\\"}`"
     * l’indentation forte du titre de niveau 3,
     * le niveau 3 passé en capitales avec "all-caps",
+    * l’identation (négative) du numéro de page des titres de niveau 3 mise à 40 points-postscript grâce à "`number_indent: 40`",
     * les styles simples (italique, gras…) qu’on peut appliquer aux titres,
     * l’aspect des pointillés grâce à la propriété `:dash` pour les titres de niveau 3 et 4,
-    * un niveau inférieur (comme le titre de niveau 4) peut tout à fait être moins en retrait qu’un titre supérieur (les titres de niveau 3).
+    * un niveau inférieur (comme le titre de niveau 4) peut tout à fait être moins en retrait qu’un titre supérieur (les titres de niveau 3),
+    * la couleur propre du numéro de page du titre de niveau 4 grâce à son "`number_color: "BBB000"`",
+    * l’alignement propre du numéro de page du titre de niveau 4 grâce à son "`vadjust_number: -2`" propre,
+    * la ligne pointillée du titre de niveau 4 remontée grâce au "`vadjust_line: -5`".
 
     Notes :
-    * En mettant `numeroter` à `true`, on peut obtenir la numérotation de la page.
-
-    AJOUTER :
-    * position horizontale du numéro de page
-    * jouer sur vadjust pour le numéro de page
-    * jouer sur vadjust pour la ligne pointillée
+    * En ajoutant "`numeroter: true`", on obtiendrait la numérotation de la page,
+    * En ajoutant "`belle_page: false`", la table des matières s’inscrirait sur la page précédente.
 
     (( new_page ))
-    ![page-4](width:"100%")
+    ![page-3](width:"100%")
     (( new_page ))
     EOT
 end

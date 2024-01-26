@@ -22,7 +22,6 @@ class TableOfContent < SpecialTable
   def print(pdf, num_page)
     super
 
-
     tdm = pdf.tdm
     my  = self
 
@@ -31,6 +30,10 @@ class TableOfContent < SpecialTable
     pdf.fill_color(fonte.color)
     # - On se place sur la bonne page -
     pdf.go_to_page(num_page)
+    if belle_page? && num_page.even?
+      num_page += 1
+      pdf.go_to_page(num_page)
+    end
     pdf.move_down(lines_top * tdm_line_height)
     # Pas de pagination ?
     book.page(num_page).pagination = false unless numeroter?
@@ -67,8 +70,12 @@ class TableOfContent < SpecialTable
       number_fonte    = cdata[:number_fonte]
       number_options  = cdata[:number_options]
       number_color    = cdata[:number_options][:color]
+      number_indent   = cdata[:number_indent]
+      vadjust_number  = cdata[:vadjust_number]
       dash_line       = cdata[:dash_line]
+      vadjust_line    = cdata[:vadjust_line]
       caps            = cdata[:caps]
+      numeroter_title = cdata[:numeroter]
 
       # puts "title_options = #{title_options.inspect}".jaune
 
@@ -87,35 +94,45 @@ class TableOfContent < SpecialTable
 
         pdf.update do
 
-          # Largeur prise par le titre
-          title_width = width_of(content, **{name:title_fonte.name, size: title_fonte.size, style:title_fonte.style})
+          # - Largeur prise par le titre -
+          # 
+          # Le problème ici est que SI je mets inline_format: true 
+          # pour que les styles HTML soient traités, certains titres,
+          # pour une raison inconnue, passent à la ligne et renvoient
+          # donc une mauvaise valeur. La solution valide est donc de
+          # supprimer les balises HTML du contenu et de ne pas mettre
+          # inline_format: true
+          contentforwidth = content.gsub(/<.+?>/,'')
+          title_width = width_of(contentforwidth, **{name:title_fonte.name, size: title_fonte.size, style:title_fonte.style})
 
 
 
           number_width = 0
           line_width   = 0
 
-          if my.numeroter?
+          if numeroter_title
 
             # Largeur pour le numéro
             number_width = width_of(titre.numero.to_s, **{name:number_fonte.name, size:number_fonte.size, style:number_fonte.style})
 
             # Largeur (longueur) pour la ligne
-            line_width = bounds.width - (indent + title_width + number_width) - 10
+            line_width = bounds.width - (indent + title_width + number_width + number_indent) - 10
 
             ####################################
             ### Impression du NUMÉRO DE PAGE ###
             ####################################
             nopts = number_options.merge(width: number_width)
-            nopts[:at] = [bounds.width - number_width, cursor - my.vadjust_number]
+            nopts[:at] = [bounds.width - (number_width + number_indent), cursor - vadjust_number]
             fill_color(number_color) if number_color
+            # puts "nopts pour le numéro : #{nopts.inspect}".jaune
+            # exit 12
             text_box("#{titre.numero}", **nopts)
 
             ##########################
             ### LIGNE D’ALIGNEMENT ###
             ##########################
             lf = indent + title_width + 5
-            hl = cursor - (12 + my.vadjust_line)
+            hl = cursor - (12 + vadjust_line)
             dash(dash_line[:length], **dash_line[:options])
             stroke_color(dash_line[:color]) if dash_line[:color]
             stroke_horizontal_line(lf, lf + line_width, at: hl)
@@ -129,8 +146,6 @@ class TableOfContent < SpecialTable
           opts[:at][1] = cursor
           # - Impression -
           fill_color(title_color)
-          puts "width à la gravure: #{opts[:width]}".jaune
-          # opts[:width] = 300
           text_box(content, **opts)
           move_down(my.tdm_line_height)
 
@@ -192,21 +207,24 @@ class TableOfContent < SpecialTable
 
     # Si on ne se trouve pas sur une belle page, on passe à la page
     # suivante
-    start_new_tdm_page if pdf.page_number.even?
-
-    # Instancier un titre pour la table des matières
-    # 
-    unless recipe[:no_title] || title.nil? || title == '---'
-      titre = PdfBook::NTitre.new(book:book, titre:"{no_toc}#{title}", level:title_level, pindex:nil)
-      titre.print(pdf)
-      book.page(pdf.page_number).add_content_length(title.length + 3)
+    if belle_page? && pdf.page_number.even?
+      start_new_tdm_page
     end
 
+    # Instancier un titre pour la table des matières
+  
     # On mémorise le numéro de première page de cette table des
     # matières
     # book.tdm.add_page_number(pdf.page_number.freeze)
     pdf.tdm.add_page_number(pdf.page_number.freeze)
 
+    unless recipe[:no_title] || title.nil? || title == '---'
+      titre = PdfBook::NTitre.new(book:book, titre:"{no_toc}#{title}", level:title_level, pindex:nil)
+      titre.print(pdf, **{on_this_page: true})
+      book.page(pdf.page_number).add_content_length(title.length + 3)
+    end
+
+  
     # Le nombre de pages à ajouter est défini par :pages_count qui
     # doit impérativement être un nombre pair.
     added = page_count || 2
@@ -234,6 +252,13 @@ class TableOfContent < SpecialTable
   # @return [Boolean] true s'il faut numéroter la table des matières
   def numeroter?
     recipe[:numeroter] == true
+  end
+
+  # @return [Boolean] true s’il faut commencer la table des matières
+  # sur une belle page (défaut) ou plutôt retourne false s’il ne faut
+  # pas mettre la table des matières sur une belle page
+  def belle_page?
+    not(recipe[:belle_page] === false)
   end
 
   # @return [Boolean] true si la numérotation se fait par les pages
@@ -268,11 +293,11 @@ class TableOfContent < SpecialTable
   end
 
   def lines_top
-    recipe[:lines_top]
+    recipe[:lines_before] || recipe[:lines_top]
   end
 
   def lines_bottom
-    recipe[:lines_bottom]
+    recipe[:lines_after] || recipe[:lines_bottom]
   end
 
   # Ajustement vertical de la ligne d’alignement
@@ -377,16 +402,22 @@ class TableOfContent < SpecialTable
       cdata.merge!(title_options: title_opts)
 
       # - NUMÉRO -
+      # Faut-il numéroter ?
+      cdata.merge!(numeroter: not(title_rdata[:numeroter] === false))
       # Fonte pour le numéro de ce niveau de titre
       number_fonte = Fonte.get_in(title_rdata[:number_font]).or(title_fonte)
-      cdata.merge!(number_fonte: number_fonte) 
+      cdata.merge!(number_fonte: number_fonte)
+      # - Indentation (négative) -
+      cdata.merge!(number_indent: title_rdata[:number_indent]||0)
+      # - Alignement vertical -
+      cdata.merge!(vadjust_number: title_rdata[:vadjust_number]||vadjust_number||0)
       # Les options de numéro pour ce niveau de titre
       number_opts = {
         at:         [nil,nil], # fonction de title-width
         name:       number_fonte.name,
         style:      number_fonte.style,
-        size:       title_rdata[:numero_size]||number_fonte.size,
-        color:      number_fonte.color,
+        size:       title_rdata[:number_size]||number_fonte.size,
+        color:      title_rdata[:number_color]||number_fonte.color,
         align:      :right,
         inline_format: true # utile ?
       }
@@ -395,6 +426,7 @@ class TableOfContent < SpecialTable
       # - LIGNE POINTILLÉE -
       dl = main_dash_line.deep_merge(title_rdata[:dash]||title_rdata[:dash_line]||{})
       cdata.merge!(dash_line: dl)
+      cdata.merge!(vadjust_line: title_rdata[:vadjust_line]||vadjust_line||0)
 
       cdatas.merge!(level => cdata)
     end #/chaque niveau de titre

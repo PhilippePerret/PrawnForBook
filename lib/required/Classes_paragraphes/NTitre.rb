@@ -30,7 +30,11 @@ class NTitre < AnyParagraph
   ##
   # Méthode principale qui écrit le titre dans la page
   # 
-  def print(pdf)
+  # @params [Hash] options
+  #     on_this_page: true  Force l’inscription sur la page courante,
+  #                         quels que soient les options.
+  # 
+  def print(pdf, **options)
     # Si le titre a un niveau de 0 (*) il faut s'arrêter là
     # 
     # (*) Cela arrive par exemple avec les titres de bibliographie
@@ -46,10 +50,12 @@ class NTitre < AnyParagraph
     spy "Traitement du titre #{self.inspect}…".bleu
 
     # - Corrections du texte -
-    super
+    super(pdf)
 
     # Le titre formaté
     ftitre = formated_as_title
+
+    on_this_page = options[:on_this_page]
 
     # Calcul du nombre de ligne avant
     # ===============================
@@ -108,32 +114,37 @@ class NTitre < AnyParagraph
       #   lines before (calculées) : #{lines_before_calc}
       #   line_height: #{line_height}
       #   EOT
-      start_new_page if limite_basse < line_height || my.on_new_page?
 
-      # - Page seule sur la double page -
-      # 
-      if my.alone? 
-        # puts "#{tstr} est seul sur une double".orange
-        # Si la page doit être seule sur une double page et qu'on se
-        # trouve actuellement sur une page paire, il faut passer à la
-        # page suivante. Mais si, au contraire, on se trouve sur la 
-        # page impaire (belle page) mais qu'il y a du texte à gauche,
-        # c'est deux pages qu'il faut passer.
-        if page_number.even?
-          start_new_page
-        elsif page_number.odd?
-          2.times { start_new_page }
-        end
-      elsif my.belle_page? 
-        # puts "#{tstr} est sur une belle page".orange
-        if page_number.even? # paire (= gauche)
-          # Si le titre doit être affiché sur une belle page, et qu'on se
-          # trouve sur une page paire, il faut encore passer à la page
-          # suivante.
-          start_new_page
-        end
-      end
+      unless on_this_page
 
+        start_new_page if limite_basse < line_height || my.on_new_page?
+
+        # - Page seule sur la double page -
+        # 
+        if my.alone? 
+          # puts "#{tstr} est seul sur une double".orange
+          # Si la page doit être seule sur une double page et qu'on se
+          # trouve actuellement sur une page paire, il faut passer à la
+          # page suivante. Mais si, au contraire, on se trouve sur la 
+          # page impaire (belle page) mais qu'il y a du texte à gauche,
+          # c'est deux pages qu'il faut passer.
+          if page_number.even?
+            start_new_page
+          elsif page_number.odd?
+            2.times { start_new_page }
+          end
+        elsif my.belle_page? 
+          # puts "#{tstr} est sur une belle page".orange
+          if page_number.even? # paire (= gauche)
+            # Si le titre doit être affiché sur une belle page, et qu'on se
+            # trouve sur une page paire, il faut encore passer à la page
+            # suivante.
+            start_new_page
+          end
+        end
+
+      end # /sauf s’il faut obligatoirement l’inscrire sur cette page
+      
       # - Hauteur du titre -
       # (je ne sais plus à quel saint me vouer pour la hauteur… Ici,
       # quelle que soit la fonte, c’est toujours 18, la hauteur de

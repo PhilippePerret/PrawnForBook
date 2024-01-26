@@ -9,23 +9,39 @@ book_format:
       belle_page: false
       alone: false
       align: :center
+#
+# - Page à (ne pas) insérer -
+#
+inserted_pages:
+  page_de_garde: false
+  faux_titre: false
+  page_de_titre: false
+#
+# - Table des matières -
+#
 table_of_content:
   title:      "Mon Sommaire"
   no_title:   false
+  lines_before: 8
   numeroter:  false
   level_max:  4
   line_height: 24
+  vadjust_number: 2
   level1:
-    font: "Helvetica/light/15/55A200"
-    numero_size: 12
+    font: "Helvetica/light/20/55A200"
+    numeroter: false
   level2:
     dash: {color: "0000FF"}
   level3:
     indent: 6cm
-    numero_size: 10
+    number_size: 10
+    number_indent: 40
     caps: "all-caps"
     dash: {length: 10, space: 2} 
   level4:
     font: "Reenie/normal/15/FF0000"
-    numero_size: 10
+    number_size: 10
+    number_color: "BBB000"
     dash: {length: 1, space: 3} 
+    vadjust_line: -5
+    vadjust_number: -2

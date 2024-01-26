@@ -235,34 +235,35 @@ table_of_content:
   not_on_even:          false
   pages_count:          4
   title:                "Table des matières"
+  belle_page:           true
   no_title:             false
   title_level:          1
   level_max:            3
   line_height:          14
-  lines_top:            4
-  lines_bottom:         4
+  lines_before:         4
+  lines_after:          4
   numeroter:            true
   vadjust_number:       2
   dash_line:            {length: 1, space: 3}
   vadjust_line:         0
   level1:
     font:         "Times-Roman/normal/12/000000"
-    numero_size:  10
+    number_size:  10
     caps:         "all-caps"
     indent:       0
   level2:
     font:         "Times-Roman/normal/12/000000"
-    numero_size:  10
+    number_size:  10
     indent:       '10mm'
     separator:    null
   level3:
     font:         "Times-Roman/normal/11/000000"
-    numero_size:  10
+    number_size:  10
     indent:       '20mm'
     separator:    null
   level4:
     font:         "Times-Roman/normal/8/000000"
-    numero_size:  10
+    number_size:  10
     indent:       '30mm'
     separator:    null
 #/table_of_content
