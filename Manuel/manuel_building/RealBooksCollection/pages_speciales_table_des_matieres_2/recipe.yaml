@@ -1,0 +1,30 @@
+---
+book_format:
+  book:
+    width: 210mm
+    height: 297mm
+  titles:
+    level1:
+      new_page: false
+      belle_page: false
+      alone: false
+      align: :center
+table_of_content:
+  title:      "Mon Sommaire"
+  no_title:   false
+  level_max:  4
+  # line_height: 20
+  level1:
+    font: "Helvetica/light/20/55A200"
+    numero_size: 12
+  # level2:
+  #   numero_size: 15
+  level3:
+    indent: 6cm
+    numero_size: 10
+    caps: "all-caps"
+    separator: •
+  level4:
+    font: "Reenie/normal/15/FF0000"
+    numero_size: 10
+    separator: _

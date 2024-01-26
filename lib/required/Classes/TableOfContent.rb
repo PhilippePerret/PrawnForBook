@@ -75,7 +75,7 @@ class TableOfContent < SpecialTable
       content = case caps
         when 'none'       then titre.content
         when 'title', NilClass then titre.content.titleize
-        when 'all-caps'   then titre.content.upcase
+        when 'all-caps'   then titre.content.all_caps
         when 'all-min'    then titre.content.downcase
         else raise "Caps inconnu : #{caps.inspect}"
         end
@@ -192,7 +192,7 @@ class TableOfContent < SpecialTable
     unless recipe[:no_title] || title.nil? || title == '---'
       titre = PdfBook::NTitre.new(book:book, titre:title, level:title_level, pindex:nil)
       titre.print(pdf)
-      book.page(page_number).add_content_length(title.length + 3)
+      book.page(pdf.page_number).add_content_length(title.length + 3)
     end
 
     # On mémorise le numéro de première page de cette table des

@@ -41,7 +41,33 @@ class String
     "<color rgb=\"#{html_color}\">#{self}</color>"
   end
 
+
+  # Met tout le texte en capitales, mais en ne touchant pas aux
+  # balises HTML peut-être contenues
+  # 
+  def all_caps
+    str = self.dup
+    table_html_tags = {}
+    x_html_tag = 0
+    str = str.gsub(/(<.+?>)/) do
+      x_html_tag += 1
+      k_html_tag = "_BALHTML#{x_html_tag}_"
+      table_html_tags.merge!(k_html_tag => $1.freeze)
+      k_html_tag
+    end
+    str = str.upcase
+    table_html_tags.each do |ktag, real_value|
+      str = str.sub(ktag, real_value)
+    end
+    return str
+  end
+
 end #/class String
+
+
+
+
+
 
 class Array
   def proceed_unit
