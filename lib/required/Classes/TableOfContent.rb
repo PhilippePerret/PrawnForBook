@@ -29,9 +29,11 @@ class TableOfContent < SpecialTable
     # - Préparation -
     pdf.font(fonte)
     pdf.fill_color(fonte.color)
-    # - On se place au bon endroit -
+    # - On se place sur la bonne page -
     pdf.go_to_page(num_page)
     pdf.move_down(lines_top * tdm_line_height)
+    # Pas de pagination ?
+    book.page(num_page).pagination = false unless numeroter?
 
     # Données pour le titre en cours de traitement
     # (permet de récupérer plus rapidement les données si le niveau
@@ -59,12 +61,13 @@ class TableOfContent < SpecialTable
         # puts "\nNouveau cdata = #{cdata.inspect}".bleu
       end
       indent          = cdata[:indent]
-      # title_fonte     = cdata[:title_font] 
-      # number_fonte    = cdata[:number_font]
+      title_fonte     = cdata[:font]
       title_options   = cdata[:title_options]
       title_color     = cdata[:title_options][:color]
+      number_fonte    = cdata[:number_fonte]
       number_options  = cdata[:number_options]
       number_color    = cdata[:number_options][:color]
+      dash_line       = cdata[:dash_line]
       caps            = cdata[:caps]
 
       # puts "title_options = #{title_options.inspect}".jaune
@@ -85,7 +88,9 @@ class TableOfContent < SpecialTable
         pdf.update do
 
           # Largeur prise par le titre
-          title_width = width_of(content, **title_options)
+          title_width = width_of(content, **{name:title_fonte.name, size: title_fonte.size, style:title_fonte.style})
+
+
 
           number_width = 0
           line_width   = 0
@@ -93,7 +98,7 @@ class TableOfContent < SpecialTable
           if my.numeroter?
 
             # Largeur pour le numéro
-            number_width = width_of(titre.numero.to_s, **number_options)
+            number_width = width_of(titre.numero.to_s, **{name:number_fonte.name, size:number_fonte.size, style:number_fonte.style})
 
             # Largeur (longueur) pour la ligne
             line_width = bounds.width - (indent + title_width + number_width) - 10
@@ -111,8 +116,8 @@ class TableOfContent < SpecialTable
             ##########################
             lf = indent + title_width + 5
             hl = cursor - (12 + my.vadjust_line)
-            dash(my.dash_line[:length], **my.dash_line[:options])
-            stroke_color(my.dash_line[:color]) if my.dash_line[:color]
+            dash(dash_line[:length], **dash_line[:options])
+            stroke_color(dash_line[:color]) if dash_line[:color]
             stroke_horizontal_line(lf, lf + line_width, at: hl)
 
           end #/s’il faut numéroter
@@ -124,6 +129,8 @@ class TableOfContent < SpecialTable
           opts[:at][1] = cursor
           # - Impression -
           fill_color(title_color)
+          puts "width à la gravure: #{opts[:width]}".jaune
+          # opts[:width] = 300
           text_box(content, **opts)
           move_down(my.tdm_line_height)
 
@@ -190,7 +197,7 @@ class TableOfContent < SpecialTable
     # Instancier un titre pour la table des matières
     # 
     unless recipe[:no_title] || title.nil? || title == '---'
-      titre = PdfBook::NTitre.new(book:book, titre:title, level:title_level, pindex:nil)
+      titre = PdfBook::NTitre.new(book:book, titre:"{no_toc}#{title}", level:title_level, pindex:nil)
       titre.print(pdf)
       book.page(pdf.page_number).add_content_length(title.length + 3)
     end
@@ -219,7 +226,7 @@ class TableOfContent < SpecialTable
   # 
   def start_new_tdm_page
     pdf.start_new_page
-    book.page(pdf.page_number).pagination = false
+    book.page(pdf.page_number).pagination = false unless numeroter?
   end
 
   # --- Predicate Methods ---
@@ -279,14 +286,14 @@ class TableOfContent < SpecialTable
   end
 
   # Ligne pointillée d’alignement
-  def dash_line
-    @dash_line ||= begin
-      dl = recipe[:dash_line]
+  def main_dash_line
+    @main_dash_line ||= begin
+      dl = recipe[:dash_line]||recipe[:dash]
       {
         length: dl[:length]||1, 
         options: {
           space: dl[:space]||1, 
-          phase: dl[:phase] || 1
+          phase: dl[:phase]|| 1
         },
         color: dl[:color]
       }
@@ -347,18 +354,20 @@ class TableOfContent < SpecialTable
       # - Transformation du titre -
       cdata.merge!(caps: (title_rdata[:caps]||'title').to_s.downcase)
 
+      # Fonte pour le titre de ce niveau de titre
+      title_fonte = Fonte.get_in(title_rdata).or_default() || raise("NO FONT")
+      cdata.merge!(font: title_fonte)
+
       # - Indentation -
       indent = title_rdata[:indent] || 0
       indent = indent.to_f if indent.is_a?(String)
       cdata.merge!(indent: indent)
 
       # - TITRE -
-      # Fonte pour le titre de ce niveau de titre
-      title_fonte = Fonte.get_in(title_rdata).or_default
       # Les options de titre pour ce niveau de titre
       title_opts = {
         at: [indent, nil],
-        font_name:  title_fonte.name,
+        name:       title_fonte.name,
         style:      title_fonte.style,
         size:       title_fonte.size,
         color:      title_fonte.color,
@@ -369,11 +378,12 @@ class TableOfContent < SpecialTable
 
       # - NUMÉRO -
       # Fonte pour le numéro de ce niveau de titre
-      number_fonte = Fonte.get_in(title_rdata[:number_font]).or(title_fonte) 
+      number_fonte = Fonte.get_in(title_rdata[:number_font]).or(title_fonte)
+      cdata.merge!(number_fonte: number_fonte) 
       # Les options de numéro pour ce niveau de titre
       number_opts = {
         at:         [nil,nil], # fonction de title-width
-        font_name:  number_fonte.name,
+        name:       number_fonte.name,
         style:      number_fonte.style,
         size:       title_rdata[:numero_size]||number_fonte.size,
         color:      number_fonte.color,
@@ -381,6 +391,10 @@ class TableOfContent < SpecialTable
         inline_format: true # utile ?
       }
       cdata.merge!(number_options: number_opts)
+
+      # - LIGNE POINTILLÉE -
+      dl = main_dash_line.deep_merge(title_rdata[:dash]||title_rdata[:dash_line]||{})
+      cdata.merge!(dash_line: dl)
 
       cdatas.merge!(level => cdata)
     end #/chaque niveau de titre

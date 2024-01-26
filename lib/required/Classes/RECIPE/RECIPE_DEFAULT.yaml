@@ -24,7 +24,10 @@ fonts:
     bold_italic:  'resources/fonts/Helvetica/Helvetica-BoldOblique.ttf'
     italic:       'resources/fonts/Helvetica/Helvetica-Oblique.ttf'
   Reenie:
+    # Note : tous la même
     normal: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
+    bold:   "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
+    italic: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
 #</fonts>
 
 # --- Données du livre ---
@@ -240,7 +243,7 @@ table_of_content:
   lines_bottom:         4
   numeroter:            true
   vadjust_number:       2
-  dash_line:      {length: 1, space: 3}
+  dash_line:            {length: 1, space: 3}
   vadjust_line:         0
   level1:
     font:         "Times-Roman/normal/12/000000"

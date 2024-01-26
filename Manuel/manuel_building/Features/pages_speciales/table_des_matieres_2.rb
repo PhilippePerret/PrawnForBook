@@ -29,25 +29,31 @@ Prawn4book::Manual::Feature.new do
           belle_page: false
           alone: false
           align: :center
+    #
+    # - Table des matières -
+    #
     table_of_content:
       title:      "Mon Sommaire"
       no_title:   false
+      numeroter:  false
       level_max:  4
-      # line_height: 20
+      line_height: 24
       level1:
         font: "Helvetica/light/20/55A200"
         numero_size: 12
       # level2:
       #   numero_size: 15
+      level2:
+        dash: {color: "0000FF"}
       level3:
         indent: 6cm
         numero_size: 10
         caps: "all-caps"
-        separator: •
+        dash: {length: 10, space: 2} 
       level4:
         font: "Reenie/normal/15/FF0000"
         numero_size: 10
-        separator: _
+        dash: {length: 1, space: 3} 
     YAML
 
   texte <<~EOT
@@ -58,11 +64,21 @@ Prawn4book::Manual::Feature.new do
     * l’absence de numérotation de la page,
     * les quatre niveaux de titre, alors qu’il y en a 3 par défaut (grâce à "`level_max:  4`"),
     * la taille, police et couleur du titre de niveau 1,
+    * la couleur spéciale pour la ligne de pointillé du titre de niveau 2 grâce à "`dash: {color: \\"0000FF\\"}`"
     * l’indentation forte du titre de niveau 3,
     * le niveau 3 passé en capitales avec "all-caps",
     * les styles simples (italique, gras…) qu’on peut appliquer aux titres,
-    * le signe entre le titre et son numéro de page qui peut être défini par ce qu’on veut avec `separator`,
+    * l’aspect des pointillés grâce à la propriété `:dash` pour les titres de niveau 3 et 4,
     * un niveau inférieur (comme le titre de niveau 4) peut tout à fait être moins en retrait qu’un titre supérieur (les titres de niveau 3).
+
+    Notes :
+    * En mettant `numeroter` à `true`, on peut obtenir la numérotation de la page.
+
+    AJOUTER :
+    * position horizontale du numéro de page
+    * jouer sur vadjust pour le numéro de page
+    * jouer sur vadjust pour la ligne pointillée
+
     (( new_page ))
     ![page-4](width:"100%")
     (( new_page ))

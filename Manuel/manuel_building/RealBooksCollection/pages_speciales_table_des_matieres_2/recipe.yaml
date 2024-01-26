@@ -12,19 +12,20 @@ book_format:
 table_of_content:
   title:      "Mon Sommaire"
   no_title:   false
+  numeroter:  false
   level_max:  4
-  # line_height: 20
+  line_height: 24
   level1:
-    font: "Helvetica/light/20/55A200"
+    font: "Helvetica/light/15/55A200"
     numero_size: 12
-  # level2:
-  #   numero_size: 15
+  level2:
+    dash: {color: "0000FF"}
   level3:
     indent: 6cm
     numero_size: 10
     caps: "all-caps"
-    separator: •
+    dash: {length: 10, space: 2} 
   level4:
     font: "Reenie/normal/15/FF0000"
     numero_size: 10
-    separator: _
+    dash: {length: 1, space: 3} 
