@@ -405,7 +405,7 @@ private
     return str    
   end
 
-  REG_INDEX = /(?<=(^| ))(?<index_id>[a-z]+?)#{EXCHAR}\((?<mot>.+?)(?:\|(?<id_mot>.+?))?\)/.freeze
+  REG_INDEX = /(?<=(^| |’))(?<index_id>[a-z]+?)#{EXCHAR}\((?<mot>.+?)(?:\|(?<id_mot>.+?))?\)/.freeze
 
   ##
   # Traitement des références croisées
