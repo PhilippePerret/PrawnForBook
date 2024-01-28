@@ -61,6 +61,7 @@ class Index
     # @param index_id [String|Symbol]
     #   Identifiant du nouvel index
     # 
+    # 
     # @return l’index [Prawn4book::PdfBook::Index] créé
     # 
     def create(book, index_id)
@@ -105,6 +106,13 @@ class Index
   #   Le texte à écrire (mais peut être modifié par la méthode
   #   personnalisée de traitement #index_<index id>)
   # 
+  # @param context [Hash]
+  #   paragraph: Le paragraphe contenant l’item indexé
+  #   Peut définir :importance qui peut avoir la valeur :main ou
+  #   :minor (cette importance est fixée par l’ajoute de "!" pour
+  #   :main ou "." pour :minor au tout début, avant l’identifiant
+  #   lui-même, donc)
+  # 
   # @return [String] Le texte à écrire
   # 
   def add(item_id, output, **context)
@@ -113,6 +121,7 @@ class Index
       paragraph:    context[:paragraph],
       output:       output,
       real_output:  output,
+      weight:       context[:importance] || :normal,
     }
 
     # On traite cet item avec la méthode personnalisée qui doit

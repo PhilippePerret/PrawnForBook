@@ -5,8 +5,23 @@ Prawn4book::Manual::Feature.new do
 
   description <<~EOT
     _PFB_ possède un système de gestion des bibliographies très puissant. Elle peut en gérer autant que l’on veut, donc une infinité, et les mettre en forme de la façon exacte que l’on veut, avec une connaissance minimum du langage ruby (et encore, comme d’habitude, on peut se contenter des comportements par défaut).
-    Une bibliographie se définit dans _PFB_ par une donnée dans la section principale de recette `bibliographies` et une balise qui servira d’identifiant pour la bibliographie et de balise pour repérer le texte. Par exemple les balises `article` et `film` qui serviront d’illustration ci-dessous et seront utilisés dans le texte de cette manière :
-    « C’est une référence à l’article article\\(Les chaussures|0001) et une référence au film film\\(Titanic). »
+    Une bibliographie se définit dans _PFB_ par une donnée dans la recette du livre ou de la collection, dans une section principale `bibliographies` qui consiste en une balise qui servira d’identifiant et de balise pour repérer le texte. 
+    Par exemple, dans la recette, on va trouver :
+    (( line ))
+    ~~~yaml
+    ---
+    bibliographies:
+      article:
+        title: "Articles de presse"
+        path:  bib/articles
+      film:
+        title: "Films"
+        path:  bib/films
+    ~~~
+    (( line ))
+    Et dans le texte on pourra alors utiliser les balises "article" et "film" pour consigner des références.
+    (( line ))
+    « C’est une référence à l’article article\\(Les chaussures|0001) et une référence principale au film film\\(Titanic||main). »
 
     #### Nomenclature pour les bibliographies
 
@@ -21,45 +36,66 @@ Prawn4book::Manual::Feature.new do
 
     #### Données minimales des bibliographies
 
-    Une bibliographie est définie par les données minimales et indispensables suivantes (pour la compréhension, on choisit d’illustrer une bibliographie pour des articles de journaux) :
+    Dans la recette, une bibliographie est définie par les données minimales et indispensables suivantes (pour la compréhension, on choisit d’illustrer une bibliographie pour des articles de journaux) :
     * Le **tag** (ou **identifiant**) | C’est un mot simple en minuscule (donc seulement les lettres de "a" à "z", au singulier (p.e. "article") qui sert de *clé* pour la bibliographie. C’est ce tag qui sera utilisé au cours du livre pour construire un *marquer de référence* pour faire référence à un *item bibliographique* en particulier (cf. plus bas).
     * **`title`** ("titre" en anglais) | Le titre de la bibliographie, qui sera imprimé avant d’afficher la bibliographie.
     * **`path`** ("chemin d’accès" en anglais) | qui indique le chemin jusqu’à la *banque des données bibliographiques* qui contient, comme son nom l’indique, toutes les données bibliographiques. C’est au mieux un dossier (contenant les *cartes* ou les *fiches* de données, une par *item*) ou un fichier (contenant toutes les données).
-    * **`main_key`** ("clé principale" en anglais) | Si ce n’est pas la propriété `title` de l’item (à ne pas confondre avec le `title` dont nous venons de parler) qui doit être utilisée pour remplacer la marque de référence, c’est la valeur de cette clé principale qu’il faudra prendre (et qui doit donc impérativement être définie pour chaque item bibliographique)
+    (( line ))
     Ce sont les données minimales à définir pour qu’une bibliographie soit utilisable. Dans la recette (cf. [[recette/_titre_section_]]), elles sont définies de cette manière :
     (( line ))
-    {-}`bibliographies:`
-    {-}`  \\<tag>:`
-    {-}`    # Propriétés indispensables`
-    {-}`    title: "\\<titre>"`
-    {-}`    path: "\\<path/to/data>"`
-    {-}`    main_key: "\\<clé item>" # si autre que title`
-    {-}`    # Propriétés optionnelles`
-    {-}`    format: \\<format>`
-    {-}`    picto: "\\<picto>"`
-    (( line ))
-    À partir de là, dans le texte, il suffit de mettre un mot ou un grand de mot entre parenthèses en le précédant de l’identifiant de la bibliographie pour que cet élément soit pris en repère. Par exemple :
-    (( line ))
-    (( {align: :center} ))
-    {-}`\\<id biblio>(\\<id item>)` 
-    (( line ))
-    Ce mot sera remplacé par la propriété `title` de l’item (cf. plus bas) et cette référence sera enregistrée pour l’ajouter à la liste des sources bibliographiques à la fin du livre.
-    Si le `title` de l’item de convient pas dans une utilisation particulière, on peut définir un texte quelconque avant l’identifiant, en le séparant avec un trait droit ("|") de l’identifiant, comme ci-dessous.
-    (( line ))
-    (( {align: :center} ))
-    {-}`C’est un film\\(exemple de film|the titanic) dans le texte.` 
-    (( line ))
-    Avec le code ci-dessus, le texte "exemple de film" sera utilisé à la place du titre du film, mais c’est une référence au film en question qui sera enregistrée en liste des sources en fin de volume.
+    ~~~yaml
+    bibliographies:
+      \\<tag>:
+      # Propriétés indispensables
+      title: "\\<titre>"
+      path: "\\<path/to/data>"
+      # Propriétés optionnelles
+      main_key: "\\<clé item>" # si autre que title
+      format: \\<format>
+      picto: "\\<picto>"
+    ~~~
 
     ##### Données optionnelles
 
     Pour commencer à personnaliser l’affichage de la bibliographie (ou des *items* dans le texte), on peut utiliser ces propriétés optionnelles :
+    * **`main_key`** ("clé principale" en anglais) | Si ce n’est pas la propriété `title` de l’item (à ne pas confondre avec le `title` dont nous venons de parler) qui doit être utilisée pour remplacer la marque de référence, c’est la valeur de cette clé principale qu’il faudra prendre (et qui doit donc impérativement être définie pour chaque item bibliographique)
     * **picto** | Pictogramme à utiliser avant le texte qui remplacera la *marque de référence* dans le texte du livre.
     * **`title_level`** ("niveau de titre" en anglais) | Le niveau de titre pour la section qui liste les sources citées. Par défaut, ce niveau est 1, le plus grand titre.
     * **format** | Format à utiliser pour l’affichage de la *liste des sources*,
     * **key_sort** ("clé de classement" en anglais) | Clé de classement des *items* dans la *liste des sources*
 
-    ##### Données bibliographiques
+    #### Référence dans le texte
+
+    (( line ))
+    À partir de là, dans le texte, il suffit d’utiliser :
+    (( line ))
+    `\\<id bibliographie>(\\<id item>)`
+    (( line ))
+    Ce code sera remplacé par le titre (`title`) de la donnée de l’item, dans sa carte (cf. plus bas) et cette référence sera enregistrée pour l’ajouter à la liste des sources bibliographiques à la fin du livre..
+    … ou, si l’on veut un autre texte gravé au lieu du titre de l’*item* :
+    (( line ))
+    `\\<id bibliographie>(\\<texte gravé>|\\<id item>)`
+    (( line ))
+
+    #### Importance de la référence
+
+    Souvent, dans un texte, les appels de référence peuvent avoir plus ou moins d’importance. Une section du livre peut par exemple juste mentionner un film et une autre, au contraire, développer autour de ce film de façon conséquence.
+    On peut marquer cette importance à l’aide d’un signe ajouté au début de la marque de référence.
+    * un "!" indiquera que la référence est importante,
+    * un "." indiquera que la référence est mineure, c’est-à-dire qu’on ne fait qu’une mention à l’item, sans développer.
+    Par exemple :
+    (( line ))
+    ~~~
+    Ici un long développement sur le film film(!Titanic) qui traite de…
+    .\.. Un peu plus loin .\..
+    Ici je fais juste mention à film{{(}}.Titanic) pour le citer parmi d’autres…
+    ~~~
+    (( line ))
+    Dans la bibliographie en fin d’ouvrage (ou ailleurs où vous la placerez), les pages des références importantes seront mises en gras tandis que les pages des références mineures seront grisées.
+    (( line ))
+    *Note : La marque "!" ou "." se met toujours après la parenthèse, même si un texte alternatif est proposé. Ainsi, on trouvera "film\\(!Titanic)" aussi bien que "film\\(!ce film|Titanic)`.*
+
+    #### Données bibliographiques
 
     Dans l’idéal, les données sont consignées dans un dossier qui contient chaque donnée sous forme de fiche (un fiche par item) au forme YAML (le format des recettes). Ce format permet une édition facile des données. Cependant, vous pouvez aussi utiliser le format `JSON` ou même `TXT` (simple texte).
 

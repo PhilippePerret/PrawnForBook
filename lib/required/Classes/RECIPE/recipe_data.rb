@@ -507,7 +507,7 @@ class Recipe
   end
 
   def page_index
-    @page_index    ||= DATA[:page_index]||inserted_pages[:page_index]||inserted_pages[:index_page]
+    @page_index    ||= DATA[:page_index]||DATA[:index_page]||inserted_pages[:page_index]||inserted_pages[:index_page]
   end
 
   def copyright

@@ -49,17 +49,13 @@ module Prawn4book
   TOUT_AIDE = TOUT || nil
   # TOUT_AIDE = TOUT || true
 
-  TOUT_PAGINATION = TOUT || nil
-  # TOUT_PAGINATION = TOUT || true
+  TOUT_PAGINATION = TOUT || nil # true (graver) ou nil (ne pas graver)
 
-  TOUT_REFS = TOUT || nil
-  # TOUT_REFS = TOUT || true
+  TOUT_REFS = TOUT || nil # true (graver) ou nil (ne pas graver)
 
-  TOUT_BIBLIO = TOUT || nil
-  # TOUT_BIBLIO = TOUT || true
+  TOUT_BIBLIO = TOUT || true # true (graver) ou nil (ne pas graver)
 
-  # FORMAT_PRECIS = TOUT || nil # format livre/page
-  FORMAT_PRECIS = TOUT || true
+  FORMAT_PRECIS = TOUT || nil # true (graver) ou nil (ne pas graver)
 
   CHANGE_DEF_BEHAVIOR = TOUT || nil
   # CHANGE_DEF_BEHAVIOR = TOUT || true
@@ -122,14 +118,14 @@ module Prawn4book
     TOUT_PAGES_SPECS && 'pages_speciales/mention_legale',
     TOUT_PAGES_SPECS && 'pages_speciales/dedicace',
     TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres',
-    TOUT_PAGES_SPECS && false,
-    'pages_speciales/table_des_matieres_2',
+    TOUT_PAGES_SPECS && 'pages_speciales/table_des_matieres_custom',
     TOUT_PAGES_SPECS && 'pages_speciales/table_illustrations',
     TOUT_PAGES_SPECS && 'pages_speciales/abreviations',
     TOUT_PAGES_SPECS && 'pages_speciales/glossaire',
     TOUT_PAGES_SPECS && 'pages_speciales/remerciements',
     TOUT_PAGES_SPECS && 'pages_speciales/credits_page',
-    TOUT_PAGES_SPECS && 'pages_speciales/index_page',
+    TOUT_PAGES_SPECS && false,
+    'pages_speciales/index_page',
 
     #---Entetes/Pied-de-page---#
     TOUT_HEADFOOT && 'header_footer/grand_titre',
@@ -158,8 +154,7 @@ module Prawn4book
     #__Texte_Details___#
     TOUT_TEXT_DETAIL && 'texte_detail/grand_titre',
     TOUT_TEXT_DETAIL && 'texte_detail/inline_styling',
-    TOUT_TEXT_DETAIL && false,
-    'texte_detail/par_class_tag',
+    TOUT_TEXT_DETAIL && 'texte_detail/par_class_tag',
     TOUT_TEXT_DETAIL && 'texte_detail/indentation',
     TOUT_TEXT_DETAIL && 'texte_detail/hauteur_de_ligne',
     TOUT_TEXT_DETAIL && 'texte_detail/gestion_tirets_conditionnels',
@@ -195,9 +190,10 @@ module Prawn4book
     TOUT_REFS && 'tables/tables',
 
     #---Bibliographies---#
-    TOUT_BIBLIO && 'bibliographies/grand_titre',
+    TOUT_BIBLIO && 'bibliographies/_titre_section_',
     TOUT_BIBLIO && 'bibliographies/introduction',
     TOUT_BIBLIO && 'bibliographies/customisation',
+    TOUT_BIBLIO && 'bibliographies/custom_indexes', # <== À FAIRE
 
     #---Format précis livre et pages ---
     # 

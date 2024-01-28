@@ -223,6 +223,18 @@ inserted_pages:
     belle_page: true
     title:          "Table des illustrations"
     title_level:    2
+
+  page_index:
+    aspect:
+      canon:
+        font: "//11"
+      number:
+        font: "Courier/italic/9/555555"
+        main: 
+          font: "Courier/bold/9.5/000000"
+        minor:
+          font: "Courier/italic/8.5/999999"
+
 #/inserted_pages
 
 #
@@ -310,12 +322,4 @@ book_making:
     lieu:       null
 #</book_making>
 
-# --- La page d'index ---
-
-page_index:
-  aspect:
-    canon:
-      font: "//11"
-    number:
-      font: "Courier/italic/9/555555"
 

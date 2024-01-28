@@ -141,7 +141,14 @@ class BibItem
     unite = TERMS[key_numerotation]
     unite = "#{unite}s" if @occurrences.count > 1
     # "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
+    
+    # TODO : ICI, IL FAUT PASSER AUX SEGMENTS, COMME AVEC LA PAGE
+    # D’INDEX, POUR POUVOIR DÉFINIR UN ASPECT PROPRE EN FONCTION DU
+    # POIDS DE L’OCCURRENCE.
+    # IL FAUDRA DONC UTILISER pdf.formatted_text COMME AVEC LA PAGE
+    # D’INDEX
     liste = @occurrences.map { |hoccu| hoccu[key_numerotation] }.uniq
+
     # unite + ":" + (pretty ? liste.pretty_join : liste.join(', '))
     (pretty ? liste.pretty_join : liste.join(', '))
   end

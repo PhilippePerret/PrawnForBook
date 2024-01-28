@@ -1,16 +1,13 @@
 ---
-:pages_speciales_table_des_matieres_2:
+:pages_speciales_index_page:
   :page: 20
   :paragraph:
-:texte_detail_par_class_tag:
-  :page: 23
+:bibliographies__titre_section_:
+  :page: 22
   :paragraph:
-:format_precis_grand_titre:
+:bibliographies_introduction:
+  :page: 22
+  :paragraph:
+:bibliographies_customisation:
   :page: 26
-  :paragraph:
-:format_precis_definition_marges:
-  :page: 26
-  :paragraph:
-:format_precis_multi_colonnes:
-  :page: 28
   :paragraph:

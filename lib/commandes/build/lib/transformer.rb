@@ -169,6 +169,11 @@ module ParserFormaterClass
     # 
     str = __traite_notes_in(str, context) || return # quand nil
 
+    #
+    # Traitement ultime 
+    # 
+    str = __traite_ultime_chars(str, context)
+
     return str
   end
 
@@ -336,24 +341,21 @@ private
   def self.__traite_mots_indexed_in(str, context)
     numero_par = context[:paragraph].numero
     first_page = context[:paragraph].first_page
-    str = str.gsub(/index:(.+?)(\b)/) do
-      dmot = {
-        mot:  $1.freeze, 
-        page: first_page, 
-        paragraph:numero_par,
-        hybrid: "#{first_page}-#{numero_par}"
-      }
-      book.page_index.add(dmot)
-      dmot[:mot] + $2
-    end
-    str = str.gsub(/index\((.+?)\)/) do
-      mot, canon = $1.freeze.split('|')
+    str = str.gsub(REG_REAL_INDEX) do
+      mot   = $~[:mot].freeze
+      canon = $~[:canon].freeze
+      poids = case $~[:poids]
+        when "!" then :main
+        when "." then :minor
+        else :normal
+        end.freeze
       dmot = {
         mot:        mot, 
         canon:      canon, 
+        poids:      poids,
         page:       first_page, 
         paragraph:  numero_par,
-        hybrid:     "#{first_page}-#{numero_par}"
+        hybrid:     "#{first_page}§#{numero_par}",
       }
       book.page_index.add(dmot)
       dmot[:mot]
@@ -361,6 +363,8 @@ private
 
     return str
   end
+
+  REG_REAL_INDEX = /index\((?<poids>[\!\.])?(?<mot>.+?)(?:\|(?<canon>.+?))?\)/.freeze
 
   # Relève les abréviations qui seraient définies dans +str+
   # 
@@ -487,6 +491,17 @@ private
 
       bib_tag = $1.freeze
       item_av, item_ap = $2.freeze.split('|')
+      # Poids
+      weight = 
+        if item_av.start_with?('!')
+          item_av = item_av[1..-1]
+          :main
+        elsif item_av.start_with?('.')
+          item_av = item_av[1..-1]
+          :minor
+        else
+          :normal
+        end
 
       biblio = Prawn4book::Bibliography.get(bib_tag) || raise(PFBFatalError.new(700, {bib: bib_tag.inspect}))
       canon, actual = 
@@ -514,6 +529,7 @@ private
         bibitem.add_occurrence({
           page:       first_page, 
           paragraph:  parag_num,
+          weight:     weight, # :normal la plupart du temps
         })
         #
         # Formatage de l'élément bibliographique
@@ -522,6 +538,17 @@ private
         bibitem.formated(context, actual)
       end
     end
+  end
+
+  ##
+  # @private
+  # 
+  # Traitement ultime
+  # 
+  def self.__traite_ultime_chars(str, context)
+    # str = str.gsub(/\[\[(.+?)\]\]/, '\1')
+    # puts "#{str}" if str.match?(/film/)
+    return str
   end
 
   ##

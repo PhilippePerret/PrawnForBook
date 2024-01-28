@@ -131,7 +131,7 @@ class Bibliography
     "#{bibitem.title} : #{bibitem.occurrences_pretty_list}."
   end
 
-  # Affichage de l’iem dans la liste des sources bibliographiques
+  # Affichage de l’item dans la liste des sources bibliographiques
   # quand la propriété `format’ est définie.
   def formate_item_by_format(bibitem, pdf)
     fmt_data = Marshal.load(Marshal.dump(bibitem.data))
