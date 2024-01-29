@@ -414,23 +414,6 @@ class Recipe
     default_font.style
   end
 
-  # --- Page d'index ---
-
-  def index_canon_fonte
-    @index_canon_fonte ||= begin
-      tbl = page_index[:aspect] || {}
-      tbl = tbl[:canon] || {}
-      Fonte.get_in(tbl).or_default
-    end
-  end
-  def index_number_fonte
-    @index_number_fonte ||= begin
-      tbl = page_index[:aspect] || {}
-      tbl = tbl[:number] || {}
-      Fonte.get_in(tbl).or_default
-    end
-  end
-
   # -- Modèle --
 
   # Pas de modèle définissable pour le moment

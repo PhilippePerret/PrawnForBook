@@ -6,11 +6,11 @@ bibliographies:
     picto: book
     format: "%{title} (%{author|monauteur})"
     number:
-      font: "Courier/italic/9/555555"
+      font: "Helvetica/italic/9/555555"
       main: 
-        font: "Courier/bold/9.5/000000"
+        font: "Helvetica/bold/10/000000"
       minor:
-        font: "Courier/italic/8.5/999999"
+        font: "Helvetica/light/8/999999"
 
 inserted_pages:
   #
@@ -20,11 +20,11 @@ inserted_pages:
    aspect:
       canon: "//14/007700"
       number:
-        font: "Courier/italic/9/555555"
+        font: "Helvetica/italic/9/555555"
         main: 
-          font: "Courier/bold/9.5/000000"
+          font: "Helvetica/bold/9.5/000000"
         minor:
-          font: "Courier/italic/8.5/999999"
+          font: "Helvetica/italic/8.5/999999"
   #
   #
   #
