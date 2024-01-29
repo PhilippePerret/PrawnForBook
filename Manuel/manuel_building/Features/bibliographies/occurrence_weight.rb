@@ -11,6 +11,8 @@ Prawn4book::Manual::Feature.new do
   real_texte <<~EOT
     Sur la première page, je fais une référence de poids normal au livre book(dracula).
     Je fais aussi une référence de poids normal à book(l’assomoir).
+    Et enfin, puisque cette page contient une référence au trois livres, une référence aussi à book(notre dame de paris).
+    J’indexe aussi le mot index(bibliothèque).
     (( new_page ))
     Sur la deuxième page, une référence importante au livre book(!notre dame de paris) en utilisant son titre.
     (( new_page ))
@@ -18,7 +20,12 @@ Prawn4book::Manual::Feature.new do
     Je parle surtout de book(!l’assomoir) dans la page trois.
     (( new_page ))
     À la page 4 de trouve une book(.référence mineure|l’assomoir) au livre de Zola mais sans citer son nom.
+    Le mot index(!bibliothèque) est ici très important.
+    Et je mets aussi une référence mineure au mot index(.bibliothèque) dans la même page, pour avoir les deux. C’est la première qui l’emporte.
+    (( new_page ))
+    Une référence moi forte au mot index(.bibliothèque) à la page 5.
     (( biblio(book) ))
+    (( index ))
     EOT
   real_recipe <<~EOT
     ---
@@ -26,6 +33,14 @@ Prawn4book::Manual::Feature.new do
       book:
         title: Livres
         path: assets/biblios/books
+        picto: book
+        format: "%{title} (%{author|monauteur})"
+        number:
+          font: "Courier/italic/9/555555"
+          main: 
+            font: "Courier/bold/9.5/000000"
+          minor:
+            font: "Courier/italic/8.5/999999"
 
     inserted_pages:
       #
@@ -35,11 +50,11 @@ Prawn4book::Manual::Feature.new do
        aspect:
           canon: "//14/007700"
           number:
-          font: "Courier/italic/9/555555"
-          main: 
-            font: "Courier/bold/9.5/000000"
-          minor:
-            font: "Courier/italic/8.5/999999"
+            font: "Courier/italic/9/555555"
+            main: 
+              font: "Courier/bold/9.5/000000"
+            minor:
+              font: "Courier/italic/8.5/999999"
       #
       #
       #
@@ -49,12 +64,9 @@ Prawn4book::Manual::Feature.new do
     EOT
 
   texte <<~EOT
-    ![page-1]
-    ![page-2]
-    ![page-3]
-    ![page-4]
-    ![page-5]
-    ![page-6]
+    La page de bibliographie, à la fin du livre, ressemblera à :
+    ![page-8]
+    ![page-12]
     (( new_page ))
     EOT
 

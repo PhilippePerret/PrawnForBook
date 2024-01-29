@@ -25,6 +25,16 @@ class PageIndex
     titre = PdfBook::NTitre.new(book:pdfbook, titre:"Index", level:1, pindex: 0)
     titre.print(pdf)
 
+    #
+    # Le livre définit peut-être INDEX, qui est une table avec en
+    # clé le canon qu’on utilise dans le texte et en valeur la vraie
+    # valeur qu’il faut donner au mot indexé dans la page d’index
+    # Si cette constante n’est pas définie, il faut l’initialiser
+    # 
+    unless defined?(INDEX)
+      Prawn4book.const_set('INDEX',{})
+    end
+
     # 
     # Boucle sur la table des index 
     # 
@@ -70,7 +80,7 @@ class PageIndex
           when :minor then number_minor_fonte_data
           else number_fonte_data
           end
-        segments << dmot[:font_data].merge!(text: dmot[key_num].to_s)
+        segments << font_data.merge(text: dmot[key_num].to_s)
       end
       # -- Gravure du canon et ses références --
       # Note : ça passe automatiquement à la ligne, ne rien faire.
