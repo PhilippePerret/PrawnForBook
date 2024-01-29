@@ -194,6 +194,8 @@ module Prawn4book
     TOUT_BIBLIO && 'bibliographies/introduction',
     TOUT_BIBLIO && 'bibliographies/customisation',
     TOUT_BIBLIO && 'bibliographies/custom_indexes', # <== À FAIRE
+    TOUT_BIBLIO && false,
+    'bibliographies/occurrence_weight',
 
     #---Format précis livre et pages ---
     # 

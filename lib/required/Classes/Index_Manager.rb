@@ -121,7 +121,7 @@ class Index
       paragraph:    context[:paragraph],
       output:       output,
       real_output:  output,
-      weight:       context[:importance] || :normal,
+      weight:       context.delete(:occurrence_weight)
     }
 
     # On traite cet item avec la méthode personnalisée qui doit

@@ -26,6 +26,7 @@ module Prawn4book
 
       puts "Chargement des features…".bleu
       all_features = FEATURE_LIST.map do |fname|
+        next if fname == false
         next if fname.start_with?('#')
         fpath = File.join(FEATURES_FOLDER, "#{fname}.rb")
         dname = File.basename(fname)

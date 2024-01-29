@@ -392,6 +392,13 @@ private
       indexId = $~[:index_id].to_sym.freeze
       output  = $~[:mot].freeze
       motId   = ($~[:id_mot] || output).freeze
+      # Poids de cette occurrence
+      weight  = case $~[:weight]
+        when '!' then :main
+        when '.' then :minor
+        else :normal
+        end
+      context.merge!(occurrence_weight: weight)
       begin
         book.index(indexId).add(motId, output, **context)
       rescue PFBFatalError => e
@@ -405,7 +412,7 @@ private
     return str    
   end
 
-  REG_INDEX = /(?<=(^| |’))(?<index_id>[a-z]+?)#{EXCHAR}\((?<mot>.+?)(?:\|(?<id_mot>.+?))?\)/.freeze
+  REG_INDEX = /(?<=(^| |’|\())(?<index_id>[a-z]+?)#{EXCHAR}\((?<weight>[\.\!])?(?<mot>.+?)(?:\|(?<id_mot>.+?))?\)/.freeze
 
   ##
   # Traitement des références croisées

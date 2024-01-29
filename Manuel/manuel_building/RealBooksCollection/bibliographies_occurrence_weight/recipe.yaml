@@ -1,0 +1,28 @@
+---
+bibliographies:
+  book:
+    title: Livres
+    path: assets/biblios/books
+
+inserted_pages:
+  #
+  # Aspect pour la page d’index
+  #
+  page_index:
+   aspect:
+      canon: "//14/007700"
+      number:
+      font: "Courier/italic/9/555555"
+      main: 
+        font: "Courier/bold/9.5/000000"
+      minor:
+        font: "Courier/italic/8.5/999999"
+  #
+  #
+  #
+  page_de_garde: false
+  page_de_titre: false
+  faux_titre: false
+book_format:
+  text:
+    line_height: 20
