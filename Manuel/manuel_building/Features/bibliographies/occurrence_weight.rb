@@ -66,8 +66,9 @@ Prawn4book::Manual::Feature.new do
 
   texte <<~EOT
     La page de bibliographie, à la fin du livre, ressemblera à :
-    ![page-8]
-    ![page-12]
+    ![page-8](width:"70%")
+    La page d’index ressemblera à :
+    ![page-12](width:"70%")
     (( new_page ))
     EOT
 

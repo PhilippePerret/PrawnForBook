@@ -1,7 +1,7 @@
 Sur la première page, je fais une référence de poids normal au livre book(dracula).
 Je fais aussi une référence de poids normal à book(l’assomoir).
 Et enfin, puisque cette page contient une référence au trois livres, une référence aussi à book(notre dame de paris).
-J’indexe aussi le mot index(!bibliothèque) sans poids.
+J’indexe aussi le mot index(bibliothèque) sans poids.
 (( new_page ))
 Sur la deuxième page, une référence importante au livre book(!notre dame de paris) en utilisant son titre.
 (( new_page ))
