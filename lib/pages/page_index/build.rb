@@ -101,7 +101,6 @@ class PageIndex
     end.each do |canon, dcanon|
       pdf.font(canon_fonte)
       txt = INDEX.key?(canon.downcase.to_sym) ? INDEX[canon.downcase.to_sym] : canon
-      puts "dcanon[:items]: #{dcanon[:items].inspect}"
       segments = Occurrences.as_formatted({
         text:           "#{txt} : ",
         fonte:          canon_fonte,
