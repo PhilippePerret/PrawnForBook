@@ -400,7 +400,8 @@ class PdfBook
     pdf.build_faux_titre          if recipe.faux_titre? && pdf.first_page < 3
     pdf.build_page_de_titre       if page_de_titre?     && pdf.first_page < 4
     
-    # Toujours commencer sur la BELLE PAGE
+    # Toujours commencer sur la BELLE PAGE 
+    # (donc une page impaire)
     # 
     pdf.start_new_page if pdf.page_number.even?
 

@@ -60,6 +60,7 @@ class InputTextFile
         # @note
         #   Le +self+ sert simplement à savoir d'où vient le para-
         #   graphe injecté
+        # 
         book.inject(pdf, par_str, idx, self)
       end
     end

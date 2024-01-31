@@ -118,6 +118,10 @@ class << self
     # Les titres ne passent pas par cette méthode
     # 
 
+    debugit = false
+    debugit = text.match?('Sur la première page, je fais une référence')
+
+
     my = self
 
     options = defaultize_options(options.dup, pdf)
@@ -133,7 +137,7 @@ class << self
     puce = options[:puce]
 
     # - Faut-il se passer du numéro de paragraphe ? -
-    # TODO
+    #
     no_num = options[:no_num] === true # || pas par recette
 
     # Un SPARADRAP pour gérer la couleur directement en html dans
@@ -168,8 +172,6 @@ class << self
 
         str = text.dup
 
-        debugit = false # str.match?('Le grand titre à utiliser pour la table des matières')
-
         if (lbefore = options.delete(:lines_before))
           (lbefore + 1).times { move_to_next_line }
         end
@@ -190,17 +192,25 @@ class << self
           start_new_page
         end
 
-        # if debugit
-        #   puts "cursor : #{cursor}".bleu
-        #   puts "boxheight : #{boxheight}".bleu
-        #   exit 112
-        # end
-
         printed_lines = b.instance_variable_get('@printed_lines')
         lines_count = printed_lines.count
 
+        if debugit
+          puts "str               : #{str.inspect}".gris
+          puts "line_height       : #{line_height}".gris
+          puts "pdf.font          : #{pdf.font.inspect}".gris
+          puts "fonte             : #{fonte.inspect}".gris
+          puts "pdf.cursor        : #{cursor}".gris
+          puts "pdf.current_line  : #{pdf.current_line}".bleu
+          puts "options           : #{options}".gris
+          puts "Box height        : #{boxheight}".bleu
+          puts "=> lines_count    : #{lines_count}".bleu
+          # exit 112
+        end
+
         # Y a-t-il une ligne de voleur ?
         has_thief_line = lines_count > 1 && printed_lines.last.length < THIEF_LINE_LENGTH
+        puts "has_thief_line est #{has_thief_line.inspect}".bleu if debugit
 
         # Si la dernière ligne est trop courte, il faut chercher le
         # character_spacing qui permettra de remonter le texte seul
@@ -216,6 +226,22 @@ class << self
           # de lignes
           boxheight   -= line_height
           lines_count -= 1
+
+          if debugit
+            puts "Box height ramené à #{boxheight.inspect}".jaune
+            puts "Nombre lignes (lines_count) ramané à #{lines_count}".jaune
+          end
+
+        end
+
+        # SPARADRAP pour le bug #272 (quand un paragraphe, sur deux
+        # lignes mais avec une ligne de voleur, est ramené à une seule
+        # ligne, sans ça, le paragraphe suivant écrase ce paragraphe
+        # en question. Il semble que le `boxheight -= line_height’ ne
+        # soit pas bon quand on a une seule ligne… À vérifier quand
+        # même pour les autres cas.
+        if boxheight < line_height
+          boxheight = pdf.height_of('Xp')
         end
 
         # On doit voir si on va passer à la page suivante. On le sait
@@ -223,16 +249,7 @@ class << self
         # la hauteur du bloc, passe en dessous de zéro (zéro, c'est la
         # limite basse de la page)
         sur_deux_pages = cursor - boxheight < 0
-
-        # # /débug
-        # if page_number > 18 && text.match?(/Recette.+collection/i)
-        #   puts "\n"
-        #   puts "cursor = #{cursor.round(3)}".bleu
-        #   puts "boxheight = #{boxheight.round(3)}".bleu
-        #   puts "cursor - boxheight = #{cursor - boxheight}".bleu
-        #   puts "sur_deux_pages est #{sur_deux_pages.inspect}".bleu
-        #   exit 100
-        # end
+        puts "sur_deux_pages est #{sur_deux_pages.inspect}".bleu if debugit
 
         # Il faut traiter le cas du passage à la page suivante. En fait,
         # en calculant ce qui dépasse, on doit pouvoir obtenir le nom
@@ -246,10 +263,13 @@ class << self
           nb_lines_curr_page = lines_count
         end
 
-        # puts "Nombre lignes : #{lines_count} / On current page:#{nb_lines_curr_page} / On next page:#{nb_lines_next_page}".bleu
-
         parag_has_orphan = nb_lines_curr_page == 1 && lines_count > 1
         parag_has_widow  = nb_lines_next_page == 1
+
+        if debugit
+          puts "parag_has_orphan est #{parag_has_orphan.inspect}".bleu
+          puts "parag_has_widow  est #{parag_has_widow.inspect}".bleu
+        end
         
         # Gestion d'une orpheline
         # 
@@ -269,8 +289,7 @@ class << self
         # culer la ligne, on s'était placé bien en haut pour ne pas
         # avoir de passage à la page suivante)
         options[:at][1] = cursor
-
-        # puts "Options avant écriture : #{options.inspect}".jaune
+        puts "options[:at] mis à #{options[:at].inspect}".jaune if debugit
 
         # - Par défaut -
         excedent = nil
@@ -285,13 +304,16 @@ class << self
           options.merge!(height: (nb_lines_curr_page - 1) * line_height)
 
         elsif nb_lines_next_page > 1
+          
           #
           # Le reste de page ne permet pas d'écrire tout le texte,
           # mais aucun problème de veuve n'a été détecté. Donc on
           # écrit sur cette page, puis sur l'autre.
           # (ce sera géré automatiquement par l'excédent)
+          # 
 
         else
+
           #
           # Le cas normal : on écrit le texte sur la page courante
           # 
@@ -331,13 +353,12 @@ class << self
         # 
         # puts "Options (1er) : #{options.inspect}".bleu
         excedent = text_box(str, **options)
+        puts "Excédent après écriture : #{excedent.inspect}".bleu if debugit
 
         # Écriture du numéro du paragraphe (si besoin)
         if owner.paragraph? && not(no_num)
           owner.print_paragraph_number(self)
         end
-
-        # puts "excedent = #{excedent.inspect}".jaune
 
         # 
         # Gestion de l'excedent quand il y en a
@@ -347,6 +368,7 @@ class << self
           #   la hauteur du box -
           move_down(boxheight)
           update_current_line
+          puts "current line est maintenant à #{pdf.current_line}".jaune if debugit
         else
           # - Impression de l'exédent -
           start_new_page
