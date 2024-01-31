@@ -119,7 +119,7 @@ class << self
     # 
 
     debugit = false
-    debugit = text.match?('Sur la première page, je fais une référence')
+    # debugit = text.match?('Sur la première page, je fais une référence')
 
 
     my = self

@@ -92,27 +92,29 @@ class Bibliography
       pdf.move_to_next_line
       # str = Prawn4book::Bibliography.send(formate_method, bibitem)
       begin
-        #
         # C'est peut-être une méthode utilisateur qui est utilisée
         # ici, il faut donc s'attendre au pire. On la protège.
-        # 
-        str = item_formatage_method.call(bibitem, pdf)
-        # La méthode peut retourner nil si le code a été écrit 
-        # directement dans le document pdf.
+        segments = item_formatage_method.call(bibitem, pdf) || return
+        unless segments.is_a?(Array) && segments[0].is_a?(Hash)
+          raise "La méthode de formatage de bibliographie (pour ’#{biblio.id}’) ne peut plus retourner un simple [String]. Elle doit retourner une liste de segments pour pdf.formatted_text"
+        end
       rescue Exception => e
         raise PFBFatalError.new(740, **{method: "#{item_formatage_method.name}", err: e.message, err_class: "#{e.class}"})
       end
-      unless str.nil?
+      unless segments.empty?
         #
         # Si le texte n'a pas été écrit directement dans le 
         # livre
         # 
-        pdf.text(str, **options)
+        # pdf.text(segments, **options) # avant, avec un string
+        pdf.formatted_text(segments, **options)
         if  book.pages[page_number_at_start][:content_length] == PAGE_FAKED_LENGTH
           # -- valeur fictive retirée --
           book.pages[page_number_at_start][:content_length] = 0
         end
-        book.pages[page_number_at_start].add_content_length(str.length)
+        # Ajouter la longueur de texte
+        str_length = segments.sum { |h| h[:text].length }
+        book.pages[page_number_at_start].add_content_length(str_length)
         pdf.move_down(4)
       end
     end
@@ -123,15 +125,17 @@ end #/class Pages
 
 class Bibliography
 
-  # Affichage par défaut de l’item dans la liste
-  # des sources en fin d’ouvrage
-  # 
+  # @return [String] le texte par défaut (i.e. quand aucune méthode
+  # personnalisée n’est définie) de l’item dans la liste des sources 
+  # en fin d’ouvrage
+  # @todo : pouvoir formater la liste des occurrences => utiliser
+  # formatted_text et une liste de segment
   def self.default_formate_method(bibitem, pdf)
     spy "Je dois imprimer l'item #{bibitem.title} avec la méthode par défaut des bibliographies.".jaune
-    "#{bibitem.title} : #{bibitem.occurrences_pretty_list}."
+    bibitem.occurrences_pretty_list(main_text: "#{bibitem.title}")
   end
 
-  # Affichage de l’item dans la liste des sources bibliographiques
+  # @return [String] de l’item dans la liste des sources bibliographiques
   # quand la propriété `format’ est définie.
   def formate_item_by_format(bibitem, pdf)
     fmt_data = Marshal.load(Marshal.dump(bibitem.data))
@@ -145,7 +149,7 @@ class Bibliography
       fmt_data.merge!(uk => valu)
     end
 
-    @formated_format % fmt_data.merge(pages: bibitem.occurrences_pretty_list)
+    bibitem.occurrences_pretty_list(main_text: @formated_format % fmt_data)
   end
 
   # Prend la donnée `format’ de la bibliographie si elle est définie
@@ -195,18 +199,15 @@ class Bibliography
       keys.merge!(uniq_prop => {prop: prop, method: meth}) # [1]
       "%{#{uniq_prop}}" # [1]
     end
-    # Si le format ne définit pas `pages` on l’ajoute à la fin
-    # Noter que suivant la pagination, ça peut être autre chose
-    unless keys.key?(:pages)
-      fmt << " : %{pages}."
-    end
     @format_methods_per_key = keys
     @formated_format = fmt
   end
 
   REG_BIBITEM_PROP_DEFINITION = /\%\{([a-zA-Z_0-9\-]+?)(?:\|(.+?))?\}/
 
-  # Toutes les méthodes de formatages communes
+  #
+  # === Toutes les méthodes de FORMATAGES COMMUNES ===
+  # 
   # (on peut en définir d’autres en mode expert)
 
   def all_caps(str)

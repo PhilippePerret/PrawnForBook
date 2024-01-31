@@ -238,6 +238,33 @@ class Bibliography
   def title_level ; @title_level  ||= data[:title_level]||1     end
   def main_key    ; @main_key     ||= data[:main_key] || :title end
 
+
+  # Fonte principale
+  def fonte
+    @fonte ||= Fonte.get_in(recipe_data).or_default()
+  end
+
+  def fonte_number_normal
+    @fonte_number_normal ||= Fonte.get_in(recipe_number_data).or(fonte)
+  end
+  def fonte_number_main
+    @fonte_number_main ||= Fonte.get_in(recipe_number_data[:main]).or(fonte_number_normal)
+  end
+  def fonte_number_minor
+    @fonte_number_minor ||= Fonte.get_in(recipe_number_data[:minor]).or(fonte_number_normal)
+  end
+
+  # Données pour la fonte du nombre (référence) if any
+  def recipe_number_data
+    @recipe_number_data ||= recipe_data[:number] || {}
+  end
+  # Données recette pour cette bibliographie
+  
+  def recipe_data
+    @recipe_data ||= get_data_biblios(self.id)
+  end
+
+
   private
 
 

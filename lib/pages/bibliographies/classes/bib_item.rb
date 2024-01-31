@@ -132,25 +132,16 @@ class BibItem
   #
   # @api public
   # 
-  def occurrences_pretty_list
-    occurrences_list(true)
-  end
-
-  def occurrences_list(pretty = false)
-    return nil if @occurrences.count == 0
-    unite = TERMS[key_numerotation]
-    unite = "#{unite}s" if @occurrences.count > 1
-    # "#{unite} #{@occurrences.map { |hoccu| hoccu[key_numerotation] }.pretty_join}"
-    
-    # TODO : ICI, IL FAUT PASSER AUX SEGMENTS, COMME AVEC LA PAGE
-    # D’INDEX, POUR POUVOIR DÉFINIR UN ASPECT PROPRE EN FONCTION DU
-    # POIDS DE L’OCCURRENCE.
-    # IL FAUDRA DONC UTILISER pdf.formatted_text COMME AVEC LA PAGE
-    # D’INDEX
-    liste = @occurrences.map { |hoccu| hoccu[key_numerotation] }.uniq
-
-    # unite + ":" + (pretty ? liste.pretty_join : liste.join(', '))
-    (pretty ? liste.pretty_join : liste.join(', '))
+  def occurrences_pretty_list(main_text:)
+    main_data = {
+      text:         main_text,
+      fonte:        biblio.fonte,
+      fonte_normal: biblio.fonte_number_normal,
+      fonte_main:   biblio.fonte_number_main,
+      fonte_minor:  biblio.fonte_number_minor,
+      key_ref:      key_numerotation
+    }
+    Occurrences.as_formatted(main_data, @occurrences)
   end
 
   # --- Predicate Methods ---
@@ -361,6 +352,8 @@ class BibItem
       description: lines.join("\n").strip
     }
   end
+
+  # Les données recette pour cette bibliographie
 
   # @shortcut vers la recette
   def recipe
