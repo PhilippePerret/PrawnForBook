@@ -53,7 +53,7 @@ book_format:
       belle_page: false
       alone: false
     level5:
-      font:   'Times-Roman'
+      font:   'Times'
       style:  null
       size:   22
       align:  right

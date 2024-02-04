@@ -28,6 +28,19 @@ fonts:
     normal: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
     bold:   "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
     italic: "resources/fonts/Reenie_Beanie/ReenieBeanie-Regular.ttf"
+  Courier:
+    normal:       "resources/fonts/Courier/Courier.ttf"
+    regular:      "resources/fonts/Courier/Courier.ttf"
+    italic:       "resources/fonts/Courier/Courier-Oblique.ttf"
+    bold:         "resources/fonts/Courier/Courier-Bold.ttf"
+    bold_italic:  "resources/fonts/Courier/Courier-BoldOblique.ttf"
+  Times:
+    normal:       "resources/fonts/Garamond/Garamond-Regular.ttf"
+    italic:       "resources/fonts/Garamond/Garamond-Italic.ttf"
+    bold:         "resources/fonts/Garamond/Garamond-Bold.ttf"
+    bold_italic:  "resources/fonts/Garamond/Garamond-Bold.ttf"
+    light:        "resources/fonts/Garamond/Light-Condensed.ttf"
+    light_italic: "resources/fonts/Garamond/Light-Condensed-Italic.ttf"
 #</fonts>
 
 # --- Données du livre ---
@@ -85,7 +98,7 @@ book_format:
     show_grid:                  false
     show_margins:               false
   text:
-    font:                     "Times-Roman/normal/13/000000"
+    font:                     "Times/normal/13/000000"
     indent:                   0
     line_height:              14
     numerotation:             false
@@ -107,7 +120,7 @@ book_format:
       left: 6mm
     # - Notes de page -
     notes_page:
-      font:           "Times-Roman/italic/10/000000"
+      font:           "Times/italic/10/000000"
       borders:        0.3
       border_color:   "999999"
       left:           0
@@ -184,15 +197,15 @@ inserted_pages:
   # half_title:     false # faux titre en anglais
   page_de_titre:
     title:
-      font: "Times-Roman//18/000000"
+      font: "Times//18/000000"
     subtitle:
-      font: "Times-Roman//11/000000"
+      font: "Times//11/000000"
     author: 
-      font: "Times-Roman//15/000000"
+      font: "Times//15/000000"
     collection: 
-      font: "Times-Roman//12/000000"
+      font: "Times//12/000000"
     publisher:
-      font: "Times-Roman//12/000000"
+      font: "Times//12/000000"
       logo:
         height: 10
   copyright: "@Tous droits réservés"
@@ -200,9 +213,9 @@ inserted_pages:
   credits_page:   false
     # disposition: 'distribute' # 'bottom', 'top'
     # libelle:
-    #   font: "Times-Roman/italic/9/777777"
+    #   font: "Times/italic/9/777777"
     # value:
-    #   font: "Times-Roman//11/000000"
+    #   font: "Times//11/000000"
   abbreviations:
     belle_page:   true
     title:        "Liste des abréviations"
@@ -259,22 +272,22 @@ table_of_content:
   dash_line:            {length: 1, space: 3}
   vadjust_line:         0
   level1:
-    font:         "Times-Roman/normal/12/000000"
+    font:         "Times/normal/12/000000"
     number_size:  10
     caps:         "all-caps"
     indent:       0
   level2:
-    font:         "Times-Roman/normal/12/000000"
+    font:         "Times/normal/12/000000"
     number_size:  10
     indent:       '10mm'
     separator:    null
   level3:
-    font:         "Times-Roman/normal/11/000000"
+    font:         "Times/normal/11/000000"
     number_size:  10
     indent:       '20mm'
     separator:    null
   level4:
-    font:         "Times-Roman/normal/8/000000"
+    font:         "Times/normal/8/000000"
     number_size:  10
     indent:       '30mm'
     separator:    null

@@ -542,7 +542,7 @@ class Recipe
 
 
   def fonts_data
-    @fonts_data ||= DATA[:fonts] || {}
+    @fonts_data ||= DATA[:fonts]
   end
   alias :fonts :fonts_data
 

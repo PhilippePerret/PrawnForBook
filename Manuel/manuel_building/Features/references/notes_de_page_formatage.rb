@@ -14,7 +14,7 @@ Prawn4book::Manual::Feature.new do
     book_format:
       text:
         notes_page:
-          font: "Times-Roman"
+          font: "Times"
           size: 15
           style: ""
           color: CCCCCC

@@ -43,7 +43,7 @@ class Bibliography
       if recipe_data[:font] then
         recipe_data[:font]
       else
-        'Times-Roman'
+        'Times'
       end
     end
   end

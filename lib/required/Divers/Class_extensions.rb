@@ -32,10 +32,14 @@ class String
       self.to_f
     else
       unite   = self[-2..-1]
+      unite   = UNITE_TO_REAL_UNITE[unite] || unite
       nombre  = self[0..-3].to_f
       nombre.send(unite.to_sym)
     end
   end
+  UNITE_TO_REAL_UNITE = {
+    'po' => 'in'
+  }
 
   def colorize_in(html_color)
     "<color rgb=\"#{html_color}\">#{self}</color>"

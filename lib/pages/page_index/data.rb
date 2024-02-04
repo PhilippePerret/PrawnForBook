@@ -14,10 +14,10 @@ class PageIndex
   PAGE_DATA = {
     aspect: {
       canon:  {
-        font: {name:'Police/style/taille/couleur pour le canon', default: 'Times-Roman/bold/12/000000', values: Fonte.method(:as_choices)},
+        font: {name:'Police/style/taille/couleur pour le canon', default: 'Times/bold/12/000000', values: Fonte.method(:as_choices)},
       },
       number:  {
-        font: {name:'Police/style/taille/couleur pour les numéros', default: 'Times-Roman//12/000000', values: Fonte.method(:as_choices)},
+        font: {name:'Police/style/taille/couleur pour les numéros', default: 'Times//12/000000', values: Fonte.method(:as_choices)},
       },
     },
   }

@@ -41,7 +41,7 @@ module Prawn4book
       # props = {name: 'Helvetica', style: :italic, size: 30}
       # props = {name: 'Times', size: 30} # ne fonctionne pas
 
-      font('Times-Roman', {style: :italic, size:40})
+      font('Times', {style: :italic, size:40})
       text "Un texte quelconque pour voir."
 
     end

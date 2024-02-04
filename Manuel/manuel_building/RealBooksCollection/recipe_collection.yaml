@@ -36,7 +36,7 @@ book_format:
     show_margins: false
   text:
     # numerotation: true
-    font:         'Times-Roman/normal/11/000000'
+    font:         'Times/normal/11/000000'
     line_height:  20
     guillemets:   ['« ',' »']
     indent:       0

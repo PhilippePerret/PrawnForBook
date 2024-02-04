@@ -359,11 +359,14 @@ class PdfBook
       end
     end
 
-    # = FONTS =
-    # 
-    # Empacketage de toutes les fontes dans le document PDF.
-    # 
-    pdf.embed_fontes(book_fonts)
+    # On charge les fontes
+    #
+    # Normalement, on devrait les "filtrer" à la fin pour n’empacketer
+    # que les fontes utilisées.
+    Fonte.load_all_fontes(self, pdf)
+
+
+    # Définir la fonte par défaut
     if first_turn?
       # - Par défaut -
       default_fonte = Fonte.new(
@@ -470,6 +473,12 @@ class PdfBook
 
     end #/pdf
 
+    # = FONTS =
+    # 
+    # Empacketage des fontes utilisées dans le document PDF.
+    # 
+    Fonte.empacketer_in(self, pdf)
+
     #
     # Affichage du rapport final
     # 
@@ -483,6 +492,7 @@ class PdfBook
   
     return true # pour l’ouvrir, le cas échéant
   end
+  #/ #build_pdf_book
 
 
   ##
@@ -693,6 +703,40 @@ class PdfBook
     page.set_current_titles(current_titles.dup)
 
 
+  end
+
+  # Les fontes sont définies en chemin relatif mais pour leur
+  # empacketage, il faut les chemins d’accès complets.
+  # C’est ce que retourne cette méthode à partir des fontes définies
+  def book_fonts_for_embedding
+    tbl = {}
+    book_fonts.each do |ftName, ftData|
+      ftName = ftName.to_s
+      tbl.merge!(ftName => {})
+      ftData.each do |ftStyle, ftPath|
+        ftFullPath = full_path_of(ftPath) || begin
+          raise "Impossible de trouver la police #{ftName}/#{ftStyle}"
+        end
+        tbl[ftName].merge!(ftStyle => ftFullPath)
+      end
+    end
+    return tbl
+  end
+
+  def full_path_of(relPath)
+    if File.exist?(f = relPath)
+      return f
+    elsif File.exist?(f = File.join(folder, relPath))
+      return f
+    elsif File.exist?(f = File.join(File.dirname(folder), relPath))
+      return f
+    elsif File.exist?(f = File.join(APP_FOLDER,relPath))
+      return f # police Prawn-for-book
+    elsif File.exist?(f = File.join(FONTS_FOLDER, relPath))
+      return f # police Prawn-for-book
+    else
+      return nil
+    end
   end
 
   # @return true si les données sont conformes, false dans le

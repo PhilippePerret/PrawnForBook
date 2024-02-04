@@ -18,10 +18,10 @@ class SpecialPage
   end
 
   def self.first_police_name
-    "Times-Roman"
+    "Times"
   end
   def default_font_name
-    'Times-Roman'
+    'Times'
   end
   def default_font_size
     11    

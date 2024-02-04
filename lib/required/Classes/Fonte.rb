@@ -171,6 +171,38 @@ class << self
   attr_accessor :default
 
 
+  # Pour charger toutes les fontes dans le PrawnView
+  # 
+  def load_all_fontes(book, pdf)
+    return if book.book_fonts.nil? || book.book_fonts.empty?
+    book.book_fonts_for_embedding.each do |ftName, ftData|
+      pdf.font_families.update(ftName => ftData)
+      # puts "\nFonte chargée : #{ftName.inspect}".bleu
+      # puts "#{ftData}".gris
+    end
+  end
+
+  # Pour empacketer les fontes dans le documents pdf
+  # 
+  # @notes
+  #   - On empackete que les fontes qui servent (en vrai, je crois
+  #     qu’elles sont toutes empacketées par #load_all_fontes)
+  # 
+  def empacketer_in(book, pdf)
+    return if book.book_fonts.nil? || book.book_fonts.empty?
+    book.book_fonts_for_embedding.each do |ftName, ftData|
+      next unless @fonts_for_package.key?(ftName)
+      tableStyles = {}
+      ftData.each do |ftStyle, ftPath|
+        next unless @fonts_for_package[ftName].key?(ftStyle)
+        tableStyles.merge!(ftStyle => ftPath)
+      end
+      pdf.font_families.update(ftName => tableStyles)
+      # puts "\nFonte empacketée : #{ftName.inspect}".bleu
+      # puts "#{tableStyles}".gris
+    end
+  end
+
   # Pour récupérer une fonte dans une table de valeur quelconque
   # 
   # @usages
@@ -265,9 +297,23 @@ class << self
     @fonts_by_name[hname]
   end
 
+  # Appelée à l’instanciation d’une nouvelle fonte [Fonte] (*)
+  # Cette méthode consigne la fonte dans une table pour pouvoir
+  # l’obtenir à l’aide de #get_by_name et mémoriser aussi la fonte
+  # pour empacketage si c’est nécessaire.
+  # 
+  # (*) Attention, ici, une "fonte" possède une taille précise et
+  #     une couleur précise.
   def add_by_name(fonte)
     @fonts_by_name ||= {}
     @fonts_by_name.merge!(fonte.hname => fonte)
+    add_for_package(fonte)
+  end
+
+  def add_for_package(fonte)
+    @fonts_for_package ||= {}
+    @fonts_for_package.merge!(fonte.name => {}) unless @fonts_for_package.key?(fonte.name)
+    @fonts_for_package[fonte.name].merge!(fonte.style => true)
   end
 
   # Pour retourner une copie de la fonte par défaut (pour ne pas la
@@ -313,7 +359,7 @@ class << self
   end
 
   def default_fonte_times
-    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :roman, color: '000000'})
+    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :regular, color: '000000'})
   end
 
   # @return [Array<Hash>] La liste des Q-choices pour pouvoir choisir
@@ -415,8 +461,6 @@ class << self
   end
 
 end #/<< self Fonte
-###################       INSTANCE      ###################
-
 end #/class Fonte
 
 

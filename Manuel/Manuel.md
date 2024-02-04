@@ -1703,7 +1703,7 @@ headers_footers:
 		HF0001:
 			:id: :HF0001
 			:name: Le headfooter en démo
-			:font_n_style: "Times-Roman/normal"
+			:font_n_style: "Times/normal"
 			:size: 12
 			:pg_left:
 				# ... définition... (il ne faut définir que les tiers utiles)
@@ -3152,7 +3152,7 @@ Voir ici pour le détail du fonctionnement et de la définition des [bibliograph
 #<bibliographies>
 bibliographies:
 	book_identifiant: "livre" # cf. [1]
-	font_n_style: "Times-Roman/normal" # Fonte par défaut
+	font_n_style: "Times/normal" # Fonte par défaut
 	# Définition de toutes bibliographies utilisées
 	biblios:
 		letag: # par ex. "livre" ou "film" cf. [2]

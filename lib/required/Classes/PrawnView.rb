@@ -262,37 +262,5 @@ class PrawnView
     page_number.odd?
   end
 
-  
-  # --- Doc Definition Methods ---
-
-  ##
-  # Définition des polices requises (à empaqueter dans le PDF)
-  # 
-  def embed_fontes(fontes)
-    return if fontes.nil? || fontes.empty?
-    fontes.each do |fontname, fontdata|
-      # On en profite pour vérifier l'existence
-      fontdata.each do |style, fspath|
-        unless fspath.start_with?('/')
-          # <=  Ce n'est pas un chemin absolu
-          # =>  On va le chercher dans le dossier de l'application, 
-          #     le dossier de la collection (if any) ou le dossier
-          #     du livre.
-          if File.exist?(File.join(APP_FOLDER, fspath))
-            fspath = File.join(APP_FOLDER,fspath)
-          elsif File.exist?(File.join(book.folder,fspath))
-            fspath = File.join(book.folder,fspath)
-          elsif book.in_collection? && File.exist?(File.join(book.collection.folder,fspath))
-            fspath = File.join(book.collection.folder,fspath)
-          end
-          fontdata.merge!(style => fspath)
-        end
-        File.exist?(fspath) || raise("La police #{fspath} est introuvable…")
-      end
-      # logif("Famille de police installée : #{fontname.inspect}\n#{fontdata.inspect}")
-      font_families.update(fontname.to_s => fontdata)
-    end
-  end
-
 end #/PrawnView
 end #/module Prawn4book
