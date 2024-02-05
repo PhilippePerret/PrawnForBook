@@ -39,7 +39,7 @@ Prawn4book::Manual::Feature.new do
     sample_texte <<~EOT
     \\(( new_page ))
     \\(( move_to_line(12) ))
-    \\(( {style: :italic, size: 14, font: 'Courier', indentation: 40} ))
+    \\(( {indent: 40, style: :italic} ))
     Je voudrais, par ces quelques lignes, adresser une dédicade à celle sans qui ce manuel n’aurait jamais vu le jour, je veux parler de ma chienne Poupette qui reste pour moi bla bla bla sur plusieurs pages.
     \\(( new_page ))
     EOT

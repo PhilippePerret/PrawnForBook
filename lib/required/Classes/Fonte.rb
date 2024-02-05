@@ -359,7 +359,7 @@ class << self
   end
 
   def default_fonte_times
-    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :regular, color: '000000'})
+    @default_fonte_times ||= new("Times-Roman", **{size: default_size, style: :normal, color: '000000'})
   end
 
   # @return [Array<Hash>] La liste des Q-choices pour pouvoir choisir

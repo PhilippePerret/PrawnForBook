@@ -6,7 +6,10 @@
 #<fonts>
 fonts:
   PictoPhil:
-    normal: 'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
+    normal:       'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
+    italic:       'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
+    bold:         'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
+    bold_italic:  'resources/fonts/PictoPhil/Pictophil-Regular.ttf'
     # FONCTIONNE MAL AVEC LES .OTF
     # normal: 'resources/fonts/PictoPhil/Pictophil-Regular.otf'
   Numito:

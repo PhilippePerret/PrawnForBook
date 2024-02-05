@@ -34,7 +34,10 @@ class PFBCode < AnyParagraph
     # 
     case @raw_code.strip
     when REG_NEXT_PARAG_STYLE
-      treat_as_next_parag_code 
+      treat_as_next_parag_code
+    when 'stop'
+      Prawn4book.stop_gravure
+      @isnotprinted = true
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
       # Rien
     end
@@ -57,14 +60,8 @@ class PFBCode < AnyParagraph
         start_new_page
         start_new_page if page_number.even?
       end
-    when 'tdm','toc','table_des_matieres','table_of_contents','table_of_content'
-      book.table_of_content.prepare_pages(pdf, first_turn?)
-    when 'tdi','loi','table_des_illustrations','list_of_illustrations'
-      book.table_illustrations.print(pdf, first_turn?)
-    when 'list_of_abbreviations','liste_des_abreviations','loa','lda'
-      book.abbreviations.print(pdf, first_turn?)
-    when 'glossaire','glossary'
-      book.glossary.print(pdf)
+    when 'line' # ligne vide
+      pdf.move_to_next_line
     when 'no_pagination'
       book.page(pdf.page_number).pagination = false
     when 'stop_pagination'
@@ -75,19 +72,6 @@ class PFBCode < AnyParagraph
       AnyParagraph.stop_numerotation_paragraphs
     when 'restart_numerotation_paragraphs'
       AnyParagraph.restart_numerotation_paragraphs
-    when /^(?:colonne|column)s?\((.+?)\)$/ 
-      change_nombre_colonnes($1, pdf)
-    when /^notice\((.+?)\)$/.freeze
-      add_notice($1, self)
-    when /^(?:erreur|error)\((.+?)\)$/.freeze
-      add_erreur($1, self)
-    when 'index'
-      book.page_index.build(pdf)
-      book.pages[pdf.page_number].add_content_length(100) #arbitrairement
-    when /^index\((?<index_id>[a-z]+)\)$/
-      book.index($~[:index_id].to_sym).print(pdf)
-    when /^biblio/
-      treate_as_bibliography(pdf)
     when /^move_to_(line|next|closest|first|last)(_line)?/.freeze
       pdf.instance_eval(raw_code)
     when PdfBook::ReferencesTable::REG_CIBLE_REFERENCE
@@ -96,17 +80,43 @@ class PFBCode < AnyParagraph
       treate_as_cible_references(pdf, book)
     when PdfBook::ReferencesTable::REG_APPEL_REFERENCE
       raise PFBFatalError.new(2000, {code: raw_code})
-    when 'line' # Inscription d'une ligne vide
-      pdf.move_to_next_line
-    when /^fonte?\((.+)\)$/.freeze # Changement forcé de fonte
-      force_fonte_change(pdf, $1.strip)
+    when 'index'
+      book.page_index.build(pdf)
+      book.pages[pdf.page_number].add_content_length(100) #arbitrairement
     when REG_METHODE_WITH_ARGS
-      #
-      # Une méthode appelée entre (( ... )) sur la ligne
-      # 
-      methode = $1.to_sym.freeze
-      params  = $2.freeze
-      traite_as_methode_with_params(pdf, methode, params)
+      case raw_code
+      when /^(?:colonne|column)s?\((.+?)\)$/ 
+        change_nombre_colonnes($1, pdf)
+      when /^index\((?<index_id>[a-z]+)\)$/
+        book.index($~[:index_id].to_sym).print(pdf)
+      when /^biblio/
+        treate_as_bibliography(pdf)
+      when /^fonte?\((.+)\)$/.freeze # Changement forcé de fonte
+        force_fonte_change(pdf, $1.strip)
+      when /^notice\((.+?)\)$/.freeze
+        add_notice($1, self)
+      when /^(?:erreur|error)\((.+?)\)$/.freeze
+        add_erreur($1, self)
+      else        
+        #
+        # Une méthode appelée entre (( ... )) sur la ligne
+        # 
+        # methode = $1.to_sym.freeze
+        # params  = $2.freeze
+        methode = $~[:method].to_sym.freeze
+        params  = $~[:params].freeze
+        traite_as_methode_with_params(pdf, methode, params)
+      end
+    when 'tdm','toc','table_des_matieres','table_of_contents','table_of_content'
+      book.table_of_content.prepare_pages(pdf, first_turn?)
+    when 'tdi','loi','table_des_illustrations','list_of_illustrations'
+      book.table_illustrations.print(pdf, first_turn?)
+    when 'list_of_abbreviations','liste_des_abreviations','loa','lda'
+      book.abbreviations.print(pdf, first_turn?)
+    when 'glossaire','glossary'
+      book.glossary.print(pdf)
+    when REG_METHODE_WITHOUT_ARGS
+        traite_as_methode_with_params(pdf, $~[:method].to_sym.freeze)
     else
       raise PFBFatalError.new(1001, {code:raw_code, page: pdf.page_number})
     end
@@ -198,7 +208,7 @@ class PFBCode < AnyParagraph
   # 
   #   [voir si j'ai traité ici les nouvelles pages ajoutées]
   # 
-  def traite_as_methode_with_params(pdf, methode, params)
+  def traite_as_methode_with_params(pdf, methode, params = nil)
     # -- Exposer (pour les méthodes) --
     @pdf   = pdf
     @book  = book
@@ -394,7 +404,8 @@ class PFBCode < AnyParagraph
     end
   end
 
-  REG_METHODE_WITH_ARGS = /^([a-zA-Z0-9_.]+)(?:\((.*?)\))?$/.freeze
+  REG_METHODE_WITH_ARGS     = /^(?<method>[a-zA-Z0-9_.]+)(?:\((?<params>.*?)\))$/.freeze
+  REG_METHODE_WITHOUT_ARGS  = /^(?<method>[a-zA-Z0-9_.]+)$/.freeze
 
 end #/class PFBCode
 end #/class PdfBook

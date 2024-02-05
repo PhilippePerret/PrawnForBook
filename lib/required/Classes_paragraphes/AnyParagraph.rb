@@ -450,7 +450,8 @@ class AnyParagraph
       if prev_pfbcode
         prev_pfbcode.next_parag_style.each do |k, v|
           k = case k
-              when :font    then :font_family
+              # when :font    then :font_family
+              when :font    then :font_name
               when :size    then :font_size
               when :style   then :font_style
               when :left    then :margin_left

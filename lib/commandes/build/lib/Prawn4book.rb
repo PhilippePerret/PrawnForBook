@@ -3,7 +3,6 @@ module Prawn4book
   def self.force?
     :TRUE == @modeforce ||= true_or_false(CLI.option(:force))
   end
-
   def self.first_turn?
     @@turn ||= 1
     @@turn == 1
@@ -34,6 +33,20 @@ module Prawn4book
   def self.require_third_turn?
     @@third_turn ||= false
     @@third_turn === true
+  end
+
+  # @return true si on est dans une section où la gravure (lecture et
+  # impression des paragraphes) a été interrompue par un ’(( stop ))’
+  # 
+  @@gravure_is_stopped = false
+  def self.gravure_stopped?
+    return @@gravure_is_stopped
+  end
+  def self.stop_gravure
+    @@gravure_is_stopped = true
+  end
+  def self.restart_gravure
+    @@gravure_is_stopped = false
   end
 
   # Méthode qui définit les constantes qui vont servir pour les

@@ -1,8 +1,8 @@
 module Prawn4book
 
 
-  # TOUT = true # ou nil, attention ! (pas false)
-  TOUT = nil
+  # Attention ! pas false, mais nil
+  TOUT = true #nil
 
   TOUT_GENE = TOUT || nil
   # TOUT_GENE = TOUT || true
@@ -135,8 +135,10 @@ module Prawn4book
     #---Aides conception---#
     TOUT_AIDE && 'aide/_titre_section_',
     TOUT_AIDE && 'aide/manuel_et_autres_aides',
+    TOUT_AIDE && 'aide/tutoriels',
     TOUT_AIDE && LANG != 'en' && LANG != 'us' && 'aide/correspondance_lang_anglais',
     TOUT_AIDE && 'aide/snippets',
+    TOUT_AIDE && 'aide/stop_gravure',
     TOUT_AIDE && 'aide/assistants',
     TOUT_AIDE && 'aide/erreurs_et_notices',
     TOUT_AIDE && 'aide/afficher_grille_reference_et_marges',
@@ -224,11 +226,6 @@ module Prawn4book
     TOUT_EXPERT && 'expert/formaters',
     TOUT_EXPERT && 'expert/class_tags_expert',
     TOUT_EXPERT && 'expert/modifier_line_height',
-
-    #---Tutoriel de prise en main---#
-    # Note : en faire plutôt un livre séparé
-    TOUT_TUTORIEL && 'tutoriel/grand_titre',
-    TOUT_TUTORIEL && 'tutoriel/installation',
 
     #---Annexe---#
     TOUT_ANNEXE && 'annexe/_titre_section_',

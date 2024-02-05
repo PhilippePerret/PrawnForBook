@@ -55,11 +55,19 @@ class InputTextFile
       if par_str.match?(REG_INCLUSION)
         # -- Fichier inclus --
         InputTextFile.new(book, included_file_path(par_str.match(REG_INCLUSION)[:code])).parse_and_write(pdf)
+      elsif Prawn4book.gravure_stopped?
+        # -- Si la gravure a été interrompue par un (( stop )) --
+        if par_str.match?(REG_RESTART)
+          # … et qu’elle est reprise par un (( start )) ou (( restart ))
+          Prawn4book.restart_gravure
+        else
+          # sinon on passe simplement le paragraphe
+        end
       else
         # -- (Whatever) Paragraphe --
         # @note
-        #   Le +self+ sert simplement à savoir d'où vient le para-
-        #   graphe injecté
+        #   - Le +self+ sert simplement à savoir d'où vient le para-
+        #    graphe injecté
         # 
         book.inject(pdf, par_str, idx, self)
       end
@@ -69,6 +77,7 @@ class InputTextFile
     end
   end
 
+  REG_RESTART = /^\(\( (?:re)?start \)\)$/.freeze
 
   REG_INCLUSION = /^\(\( include (?<code>.+) \)\)$/.freeze
 

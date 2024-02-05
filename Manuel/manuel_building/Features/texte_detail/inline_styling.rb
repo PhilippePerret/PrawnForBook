@@ -32,7 +32,7 @@ Prawn4book::Manual::Feature.new do
 
     Voici la liste des propriétés qui peuvent être appliquées au paragraphe suivant (et seulement le paragraphe suivant) :
     * **`size`** | Taille de la police du paragraphe suivant.
-    * **`font`** | Nom de la police à utiliser. Elle doit bien sûr être définie et embarquée (voir [[recette/definition_fontes]]).
+    * **`font`** | Nom de la police à utiliser ou "font-string" (voir [[annexe/font_string]]). Cette police (et son style ci-dessous) doit bien sûr être définie et embarquée (voir [[recette/definition_fontes]]).
     * **`style`** | Le style à appliquer, parmi `normal`, `italic`, `bold`, `[:italic, :bold]` ou tout autre style défini explictement pour les fontes embarquées. Voir [[recette/definition_fontes]].
     * **`lines_before`** | ("lignes avant" en anglais) Définit combien de lignes vides on doit laisser *avant* le paragraphe.
     * **`lines_after`** | ("lignes après" en anglais) Définit combien de lignes vides on doit laisser *après* le paragraphe.    
@@ -63,7 +63,7 @@ Prawn4book::Manual::Feature.new do
   couleur = 'FF0FF0'
 
   add_to_segments <<~EOT
-  (( {font:"#{font}", size:#{ftsize}, indent:"#{indent}", color:"#{couleur}" } ))
+  (( {font_name:"#{font}", size:#{ftsize}, indent:"#{indent}", color:"#{couleur}" } ))
   Le présent paragraphe est mis en forme par de la STYLISATION EN LIGNE qui met la police à #{font}, la taille de police à #{ftsize} pt, l’indentation à #{indent} et la couleur à #{couleur}.
   EOT
 
