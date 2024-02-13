@@ -94,9 +94,10 @@ module Prawn4book
     TOUT_RECETTE && 'recette/publisher',
 
     #---Contenu_textuel_(intro)---#
-    TOUT_TEXTE && 'texte/grand_titre',
+    TOUT_TEXTE && 'texte/_titre_section_',
     TOUT_TEXTE && 'texte/types_paragraphes',
     TOUT_TEXTE && 'texte/format_markdown_du_texte',
+    TOUT_TEXTE && 'texte/comments',
     TOUT_TEXTE && 'texte/styles_inline_format', # <i>, <b>, ...
     TOUT_TEXTE && 'texte/intro_inline_styling', # prev paragraph
     TOUT_TEXTE && 'titres/titres',

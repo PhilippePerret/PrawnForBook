@@ -44,6 +44,9 @@ fonts:
     bold_italic:  "resources/fonts/Garamond/Garamond-Bold.ttf"
     light:        "resources/fonts/Garamond/Light-Condensed.ttf"
     light_italic: "resources/fonts/Garamond/Light-Condensed-Italic.ttf"
+  Arial:
+    bold:           "resources/fonts/Arial/Arial Bold.ttf"
+    black:          "resources/fonts/Arial/Arial Black.ttf"
 #</fonts>
 
 # --- Données du livre ---

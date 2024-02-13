@@ -80,10 +80,10 @@ class PdfBook
       return
     end 
 
-    # Si un commentaire est ouvert (par <!-- sur une ligne)
+    # Si un commentaire est ouvert (par "[#" sur une ligne)
     if @current_comment
       if paragraph_str.match?(AnyParagraph::REG_END_COMMENT)
-        @current_comment.add(paragraph_str[0...-3].strip)
+        @current_comment.add(paragraph_str[0...-2].strip)
         @current_comment = nil
       else
         @current_comment.add(paragraph_str)

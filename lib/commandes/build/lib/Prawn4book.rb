@@ -63,11 +63,12 @@ module Prawn4book
     define_constant('PAGE_WIDTH', pdf.bounds.width)
     define_constant('PAGE_HEIGHT', pdf.bounds.height)
   end
-  def self.define_constant(const_name, const_value)
-    if self.constants.include?(const_name.to_sym)
-      self.send(:remove_const, const_name)
+  def self.define_constant(const_name, const_value, main_class = nil)
+    main_class ||= self
+    if main_class.constants.include?(const_name.to_sym)
+      main_class.send(:remove_const, const_name)
     end
-    self.const_set(const_name, const_value)
+    main_class.const_set(const_name, const_value)
   end
 
 end #/module Prawn4book

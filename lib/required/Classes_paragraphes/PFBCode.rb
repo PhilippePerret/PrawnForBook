@@ -84,6 +84,10 @@ class PFBCode < AnyParagraph
       book.page_index.build(pdf)
       book.pages[pdf.page_number].add_content_length(100) #arbitrairement
     when REG_METHODE_WITH_ARGS
+      # Il faut les prendre tout de suite pour ne pas les oublier
+      # aux prochaines recherches ci-dessous
+      methode = $~[:method].to_sym.freeze
+      params  = $~[:params].freeze
       case raw_code
       when /^(?:colonne|column)s?\((.+?)\)$/ 
         change_nombre_colonnes($1, pdf)
@@ -103,8 +107,6 @@ class PFBCode < AnyParagraph
         # 
         # methode = $1.to_sym.freeze
         # params  = $2.freeze
-        methode = $~[:method].to_sym.freeze
-        params  = $~[:params].freeze
         traite_as_methode_with_params(pdf, methode, params)
       end
     when 'tdm','toc','table_des_matieres','table_of_contents','table_of_content'

@@ -210,6 +210,12 @@ class PdfBook
       end
     end
 
+    # S’il le faut, enregistrer les références registrées
+    # (références qu’on enregistre pour les avoir à disposition même
+    #  lorsque n’est pas encore faite — premier tour - ou qu’elle se
+    #  trouve provisoirement dans une partie non gravée)
+    PdfBook::ReferencesTable.save_registered_references_table
+
     @end_time = Time.now
 
     # Message tout final

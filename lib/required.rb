@@ -13,6 +13,7 @@ CLI.set_options_table({
   c: :cursor, 
   g: :grid,
   t: :export_text, # pfb build -t
+  nouprefs: :no_update_registered_refs,
 })
 
 #

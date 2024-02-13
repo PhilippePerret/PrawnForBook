@@ -21,3 +21,7 @@ contexts:
       scope: meta.ruby.code.protected
     - match: \#\{[^\{\}]+?\}
       scope: meta.ruby.code
+
+  comments:
+    - match: "^\\[#\\] "
+      scope: punctuation.definition.comment.pfb

@@ -11,9 +11,9 @@ class AnyParagraph
   REG_PFBCODE       = /^\(\( (.+) \)\)$/.freeze
   REG_TABLE         = /^\|(.+)\|$/.freeze
   REG_END_TABLE     = /^\|\/\|$/.freeze
-  REG_COMMENTS      = /^<\!\-\-(.+)\-\-\>$/.freeze
-  REG_START_COMMENT = /^<\!\-\-(.*)/.freeze
-  REG_END_COMMENT   = /(.*)\-\-\>$/.freeze
+  REG_COMMENTS      = /^\[#\] (.*)$/.freeze
+  REG_START_COMMENT = /^\[#(.*)/.freeze
+  REG_END_COMMENT   = /(.*)#\]$/.freeze
   REG_CODE_BLOCK    = /#{EXCHAR}(?:\~\~\~|\`\`\`)/.freeze
   REG_END_CODE_BLOCk   = /^#{REG_CODE_BLOCK}$/.freeze 
   REG_START_CODE_BLOCK = /^#{REG_CODE_BLOCK}([a-zA-Z]+)?$/.freeze

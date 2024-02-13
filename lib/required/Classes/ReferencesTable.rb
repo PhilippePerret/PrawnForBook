@@ -166,25 +166,44 @@ class ReferencesTable
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
       unless ref_text.match?(/_(ref|page|paragraph)_/)
-        ref_text = "#{ref_text} _ref_"
+        ref_text = "#{ref_text} (_ref_)"
       end
       # - Transformation de la marque -
-      ref_text
+      final_mark = ref_text
         .gsub(/_ref_/, endroit_to(ref))
         .gsub(/_page_/, ref[:paragraph].page.to_s)
         .gsub(/_paragraph_/, ref[:paragraph].numero.to_s)
+      # - Registration de la marque, avec son ID, dans le fichier
+      #   qui tient à jour les référence entres les gravures, pour
+      #   avoir toujours un texte qui se rapproche -
+      # (sauf si on ne veut pas actualiser les références)
+      register_reference(ref_id, final_mark) unless self.class.no_update_references?
+      # - On retourne la marque -
+      final_mark
     elsif second_turn?
+      #
       # Second tour et l’on ne connait toujours pas la référence
-      err_msg = PFBError[2002] % {id: ref_id}
-      unless @_key_table_list_has_been_done === true
-        # Pour ne donner le message qu’une seule fois
-        err_msg = "#{err_msg}\nPour information, la table des références (des cibles) contient : #{table.keys}"
-        @_key_table_list_has_been_done = true
-      end 
-      add_erreur(err_msg)
+      #
 
-      # raise PFBFatalError.new(2002, {id: ref_id, targets:table.keys})
-      "### REF: #{ref_id} ###"
+      # On essaie de récupérer la référence dans la table des 
+      # préférence registrées (enregistrées dans un fichier, entre les
+      # différentes gravures)
+      # Si on ne la trouve pas, on met la référence par défaut
+      get_registered_references(ref_id) || begin
+
+        # Un message d’erreur indiquant la référence non trouvée
+        err_msg = PFBError[2002] % {id: ref_id}
+        unless @_key_table_list_has_been_done === true
+          # Pour ne donner le message qu’une seule fois
+          err_msg = "#{err_msg}\nPour information, la table des références (des cibles) contient : #{table.keys}"
+          @_key_table_list_has_been_done = true
+        end 
+        add_erreur(err_msg)
+
+        # Un texte type à graver dans le livre
+        "### REF: #{ref_id} ###"
+      end
+      
     else
       # - Référence non définie -
       # On passe ici quand la référence cible n'est pas encore 
@@ -210,13 +229,17 @@ class ReferencesTable
   end
 
   ##
-  # Enregistrement des la liste des références
+  # Enregistrement de la liste des références
   # 
   # @rappel 
   # 
   #   Cette table enregistrée dans un fichier ne sert que pour les
   #   références croisées. Pour un livre, elles sont recalculées 
   #   chaque fois.
+  # 
+  # @note
+  #   ATTENTION - Il ne s’agit pas de la liste des registered 
+  #   références qui elles sont enregistrées plus bas.
   # 
   def save
     File.write(path, saved_yaml_table)
@@ -249,7 +272,7 @@ class ReferencesTable
   # dans le texte
   # 
   # @note
-  #   Les références croisées utilisent une autre méthode.
+  #   Les références entre livres utilisent une autre méthode.
   # 
   # @param ref [Hash]
   #     Table contenant (pour le moment) :paragraph, l’instance
@@ -272,6 +295,63 @@ class ReferencesTable
       book.recipe.reference_hybrid_format % {page:num_page, paragraph:num_para}
     end
   end
+
+  # --- MÉTHODES DE REGISTRATION ---
+  # 
+  # La "registration" est un mécanisme destiné à pouvoir mettre une
+  # référence valide même lorsqu’une partie du texte n’est pas gravé,
+  # en se servant des références précédemment calculées.
+  # Chaque table possède sa propre table, enregistrées dans la
+  # table géante REGISTERED_REFERENCES_TABLE qui les contient toutes
+  # En clé se trouve l’identifiant de la table.
+  # 
+  # Pour cette table-ci, c’est la table :references_cibles
+  # (nan mais, en fait, il n’y a que cette table, qui fait ça…)
+
+
+  def register_reference(ref_id, ref_mark)
+    REGISTERED_REFERENCES_TABLE || self.class.get_registered_references_table
+    REGISTERED_REFERENCES_TABLE[:references_cibles] || REGISTERED_REFERENCES_TABLE.merge!(references_cibles: {})
+    # acte = REGISTERED_REFERENCES_TABLE[:references_cibles].key?(ref_id) ? "UPDATE" : "INSERT"
+    # puts "\n#{acte} de ref_id #{ref_id.inspect} mis à #{ref_mark.inspect}".bleu
+    REGISTERED_REFERENCES_TABLE[:references_cibles].merge!(ref_id => ref_mark)
+  end
+
+  def get_registered_references(ref_id)
+    REGISTERED_REFERENCES_TABLE || self.class.get_registered_references_table
+    REGISTERED_REFERENCES_TABLE[:references_cibles] || return
+    REGISTERED_REFERENCES_TABLE[:references_cibles][ref_id]
+  end
+
+  REGISTERED_REFERENCES_TABLE = nil
+
+  class << self
+    def get_registered_references_table
+      tbl = File.exist?(registred_references_file) \
+              ? YAML.safe_load(File.read(registred_references_file), YAML_OPTIONS) \
+              : {}
+      Prawn4book.define_constant('REGISTERED_REFERENCES_TABLE', tbl, self)
+    end
+
+    def save_registered_references_table
+      REGISTERED_REFERENCES_TABLE || return
+      File.write(registred_references_file, REGISTERED_REFERENCES_TABLE.to_yaml)
+    end
+
+    def registred_references_file
+      @registred_references_file ||= File.join(PdfBook.current.folder,'registered_references.yaml')
+    end
+
+    # @return true s’il ne faut pas actualiser les registered 
+    # références (quand, par exemple, on ne travaille que sur une
+    # portion de texte)
+    def no_update_references?
+      :TRUE == @dontupdateregisteredrefs ||= true_or_false(CLI.option(:no_update_registered_refs))
+    end
+  end #/ << self
+
+  # --- /MÉTHODES DE REGISTRATION ---
+
 
   # Longueur par défaut d'une référence (le 'XX' de "Page XX"). Il
   # est utile lorsqu'on marque provisoirement, au premier tour, la
