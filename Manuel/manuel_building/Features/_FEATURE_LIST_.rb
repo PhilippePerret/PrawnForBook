@@ -40,8 +40,7 @@ module Prawn4book
   TOUT_TABLE = TOUT || nil
   # TOUT_TABLE = TOUT || true
 
-  TOUT_EXPERT = TOUT || nil
-  # TOUT_EXPERT = TOUT || true
+  TOUT_EXPERT = TOUT || nil # true ou nil
 
   TOUT_TUTORIEL = TOUT || nil
   # TOUT_TUTORIEL = TOUT || true
@@ -205,6 +204,7 @@ module Prawn4book
     FORMAT_PRECIS && 'format_precis/grand_titre',
     FORMAT_PRECIS && 'format_precis/definition_marges',
     FORMAT_PRECIS && 'format_precis/multi_colonnes',
+    FORMAT_PRECIS && 'format_precis/filename_suffix',
 
     #---Changements_comportements_par_default---#
     # 
@@ -227,6 +227,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/formaters',
     TOUT_EXPERT && 'expert/class_tags_expert',
     TOUT_EXPERT && 'expert/modifier_line_height',
+    TOUT_EXPERT && 'expert/use_file_suffix',
 
     #---Annexe---#
     TOUT_ANNEXE && 'annexe/_titre_section_',

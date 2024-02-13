@@ -45,6 +45,7 @@ fonts:
     light:        "resources/fonts/Garamond/Light-Condensed.ttf"
     light_italic: "resources/fonts/Garamond/Light-Condensed-Italic.ttf"
   Arial:
+    normal:         "resources/fonts/Arial/Arial.ttf"
     bold:           "resources/fonts/Arial/Arial Bold.ttf"
     black:          "resources/fonts/Arial/Arial Black.ttf"
 #</fonts>

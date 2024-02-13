@@ -16,9 +16,4 @@ Prawn4book::Manual::Feature.new do
     Texte à interpréter, si 'sample_texte' ne peut pas l'être.
     EOT
 
-  recipe <<~EOT #, "Autre entête"
-    ---
-    # Cette recette doit être supprimée ou utilisée
-    EOT
-
 end

@@ -378,6 +378,11 @@ class PdfBook
 
   # --- Paths & Names Methods ---
 
+  # Préfixe fourni dans la recette ou en ligne de commande
+  def filename_suffix
+    @filename_suffix ||= CLI.options[:suffix] || ""
+  end
+  
   def filename
     @filename ||= File.basename(File.dirname(text_file))
   end
