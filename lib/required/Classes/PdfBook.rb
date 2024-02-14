@@ -43,7 +43,7 @@ class PdfBook
   #   Pour que ça fonctionne de façon optimale, il faut absolument
   #   que tous les paragraphes passent par ici.
   # 
-  def inject(pdf, paragraph_str, idx, source = 'user_method')
+  def inject(pdf, paragraph_str, idx = 0, source = 'user_method')
 
     # Si une table est en cours de traitement (@current_table non 
     # nil) et que +paragraph_str+ n'est plus un élément de table (il
@@ -396,7 +396,7 @@ class PdfBook
   end
 
   def book_pdf_name
-    @book_pdf_name ||= "book#{"_bat" if Prawn4book.bat?}.pdf"
+    @book_pdf_name ||= "book#{filename_suffix}#{"_bat" if Prawn4book.bat?}.pdf"
   end
 
   private

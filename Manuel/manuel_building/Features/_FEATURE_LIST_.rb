@@ -1,7 +1,7 @@
 module Prawn4book
 
 
-  # Attention ! pas false, mais nil
+  # Attention ! pas false, mais nil si on ne veut pas tout
   TOUT = true #nil
 
   TOUT_GENE = TOUT || nil
@@ -219,6 +219,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/contexte_erreurs',
     TOUT_EXPERT && 'expert/reference_a_paragraphe',
     TOUT_EXPERT && 'expert/injection_code',
+    TOUT_EXPERT && 'expert/corrections_textes_propres',
     TOUT_EXPERT && 'expert/evaluation_code_ruby',
     TOUT_EXPERT && 'expert/helpers_methods',
     TOUT_EXPERT && 'expert/parse_du_paragraphe',

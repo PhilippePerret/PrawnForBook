@@ -40,7 +40,8 @@ class AnyParagraph
       # 
       context = { pdf:pdf, paragraph:self }
 
-      @text = AnyParagraph.__parse(text||raw_code||raw_text, context)
+      # @text = AnyParagraph.__parse(text||raw_code||raw_text, context)
+      @text = self.class.__parse(text||raw_code||raw_text, context)
 
     end
   end

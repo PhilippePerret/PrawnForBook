@@ -35,7 +35,7 @@
 :recette_publisher:
   :page: 34
   :paragraph:
-:texte_grand_titre:
+:texte__titre_section_:
   :page: 36
   :paragraph:
 :texte_types_paragraphes:
@@ -44,8 +44,11 @@
 :texte_format_markdown_du_texte:
   :page: 36
   :paragraph:
-:texte_styles_inline_format:
+:texte_comments:
   :page: 36
+  :paragraph:
+:texte_styles_inline_format:
+  :page: 37
   :paragraph:
 :texte_intro_inline_styling:
   :page: 37
@@ -144,236 +147,245 @@
   :page: 90
   :paragraph:
 :aide_exporter_texte:
-  :page: 90
+  :page: 91
   :paragraph:
 :pagination__titre_section_:
-  :page: 91
+  :page: 92
   :paragraph:
 :pagination_pagination:
-  :page: 91
+  :page: 92
   :paragraph:
 :pagination_types_numerotation:
-  :page: 91
+  :page: 92
   :paragraph:
 :pagination_numerotation_paragraphes:
-  :page: 94
+  :page: 95
   :paragraph:
 :pagination_aspect_numero:
-  :page: 99
+  :page: 101
   :paragraph:
 :pagination_arret_pagination:
-  :page: 100
-  :paragraph:
-:pagination_no_pagination:
   :page: 102
   :paragraph:
-:pagination_numeroter_pages_vierges:
+:pagination_no_pagination:
   :page: 104
   :paragraph:
+:pagination_numeroter_pages_vierges:
+  :page: 106
+  :paragraph:
 :texte_detail_grand_titre:
-  :page: 105
-  :paragraph:
-:texte_detail_inline_styling:
-  :page: 105
-  :paragraph:
-:texte_detail_par_class_tag:
   :page: 107
   :paragraph:
+:texte_detail_inline_styling:
+  :page: 107
+  :paragraph:
+:texte_detail_par_class_tag:
+  :page: 109
+  :paragraph:
 :texte_detail_indentation:
-  :page: 110
+  :page: 112
   :paragraph:
 :texte_detail_gestion_tirets_conditionnels:
-  :page: 111
+  :page: 113
   :paragraph:
 :texte_detail_placement_sur_ligne_quelconque:
-  :page: 113
+  :page: 115
   :paragraph:
 :puces_puces:
-  :page: 113
+  :page: 115
   :paragraph:
 :puces_losange:
-  :page: 114
-  :paragraph:
-:puces_black_losange:
   :page: 116
   :paragraph:
-:puces_square:
-  :page: 117
-  :paragraph:
-:puces_black_square:
+:puces_black_losange:
   :page: 118
   :paragraph:
-:puces_bullet:
+:puces_square:
   :page: 119
   :paragraph:
-:puces_black_bullet:
+:puces_black_square:
   :page: 120
   :paragraph:
-:puces_finger:
+:puces_bullet:
   :page: 121
   :paragraph:
-:puces_black_finger:
+:puces_black_bullet:
   :page: 122
   :paragraph:
-:puces_big_hyphen:
+:puces_finger:
   :page: 123
   :paragraph:
-:puces_custom_image:
+:puces_black_finger:
   :page: 124
   :paragraph:
+:puces_big_hyphen:
+  :page: 125
+  :paragraph:
+:puces_custom_image:
+  :page: 126
+  :paragraph:
 :images_grand_titre:
-  :page: 127
+  :page: 129
   :paragraph:
 :images_inserer_images:
-  :page: 128
+  :page: 130
   :paragraph:
 :exemple_image_18:
-  :page: 140
-  :paragraph:
-:exemple_image_19:
-  :page: 141
-  :paragraph:
-:images_images_flottantes:
   :page: 142
   :paragraph:
+:exemple_image_19:
+  :page: 143
+  :paragraph:
+:images_images_flottantes:
+  :page: 144
+  :paragraph:
 :images_format_legende:
-  :page: 151
+  :page: 153
   :paragraph:
 :tables_titre_section:
-  :page: 154
-  :paragraph:
-:references_cross_references:
-  :page: 155
-  :paragraph:
-:exemple_cible:
   :page: 156
   :paragraph:
-:ex_autre_cible:
+:references_cross_references:
   :page: 157
   :paragraph:
-:references_hyperlinks:
+:exemple_cible:
   :page: 158
   :paragraph:
-:references_notes_de_page:
+:ex_autre_cible:
   :page: 159
+  :paragraph:
+:references_hyperlinks:
+  :page: 160
+  :paragraph:
+:references_notes_de_page:
+  :page: 161
   :paragraph:
 :references_notes_de_page_formatage:
-  :page: 159
+  :page: 161
   :paragraph:
 :tables_tables:
-  :page: 160
+  :page: 162
   :paragraph:
 :tables:
-  :page: 160
+  :page: 162
   :paragraph:
 :bibliographies__titre_section_:
-  :page: 161
+  :page: 163
   :paragraph:
 :bibliographies_introduction:
-  :page: 161
+  :page: 163
   :paragraph:
 :bibliographies_customisation:
-  :page: 165
+  :page: 167
   :paragraph:
 :bibliographies_occurrence_weight:
-  :page: 169
+  :page: 171
   :paragraph:
 :format_precis_grand_titre:
-  :page: 173
-  :paragraph:
-:format_precis_definition_marges:
-  :page: 173
-  :paragraph:
-:format_precis_multi_colonnes:
   :page: 175
   :paragraph:
-:undef_behavior_titre_section:
-  :page: 180
+:format_precis_definition_marges:
+  :page: 175
   :paragraph:
-:undef_behavior_export_as_document_pdf:
-  :page: 180
+:format_precis_multi_colonnes:
+  :page: 177
   :paragraph:
-:expert__titre_section_:
+:format_precis_filename_suffix:
   :page: 181
   :paragraph:
+:undef_behavior_titre_section:
+  :page: 183
+  :paragraph:
+:undef_behavior_export_as_document_pdf:
+  :page: 183
+  :paragraph:
+:expert__titre_section_:
+  :page: 184
+  :paragraph:
 :expert_mode_expert:
-  :page: 182
-  :paragraph:
-:expert_contexte_erreurs:
-  :page: 182
-  :paragraph:
-:expert_reference_a_paragraphe:
-  :page: 182
-  :paragraph:
-:expert_injection_code:
-  :page: 183
-  :paragraph:
-:expert_evaluation_code_ruby:
-  :page: 183
-  :paragraph:
-:expert_helpers_methods:
   :page: 185
   :paragraph:
-:expert_parse_du_paragraphe:
+:expert_contexte_erreurs:
+  :page: 185
+  :paragraph:
+:expert_reference_a_paragraphe:
+  :page: 185
+  :paragraph:
+:expert_injection_code:
   :page: 186
   :paragraph:
-:expert_bibliographies:
+:expert_corrections_textes_propres:
   :page: 186
   :paragraph:
-:expert_multi_colonnes:
-  :page: 186
-  :paragraph:
-:expert_formaters:
+:expert_evaluation_code_ruby:
   :page: 188
   :paragraph:
-:expert_class_tags_expert:
+:expert_helpers_methods:
   :page: 189
   :paragraph:
-:expert_modifier_line_height:
+:expert_parse_du_paragraphe:
+  :page: 190
+  :paragraph:
+:expert_bibliographies:
   :page: 191
   :paragraph:
-:annexe__titre_section_:
+:expert_multi_colonnes:
+  :page: 191
+  :paragraph:
+:expert_formaters:
   :page: 192
   :paragraph:
-:annexe_reconstruction_manuel:
+:expert_class_tags_expert:
+  :page: 193
+  :paragraph:
+:expert_modifier_line_height:
+  :page: 195
+  :paragraph:
+:expert_use_file_suffix:
   :page: 196
+  :paragraph:
+:annexe__titre_section_:
+  :page: 196
+  :paragraph:
+:annexe_reconstruction_manuel:
+  :page: 200
   :paragraph:
 :annexe_markdown_all_marks:
-  :page: 196
+  :page: 200
   :paragraph:
 :all_markdown:
-  :page: 196
+  :page: 200
   :paragraph:
 :annexe_format_yaml:
-  :page: 197
-  :paragraph:
-:annexe_font_string:
-  :page: 197
-  :paragraph:
-:annexe_definition_couleur:
-  :page: 198
-  :paragraph:
-:annexe_grille_reference:
-  :page: 199
-  :paragraph:
-:images_rogner_svg:
   :page: 201
   :paragraph:
-:annexe_synopsis_creation:
-  :page: 204
+:annexe_font_string:
+  :page: 201
   :paragraph:
-:annexe_installation_application:
-  :page: 204
+:annexe_definition_couleur:
+  :page: 202
   :paragraph:
-:annexe_constantes:
-  :page: 204
+:annexe_grille_reference:
+  :page: 203
   :paragraph:
-:annexe_pages_dun_livre:
+:images_rogner_svg:
   :page: 205
   :paragraph:
-:annexe_erreurs_possibles:
+:annexe_synopsis_creation:
+  :page: 208
+  :paragraph:
+:annexe_installation_application:
+  :page: 208
+  :paragraph:
+:annexe_constantes:
+  :page: 208
+  :paragraph:
+:annexe_pages_dun_livre:
   :page: 209
   :paragraph:
+:annexe_erreurs_possibles:
+  :page: 213
+  :paragraph:
 :annexe__liste_exhaustive_features_:
-  :page: 211
+  :page: 215
   :paragraph:

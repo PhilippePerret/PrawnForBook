@@ -41,9 +41,6 @@ module ParserFormaterClass
   # @return [String|Nil] la chaine de caractère corrigée ou nil si le texte a été traité avant.
   # 
   # 
-  # TODO : changer le nom de cette méthode parce qu'elle fait plus de
-  # formatage que de parsing…
-  # 
   def __parse(str, context)
 
     pdf = context[:pdf]
@@ -65,23 +62,19 @@ module ParserFormaterClass
     context[:font_size] ||= Prawn4book::Fonte.current.size
 
     #
+    # Si une méthode de "pré-parsing" existe, on l'appelle. Cf. le
+    # manuel dans la partie expert.
+    # 
+    # @note
+    #   Elle peut être définie seulement pour un type de paragraphe
+    #
+    str = pre_parse(str, context) if respond_to?(:pre_parse)
+
+    #
     # Est-ce un texte avec un class-tags ?
     # (cf. l'explication au-dessus de la méthode, plus bas)
     #   
     str = __get_class_tags_in(str, context)
-
-    #
-    # Si une méthode de "pré-parsing" existe, on l'appelle. Elle
-    # peut être définie pour chaque livre/collection dans :
-    # Prawn4book::PdfBook::AnyParagraph#pre_parse
-    # 
-    # Définie pour AnyParagraph, elle est utilisable par tous les
-    # types de paragraphe (titre, table, pfbcode, etc.). Sinon, on
-    # peut l'implémenter pour une classe particulière.
-    #
-    if respond_to?(:pre_parse)
-      str = pre_parse(str, context)
-    end 
 
     # 
     # Traitement des codes ruby 
@@ -133,17 +126,18 @@ module ParserFormaterClass
     #
     # Si des formatages propres existent 
     # 
+    # (on peut utiliser plutôt #pre_parse, #parse et #post_parse)
     if Prawn4book::PdfBook::AnyParagraph.has_custom_paragraph_parser?
       str = ParserParagraphModule.paragraph_parser(str, context[:pdf])
     end
 
     #
     # Si une méthode de parsing propre existe, on l'appelle
-    # (@note : je ne sais plus à quoi elle correspond)
+    # (elle doit être définie par l’utilisateur comme méthode de
+    #  Prawn4book::PdfBook::AnyParagraph#parse ou seulement une 
+    #  classe particulière de paragraphe)
     # 
-    if respond_to?(:parse)
-      str = parse(str, context)
-    end
+    str = parse(str, context) if respond_to?(:parse)
 
     #
     # Mini-traitements finaux, par exemple les apostrophes et les
@@ -161,7 +155,7 @@ module ParserFormaterClass
 
     #
     # Traitement des class-tags
-    # 
+    # (fait au-dessus)
     str = __traite_class_tags_in(str, context) || return # quand nil
 
     #
@@ -173,6 +167,11 @@ module ParserFormaterClass
     # Traitement ultime 
     # 
     str = __traite_ultime_chars(str, context)
+
+    #
+    # Traitement personnalisé ultime
+    # 
+    str = post_parse(str, context) if respond_to?(:post_parse)
 
     return str
   end
@@ -196,7 +195,7 @@ module Prawn4book
 class PdfBook
 class AnyParagraph
 
-  extend ParserFormaterClass
+  # extend ParserFormaterClass
   include ParserFormater
 
   # (ne pas mettre en cache : les tests foirent, sinon)
