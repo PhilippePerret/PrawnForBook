@@ -560,8 +560,11 @@ class PdfBook
       PdfBook::AnyParagraph.include(ParserFormater)
     end
     if defined?(ParserFormaterClass)
+      # puts "ParserFormaterClass est défini !".jaune
+      # exit 12
       spy "Extension du module ParserFormaterClass dans PdfBook::AnyParagraph".bleu
       PdfBook::AnyParagraph.extend(ParserFormaterClass)
+      PdfBook::AnyParagraph.include(ParserFormaterClass)
     end
 
     if defined?(CustomIndexModule)

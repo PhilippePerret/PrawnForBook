@@ -268,7 +268,22 @@ class PFBCode < AnyParagraph
         #
         # --- Méthode définie comme méthode d'instance ---
         #
-        self.instance_eval(raw_code)
+        # Avant :
+        # self.instance_eval(raw_code)
+        # 
+        # Maintenant :
+        arity = self.method(methode).parameters.count
+        params = eval("[#{params}]")
+        nombre_params = params.count
+        diff_params_count = arity - nombre_params
+        parameters = 
+          case diff_params_count
+          when 0 then []
+          when 1 then [pdf] + params
+          when 2 then [pdf, {paragraph: self, book: book }]
+          else raise "Trop de paramètres dans #{methode.inspect}"
+          end + params
+        self.send(methode, *parameters)
       elsif PrawnHelpersMethods.respond_to?(methode)
         #
         # --- Méthode définie comme méthode de classe ---

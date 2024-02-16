@@ -147,7 +147,28 @@ ERRORS = {
 
       # in ./formater.rb
       module ParserFormaterClass
-        def %{meth}(pdf, context, ...)
+        # En fonction du nombre d’arguments, on enverra différentes
+        # chose à la méthode. Le mieux est de faire :
+        #     def %{meth}(pdf, context, arg1, arg2... argN)
+        # où <argX> sont les arguments transmis dans le texte.
+        # Si la méthode #%{meth} attend le même nombre d’argument que
+        # ceux transmis dans le texte, seuls ces arguments seront 
+        # transmis. Par exemple, si la méthode définie par :
+        #     def %{meth}(annee, jour)
+        # et que le texte appelle :
+        #     (( %{meth}(2024, 12) ))
+        # alors 2024 sera mis dans annee et 12 dans jour.
+        # En revanche, s’il y a plus d’arguments que ceux transmis,
+        # le premier en plus sera le PrawnView en cours de gravure (le
+        # pdf). Par exemple :
+        #     def %{meth}(pdf, annee, jour)
+        # S’il y a deux arguments en plus, le premier sera toujours le
+        # pdf, mais le second sera le contexte, une table définissant
+        # :book (le livre en cours de gravure) et :paragraph (le paragraphe
+        # courant, donc le PFBCode appelant la méthode)
+        #     def %{meth}(pdf, context, annee, jour)
+
+        def %{meth}(pdf, context, args...)
           # ... traitement ...
         end
       end
