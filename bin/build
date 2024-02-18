@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+current_dir = ARGV[0]
+current_project = ARGV[1]
+# puts "current_dir: #{current_dir}"
+# puts "Version ruby : #{RUBY_VERSION}"
+# puts "Version ruby en CL : #{`ruby --version`}"
+# puts "current_project: #{current_project}"
+
+
+# - On doit s’assurer que c’est bien un livre PFB ou une collection
+File.exist?(File.join(current_dir,'recipe.yaml')) || \
+File.exist?(File.expand_path(File.join(current_dir,'..','recipe_collection.yaml'))) || begin
+  raise "Il faut se trouver dans dossier de livre Prawn-for-book."
+end
+
+
+# - S’il y a un fichier d’options de construction, on les prend 
+options = []
+if File.exist?(foptions = File.join(current_dir,'build_options')) \
+  || File.exist?(foptions = File.join(current_dir,'../build_options'))
+    File.readlines(foptions, **{chomp:true}).each do |line|
+      next if line.start_with?('#')
+      options << line
+    end
+end
+
+# puts "options : #{options.inspect}"
+
+# Je ne sais pas du tout pourquoi je suis obligé de faire ça…
+table_gems = {}
+Dir["/Users/philippeperret/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/*"].each do |f|
+  fname = File.basename(f).freeze
+  gem_name = fname.split('-')
+  gem_name.pop
+  gem_name = gem_name.join('-')
+  table_gems.merge!(gem_name => fname)
+end
+table_gems.each do |gem_name, gem_version|
+  # puts "#{gem_name}: #{gem_version}"
+  $: << "/Users/philippeperret/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/#{gem_version}/lib/"
+end
+
+
+# require 'bundler'
+# Dir.chdir("/Users/philippeperret/Programmes/Prawn4book") do
+#   ::Bundler.require(:plugins)
+#   puts "Plugins chargés"
+# end
+
+Dir.chdir(current_dir) do
+  ARGV.clear
+  ARGV << "build"
+  options.each { |o| ARGV << o }
+  load "/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb"
+  puts "Fichier prawn4book lancé"
+end
+

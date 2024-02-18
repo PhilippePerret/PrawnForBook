@@ -1,0 +1,6 @@
+{
+  "cmd": ["/Users/philippeperret/Programmes/Prawn4book/bin/build", "$folder", "$project"],
+  "env": {
+    "PATH": "/Users/philippeperret/.rbenv/versions/2.7.3/bin/:/Users/philippeperret/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/:$PATH"
+  }
+}

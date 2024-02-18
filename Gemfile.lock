@@ -30,6 +30,8 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
+    precedences (1.4.1)
+      clir (>= 0.16)
     ruby-progressbar (1.11.0)
     ruby-rc4 (0.1.5)
     ttfunk (1.7.0)
@@ -57,6 +59,7 @@ DEPENDENCIES
   minitest-reporters
   pdf-inspector
   pdf-reader
+  precedences
 
 BUNDLED WITH
    2.1.4

@@ -9,5 +9,6 @@ gem 'pdf-reader', require: 'pdf/reader', group: :test
 gem 'minitest-fail-fast', group: :test
 gem 'fastimage'
 gem 'iconv'
+gem 'precedences'
 
 # require 'minitest/autorun'
