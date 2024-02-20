@@ -340,13 +340,17 @@ class << self
 
         # Numérotation du paragraphe
         # --------------------------
+        numeroter_paragraph = owner.paragraph? && \
+          PdfBook::AnyParagraph.numerotage_paragraph? && \
+          not(no_num)
+
         # C’est ici et seulement ici que le paragraphe peut être
         # numéroté, car on sait sur quelle page il va se trouver
         # (avant, on le numérotait dans #prepare_and_formate_text
         #  qui ne tenait donc pas compte du fait que le paragraphe 
         #  pouvait passer à la page suivante en cas de veuve, etc.)
         # 
-        if owner.paragraph? && PdfBook::AnyParagraph.numerotage_paragraph?
+        if numeroter_paragraph
           owner.numero = PdfBook::AnyParagraph.get_next_numero
         end
 
@@ -360,9 +364,7 @@ class << self
         puts "Excédent après écriture : #{excedent.inspect}".bleu if debugit
 
         # Écriture du numéro du paragraphe (si besoin)
-        if owner.paragraph? && not(no_num)
-          owner.print_paragraph_number(self)
-        end
+        owner.print_paragraph_number(self) if numeroter_paragraph
 
         # 
         # Gestion de l'excedent quand il y en a

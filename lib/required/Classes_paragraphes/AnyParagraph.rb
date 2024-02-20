@@ -65,6 +65,14 @@ class AnyParagraph
   # 
   def print_paragraph_number(pdf, **options)
 
+    begin
+      raise "JE NE DEVRAIS RENTRER PAR ICI."
+    rescue Exception => e
+      puts "ERREUR: #{e.message}"
+      puts "BACKTRACE:\n#{e.backtrace}"
+      exit 12
+    end
+
     return if AnyParagraph.numerotation_paragraphs_stopped?
 
     num = numero.to_s
