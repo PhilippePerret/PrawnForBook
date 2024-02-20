@@ -118,7 +118,7 @@ class << self
     # Les titres ne passent pas par cette méthode
     # 
 
-    # debugit = false
+    debugit = false
     # debugit = text.match?('On notera qu’à l’ouverture de la scène')
     # puts "\ndebugit est #{debugit.inspect}"
 
