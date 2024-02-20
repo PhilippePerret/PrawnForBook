@@ -276,7 +276,6 @@ class PFBCode < AnyParagraph
         params = eval("[#{params}]")
         nombre_params = params.count
         diff_params_count = arity - nombre_params
-        puts "diff_params_count = #{diff_params_count.inspect}".bleu
         parameters = 
           case diff_params_count
           when 0 then []

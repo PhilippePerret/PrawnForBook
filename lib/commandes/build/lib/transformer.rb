@@ -564,6 +564,8 @@ private
   # 
   def self.__traite_notes_in(str, context)
 
+    str = str.to_s
+
     return str unless str.match?('\^')
 
     # puts "str: #{str.inspect}"

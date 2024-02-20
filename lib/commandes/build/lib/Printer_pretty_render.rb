@@ -118,8 +118,9 @@ class << self
     # Les titres ne passent pas par cette méthode
     # 
 
-    debugit = false
-    # debugit = text.match?('Sur la première page, je fais une référence')
+    # debugit = false
+    # debugit = text.match?('On notera qu’à l’ouverture de la scène')
+    # puts "\ndebugit est #{debugit.inspect}"
 
 
     my = self
@@ -152,6 +153,8 @@ class << self
       pdf.update do
 
         font(fonte) if fonte
+
+        update_current_line
 
         # Si le curseur est déjà sous le zéro, on passe directement
         # à la page suivante
@@ -353,6 +356,7 @@ class << self
         # 
         # puts "Options (1er) : #{options.inspect}".bleu
         excedent = text_box(str, **options)
+        update_current_line
         puts "Excédent après écriture : #{excedent.inspect}".bleu if debugit
 
         # Écriture du numéro du paragraphe (si besoin)
