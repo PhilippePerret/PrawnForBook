@@ -448,37 +448,57 @@ class AnyParagraph
 
     def get_and_calc_styles
       sty = {}
-      if prev_pfbcode
-        prev_pfbcode.next_parag_style.each do |k, v|
-          k = case k
-              # when :font    then :font_family
-              when :font    then :font_name
-              when :size    then :font_size
-              when :style   then :font_style
-              when :left    then :margin_left
-              when :right   then :margin_right
-              when :top     then :margin_top
-              when :bottom  then :margin_bottom
-              when :color   then :color
-              when :kerning then :kerning
-              when :lines_before      then :lines_before
-              when :lines_after       then :lines_after
-              when :character_spacing then :character_spacing
-              when :word_space        then :word_space
-              else 
-                case k
-                when :indentation, :indent
-                  set_indentation(v)
-                  v = :NOT_STYLE_VALUE
-                when :no_indentation
-                  self.no_indentation = v
-                  v = :NOT_STYLE_VALUE
-                else k
-                end
-              end
-          sty.merge!(k => real_value_for(v)) unless v == :NOT_STYLE_VALUE
-        end
+      table_styles = {}
+
+      # Styles définis par le PfbCode précédent
+      if prev_pfbcode && prev_pfbcode.next_parag_style
+        table_styles.merge!(prev_pfbcode.next_parag_style) 
       end
+
+      # Styles définis par tout autre voie, à commencer par la
+      # programmation des styles. Cette fonctionnalité a été ajoutée
+      # pour retirer l’indentation des paragraphes qui suivaient des
+      # dialogues dans les livres d’analyse
+      # 
+      # self.class ci-dessous est PfbBook::AnyParagraph
+      table_styles.merge!(AnyParagraph.next_paragraph_styles)
+
+
+      if table_styles.empty?
+        @styles = {}
+        return sty
+      end
+
+      table_styles.each do |k, v|
+        k = case k
+            # when :font    then :font_family
+            when :font    then :font_name
+            when :size    then :font_size
+            when :style   then :font_style
+            when :left    then :margin_left
+            when :right   then :margin_right
+            when :top     then :margin_top
+            when :bottom  then :margin_bottom
+            when :color   then :color
+            when :kerning then :kerning
+            when :lines_before      then :lines_before
+            when :lines_after       then :lines_after
+            when :character_spacing then :character_spacing
+            when :word_space        then :word_space
+            else 
+              case k
+              when :indentation, :indent
+                set_indentation(v)
+                v = :NOT_STYLE_VALUE
+              when :no_indentation
+                self.no_indentation = v
+                v = :NOT_STYLE_VALUE
+              else k
+              end
+            end
+        sty.merge!(k => real_value_for(v)) unless v == :NOT_STYLE_VALUE
+      end
+
       @styles = sty
 
       return sty # on l’avait avant, on le garde

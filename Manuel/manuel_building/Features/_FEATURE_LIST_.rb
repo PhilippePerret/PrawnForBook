@@ -226,6 +226,7 @@ module Prawn4book
     TOUT_EXPERT && 'expert/bibliographies',
     TOUT_EXPERT && 'expert/multi_colonnes',
     TOUT_EXPERT && 'expert/formaters',
+    TOUT_EXPERT && 'expert/define_next_paragraph_styles',
     TOUT_EXPERT && 'expert/class_tags_expert',
     TOUT_EXPERT && 'expert/modifier_line_height',
     TOUT_EXPERT && 'expert/use_file_suffix',

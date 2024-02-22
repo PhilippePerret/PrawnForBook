@@ -147,16 +147,16 @@
   :page: 90
   :paragraph:
 :aide_exporter_texte:
-  :page: 91
+  :page: 92
   :paragraph:
 :pagination__titre_section_:
-  :page: 92
+  :page: 93
   :paragraph:
 :pagination_pagination:
-  :page: 92
+  :page: 93
   :paragraph:
 :pagination_types_numerotation:
-  :page: 92
+  :page: 93
   :paragraph:
 :pagination_numerotation_paragraphes:
   :page: 95
@@ -335,14 +335,17 @@
 :expert_formaters:
   :page: 192
   :paragraph:
-:expert_class_tags_expert:
+:expert_define_next_paragraph_styles:
   :page: 193
   :paragraph:
+:expert_class_tags_expert:
+  :page: 194
+  :paragraph:
 :expert_modifier_line_height:
-  :page: 195
+  :page: 194
   :paragraph:
 :expert_use_file_suffix:
-  :page: 196
+  :page: 195
   :paragraph:
 :annexe__titre_section_:
   :page: 196

@@ -137,6 +137,25 @@ class << self
     end
   end
 
+  ##
+  # Méthode pour définir les propriétés du paragraphe suivant, depuis
+  # un programme ou depuis un paragraphe qui n’est pas un PfbCode (qui
+  # utilise @next_parag_style)
+  #
+  # Cette méthode appelée sans argument retourne les propriétés 
+  # enregistrées et les efface. Elle est systématiquement appelée par
+  # les paragraphes.
+  # 
+  def next_paragraph_styles(values = nil)
+    if values.nil?
+      retour = (@__next_paragraph_styles || {}).freeze
+      @__next_paragraph_styles = nil
+      return retour
+    else
+      @__next_paragraph_styles = values
+    end
+  end
+
 end # << self class
 end #/class AnyParagraph
 end #/class PdfBook
