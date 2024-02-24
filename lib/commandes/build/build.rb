@@ -36,6 +36,12 @@ class PdfBook
 
   def generate_pdf_book
 
+    if Prawn4book.soft_feedback?
+      puts "- Génération du book PDF -"
+      puts "Merci de patienter…"
+      sleep 0.1
+    end
+
     # Avant toute chose, il faut s’assurer, en mode "Bon À Tirer", 
     # que l’utilisateur n’a pas demandé l’affichage des marges ou
     # de la grille de référence (par les options, car il pourrait
@@ -235,15 +241,21 @@ class PdfBook
       ok = nombre_erreurs_fatales_signalees == 0
 
       msg_id  = ok ? (Prawn4book.bat? ? :success_bat : :success) : :success_but_unfinished
-      methode = ok ? :vert : :orange
 
-      puts "#{MESSAGES[:building][msg_id] % {
+      rapport = "#{MESSAGES[:building][msg_id] % {
         path: pdf_relpath,
         nombre_paragraphes: paragraphes.count,
         nombre_pages: pages.count,
         duree_traitement: (@end_time.to_f - @start_time.to_f).round(2)
-      }}".send(methode)
-      puts "\n"
+      }}"
+
+      unless Prawn4book.soft_feedback?
+        methode = ok ? :vert : :orange
+        rapport = rapport.send(methode)
+      end 
+
+      puts rapport + "\n"
+
       return true
     else
       puts ERRORS[:building][:book_not_built].rouge
@@ -275,7 +287,13 @@ class PdfBook
   # passé.
   # 
   def build_pdf_book
-    clear unless debug? || ENV['TEST']
+
+    if Prawn4book.soft_feedback?
+      puts "Contruction du livre — Tour #{Prawn4book.turn}…"
+      sleep 0.1
+    elsif not(debug? || ENV['TEST'])
+      clear
+    end
 
     # Utile dans le DSL pdf.update
     my = me = self

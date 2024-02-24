@@ -7,7 +7,7 @@ module Prawn4book
 
 class Command
   def proceed
-    clear
+    # clear
     # 
     # On s'assure qu'il y a bien un livre courant
     # 

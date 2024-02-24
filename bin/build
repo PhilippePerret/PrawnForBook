@@ -53,6 +53,5 @@ Dir.chdir(current_dir) do
   ARGV << "build"
   options.each { |o| ARGV << o }
   load "/Users/philippeperret/Programmes/Prawn4book/prawn4book.rb"
-  puts "Fichier prawn4book lancé"
 end
 

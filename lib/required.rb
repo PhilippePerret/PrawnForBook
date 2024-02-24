@@ -22,6 +22,21 @@ CLI.set_options_table({
 # Note : penser à utiliser 'color_mode: :cmyk'
 require 'prawn-svg'
 
+module Prawn4book
+  # @return true si on doit faire un retour "doux" (quand on utilise
+  # une console qui ne sort pas la couleur, par exemple)
+  def self.soft_feedback?
+    :TRUE == @softfeedback ||= true_or_false(CLI.option(:soft_feedback))
+  end
+end
+
+if Prawn4book.soft_feedback?
+  # Il faut charger tout de suite le surclassement des méthodes pour
+  # que les textes localisés, chargés par constants.rb, qui utilisent
+  # des méthodes couleurs, ne soient pas en couleur.
+  require_relative "modules/soft_feedback_overwritings"
+end
+
 require_relative 'required/Divers/constants'
 
 require_relative 'required/Divers/PrawnOwner'

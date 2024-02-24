@@ -71,7 +71,15 @@ class InputTextFile
         # 
         book.inject(pdf, par_str, idx, self)
       end
+    
+    end #/lecture de tous les paragraphes
+
+    # Si la gravure était arrêtée, il faut la remettre pour que les
+    # paragraphes soient imprimés (mais ne me demandez pas pourquoi)
+    if Prawn4book.gravure_stopped?
+      Prawn4book.restart_gravure
     end
+
     if not(Prawn4book.second_turn_required?) || Prawn4book.second_turn?
       puts "\n[#{affixe}] #{book.paragraphes.count} paragraphes instanciés et imprimés.".bleu
     end

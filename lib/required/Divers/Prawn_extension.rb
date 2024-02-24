@@ -223,7 +223,6 @@ class Prawn::Document
     add_content_length_to_current_page(100)
     __real_image(ipath, **params)
   end
-  # TODO IDEM AVEC : text_box, formatted_text,
-  # formatted_text_box,
+
 end
 

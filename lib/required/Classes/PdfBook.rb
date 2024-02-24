@@ -173,7 +173,9 @@ class PdfBook
 
     # --- IMPRESSION ---
     paragraphe.print(pdf)
-    STDOUT.write '.'.vert
+    unless Prawn4book.soft_feedback?
+      STDOUT.write '.'.vert
+    end
 
   end
 

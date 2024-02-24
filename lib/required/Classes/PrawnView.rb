@@ -253,10 +253,6 @@ class PrawnView
 
   # --- Predicate Methods ---
 
-  # def paragraph_number?
-  #   :TRUE == @hasparagnum ||= true_or_false(book.recette.paragraph_number?)
-  # end
-
   # @predicate True si c'est une belle page (aka page droite)
   def belle_page?
     page_number.odd?
