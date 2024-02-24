@@ -57,8 +57,6 @@ class PrawnView
   # curseur
   def update_current_line
     @current_line = ((bounds.top - cursor) / line_height).round
-    # @current_line = ((bounds.top - cursor) / line_height).round - 1
-    # puts "Current line updatée : #{current_line}".bleu
   end
 
   # @return la hauteur de ligne courante 

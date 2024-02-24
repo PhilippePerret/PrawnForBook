@@ -125,6 +125,13 @@ module Prawn
       # exit 1
       original_start_new_page?(cell, offset, ref_bounds)
     end
+
+    alias :original_draw :draw
+    def draw(*args)
+      ret = original_draw(*args)
+      Prawn4book::PdfBook.current.pdf.update_current_line
+      return ret
+    end
   
     class Cell
       class Text
@@ -174,6 +181,8 @@ module Prawn::Measurements
 end
 
 class Prawn::Document
+
+  attr_reader :book
   
   def add_content_length_to_current_page(len)
     @book ||= Prawn4book::PdfBook.ensure_current
@@ -197,31 +206,45 @@ class Prawn::Document
   def draw_text(str, **params)
     # puts "-> draw_text".bleu
     add_content_length_to_current_page(str.to_s.length)
-    __real_draw_text(str, **params)
+    ret = __real_draw_text(str, **params)
+    book.pdf.update_current_line
+    return ret
   end
+
   alias_method :__real_formatted_text, :formatted_text
   def formatted_text(str, **params)
     # puts "-> formatted_text".bleu
     is_titre = params.delete(:is_title)
     add_content_length_to_current_page(str.to_s.length) unless is_titre
-    __real_formatted_text(str, **params)
+    ret = __real_formatted_text(str, **params)
+    book.pdf.update_current_line
+    return ret
   end
+
   alias_method :__real_formatted_text_box, :formatted_text_box
   def formatted_text_box(str, **params)
     # puts "-> formatted_text_box".bleu
     add_content_length_to_current_page(str.to_s.length)
-    __real_formatted_text_box(str, **params)
+    ret = __real_formatted_text_box(str, **params)
+    book.pdf.update_current_line
+    return ret
   end
+
   alias_method :__real_text_box, :text_box
   def text_box(str, **params)
     # puts "-> text_box".bleu
     add_content_length_to_current_page(str.to_s.length)
-    __real_text_box(str, **params)
+    ret = __real_text_box(str, **params)
+    book.pdf.update_current_line
+    return ret
   end
+
   alias_method :__real_image, :image
   def image(ipath, **params)
     add_content_length_to_current_page(100)
-    __real_image(ipath, **params)
+    ret = __real_image(ipath, **params)
+    book.pdf.update_current_line
+    return ret
   end
 
 end

@@ -9,6 +9,9 @@ class PdfBook
   # cours, cette propriété est déinie.
   attr_accessor :columns_box # noter le "s" (il n’y en a pas dans Prawn::ColumnBox)
 
+  # Le pdf qui sera gravé
+  attr_reader :pdf
+
   ##
   # Instanciation du PdfBook qui va permettre de générer le fichier
   # PDF prêt à l'impression.
