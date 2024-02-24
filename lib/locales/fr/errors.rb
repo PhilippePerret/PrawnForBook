@@ -49,7 +49,7 @@ ERRORS = {
       Les marges du livre doivent être toutes définies. Dans le cas 
       contraire, la mise en page risque de changer lorsque vous les
       définirez explicitement.
-      Pour le moment, elles sont mises à :
+      Pour le moment, elles sont mises à :
       %{margins}
       Il faut définir %{missings} dans la recette, de cette manière :
 
@@ -160,7 +160,7 @@ ERRORS = {
         # alors 2024 sera mis dans annee et 12 dans jour.
         # En revanche, s’il y a plus d’arguments que ceux transmis,
         # le premier en plus sera le PrawnView en cours de gravure (le
-        # pdf). Par exemple :
+        # pdf). Par exemple :
         #     def %{meth}(pdf, annee, jour)
         # S’il y a deux arguments en plus, le premier sera toujours le
         # pdf, mais le second sera le contexte, une table définissant
@@ -464,11 +464,11 @@ ERRORS = {
     credits_page: {
       require_info: <<~ERR,
         Je ne suis pas en mesure de produire la page d'information de fin
-        de livre, il me manque ces informations : 
+        de livre, il me manque ces informations : 
         %{missing_infos}
         
         Vous devez les renseigner dans la recette du livre ou de la 
-        collection :
+        collection :
 
         %{missing_keys}
         
@@ -726,7 +726,7 @@ ERRORS = {
   index: {
 
     invalid: <<~ERR,
-      L’index personnalisé d’identifiant '%{id}' est invalide :
+      L’index personnalisé d’identifiant '%{id}' est invalide :
       %{err}
       ERR
 
@@ -820,7 +820,7 @@ ERRORS = {
     book_undefined_in_bib_livre: "Le livre d'identifiant '%s' n'est pas défini dans la bibliographie 'livre'.",
   
     no_lien_seul_on_line: <<~ERR,
-      Un « appel » à une cible de référence ne doit jamais se trouver
+      Un « appel » à une cible de référence ne doit jamais se trouver
       seul sur une ligne. Mettre le texte (( %{code} )) à un meilleur endroit.
       ERR
 

@@ -10,18 +10,18 @@ MESSAGES = {
   building: {
 
     success: <<~EOT,
-      👍 Book PDF produit avec succès !
+      👍 Book PDF produit avec succès !
       #{'(in %{path})'.gris}
       #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
     success_bat: <<~EOT,
-      👍🥂 La vertion BAT du livre a été produite avec succès !
+      👍🥂 La vertion BAT du livre a été produite avec succès !
       #{'(in %{path})'.gris}
       #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
     success_but_unfinished: <<~EOT,
-      🍺 Le Book PDF a bien été produit mais des erreurs fatales
-        indiquent qu’il ne peut pas être imprimé tel quel.
+      🍺 Le Book PDF a bien été produit mais des erreurs fatales
+        indiquent qu’il ne peut pas être imprimé tel quel.
       #{'(in %{path})'.gris}
       #{'%{nombre_paragraphes} paragraphes sur %{nombre_pages} pages traités en %{duree_traitement} s'.bleu}
       EOT
@@ -53,7 +53,7 @@ MESSAGES = {
   biblio: {
 
 
-    no_occurrence: "Il n'existe aucune occurrence pour la bibliographie « %s ».\nC'est peut-être normal.",
+    no_occurrence: "Il n'existe aucune occurrence pour la bibliographie « %s ».\nC'est peut-être normal.",
     
     intro_assistant: "
     Nous allons programmer les bibliographies du livre courant

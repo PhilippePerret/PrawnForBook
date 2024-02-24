@@ -103,7 +103,7 @@ PROMPTS = {
   creer_un: 'Créer un %s',
   Define: 'Définir',
   DefineLater: 'Définir plus tard',
-  Open_in_editor: 'Dois-je ouvrir le dossier %{folder} dans l’éditeur ?',
+  Open_in_editor: 'Dois-je ouvrir le dossier %{folder} dans l’éditeur ?',
   Open_: 'Ouvrir…',
   and_open: 'et l’ouvrir',
   Open_something: 'Ouvrir quelque chose',
