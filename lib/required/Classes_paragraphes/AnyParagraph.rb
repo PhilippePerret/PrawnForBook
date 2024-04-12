@@ -4,6 +4,10 @@ class AnyParagraph
 
   attr_accessor :numero
 
+  # Pour inspect seulement, je crois
+  attr_reader :raw_text
+
+
   def inspect
     "<<<#{self.class.name} ##{object_id} type=#{type} raw-text=#{raw_text.inspect} text=#{text.inspect}>>>"
   end

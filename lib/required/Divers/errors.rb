@@ -66,7 +66,9 @@ class PFBFatalError < StandardError
   #   - réduire les chemins d'accès (en distinguant bien les
   #     module personnalisés des modules de PrawnForBook)
   def self.backtracize(err)
-    err.backtrace[0..6].collect do |b| 
+    linesbk = err.backtrace
+    linesbk = err.backtrace[0..6] unless debug?
+    linesbk.collect do |b| 
       b.sub(/#{APP_FOLDER}/.freeze, '<pfb>')
         .sub(/#{folder_for_backtrace}/.freeze, origine_for_backtrace)      
     end.join("\n  ")

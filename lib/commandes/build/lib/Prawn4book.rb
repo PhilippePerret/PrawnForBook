@@ -35,6 +35,11 @@ module Prawn4book
     @@third_turn === true
   end
 
+  # @return true si la gravure du livre a été partielle
+  def self.partial_gravure?
+    @@partial_gravure === true
+  end
+
   # @return true si on est dans une section où la gravure (lecture et
   # impression des paragraphes) a été interrompue par un ’(( stop ))’
   # 
@@ -44,6 +49,7 @@ module Prawn4book
   end
   def self.stop_gravure
     @@gravure_is_stopped = true
+    @@partial_gravure = true
   end
   def self.restart_gravure
     @@gravure_is_stopped = false

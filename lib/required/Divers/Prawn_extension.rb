@@ -182,12 +182,13 @@ end
 
 class Prawn::Document
 
-  attr_reader :book
+  def book
+    @book ||= Prawn4book::PdfBook.ensure_current
+  end
   
   def add_content_length_to_current_page(len)
-    @book ||= Prawn4book::PdfBook.ensure_current
-    page = @book.pages[page_number] || begin
-      @book.add_page(page_number)
+    page = book.pages[page_number] || begin
+      book.add_page(page_number)
     end
     page.add_content_length(len)
     page[:first_par] = 1 # sinon n'imprime pas le numéro
@@ -215,7 +216,10 @@ class Prawn::Document
   def formatted_text(str, **params)
     # puts "-> formatted_text".bleu
     is_titre = params.delete(:is_title)
-    add_content_length_to_current_page(str.to_s.length) unless is_titre
+    str.each do |hstr|
+      add_content_length_to_current_page(hstr[:text].length) unless is_titre
+    end
+    # # add_content_length_to_current_page(str.to_s.length) unless is_titre
     ret = __real_formatted_text(str, **params)
     book.pdf.update_current_line
     return ret
@@ -224,7 +228,9 @@ class Prawn::Document
   alias_method :__real_formatted_text_box, :formatted_text_box
   def formatted_text_box(str, **params)
     # puts "-> formatted_text_box".bleu
-    add_content_length_to_current_page(str.to_s.length)
+    str.each do |hstr|
+      add_content_length_to_current_page(hstr[:text].length) unless is_titre
+    end
     ret = __real_formatted_text_box(str, **params)
     book.pdf.update_current_line
     return ret

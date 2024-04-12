@@ -10,7 +10,7 @@ class String
   # 
   def to_pps(ref = nil)
     if self.strip.match?(/\%$/)
-      ref || raise(ArgumentError.new(PFBError[6000]))
+      ref || raise(ArgumentError.new(Prawn4book::PFBError[6000]))
       str = self.strip.gsub(/ ?\%$/,'').to_i
       ref.to_f * str.to_f / 100
     else
@@ -127,7 +127,7 @@ class Symbol
 end #/class Symbol
 
 class NilClass
-  def to_pps # quand une dimension n’est pas définie
+  def to_pps(arg = nil) # quand une dimension n’est pas définie
     nil
   end
 end #/class NilClass
