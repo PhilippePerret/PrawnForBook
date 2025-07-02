@@ -578,7 +578,8 @@ class Recipe
 
     def get_data_in_recipe(recipe_path)
       return unless File.exist?(recipe_path)
-      DATA.deep_merge!(YAML.load_file(recipe_path, **YAML_OPTIONS)||{})
+      # DATA.deep_merge!(YAML.load_file(recipe_path, **YAML_OPTIONS)||{})
+      DATA.deep_merge!(YAML.safe_load(IO.read(recipe_path), **YAML_OPTIONS)||{})
     end
 
 end #/Class Recipe

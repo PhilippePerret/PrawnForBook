@@ -1,7 +1,7 @@
 require 'yaml'
 require 'fileutils'
 require 'precedences'
-require 'log_in_file'
+# require 'log_in_file'
 require 'prawn'
 require 'prawn/table'
 require "prawn/measurement_extensions" # Pour pouvoir utiliser 1.cm etc.

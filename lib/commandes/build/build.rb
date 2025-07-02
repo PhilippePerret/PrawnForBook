@@ -742,7 +742,7 @@ class PdfBook
       tbl.merge!(ftName => {})
       ftData.each do |ftStyle, ftPath|
         ftFullPath = full_path_of(ftPath) || begin
-          raise "Impossible de trouver la police #{ftName}/#{ftStyle}"
+          raise "Impossible de trouver la police #{ftName}/#{ftStyle}\nde path: #{ftPath}"
         end
         tbl[ftName].merge!(ftStyle => ftFullPath)
       end
