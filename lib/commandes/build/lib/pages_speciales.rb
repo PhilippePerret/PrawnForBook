@@ -19,7 +19,7 @@ class PrawnView
   # Gravure page de titre
   # 
   def build_page_de_titre
-    require 'lib/pages/page_de_titre'
+    require './lib/pages/page_de_titre'
     page = Prawn4book::Pages::PageDeTitre.new(self)
     page.build(self)
   end
@@ -34,8 +34,8 @@ class PrawnView
   # Gravure page des crédits
   # 
   def build_credits_page
-    require 'lib/pages/credits_page'
-    page = Prawn4book::Pages::PageInfos.new(self)
+    require './lib/pages/credits_page'
+    page = Prawn4book::Pages::CreditsPage.new(self)
     page.build(self)
   end
 
@@ -43,7 +43,7 @@ class PrawnView
   # (hors index personnalisés)
   # 
   def build_page_index
-    require 'lib/pages/page_index'
+    require './lib/pages/page_index'
     page = Prawn4book::Pages::PageIndex.new(self)
     page.build(self)
   end

@@ -7,7 +7,7 @@
     des bibliographies du livre/collection
   - les pages spéciales pour définir une bibliographie en particulier
 =end
-require 'lib/modules/tty_facilitators'
+require './lib/modules/tty_facilitators'
 
 module Prawn4book
 class Assistant
@@ -137,7 +137,7 @@ class AssistantBiblio
   # 
   def build_data_format_file(dbiblio)
     return unless Q.yes?((PROMPTS[:biblio][:ask_create_data_format_file]).jaune)
-    require 'lib/pages/bibliographies'
+    require './lib/pages/bibliographies'
     Bibliography::BibItem.assiste_creation_data_format(dbiblio)
   end
 

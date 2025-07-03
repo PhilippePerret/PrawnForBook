@@ -14,6 +14,7 @@ GEM
     ansi (1.5.0)
     bigdecimal (3.2.2)
     builder (3.3.0)
+    bundler-why (0.1.3)
     clir (0.24.2)
       json
       tty-prompt
@@ -75,6 +76,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler-why (~> 0.1.3)
   clir (>= 0.24.2)
   fastimage
   minitest

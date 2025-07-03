@@ -1,0 +1,10 @@
+---
+commands:
+  why: "bundler-why"
+hooks:
+load_paths:
+  bundler-why:
+  - "/Users/philippeperret/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/bundler-why-0.1.3/lib"
+plugin_paths:
+  bundler-why: "/Users/philippeperret/.rbenv/versions/2.7.3/lib/ruby/gems/2.7.0/gems/bundler-why-0.1.3"
+sources:

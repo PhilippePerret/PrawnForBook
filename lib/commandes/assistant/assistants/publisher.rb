@@ -1,4 +1,4 @@
-require 'lib/modules/tty_facilitators'
+require './lib/modules/tty_facilitators'
 module Prawn4book
 class Assistant
   # --- Point d'entrée pour l'assistant à la maison d'édition ---

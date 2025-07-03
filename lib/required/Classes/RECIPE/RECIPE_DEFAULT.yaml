@@ -217,7 +217,7 @@ inserted_pages:
         height: 10
   copyright: "@Tous droits réservés"
   # Colophon
-  credits_page:   false
+  book_making:   false
     # disposition: 'distribute' # 'bottom', 'top'
     # libelle:
     #   font: "Times/italic/9/777777"

@@ -6,7 +6,7 @@
 require_folder(File.join(File.dirname(__dir__),'special_pages_abstract'))
 module Prawn4book
 class Pages
-class PageInfos < SpecialPage
+class CreditsPage < SpecialPage
 
   def self.depot_bnf_default
     year = Time.now.year
@@ -81,6 +81,6 @@ class PageInfos < SpecialPage
     ]  
   end
 
-end #/class PageInfos
+end #/class CreditsPage
 end #/class Pages
 end #/module Prawn4book

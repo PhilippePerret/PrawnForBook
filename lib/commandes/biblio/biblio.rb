@@ -27,7 +27,7 @@ class Command
     # 
     # On requiert tout ce qui concerne les bibliographies
     # 
-    require 'lib/pages/bibliographies'
+    require './lib/pages/bibliographies'
     # 
     # On exécute l'action désirée
     # 

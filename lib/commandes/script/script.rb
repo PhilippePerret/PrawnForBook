@@ -7,7 +7,7 @@
   * jouer la commande 'pfb sandbox'
 
 =end
-# require 'lib/commandes/build/lib/PrawnView'
+# require './lib/commandes/build/lib/PrawnView'
 module Prawn4book
 class Command
   def proceed; Prawn4book::Script.run_script end

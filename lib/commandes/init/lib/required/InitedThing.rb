@@ -57,7 +57,8 @@ class InitedThing
 
   def ask_for_open_folder
     if Q.yes?((PROMPTS[:Open_in_editor] % {folder:of_the_thing}).jaune)
-      `subl -n "#{folder}"`
+      `code "#{folder}"`
+      # `subl -n "#{folder}"`
     end    
   end
 

@@ -27,12 +27,11 @@ class << self
 
   def cfolder
     @cfolder ||= begin
-      compun = CLI.components[1]
-      if compun && File.exist?(compun) && File.directory?(compun)
-        compun
-      else
-        File.expand_path('.')
+      compun = BOOK_DIR
+      compun && File.exist?(compun) && File.directory?(compun) || begin
+        raise "Dossier du livre non défini."
       end
+      compun
     end
   end
 

@@ -69,7 +69,7 @@ end #/Command
   end
 
   def self.traite_as_page_speciale(thing)
-    require "lib/pages/#{thing}"
+    require "./lib/pages/#{thing}"
     Prawn4book::Pages.run_assistant(thing)    
   end
 

@@ -1,6 +1,6 @@
 module Prawn4book
 class Pages
-class PageInfos
+class CreditsPage
 
   # = main =
   #
@@ -504,6 +504,6 @@ class PageInfos
   end
 
 
-end #/class PageInfos
+end #/class CreditsPage
 end #/class Pages
 end #/module Prawn4book

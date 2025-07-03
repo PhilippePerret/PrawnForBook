@@ -118,7 +118,7 @@ class << self
       spy err_msg.rouge
       fatal_error err_msg
     end
-    require 'lib/pages/bibliographies'
+    require './lib/pages/bibliographies'
     page = Prawn4book::Pages::Bibliography.new(book, biblio)
     page.build(pdf)
   end

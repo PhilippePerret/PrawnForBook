@@ -1,4 +1,4 @@
-require 'lib/pages/bibliographies'
+require './lib/pages/bibliographies'
 module Prawn4book
 class Command
   def proceed

@@ -2289,13 +2289,13 @@ Le format de la référence, c’est-à-dire la marque qui renverra à la cible,
 Pour une *référence croisée à un autre livre*, il faut ajouter un identifiant devant la référence et préciser le sens de cet identifiant. Elle peut ressembler à :
 
 ~~~text
-Rendez-vous sur la (( ->(IDLIVRE:id_ref_uniq) )).
+Rendez-vous sur la ->(IDLIVRE:id_ref_uniq).
 ~~~
 
 Par exemple :
 
 ~~~
-Rendez-vous sur la (( ->(mon_livre:sa_reference) )).
+Rendez-vous sur la ->(mon_livre:sa_reference).
 ~~~
 
 … qui sera transformé en :
@@ -2305,6 +2305,8 @@ Rendez-vous sur la page 12 de <i>Mon beau livre référrencé</i>.
 ~~~
 
 Ci-dessus, `IDLIVRE` est l’identifiant du livre (tel que défini dans la bibliographie (des livres) et `id_ref_uniq` est une référence définie pour le livre.
+
+> Pour le formatage de la référence croisée (par défaut ou ponctuellement, voir [format des références](#format-reference))
 
 Pour traiter une référence croisée, on a besoin de plusieurs choses :
 
@@ -2370,7 +2372,48 @@ Pour traiter une référence croisée, on a besoin de plusieurs choses :
   >
   > Noter qu’il peut être difficile de connaitre le numéro de paragraphe dans un livre imprimé. Dans ce cas, laisser la donnée vide et, si les références se font par paragraphe, c’est exceptionnellement la donnée page qui sera utilisée).
 
+<a name="format-reference"></a>
 
+#### Format des références
+
+Par défaut, une référence prendre la forme finale :
+
+~~~
+C'est une référence (page 12) au texte
+~~~
+
+… quand le code sera :
+
+~~~
+C'est une référence ->(<cible>) au texte
+~~~
+
+Si la numérotation par défaut est réglée sur "paragraphe", alors au lieu de "page 12", c'est le texte "paragraphe 123" qui sera utilisé.
+
+On peut formaté ponctuellement les références à l'aide des marques `_ref_` ("page xx", ou "paragraphe xxx"), `_page_` (le numéro de page seul) ou `_paragraph_` (le numéro de paragraphe seul, mais cette information n'est définie que si l'on demande une numérotation par paragraphe). Ces marques s'utilisent en premier argument, séparé par un trait droit "|". Par exemple :
+
+~~~
+Vous trouverez ce chapitre à la page ->(_page_|<cible>) de ce livre.
+~~~
+
+… qui pourrait, dans le cas présent, si c'est une numérotation par page, s'écrire : 
+
+~~~
+Vous trouverez ce chapitre à la ->(_ref_|<cible>) de ce livre.
+~~~
+
+##### Défininition du format par défaut
+
+On peut définir le format par défaut dans la recette du livre en définissant dans la recette :
+
+~~~
+:book_format:
+  :text:
+    :references:
+      :default_format: '(_ref_)' # valeur par défaut
+~~~
+
+Tout ce qu'il y a entre les guillemets sera affiché. En utilisant les marques `\_ref\_` (qui donnera "page x" ou "page x § y", ou "§ y" en fonction de la numérotation choisie), `\_page\_` ou `\_paragraph\_` (qui n'aura une valeur que si la numératation par paragraphe est activée).
 
 ---
 
@@ -3379,7 +3422,7 @@ page_de_titre:
 # in recipe.yaml/collection_recipe.yaml
 
 #<credits_page>
-credits_page:
+:book_making:
 	aspect:
 		libelle: # pour les libellés
 			font_n_style: "Police/style"

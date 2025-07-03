@@ -1,5 +1,6 @@
 #
-# Le nouveau module pour obtenir les données de recette
+# Le nouveau module pour obtenir les DONNÉES DE LA RECETTE DU LIVRE
+# COURANT
 # 
 module Prawn4book
 class Recipe
@@ -326,7 +327,9 @@ class Recipe
   end
 
   # -- Format des références --
-
+  def reference_default_format
+    format_text[:references][:default_format] || '(_ref_)'
+  end
   def reference_page_format
     underscore_to_template_variable(format_text[:references][:page_format]||'page _page_')
   end
@@ -396,8 +399,10 @@ class Recipe
 
   def default_font
     @default_font ||= begin
-      if format_text[:font]||format_text[:default_font]
-        Fonte.get_in(format_text).or_default
+      if format_text[:font]||format_text[:default_font]||format_text[:default_font_and_style]
+        lestylefonte = format_text[:default_font_and_style] || format_text[:default_font] || format_text[:font]
+        Fonte.get_in(lestylefonte).or_default
+        # Fonte.get_in(format_text).or_default
       else
         Fonte.default_fonte_times.dup
       end

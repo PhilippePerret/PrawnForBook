@@ -16,7 +16,7 @@ class << self
     # L'assistant va nous permettre de créer la nouvelle 
     # bibliographie
     # 
-    require 'lib/commandes/assistant/assistants/bibliographies'
+    require './lib/commandes/assistant/assistants/bibliographies'
     dbiblio = {}
     assistant = Prawn4book::Assistant::AssistantBiblio.new(book)
     # 

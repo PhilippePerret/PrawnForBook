@@ -40,7 +40,8 @@ module Prawn4book
     if in_finder
       `open -a Finder "#{book.folder}"`
     else
-      `subl -n "#{book.folder}"`
+      `code "#{book.folder}"` # VSCode
+      # `subl -n "#{book.folder}"` # Sublime Text
     end
   end
 
@@ -57,7 +58,8 @@ module Prawn4book
     if in_finder
       `open -a Finder "#{book.collection.folder}"`  
     else
-      `subl -n "#{book.collection.folder}"`
+      `code "#{book.collection.folder}"` # VSCode
+      # `subl -n "#{book.collection.folder}"` # Sublime Text
     end
   end
 

@@ -1,6 +1,6 @@
 module Prawn4book
 class Pages
-class PageInfos
+class CreditsPage
 
   # = main =
   #
@@ -16,6 +16,6 @@ class PageInfos
   #   Les principales méthodes se trouvent dans la classe mère
   # 
 
-end #/class PageInfos
+end #/class CreditsPage
 end #/class Pages
 end #/module Prawn4book

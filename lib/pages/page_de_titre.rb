@@ -6,7 +6,7 @@
   C'est ce fichier qui doit être appelé pour utiliser/définir/construire
   la page :
 
-    require 'lib/pages/page_de_titre'
+    require './lib/pages/page_de_titre'
 
 =end
 require_relative 'required'

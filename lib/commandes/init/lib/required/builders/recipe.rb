@@ -1,7 +1,7 @@
 module Prawn4book
 class InitedThing
 
-  require 'lib/required/utils/methods'
+  require './lib/required/utils/methods'
   include UtilsMethods
 
   #
@@ -166,7 +166,7 @@ class InitedThing
   # @param [String|Symbol] balise La chose à éditer, par exemple :book_data ou :page_de_titre
   def edit_with_special_pages(balise)
     balise = balise.to_s
-    require "lib/pages/#{balise}"
+    require "./lib/pages/#{balise}"
     klass = Prawn4book::Pages.const_get(balise.camelize)
     return klass.define(owner.folder)
   end

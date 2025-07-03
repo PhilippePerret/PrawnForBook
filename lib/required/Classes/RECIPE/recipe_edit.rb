@@ -109,6 +109,10 @@ class Recipe
     File.exist?(path) ? File.read(path) : "---\n"
   end
 
+  def path
+    @path ||= File.join(BOOK_DIR, "recipe.yaml")
+  end
+  alias :recipe_path :path
 
 end #/class Recipe
 end #/module Prawn4book

@@ -17,3 +17,5 @@ gem 'fastimage'
 gem 'precedences', path: '/Users/philippeperret/Programmes/Gems/precedences'
 
 # require 'minitest/autorun'
+
+gem "bundler-why", "~> 0.1.3"

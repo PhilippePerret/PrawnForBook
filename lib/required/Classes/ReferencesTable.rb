@@ -133,7 +133,7 @@ class ReferencesTable
   # 
   # @param paragraph [NTextParagraph] 
   # 
-  #   Instance du paragraphe contetant l'appel.
+  #   Instance du paragraphe contenant l'appel.
   # 
   def get(ref_id, context = nil)
     paragraph = context[:paragraph]
@@ -166,7 +166,7 @@ class ReferencesTable
       # - Il faut toujours qu’il y ait une marque pour la page ou
       #   le paragraphe -
       unless ref_text.match?(/_(ref|page|paragraph)_/)
-        ref_text = "#{ref_text} (_ref_)"
+        ref_text = "#{ref_text} #{book.recipe.reference_default_format}"
       end
       # - Transformation de la marque -
       final_mark = ref_text

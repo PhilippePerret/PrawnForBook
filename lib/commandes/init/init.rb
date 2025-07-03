@@ -21,6 +21,10 @@ class << self
   # définir des premières choses sur le livre dont il faut définir ou
   # redéfinir la recette.
   # 
+  # ATTENTION : Cette méthode a été transformée pour tenir compte
+  # du fait qu'on appelle prawn-for-book avec un alias, pour le
+  # jouer par bundler avec la bonne version ruby
+  # 
   def init_new_book_or_collection(cdata = nil, force = false)
     clear
 
@@ -30,18 +34,16 @@ class << self
 
     thing = choose_what
     this_thing = thing == :book ? 'ce livre' : 'cette collection'
-    thing_name = Q.ask("Nom du dossier de #{this_thing} :".jaune) || return
-    thing_path = File.expand_path(File.join('.', thing_name))
+    thing_path = BOOK_DIR
     Q.yes?("Le chemin d'accès à #{this_thing} sera-t-il bien le dossier :\n  #{thing_path.inspect} ?".jaune) || return
-    mkdir(thing_path)
     @inited = case thing
-    when NilClass
-      return
-    when :book     
-      InitedBook.new(PdfBook.new(thing_path), thing_path)
-    when :collection
-      InitedCollection.new(Collection.new(thing_path), thing_path)
-    end
+      when NilClass
+        return
+      when :book     
+        InitedBook.new(PdfBook.new(thing_path), thing_path)
+      when :collection
+        InitedCollection.new(Collection.new(thing_path), thing_path)
+      end
     # 
     # On y va
     # 

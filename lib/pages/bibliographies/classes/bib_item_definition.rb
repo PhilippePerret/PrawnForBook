@@ -7,7 +7,7 @@
   - définir le format d'un item de bibliographie (fichier DATA_FORMAT)
     dans la bibliographie
 =end
-require 'lib/modules/tty_facilitators'
+require './lib/modules/tty_facilitators'
 
 class BibItemError < StandardError ; end
 

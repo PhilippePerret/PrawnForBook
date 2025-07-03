@@ -13,7 +13,7 @@
       pied de page et inversement.
 
 =end
-require 'lib/modules/tty_facilitators'
+require './lib/modules/tty_facilitators'
 module Prawn4book
 class Assistant
 

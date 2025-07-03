@@ -69,7 +69,7 @@ class PdfBook
     # module qui s'en charge
     # 
     if export_text?
-      require 'lib/modules/Exportator'
+      require './lib/modules/Exportator'
       Prawn4book.exported_book = self
     end
 
@@ -93,7 +93,7 @@ class PdfBook
     @start_time = Time.now
     Prawn4book.turn = 1
     # - Bibliographies -
-    require 'lib/pages/bibliographies'
+    require './lib/pages/bibliographies'
     Bibliography.init
     # - paragraphes texte -
     PdfBook::AnyParagraph.init_first_turn
