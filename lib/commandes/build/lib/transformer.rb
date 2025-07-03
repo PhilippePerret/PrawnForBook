@@ -388,24 +388,35 @@ private
   def self.__traite_other_mots_indexed_in(str, context)
     return str unless str.match?('\(')
     str = str.gsub(REG_INDEX) do
+      tout    = $&.freeze
       indexId = $~[:index_id].to_sym.freeze
       output  = $~[:mot].freeze
       motId   = ($~[:id_mot] || output).freeze
-      # Poids de cette occurrence
-      weight  = case $~[:weight]
+      if output == "e" || output == "le"
+        # <= Féminisation d'une mot
+        # => On remet le mot, sans rien toucher
+        output
+      else
+        # Vraie indexation ?
+        # Poids de cette occurrence
+        weight  = case $~[:weight]
         when '!' then :main
         when '.' then :minor
         else :normal
         end
-      context.merge!(occurrence_weight: weight)
-      begin
-        book.index(indexId).add(motId, output, **context)
-      rescue PFBFatalError => e
-        par = context[:paragraph]
-        puts "\n### Problème avec le Paragraphe #{par.pindex}".rouge
-        puts "### de texte : #{str.inspect}".rouge
-        raise e
-      end
+        context.merge!(occurrence_weight: weight)
+        begin
+          book.index(indexId).add(motId, output, **context)
+        rescue PFBFatalError => e
+          par = context[:paragraph]
+          puts "\n### Problème avec le Paragraphe #{par.pindex}".rouge
+          puts "### de texte : #{str[0..500].inspect}".rouge
+          puts "### Valeurs relevées :\n### indexId=#{indexId.inspect}"
+          puts "### output=#{output.inspect} / motId=#{motId.inspect} / weight=#{weight.inspect} "
+          puts "#{__FILE__}:#{__LINE__}"
+          raise e
+        end
+      end # /fin de if c'est une vraie indexation
     end
 
     return str    
