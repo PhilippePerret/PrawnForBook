@@ -115,9 +115,55 @@ Quand on dit « le texte » ici, on pense au « texte du livre à produire �
 
 #### Les paragraphes « stylés »
 
-#### Les styles dans des paragraphes
+<a name="style-in-paragraph"></a>
+
+#### Les styles dans des paragraphes [mode expert]
 
 Alors que ci-dessus nous avons vu comment styliser tout un paragraphe, dans sa globalité (ce qu’on appellerait un « style de paragraphe » dans un traitement de texte classique), ici nous allons voir comment mettre en forme du texte à l’intérieur du paragraphe (ce qu’on appellerait un « style de caractère » dans un traitement de texte).
+
+Le plus simple est d’utiliser la fonctionnalité des index (en coulisse). On définit une méthode (pour éviter les problèmes de collision, l’essayer avant de l’utiliser). Voilà la démarche : 
+
+Choisir un nom de méthode, par exemple `ville`. L’essayer tout de suite avant de l’implémenter, pour éviter les collisions. Dans le [fichier texte](#texte), écrire : 
+
+~~~
+Je vis dans une ville qui s'appelle ville(Paris,75010).
+~~~
+
+Demander la fabrication du livre avec `$ pfb build`. Si ça produit une erreur, c’est parfait : la méthode n’existe pas. On peut l’implémenter, dans le ou un fichier `helpers.rb` à créer à la racine du dossier du livre.
+
+~~~ruby
+module PrawnHelpersMethods
+	def ville(params)
+		return params
+	end
+end
+~~~
+
+Noter que même s’il y a deux paramètres dans `ville(Paris, 75010)`, ces deux paramètres arrivent en « Array » dans la méthode ci-dessus. Pour séparer, le nom de la ville de son code postal, on utilise toujours la même fonction : 
+
+~~~ruby
+module PrawnHelpersMethods
+	def ville(params)
+		nom, codep = params
+		return nom
+	end
+end
+~~~
+
+Maintenant que tout est en place, on peut mettre en forme nos villes. Par exemple en la mettant en police `ArialN` (qu’on aura [chargée dans la recette](#fonts-load)) et en italic.
+
+~~~ruby
+module PrawnHelpersMethods
+  TEMP_VILLE = '<em><font name"ArialN"> \
+											%{ville}</font></em>'
+	def ville(params)
+		nom, codep = params
+		return TEMP_VILLE % {ville: nom}
+	end
+end
+~~~
+
+
 
 ### Images
 
@@ -149,7 +195,7 @@ Imaginons par exemple que vous ayez des noms de villes dans votre livre de voyag
 Ceci est mon texte qui parle de ville(Paris) mais aussi de ville(Naples) ou de ville(Moscou).
 ~~~
 
-Remarquez ci-dessus la balise `ville(...)`. Elle va permettre deux choses (au moins) : 1) de mettre en forme toutes les villes de la même manière et 2) de consigner toutes les villes citées dans le livre, en mémorisant même leur page et leur paragraphe.
+Remarquez ci-dessus la balise `ville(...)`. Elle va permettre deux choses (au moins) : 1) de mettre en forme toutes les villes de la même manière et 2) de consigner toutes les villes citées dans le livre, en mémorisant même leur page et leur paragraphe. Pour la première utilisation, voir [l’exemple de style dans un paragraphe](#style-in-paragraph).
 
 ---
 
@@ -166,6 +212,8 @@ La *recette* est un fichier  'recipe.yaml' qui se trouve à la racine du dossier
 ### Éléments de la recette
 
 #### Tailles du livre
+
+<a name="fonts-load"></a>
 
 #### Polices chargées
 

@@ -166,10 +166,11 @@ class Index
   #   - soit dans le module PrawnHelpersMethods, sans préfixe et
   #     avec des arguments dynamiques (si 2, le contexte)
   def call_index_methode(item_id, output, context)
+    as_params = item_id.split(',').map{|s|s.strip}
     case @nbp 
     when 3 then send(treat_item_method_name, item_id, output, **context)
-    when 2 then send(treat_item_method_name, item_id, **context)
-    when 1 then send(treat_item_method_name, item_id)
+    when 2 then send(treat_item_method_name, as_params, **context)
+    when 1 then send(treat_item_method_name, as_params)
     end
   end
 

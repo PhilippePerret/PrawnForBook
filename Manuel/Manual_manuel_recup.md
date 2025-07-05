@@ -3134,8 +3134,10 @@ end
 … et l’utiliser dans le texte avec :
 
 ~~~text
-Ce paragraphe contient un (( #colorise("texte", :ma_couleur_preferee) )) qui sera dans ma couleur préférée et un (( colorise("autre texte", :une_autre_couelur) )) qui sera dans une autre couleur.
+Ce paragraphe contient un (( colorise("texte", :ma_couleur_preferee) )) qui sera dans ma couleur préférée et un (( colorise("autre texte", :une_autre_couelur) )) qui sera dans une autre couleur.
 ~~~
+
+> IL FAUT FAIRE VRAIMENT UN TRUC TRÈS CLAIR SUR LE FAIT QUE `(( methode(...) ))` et `methode(...)` SONT DEUX UTILISATIONS COMPLÈTEMENT DIFFÉRENTES. AVANT, POUR LA DEUXIÈME UTILISATION, IL FALLAIT UNE MÉTHODE `index_method` AVEC OBLIGATOIREMENT 3 ARGUMENTS. MAINTENANT, LE HELPER FONCTIONNE AVEC LA MÉTHODE SIMPLE, ET UN ARGUMENT OU DEUX (LE PREMIER CONTIENT TOUT CE QUI EST EN PARAMÈTRE, MÊME S'IL Y EN A PLUSIEURS EN APPEL ET LE SECOND, OPTIONNEL, EST LE CONTEXT AVEC au moins {:pdf, :paragraph, :font_size})
 
 Ce texte, une fois construit, produira :
 

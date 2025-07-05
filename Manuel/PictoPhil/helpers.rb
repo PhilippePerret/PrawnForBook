@@ -7,12 +7,8 @@ module CustomIndexModule
 end
 
 module PrawnHelpersMethods
-  def lettre(lettre, context)
+  def lettre(params, context)
+    name, lettre = params
     return (name + ' = <font name="PictoPhil" size="16">' + lettre + '</font>')
-  end
-end
-
-module Prawn4book
-  class PdfBook::NTextParagraph
   end
 end
