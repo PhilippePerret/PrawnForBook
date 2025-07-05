@@ -3,13 +3,13 @@ class PdfBook
 class IndexManager
 
   # [Prawn4book::PdfBook] Le livre en construction
-  attr_reader :book
+  attr_reader :__book
 
   # [Hash] Table de tous les index personnalisés
   attr_reader :items
 
   def initialize(book)
-    @book   = book
+    @__book = book
     @items  = {}
   end
 
@@ -22,7 +22,7 @@ class IndexManager
   # @return l’index personnalisé [Prawn4book::PdfBook::Index] d’id
   # +index_id+ ou le crée s’il n’existe pas.
   def get(index_id)
-    items[index_id] ||= PdfBook::Index.create(book, index_id)
+    items[index_id] ||= PdfBook::Index.create(__book, index_id)
   end
 
 end #/class IndexManager
@@ -80,18 +80,18 @@ class Index
   # [Symbol] Identifiant de l’index personnalisé
   # C’est donc le "mot" qui est utilisé avant les parenthèses, par
   # exemple dans "Ceci est un perso(personnage) indexé."
-  attr_reader :id
+  attr_reader :__id
 
   # Le livre en construction
-  attr_reader :book
+  attr_reader :__book
 
   # Liste des items de cet index personnalisé. Par exemple la
   # liste des personnes pour un index ’people’
   attr_reader :items
 
   def initialize(book, index_id)
-    @book   = book
-    @id     = index_id
+    @__book = book
+    @__id   = index_id
     @items  = {}
   end
 
@@ -125,13 +125,13 @@ class Index
     }
 
     # On traite cet item avec la méthode personnalisée qui doit
-    # obligatoirement exister. 
+    # obligatoirement exister(*)
     # Elle peut, en fonction de son retour :
     # - modifier le texte à écrire
     # - modifier l’identifiant de l’item
     # - ajouter des données pour l’item
     # 
-    case real_output = send(treat_item_method_name, item_id, output, **context)
+    case real_output = call_index_methode(item_id, output, context)
     when String
       data_item.merge!(real_output: real_output)
     when Array
@@ -160,6 +160,19 @@ class Index
     return data_item[:real_output]
   end
 
+  # (*) Maintenant :
+  #   - soit dans le module CustomIndexModule avec un préfixe
+  #     'index_' (methode -> index_methode) avec trois arguments 
+  #   - soit dans le module PrawnHelpersMethods, sans préfixe et
+  #     avec des arguments dynamiques (si 2, le contexte)
+  def call_index_methode(item_id, output, context)
+    case @nbp 
+    when 3 then send(treat_item_method_name, item_id, output, **context)
+    when 2 then send(treat_item_method_name, item_id, **context)
+    when 1 then send(treat_item_method_name, item_id)
+    end
+  end
+
   # Méthode appelée quand on demande à inscrire l’index personnalisé
   # dans le livre.
   # 
@@ -170,12 +183,15 @@ class Index
   # 
   def print(pdf)
     self.respond_to?(printing_method_name) || \
-      raise(PFBFatalError.new(2503, {id: id}))
+      raise(PFBFatalError.new(2503, {id: __id}))
     nbp = self.method(printing_method_name).parameters.count
-    nbp == 1 || \
-      raise(PFBFatalError.new(2504, {id: id}))
+    nbp == 1 || raise(PFBFatalError.new(2504, {id: __id}))
     send(printing_method_name, pdf)
     pdf.update_current_line
+  end
+
+  def method_with_prefix?
+    treat_item_method_name.to_s.start_with?('index_')
   end
 
   # Méthode appelée à la création de l’index personnalisé pour 
@@ -183,22 +199,26 @@ class Index
   # on raise une erreur fatale. Sinon, on signale simplement le 
   # problème.
   def is_valid_or_raise
+    # puts "Methodes : #{self.methods}"
     self.respond_to?(treat_item_method_name) || raise(PrawnBuildingError.new(2501))
-    # La méthode doit recevoir trois arguments
     @nbp = self.method(treat_item_method_name).parameters.count
-    @nbp == 3 || raise(PrawnBuildingError.new(2502))
+    puts "Nombre de paramètres : #{@nbp.inspect}"
+    if method_with_prefix?
+      # La méthode doit recevoir trois arguments
+      @nbp == 3 || raise(PrawnBuildingError.new(2502))
+    end
   rescue PrawnBuildingError => e
     err_sub_data = {
-      id: id, 
+      id: __id, 
       nb_params: @nbp,
     }
     err_sub = PFBError[e.message.to_i] % err_sub_data
     err_data = {
-      id: id,
+      id: __id,
       err: err_sub,
     }
     err_num = 2500
-    if book.recipe.level_error < FATAL_LEVEL_ERROR
+    if __book.recipe.level_error < FATAL_LEVEL_ERROR
       err_msg = PFBError[err_num] % err_data
       add_erreur(err_msg)
     else
@@ -207,11 +227,17 @@ class Index
   end
 
   def treat_item_method_name
-    @treat_item_method_name ||= "index_#{id}".to_sym
+    @treat_item_method_name ||= begin
+      maybe_method = "#{__id}".to_sym 
+      unless self.respond_to?(maybe_method)
+        maybe_method = "index_#{__id}".to_sym
+      end
+      maybe_method
+    end
   end
 
   def printing_method_name
-    @printing_method_name ||= "print_index_#{id}".to_sym
+    @printing_method_name ||= "print_index_#{__id}".to_sym
   end
 end #/class Index
 end #/class PdfBook

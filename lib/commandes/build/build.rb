@@ -572,6 +572,11 @@ class PdfBook
     if defined?(PrawnHelpersMethods)
       spy "Inclusion du module PrawnHelpersMethods dans PdfBook::AnyParagraph".bleu
       PdfBook::AnyParagraph.include(PrawnHelpersMethods)
+      # Essai d'ajout des helpers pour les index, afin que les appels de type
+      # 'methode(param)' ne provoque pas systématiquement une erreur demandant
+      # de faire une méthode d'indexaction 'index_methode(param, o, c)' pour le
+      # module CustomIndexModule
+      PdfBook::Index.include(PrawnHelpersMethods)
     end
     if defined?(ParserFormater)
       spy "Inclusion du module ParserFormater dans PdfBook::AnyParagraph".bleu

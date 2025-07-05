@@ -731,7 +731,7 @@ ERRORS = {
       ERR
 
     missing_item_treatment_method: <<~ERR,
-      Aucune méthode de traitement des items de d’index personnalisé %{id} 
+      Aucune méthode de traitement des items d’index personnalisé %{id} 
       n’est implémenté.
       Pour y remédier, dans un fichier `parser.rb’ ou `prawn4book.rb’,
       implémenter la méthode #index_%{id} dans un module CustomIndexModule:

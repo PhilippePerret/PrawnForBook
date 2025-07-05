@@ -1,0 +1,52 @@
+---
+# Recette pour voir les glypes pictophil
+:book_data:
+  :title: Glyphes de la police PictoPhil
+  :id: pictophil
+  :auteurs: Philippe PERRET
+:fonts:
+  :PictoPhil:
+    :normal: resources/fonts/PictoPhil/Pictophil-Regular.ttf
+    :italic: resources/fonts/PictoPhil/Pictophil-Regular.ttf
+    :bold: resources/fonts/PictoPhil/Pictophil-Regular.ttf
+    :bold_italic: resources/fonts/PictoPhil/Pictophil-Regular.ttf
+  :Times:
+    :normal: resources/fonts/Garamond/Garamond-Regular.ttf
+    :italic: resources/fonts/Garamond/Garamond-Italic.ttf
+    :bold: resources/fonts/Garamond/Garamond-Bold.ttf
+    :bold_italic: resources/fonts/Garamond/Garamond-Bold.ttf
+    :light: resources/fonts/Garamond/Light-Condensed.ttf
+    :light_italic: resources/fonts/Garamond/Light-Condensed-Italic.ttf
+:book_format:
+  :book:
+    :width:   10cm
+    :height:  10cm
+  :page:
+    :margins:
+      :top: 1cm
+      :ext: 1cm
+      :bot: 1cm
+      :int: 1cm
+  :text:
+    :default_font_and_style: "Times/normal/11.0/000055"
+    :default_font: "Times/normal/11.0/000055"
+    :line_height: 12.0
+:inserted_pages:
+  :page_de_garde: false
+  :faux_titre: false
+  :page_de_titre:
+    :title:
+      :font: Times/normal/18/000000
+    :subtitle:
+      :font: Times/normal/11/000000
+    :author:
+      :font: Times/normal/15/000000
+    :collection:
+      :font: Times/normal/12/000000
+    :publisher:
+      :font: Times/normal/12/000000
+      :logo:
+        :height: 10
+  :copyright: false
+  :credits_page: false
+  :abbreviations: false

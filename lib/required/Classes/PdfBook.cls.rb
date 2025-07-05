@@ -2,6 +2,15 @@ module Prawn4book
 class PdfBook
 class << self
 
+  # @api
+  # (on s'en sert notamment pour déterminer au tout départ si la 
+  #  commande est jouée dans un dossier de livre)
+  def is_book?(fold)
+    File.exist?(File.join(fold,'recipe.yaml')) ||
+    File.exist?(File.join(fold,'recipe_collection.yaml')) ||
+    File.exist?(File.expand_path(File.join(fold,'..','recipe_collection.yaml')))
+  end
+
   # S'assure que la commande a été jouée depuis un livre ou une
   # collection et retourne l'instance, ou lève une exception.
   # 
@@ -16,10 +25,9 @@ class << self
   # @return true si on se trouve dans un dossier de livre
   # ou de collection
   def current?
-    File.exist?(File.join(cfolder,'recipe.yaml')) || \
-    File.exist?(File.join(cfolder,'recipe_collection.yaml')) || \
-    File.exist?(File.expand_path(File.join(cfolder,'..','recipe_collection.yaml')))
+    is_book?(cfolder)
   end
+
 
   def in_collection?
     current? && File.exist?(File.join(cfolder,'recipe_collection.yaml'))

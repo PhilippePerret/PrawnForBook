@@ -1,6 +1,49 @@
+require "open3"
 module Prawn4book
 
+  # @runner
+  class Command
+    def proceed
+      tool = (CLI.components[0] || raise("Il faut définir l'outil à utiliser")).to_sym.freeze
+      if Tool.respond_to?(tool)
+        Tool.send(tool, {just_info: false})
+      else
+        puts "Je ne connais pas l’outil #{tool.inspect}".rouge
+        puts "Liste des outils".rouge
+        Tool.singleton_methods(false).each do |tool|
+          puts "#{tool}".bleu
+          puts "  #{Tool.send(tool, {just_info: true})}".bleu
+        end
+      end
+    end
+  end #/Command
 
+  class Tool
+    class << self
+
+      # === OUTIL pictophil ====
+      # 
+      # Permet de montrer la liste des caractères spéciaux de la 
+      # police PictoPhil spéciales pour Prawn-4-book. Soit l'user
+      # possède le paquet qui permet d'actualiser le fichier de
+      # démo, soit on ouvre le fichier PDF montrant les caractères
+      # (note : c'est cette même méthode qui permet de produire ce
+      #  fichier)
+      # 
+      def pictophil(just_info: false)
+        if just_info
+          return "Outil permettant de lister les caractères (glyphes) utilisables de la police PictoPhil."
+        end
+        require './lib/modules/glyphes_pictophil'
+        PictoPhil.show_glyph_list
+      end
+
+    end
+  end
+
+
+  # Les outils ci-dessous étaient là avant que je fasse de ce module
+  # une "commande" normale en ajoutant Command::proceed
   def self.play_tools
     tool_name = CLI.components[0]
     

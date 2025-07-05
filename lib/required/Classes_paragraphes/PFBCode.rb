@@ -268,6 +268,13 @@ class PFBCode < AnyParagraph
         #
         # --- Méthode définie comme méthode d'instance ---
         #
+        # C'est une méthode appelée par '(( methode(pararm, param, param) ))' sur une
+        # seule ligne et définie dans le module helpers.rb du livre dans :
+        #   module PrawnHelpersMethods
+        #     def methode(param, param, param)
+        #       ... traitement ...
+        #       return sortie
+        #     end
         # Avant :
         # self.instance_eval(raw_code)
         # 
@@ -283,7 +290,7 @@ class PFBCode < AnyParagraph
           when 2 then [pdf, {paragraph: self, book: book }]
           else raise "Trop de paramètres dans #{methode.inspect}"
           end + params
-        self.send(methode, *parameters)
+        self.send(methode, *parameters)#.tap { |output| puts "Sortie = #{output}" }
       elsif PrawnHelpersMethods.respond_to?(methode)
         #
         # --- Méthode définie comme méthode de classe ---

@@ -408,12 +408,15 @@ private
         begin
           book.index(indexId).add(motId, output, **context)
         rescue PFBFatalError => e
+          # TODO: Dans une prochaine version : mémoriser les erreurs, ne
+          # pas interrompre brutalement le programme. Ici, il suffit de
+          # remettre tout, avec du rouge peut-être.
           par = context[:paragraph]
           puts "\n### Problème avec le Paragraphe #{par.pindex}".rouge
           puts "### de texte : #{str[0..500].inspect}".rouge
-          puts "### Valeurs relevées :\n### indexId=#{indexId.inspect}"
-          puts "### output=#{output.inspect} / motId=#{motId.inspect} / weight=#{weight.inspect} "
-          puts "#{__FILE__}:#{__LINE__}"
+          puts "### Valeurs relevées :\n### indexId=#{indexId.inspect}".rouge
+          puts "### output=#{output.inspect} / motId=#{motId.inspect} / weight=#{weight.inspect} ".rouge
+          puts "#{__FILE__}:#{__LINE__}".rouge
           raise e
         end
       end # /fin de if c'est une vraie indexation
@@ -618,16 +621,17 @@ private
     str = __traite_apos_and_guils(str, context)
     str = __traite_ponctuations_doubles(str, context)
     str = __traite_points_suspensions(str, context)
-    str = __traite_tirets_conditionnels(str,context)
+    str = __traite_tirets_conditionnels_et_autres(str,context)
     str = __traite_tirets_exergue(str,context)
     str = __traite_exposants(str,context)
     str = str.gsub(REG_ANTESLASHED,'\1')
     return str
   end
 
-  def self.__traite_tirets_conditionnels(str, context)
-    str = str.gsub('{-}'.freeze, Prawn::Text::SHY)
-    return str
+  def self.__traite_tirets_conditionnels_et_autres(str, context)
+    str
+    .gsub('{-}'.freeze, Prawn::Text::SHY)
+    .gsub(/\[\-\]/.freeze, '<font name="PictoPhil">‑</font>') # trait d'union insécable
   end
 
   def self.__traite_other_signs(str, context)

@@ -32,6 +32,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    open3 (0.2.1)
     pastel (0.8.0)
       tty-color (~> 0.5)
     pdf-core (0.10.0)
@@ -82,6 +83,7 @@ DEPENDENCIES
   minitest
   minitest-fail-fast
   minitest-reporters
+  open3 (= 0.2.1)
   pdf-inspector
   pdf-reader
   prawn (~> 2.5)

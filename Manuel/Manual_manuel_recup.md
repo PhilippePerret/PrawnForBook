@@ -2,22 +2,11 @@
 
 [toc]
 
-TODO: Ce texte est la récupération du manual.pdf pour faire un manuel "manuel", c'est-à-dire pas produit de façon automatique. Je ne sais pas pourquoi, mais le fichier manuel.md a été "rogné" pour dire les choses simplement. Une partie immense a été supprimée. En fait, ce sont les 500 premières lignes qui doivent être reformatées. LE FAIRE EN SUIVANT LE PDF.
-
-## Introduction
-
-### Présentation
-
-Prawn4book — ou Prawn For Book, c’est-à-dire « Prawn pour les livres » — est une application en ligne de commande permettant de transformer un simple texte pseudo-markdown en véritable PDF prêt pour l’imprimerie, grâce au (formidable) gem Prawn qui donne son nom à l’application.
-
-Sa commande (qui doit être définie dans le fichier `.zshrc` ou autre) est : pfb (« Prawn For Book ») ou `bk` pour "book").
-
-L’application met en forme le texte, dans ses moindres détails et ses moindres aspects, empaquette les polices nécessaires, gère les références — même les références croisées —, gère les index et les bibliographies — autant que l’on veut —, gère les mises en place complexes pour produire un PDF conforme en tous points aux désirs de l’’auteur ou de l’éditeur.
 
 ### Les grandes forces de Prawn-for-book
 
-Les grandes forces de PRAWN-FOR-BOOK sont donc :
-* production simple d’un document PDF valide, professionnel, prêt pour l’imprimerie, et notamment :
+Les grandes forces de PRAWN-FOR-BOOK sont :
+* production simple et rapide d’un document PDF valide, professionnel, prêt pour l’imprimerie, et notamment :
 * gestion automatique des veuves et des orphelines,
 * gestion automatique des lignes de voleur.
 * gestion cohérente de toute une collection de livres,
@@ -26,41 +15,13 @@ de formatage),
 * gestion des références croisées (+ les références à la page d’un autre livre)
 * gestion d’un index,
 * gestion d’autant de bibliographies que l’on veut,
-* gestion automatiquement de la table des matières (est-ce vraiment utile de le préciser ?…),
+* gestion automatique de la table des matières (est-ce vraiment utile de le préciser ?…),
 * gestion puissante de n’importe quelle information au fil du texte ou sous forme de rapport,
-* extension infinie des capacités… (pour les experts)
+* extension infinie des capacités… *(par programmation, pour les experts)*
 
 ### Commande principale
 
-Sa commande simple est (*) :  `$> pfb`
-Ou en version longue (*) :
-$> prawn-for-book
-(*) En présupposant bien sûr que des alias de commande ont été créé, sur MacOs grâce à :
-ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/prawn-for-book
-ln -s /Users/me/Programmes/Prawn4book/prawn4book.rb /usr/local/bin/pfb
-Et sur Windows grâce à :
-TODO ?
-Pour les sous-commandes de Prawn-for-book, voir l’annexe.
-Obtenir de l’aide
-$> pfb aide On peut obtenir de l’aide de différents moyens :
-ouvrir une aide générale en présentant les commandes principales.
-offrira de l’aide sur l’ <identifiant>. On peut obtenir grâce à
-cette commande les assistants de création qui permettent de définir très précisément la recette d’un
-livre ou d’une collection.
-$> pfb aide <identifiant> $> pfb lexique “groupe de mots” offrira de l’aide sur un mot particulier ou un groupe
-de mots en en donnant la définition ou le sens dans Prawn-for-book. Note : les guillemets ne sont
-nécessaires que s’il y a plusieurs mots.
-Pour ouvrir le manuel : $> pfb manuel (ajouter -dev pour l’ouvrir en édition).
-AIDE RAPIDE
-BIBLIOGRAPHIE
-Voir comment utiliser une bibliographie.
-IMAGES
-Voir comment insérer une image dans le texte.
-TABLES (TABLEAU)
-Voir comment insérer une table ou un tableau dans le texte.
-HEADERS/FOOTERS
-Voir comment définir les pieds et page et entêtes de page.
-Créer un livre
+
 Créer un livre avec Prawn-for-book consiste à créer deux choses [1], deux fichiers :
 le fichier recette recipe.yaml qui définit tous les aspects du livre, en dehors du contenu textuel lui-
 même,
@@ -371,6 +332,13 @@ Noter que contrairement à #{...}, il ne peut y avoir qu’une seule utilisation
 paragraphe.
 Tout le code doit se trouver sur le même paragraphe, sinon il ne sera pas pris en compte. Séparer les
 lignes habituelles par des points-virgules ( (1...10).each do |i|; puts i; end).
+
+### Caractères spéciaux
+
+On peut mettre un trait d'union conditionnel avec `{-}` et un trait d'union insécable avec `[-]`.
+
+> Noter que pour utiliser le trait d'union insécable (qui n'existe dans presque aucune police, il faut utiliser la police PictoPhil dans sa recette de livre)
+
 Stylisation du paragraphe
 Il existe ensuite plusieurs manières de styliser ces paragraphes si nécessaire :
 stylisation par défaut,
@@ -3074,12 +3042,14 @@ end
 Les méthodes d'helpers s'utilisent dans le texte comme un code ruby :
 
 ~~~text
-Ceci est un texte de paragraphe avec un (( #code_ruby_simple )) qui sera évalué.
+Ceci est un texte de paragraphe avec un (( code_ruby_simple )) qui sera évalué.
 
-Ceci est un paragraphe avec qui devra apprendre à dire (( #code_ruby("bonjour tout le monde") )).
+Ceci est un paragraphe avec qui devra apprendre à dire (( code_ruby("bonjour tout le monde") )).
 ~~~
 
-> Attention : ne pas oublier les espaces à l’intérieur des parenthèses, comme c’est le cas avec le signe de Prawn, les doubles parenthèses.
+> Noter que ce qui sera écrit n'est pas ce qui sera retourné par la méthode d'helpers (qui porte bien mal son nom ici). Pour écrire quelque chose, voir ailleurs dans le manuel.
+
+> Attention : ne pas oublier les espaces à l’intérieur des doubles parenthèses, comme c’est le cas avec le signe de Prawn, les doubles parenthèses.
 
 **Au besoin, cette méthode d’helpers peut générer des pages entières.**
 
@@ -3094,6 +3064,7 @@ module PrawnHelpersMethods
     # On retourne la position actuelle du curseur dans le fichier
     # pdf en l'arrondissant :
     return round(pdf.cursor)
+    
   end
   
   def code_ruby(str)
@@ -4457,6 +4428,10 @@ Pour modifier l’aspect du texte, il faut ouvrir le package dans *Sublime Text*
 ---
 
 
+
+
+
+---
 
 ## Prawn
 
