@@ -55,7 +55,7 @@ class PFBCode < AnyParagraph
         start_new_page if page_number.odd?
       end
     when 'new_odd_page', 'new_belle_page', 'nouvelle_page_impaire', \
-      'belle_page', 'page_impaire'
+      'belle_page', 'page_impaire', 'nouvelle_belle_page'
       pdf.update do
         start_new_page
         start_new_page if page_number.even?

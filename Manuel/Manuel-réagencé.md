@@ -111,13 +111,98 @@ Toutes les polices définies dans la recette sont embarquées dans le PDF final.
 
 Quand on dit « le texte » ici, on pense au « texte du livre à produire » et particulièrement le texte codé qu’il faut produire pour obtenir, en combinaison avec [la recette](#recette) le livre désiré.
 
+<a name="paragraphs"></a>
+
 ### Les paragraphes
+
+<a name="styled-paragraphs"></a>
 
 #### Les paragraphes « stylés »
 
+Il existe plusieurs moyens de styler des paragraphes particuliers :
+
+* [Par classe](#styled-paragraph-per-class), à la manière du CSS en HTML. Cela permet d’uniformiser des mises en forme, sans avoir à les répéter.
+* [Par pré-paragraphe](#styled-paragraph-per-precode). Cela permet de définir de façon unique un paragraphe, en mettant ses informations dans la ligne qui le précède.
+
+<a name="styled-paragraph-per-class"></a>
+
+##### Stylisation du paragraphe par classe
+
+La classe se met au début du paragraphe, avant des doubles deux-points « :: », en les séparant par des points s’il y a plusieurs classes :
+
+~~~
+class1.class2::Le paragraphe dans le style class1 et le style class2.
+~~~
+
+Il suffit ensuite de définir le style dans un fichier `formater.rb` à la racine du livre, dans un module `ParserFormaterClass`. La méthode à créer portera le nom de la classe, préfixé par `formate_` :
+
+~~~ruby
+# in formater.rb
+module ParserFormaterClass
+  
+  # Définition simple (+str+ est le texte du
+  # paragraphe)
+  def formate_class1(str, context)
+  	return "<strong>#{str}</strong>"
+    # => paragraphe en gras
+  end
+  
+  # Définition pour utilisation complexe, en
+  # se servant du "contexte", c'est-à-dire de
+  # toutes les informations connues au moment
+  # du traitement
+  def formate_class2(str, context)
+    par = context[:paragraph]
+		par.font = "Arial"
+		par.font_size = 14
+		par.margin_left = "10%"
+		par.kerning = 1.2
+		par.margin_top = 4
+		par.margin_bottom = 12
+		par.text = "FIXED: #{par.text}"
+    return par.text
+  end
+end
+~~~
+
+<a name="styled-paragraph-per-precode"></a>
+
+##### Stylisation du paragraphe par pré-paragraphe
+
+Pour une stylisation du paragraphe par « pré-paragraphe », on met dans la ligne précédente, entre `(( … ))` (comme tout code prawn-4-book) une table avec la définition des propriétés.
+
+~~~
+Un paragraph normal.
+
+(( {align: :center, font_size: '16pt'} ))
+Le paragraphe qui doit être aligné au centre et d'une taille de police de 16 points.
+~~~
+
+Noter que le code sera évalué tel quel ce qui signifie :
+
+* on ne doit utiliser en clé (`align`, `font_size`, etc.) que des mots seuls ou des mots séparés d’un trait plat (<font color="red">contrairement à CSS on ne peut pas utiliser le tiret, dont font-size est mauvais</font>) — voir ci-dessous la liste des propriétés possibles.
+* on ne doit utiliser en clé que des valeurs évaluables donc : des nombres (`12`), des strings (`"string"`), des symboles (`:center`) ou des nombres avec unités connues (`12.mm` pour 12 millimètres). Ce qui signifie que <font color="red">`font_size: 12pt`</font> est erroné tandis que <font color="green">`font_size: '12pt'`</font> est correct.
+
+Valeurs utilisables :
+
+|  Propriété    |  Description    |   Valeurs   |
+| ---- | ---- | ---- |
+|  `font_family` / `font`    |  Nom de la fonte (qui doit exister dans le document)    |  String (chaine), par exemple `font_family:"Garamond"`  |
+| `font_size` / `size`  | Taille de la police Entier ou valeurs.  | `font_size:12`, `size: "12pt"` |
+|`font_style` / `style` | Style de la police à utiliser (doit exister pour la police utilisée)  | Symbol. `font_style: :italic`|
+| `align` | Alignement du texte | :left, :center, :right, :justify |
+| `kerning` | Espacement entre les lettres | Entier ou flottant. `kernel:2`, `kernel: "1mm"`|
+| `word_space`| Espacement entre les mots | Entier ou flottant. `word_space: 1.6` |
+| `margin_top`| Distance avec l’élément au-dessus |    Entier en points-pdf ou valeur. `margin_top: 2.mm`, `margin_top: "2mm"` |
+| `margin_right` | Distance avec la marge droite | idem |
+| `margin_bottom` | Distance avec la marge du bas | idem |
+| `margin_left` | Distance de la marge gauche | idem |
+| `width` |  Largeur de l’image (si c’est une image) ou largeur du texte. | Pourcentage ou valeur avec unité. `width: "100%"`, `width: 3.cm` |
+| `height` |  Pour une image, la hauteur qu’elle doit faire.  | `height: "15mm"` |
+
 <a name="style-in-paragraph"></a>
 
-#### Les styles dans des paragraphes [mode expert]
+#### Les styles **dans** des paragraphes [mode expert]
 
 Alors que ci-dessus nous avons vu comment styliser tout un paragraphe, dans sa globalité (ce qu’on appellerait un « style de paragraphe » dans un traitement de texte classique), ici nous allons voir comment mettre en forme du texte à l’intérieur du paragraphe (ce qu’on appellerait un « style de caractère » dans un traitement de texte).
 
@@ -174,6 +259,64 @@ end
 ### Sauts
 
 Dans cette partie est abordé le problème des différents sauts, sauts de page principalement, pour se retrouver sur une page particulière (belle page ou page gauche) etc.
+
+Pour insérer un saut de page, ajouter, seul sur une ligne, l’un des codes suivants :
+
+~~~
+(( new_page ))
+ou
+(( nouvelle_page ))
+~~~
+
+Pour insérer le nombre de sauts de pages nécessaires pour se retrouver sur une *belle page*, c’est-à-dire une page droite, ajouter, seul sur une ligne, l’un des codes suivants :
+
+~~~
+(( belle_page ))
+ou
+(( nouvelle_belle_page ))
+ou
+(( new_belle_page ))
+ou
+(( nouvelle_page_impaire ))
+ou
+(( new_odd_page ))
+~~~
+
+Enfin, pour insérer le nombre de sauts de pages nécessaires pour se retrouver sur une page gauche, ajouter, seul sur une ligne, l’un des codes suivants :
+
+~~~
+(( fausse_page ))
+ou
+(( new_even_page ))
+ou
+(( nouvelle_page_paire ))
+~~~
+
+### Commentaires
+
+Les commentaires en ligne se marquent :
+
+~~~
+[#] Un commentaire sur une seule ligne.
+~~~
+
+Les blocs de commentaires se placent à l’aide de :
+
+~~~
+[# 	Ceci est un bloc de
+		commentaires qui tient
+		sur plusieurs lignes
+#]
+~~~
+
+On peut utiliser les marques de blocs de commentaire pour mettre du commentaire n’importe où dans le code. Par exemple :
+
+~~~pfb
+(( {size:32 [# pour être assez grand #], align:right} ))
+Ce paragraphe permet de montrer [# et bien montrer j'espère #] qu'on peut mettre des commentaires à l'intérieur de ce qu'on veut.
+~~~
+
+
 
 ### Fichiers inclus
 

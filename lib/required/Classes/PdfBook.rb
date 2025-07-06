@@ -3,6 +3,9 @@ require_relative 'ReferencesTable'
 module Prawn4book
 class PdfBook
 
+  # Commentaires internes
+  REG_INNER_COMMENTS = /\[\#.*\#\]/.freeze
+
   attr_reader :folder
 
   # [PdfBook::ColumnsBox] Quand un affichage par colonne est en 
@@ -47,6 +50,10 @@ class PdfBook
   #   que tous les paragraphes passent par ici.
   # 
   def inject(pdf, paragraph_str, idx = 0, source = 'user_method')
+
+    # On commence par retirer tout commentaire interne, délimité
+    # par : [# ... #]
+    paragraph_str = paragraph_str.gsub(REG_INNER_COMMENTS, '')
 
     # Si une table est en cours de traitement (@current_table non 
     # nil) et que +paragraph_str+ n'est plus un élément de table (il

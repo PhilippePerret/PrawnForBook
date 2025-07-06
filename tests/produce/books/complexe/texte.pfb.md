@@ -5,6 +5,16 @@ Ce livre doit permettre de tester énormément de choses dans le détail. Grâce
 > Noter quand même qu’on ne doit pas créer un gros fichier comme ça avec trop de choses, sinon, il serait difficile de voir où le bât blesse.
 
 ## Premiers tests
+
+Le code :
+
+~~~
+(( {font:"Helvetica", style: :italic, size: 21} ))
+Ce texte est écrit dans la police “Helvetica” en taille 21 et style italique (c’est une ligne de pfbcode qui le détermine juste au-dessus). Elle doit juste s’adapter aux lignes de références qui sont placées dans cette partie (par défaut) avec une hauteur de ligne de 24 points.
+~~~
+
+Va produire :
+
 (( {font:"Helvetica", style: :italic, size: 21} ))
 Ce texte est écrit dans la police “Helvetica” en taille 21 et style italique (c’est une ligne de pfbcode qui le détermine juste au-dessus). Elle doit juste s’adapter aux lignes de références qui sont placées dans cette partie (par défaut) avec une hauteur de ligne de 24 points.
 

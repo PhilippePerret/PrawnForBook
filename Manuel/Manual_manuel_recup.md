@@ -386,26 +386,8 @@ Paragraphe avec police par défaut.
 On peut mettre plusieurs propriétés en les séparant par des virgules :
 (( {margin_left: 40, margin_top: 50} ))
 IMAGE[images/mon_image.svg]
-Propriété Description Valeurs
-font_family / font Nom de la fonte (qui doit exister dans le
-document) String (chaine), par exemple font_famiily:"Garamond"
-font_size / size Taille de la police Entier ou valeurs. P.e. font_size:12
-font_style / style Style de la police à utiliser (doit être
-défini pour la police) Symbol (mot commençant par “:”). P.e. : font_style: :italic
-kerning Éloignement des lettres Entier ou flottant. P.e. kernel:2
-word_space Espacement entre les mots Entier ou flottant. P.e. word_space: 1.6
-margin_top Distance avec l’élément au-dessus Entier en points-pdf ou valeur. P.e. margin-top: 2.mm
-margin_right Distance avec la marge droite Idem
-margin_bottom Distance avec l’élément inférieur Idem
-margin_left Distance de la marge gauche Idem
-width Largeur de l’image (si c’est une image)
-ou largeur du texte.
-Pourcentage ou valeur avec unité. P.e. width: "100%" ou width: 3.cm
-(notez qu’il n’y pas de guillemets lorsqu’on utilise les unités Prawn.
-height Pour une image, la hauteur qu’elle doit
-faire.
-L’image ci-dessus se retrouvera à 40 points-pdf de la marge gauche et à 50 points-pdf de son contenu
-précédent.
+
+
 Les propriétés qu’on peut définir sont les suivantes :
 Traitement des mots seuls en bas de paragraphe
 À partir de la version 2.0, les lignes de voleur, tout comme les orphelines ou les veuves sont automatiquement

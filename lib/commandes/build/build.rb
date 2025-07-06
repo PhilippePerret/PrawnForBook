@@ -372,6 +372,10 @@ class PdfBook
           page(pdf.page_number).pagination = false
         end
         export_text("\n#{'-'*15}PAGE ##{pdf.page_number}#{'-'*15}\n\n") if export_text?
+        if self.respond_to?(:on_create_page)
+          proc = on_create_page(pdf)
+          proc.call
+        end
       end
     else
       pdf.on_page_create do
@@ -379,6 +383,10 @@ class PdfBook
         # page(pdf.page_number).pagination = false if pdf.pagination_stopped?
         if pdf.pagination_stopped?
           page(pdf.page_number).pagination = false
+        end
+        if self.respond_to?(:on_create_page)
+          proc = on_create_page(pdf)
+          proc.call
         end
       end
     end
@@ -549,7 +557,7 @@ class PdfBook
     # (par exemple pour reseter certaines données)
     # 
     custom_modules_prawn4book.each { |m| require(m) }
-
+    
     #
     # S'il existe des modules de formatage propre au livre (et/ou à la
     # collection) il faut le(s) charger.

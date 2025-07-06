@@ -749,7 +749,7 @@ private
       SPAN_EXPOSANT % [lettre, expo]
     end
   end
-  REG_EXPOSANT = /([0-9XVIC])\^(er|re|e)/.freeze
+  REG_EXPOSANT = /([0-9XVIC]+)\^(er|re|e)/.freeze
   SPAN_EXPOSANT = '%s<sup>%s</sup>'.freeze
 
   def self.__traite_backsticks(str)

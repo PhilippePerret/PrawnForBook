@@ -91,6 +91,7 @@ def print(pdf)
 
     # La page courante [Prawn4book::PageManager::Page]
     curpage = book.pages[number]
+    book.build_on_page(pdf, curpage) if book.respond_to?(:build_on_page)
 
     # puts "Entête et pied de page sur page #{number}"
     next if curpage.not_printable?

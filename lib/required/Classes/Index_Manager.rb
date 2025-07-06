@@ -203,7 +203,6 @@ class Index
     # puts "Methodes : #{self.methods}"
     self.respond_to?(treat_item_method_name) || raise(PrawnBuildingError.new(2501))
     @nbp = self.method(treat_item_method_name).parameters.count
-    puts "Nombre de paramètres : #{@nbp.inspect}"
     if method_with_prefix?
       # La méthode doit recevoir trois arguments
       @nbp == 3 || raise(PrawnBuildingError.new(2502))
@@ -227,11 +226,14 @@ class Index
     end
   end
 
+  # def treat_item_method_name
+  #   @treat_item_method_name ||= "index_#{__id}".to_sym
+  # end
   def treat_item_method_name
     @treat_item_method_name ||= begin
-      maybe_method = "#{__id}".to_sym 
+      maybe_method = "index_#{__id}".to_sym
       unless self.respond_to?(maybe_method)
-        maybe_method = "index_#{__id}".to_sym
+        maybe_method = "#{__id}".to_sym 
       end
       maybe_method
     end

@@ -13,6 +13,8 @@ class AnyParagraph
   REG_END_TABLE     = /^\|\/\|$/.freeze
   REG_COMMENTS      = /^\[#\] (.*)$/.freeze
   REG_START_COMMENT = /^\[#(.*)/.freeze
+  # Noter que les commentaires dans le texte ou dans le code [#...#]
+  # sont retirés tout au début du travail du fichier
   REG_END_COMMENT   = /(.*)#\]$/.freeze
   REG_CODE_BLOCK    = /#{EXCHAR}(?:\~\~\~|\`\`\`)/.freeze
   REG_END_CODE_BLOCk   = /^#{REG_CODE_BLOCK}$/.freeze 
