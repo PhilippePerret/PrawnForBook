@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+# Dossier dans lequel est joué la commande
+# Passé en premier argument du script
+cur_folder="$(pwd)"
+
+# Dossier de l'application
+APP_FOLDER="$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")")"
+
+# Si on veut voir quel est le dossier application
+# echo $APP_FOLDER
+
+cd $APP_FOLDER
+bundle exec ruby pfb.rb "$cur_folder" $@
