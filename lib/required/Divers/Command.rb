@@ -27,7 +27,22 @@ class Command
   end
 
   def load
-    File.exist?(script_path) || begin
+    File.exist?(script_path) || 
+    begin
+      # Serait-ce un outil (dans tools)
+      _name = "tools"
+      _folder       = File.join(COMMANDS_FOLDER,_name)
+      _lib_folder   = File.join(_folder,'lib')
+      _script_path  = File.join(_folder,"#{_name}.rb")
+      Dir["#{_lib_folder}/**/*.rb"].each{|m|require(m)}
+      require _script_path
+      if tool_exist?(name)
+        Object.send(:remove_const, :COMMAND_FOLDER)
+        CLI.components[0] = name
+        return Command.new("tools").run
+      end
+    end ||
+    begin
       puts "Je ne connais pas la commande #{ini_name.inspect}".rouge
       puts "(jouer 'pfb -h' pour obtenir de l'aide)".bleu
       return

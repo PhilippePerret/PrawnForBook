@@ -3,6 +3,9 @@ module Prawn4book
 
   # @runner
   class Command
+    def tool_exist?(tool)
+      Tool.respond_to?(tool)
+    end
     def proceed
       tool = (CLI.components[0] || raise("Il faut définir l'outil à utiliser")).to_sym.freeze
       if Tool.respond_to?(tool)
@@ -20,6 +23,15 @@ module Prawn4book
 
   class Tool
     class << self
+
+      # === OUTIL info/infos ===
+      def info(just_info: false)
+        if just_info
+          return "Permet d'avoir des informations sur le livre courant."
+        end
+        puts "Je dois apprendre à donner des informations sur le livre courant.".jaune
+      end
+      alias :infos :info
 
       # === OUTIL pictophil ====
       # 
