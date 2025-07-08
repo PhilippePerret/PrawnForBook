@@ -29,7 +29,19 @@ module Prawn4book
         if just_info
           return "Permet d'avoir des informations sur le livre courant."
         end
-        puts "Je dois apprendre à donner des informations sur le livre courant.".jaune
+        book_path = File.join(BOOK_DIR,'book.pdf')
+        building_date =
+          if File.exist?(book_path)
+            File.stat(book_path).mtime
+          else
+            '- aucune fabrication -'
+          end
+        puts <<~CODE.bleu
+        DOSSIER DU LIVRE : 
+        #{BOOK_DIR.sub(Dir.home, '.')}
+        DERNIÈRE FABRICATION : #{building_date}
+        CODE
+      
       end
       alias :infos :info
 
