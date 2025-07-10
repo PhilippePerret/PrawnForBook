@@ -285,7 +285,7 @@ class << self
     # (il faut la refaire avec les données peut-être modifiées)
     key_font = "#{dfont[:name]}:#{dfont[:style]}:#{dfont[:size]}:#{dfont[:color]}"
 
-    thefont = new(dfont)
+    thefont = new(**dfont)
     @fonts.merge!(key_font => thefont)
 
     return thefont

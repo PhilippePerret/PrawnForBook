@@ -15,7 +15,7 @@ gem 'prawn-svg', '0.37.0'
 # gem 'log_in_file'
 gem 'fastimage', '2.4.0'
 gem 'iconv', '1.1.0'
-gem 'precedences', path: '/Users/philippeperret/Programmes/Gems/precedences'
+gem 'precedences', '1.7.1'
 
 # require 'minitest/autorun'
 

@@ -1,9 +1,3 @@
-PATH
-  remote: /Users/philippeperret/Programmes/Gems/precedences
-  specs:
-    precedences (1.7.1)
-      clir (>= 0.16)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -55,6 +49,8 @@ GEM
       rexml (>= 3.3.9, < 4)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
+    precedences (1.7.1)
+      clir (>= 0.16)
     public_suffix (5.1.1)
     rexml (3.4.1)
     ruby-progressbar (1.13.0)
@@ -89,7 +85,7 @@ DEPENDENCIES
   prawn (~> 2.5)
   prawn-svg (= 0.37.0)
   prawn-table (= 0.2.2)
-  precedences!
+  precedences (= 1.7.1)
 
 BUNDLED WITH
    2.1.4

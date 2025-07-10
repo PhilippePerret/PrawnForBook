@@ -77,7 +77,7 @@ begin
   if Prawn4book::PdfBook.is_book?(BOOK_DIR)
     # OK
   else
-    puts "Attention, P4Book n'a pas été lancée dans un dossier de livre.".orange
+    puts "Attention, P4Book n'a pas été jouée dans un dossier de livre.".orange
     sleep 3
   end
   Prawn4book.run
